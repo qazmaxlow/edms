@@ -471,9 +471,21 @@ def popup_report_view(request, system_code, year, month):
     m['compare_past_datasource_json'] = json.dumps(compare_past_datasource)
 
     # weekends
-    m['weekends'] = {}
-    m['weekends']['total_bill'] = sum([ g['currentWeekendInfo']['average'] for g in group_data]) * money_unit_rate.rate;
+    weekends_usage = {}
+    weekends_usage['total_bill'] = sum([ g['currentWeekendInfo']['average'] for g in group_data]) * money_unit_rate.rate;
 
+    # beginningWeekendInfo
+    weekends_beginning_usage = sum([ g['beginningWeekendInfo']['average'] for g in group_data])
+    weekends_average_usage = sum([ g['currentWeekendInfo']['average'] for g in group_data])
+
+    # average_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
+    weekends_compare_last_month = None
+    if weekends_beginning_usage > 0:
+        weekends_compare_last_month = (weekends_average_usage - weekends_beginning_usage)/weekends_beginning_usage*100
+
+    weekends_usage['compare_last_month'] = weekends_compare_last_month
+
+    m['weekends'] = weekends_usage
 
     return render(request, 'companies/reports/popup_report.html', m)
 

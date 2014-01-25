@@ -398,7 +398,7 @@
                 </div>
                 <div class="col-xs-8">
                   <h3 class="{{ weekday_month_compare_helper.change_css_class }}">
-                    {{ weekday_month_compare_helper.compared_percent_abs|floatformat:0 }}%
+                    {{ weekends.compare_last_month|floatformat:0 }}%
                     {{ weekday_month_compare_helper.change_desc }}
                   </h3>
                   <p>{% trans "Compare to Last Month" %}</p>
