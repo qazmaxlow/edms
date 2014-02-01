@@ -764,16 +764,22 @@ $(function() {
           <kendo-button sprite-css-class="'k-icon k-i-refresh'">Year</kendo-button>
           <kendo-button sprite-css-class="'k-icon k-i-refresh'">Custom day</kendo-button>
 
+
+
           <input kendo-date-picker
              k-options="monthSelectorOptions"
              k-format="'MMMM yyyy'" />
         </p>
       </div>
+
     </div>
 
   <div class="row">
     <div class="col-xs-3">
       <div class="row time-type"><div class="col-xs-12">
+          <div>
+            <input type="text"  value="{% templatetag openvariable %} summary_report[0].action_name {% templatetag closevariable %}">
+          </div>
           Monthly
       </div></div>
       <div class="row content"><div class="col-xs-12">
@@ -1033,7 +1039,35 @@ $(function() {
             $scope.viewReport = function(year, month) {
                 $scope.win_report.refresh({ url: '../report/popup-report/' + year + '/' + month + '/'});
                 $scope.win_report.open();
-            }
+            };
+
+            var summary_report_ds = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        async: false,
+                        url: "{% url 'trail-list' systems.0.code %}",
+                        type: 'GET',
+                        dataType: "json"
+                    }
+                },
+                pageSize: 30,
+                serverPaging: true,
+                schema: {
+                    data: "results",
+                    total: "count"
+                }
+            });
+
+            summary_report_ds.read();
+            $scope.summary_report = summary_report_ds.data();
+
+            /*
+            $scope.wtf = function() {
+                summary_report_ds.read();
+                return summary_report_ds.data();
+
+            }*/
+
         })
 
 
