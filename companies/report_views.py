@@ -50,8 +50,6 @@ def next_month(datetime):
 
 
 def summary_ajax(request, system_code):
-    # data = [{'hello': 3.2}]
-    # data['hello'] = 3.2
     systems_info = System.get_systems_info(system_code, request.user.system.code)
     systems = systems_info['systems']
     current_system = systems[0]
@@ -79,11 +77,11 @@ def summary_ajax(request, system_code):
 
     end_date = request.GET.get('end_date')
 
-    # end_dt = pytz.utc.localize(datetime.datetime.utcnow()).astimezone(current_system_tz)
-    end_dt = datetime.datetime.now(current_system_tz)
-    end_dt = end_dt.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    end_dt = next_month(start_dt)
 
     source_ids = [str(source.id) for source in sources]
+
+    # read by month!!!
     source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingMonth, start_dt, end_dt)
 
     last_month_start_dt = previous_month(start_dt)
@@ -103,7 +101,27 @@ def summary_ajax(request, system_code):
     # _money_unit_rates = UnitRate.objects.filter(category_code='money', code=unit_infos['money'])
 
     source_timestamp_energy = [(source_id, ) + sr.items()[0] for source_id, sr in source_readings.items()]
-    # assert False
+
+    all_holidays = current_system.get_all_holidays()
+
+    def weekend_avg(source_reading):
+        total_day = 0
+        total_val = 0
+
+        for t, v in source_reading.items():
+            dt = datetime.datetime.fromtimestamp(t, current_system_tz)
+            if dt.weekday() >= 5 or dt.date() in all_holidays:
+                total_val += v
+                total_day += 1
+
+        if total_day > 0:
+            return total_val / float(total_day)
+
+
+
+    day_source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingDay, start_dt, end_dt)
+
+    weekend_timestamp_energy = [(source_id, weekend_avg(sr) ) for source_id, sr in day_source_readings.items()]
 
     def get_unit_rate(source_id, timestamp):
         source = Source.objects(id=str(source_id)).first()
@@ -118,7 +136,8 @@ def summary_ajax(request, system_code):
 
     monthly_money_sum = sum([ get_unit_rate(s, t).rate*e for s, t, e in source_timestamp_energy])
 
-    # ds = [ datetime.datetime.fromtimestamp(t) for t, e in timestamp_energy]
+    # weekend_money_sum = sum([ get_unit_rate(s, t).rate*e for s, t, e in weekend_timestamp_energy])
+    weekend_money_sum = sum([ e for s, e in weekend_timestamp_energy if e is not None])
 
     co2_usages = copy.deepcopy(source_readings)
     calculation.transform_source_readings(co2_usages, systems, sources, co2_unit_rates, CO2_CATEGORY_CODE)
@@ -155,9 +174,8 @@ def summary_ajax(request, system_code):
     compare_last_month_money = (current_month_money - last_month_money_usage)/ current_month_money * 100
     # m['compare_last_month_money'] = compare_last_month_money
     m['monthly_money_sum'] = monthly_money_sum
+    m['weekend_money_sum'] = weekend_money_sum
 
-    # data = [{'hello': 3.2}]
-    # data = [{'month_summary': monthly_summary[0]}]
     data = [m]
 
     return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type="application/json")
