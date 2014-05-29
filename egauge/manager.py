@@ -1,7 +1,8 @@
 import requests
 import pytz
 from bson.code import Code
-from models import Source, SourceReadingMin
+from mongoengine import connection
+from models import Source, SourceReadingMin, SourceReadingHour, SourceReadingDay, SourceReadingWeek, SourceReadingMonth, SourceReadingYear
 import time
 import datetime
 from lxml import etree
@@ -15,58 +16,57 @@ class SourceManager:
 	class GetEgaugeDataError(Exception):
 		pass
 
-	map_xml_url = Code('''
+	map_update_sum = Code('''
 		function () {
-			emit(this.xml_url, {
-				source_id: this._id,
-				name: this.name,
-			});
+			emit(this.source_id, this.value);
 		}
 	''')
 
-	# reduce function cannot ouput array, so use dict
-	reduce_xml_url = Code('''
+	reduce_update_sum = Code('''
 		function (key, values) {
-			result = {reduced: true};
-			for (var idx = 0; idx < values.length; idx++){
-				result[idx] = values[idx];
-			}
-			return result;
+			return Array.sum(values);
 		}
 	''')
 
 	@staticmethod
 	def retrieveAllReading():
-		grouped_sources = Source.objects.map_reduce(SourceManager.map_xml_url, SourceManager.reduce_xml_url, 'inline')
-		for document in grouped_sources:
-			xml_url = document.key
-			value = document.value
-			start_timestamp = int(time.time())
+		current_db_conn = connection.get_db()
+		result = current_db_conn.source.aggregate([
+			{ "$project": {"_id": 1, "name": 1, "tz": 1, "xml_url": 1}},
+			{
+				"$group": {
+					"_id": "$xml_url",
+					"sources": {"$push": {"_id": "$_id", "name": "$name", "tz": "$tz"}}
+				}
+			}
+		])
 
-			# reduced boolean is added as some mapping may not go through reduce function
-			# if the mapped value count is only one
-			if 'reduced' in value:
-				del value['reduced']
-				SourceManager.retrieveReading(xml_url, value, start_timestamp)
-			else:
-				SourceManager.retrieveReading(xml_url, {u'0': value}, start_timestamp)
+		for grouped_sources in result['result']:
+			xml_url = grouped_sources['_id']
+			sources = grouped_sources['sources']
+			retrieve_time = datetime.datetime.utcnow()
+			retrieve_time = retrieve_time.replace(second=0, microsecond=0, tzinfo=pytz.timezone("UTC"))
+
+			SourceManager.retrieveMinReading(xml_url, sources, retrieve_time)
 
 	@staticmethod
-	def retrieveReading(xml_url, infos, start_timestamp):
+	def retrieveMinReading(xml_url, infos, retrieve_time):
 		source_reading_mins = []
-		reading_datetime = datetime.datetime.fromtimestamp(start_timestamp).replace(tzinfo=pytz.timezone("UTC"))
+		need_update_source_ids = []
+		start_timestamp = time.mktime(retrieve_time.utctimetuple())
 		try:
 			readings = SourceManager.getEgaugeData(xml_url, start_timestamp, 2)
-			for dummy, info in infos.items():
+			for info in infos:
 				source_reading_min = SourceReadingMin(
-					datetime=reading_datetime,
-					source_id=info['source_id'],
+					datetime=retrieve_time,
+					source_id=info['_id'],
 					name=info['name'],
 					xml_url=xml_url,
 				)
 				if info['name'] in readings:
 					source_reading_min.value = readings[info['name']]
 					source_reading_min.valid = True
+					need_update_source_ids.append(info['_id'])
 				else:
 					Utils.log_error("no matching cname for source! source: %s, cname: %s"%(xml_url, info['name']))
 					source_reading_min.value = 0
@@ -74,16 +74,63 @@ class SourceManager:
 				source_reading_mins.append(source_reading_min)
 		except SourceManager.GetEgaugeDataError, e:
 			source_reading_mins = [SourceReadingMin(
-					datetime=reading_datetime,
-					source_id=info['source_id'],
+					datetime=retrieve_time,
+					source_id=info['_id'],
 					name=info['name'],
 					xml_url=xml_url,
 					value=0,
 					valid=False
-			) for (dummy, info) in infos.items()]
+			) for info in infos]
 			Utils.log_exception(e)
 
 		SourceReadingMin.objects.insert(source_reading_mins)
+
+		# source with same XML should be same timezone
+		source_tz = infos[0]['tz']
+		if need_update_source_ids:
+			for range_type in [Utils.RANGE_TYPE_HOUR, Utils.RANGE_TYPE_DAY,
+				Utils.RANGE_TYPE_WEEK, Utils.RANGE_TYPE_MONTH, Utils.RANGE_TYPE_YEAR]:
+				SourceManager.updateSum(range_type, retrieve_time, source_tz, need_update_source_ids)
+
+	@staticmethod
+	def updateSum(range_type, retrieve_time, source_tz, source_ids):
+		local_retrieve_time = retrieve_time.astimezone(pytz.timezone(source_tz))
+		start_time, end_time = Utils.get_datetime_range(range_type, local_retrieve_time)
+		if range_type == Utils.RANGE_TYPE_HOUR:
+			target_collection = 'source_reading_min'
+			update_class = SourceReadingHour
+		elif range_type == Utils.RANGE_TYPE_DAY:
+			target_collection = 'source_reading_hour'
+			update_class = SourceReadingDay
+		elif range_type == Utils.RANGE_TYPE_WEEK:
+			target_collection = 'source_reading_day'
+			update_class = SourceReadingWeek
+		elif range_type == Utils.RANGE_TYPE_MONTH:
+			target_collection = 'source_reading_day'
+			update_class = SourceReadingMonth
+		elif range_type == Utils.RANGE_TYPE_YEAR:
+			target_collection = 'source_reading_month'
+			update_class = SourceReadingYear
+
+		current_db_conn = connection.get_db()
+		result = current_db_conn[target_collection].aggregate([
+			{"$match": {
+				'source_id': {'$in': source_ids},
+				'datetime': {'$gte': start_time, '$lt': end_time}}
+			},
+			{"$project": {"source_id": 1, "value": 1}},
+			{
+				"$group": {
+					"_id": "$source_id",
+					"value": {"$sum": "$value"}
+				}
+			}
+		])
+
+		for info in result['result']:
+			update_class.objects(
+				source_id=info['_id'], datetime=start_time
+			).update_one(set__value=info['value'], upsert=True)
 
 	@staticmethod
 	def getEgaugeData(xml_url, start_timestamp, row):

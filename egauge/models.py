@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
 from mongoengine.document import Document
 from mongoengine.fields import *
+
+SOURCE_TZ_HK = u'Asia/Hong_Kong'
 
 class Source(Document):
 	name = StringField(max_length=200)
@@ -8,6 +11,7 @@ class Source(Document):
 	system_code = StringField(max_length=100)
 	system_path = StringField(max_length=2000)
 	order = IntField()
+	tz = StringField(max_length=50, default=SOURCE_TZ_HK)
 
 class BaseSourceReading(Document):
 	meta = {
@@ -16,11 +20,11 @@ class BaseSourceReading(Document):
 
 	source_id = ObjectIdField()
 	datetime = DateTimeField()
-	name = StringField(max_length=200)
 	value = FloatField()
 
 class SourceReadingMin(BaseSourceReading):
 	xml_url = StringField(max_length=120)
+	name = StringField(max_length=200)
 	valid = BooleanField()
 
 class SourceReadingHour(BaseSourceReading):
