@@ -18,12 +18,12 @@ app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 app.conf.update(
     CELERY_TASK_RESULT_EXPIRES=10,
     CELERY_DISABLE_RATE_LIMITS=True,
+    CELERY_IGNORE_RESULT=True,
 
 	CELERYBEAT_SCHEDULE = {
 			'retrieve-reading-every-min': {
-			'task': 'egauge.tasks.add',
+			'task': 'egauge.tasks.retrieve_all_reading',
 			'schedule': crontab(),
-			'args': (5, 4)
 	    },
 	}
 )

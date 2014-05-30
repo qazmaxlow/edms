@@ -17,7 +17,7 @@ class SourceManager:
 		pass
 
 	@staticmethod
-	def retrieveAllReading():
+	def get_grouped_sources():
 		current_db_conn = connection.get_db()
 		result = current_db_conn.source.aggregate([
 			{ "$project": {"_id": 1, "name": 1, "tz": 1, "xml_url": 1}},
@@ -29,21 +29,33 @@ class SourceManager:
 			}
 		])
 
-		for grouped_sources in result['result']:
-			xml_url = grouped_sources['_id']
-			sources = grouped_sources['sources']
-			retrieve_time = datetime.datetime.utcnow()
-			retrieve_time = retrieve_time.replace(second=0, microsecond=0, tzinfo=pytz.timezone("UTC"))
-
-			SourceManager.retrieveMinReading(xml_url, sources, retrieve_time)
+		return result['result']
 
 	@staticmethod
-	def retrieveMinReading(xml_url, infos, retrieve_time):
+	def gen_retrieve_time():
+		retrieve_time = datetime.datetime.utcnow()
+		retrieve_time = retrieve_time.replace(second=0, microsecond=0, tzinfo=pytz.timezone("UTC"))
+		# delay 1 seconds to ensure data at meter is ready
+		retrieve_time -= datetime.timedelta(minutes=1)
+
+		return retrieve_time
+
+	@staticmethod
+	def retrieve_all_reading():
+		for grouped_sources in SourceManager.get_grouped_sources():
+			xml_url = grouped_sources['_id']
+			sources = grouped_sources['sources']
+			retrieve_time = SourceManager.gen_retrieve_time()
+
+			SourceManager.retrieve_min_reading(xml_url, sources, retrieve_time)
+
+	@staticmethod
+	def retrieve_min_reading(xml_url, infos, retrieve_time):
 		source_reading_mins = []
 		need_update_source_ids = []
 		start_timestamp = time.mktime(retrieve_time.utctimetuple())
 		try:
-			readings = SourceManager.getEgaugeData(xml_url, start_timestamp, 2)
+			readings = SourceManager.get_egauge_data(xml_url, start_timestamp, 2)
 			for info in infos:
 				source_reading_min = SourceReadingMin(
 					datetime=retrieve_time,
@@ -78,10 +90,10 @@ class SourceManager:
 		if need_update_source_ids:
 			for range_type in [Utils.RANGE_TYPE_HOUR, Utils.RANGE_TYPE_DAY,
 				Utils.RANGE_TYPE_WEEK, Utils.RANGE_TYPE_MONTH, Utils.RANGE_TYPE_YEAR]:
-				SourceManager.updateSum(range_type, retrieve_time, source_tz, need_update_source_ids)
+				SourceManager.update_sum(range_type, retrieve_time, source_tz, need_update_source_ids)
 
 	@staticmethod
-	def updateSum(range_type, retrieve_time, source_tz, source_ids):
+	def update_sum(range_type, retrieve_time, source_tz, source_ids):
 		local_retrieve_time = retrieve_time.astimezone(pytz.timezone(source_tz))
 		start_time, end_time = Utils.get_datetime_range(range_type, local_retrieve_time)
 		if range_type == Utils.RANGE_TYPE_HOUR:
@@ -121,8 +133,9 @@ class SourceManager:
 			).update_one(set__value=info['value'], upsert=True)
 
 	@staticmethod
-	def getEgaugeData(xml_url, start_timestamp, row):
+	def get_egauge_data(xml_url, start_timestamp, row):
 		full_url = 'http://%s/cgi-bin/egauge-show/?m&n=%d&a&C&f=%d' % (xml_url, row, start_timestamp)
+		# full_url = 'http://%s/cgi-bin/egauge-show/?m&n=%d&a&f=%d' % (xml_url, row, start_timestamp)
 		digest_auth = requests.auth.HTTPDigestAuth(SourceManager.DEFAULT_USERNAME, SourceManager.DEFAULT_PASSWORD)
 		response = requests.get(full_url, auth=digest_auth)
 		if response.status_code != 200:
@@ -131,8 +144,14 @@ class SourceManager:
 
 		root = etree.XML(xml_content)
 		cnames = [cname.text.strip() for cname in root.getiterator('cname')]
+		# current_values = [float(value)/3600000 for value in root.xpath("//r[1]/c/text()")]
+		# past_values = [float(value)/3600000 for value in root.xpath("//r[2]/c/text()")]
+		# if not (len(current_values) == len(past_values) == len(cnames)):
+		# 	raise SourceManager.GetEgaugeDataError("cnames and values number not much! source: %s"%full_url)
+		# values = map((lambda current_v,past_v:abs(current_v-past_v)), current_values, past_values)
 		values = [abs(float(value))/3600000 for value in root.xpath("//r[2]/c/text()")]
 		if len(cnames) != len(values):
-			raise SourceManager.GetEgaugeDataError("cnames and values number not much! source: %s"%xml_url)
+			Utils.log_error(xml_content)
+			raise SourceManager.GetEgaugeDataError("cnames and values number not much! source: %s"%full_url)
 
 		return dict(zip(cnames, values))
