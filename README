@@ -1,0 +1,24 @@
+require:
+
+a) pip
+	1. download get-pip.py (http://pip.readthedocs.org/en/latest/installing.html)
+	2. python get-pip.py
+
+b) virtualenv, virtualenv-wrapper
+	1. pip install virtualenvwrapper
+	2. edit ~/.profile
+		export WORKON_HOME=/app/ENV
+		source /usr/local/bin/virtualenvwrapper.sh
+	3. edit or create ~/.virtualenv/virtualenv.ini if not exist
+		[virtualenv]
+		distribute = true
+
+c) mongodb
+	1. brew install mongodb
+	2. run mongodb daemon mode
+
+d) celery
+	1. brew install rabbitmq
+	2. run rabbitmq
+	3. pip install celery
+	4. run celery worker (worker for processing task) AND beat (beat for fire periodic task)

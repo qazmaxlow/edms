@@ -2,7 +2,7 @@ import requests
 import pytz
 from bson.code import Code
 from mongoengine import connection
-from models import Source, SourceReadingMin, SourceReadingHour, SourceReadingDay, SourceReadingWeek, SourceReadingMonth, SourceReadingYear
+from .models import Source, SourceReadingMin, SourceReadingHour, SourceReadingDay, SourceReadingWeek, SourceReadingMonth, SourceReadingYear
 import time
 import datetime
 from lxml import etree
@@ -15,18 +15,6 @@ class SourceManager:
 
 	class GetEgaugeDataError(Exception):
 		pass
-
-	map_update_sum = Code('''
-		function () {
-			emit(this.source_id, this.value);
-		}
-	''')
-
-	reduce_update_sum = Code('''
-		function (key, values) {
-			return Array.sum(values);
-		}
-	''')
 
 	@staticmethod
 	def retrieveAllReading():
