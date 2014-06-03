@@ -16,6 +16,9 @@ class Source(Document):
 class BaseSourceReading(Document):
 	meta = {
 		'abstract': True,
+		'indexes': [
+			{'fields': [('source_id', 1), ("datetime", 1)], 'unique': True}
+		]
 	}
 
 	source_id = ObjectIdField()
@@ -23,9 +26,14 @@ class BaseSourceReading(Document):
 	value = FloatField()
 
 class SourceReadingMin(BaseSourceReading):
+	pass
+
+class SourceReadingMinInvalid(Document):
+	source_id = ObjectIdField()
+	datetime = DateTimeField()
 	xml_url = StringField(max_length=120)
 	name = StringField(max_length=200)
-	valid = BooleanField()
+	tz = StringField(max_length=50, default=SOURCE_TZ_HK)
 
 class SourceReadingHour(BaseSourceReading):
 	pass
