@@ -21,10 +21,14 @@ app.conf.update(
     CELERY_IGNORE_RESULT=True,
 
 	CELERYBEAT_SCHEDULE = {
-			'retrieve-reading-every-min': {
+		'retrieve-reading-every-min': {
 			'task': 'egauge.tasks.retrieve_all_reading',
 			'schedule': crontab(),
-	    },
+    	},
+    	'recover-reading-every-hour': {
+			'task': 'egauge.tasks.recover_all_invalid_reading',
+			'schedule': crontab(minute=0, hour='*'),
+    	},
 	}
 )
 

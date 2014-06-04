@@ -35,7 +35,7 @@ class SourceManager:
 	@staticmethod
 	def gen_retrieve_time():
 		retrieve_time = datetime.datetime.utcnow()
-		retrieve_time = retrieve_time.replace(second=0, microsecond=0, tzinfo=pytz.timezone("UTC"))
+		retrieve_time = pytz.utc.localize(retrieve_time.replace(second=0, microsecond=0))
 		# delay 1 seconds to ensure data at meter is ready
 		retrieve_time -= datetime.timedelta(minutes=1)
 
@@ -57,14 +57,14 @@ class SourceManager:
 		need_update_source_ids = []
 		start_timestamp = time.mktime(retrieve_time.utctimetuple())
 		try:
-			readings = SourceManager._get_egauge_data(xml_url, start_timestamp, 2)
+			readings = SourceManager.__get_egauge_data(xml_url, start_timestamp, 1)
 			for info in infos:
 				construct_info = {
 					'datetime': retrieve_time,
 					'source_id': info['_id'],
 				}
 				if info['name'] in readings:
-					construct_info['value'] = readings[info['name']]
+					construct_info['value'] = readings[info['name']][0]
 					source_reading_min = SourceReadingMin(**construct_info)
 					source_reading_mins.append(source_reading_min)
 					need_update_source_ids.append(info['_id'])
@@ -152,7 +152,7 @@ class SourceManager:
 	@staticmethod
 	def recover_min_reading(grouped_invalid_reading):
 		xml_url = grouped_invalid_reading['_id']['xml_url']
-		retrieve_time = (grouped_invalid_reading['_id']['datetime']).replace(tzinfo=pytz.timezone("UTC"))
+		retrieve_time = pytz.utc.localize(grouped_invalid_reading['_id']['datetime'])
 		sources = grouped_invalid_reading['sources']
 
 		start_timestamp = time.mktime(retrieve_time.utctimetuple())
@@ -160,13 +160,13 @@ class SourceManager:
 			source_reading_mins = []
 			need_update_source_ids = []
 			will_remove_invalid_reading = []
-			readings = SourceManager._get_egauge_data(xml_url, start_timestamp, 2)
+			readings = SourceManager.__get_egauge_data(xml_url, start_timestamp, 1)
 			for source in sources:
 				if source['name'] in readings:
 					source_reading_min = SourceReadingMin(
 						datetime=retrieve_time,
 						source_id=source['source_id'],
-						value=readings[source['name']]
+						value=readings[source['name']][0]
 					)
 					source_reading_mins.append(source_reading_min)
 					need_update_source_ids.append(source['source_id'])
@@ -187,25 +187,93 @@ class SourceManager:
 			SourceReadingMinInvalid.objects(id__in=will_remove_invalid_reading).delete()
 
 	@staticmethod
-	def _get_egauge_data(xml_url, start_timestamp, row):
-		full_url = 'http://%s/cgi-bin/egauge-show/?m&n=%d&a&C&f=%d' % (xml_url, row, start_timestamp)
-		# full_url = 'http://%s/cgi-bin/egauge-show/?m&n=%d&a&f=%d' % (xml_url, row, start_timestamp)
+	def force_retrieve_all_reading(start_dt, end_dt):
+		'''
+		The start_dt and end_dt should be timezone aware
+		'''
+		all_grouped_sources = SourceManager.get_grouped_sources()
+		start_dt = start_dt.replace(minute=0, second=0, microsecond=0)
+		end_dt = end_dt.replace(minute=0, second=0, microsecond=0) + datetime.timedelta(hours=1)
+		total_hour = int((end_dt - start_dt).total_seconds()/3600)
+
+		for hour_idx in xrange(total_hour):
+			start_time = start_dt + datetime.timedelta(hours=hour_idx)
+			end_time = start_time + datetime.timedelta(hours=1)
+			start_timestamp = time.mktime(start_time.utctimetuple())
+			reading_datetimes = [(start_time + datetime.timedelta(minutes=minute)) for minute in xrange(60)]
+
+			print 'processing: ', start_time
+			for grouped_sources in all_grouped_sources:
+				xml_url = grouped_sources['_id']
+				sources = grouped_sources['sources']
+				print 'processing: ', xml_url
+
+				SourceReadingMin.objects(
+					source_id__in=[source['_id'] for source in sources],
+					datetime__gte=start_time,
+					datetime__lt=end_time
+				).delete()
+
+				source_reading_mins = []
+				source_reading_mins_invalid = []
+				need_update_source_ids = []
+				try:
+					readings = SourceManager.__get_egauge_data(xml_url, start_timestamp, 60)
+					for source in sources:
+						if source['name'] in readings:
+							source_reading_mins += [SourceReadingMin(
+								datetime=reading_datetime,
+								source_id=source['_id'],
+								value=readings[source['name']][idx]
+							) for (idx, reading_datetime) in enumerate(reading_datetimes)]
+							need_update_source_ids.append(source['_id'])
+						else:
+							Utils.log_error("no matching cname for source! source: %s, cname: %s"%(xml_url, source['name']))
+							source_reading_mins_invalid += [SourceReadingMinInvalid(
+								datetime=reading_datetime,
+								source_id=source['_id'],
+								xml_url=xml_url,
+								name=source['name'],
+								tz=source['tz']
+							) for (idx, reading_datetime) in enumerate(reading_datetimes)]
+				except SourceManager.GetEgaugeDataError, e:
+					for source in sources:
+						source_reading_mins_invalid += [SourceReadingMinInvalid(
+							datetime=reading_datetime,
+							source_id=source['_id'],
+							xml_url=xml_url,
+							name=source['name'],
+							tz=source['tz']
+						) for (idx, reading_datetime) in enumerate(reading_datetimes)]
+
+				if source_reading_mins:
+					SourceReadingMin.objects.insert(source_reading_mins)
+				if source_reading_mins_invalid:
+					SourceReadingMinInvalid.objects.insert(source_reading_mins_invalid)
+
+				if need_update_source_ids:
+					source_tz = sources[0]['tz']
+					SourceManager.update_sum(start_time, source_tz, need_update_source_ids)
+
+	@staticmethod
+	def __get_egauge_data(xml_url, start_timestamp, row):
+		full_url = 'http://%s/cgi-bin/egauge-show/?m&n=%d&a&C&f=%d' % (xml_url, (row+1), start_timestamp)
 		digest_auth = requests.auth.HTTPDigestAuth(SourceManager.DEFAULT_USERNAME, SourceManager.DEFAULT_PASSWORD)
-		response = requests.get(full_url, auth=digest_auth)
+		try:
+			response = requests.get(full_url, auth=digest_auth)
+		except requests.ConnectionError, e:
+			raise SourceManager.GetEgaugeDataError(str(e))
+
 		if response.status_code != 200:
 			raise SourceManager.GetEgaugeDataError("Response status code: %d"%response.status_code)
 		xml_content = response.content
 
 		root = etree.XML(xml_content)
 		cnames = [cname.text.strip() for cname in root.getiterator('cname')]
-		# current_values = [float(value)/3600000 for value in root.xpath("//r[1]/c/text()")]
-		# past_values = [float(value)/3600000 for value in root.xpath("//r[2]/c/text()")]
-		# if not (len(current_values) == len(past_values) == len(cnames)):
-		# 	raise SourceManager.GetEgaugeDataError("cnames and values number not much! source: %s"%full_url)
-		# values = map((lambda current_v,past_v:abs(current_v-past_v)), current_values, past_values)
-		values = [abs(float(value))/3600000 for value in root.xpath("//r[2]/c/text()")]
-		if len(cnames) != len(values):
-			Utils.log_error(xml_content)
-			raise SourceManager.GetEgaugeDataError("cnames and values number not much! source: %s"%full_url)
-
-		return dict(zip(cnames, values))
+		result = {}
+		for idx, cname in enumerate(cnames):
+			values = root.xpath("//r[position()>1]/c[%d]/text()"%(idx+1))
+			if len(values) != row:
+				raise SourceManager.GetEgaugeDataError("cname or row number not much! source: %s, cname: %s, row_num: %d"%(full_url, cname, row))
+			result[cname] = [abs(float(value))/3600000 for value in values]
+		return result
