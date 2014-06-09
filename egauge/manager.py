@@ -2,6 +2,7 @@ import requests
 import pytz
 from bson.code import Code
 from mongoengine import connection
+from mongoengine import Q
 from .models import Source, SourceReadingMin, SourceReadingHour,\
 	SourceReadingDay, SourceReadingWeek, SourceReadingMonth, SourceReadingYear, SourceReadingMinInvalid
 import time
@@ -277,3 +278,42 @@ class SourceManager:
 				raise SourceManager.GetEgaugeDataError("cname or row number not much! source: %s, cname: %s, row_num: %d"%(full_url, cname, row))
 			result[cname] = [abs(float(value))/3600000 for value in values]
 		return result
+
+	@staticmethod
+	def get_sources(system_code, system_path):
+		if system_path is None:
+			target_path = ',%s,'%system_code
+		else:
+			target_path = '%s%s,'%(system_path, system_code)
+		sources = Source.objects(Q(system_code=system_code) | Q(system_path__startswith=target_path))
+		source_mapping = {}
+		for source in sources:
+			if source.system_path is None or source.system_path == target_path:
+				source_mapping[source.id] = {'group': 'source:%s'%source.name, 'name': source.name, 'order': source.order}
+			else:
+				system_code = source.system_path.replace(target_path, '').split(',')[0]
+				source_mapping[source.id] = {'group': 'system:%s'%system_code, 'name': system_code, 'order': -1}
+
+		return source_mapping
+
+	@staticmethod
+	def get_readings(source_ids, range_type, start_dt, end_dt, tz_offset):
+		range_type_mapping = {
+			Utils.RANGE_TYPE_HOUR: {'target_class': SourceReadingHour, 'dt_formatter': '%H'}
+		}
+
+		readings = range_type_mapping[range_type]['target_class'].objects(
+			source_id__in=source_ids,
+			datetime__gte=start_dt,
+			datetime__lt=end_dt)
+
+		offset_timedelta = datetime.timedelta(hours=tz_offset)
+		group_readings = {}
+		for source_id in source_ids:
+			group_readings[source_id] = {}
+		dt_formatter = range_type_mapping[range_type]['dt_formatter']
+		for reading in readings:
+			dt_key = (reading.datetime - offset_timedelta).strftime(dt_formatter)
+			group_readings[str(reading.source_id)][dt_key] = reading.value
+
+		return group_readings

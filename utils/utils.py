@@ -1,5 +1,8 @@
 import logging
 import datetime
+import json
+import pytz
+from django.http import HttpResponse
 
 class Utils:
 
@@ -43,3 +46,11 @@ class Utils:
 			end_time = start_time.replace(year=(start_time.year+1))
 
 		return (start_time, end_time)
+
+	@staticmethod
+	def json_response(data):
+		return HttpResponse(json.dumps(data), content_type="application/json")
+
+	@staticmethod
+	def utc_dt_from_utc_timestamp(timestamp):
+		return pytz.utc.localize(datetime.datetime.fromtimestamp(timestamp))

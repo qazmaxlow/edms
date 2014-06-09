@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'mongoengine.django.mongo_auth',
     'egauge',
+    'entrak',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -47,7 +48,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'middleware.timezone_middleware.TimezoneMiddleware',
+    'entrak.middleware.timezone_middleware.TimezoneMiddleware',
 )
 
 ROOT_URLCONF = 'entrak.urls'

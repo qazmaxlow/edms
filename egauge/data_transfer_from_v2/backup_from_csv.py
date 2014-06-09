@@ -28,6 +28,14 @@ SOURCE_MAPPING = {
 		{'xml_url': 'en-trak1039.d.en-trak.com', 'name': 'showroom Lights'},
 		{'xml_url': 'en-trak1039.d.en-trak.com', 'name': 'Showroom Sockets'},
 	],
+	'school8': [
+		# {'xml_url': 'egauge984.egaug.es', 'name': 'Air Con'},
+		{'xml_url': 'egauge984.egaug.es', 'name': 'Lights & Plugs'},
+	],
+	'school3': [
+		{'xml_url': 'en-trak1010.d.en-trak.com', 'name': 'Blocks AB'},
+		# {'xml_url': 'en-trak1010.d.en-trak.com', 'name': 'Blocks CD'},
+	],
 }
 
 def is_min_datetime_valid(value):

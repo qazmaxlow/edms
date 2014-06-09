@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block extra_head %}
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="{% static 'js/arboreal.js' %}"></script>
+
+<script type="text/javascript">
+var systemTree = null;
+
+{% for system in systems %}
+	var system = {};
+	system.code = '{{system.code}}';
+	system.name = '{{system.name}}';
+	system.path = '{{system.path}}';
+	if (system.path == 'None') {
+		systemTree = new Arboreal(null, system);
+	} else {
+		parentCodes = $(system.path.split(',')).filter(function(){
+			return this != "";
+		});
+		parentCode = parentCodes[parentCodes.length - 1];
+		parentNode = systemTree.find(function (node) {
+			return node.data.code == parentCode;
+		});
+		parentNode.appendChild(system);
+	}
+{% endfor %}
+
+var timezoneOffset = new Date().getTimezoneOffset();
+function getSourceReadings(sourceIds, rangeType, startDt, endDt, tzOffset) {
+	$.ajax({
+		type: "POST",
+		url: "../source_readings/",
+		data: {
+			source_ids: sourceIds,
+			range_type: rangeType,
+			start_dt: startDt,
+			end_dt: endDt,
+			js_tz_offset: tzOffset
+		},
+	}).done(function(data) {
+		console.log(data);
+	});
+}
+
+$(function() {
+	getSourceReadings(
+		["53901e6569f192c20f03fb36", "53901e6569f192c20f03fb38"],
+		'hour',
+		1401638400,
+		1401724800,
+		timezoneOffset);
+});
+
+</script>
+{% endblock %}
+
+{% block content %}
+{% endblock %}
