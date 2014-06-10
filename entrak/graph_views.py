@@ -20,7 +20,7 @@ def source_readings_view(request, system_code):
 	range_type = request.POST.get('range_type')
 	start_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('start_dt'))))
 	end_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('end_dt'))))
-	tz_offset = int(request.POST.get('js_tz_offset'))/60
+	tz_offset = int(request.POST.get('js_tz_offset'))
 
 	readings = SourceManager.get_readings(source_ids, range_type, start_dt, end_dt, tz_offset)
 	return Utils.json_response(readings)

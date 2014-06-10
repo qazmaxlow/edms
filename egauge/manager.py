@@ -286,15 +286,8 @@ class SourceManager:
 		else:
 			target_path = '%s%s,'%(system_path, system_code)
 		sources = Source.objects(Q(system_code=system_code) | Q(system_path__startswith=target_path))
-		source_mapping = {}
-		for source in sources:
-			if source.system_path is None or source.system_path == target_path:
-				source_mapping[source.id] = {'group': 'source:%s'%source.name, 'name': source.name, 'order': source.order}
-			else:
-				system_code = source.system_path.replace(target_path, '').split(',')[0]
-				source_mapping[source.id] = {'group': 'system:%s'%system_code, 'name': system_code, 'order': -1}
 
-		return source_mapping
+		return sources
 
 	@staticmethod
 	def get_readings(source_ids, range_type, start_dt, end_dt, tz_offset):
@@ -313,7 +306,7 @@ class SourceManager:
 			group_readings[source_id] = {}
 		dt_formatter = range_type_mapping[range_type]['dt_formatter']
 		for reading in readings:
-			dt_key = (reading.datetime - offset_timedelta).strftime(dt_formatter)
+			dt_key = int((reading.datetime - offset_timedelta).strftime(dt_formatter))
 			group_readings[str(reading.source_id)][dt_key] = reading.value
 
 		return group_readings

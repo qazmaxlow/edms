@@ -3,59 +3,246 @@
 {% load staticfiles %}
 
 {% block extra_head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/chart.css' %}">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <script src="{% static 'js/arboreal.js' %}"></script>
+<script src="{% static 'js/flot/jquery.flot.min.js' %}"></script>
 
 <script type="text/javascript">
-var systemTree = null;
 
-{% for system in systems %}
-	var system = {};
-	system.code = '{{system.code}}';
-	system.name = '{{system.name}}';
-	system.path = '{{system.path}}';
-	if (system.path == 'None') {
-		systemTree = new Arboreal(null, system);
-	} else {
-		parentCodes = $(system.path.split(',')).filter(function(){
-			return this != "";
-		});
-		parentCode = parentCodes[parentCodes.length - 1];
-		parentNode = systemTree.find(function (node) {
-			return node.data.code == parentCode;
-		});
-		parentNode.appendChild(system);
-	}
-{% endfor %}
-
-var timezoneOffset = new Date().getTimezoneOffset();
-function getSourceReadings(sourceIds, rangeType, startDt, endDt, tzOffset) {
+function getSourceReadings(targetSystem, rangeType, startDt, endDt, tzOffset) {
+	var sourceIds = getSourceIdsUnderTree(targetSystem);
 	$.ajax({
 		type: "POST",
 		url: "../source_readings/",
 		data: {
 			source_ids: sourceIds,
 			range_type: rangeType,
-			start_dt: startDt,
-			end_dt: endDt,
-			js_tz_offset: tzOffset
+			start_dt: startDt/1000,
+			end_dt: endDt/1000,
+			js_tz_offset: tzOffset/60
 		},
 	}).done(function(data) {
-		console.log(data);
+		for (var sourceId in data) {
+			var systemNode = findSystemNodeBySourceId(targetSystem, sourceId);
+			systemNode.data.sources[sourceId]['data'] = data[sourceId];
+		}
+
+		plotGraphForTree(targetSystem);
 	});
 }
 
+function findNodeBySystemCode(tree, systemCode) {
+	return tree.find(function (node) {
+		return (systemCode === node.data.code);
+	});
+}
+
+function getSourceIdsUnderTree(tree) {
+	var sourceIds = [];
+	tree.traverseDown(function (node) {
+		for (var sourceId in node.data.sources) {
+			sourceIds.push(sourceId);
+		}
+	});
+
+	return sourceIds;
+}
+
+function findSystemNodeBySourceId(tree, sourceId) {
+	return tree.find(function (node) {
+		return sourceId in node.data.sources;
+	});
+}
+
+function sumUpSourceReading(sourceReadings, sources) {
+	for (var sourceId in sources) {
+		var source = sources[sourceId];
+		for (var readingKey in source.data) {
+			if (readingKey in sourceReadings) {
+				sourceReadings[readingKey] += source.data[readingKey];
+			} else {
+				sourceReadings[readingKey] = source.data[readingKey];
+			}
+		};
+	};
+}
+
+function plotGraphForTree(tree) {
+	var allSeries = [];
+	var totalReadings = {};
+	var sourceLineOptions = {show: false};
+
+	sumUpSourceReading(totalReadings, tree.data.sources);
+	for (var sourceId in tree.data.sources) {
+		var source = tree.data.sources[sourceId];
+
+		var series = {};
+		series.label = source.name;
+		series.lines = sourceLineOptions;
+		series.data = [];
+		for (var readingKey in source.data) {
+			series.data.push([readingKey, source.data[readingKey]]);
+		};
+		allSeries.push(series);
+	}
+
+	for (var childrenIdx in tree.children) {
+		var subTree = tree.children[childrenIdx];
+		var series = {};
+		series.label = subTree.data.name;
+		series.lines = sourceLineOptions;
+		series.data = [];
+		sourceReadings = {};
+
+		sumUpSourceReading(sourceReadings, subTree.data.sources);
+
+		subTree.traverseDown(function (node) {
+			sumUpSourceReading(sourceReadings, node.data.sources);
+		});
+
+		for (var readingKey in sourceReadings) {
+			series.data.push([readingKey, sourceReadings[readingKey]]);
+
+			if (readingKey in totalReadings) {
+				totalReadings[readingKey] += sourceReadings[readingKey];
+			} else {
+				totalReadings[readingKey] = sourceReadings[readingKey];
+			}
+		};
+		allSeries.push(series);
+	};
+
+	var totalSeries = {
+		label: 'Total',
+		bars: {
+			barWidth: 0.4,
+			align: "center",
+			show: true,
+		},
+		data: [],
+		isTotal: true	// not in API, custom variable
+	};
+	for (var readingKey in totalReadings) {
+		totalSeries.data.push([readingKey, totalReadings[readingKey]]);
+	}
+	allSeries.push(totalSeries);
+
+	App.plot = $("#chart").plot(allSeries, {}).data("plot");
+	setupSourceChoice("#sourceChoice", App.plot);
+	refreshYAxisSlider("#yAxisSlider", App.plot);
+}
+
+function setupSourceChoice(eleSelector, plot) {
+	var choiceContainer = $(eleSelector);
+	choiceContainer.empty();
+	var datasets = plot.getData();
+
+	$.each(datasets, function(seriesIdx, series) {
+		var choiceHtml = "<div ";
+		if (series.isTotal) {
+			choiceHtml += "style='display:none;'";
+		}
+		choiceHtml += " >";
+		choiceHtml += "<input type='checkbox' " + "series_idx='" + seriesIdx + "'"
+			+ " name='" + series.label + "'"
+			+ " ></input><label>" + series.label + "</label></div>";
+		choiceContainer.append(choiceHtml);
+	});
+
+	choiceContainer.find("input").click(function () {
+		choiceContainer.find("input:checked").each(function () {
+			var seriesIdx = parseInt($(this).attr("series_idx"), 10);
+			plot.getData()[seriesIdx].lines.show = true;
+		});
+		choiceContainer.find("input:not(:checked)").each(function () {
+			var seriesIdx = parseInt($(this).attr("series_idx"), 10);
+			plot.getData()[seriesIdx].lines.show = false;
+		});
+
+		plot.draw();
+	});
+}
+
+function refreshYAxisSlider(eleSelector, plot) {
+	var currentYMax = plot.getAxes().yaxis.max;
+	var yMin = currentYMax*0.25;
+	var yMax = currentYMax*1.75;
+	var step = (yMax-yMin)/1000;
+	$(eleSelector).slider("option", {
+		min: yMin,
+		max: yMax,
+		step: step,
+		value: currentYMax,
+	}).off("slide")
+	.on("slide", function(event, ui) {
+		plot.getAxes().yaxis.options.max = Math.round(ui.value);
+		plot.setupGrid();
+		plot.draw();
+	});
+}
+
+var App = {};
+App.systemTree = null;
+App.timezoneOffset = new Date().getTimezoneOffset();
+App.currentSelectedSystem = null;
+
 $(function() {
+
+	{% for system in systems %}
+		var system = {};
+		system.code = '{{system.code}}';
+		system.name = '{{system.name}}';
+		system.path = '{{system.path}}';
+		system.sources = {};
+		if (system.path == 'None') {
+			App.systemTree = new Arboreal(null, system);
+		} else {
+			parentCodes = $(system.path.split(',')).filter(function(){
+				return this != "";
+			});
+			parentCode = parentCodes[parentCodes.length - 1];
+			parentNode = App.systemTree.find(function (node) {
+				return node.data.code == parentCode;
+			});
+			parentNode.appendChild(system);
+		}
+	{% endfor %}
+	App.currentSelectedSystem = App.systemTree;
+
+	{% for source in sources %}
+		var source = {};
+		var source_id = '{{source.id}}';
+		source.name = '{{source.d_name}}';
+		source.name_tc = '{{source.d_name_tc}}';
+		source.order = '{{source.order}}';
+
+		var systemNode = findNodeBySystemCode(App.systemTree, '{{source.system_code}}');
+		systemNode.data.sources[source_id] = source;
+	{% endfor %}
+
 	getSourceReadings(
-		["53901e6569f192c20f03fb36", "53901e6569f192c20f03fb38"],
+		App.currentSelectedSystem,
 		'hour',
-		1401638400,
-		1401724800,
-		timezoneOffset);
+		1401638400000,
+		1401724800000,
+		App.timezoneOffset);
+
+	$("#yAxisSlider").slider({
+		orientation: "vertical",
+		animate: "fast",
+	});
 });
 
 </script>
 {% endblock %}
 
 {% block content %}
+
+<div id="chart" class='chart'></div>
+<div id="sourceChoice"></div>
+<div id="yAxisSlider"></div>
+
 {% endblock %}

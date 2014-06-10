@@ -10,7 +10,9 @@ class Source(Document):
 	xml_url = StringField(max_length=120)
 	system_code = StringField(max_length=100)
 	system_path = StringField(max_length=2000)
-	order = IntField()
+	d_name = StringField(max_length=200)
+	d_name_tc = StringField(max_length=200)
+	order = IntField(default=1)
 	tz = StringField(max_length=50, default=SOURCE_TZ_HK)
 
 class BaseSourceReading(Document):
