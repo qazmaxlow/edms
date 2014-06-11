@@ -292,6 +292,7 @@ class SourceManager:
 	@staticmethod
 	def get_readings(source_ids, range_type, start_dt, end_dt, tz_offset):
 		range_type_mapping = {
+			Utils.RANGE_TYPE_MIN: {'target_class': SourceReadingMin, 'dt_formatter': '%M'},
 			Utils.RANGE_TYPE_HOUR: {'target_class': SourceReadingHour, 'dt_formatter': '%H'}
 		}
 

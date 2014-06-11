@@ -9,28 +9,33 @@
 <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <script src="{% static 'js/arboreal.js' %}"></script>
 <script src="{% static 'js/flot/jquery.flot.min.js' %}"></script>
+<script src="{% static 'js/growraf/jquery.flot.growraf.js' %}"></script>
+<script src="{% static 'js/moment.min.js' %}"></script>
 
 <script type="text/javascript">
 
-function getSourceReadings(targetSystem, rangeType, startDt, endDt, tzOffset) {
-	var sourceIds = getSourceIdsUnderTree(targetSystem);
+function getSourceReadings() {
+	timestamps = genStartEndDtStamp();
+	var sourceIds = getSourceIdsUnderTree(App.currentSelectedSystem);
 	$.ajax({
 		type: "POST",
 		url: "../source_readings/",
 		data: {
 			source_ids: sourceIds,
-			range_type: rangeType,
-			start_dt: startDt/1000,
-			end_dt: endDt/1000,
-			js_tz_offset: tzOffset/60
+			range_type: API_RANGE_TYPES[App.currentRangeType],
+			start_dt: timestamps.startDtStamp,
+			end_dt: timestamps.endDtStamp,
+			js_tz_offset: App.timezoneOffset
 		},
 	}).done(function(data) {
+		console.log(data);
 		for (var sourceId in data) {
-			var systemNode = findSystemNodeBySourceId(targetSystem, sourceId);
+			var systemNode = findSystemNodeBySourceId(App.currentSelectedSystem, sourceId);
 			systemNode.data.sources[sourceId]['data'] = data[sourceId];
 		}
 
-		plotGraphForTree(targetSystem);
+		transformReadingToChartDatasets(App.currentSelectedSystem);
+		plotGraph();
 	});
 }
 
@@ -70,23 +75,24 @@ function sumUpSourceReading(sourceReadings, sources) {
 	};
 }
 
-function plotGraphForTree(tree) {
-	var allSeries = [];
+function transformReadingToChartDatasets(tree) {
+	App.sourceDatasets = [];
 	var totalReadings = {};
-	var sourceLineOptions = {show: false};
+	var sourceLineOptions = {show: true};
 
 	sumUpSourceReading(totalReadings, tree.data.sources);
 	for (var sourceId in tree.data.sources) {
 		var source = tree.data.sources[sourceId];
 
-		var series = {};
-		series.label = source.name;
-		series.lines = sourceLineOptions;
-		series.data = [];
+		var series = {
+			label: source.name,
+			lines: sourceLineOptions,
+			data: [],
+		};
 		for (var readingKey in source.data) {
 			series.data.push([readingKey, source.data[readingKey]]);
 		};
-		allSeries.push(series);
+		App.sourceDatasets.push(series);
 	}
 
 	for (var childrenIdx in tree.children) {
@@ -112,10 +118,10 @@ function plotGraphForTree(tree) {
 				totalReadings[readingKey] = sourceReadings[readingKey];
 			}
 		};
-		allSeries.push(series);
+		App.sourceDatasets.push(series);
 	};
 
-	var totalSeries = {
+	App.totalSeries = {
 		label: 'Total',
 		bars: {
 			barWidth: 0.4,
@@ -123,24 +129,30 @@ function plotGraphForTree(tree) {
 			show: true,
 		},
 		data: [],
-		isTotal: true	// not in API, custom variable
 	};
 	for (var readingKey in totalReadings) {
-		totalSeries.data.push([readingKey, totalReadings[readingKey]]);
+		App.totalSeries.data.push([readingKey, totalReadings[readingKey]]);
 	}
-	allSeries.push(totalSeries);
+}
 
-	App.plot = $("#chart").plot(allSeries, {}).data("plot");
-	setupSourceChoice("#sourceChoice", App.plot);
+function plotGraph() {
+	App.plot = $("#chart").plot([App.totalSeries], {
+		series: {
+	        grow: {
+	            active: true,
+	            duration: 800,
+	        }
+	    },
+	}).data("plot");
+	setupSourceChoice("#sourceChoice", App.plot, App.totalSeries, App.sourceDatasets);
 	refreshYAxisSlider("#yAxisSlider", App.plot);
 }
 
-function setupSourceChoice(eleSelector, plot) {
+function setupSourceChoice(eleSelector, plot, totalSeries, sourceDatasets) {
 	var choiceContainer = $(eleSelector);
 	choiceContainer.empty();
-	var datasets = plot.getData();
 
-	$.each(datasets, function(seriesIdx, series) {
+	$.each(sourceDatasets, function(seriesIdx, series) {
 		var choiceHtml = "<div ";
 		if (series.isTotal) {
 			choiceHtml += "style='display:none;'";
@@ -153,16 +165,16 @@ function setupSourceChoice(eleSelector, plot) {
 	});
 
 	choiceContainer.find("input").click(function () {
+		var willPlotSeries = [totalSeries];
 		choiceContainer.find("input:checked").each(function () {
 			var seriesIdx = parseInt($(this).attr("series_idx"), 10);
-			plot.getData()[seriesIdx].lines.show = true;
-		});
-		choiceContainer.find("input:not(:checked)").each(function () {
-			var seriesIdx = parseInt($(this).attr("series_idx"), 10);
-			plot.getData()[seriesIdx].lines.show = false;
+			willPlotSeries.push(sourceDatasets[seriesIdx]);
 		});
 
+		plot.getOptions().series.grow.active = false;
+		plot.setData(willPlotSeries);
 		plot.draw();
+		plot.getOptions().series.grow.active = true;
 	});
 }
 
@@ -184,10 +196,64 @@ function refreshYAxisSlider(eleSelector, plot) {
 	});
 }
 
+function genStartEndDtStamp() {
+	var startDt = null;
+	var endDt = null;
+	var currentDtClone = moment(App.currentDt);
+
+	if (App.currentRangeType === RANGE_TYPE_HOUR) {
+		startDt = currentDtClone;
+		endDt = moment(startDt).add('h', 1);
+	} else if (App.currentRangeType === RANGE_TYPE_DAY) {
+		startDt = currentDtClone.startOf('day');
+		endDt = moment(startDt).add('d', 1);
+	} else if (App.currentRangeType == RANGE_TYPE_NIGHT) {
+		if (currentDtClone.hour() >= 12) {
+			startDt = currentDtClone.hour(12);
+		} else {
+			startDt = currentDtClone.hour(12).subtract('d', 1);
+		}
+		endDt = moment(startDt).add('d', 1);
+	} else if (App.currentRangeType == RANGE_TYPE_WEEK) {
+		startDt = currentDtClone.startOf('week');
+		endDt = moment(startDt).add('d', 7);
+	} else if (App.currentRangeType == RANGE_TYPE_MONTH) {
+		startDt = currentDtClone.startOf('month');
+		endDt = moment(startDt).add('M', 1);
+	} else if (App.currentRangeType == RANGE_TYPE_YEAR) {
+		startDt = currentDtClone.startOf('year');
+		endDt = moment(startDt).add('y', 1);
+	}
+
+	return {startDtStamp: startDt.unix(), endDtStamp: endDt.unix()}
+}
+
+var RANGE_TYPE_HOUR		= 'hour';
+var RANGE_TYPE_DAY		= 'day';
+var RANGE_TYPE_NIGHT	= 'night';
+var RANGE_TYPE_WEEK		= 'week';
+var RANGE_TYPE_MONTH	= 'month';
+var RANGE_TYPE_YEAR		= 'year';
+
+var API_RANGE_TYPES = {
+	'hour': 'min',
+	'day': 'hour',
+	'night': 'hour',
+	'week': 'week',
+	'month': 'month',
+	'year': 'year',
+}
+
 var App = {};
 App.systemTree = null;
-App.timezoneOffset = new Date().getTimezoneOffset();
+App.timezoneOffset = (new Date().getTimezoneOffset())/60;
 App.currentSelectedSystem = null;
+App.totalSeries = null;
+App.sourceDatasets = null;
+App.currentRangeType = RANGE_TYPE_DAY;
+// App.currentDt = moment().startOf('hour');
+// TODO: hardcode now
+App.currentDt = moment().year(2014).month(5).date(3).startOf('hour');
 
 $(function() {
 
@@ -223,12 +289,7 @@ $(function() {
 		systemNode.data.sources[source_id] = source;
 	{% endfor %}
 
-	getSourceReadings(
-		App.currentSelectedSystem,
-		'hour',
-		1401638400000,
-		1401724800000,
-		App.timezoneOffset);
+	getSourceReadings();
 
 	$("#yAxisSlider").slider({
 		orientation: "vertical",

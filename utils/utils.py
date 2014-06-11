@@ -7,6 +7,7 @@ from django.http import HttpResponse
 class Utils:
 
 	LOGGER_NAME = 'django.entrak_error'
+	RANGE_TYPE_MIN		= 'min'
 	RANGE_TYPE_HOUR		= 'hour'
 	RANGE_TYPE_DAY		= 'day'
 	RANGE_TYPE_WEEK		= 'week'
