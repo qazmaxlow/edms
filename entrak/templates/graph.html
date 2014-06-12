@@ -11,326 +11,20 @@
 <script src="{% static 'js/flot/jquery.flot.min.js' %}"></script>
 <script src="{% static 'js/growraf/jquery.flot.growraf.js' %}"></script>
 <script src="{% static 'js/moment.min.js' %}"></script>
+<script src="{% static 'js/graph.js' %}"></script>
 
 <script type="text/javascript">
 
-function getSourceReadings() {
-	var startEndDt = genStartEndDtStamp();
-	var sourceIds = getSourceIdsUnderTree(App.currentSelectedSystem);
-	$.ajax({
-		type: "POST",
-		url: "../source_readings/",
-		data: {
-			source_ids: sourceIds,
-			range_type: API_RANGE_TYPES[App.currentRangeType],
-			start_dt: startEndDt.startDt.unix(),
-			end_dt: startEndDt.endDt.unix(),
-			js_tz_offset: App.timezoneOffset
-		},
-	}).done(function(data) {
-		for (var sourceId in data) {
-			var systemNode = findSystemNodeBySourceId(App.currentSelectedSystem, sourceId);
-			systemNode.data.sources[sourceId]['data'] = {};
-			$.each(data[sourceId], function(readingKey, value) {
-				systemNode.data.sources[sourceId]['data'][transformXCoordinate(readingKey)] = value;
-			})
-		}
-
-		updateXAxisOptions(startEndDt.startDt);
-		transformReadingToChartDatasets(App.currentSelectedSystem);
-		plotGraph();
-	});
-}
-
-function findNodeBySystemCode(tree, systemCode) {
-	return tree.find(function (node) {
-		return (systemCode === node.data.code);
-	});
-}
-
-function getSourceIdsUnderTree(tree) {
-	var sourceIds = [];
-	tree.traverseDown(function (node) {
-		for (var sourceId in node.data.sources) {
-			sourceIds.push(sourceId);
-		}
-	});
-
-	return sourceIds;
-}
-
-function findSystemNodeBySourceId(tree, sourceId) {
-	return tree.find(function (node) {
-		return sourceId in node.data.sources;
-	});
-}
-
-function sumUpSourceReading(sourceReadings, sources) {
-	for (var sourceId in sources) {
-		var source = sources[sourceId];
-		for (var readingKey in source.data) {
-			if (readingKey in sourceReadings) {
-				sourceReadings[readingKey] += source.data[readingKey];
-			} else {
-				sourceReadings[readingKey] = source.data[readingKey];
-			}
-		};
-	};
-}
-
-function transformXCoordinate(value) {
-	if (App.currentRangeType === RANGE_TYPE_NIGHT) {
-		if (value > 12) {
-			value -= 24;
-		}
-	} else if (App.currentRangeType === RANGE_TYPE_YEAR) {
-		value -= 1;
-	}
-
-	return value;
-}
-
-function transformReadingToChartDatasets(tree) {
-	App.sourceDatasets = [];
-	var totalReadings = {};
-	var sourceLineOptions = {show: true};
-
-	sumUpSourceReading(totalReadings, tree.data.sources);
-	for (var sourceId in tree.data.sources) {
-		var source = tree.data.sources[sourceId];
-
-		var series = {
-			label: source.name,
-			lines: sourceLineOptions,
-			data: [],
-		};
-		for (var readingKey in source.data) {
-			series.data.push([readingKey, source.data[readingKey]]);
-		};
-		App.sourceDatasets.push(series);
-	}
-
-	for (var childrenIdx in tree.children) {
-		var subTree = tree.children[childrenIdx];
-		var series = {};
-		series.label = subTree.data.name;
-		series.lines = sourceLineOptions;
-		series.data = [];
-		sourceReadings = {};
-
-		sumUpSourceReading(sourceReadings, subTree.data.sources);
-
-		subTree.traverseDown(function (node) {
-			sumUpSourceReading(sourceReadings, node.data.sources);
-		});
-
-		for (var readingKey in sourceReadings) {
-			series.data.push([readingKey, sourceReadings[readingKey]]);
-
-			if (readingKey in totalReadings) {
-				totalReadings[readingKey] += sourceReadings[readingKey];
-			} else {
-				totalReadings[readingKey] = sourceReadings[readingKey];
-			}
-		};
-		App.sourceDatasets.push(series);
-	};
-
-	App.totalSeries = {
-		label: 'Total',
-		bars: {
-			barWidth: 0.4,
-			align: "center",
-			show: true,
-		},
-		data: [],
-	};
-	for (var readingKey in totalReadings) {
-		App.totalSeries.data.push([readingKey, totalReadings[readingKey]]);
-	}
-}
-
-function plotGraph() {
-	App.plot = $("#chart").plot([App.totalSeries], {
-		series: {
-	        grow: {
-	            active: true,
-	            duration: 800,
-	        }
-	    },
-	    xaxis: {
-	    	min: App.currentXaxisOptions.min,
-	    	max: App.currentXaxisOptions.max,
-	    	ticks: App.currentXaxisOptions.ticks,
-	    }
-	}).data("plot");
-	setupSourceChoice("#sourceChoice", App.plot, App.totalSeries, App.sourceDatasets);
-	refreshYAxisSlider("#yAxisSlider", App.plot);
-}
-
-function setupSourceChoice(eleSelector, plot, totalSeries, sourceDatasets) {
-	var choiceContainer = $(eleSelector);
-	choiceContainer.empty();
-
-	$.each(sourceDatasets, function(seriesIdx, series) {
-		var choiceHtml = "<div ";
-		if (series.isTotal) {
-			choiceHtml += "style='display:none;'";
-		}
-		choiceHtml += " >";
-		choiceHtml += "<input type='checkbox' " + "series_idx='" + seriesIdx + "'"
-			+ " name='" + series.label + "'"
-			+ " ></input><label>" + series.label + "</label></div>";
-		choiceContainer.append(choiceHtml);
-	});
-
-	choiceContainer.find("input").click(function () {
-		var willPlotSeries = [totalSeries];
-		choiceContainer.find("input:checked").each(function () {
-			var seriesIdx = parseInt($(this).attr("series_idx"), 10);
-			willPlotSeries.push(sourceDatasets[seriesIdx]);
-		});
-
-		plot.getOptions().series.grow.active = false;
-		plot.setData(willPlotSeries);
-		plot.draw();
-		plot.getOptions().series.grow.active = true;
-	});
-}
-
-function refreshYAxisSlider(eleSelector, plot) {
-	var currentYMax = plot.getAxes().yaxis.max;
-	var yMin = currentYMax*0.25;
-	var yMax = currentYMax*1.75;
-	var step = (yMax-yMin)/1000;
-	$(eleSelector).slider("option", {
-		min: yMin,
-		max: yMax,
-		step: step,
-		value: currentYMax,
-	}).off("slide")
-	.on("slide", function(event, ui) {
-		plot.getAxes().yaxis.options.max = Math.round(ui.value);
-		plot.setupGrid();
-		plot.draw();
-	});
-}
-
-function genStartEndDtStamp() {
-	var startDt = null;
-	var endDt = null;
-	var currentDtClone = moment(App.currentDt);
-
-	if (App.currentRangeType === RANGE_TYPE_HOUR) {
-		startDt = currentDtClone;
-		endDt = moment(startDt).add('h', 1);
-	} else if (App.currentRangeType === RANGE_TYPE_DAY) {
-		startDt = currentDtClone.startOf('day');
-		endDt = moment(startDt).add('d', 1);
-	} else if (App.currentRangeType == RANGE_TYPE_NIGHT) {
-		if (currentDtClone.hour() >= 12) {
-			startDt = currentDtClone.hour(12);
-		} else {
-			startDt = currentDtClone.hour(12).subtract('d', 1);
-		}
-		endDt = moment(startDt).add('d', 1);
-	} else if (App.currentRangeType == RANGE_TYPE_WEEK) {
-		startDt = currentDtClone.startOf('week');
-		endDt = moment(startDt).add('d', 7);
-	} else if (App.currentRangeType == RANGE_TYPE_MONTH) {
-		startDt = currentDtClone.startOf('month');
-		endDt = moment(startDt).add('M', 1);
-	} else if (App.currentRangeType == RANGE_TYPE_YEAR) {
-		startDt = currentDtClone.startOf('year');
-		endDt = moment(startDt).add('y', 1);
-	}
-
-	return {startDt: startDt, endDt: endDt}
-}
-
-function updateXAxisOptions(startDt) {
-	var min = null;
-	var max = null;
-	var ticks = [];
-
-	if (App.currentRangeType === RANGE_TYPE_HOUR) {
-		min = -1;
-		max = 60;
-		for (var i = 0; i < 12; i++) {
-			var tickLabel = moment(startDt).add('m', i*5).format('h:mma');
-			ticks.push([i*5, tickLabel]);
-		};
-	} else if (App.currentRangeType === RANGE_TYPE_DAY) {
-		min = -1;
-		max = 24;
-		
-		for (var i = 0; i < 12; i++) {
-			var tickLabel = moment(startDt).add('h', i*2).format('ha');
-			ticks.push([i*2, tickLabel]);
-		};
-	} else if (App.currentRangeType === RANGE_TYPE_NIGHT) {
-		min = -12;
-		max = 13;
-
-		for (var i = 0; i < 12; i++) {
-			var tickLabel = moment(startDt).add('h', i*2).format('ha');
-			ticks.push([(i*2)-11, tickLabel]);
-		};
-	} else if (App.currentRangeType === RANGE_TYPE_WEEK) {
-		min = -1;
-		max = 7;
-		var tickLabels = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-		for (var i = 0; i < tickLabels.length; i++) {
-			ticks.push(i, tickLabels[i]);
-		};
-	} else if (App.currentRangeType === RANGE_TYPE_MONTH) {
-		var dayOfEndOfMonth = moment(startDt).endOf('month').date();
-		min = 0;
-		max = dayOfEndOfMonth+2;
-		for (var i = 0; i < max; i++) {
-			ticks.push([i, i]);
-		};
-	} else if (App.currentRangeType === RANGE_TYPE_YEAR) {
-		min = -1;
-		max = 12;
-		for (var i = 0; i < max; i++) {
-			var tickLabel = moment(startDt).add('M', i).format('MMM');
-			ticks.push([i, tickLabel]);
-		}
-	}
-
-	App.currentXaxisOptions = {min: min, max: max, ticks: ticks};
-}
-
-var RANGE_TYPE_HOUR		= 'hour';
-var RANGE_TYPE_DAY		= 'day';
-var RANGE_TYPE_NIGHT	= 'night';
-var RANGE_TYPE_WEEK		= 'week';
-var RANGE_TYPE_MONTH	= 'month';
-var RANGE_TYPE_YEAR		= 'year';
-
-var API_RANGE_TYPES = {
-	'hour': 'hour',
-	'day': 'day',
-	'night': 'day',
-	'week': 'week',
-	'month': 'month',
-	'year': 'year',
-}
-
-var App = {};
-App.systemTree = null;
-App.timezoneOffset = (new Date().getTimezoneOffset())/60;
-App.currentSelectedSystem = null;
-App.totalSeries = null;
-App.sourceDatasets = null;
-App.currentRangeType = RANGE_TYPE_DAY;
-// App.currentDt = moment().startOf('hour');
-// TODO: hardcode now
-App.currentDt = moment().year(2014).month(5).date(3).startOf('hour');
-App.currentXaxisOptions = {};
+var graph = null;
 
 $(function() {
+
+	graph = new Graph("#chart", "#source-choice", "#y-axis-slider");
+	graph.timezoneOffset = (new Date().getTimezoneOffset())/60;
+	graph.currentRangeType = graph.RANGE_TYPE_DAY;
+	// TODO: hardcode now
+	// graph.currentDt = moment().startOf('hour');
+	graph.currentDt = moment().year(2014).month(5).date(3).startOf('hour');
 
 	{% for system in systems %}
 		var system = {};
@@ -339,37 +33,36 @@ $(function() {
 		system.path = '{{system.path}}';
 		system.sources = {};
 		if (system.path == 'None') {
-			App.systemTree = new Arboreal(null, system);
+			graph.systemTree = new Arboreal(null, system);
 		} else {
 			parentCodes = $(system.path.split(',')).filter(function(){
 				return this != "";
 			});
 			parentCode = parentCodes[parentCodes.length - 1];
-			parentNode = App.systemTree.find(function (node) {
+			parentNode = graph.systemTree.find(function (node) {
 				return node.data.code == parentCode;
 			});
 			parentNode.appendChild(system);
 		}
 	{% endfor %}
-	App.currentSelectedSystem = App.systemTree;
+	graph.currentSelectedSystem = graph.systemTree;
 
 	{% for source in sources %}
 		var source = {};
-		var source_id = '{{source.id}}';
 		source.name = '{{source.d_name}}';
 		source.name_tc = '{{source.d_name_tc}}';
 		source.order = '{{source.order}}';
 
-		var systemNode = findNodeBySystemCode(App.systemTree, '{{source.system_code}}');
-		systemNode.data.sources[source_id] = source;
+		graph.addSourceToSystem('{{source.system_code}}', '{{source.id}}', source);
 	{% endfor %}
 
-	getSourceReadings();
-
-	$("#yAxisSlider").slider({
+	$("#y-axis-slider").slider({
 		orientation: "vertical",
 		animate: "fast",
 	});
+
+	graph.getSourceReadings();
+
 });
 
 </script>
@@ -378,7 +71,7 @@ $(function() {
 {% block content %}
 
 <div id="chart" class='chart'></div>
-<div id="sourceChoice"></div>
-<div id="yAxisSlider"></div>
+<div id="source-choice"></div>
+<div id="y-axis-slider"></div>
 
 {% endblock %}
