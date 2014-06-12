@@ -15,7 +15,7 @@
 <script type="text/javascript">
 
 function getSourceReadings() {
-	timestamps = genStartEndDtStamp();
+	var startEndDt = genStartEndDtStamp();
 	var sourceIds = getSourceIdsUnderTree(App.currentSelectedSystem);
 	$.ajax({
 		type: "POST",
@@ -23,17 +23,20 @@ function getSourceReadings() {
 		data: {
 			source_ids: sourceIds,
 			range_type: API_RANGE_TYPES[App.currentRangeType],
-			start_dt: timestamps.startDtStamp,
-			end_dt: timestamps.endDtStamp,
+			start_dt: startEndDt.startDt.unix(),
+			end_dt: startEndDt.endDt.unix(),
 			js_tz_offset: App.timezoneOffset
 		},
 	}).done(function(data) {
-		console.log(data);
 		for (var sourceId in data) {
 			var systemNode = findSystemNodeBySourceId(App.currentSelectedSystem, sourceId);
-			systemNode.data.sources[sourceId]['data'] = data[sourceId];
+			systemNode.data.sources[sourceId]['data'] = {};
+			$.each(data[sourceId], function(readingKey, value) {
+				systemNode.data.sources[sourceId]['data'][transformXCoordinate(readingKey)] = value;
+			})
 		}
 
+		updateXAxisOptions(startEndDt.startDt);
 		transformReadingToChartDatasets(App.currentSelectedSystem);
 		plotGraph();
 	});
@@ -73,6 +76,18 @@ function sumUpSourceReading(sourceReadings, sources) {
 			}
 		};
 	};
+}
+
+function transformXCoordinate(value) {
+	if (App.currentRangeType === RANGE_TYPE_NIGHT) {
+		if (value > 12) {
+			value -= 24;
+		}
+	} else if (App.currentRangeType === RANGE_TYPE_YEAR) {
+		value -= 1;
+	}
+
+	return value;
 }
 
 function transformReadingToChartDatasets(tree) {
@@ -143,6 +158,11 @@ function plotGraph() {
 	            duration: 800,
 	        }
 	    },
+	    xaxis: {
+	    	min: App.currentXaxisOptions.min,
+	    	max: App.currentXaxisOptions.max,
+	    	ticks: App.currentXaxisOptions.ticks,
+	    }
 	}).data("plot");
 	setupSourceChoice("#sourceChoice", App.plot, App.totalSeries, App.sourceDatasets);
 	refreshYAxisSlider("#yAxisSlider", App.plot);
@@ -225,7 +245,61 @@ function genStartEndDtStamp() {
 		endDt = moment(startDt).add('y', 1);
 	}
 
-	return {startDtStamp: startDt.unix(), endDtStamp: endDt.unix()}
+	return {startDt: startDt, endDt: endDt}
+}
+
+function updateXAxisOptions(startDt) {
+	var min = null;
+	var max = null;
+	var ticks = [];
+
+	if (App.currentRangeType === RANGE_TYPE_HOUR) {
+		min = -1;
+		max = 60;
+		for (var i = 0; i < 12; i++) {
+			var tickLabel = moment(startDt).add('m', i*5).format('h:mma');
+			ticks.push([i*5, tickLabel]);
+		};
+	} else if (App.currentRangeType === RANGE_TYPE_DAY) {
+		min = -1;
+		max = 24;
+		
+		for (var i = 0; i < 12; i++) {
+			var tickLabel = moment(startDt).add('h', i*2).format('ha');
+			ticks.push([i*2, tickLabel]);
+		};
+	} else if (App.currentRangeType === RANGE_TYPE_NIGHT) {
+		min = -12;
+		max = 13;
+
+		for (var i = 0; i < 12; i++) {
+			var tickLabel = moment(startDt).add('h', i*2).format('ha');
+			ticks.push([(i*2)-11, tickLabel]);
+		};
+	} else if (App.currentRangeType === RANGE_TYPE_WEEK) {
+		min = -1;
+		max = 7;
+		var tickLabels = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+		for (var i = 0; i < tickLabels.length; i++) {
+			ticks.push(i, tickLabels[i]);
+		};
+	} else if (App.currentRangeType === RANGE_TYPE_MONTH) {
+		var dayOfEndOfMonth = moment(startDt).endOf('month').date();
+		min = 0;
+		max = dayOfEndOfMonth+2;
+		for (var i = 0; i < max; i++) {
+			ticks.push([i, i]);
+		};
+	} else if (App.currentRangeType === RANGE_TYPE_YEAR) {
+		min = -1;
+		max = 12;
+		for (var i = 0; i < max; i++) {
+			var tickLabel = moment(startDt).add('M', i).format('MMM');
+			ticks.push([i, tickLabel]);
+		}
+	}
+
+	App.currentXaxisOptions = {min: min, max: max, ticks: ticks};
 }
 
 var RANGE_TYPE_HOUR		= 'hour';
@@ -236,9 +310,9 @@ var RANGE_TYPE_MONTH	= 'month';
 var RANGE_TYPE_YEAR		= 'year';
 
 var API_RANGE_TYPES = {
-	'hour': 'min',
-	'day': 'hour',
-	'night': 'hour',
+	'hour': 'hour',
+	'day': 'day',
+	'night': 'day',
 	'week': 'week',
 	'month': 'month',
 	'year': 'year',
@@ -254,6 +328,7 @@ App.currentRangeType = RANGE_TYPE_DAY;
 // App.currentDt = moment().startOf('hour');
 // TODO: hardcode now
 App.currentDt = moment().year(2014).month(5).date(3).startOf('hour');
+App.currentXaxisOptions = {};
 
 $(function() {
 
