@@ -56,6 +56,20 @@ $(function() {
 		graph.addSourceToSystem('{{source.system_code}}', '{{source.id}}', source);
 	{% endfor %}
 
+	var unitCategorys = [];
+	{% for unit in units %}
+		var unit = {};
+		unit.category = '{{unit.category}}';
+		unit.catName = '{{unit.cat_name}}';
+		unit.catId = {{unit.cat_id}};
+		unit.name = '{{unit.name}}';
+		unit.rate = {{unit.rate}};
+		unit.effectiveDate = moment({{unit.effective_date|date:"U"}}*1000);
+		unit.order = {{unit.order}};
+
+		graph.units.push(unit);
+	{% endfor %}
+
 	$("#y-axis-slider").slider({
 		orientation: "vertical",
 		animate: "fast",

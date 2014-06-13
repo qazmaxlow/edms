@@ -5,6 +5,7 @@ function Graph(graphEleSel, sourceChoiceEleSel, yAxisSliderEleSel) {
 
 	this.plot = null;
 	this.systemTree = null;
+	this.units = [];
 	this.timezoneOffset = null;
 	this.currentSelectedSystem = null;
 	this.totalSeries = null;
@@ -29,6 +30,8 @@ Graph.prototype.API_RANGE_TYPES = {
 	'month': 'month',
 	'year': 'year',
 };
+
+Graph.prototype.UNIT_KWH = 'kwh';
 
 Graph.prototype.getSourceReadings = function () {
 	var graphThis = this;

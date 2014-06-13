@@ -14,6 +14,7 @@ class Source(Document):
 	d_name_tc = StringField(max_length=200)
 	order = IntField(default=1)
 	tz = StringField(max_length=50, default=SOURCE_TZ_HK)
+	units = DictField()
 
 class BaseSourceReading(Document):
 	meta = {

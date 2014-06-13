@@ -38,6 +38,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'mongoengine.django.mongo_auth',
     'egauge',
+    'system',
+    'unit',
     'entrak',
 )
 
