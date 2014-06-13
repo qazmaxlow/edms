@@ -24,6 +24,7 @@ $(function() {
 	// TODO: hardcode now
 	// graph.currentDt = moment().startOf('hour');
 	graph.currentDt = moment().year(2014).month(5).date(3).startOf('hour');
+	graph.currentUnit = graph.UNIT_KWH;
 
 	{% for system in systems %}
 		var system = {};
@@ -51,6 +52,11 @@ $(function() {
 		source.name = '{{source.d_name}}';
 		source.name_tc = '{{source.d_name_tc}}';
 		source.order = '{{source.order}}';
+		source.units = {};
+
+		{% for category, cat_id in source.units.items %}
+			source.units['{{category}}'] = {{cat_id}};
+		{% endfor %}
 
 		graph.addSourceToSystem('{{source.system_code}}', '{{source.id}}', source);
 	{% endfor %}
@@ -63,7 +69,7 @@ $(function() {
 		unit.catId = {{unit.cat_id}};
 		unit.name = '{{unit.name}}';
 		unit.rate = {{unit.rate}};
-		unit.effectiveDate = moment({{unit.effective_date|date:"U"}}*1000);
+		unit.effectiveDate = moment.unix({{unit.effective_date|date:"U"}});
 		unit.order = {{unit.order}};
 
 		graph.units.push(unit);
@@ -72,6 +78,21 @@ $(function() {
 	$("#y-axis-slider").slider({
 		orientation: "vertical",
 		animate: "fast",
+	});
+
+	var distinctUnitCategorys = [];
+	var unitChoice = $('#unit-choice');
+	$.each(graph.units, function(idx, unit) {
+		if ($.inArray(unit.category, distinctUnitCategorys) === -1) {
+			distinctUnitCategorys.push(unit.category);
+			var buttonHtml = "<button unit_category='" + unit.category + "'>"
+				+ unit.category +  "</button>";
+			unitChoice.append(buttonHtml);
+		}
+	});
+
+	unitChoice.find("button").click(function () {
+		graph.updateUnit($(this).attr("unit_category"));
 	});
 
 	graph.getSourceReadings();
@@ -86,5 +107,8 @@ $(function() {
 <div id="chart" class='chart'></div>
 <div id="source-choice"></div>
 <div id="y-axis-slider"></div>
+<div id="unit-choice">
+	<button unit_category='kwh'>kwh</button>
+</div>
 
 {% endblock %}

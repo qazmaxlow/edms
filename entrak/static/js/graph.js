@@ -12,6 +12,7 @@ function Graph(graphEleSel, sourceChoiceEleSel, yAxisSliderEleSel) {
 	this.currentRangeType = null;
 	this.currentDt = null;
 	this.currentXaxisOptions = {};
+	this.currentUnit = null;
 }
 
 Graph.prototype.RANGE_TYPE_HOUR		= 'hour';
@@ -49,8 +50,8 @@ Graph.prototype.getSourceReadings = function () {
 		for (var sourceId in data) {
 			var systemNode = graphThis.findSystemNodeBySourceId(sourceId);
 			systemNode.data.sources[sourceId]['data'] = {};
-			$.each(data[sourceId], function(readingKey, value) {
-				systemNode.data.sources[sourceId]['data'][readingKey] = value;
+			$.each(data[sourceId], function(readingTimestamp, value) {
+				systemNode.data.sources[sourceId]['data'][readingTimestamp] = value;
 			})
 		}
 
@@ -85,16 +86,17 @@ Graph.prototype.findSystemNodeBySourceId = function (sourceId) {
 }
 
 Graph.prototype.sumUpSourceReading = function (sourceReadings, sources) {
-	for (var sourceId in sources) {
-		var source = sources[sourceId];
-		for (var readingKey in source.data) {
-			if (readingKey in sourceReadings) {
-				sourceReadings[readingKey] += source.data[readingKey];
+	var graphThis = this;
+	$.each(sources, function (sourceId, source) {
+		$.each(source.data, function(readingTimestamp, readingVal) {
+			var transformedVal = graphThis.transformReading(source, readingTimestamp, readingVal);
+			if (readingTimestamp in sourceReadings) {
+				sourceReadings[readingTimestamp] += transformedVal;
 			} else {
-				sourceReadings[readingKey] = source.data[readingKey];
+				sourceReadings[readingTimestamp] = transformedVal;
 			}
-		};
-	};
+		})
+	})
 }
 
 Graph.prototype.transformXCoordinate = function (value) {
@@ -119,6 +121,45 @@ Graph.prototype.transformXCoordinate = function (value) {
 	return value;
 }
 
+Graph.prototype.updateUnit = function (newUnit) {
+	var graphThis = this;
+	this.currentUnit = newUnit;
+	this.transformReadingToChartDatasets();
+
+	var willPlotSeries = [this.totalSeries];
+	$(this.sourceChoiceEleSel).find("input:checked").each(function () {
+		var seriesIdx = parseInt($(this).attr("series_idx"), 10);
+		willPlotSeries.push(graphThis.sourceDatasets[seriesIdx]);
+	});
+
+	this.plot.getOptions().series.grow.active = false;
+	this.plot.setData(willPlotSeries);
+	this.plot.setupGrid();
+	this.plot.draw();
+	this.plot.getOptions().series.grow.active = true;
+
+	this.refreshYAxisSlider();
+}
+
+Graph.prototype.transformReading = function (source, readingTimestamp, value) {
+	var graphThis = this;
+	if (this.currentUnit === this.UNIT_KWH) {
+		return value;
+	}
+
+	var matchUnits = $.grep(this.units, function (unit) {
+		return (unit.category === graphThis.currentUnit
+			&& unit.catId === source.units[graphThis.currentUnit]
+			&& unit.effectiveDate.unix() < readingTimestamp)
+	});
+	matchUnits.sort(function (a, b) {
+		return b.effectiveDate.unix() - a.effectiveDate.unix();
+	});
+	var matchUnit = matchUnits[0];
+
+	return matchUnit.rate*value;
+}
+
 Graph.prototype.transformReadingToChartDatasets = function () {
 	var graphThis = this;
 	var tree = this.currentSelectedSystem;
@@ -135,9 +176,10 @@ Graph.prototype.transformReadingToChartDatasets = function () {
 			lines: sourceLineOptions,
 			data: [],
 		};
-		for (var readingKey in source.data) {
-			series.data.push([graphThis.transformXCoordinate(readingKey), source.data[readingKey]]);
-		};
+		$.each(source.data, function(readingTimestamp, readingVal) {
+			var transformedVal = graphThis.transformReading(source, readingTimestamp, readingVal);
+			series.data.push([graphThis.transformXCoordinate(readingTimestamp), transformedVal]);
+		});
 		this.sourceDatasets.push(series);
 	}
 
@@ -147,7 +189,7 @@ Graph.prototype.transformReadingToChartDatasets = function () {
 		series.label = subTree.data.name;
 		series.lines = sourceLineOptions;
 		series.data = [];
-		sourceReadings = {};
+		var sourceReadings = {};
 
 		this.sumUpSourceReading(sourceReadings, subTree.data.sources);
 
@@ -155,13 +197,13 @@ Graph.prototype.transformReadingToChartDatasets = function () {
 			graphThis.sumUpSourceReading(sourceReadings, node.data.sources);
 		});
 
-		for (var readingKey in sourceReadings) {
-			series.data.push([graphThis.transformXCoordinate(readingKey), sourceReadings[readingKey]]);
+		for (var readingTimestamp in sourceReadings) {
+			series.data.push([graphThis.transformXCoordinate(readingTimestamp), sourceReadings[readingTimestamp]]);
 
-			if (readingKey in totalReadings) {
-				totalReadings[readingKey] += sourceReadings[readingKey];
+			if (readingTimestamp in totalReadings) {
+				totalReadings[readingTimestamp] += sourceReadings[readingTimestamp];
 			} else {
-				totalReadings[readingKey] = sourceReadings[readingKey];
+				totalReadings[readingTimestamp] = sourceReadings[readingTimestamp];
 			}
 		};
 		this.sourceDatasets.push(series);
@@ -176,8 +218,8 @@ Graph.prototype.transformReadingToChartDatasets = function () {
 		},
 		data: [],
 	};
-	for (var readingKey in totalReadings) {
-		this.totalSeries.data.push([graphThis.transformXCoordinate(readingKey), totalReadings[readingKey]]);
+	for (var readingTimestamp in totalReadings) {
+		this.totalSeries.data.push([graphThis.transformXCoordinate(readingTimestamp), totalReadings[readingTimestamp]]);
 	}
 }
 
