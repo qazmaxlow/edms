@@ -20,7 +20,6 @@ var graph = null;
 $(function() {
 
 	graph = new Graph("#chart", "#source-choice", "#y-axis-slider");
-	graph.timezoneOffset = (new Date().getTimezoneOffset())/60;
 	graph.currentRangeType = graph.RANGE_TYPE_DAY;
 	// TODO: hardcode now
 	// graph.currentDt = moment().startOf('hour');

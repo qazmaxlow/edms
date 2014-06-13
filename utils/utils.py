@@ -54,4 +54,4 @@ class Utils:
 
 	@staticmethod
 	def utc_dt_from_utc_timestamp(timestamp):
-		return pytz.utc.localize(datetime.datetime.fromtimestamp(timestamp))
+		return datetime.datetime.fromtimestamp(timestamp, pytz.utc)

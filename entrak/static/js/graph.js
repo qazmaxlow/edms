@@ -6,7 +6,6 @@ function Graph(graphEleSel, sourceChoiceEleSel, yAxisSliderEleSel) {
 	this.plot = null;
 	this.systemTree = null;
 	this.units = [];
-	this.timezoneOffset = null;
 	this.currentSelectedSystem = null;
 	this.totalSeries = null;
 	this.sourceDatasets = null;
@@ -45,14 +44,13 @@ Graph.prototype.getSourceReadings = function () {
 			range_type: graphThis.API_RANGE_TYPES[graphThis.currentRangeType],
 			start_dt: startEndDt.startDt.unix(),
 			end_dt: startEndDt.endDt.unix(),
-			js_tz_offset: graphThis.timezoneOffset
 		},
 	}).done(function(data) {
 		for (var sourceId in data) {
 			var systemNode = graphThis.findSystemNodeBySourceId(sourceId);
 			systemNode.data.sources[sourceId]['data'] = {};
 			$.each(data[sourceId], function(readingKey, value) {
-				systemNode.data.sources[sourceId]['data'][graphThis.transformXCoordinate(readingKey)] = value;
+				systemNode.data.sources[sourceId]['data'][readingKey] = value;
 			})
 		}
 
@@ -100,12 +98,22 @@ Graph.prototype.sumUpSourceReading = function (sourceReadings, sources) {
 }
 
 Graph.prototype.transformXCoordinate = function (value) {
-	if (this.currentRangeType === this.RANGE_TYPE_NIGHT) {
-		if (value > 12) {
+	value_dt = moment.unix(value);
+	if (this.currentRangeType === this.RANGE_TYPE_HOUR) {
+		value = value_dt.minute();
+	} else if (this.currentRangeType === this.RANGE_TYPE_DAY) {
+		value = value_dt.hour();
+	} else if (this.currentRangeType === this.RANGE_TYPE_NIGHT) {
+		value = value_dt.hour();
+		if (value >= 12) {
 			value -= 24;
-		}
+		};
+	} else if (this.currentRangeType === this.RANGE_TYPE_WEEK) {
+		value = value_dt.day();
+	} else if (this.currentRangeType === this.RANGE_TYPE_MONTH) {
+		value = value_dt.date();
 	} else if (this.currentRangeType === this.RANGE_TYPE_YEAR) {
-		value -= 1;
+		value = value_dt.month();
 	}
 
 	return value;
@@ -128,7 +136,7 @@ Graph.prototype.transformReadingToChartDatasets = function () {
 			data: [],
 		};
 		for (var readingKey in source.data) {
-			series.data.push([readingKey, source.data[readingKey]]);
+			series.data.push([graphThis.transformXCoordinate(readingKey), source.data[readingKey]]);
 		};
 		this.sourceDatasets.push(series);
 	}
@@ -148,7 +156,7 @@ Graph.prototype.transformReadingToChartDatasets = function () {
 		});
 
 		for (var readingKey in sourceReadings) {
-			series.data.push([readingKey, sourceReadings[readingKey]]);
+			series.data.push([graphThis.transformXCoordinate(readingKey), sourceReadings[readingKey]]);
 
 			if (readingKey in totalReadings) {
 				totalReadings[readingKey] += sourceReadings[readingKey];
@@ -169,7 +177,7 @@ Graph.prototype.transformReadingToChartDatasets = function () {
 		data: [],
 	};
 	for (var readingKey in totalReadings) {
-		this.totalSeries.data.push([readingKey, totalReadings[readingKey]]);
+		this.totalSeries.data.push([graphThis.transformXCoordinate(readingKey), totalReadings[readingKey]]);
 	}
 }
 
@@ -292,12 +300,12 @@ Graph.prototype.updateXAxisOptions = function (startDt) {
 			ticks.push([i*2, tickLabel]);
 		};
 	} else if (this.currentRangeType === this.RANGE_TYPE_NIGHT) {
-		min = -12;
-		max = 13;
+		min = -13;
+		max = 12;
 
 		for (var i = 0; i < 12; i++) {
 			var tickLabel = moment(startDt).add('h', i*2).format('ha');
-			ticks.push([(i*2)-11, tickLabel]);
+			ticks.push([(i*2)-12, tickLabel]);
 		};
 	} else if (this.currentRangeType === this.RANGE_TYPE_WEEK) {
 		min = -1;

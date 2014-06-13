@@ -1,12 +1,13 @@
 import requests
 import pytz
+import calendar
+import time
+import datetime
 from bson.code import Code
 from mongoengine import connection
 from mongoengine import Q
 from .models import Source, SourceReadingMin, SourceReadingHour,\
 	SourceReadingDay, SourceReadingWeek, SourceReadingMonth, SourceReadingYear, SourceReadingMinInvalid
-import time
-import datetime
 from lxml import etree
 from utils.utils import Utils
 
@@ -56,7 +57,7 @@ class SourceManager:
 		source_reading_mins = []
 		source_reading_mins_invalid = []
 		need_update_source_ids = []
-		start_timestamp = time.mktime(retrieve_time.utctimetuple())
+		start_timestamp = calendar.timegm(retrieve_time.utctimetuple())
 		try:
 			readings = SourceManager.__get_egauge_data(xml_url, start_timestamp, 1)
 			for info in infos:
@@ -156,7 +157,7 @@ class SourceManager:
 		retrieve_time = pytz.utc.localize(grouped_invalid_reading['_id']['datetime'])
 		sources = grouped_invalid_reading['sources']
 
-		start_timestamp = time.mktime(retrieve_time.utctimetuple())
+		start_timestamp = calendar.timegm(retrieve_time.utctimetuple())
 		try:
 			source_reading_mins = []
 			need_update_source_ids = []
@@ -200,7 +201,7 @@ class SourceManager:
 		for hour_idx in xrange(total_hour):
 			start_time = start_dt + datetime.timedelta(hours=hour_idx)
 			end_time = start_time + datetime.timedelta(hours=1)
-			start_timestamp = time.mktime(start_time.utctimetuple())
+			start_timestamp = calendar.timegm(start_time.utctimetuple())
 			reading_datetimes = [(start_time + datetime.timedelta(minutes=minute)) for minute in xrange(60)]
 
 			print 'processing: ', start_time
@@ -290,7 +291,7 @@ class SourceManager:
 		return sources
 
 	@staticmethod
-	def get_readings(source_ids, range_type, start_dt, end_dt, tz_offset):
+	def get_readings(source_ids, range_type, start_dt, end_dt):
 		range_type_mapping = {
 			Utils.RANGE_TYPE_HOUR: {'target_class': SourceReadingMin, 'dt_formatter': '%M'},
 			Utils.RANGE_TYPE_DAY: {'target_class': SourceReadingHour, 'dt_formatter': '%H'},
@@ -304,13 +305,11 @@ class SourceManager:
 			datetime__gte=start_dt,
 			datetime__lt=end_dt)
 
-		offset_timedelta = datetime.timedelta(hours=tz_offset)
 		group_readings = {}
 		for source_id in source_ids:
 			group_readings[source_id] = {}
-		dt_formatter = range_type_mapping[range_type]['dt_formatter']
 		for reading in readings:
-			dt_key = int((reading.datetime - offset_timedelta).strftime(dt_formatter))
+			dt_key = calendar.timegm(reading.datetime.utctimetuple())
 			group_readings[str(reading.source_id)][dt_key] = reading.value
 
 		return group_readings
