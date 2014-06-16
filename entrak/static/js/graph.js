@@ -33,6 +33,41 @@ Graph.prototype.API_RANGE_TYPES = {
 
 Graph.prototype.UNIT_KWH = 'kwh';
 
+Graph.prototype.TOTAL_SERIES_BASE_OPTIONS = {
+	color: '#81D51D',
+	label: 'Total',
+	lines: {
+		lineWidth: 2.5,
+		show: true
+	},
+	points: {
+		radius: 4,
+		symbol: 'circle',
+		fillColor: "#81D51D",
+		show: true
+	},
+	bars: {
+		barWidth: 0.4,
+		align: "center",
+		show: true,
+		fill: 1,
+	},
+};
+
+Graph.prototype.SERIES_LINE_COLORS = ['#FFAE20', '#EF7C56', '#35BC99', '#C94CD7', '#587EFF'];
+Graph.prototype.SERIES_BASE_OPTIONS = {
+	lines: {
+		lineWidth: 2.5,
+		show: true,
+	},
+	points: {
+		radius: 4,
+		symbol: 'circle',
+		fillColor: "#FFFFFF",
+		show: true
+	},
+};
+
 Graph.prototype.getSourceReadings = function () {
 	var graphThis = this;
 	var startEndDt = this.genStartEndDtStamp();
@@ -132,13 +167,10 @@ Graph.prototype.updateUnit = function (newUnit) {
 		willPlotSeries.push(graphThis.sourceDatasets[seriesIdx]);
 	});
 
-	this.plot.getOptions().series.grow.active = false;
 	this.plot.setData(willPlotSeries);
+	this.refreshYAxisSlider();
 	this.plot.setupGrid();
 	this.plot.draw();
-	this.plot.getOptions().series.grow.active = true;
-
-	this.refreshYAxisSlider();
 }
 
 Graph.prototype.transformReading = function (source, readingTimestamp, value) {
@@ -171,11 +203,13 @@ Graph.prototype.transformReadingToChartDatasets = function () {
 	for (var sourceId in tree.data.sources) {
 		var source = tree.data.sources[sourceId];
 
-		var series = {
-			label: source.name,
-			lines: sourceLineOptions,
-			data: [],
-		};
+		var series = $.extend(
+			true,
+			{
+				label: source.name,
+				data: []
+			},
+			this.SERIES_BASE_OPTIONS);
 		$.each(source.data, function(readingTimestamp, readingVal) {
 			var transformedVal = graphThis.transformReading(source, readingTimestamp, readingVal);
 			series.data.push([graphThis.transformXCoordinate(readingTimestamp), transformedVal]);
@@ -185,10 +219,13 @@ Graph.prototype.transformReadingToChartDatasets = function () {
 
 	for (var childrenIdx in tree.children) {
 		var subTree = tree.children[childrenIdx];
-		var series = {};
-		series.label = subTree.data.name;
-		series.lines = sourceLineOptions;
-		series.data = [];
+		var series = $.extend(
+			true,
+			{
+				label: subTree.data.name,
+				data: []
+			},
+			this.SERIES_BASE_OPTIONS);
 		var sourceReadings = {};
 
 		this.sumUpSourceReading(sourceReadings, subTree.data.sources);
@@ -209,34 +246,77 @@ Graph.prototype.transformReadingToChartDatasets = function () {
 		this.sourceDatasets.push(series);
 	};
 
-	this.totalSeries = {
-		label: 'Total',
-		bars: {
-			barWidth: 0.4,
-			align: "center",
-			show: true,
-		},
-		data: [],
-	};
+	this.totalSeries = $.extend(true, {data: []}, this.TOTAL_SERIES_BASE_OPTIONS);
 	for (var readingTimestamp in totalReadings) {
 		this.totalSeries.data.push([graphThis.transformXCoordinate(readingTimestamp), totalReadings[readingTimestamp]]);
 	}
 }
 
+Graph.prototype.setSeriesLineColor = function (sourceSeries) {
+	var graphThis = this;
+	$.each(sourceSeries, function (idx, series) {
+		series.color = graphThis.SERIES_LINE_COLORS[idx];
+	});
+}
+
 Graph.prototype.plotGraph = function () {
+	var graphThis = this;
 	this.plot = $(this.graphEleSel).plot([this.totalSeries], {
 		series: {
-	        grow: {
-	            active: true,
-	            duration: 800,
-	        }
-	    },
-	    xaxis: {
-	    	min: this.currentXaxisOptions.min,
-	    	max: this.currentXaxisOptions.max,
-	    	ticks: this.currentXaxisOptions.ticks,
-	    }
+			grow: {
+				active: true,
+				duration: 800,
+			}
+		},
+		xaxis: {
+			min: this.currentXaxisOptions.min,
+			max: this.currentXaxisOptions.max,
+			ticks: this.currentXaxisOptions.ticks,
+			font: {
+				size: 14,
+				weight: "bold",
+				family: "sans-serif",
+				color: "#2E3E52"
+			},
+		},
+		yaxis: {
+			font: {
+				size: 14,
+				weight: "bold",
+				family: "sans-serif",
+				color: "#2E3E52"
+			},
+		},
+		legend: {
+			show: true,
+			noColumns: 6,
+		},
+		grid: {
+			hoverable: true,
+			borderWidth: {
+				'top': 0,
+				'right': 0,
+				'bottom': 1.2,
+				'left': 1.2,
+			},
+			borderColor: {
+				'bottom': "#9BCEDA",
+				'left': "#9BCEDA",
+			},
+		},
+		tooltip: true,
+		tooltipOpts: {
+			content: "%s: %y",
+			shifts: {
+				x: -60,
+				y: 25
+			}
+		}
 	}).data("plot");
+	$(this.graphEleSel).on('growFinished', function() {
+		graphThis.plot.getOptions().series.grow.active = false;
+		$(this.graphEleSel).off('growFinished');
+	});
 	this.setupSourceChoice();
 	this.refreshYAxisSlider();
 }
@@ -255,24 +335,36 @@ Graph.prototype.setupSourceChoice = function () {
 	});
 
 	choiceContainer.find("input").click(function () {
-		var willPlotSeries = [graphThis.totalSeries];
+		var willPlotSeries = [];
 
 		choiceContainer.find("input:checked").each(function () {
 			var seriesIdx = parseInt($(this).attr("series_idx"), 10);
 			willPlotSeries.push(graphThis.sourceDatasets[seriesIdx]);
 		});
+		graphThis.setSeriesLineColor(willPlotSeries);
 
-		graphThis.plot.getOptions().series.grow.active = false;
+		willPlotSeries.splice(0, 0, graphThis.totalSeries);
+
 		graphThis.plot.setData(willPlotSeries);
 		graphThis.plot.setupGrid();
 		graphThis.plot.draw();
-		graphThis.plot.getOptions().series.grow.active = true;
 	});
+}
+
+function roundMax(val) {
+	var targetRoundDigit = val.toString().length - 1;
+	return Math.ceil(val/(10*targetRoundDigit)+2)*10*targetRoundDigit;
 }
 
 Graph.prototype.refreshYAxisSlider = function () {
 	var graphThis = this;
-	var currentYMax = this.plot.getAxes().yaxis.max;
+	// first series is total and should be largest
+	var targetDatas = (graphThis.plot.getData()[0].dataOrg !== undefined) ? graphThis.plot.getData()[0].dataOrg : graphThis.plot.getData()[0].data;
+	var currentYMax = Math.max.apply(Math, targetDatas.map(function(val) {
+		return val[1];
+	}));
+	currentYMax = roundMax(currentYMax);
+	graphThis.plot.getAxes().yaxis.options.max = currentYMax;
 	var yMin = currentYMax*0.25;
 	var yMax = currentYMax*1.75;
 	var step = (yMax-yMin)/1000;
