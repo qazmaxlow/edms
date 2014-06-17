@@ -5,22 +5,46 @@
 {% block extra_head %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/chart.css' %}">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="{% static 'js/superfish-master/dist/css/superfish.css' %}">
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <script src="{% static 'js/arboreal.js' %}"></script>
 <script src="{% static 'js/flot/jquery.flot.min.js' %}"></script>
 <script src="{% static 'js/growraf/jquery.flot.growraf.js' %}"></script>
 <script src="{% static 'js/tooltip/jquery.flot.tooltip.min.js' %}"></script>
+<script src="{% static 'js/flot/jquery.flot.selection-customized.js' %}"></script>
 <script src="{% static 'js/moment.min.js' %}"></script>
+<script src="{% static 'js/superfish-master/dist/js/superfish.min.js' %}"></script>
+<script src="{% static 'js/morris.js-0.4.3/raphael-min.js' %}"></script>
+<script src="{% static 'js/morris.js-0.4.3/morris-customized.js' %}"></script>
 <script src="{% static 'js/graph.js' %}"></script>
 
 <script type="text/javascript">
 
 var graph = null;
 
+function updateDonutChart(data) {
+	$("#selection-summary-chart").empty();
+	var donutChart = Morris.Donut({
+		element: 'selection-summary-chart',
+		data: data,
+		colors: ['#FFAE20', '#EF7C56', '#35BC99', '#C94CD7', '#587EFF'],
+		labelColors: ['#FFAE20', '#EF7C56', '#35BC99', '#C94CD7', '#587EFF'],
+		formatter: function (x) { return x + "%"}
+	});
+	donutChart.on('select', function(i, row){
+		$("#selection-summary-value").text(row.label + ': ' + row.orgValue.toFixed(2));
+	});
+	donutChart.fire("select", 0, data[0]);
+}
+
 $(function() {
 
-	graph = new Graph("#chart", "#source-choice", "#y-axis-slider");
+	graph = new Graph(
+		"#chart",
+		"#source-choice",
+		"#y-axis-slider",
+		"#x-axis-slider");
 	graph.currentRangeType = graph.RANGE_TYPE_DAY;
 	// TODO: hardcode now
 	// graph.currentDt = moment().startOf('hour');
@@ -81,6 +105,31 @@ $(function() {
 		animate: "fast",
 	});
 
+	$("#x-axis-slider").slider({
+		range: true,
+		min: 0,
+		values: [0, 0],
+		step: 1,
+		animate: "fast",
+	});
+	graph.xAxisSliderCallback = function (ranges, atText, fromText, toText, data) {
+		$("#selection-summary-at").text(atText);
+		$("#selection-summary-from").text(fromText);
+		$("#selection-summary-to").text(toText);
+
+		var total = data.reduce(function (previousVal, current, index, array) {
+			return previousVal + current.value;
+		}, 0);
+		var transformedData = data.map(function (seriesData) {
+			var percentage = Math.round((seriesData.value/total)*1000)/10;
+			return {label: seriesData.label, value: percentage, orgValue: seriesData.value};
+		});
+		transformedData.sort(function (a, b) {
+			return b.orgValue - a.orgValue;
+		});
+		updateDonutChart(transformedData);
+	};
+
 	var distinctUnitCategorys = [];
 	var unitChoice = $('#unit-choice');
 	$.each(graph.units, function(idx, unit) {
@@ -98,6 +147,37 @@ $(function() {
 
 	graph.getSourceReadings();
 
+	var menuTreeDom = null;
+	graph.systemTree.traverseDown(function (node) {
+		var aDom = $('<a href="#" onclick="return false;">' + node.data.name +'</a>');
+		aDom.click({node: node}, function(event) {
+			graph.selectSystem(event.data.node);
+		});
+		var appendDom = $('<li system_code="' + node.data.code + '">');
+		appendDom.append(aDom);
+
+		var parentNode = node.parent;
+		if (parentNode !== null) {
+			var targetDom = null;
+			var parentDom = menuTreeDom.find('*').andSelf().filter("li[system_code='" + parentNode.data.code + "']");
+			var ulDoms = parentDom.find("> ul");
+			if (ulDoms.length === 0) {
+				targetDom = $("<ul></ul>");
+				parentDom.append(targetDom);
+			} else {
+				targetDom = ulDoms;
+			}
+
+			targetDom.append(appendDom);
+		} else {
+			menuTreeDom = appendDom;
+		}
+	});
+	$("#system-menu ul").append(menuTreeDom);
+
+	$('#system-menu').superfish({
+	});
+
 });
 
 </script>
@@ -106,10 +186,27 @@ $(function() {
 {% block content %}
 
 <div id="chart" class='chart'></div>
+<div id="selection-summary">
+	<div id="selection-summary-at"></div>
+	<div id="selection-summary-from"></div>
+	<div id="selection-summary-to"></div>
+	<div id="selection-summary-value"></div>
+	<div id="selection-summary-chart"></div>
+</div>
 <div id="source-choice"></div>
 <div id="y-axis-slider"></div>
 <div id="unit-choice">
 	<button unit_category='kwh'>kwh</button>
 </div>
+<div id="x-axis-slider"></div>
+
+<ul id="system-menu" class="sf-menu">
+	<li>
+		<a>
+			<img src="https://cdn4.iconfinder.com/data/icons/wirecons-free-vector-icons/32/menu-alt-512.png" style="width:25px; height:25px;">
+		</a>
+		<ul></ul>
+	</li>
+</ul>
 
 {% endblock %}

@@ -1,7 +1,8 @@
-function Graph(graphEleSel, sourceChoiceEleSel, yAxisSliderEleSel) {
+function Graph(graphEleSel, sourceChoiceEleSel, yAxisSliderEleSel, xAxisSliderEleSel) {
 	this.graphEleSel = graphEleSel;
 	this.sourceChoiceEleSel = sourceChoiceEleSel;
 	this.yAxisSliderEleSel = yAxisSliderEleSel;
+	this.xAxisSliderEleSel = xAxisSliderEleSel;
 
 	this.plot = null;
 	this.systemTree = null;
@@ -13,6 +14,7 @@ function Graph(graphEleSel, sourceChoiceEleSel, yAxisSliderEleSel) {
 	this.currentDt = null;
 	this.currentXaxisOptions = {};
 	this.currentUnit = null;
+	this.xAxisSliderCallback = null;
 }
 
 Graph.prototype.RANGE_TYPE_HOUR		= 'hour';
@@ -70,7 +72,7 @@ Graph.prototype.SERIES_BASE_OPTIONS = {
 
 Graph.prototype.getSourceReadings = function () {
 	var graphThis = this;
-	var startEndDt = this.genStartEndDtStamp();
+	var startEndDt = this.genStartEndDt();
 	var sourceIds = this.getSourceIdsUnderTree();
 	$.ajax({
 		type: "POST",
@@ -143,8 +145,10 @@ Graph.prototype.transformXCoordinate = function (value) {
 	} else if (this.currentRangeType === this.RANGE_TYPE_NIGHT) {
 		value = value_dt.hour();
 		if (value >= 12) {
-			value -= 24;
-		};
+			value -= 12;
+		} else {
+			value += 12;
+		}
 	} else if (this.currentRangeType === this.RANGE_TYPE_WEEK) {
 		value = value_dt.day();
 	} else if (this.currentRangeType === this.RANGE_TYPE_MONTH) {
@@ -269,6 +273,7 @@ Graph.prototype.plotGraph = function () {
 			}
 		},
 		xaxis: {
+			tickLength: 0,
 			min: this.currentXaxisOptions.min,
 			max: this.currentXaxisOptions.max,
 			ticks: this.currentXaxisOptions.ticks,
@@ -311,6 +316,10 @@ Graph.prototype.plotGraph = function () {
 				x: -60,
 				y: 25
 			}
+		},
+		selection: {
+			mode: "x",
+			color: "#81D51D",
 		}
 	}).data("plot");
 	$(this.graphEleSel).on('growFinished', function() {
@@ -319,6 +328,10 @@ Graph.prototype.plotGraph = function () {
 	});
 	this.setupSourceChoice();
 	this.refreshYAxisSlider();
+	this.plot.setupGrid();
+	this.plot.draw();
+
+	this.refreshXAxisSlider();
 }
 
 Graph.prototype.setupSourceChoice = function () {
@@ -353,7 +366,7 @@ Graph.prototype.setupSourceChoice = function () {
 
 function roundMax(val) {
 	var targetRoundDigit = val.toString().length - 1;
-	return Math.ceil(val/(10*targetRoundDigit)+2)*10*targetRoundDigit;
+	return Math.ceil(val/(10*targetRoundDigit)+4)*10*targetRoundDigit;
 }
 
 Graph.prototype.refreshYAxisSlider = function () {
@@ -381,7 +394,61 @@ Graph.prototype.refreshYAxisSlider = function () {
 	});
 }
 
-Graph.prototype.genStartEndDtStamp = function () {
+Graph.prototype.refreshXAxisSlider = function () {
+	var graphThis = this;
+	var startEndDt = this.genStartEndDt();
+	var xAxisSlider = $(this.xAxisSliderEleSel);
+	xAxisSlider.slider("option", "min", this.currentXaxisOptions.min+1);
+	xAxisSlider.slider("option", "max", this.currentXaxisOptions.max);
+	xAxisSlider.slider("option", "values", [0, 0]);
+	xAxisSlider.off('slide').on('slide', function(event, ui) {
+		var startIdx = ui.values[0];
+		var endIdx = ui.values[1];
+		graphThis.plot.setSelection({
+			xaxis: {
+				from: ui.values[0]-0.5,
+				to: ui.values[1]-0.5,
+			}
+		});
+
+		var result = graphThis.sumUpSeriesValueInRange(startIdx, endIdx);
+		graphThis.xAxisSliderCallback(
+			ui.values,
+			'at text',
+			graphThis.transformXToDt(startEndDt.startDt, startIdx),
+			graphThis.transformXToDt(startEndDt.startDt, endIdx),
+			result
+		);
+	});
+}
+
+Graph.prototype.transformXToDt = function (startDt, xVal) {
+	var dtUnit = null;
+	if (this.currentRangeType === this.RANGE_TYPE_HOUR) {
+		dtUnit = 'm';
+	} else if (this.currentRangeType === this.RANGE_TYPE_DAY || this.currentRangeType === this.RANGE_TYPE_NIGHT) {
+		dtUnit = 'h';
+	} else if (this.currentRangeType === this.RANGE_TYPE_WEEK || this.currentRangeType === this.RANGE_TYPE_MONTH) {
+		dtUnit = 'd';
+	} else if (this.currentRangeType === this.RANGE_TYPE_YEAR) {
+		dtUnit = 'M';
+	}
+
+	return moment(startDt).add(dtUnit, xVal);
+}
+
+Graph.prototype.sumUpSeriesValueInRange = function (startIdx, endIdx) {
+	return this.sourceDatasets.map(function (series) {
+		var value = series.data.reduce(function (previousVal, currentPts, index, array) {
+			var value = (currentPts[0] >= startIdx && currentPts[0] < endIdx) ? currentPts[1] : 0;
+			return previousVal + value;
+		}, 0);
+
+		return {label: series.label, value: value};
+	});
+}
+
+Graph.prototype.genStartEndDt = function () {
 	var startDt = null;
 	var endDt = null;
 	var currentDtClone = moment(this.currentDt);
@@ -425,21 +492,13 @@ Graph.prototype.updateXAxisOptions = function (startDt) {
 			var tickLabel = moment(startDt).add('m', i*5).format('h:mma');
 			ticks.push([i*5, tickLabel]);
 		};
-	} else if (this.currentRangeType === this.RANGE_TYPE_DAY) {
+	} else if (this.currentRangeType === this.RANGE_TYPE_DAY || this.currentRangeType === this.RANGE_TYPE_NIGHT) {
 		min = -1;
 		max = 24;
 		
 		for (var i = 0; i < 12; i++) {
 			var tickLabel = moment(startDt).add('h', i*2).format('ha');
 			ticks.push([i*2, tickLabel]);
-		};
-	} else if (this.currentRangeType === this.RANGE_TYPE_NIGHT) {
-		min = -13;
-		max = 12;
-
-		for (var i = 0; i < 12; i++) {
-			var tickLabel = moment(startDt).add('h', i*2).format('ha');
-			ticks.push([(i*2)-12, tickLabel]);
 		};
 	} else if (this.currentRangeType === this.RANGE_TYPE_WEEK) {
 		min = -1;
@@ -465,4 +524,18 @@ Graph.prototype.updateXAxisOptions = function (startDt) {
 	}
 
 	this.currentXaxisOptions = {min: min, max: max, ticks: ticks};
+}
+
+Graph.prototype.updateCurrentDt = function (newDt) {
+	this.currentDt = newDt;
+	this.getSourceReadings();
+}
+
+Graph.prototype.selectSystem = function (node) {
+	if (node === this.currentSelectedSystem) {
+		return;
+	}
+
+	this.currentSelectedSystem = node;
+	this.getSourceReadings();
 }
