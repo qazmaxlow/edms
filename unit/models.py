@@ -10,3 +10,5 @@ class Unit(Document):
 	rate = FloatField()
 	effective_date = DateTimeField()
 	order = IntField(default=1)
+	img_off = StringField(max_length=100)
+	img_on = StringField(max_length=100)

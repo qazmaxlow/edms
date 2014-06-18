@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
+{% load static %}
 {% load staticfiles %}
 
 {% block extra_head %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/chart.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/graph.css' %}">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="{% static 'js/superfish-master/dist/css/superfish.css' %}">
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
@@ -33,9 +35,43 @@ function updateDonutChart(data) {
 		formatter: function (x) { return x + "%"}
 	});
 	donutChart.on('select', function(i, row){
-		$("#selection-summary-value").text(row.label + ': ' + row.orgValue.toFixed(2));
+		$("#selection-summary-value").text(row.orgValue.toFixed(0));
+		$("#selection-summary-unit").text(graph.currentUnit);
+		$("#selection-summary-source").text(row.label);
 	});
 	donutChart.fire("select", 0, data[0]);
+}
+
+function formatDtAtStr(dt, rangeType) {
+	var formatStr = null;
+	if (rangeType === graph.RANGE_TYPE_HOUR
+		|| rangeType === graph.RANGE_TYPE_DAY
+		|| rangeType === graph.RANGE_TYPE_NIGHT) {
+		formatStr = 'D MMM YYYY, ddd';
+	} else if (rangeType === graph.RANGE_TYPE_WEEK) {
+		formatStr = 'MMM YYYY';
+	} else if (rangeType === graph.RANGE_TYPE_MONTH) {
+		formatStr = 'YYYY';
+	}
+
+	return (formatStr !== null) ? dt.format(formatStr) : '';
+}
+
+function formatDtFromToStr(dt, rangeType) {
+	var formatStr = null;
+	if (rangeType === graph.RANGE_TYPE_HOUR
+		|| rangeType === graph.RANGE_TYPE_DAY
+		|| rangeType === graph.RANGE_TYPE_NIGHT) {
+		formatStr = 'hh:mma';
+	} else if (rangeType === graph.RANGE_TYPE_WEEK) {
+		formatStr = 'ddd';
+	} else if (rangeType === graph.RANGE_TYPE_MONTH) {
+		formatStr = 'MMM';
+	} else if (rangeType === graph.RANGE_TYPE_YEAR) {
+		formatStr = 'YYYY';
+	}
+
+	return dt.format(formatStr);
 }
 
 $(function() {
@@ -87,6 +123,13 @@ $(function() {
 	{% endfor %}
 
 	var unitCategorys = [];
+	// kwh is default unit
+	graph.units.push({
+		category: 'kwh',
+		catName: 'kwh',
+		imgOff: 'kwh-unit-off.png',
+		imgOn: 'kwh-unit-on.png',
+	});
 	{% for unit in units %}
 		var unit = {};
 		unit.category = '{{unit.category}}';
@@ -96,6 +139,8 @@ $(function() {
 		unit.rate = {{unit.rate}};
 		unit.effectiveDate = moment.unix({{unit.effective_date|date:"U"}});
 		unit.order = {{unit.order}};
+		unit.imgOff = '{{unit.img_off}}';
+		unit.imgOn = '{{unit.img_on}}';
 
 		graph.units.push(unit);
 	{% endfor %}
@@ -112,22 +157,32 @@ $(function() {
 		step: 1,
 		animate: "fast",
 	});
-	graph.xAxisSliderCallback = function (ranges, atText, fromText, toText, data) {
-		$("#selection-summary-at").text(atText);
-		$("#selection-summary-from").text(fromText);
-		$("#selection-summary-to").text(toText);
+	graph.xAxisSliderCallback = function (ranges, fromDt, toDt, data) {
+		var selectionSummary = $("#selection-summary");
+		if (fromDt.unix() === toDt.unix()) {
+			if (selectionSummary.css('display') !== 'none') {
+				selectionSummary.fadeOut();
+			}
+		} else {
+			if (selectionSummary.css('display') === 'none') {
+				selectionSummary.fadeIn();
+			}
+			$("#selection-summary-at span").text(formatDtAtStr(graph.currentDt, graph.currentRangeType));
+			$("#selection-summary-from span").text(formatDtFromToStr(fromDt, graph.currentRangeType));
+			$("#selection-summary-to span").text(formatDtFromToStr(toDt, graph.currentRangeType));
 
-		var total = data.reduce(function (previousVal, current, index, array) {
-			return previousVal + current.value;
-		}, 0);
-		var transformedData = data.map(function (seriesData) {
-			var percentage = Math.round((seriesData.value/total)*1000)/10;
-			return {label: seriesData.label, value: percentage, orgValue: seriesData.value};
-		});
-		transformedData.sort(function (a, b) {
-			return b.orgValue - a.orgValue;
-		});
-		updateDonutChart(transformedData);
+			var total = data.reduce(function (previousVal, current, index, array) {
+				return previousVal + current.value;
+			}, 0);
+			var transformedData = data.map(function (seriesData) {
+				var percentage = Math.round((seriesData.value/total)*1000)/10;
+				return {label: seriesData.label, value: percentage, orgValue: seriesData.value};
+			});
+			transformedData.sort(function (a, b) {
+				return b.orgValue - a.orgValue;
+			});
+			updateDonutChart(transformedData);
+		}
 	};
 
 	var distinctUnitCategorys = [];
@@ -135,13 +190,19 @@ $(function() {
 	$.each(graph.units, function(idx, unit) {
 		if ($.inArray(unit.category, distinctUnitCategorys) === -1) {
 			distinctUnitCategorys.push(unit.category);
-			var buttonHtml = "<button unit_category='" + unit.category + "'>"
-				+ unit.category +  "</button>";
-			unitChoice.append(buttonHtml);
+			var unitLiDom = $("<li unit_category='" + unit.category + "'>"
+				+ "<img src='{% get_static_prefix %}images/unit/" + unit.imgOff + "'>"
+				+ "</li>");
+			unitLiDom.find('img').hover(function() {
+				$(this).attr("src", "{% get_static_prefix %}images/unit/" + unit.imgOn);
+			}, function() {
+				$(this).attr("src", "{% get_static_prefix %}images/unit/" + unit.imgOff);
+			});
+			unitChoice.append(unitLiDom);
 		}
 	});
 
-	unitChoice.find("button").click(function () {
+	unitChoice.find("li").click(function () {
 		graph.updateUnit($(this).attr("unit_category"));
 	});
 
@@ -178,6 +239,18 @@ $(function() {
 	$('#system-menu').superfish({
 	});
 
+	$('#expand-menu-btn').click(function () {
+		var menuLinks = $('#sub-menu-links');
+		if (menuLinks.css('display') === 'none') {
+			$(this).css({transform: 'rotate(180deg)'});
+		} else {
+			$(this).css({transform: 'rotate(0deg)'});
+		}
+		menuLinks.slideToggle(700, "easeOutBounce", function() {
+			//
+		});
+	});
+
 });
 
 </script>
@@ -185,28 +258,204 @@ $(function() {
 
 {% block content %}
 
-<div id="chart" class='chart'></div>
-<div id="selection-summary">
-	<div id="selection-summary-at"></div>
-	<div id="selection-summary-from"></div>
-	<div id="selection-summary-to"></div>
-	<div id="selection-summary-value"></div>
-	<div id="selection-summary-chart"></div>
-</div>
 <div id="source-choice"></div>
-<div id="y-axis-slider"></div>
-<div id="unit-choice">
-	<button unit_category='kwh'>kwh</button>
-</div>
-<div id="x-axis-slider"></div>
 
-<ul id="system-menu" class="sf-menu">
-	<li>
-		<a>
-			<img src="https://cdn4.iconfinder.com/data/icons/wirecons-free-vector-icons/32/menu-alt-512.png" style="width:25px; height:25px;">
-		</a>
-		<ul></ul>
-	</li>
-</ul>
+<div id="page-container">
+
+	<!-- Left Sidebar Main -->
+	<div id="menu">
+
+		<!-- User's Company Logo -->			
+		<div id="users-logo">
+			<img src="{% static 'images/users-logo-bg.png' %}" width="187" height="201" usemap="#config">
+			
+			<map name="config">
+				<area shape="circle" coords="164,22,25" href="#" alt="config">
+			</map>
+		</div>
+				
+		<!-- User's Company Name -->
+		<h2 id="company">OTIS WORLD WIDE</h2>
+		
+		<!-- Admin - Logout - Settings -->
+		<div id="admin">
+			<a href="#">
+				<div id="logout"><p>Logout</p></div>
+			</a>
+			<a href="#">
+				<div id="settings"><p>Settings</p></div>
+			</a>
+		</div>
+
+		<!-- Main Sidebar Links -->
+		<nav>
+			<ul id="menu-links">
+				<li>
+					<a href="#"><img width="26" height="22" src="{% static 'images/home-icon.png' %}"><span>Home</span></a>
+				</li>
+				<li>
+					<a href="#"><img width="26" height="22" src="{% static 'images/graph-icon.png' %}"><span>Graph</span></a>
+				</li>
+
+				<li>
+					<a href="#"><img width="26" height="23" src="{% static 'images/ranking-icon.png' %}"><span>Ranking</span></a>
+				</li>
+				<li>
+					<a href="#"><img width="26" height="24" src="{% static 'images/reports-icon.png' %}"><span>Reports</span></a>
+				</li>
+				<li>
+					<a href="#"><img width="26" height="22" src="{% static 'images/display-icon.png' %}"><span>Display</span></a>
+				</li>
+				<li>
+					<a href="#"><img width="31" height="21" src="{% static 'images/prov-icon.png' %}"><span>Pro V</span></a>
+				</li>
+			</ul>
+		</nav>
+
+	</div>	
+	<!-- Left Sidebar Main End -->
+
+	<!-- Left Sidebar Button  -->
+	<div id="open-menu"><a href="#"><img id="open-menu-icon"></a></div>
+	<!-- Left Sidebar Button Ends -->
+	
+	<!-- Main Content -->
+	<div class="right-content">
+		
+		<!-- Blue Bar top -->
+		<div class="blue-bar"></div>
+
+		<!-- Header -->
+		<div id="header">
+
+			<!-- Image Carousel - Illustrations -->
+			<div id="image-carousel"></div>
+			
+			<!-- Header Wording -->
+			<div id="sub-heading"><h2> Check this out!</h2></div>
+			<div id="heading"><h1> Graph - Days </h1></div>
+
+			<!-- Sub Menu Item -->
+			<div id="sub-menu">
+				<h3><a href="#" id="unit">Unit</a></h3>
+				<h3><a href="#" id="time">Time</a></h3>
+				<h3><a href="#" id="source">Source</a></h3>
+				<h3><a href="#" id="days">Days</a></h3>
+				<img id="expand-menu-btn" src="{% static 'images/expandable_button.png' %}">
+			</div>
+
+		</div>
+		<!-- Header End -->
+		
+		<!-- Blue Bar bottom -->
+		<div class="blue-bar"></div>
+
+		<!-- Sub Menu Item Links -->
+		<div id="sub-menu-links">
+			<ul id="unit-choice"></ul>
+			<ul id="time-choice-links"></ul>
+			<ul id="source-choice-links"></ul>
+			<ul id="day-choice-links"></ul>
+		</div>
+		<div style="clear: both;"></div>
+	
+		<!-- Main Graph -->
+		<div id="graph-panel">
+			<!-- Sub Level -->
+			<ul id="system-menu" class="sf-menu">
+				<li>
+					<a><img id="system-menu-icon"></a>
+					<ul></ul>
+				</li>
+			</ul>
+			<!-- Breadcrumbs -->
+			<div id="breadcrumbs">
+				<a href="#"><p id="level1"> Kowloon Bay </p></a>
+					<img class="next" src="{% static 'images/next-icon.png' %}">
+				<a href="#"><p id="level2"> Office A </p></a>
+					<img class="next" src="{% static 'images/next-icon.png' %}">
+				<a href="#"><p id="level3"> Level 3 </p></a>
+			</div>
+			<!-- Calendar -->
+			<a href="#"><img id="calendar"></a>
+			<!-- Date -->
+			<p id="current-day"><span> 14 Jan 2014, Tue </span>
+				<a href="#"><img id="prev-day"></a>
+				<a href="#"><img id="today"></a>
+				<a href="#"><img id="next-day"></a>
+			</p>
+			<!-- Clear Graph -->
+			<img id="clear-graph">
+			<div style="clear: both;"></div>
+
+			<!-- Simple bar for decoration -->
+			<div id="main-graph-bar"></div>
+			
+			<div id="chart"></div>
+			<div id="y-axis-slider"></div>
+			<div id="x-axis-slider"></div>
+
+			<div id="selection-summary">
+				<div id="selection-summary-left">
+					<p id="selection-summary-at">Amount of energy consumed on:<span></span></p>
+					<p id="selection-summary-from">from:<span></span></p>
+					<p id="selection-summary-to">to:<span></span></p>
+					<p id="selection-summary-equal">which equates to:</p>
+					<p id="selection-summary-value-container">
+						<span id="selection-summary-value"></span>
+						<span id="selection-summary-unit"></span>
+					</p>
+				</div>
+				<div id="selection-summary-right">
+					<div id="selection-summary-chart"></div>
+					<p id="selection-summary-source"></p>
+				</div>
+				<p style="clear: both;"></p>
+			</div>
+		</div>
+		<!-- Main Graph Ends -->
+
+		<!-- Summary -->
+		<div id="summary">
+			<div id="summary-header"><img src="{% static 'images/summary.png' %}"></div>
+
+			<!-- this part is temporarely -->
+			<div id="summary-image">
+				<div id="last-week-summary">
+					<p class="week-summary-text">This time last week you had used </p>
+					<img class="electricity-icon" src="{% static 'images/red-electricity.png' %}">
+					<span class="week-consumption">3680<span>kwh</span></span>
+				</div>
+
+				<div id="this-week-summary">
+					<p class="week-summary-text">So far today you have used </p>
+					<img class="electricity-icon" src="{% static 'images/green-electricity.png' %}">
+					<span class="week-consumption">3220<span>kwh</span></span>
+				</div>
+
+				<div id="summary-percentage">
+					<p>6 <img id="percentage-icon" src="{% static 'images/percentage.png' %}"></p>
+				</div>
+			</div>
+		</div>
+		<!-- Summary Ends -->
+
+	</div>
+	<!-- Main Content Ends -->
+</div>
+<!-- Page Container Ends -->
+
+<!-- Footer  -->
+<footer class="site-footer">
+	<p style="clear: both;"></p>
+	<p id="copyright">Copyright © En-trak Pte Ltd 2014. All rights reserved.</p>
+	<a href="#"><img id="entrak-logo" src="{% static 'images/entrakLogo.png' %}"></a>
+	<p id="disclaimer_main"><a class="disclaimer" href="#">Print </a>
+	<a class="disclaimer" href="#"> |  Contact & Support</a>
+	<a class="disclaimer" href="#"> |  Settings</a>
+	<a href="#" class="disclaimer"> |  Legal </a>
+	<a class="disclaimer" href="#"> |  Download</a></p>				
+	<p style="clear: both;"></p>
+</footer>
 
 {% endblock %}

@@ -1,0 +1,645 @@
+/**
+ * Eric Meyer's Reset CSS v2.0 (http://meyerweb.com/eric/tools/css/reset/)
+ * http://cssreset.com
+ */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+	height: 100%;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* ---- Reset Css End ---- */
+
+/* ---------------------------- */
+/* ---- Whole Page     -------- */
+/* ---------------------------- */
+* {
+  margin: 0;
+}
+html, body {
+  height: 100%;
+}
+/* ---------------------------- */
+/* ---- Page Container -------- */
+/* ---------------------------- */
+
+#page-container{
+    height: 100%;
+	width: 100%;
+	font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+}
+
+/* ---------------------------- */
+/* ---- LEFT Sidebar   -------- */
+/* ---------------------------- */
+
+#open-menu{
+	position: absolute;
+	width: 35px;
+	height: 100%;
+	background-color: #bec6c7;	
+}
+
+#open-menu-icon{
+	margin-left: 6px;
+	margin-top: 5px;
+	width: 23px;
+	height: 20px;
+	background-image: url(../images/slidebar_icon.png);
+}
+
+#open-menu-icon:hover{
+	background-image: url(../images/slidebar-icon-hover.png) !important;
+}
+
+/* ---------------------------- */
+/* ---- Main Menu  ------------ */
+/* ---------------------------- */
+
+/* Menu Background */
+#menu{
+	position: absolute;
+	width: 245px;
+ 	height: 100%;
+	background: -webkit-gradient(linear, left top, left bottom, from(#eff2f3), to(#cbcfd1));
+	margin-right: 10px;
+}
+
+/* User's logo */
+
+#users-logo{
+	margin-left: 47px;
+	width: 187px;
+	height: 201px;
+	margin-top: 65px;
+}
+
+/* Company Name*/
+#company{
+	padding-left: 72px;
+	font-weight: bolder;
+	padding-top: 15px;
+}
+
+/* --- Admin - Logout - Settings --- */
+#admin{
+	height: 40px;
+	padding-top: 10px;
+	margin-left: 30px;
+}
+#admin #logout p{
+	margin-left: 40px;
+	padding-left: 12px;
+	padding-top: 5px;
+	width: 48px;
+	height: 20px;
+	background-color: #9bceda;
+	font-weight: 500;
+	color: #ffffff;
+	font-size: 11px;
+	float: left;
+	
+	-moz-border-radius:5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px; 	
+}
+#admin #logout p:hover{
+	color: #354960;
+	font-weight: bolder;
+}
+
+#admin #settings p{
+	width: 50px;
+	height: 20px;
+	margin-left: 20px;
+	padding-top: 5px;
+	padding-left: 10px;
+	background-color: #9bceda;
+	font-weight: 500;
+	color: #ffffff;
+	font-size: 11px;
+	float: left;
+	
+	-moz-border-radius:5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#admin #settings p:hover{
+	color: #354960;
+	font-weight: bolder;
+}
+
+/* Main Menu Links */
+
+#menu-links{
+	position: relative;
+	font-size: 15px;
+}
+
+#menu-links a{
+	text-decoration: none;
+}
+
+#menu-links li{
+	border-top: 3px solid #f3f5f6;
+	padding-left: 5px;
+	padding-bottom: 8px;
+	padding-top: 10px;
+	color: #31363e;
+	margin-left: 55px;
+	font-weight: lighter;
+}
+
+#menu-links li:hover, #menu-links li.menu-links-selected{
+	background-image: url(../images/main_hover.png);
+	letter-spacing: 0.5px;
+	width: 196px;
+	height: 30px;
+	color: #fff;
+	cursor: pointer;
+	cursor: hand;
+}
+
+#menu-links span{
+	padding-left: 15px;
+	vertical-align: text-top;
+}
+
+/* Main links Ends */
+
+/* ------------------------------------------- */
+/* --  Main Content (Graph) + Header (Done) -- */
+/* ------------------------------------------- */
+.right-content {
+	min-height: 100%; /*equal to footer height*/
+	margin-bottom: -76px;
+	padding-left: 245px;
+}
+
+.right-content:after {
+	content: "";
+	display: block;
+}
+
+
+/*-- Blue Bar --*/
+.blue-bar{
+	width: 100%;
+	height: 3px;
+	background-color: #9bceda;
+}
+
+/*-- Header -- */
+
+#header{
+	width: 100%;
+	height: 163px;
+	background-color: #6e9faa;
+	top: 0px;
+}
+
+/* -- Where the illustrations is --*/
+#image-carousel{
+	float: right;
+	margin-right: 50px;
+	width: 486px;
+	height: 163px;
+	background-image: url(../images/illustration.png);
+}
+
+/*-- Sub heading --*/
+#sub-heading {
+	position: absolute;
+	color: white;
+	font-weight: 200;
+	margin-left: 35px;
+	margin-top: 40px;
+}
+/* Main heading --*/
+#heading{	
+	position: absolute;
+	font-weight: bolder;
+	font-size: 40px;
+	color: white;
+	margin-left: 35px;
+	margin-top: 73px;
+}
+
+/*-- Sub Menu --*/
+#sub-menu{
+	position: absolute;
+	width: 300px;
+	margin-top: 133px;
+	margin-left: 35px;
+}
+#header #unit {
+	float: left;
+	vertical-align: bottom;
+	text-decoration: none;
+	font-size: 14px;
+	width: 42px;
+	height: 22px;
+
+	padding-left: 18px;
+	padding-top: 8px;
+	color: #ffffff;
+	background-color: #9bceda;
+	border-top-left-radius: 5px;
+	-moz-border-top-left-radius: 5px;
+	-webkit-border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	-moz-border-top-right-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+}
+#header #unit:hover{
+	font-weight: bold;
+	background-color: #7fd51e;
+	letter-spacing: 0.6px;
+}
+#header #time {
+	float: left;
+	vertical-align: bottom;
+	text-decoration: none;
+	font-size: 14px;
+	width: 44px;
+	height: 22px;
+	margin-left: 1px;
+	
+	padding-left: 16px;
+	padding-top: 8px;
+	color: #ffffff;
+	background-color: #9bceda;
+	border-top-left-radius: 5px;
+	-moz-border-top-left-radius: 5px;
+	-webkit-border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	-moz-border-top-right-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+}
+
+#header #time:hover{
+	font-weight: bold;
+	background-color: #7fd51e;
+	letter-spacing: 0.6px;
+}
+
+#header #source {
+	float: left;
+	vertical-align: bottom;
+	text-decoration: none;
+	font-size: 14px;
+	width: 62px;
+	height: 22px;
+	margin-left: 1px;
+	
+	padding-left: 14px;
+	padding-top: 8px;
+	color: #ffffff;
+	background-color: #9bceda;
+	border-top-left-radius: 5px;
+	-moz-border-top-left-radius: 5px;
+	-webkit-border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	-moz-border-top-right-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+}
+
+#header #source:hover{
+	font-weight: bold;
+	background-color: #7fd51e;
+	letter-spacing: 0.6px;
+}
+
+#header #days {
+	float: left;
+	vertical-align: bottom;
+	text-decoration: none;
+	font-size: 14px;
+	width: 48px;
+	height: 22px;
+	margin-left: 1px;
+
+	padding-left: 14px;
+	padding-top: 8px;
+	color: #ffffff;
+	background-color: #9bceda;
+	border-top-left-radius: 5px;
+	-moz-border-top-left-radius: 5px;
+	-webkit-border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	-moz-border-top-right-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+}
+#header #days:hover{
+	font-weight: bold;
+	background-color: #7fd51e;
+	letter-spacing: 0.6px;
+}
+
+#sub-menu img{
+	margin-left: 10px;	
+	margin-top: 5px;
+}
+
+/*-- Main heading Ends --*/
+
+/*-- Sub menu items --*/
+#sub-menu-links{
+	width: 100%;
+	height: 95px;
+	background-color: #fff1cd;
+}
+
+#sub-menu-links ul{
+	padding-top: 17px;
+	margin-left: 35px;
+	height: 61px;
+}
+
+#unit-choice li{
+	float: left;
+	margin-left: 7px;
+}
+
+/*Main Graph*/
+
+
+#graph-panel{
+	margin-top: 16px;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	background-color: #f9f9f9;
+	height: 406px;
+	width: 962px;
+}
+
+#system-menu-icon{
+	background-image: url(../images/sub-category-icon.png);
+	width: 36px;
+	height: 32px;
+	float: left;
+}
+#system-menu-icon:hover{
+	background-image: url(../images/sub-category-icon-hover.png);
+}
+#breadcrumbs{
+	float: left;
+	width: 597px;
+	height: 32px;
+	background-color: #9bceda;
+	color: white;
+	font-size: 13px;
+}
+.next{
+	float: left;
+	margin-top: 12px;
+	padding-left: 10px;
+}
+#level1{
+	float: left;
+	margin-top: 10px;
+	margin-left: 20px;
+	color: white;
+}
+#level2{
+	float: left;
+	margin-top: 10px;
+	margin-left: 10px;
+	color: white;
+}
+#level3{
+	float: left;
+	margin-top: 10px;
+	margin-left: 10px;
+}
+#level3:hover{
+	color: #18515f;
+}
+
+#calendar{
+	background-image: url(../images/calendar.png);
+	width: 38px;
+	height: 32px;
+	float: left;
+}
+#calendar:hover{
+	background-image: url(../images/calendar-hover.png);
+}
+
+#current-day{
+	float: left;
+	padding-top: 8px;
+	background-color: #9bceda;
+	height: 24px;
+	width: 194px;
+	font-size: 13px;
+}
+#current-day span{
+	float: left;
+	margin-top: 2px;
+	margin-left: 12px;
+	color: white;
+}
+#prev-day{
+	float:left;
+	background-image: url(../images/prev-day.png);
+	width: 19px;
+	height: 18px;
+	margin-left: 8px;
+}
+#prev-day:hover{
+	background-image: url(../images/prev-day-hover.png);	
+}
+#today{
+	float: left;
+	width: 19px;
+	height: 18px;
+	background-image: url(../images/today.png);
+}
+#today:hover{
+	background-image: url(../images/today-hover.png);	
+}
+#prev-day:hover{
+	background-image: url(../images/prev-day-hover.png);	
+}
+#next-day{
+	float: left;
+	width: 19px;
+	height: 18px;
+	background-image: url(../images/next-day.png)
+}
+#next-day:hover{
+	background-image: url(../images/next-day-hover.png);	
+}
+
+#clear-graph{
+	float: left;
+	background-image: url(../images/clear-graph.png);
+	width: 97px;
+	height: 32px;
+}
+
+#clear-graph:hover{
+	background-image: url(../images/clear-graph-hover.png);
+}
+
+#main-graph-bar{
+	background-image: url(../images/main-graph-bar.png);
+	height: 6px;
+	width: 100%;
+}
+
+#summary{
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	background-color: #eaeeef;
+	height: 165px;
+	width: 962px;
+}
+#summary-header{
+	background-image: url(../images/summary-header.png);
+	width: 100%;
+	height: 32px;
+}
+
+#summary-image{
+	background-image: url(../images/summary-main.png);
+	background-repeat: no-repeat;
+	margin-top: 5px;
+	height: 150px;
+
+}
+
+#last-week-summary {
+	position: absolute;
+	left: 120px;
+	top: 52px;
+	width: 155px;
+}
+.week-summary-text{
+	font-size: 15px;
+}
+.electricity-icon{
+	margin-top: 22px;
+}
+.week-consumption{
+	font-size: 25px;
+	font-weight: bolder;
+	vertical-align: 10%;
+}
+.week-consumption span{
+	font-size: 18px;
+	padding-left: 5px;
+}
+#this-week-summary {
+	position: absolute;
+	left: 350px;
+	top: 52px;
+	width: 155px;
+}
+
+#summary-percentage{
+	position: absolute;
+	top: 70px;
+	left: 630px;
+}
+#summary-percentage p{
+	width: 80px;
+	font-size: 40px;
+	font-weight: bolder;
+}
+#percentage-icon{
+	margin-left: -5px;
+}
+
+
+/* ---------------------------- */
+/* ---- Footer (Done) -------- */
+/* ---------------------------- */
+.site-footer, .page-wrap:after { .push must be the same height as footer height: 76px; }
+.site-footer {
+	position: relative; /* set this to relative if want to have the footer stick to bottom upon changing screen size */
+	/*bottom: 0;  delete if not want to have at the bottom */
+	height: 76px;
+	width: 100%;
+  	background-image: url(../images/footer_bg.png);
+	color: white;
+	font-size: 10px;
+	font-weight: 500;
+	letter-spacing: 0.5px;
+	font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+}
+
+#copyright{
+	float: left;
+	margin-left: 35px;
+	margin-top: 50px;
+}
+
+footer img{
+	position: absolute;
+	right: 0;
+	bottom: 40px;
+}
+
+#disclaimer_main{
+	margin-top: 50px;
+	margin-right: 30px;
+	float: right;
+}
+.disclaimer{
+	text-decoration: none;
+	color: white;
+}
+
+.disclaimer:hover {
+	color: #51bc0b;
+}
+
+.disclaimer:selected {
+	color: #51bc0b;
+}

@@ -414,7 +414,6 @@ Graph.prototype.refreshXAxisSlider = function () {
 		var result = graphThis.sumUpSeriesValueInRange(startIdx, endIdx);
 		graphThis.xAxisSliderCallback(
 			ui.values,
-			'at text',
 			graphThis.transformXToDt(startEndDt.startDt, startIdx),
 			graphThis.transformXToDt(startEndDt.startDt, endIdx),
 			result

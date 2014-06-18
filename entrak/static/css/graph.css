@@ -1,0 +1,137 @@
+#expand-menu-btn, #system-menu > li > a:hover,
+#unit-choice li {
+	cursor: pointer;
+	cursor: hand;
+}
+
+#chart {
+	width:920px;
+	height:312px;
+/*	top: 38px;*/
+	left: 52px;
+	position: relative;
+}
+
+#y-axis-slider {
+	width: 22px;
+	height: 324px;
+	top: -296px;
+	left: 8px;
+}
+
+#x-axis-slider {
+	width: 856px;
+	height: 20px;
+	top: -296px;
+	left: 96px;
+}
+
+#system-menu {
+	margin-bottom: 0px;
+}
+
+#system-menu > li > a {
+	padding: 0px;
+	border: 0px;
+}
+#system-menu > li > a:hover {
+	padding: 0px;
+	border: 0px;
+}
+#system-menu > li > a:after {
+	content: none;
+}
+
+#selection-summary-chart {
+	width: 172px;
+	height: 172px;
+}
+
+#expand-menu-btn {
+	-webkit-transition: 0.5s ease-in-out;
+    -moz-transition: 0.5s ease-in-out;
+    -o-transition: 0.5s ease-in-out;
+    transition: 0.5s ease-in-out;
+}
+
+#selection-summary{
+	position: relative;
+	top: -590px;
+	left: 120px;
+	width: 400px;
+	height: 185px;
+	color: #354960;
+	background-color: #fff;
+	
+	border-radius: 8px;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+
+	border-style: solid;
+	border-width: 2px;
+	border-color: #9bceda;
+	
+	box-shadow: -3px 2px 7px #cfcfcf;
+	-moz-box-shadow: -3px 2px 7px #cfcfcf;
+	-webkit-box-shadow: -3px 2px 7px #cfcfcf;
+	display: none;
+}
+
+#selection-summary-left{
+	width: 210px;
+	height: 175px;
+	margin-left: 28px;
+	font-size: 14px;
+	margin-top: 10px;
+}
+
+#selection-summary-at{
+	line-height: 23px;
+}
+#selection-summary-at span{
+	font-size: 16px;
+	font-weight: bold;
+}
+#selection-summary-from{				
+	margin-top: 4px;
+}
+#selection-summary-from span{
+	font-size: 16px;
+	font-weight: bold;	
+	padding-left: 13px
+}
+#selection-summary-to {
+	margin-top: 8px;
+}
+#selection-summary-to span{
+	font-size: 16px;
+	font-weight: bold;
+	padding-left: 29px;
+}
+#selection-summary-equal{
+	margin-top: 9px;
+}
+#selection-summary-value-container {
+	margin-top: 7px;
+}
+#selection-summary-value{
+	font-size: 37px;
+	font-weight: bolder;
+}
+#selection-summary-unit{
+	font-size: 18px;
+}
+
+#selection-summary-right {
+	position: absolute;
+	top: -4px;
+	right: -4px;
+}
+#selection-summary-right p {
+	font-size: 13px;
+	font-weight: bolder;
+	color: #ef7c56;
+	letter-spacing: 0.5px;
+	margin-top: -2px;
+	text-align: center;
+}
