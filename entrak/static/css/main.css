@@ -412,7 +412,7 @@ html, body {
 	position: relative;
 	background-color: #f9f9f9;
 	height: 406px;
-	width: 962px;
+	width: 972px;
 }
 
 #system-menu-icon{
@@ -431,28 +431,24 @@ html, body {
 	background-color: #9bceda;
 	color: white;
 	font-size: 13px;
+	padding-left: 10px;
+}
+#breadcrumbs p{
+	float: left;
+	margin-top: 10px;
+	margin-left: 10px;
+}
+#breadcrumbs p:last-child{
+	color: -webkit-link;
+}
+#breadcrumbs p:hover {
+	cursor: pointer;
+	cursor: hand;
 }
 .next{
 	float: left;
 	margin-top: 12px;
 	padding-left: 10px;
-}
-#level1{
-	float: left;
-	margin-top: 10px;
-	margin-left: 20px;
-	color: white;
-}
-#level2{
-	float: left;
-	margin-top: 10px;
-	margin-left: 10px;
-	color: white;
-}
-#level3{
-	float: left;
-	margin-top: 10px;
-	margin-left: 10px;
 }
 #level3:hover{
 	color: #18515f;

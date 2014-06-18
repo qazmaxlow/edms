@@ -74,6 +74,27 @@ function formatDtFromToStr(dt, rangeType) {
 	return dt.format(formatStr);
 }
 
+function updateSelectSystem(node) {
+	var breadcrumbs = $("#breadcrumbs");
+	breadcrumbs.empty();
+	var targetNode = node;
+	while(targetNode !== null) {
+		var pDom = $("<p> " + targetNode.data.name + " </p>")
+			.click({node: targetNode}, function(event) {
+				updateSelectSystem(event.data.node);
+			});
+		breadcrumbs.prepend(pDom);
+
+		if (targetNode.parent !== null) {
+			breadcrumbs.prepend("<img class=\"next\" src=\"{% static 'images/next-icon.png' %}\">");
+		}
+		
+		targetNode = targetNode.parent;
+	}
+
+	graph.selectSystem(node);
+}
+
 $(function() {
 
 	graph = new Graph(
@@ -212,7 +233,7 @@ $(function() {
 	graph.systemTree.traverseDown(function (node) {
 		var aDom = $('<a href="#" onclick="return false;">' + node.data.name +'</a>');
 		aDom.click({node: node}, function(event) {
-			graph.selectSystem(event.data.node);
+			updateSelectSystem(event.data.node);
 		});
 		var appendDom = $('<li system_code="' + node.data.code + '">');
 		appendDom.append(aDom);
@@ -247,9 +268,10 @@ $(function() {
 			$(this).css({transform: 'rotate(0deg)'});
 		}
 		menuLinks.slideToggle(700, "easeOutBounce", function() {
-			//
 		});
 	});
+
+	updateSelectSystem(graph.systemTree);
 
 });
 
@@ -370,14 +392,14 @@ $(function() {
 			</ul>
 			<!-- Breadcrumbs -->
 			<div id="breadcrumbs">
-				<a href="#"><p id="level1"> Kowloon Bay </p></a>
+{% comment %} 				<p id="level1"> Kowloon Bay </p>
 					<img class="next" src="{% static 'images/next-icon.png' %}">
 				<a href="#"><p id="level2"> Office A </p></a>
 					<img class="next" src="{% static 'images/next-icon.png' %}">
-				<a href="#"><p id="level3"> Level 3 </p></a>
+				<a href="#"><p id="level3"> Level 3 </p></a> {% endcomment %}
 			</div>
 			<!-- Calendar -->
-			<a href="#"><img id="calendar"></a>
+			<img id="calendar">
 			<!-- Date -->
 			<p id="current-day"><span> 14 Jan 2014, Tue </span>
 				<a href="#"><img id="prev-day"></a>
