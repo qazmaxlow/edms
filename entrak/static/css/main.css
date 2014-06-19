@@ -464,7 +464,7 @@ html, body {
 	background-image: url(../images/calendar-hover.png);
 }
 
-#current-day{
+#dt-panel{
 	float: left;
 	padding-top: 8px;
 	background-color: #9bceda;
@@ -472,41 +472,38 @@ html, body {
 	width: 194px;
 	font-size: 13px;
 }
-#current-day span{
+#current-dt{
 	float: left;
-	margin-top: 2px;
+	margin-top: 4px;
 	margin-left: 12px;
 	color: white;
 }
-#prev-day{
-	float:left;
-	background-image: url(../images/prev-day.png);
+#dt-panel img {
+	float:right;
 	width: 19px;
 	height: 18px;
-	margin-left: 8px;
 }
-#prev-day:hover{
+#dt-panel img:hover {
+	cursor: hand;
+	cursor: pointer;
+}
+#dt-prev-icon{
+	background-image: url(../images/prev-day.png);
+}
+#dt-prev-icon:hover{
 	background-image: url(../images/prev-day-hover.png);	
 }
-#today{
-	float: left;
-	width: 19px;
-	height: 18px;
+#dt-now-icon{
 	background-image: url(../images/today.png);
 }
-#today:hover{
+#dt-now-icon:hover{
 	background-image: url(../images/today-hover.png);	
 }
-#prev-day:hover{
-	background-image: url(../images/prev-day-hover.png);	
-}
-#next-day{
-	float: left;
-	width: 19px;
-	height: 18px;
+#dt-next-icon {
+	margin-right: 4px;
 	background-image: url(../images/next-day.png)
 }
-#next-day:hover{
+#dt-next-icon:hover {
 	background-image: url(../images/next-day-hover.png);	
 }
 
@@ -518,6 +515,8 @@ html, body {
 }
 
 #clear-graph:hover{
+	cursor: hand;
+	cursor: pointer;
 	background-image: url(../images/clear-graph-hover.png);
 }
 
@@ -547,7 +546,6 @@ html, body {
 	background-repeat: no-repeat;
 	margin-top: 5px;
 	height: 150px;
-
 }
 
 #last-week-summary {

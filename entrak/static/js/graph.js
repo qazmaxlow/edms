@@ -538,3 +538,27 @@ Graph.prototype.selectSystem = function (node) {
 	this.currentSelectedSystem = node;
 	this.getSourceReadings();
 }
+
+Graph.prototype.goPrevOrNext = function (direction) {
+	var delta = (direction === 'prev') ? -1 : 1;
+	if (this.currentRangeType === this.RANGE_TYPE_HOUR) {
+		this.currentDt.add('h', delta);
+	} else if (this.currentRangeType === this.RANGE_TYPE_DAY || currentRangeType === this.RANGE_TYPE_NIGHT) {
+		this.currentDt.add('d', delta);
+	} else if (this.currentRangeType === this.RANGE_TYPE_WEEK) {
+		this.currentDt.add('w', delta);
+	} else if (this.currentRangeType === this.RANGE_TYPE_MONTH) {
+		this.currentDt.add('M', delta);
+	} else if (this.currentRangeType === this.RANGE_TYPE_YEAR) {
+		this.currentDt.add('y', delta);
+	}
+	this.getSourceReadings();
+}
+
+Graph.prototype.goPrev = function () {
+	this.goPrevOrNext('prev');
+}
+
+Graph.prototype.goNext = function () {
+	this.goPrevOrNext('next');
+}

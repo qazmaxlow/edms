@@ -95,6 +95,36 @@ function updateSelectSystem(node) {
 	graph.selectSystem(node);
 }
 
+function updateCurrentDtText() {
+	$("#current-dt").text(' ' + formatDtAtStr(graph.currentDt, graph.currentRangeType) + ' ');
+}
+
+function resetGraphNPanel() {
+	updateCurrentDtText();
+
+	$("#x-axis-slider").slider("values", [0, 0]);
+
+	var selectionSummary = $("#selection-summary");
+	if (selectionSummary.css('display') !== 'none') {
+		selectionSummary.fadeOut();
+	}
+
+	if (graph.plot !== null) {
+		graph.plot.setSelection({
+			xaxis: {
+				from: 0,
+				to: 0,
+			}
+		});
+	}
+}
+
+function getNowMoment() {
+	// TODO: hardcode now
+	// return moment().startOf('hour');
+	return moment().year(2014).month(5).date(3).startOf('hour');
+}
+
 $(function() {
 
 	graph = new Graph(
@@ -103,9 +133,7 @@ $(function() {
 		"#y-axis-slider",
 		"#x-axis-slider");
 	graph.currentRangeType = graph.RANGE_TYPE_DAY;
-	// TODO: hardcode now
-	// graph.currentDt = moment().startOf('hour');
-	graph.currentDt = moment().year(2014).month(5).date(3).startOf('hour');
+	graph.currentDt = getNowMoment();
 	graph.currentUnit = graph.UNIT_KWH;
 
 	{% for system in systems %}
@@ -271,8 +299,25 @@ $(function() {
 		});
 	});
 
-	updateSelectSystem(graph.systemTree);
+	$("#dt-prev-icon").click(function () {
+		graph.goPrev();
+		resetGraphNPanel();
+	});
+	$("#dt-next-icon").click(function () {
+		graph.goNext();
+		resetGraphNPanel();
+	});
+	$("#dt-now-icon").click(function() {
+		graph.updateCurrentDt(getNowMoment());
+		resetGraphNPanel();
+	});
 
+	$("#clear-graph").click(function () {
+		resetGraphNPanel();
+	});
+
+	updateSelectSystem(graph.systemTree);
+	resetGraphNPanel();
 });
 
 </script>
@@ -401,10 +446,11 @@ $(function() {
 			<!-- Calendar -->
 			<img id="calendar">
 			<!-- Date -->
-			<p id="current-day"><span> 14 Jan 2014, Tue </span>
-				<a href="#"><img id="prev-day"></a>
-				<a href="#"><img id="today"></a>
-				<a href="#"><img id="next-day"></a>
+			<p id="dt-panel"><span id="current-dt"></span>
+				<img id="dt-next-icon">
+				<img id="dt-now-icon">
+				<img id="dt-prev-icon">
+				<span style='clear: both;'></span>				
 			</p>
 			<!-- Clear Graph -->
 			<img id="clear-graph">
