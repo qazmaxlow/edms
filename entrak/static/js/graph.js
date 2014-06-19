@@ -366,8 +366,8 @@ Graph.prototype.setupSourceChoice = function () {
 }
 
 function roundMax(val) {
-	var targetRoundDigit = val.toString().length - 1;
-	return Math.ceil(val/(10*targetRoundDigit)+4)*10*targetRoundDigit;
+	var targetRoundDigit = val.toFixed(0).length - 2;
+	return Math.ceil(val/(Math.pow(10, targetRoundDigit))+3)*Math.pow(10, targetRoundDigit);
 }
 
 Graph.prototype.refreshYAxisSlider = function () {
@@ -381,7 +381,7 @@ Graph.prototype.refreshYAxisSlider = function () {
 	graphThis.plot.getAxes().yaxis.options.max = currentYMax;
 	var yMin = currentYMax*0.25;
 	var yMax = currentYMax*1.75;
-	var step = (yMax-yMin)/1000;
+	var step = (yMax-yMin)/500;
 	$(this.yAxisSliderEleSel).slider("option", {
 		min: yMin,
 		max: yMax,
@@ -389,7 +389,7 @@ Graph.prototype.refreshYAxisSlider = function () {
 		value: currentYMax,
 	}).off("slide")
 	.on("slide", function(event, ui) {
-		graphThis.plot.getAxes().yaxis.options.max = Math.round(ui.value);
+		graphThis.plot.getAxes().yaxis.options.max = ui.value;
 		graphThis.plot.setupGrid();
 		graphThis.plot.draw();
 	});
