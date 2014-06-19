@@ -13,17 +13,63 @@
 }
 
 #y-axis-slider {
-	width: 22px;
+	width: 14px;
 	height: 324px;
 	top: -296px;
-	left: 8px;
+	left: 20px;
+	background: url(../images/line.png) no-repeat #fff;
+	
+	-moz-box-shadow:    inset 0 0 3px #d5d5d5;
+    -webkit-box-shadow: inset 0 0 3px #d5d5d5;
+    box-shadow:         inset 0 0 3px #d5d5d5;
+	
+	-moz-border-radius: 10px !important;
+	-webkit-border-radius: 10px !important;
+	border-radius: 10px !important;
+}
+#y-axis-slider a{
+	background: #9bceda;
+	width: 11px;
+	height: 25px;
+	border: none !important;
+	left: 0.1em !important;
+	margin-bottom: -0.6em !important;
+	
+	-moz-border-radius: 10px !important;
+	-webkit-border-radius: 10px !important;
+	border-radius: 10px !important;
+	
 }
 
 #x-axis-slider {
 	width: 856px;
-	height: 20px;
+	height: 12px;
 	top: -296px;
 	left: 96px;
+	background: url(../images/x-line.png) no-repeat #fff;
+
+	
+	-moz-box-shadow:    inset 0 0 3px #d5d5d5;
+    -webkit-box-shadow: inset 0 0 3px #d5d5d5;
+    box-shadow:         inset 0 0 3px #d5d5d5;
+}
+#x-axis-slider a{
+	border: none;
+	width: 1em;
+	height: 1em;
+	background: url(../images/x-slider-grabber.png) no-repeat;
+	top: -0.1em;
+	border-radius: 20px;
+
+	
+	-moz-box-shadow: 1px 1px 3px #888888;
+	-webkit-box-shadow: 1px 1px 3px #888888;
+	box-shadow: 1px 1px 3px #888888;
+}
+#x-axis-slider .ui-widget-header{
+	background: linear-gradient(#b5e952, #53be0c) !important;
+	height: 8px;
+	top: 2px;
 }
 
 #system-menu {
