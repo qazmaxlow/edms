@@ -23,6 +23,7 @@ Graph.prototype.RANGE_TYPE_NIGHT	= 'night';
 Graph.prototype.RANGE_TYPE_WEEK		= 'week';
 Graph.prototype.RANGE_TYPE_MONTH	= 'month';
 Graph.prototype.RANGE_TYPE_YEAR		= 'year';
+Graph.prototype.RANGE_TYPE_REALTIME	= 'realtime';
 
 Graph.prototype.API_RANGE_TYPES = {
 	'hour': 'hour',
@@ -152,7 +153,7 @@ Graph.prototype.transformXCoordinate = function (value) {
 	} else if (this.currentRangeType === this.RANGE_TYPE_WEEK) {
 		value = value_dt.day();
 	} else if (this.currentRangeType === this.RANGE_TYPE_MONTH) {
-		value = value_dt.date();
+		value = value_dt.date() - 1;
 	} else if (this.currentRangeType === this.RANGE_TYPE_YEAR) {
 		value = value_dt.month();
 	}
@@ -508,10 +509,10 @@ Graph.prototype.updateXAxisOptions = function (startDt) {
 		};
 	} else if (this.currentRangeType === this.RANGE_TYPE_MONTH) {
 		var dayOfEndOfMonth = moment(startDt).endOf('month').date();
-		min = 0;
-		max = dayOfEndOfMonth+2;
+		min = -1;
+		max = dayOfEndOfMonth+1;
 		for (var i = 0; i < max; i++) {
-			ticks.push([i, i]);
+			ticks.push([i, i+1]);
 		};
 	} else if (this.currentRangeType === this.RANGE_TYPE_YEAR) {
 		min = -1;
@@ -530,6 +531,11 @@ Graph.prototype.updateCurrentDt = function (newDt) {
 	this.getSourceReadings();
 }
 
+Graph.prototype.updateCurrentRangeType = function (newRangeType) {
+	this.currentRangeType = newRangeType;
+	this.getSourceReadings();
+}
+
 Graph.prototype.selectSystem = function (node) {
 	if (node === this.currentSelectedSystem) {
 		return;
@@ -543,7 +549,7 @@ Graph.prototype.goPrevOrNext = function (direction) {
 	var delta = (direction === 'prev') ? -1 : 1;
 	if (this.currentRangeType === this.RANGE_TYPE_HOUR) {
 		this.currentDt.add('h', delta);
-	} else if (this.currentRangeType === this.RANGE_TYPE_DAY || currentRangeType === this.RANGE_TYPE_NIGHT) {
+	} else if (this.currentRangeType === this.RANGE_TYPE_DAY || this.currentRangeType === this.RANGE_TYPE_NIGHT) {
 		this.currentDt.add('d', delta);
 	} else if (this.currentRangeType === this.RANGE_TYPE_WEEK) {
 		this.currentDt.add('w', delta);

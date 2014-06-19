@@ -8,6 +8,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/graph.css' %}">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="{% static 'js/superfish-master/dist/css/superfish.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'js/datetimepicker-master/jquery.datetimepicker.css' %}">
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <script src="{% static 'js/arboreal.js' %}"></script>
@@ -19,6 +20,7 @@
 <script src="{% static 'js/superfish-master/dist/js/superfish.min.js' %}"></script>
 <script src="{% static 'js/morris.js-0.4.3/raphael-min.js' %}"></script>
 <script src="{% static 'js/morris.js-0.4.3/morris-customized.js' %}"></script>
+<script src="{% static 'js/datetimepicker-master/jquery.datetimepicker-customized.js' %}"></script>
 <script src="{% static 'js/graph.js' %}"></script>
 
 <script type="text/javascript">
@@ -49,12 +51,28 @@ function formatDtAtStr(dt, rangeType) {
 		|| rangeType === graph.RANGE_TYPE_NIGHT) {
 		formatStr = 'D MMM YYYY, ddd';
 	} else if (rangeType === graph.RANGE_TYPE_WEEK) {
-		formatStr = 'MMM YYYY';
+		formatStr = 'D MMM YYYY';
 	} else if (rangeType === graph.RANGE_TYPE_MONTH) {
-		formatStr = 'YYYY';
+		formatStr = 'MMM YYYY';
 	}
 
 	return (formatStr !== null) ? dt.format(formatStr) : '';
+}
+
+function formatCurrentDtStr(dt, rangeType) {
+	var formatStr = null;
+	if (rangeType === graph.RANGE_TYPE_HOUR
+		|| rangeType === graph.RANGE_TYPE_DAY
+		|| rangeType === graph.RANGE_TYPE_NIGHT
+		|| rangeType === graph.RANGE_TYPE_WEEK) {
+		formatStr = 'D MMM YYYY, ddd';
+	} else if (rangeType === graph.RANGE_TYPE_MONTH) {
+		formatStr = 'MMM YYYY';
+	} else if (rangeType === graph.RANGE_TYPE_YEAR) {
+		formatStr = 'YYYY';
+	}
+
+	return dt.format(formatStr);
 }
 
 function formatDtFromToStr(dt, rangeType) {
@@ -66,9 +84,9 @@ function formatDtFromToStr(dt, rangeType) {
 	} else if (rangeType === graph.RANGE_TYPE_WEEK) {
 		formatStr = 'ddd';
 	} else if (rangeType === graph.RANGE_TYPE_MONTH) {
-		formatStr = 'MMM';
+		formatStr = 'D';
 	} else if (rangeType === graph.RANGE_TYPE_YEAR) {
-		formatStr = 'YYYY';
+		formatStr = 'MMM';
 	}
 
 	return dt.format(formatStr);
@@ -96,7 +114,7 @@ function updateSelectSystem(node) {
 }
 
 function updateCurrentDtText() {
-	$("#current-dt").text(' ' + formatDtAtStr(graph.currentDt, graph.currentRangeType) + ' ');
+	$("#current-dt").text(' ' + formatCurrentDtStr(graph.currentDt, graph.currentRangeType) + ' ');
 }
 
 function resetGraphNPanel() {
@@ -234,6 +252,33 @@ $(function() {
 		}
 	};
 
+	var subMenuPanel = $("#sub-menu-links ul");
+	var subMenu = $("#sub-menu h3").each(function (eleIdx) {
+		$(this).click({connectedPanel: subMenuPanel[eleIdx]}, function (event) {
+			var connectedPanel = $(event.data.connectedPanel);
+			if (!(connectedPanel.hasClass('selected-submenu'))) {
+				subMenuPanel.filter(".selected-submenu").removeClass('selected-submenu').hide();
+				connectedPanel.addClass('selected-submenu').fadeIn();
+			}
+
+			var menuLinks = $('#sub-menu-links');
+			if (menuLinks.css("display") === 'none') {
+				menuLinks.slideToggle(700, "easeOutBounce", function() {});
+			}
+		});
+	});
+	$("#unit-choice").addClass('selected-submenu').show();
+
+	$('#expand-menu-btn').click(function () {
+		var menuLinks = $('#sub-menu-links');
+		if (menuLinks.css('display') === 'none') {
+			$(this).css({transform: 'rotate(180deg)'});
+		} else {
+			$(this).css({transform: 'rotate(0deg)'});
+		}
+		menuLinks.slideToggle(700, "easeOutBounce", function() {});
+	});
+
 	var distinctUnitCategorys = [];
 	var unitChoice = $('#unit-choice');
 	$.each(graph.units, function(idx, unit) {
@@ -250,9 +295,34 @@ $(function() {
 			unitChoice.append(unitLiDom);
 		}
 	});
-
 	unitChoice.find("li").click(function () {
 		graph.updateUnit($(this).attr("unit_category"));
+	});
+
+	var timeRangeTypes = [graph.RANGE_TYPE_HOUR, graph.RANGE_TYPE_DAY, graph.RANGE_TYPE_NIGHT,
+		graph.RANGE_TYPE_WEEK, graph.RANGE_TYPE_MONTH,
+		graph.RANGE_TYPE_YEAR, graph.RANGE_TYPE_REALTIME];
+	var timeChoice = $("#time-choice");
+	$.each(timeRangeTypes, function(idx, rangeType) {
+		var timeLiDom = $("<li id='time-choice-" + rangeType + "-icon' range_type='" + rangeType + "'></li>");
+		timeChoice.append(timeLiDom);
+	})
+	timeChoice.find("li").click(function () {
+		var newRangeType = $(this).attr("range_type");
+		if (newRangeType === graph.RANGE_TYPE_REALTIME) {
+			var nowMoment = getNowMoment();
+			if (graph.currentRangeType !== graph.RANGE_TYPE_HOUR || !(nowMoment.isSame(graph.currentDt))) {
+				graph.currentDt = nowMoment;
+				graph.currentRangeType = graph.RANGE_TYPE_HOUR;
+				graph.getSourceReadings();
+				resetGraphNPanel();
+			}
+		} else {
+			if (graph.currentRangeType !== newRangeType) {
+				graph.updateCurrentRangeType(newRangeType);
+				resetGraphNPanel();
+			}
+		}
 	});
 
 	graph.getSourceReadings();
@@ -288,16 +358,28 @@ $(function() {
 	$('#system-menu').superfish({
 	});
 
-	$('#expand-menu-btn').click(function () {
-		var menuLinks = $('#sub-menu-links');
-		if (menuLinks.css('display') === 'none') {
-			$(this).css({transform: 'rotate(180deg)'});
-		} else {
-			$(this).css({transform: 'rotate(0deg)'});
+	$("#calendar").click(function () {
+		$('#current-dt-picker').datetimepicker('destroy');
+
+		var dtPickerOptions = {
+			format: "unixtime",
+			value: graph.currentDt.unix(),
+			scrollMonth: false,
+			onClose: function() {
+				$("#current-dt-picker").off("change");
+			},
+			onShow: function() {
+				$("#current-dt-picker").change(function() {
+					graph.updateCurrentDt(moment.unix($(this).val()).startOf('hour'));
+					resetGraphNPanel();
+				});
+			}
+		};
+		if (graph.currentRangeType !== graph.RANGE_TYPE_HOUR) {
+			dtPickerOptions.timepicker = false;
 		}
-		menuLinks.slideToggle(700, "easeOutBounce", function() {
-		});
-	});
+		$("#current-dt-picker").datetimepicker(dtPickerOptions).datetimepicker('show');
+	})
 
 	$("#dt-prev-icon").click(function () {
 		graph.goPrev();
@@ -404,10 +486,10 @@ $(function() {
 
 			<!-- Sub Menu Item -->
 			<div id="sub-menu">
-				<h3><a href="#" id="unit">Unit</a></h3>
-				<h3><a href="#" id="time">Time</a></h3>
-				<h3><a href="#" id="source">Source</a></h3>
-				<h3><a href="#" id="days">Days</a></h3>
+				<h3 id="sub-menu-unit">Unit</h3>
+				<h3 id="sub-menu-time">Time</h3>
+				<h3 id="sub-menu-source">Source</h3>
+				<h3 id="sub-menu-days">Days</h3>
 				<img id="expand-menu-btn" src="{% static 'images/expandable_button.png' %}">
 			</div>
 
@@ -420,9 +502,9 @@ $(function() {
 		<!-- Sub Menu Item Links -->
 		<div id="sub-menu-links">
 			<ul id="unit-choice"></ul>
-			<ul id="time-choice-links"></ul>
-			<ul id="source-choice-links"></ul>
-			<ul id="day-choice-links"></ul>
+			<ul id="time-choice"></ul>
+			<ul id="source-choice"></ul>
+			<ul id="day-choice"></ul>
 		</div>
 		<div style="clear: both;"></div>
 	
@@ -436,14 +518,9 @@ $(function() {
 				</li>
 			</ul>
 			<!-- Breadcrumbs -->
-			<div id="breadcrumbs">
-{% comment %} 				<p id="level1"> Kowloon Bay </p>
-					<img class="next" src="{% static 'images/next-icon.png' %}">
-				<a href="#"><p id="level2"> Office A </p></a>
-					<img class="next" src="{% static 'images/next-icon.png' %}">
-				<a href="#"><p id="level3"> Level 3 </p></a> {% endcomment %}
-			</div>
+			<div id="breadcrumbs"></div>
 			<!-- Calendar -->
+			<input type="text" id="current-dt-picker">
 			<img id="calendar">
 			<!-- Date -->
 			<p id="dt-panel"><span id="current-dt"></span>

@@ -1,5 +1,6 @@
-#expand-menu-btn, #system-menu > li > a:hover,
-#unit-choice li {
+#expand-menu-btn, #system-menu > li > a, #unit-choice li, #time-choice li,
+#breadcrumbs p, #calendar, #dt-panel img, #clear-graph, #sub-menu h3,
+#menu-links li {
 	cursor: pointer;
 	cursor: hand;
 }
@@ -7,7 +8,6 @@
 #chart {
 	width:920px;
 	height:312px;
-/*	top: 38px;*/
 	left: 52px;
 	position: relative;
 }
@@ -134,4 +134,119 @@
 	letter-spacing: 0.5px;
 	margin-top: -2px;
 	text-align: center;
+}
+
+#current-dt-picker {
+	position: absolute;
+	visibility: hidden;
+	top: -240px;
+}
+
+/*-- Sub Menu --*/
+#sub-menu{
+	position: absolute;
+	width: 320px;
+	margin-top: 133px;
+	margin-left: 35px;
+}
+#sub-menu img{
+	margin-left: 4px;	
+	margin-top: 5px;
+	display: inline;
+}
+#sub-menu h3{
+	display: inline;
+	vertical-align: bottom;
+	text-decoration: none;
+	font-size: 14px;
+	width: 42px;
+	height: 22px;
+	padding-left: 18px;
+	padding-top: 8px;
+	padding-right: 18px;
+	padding-bottom: 2px;
+	margin-left: -4px;
+	color: #ffffff;
+	background-color: #9bceda;
+	border-top-left-radius: 5px;
+	-moz-border-top-left-radius: 5px;
+	-webkit-border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	-moz-border-top-right-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+}
+#sub-menu h3:hover {
+	font-weight: bold;
+	background-color: #7fd51e;
+	letter-spacing: 0.6px;
+}
+#sub-menu-unit {
+	margin-left: 0px;
+}
+
+#sub-menu-links{
+	width: 100%;
+	height: 95px;
+	background-color: #fff1cd;
+	position: relative;
+}
+#sub-menu-links ul{
+	padding-top: 17px;
+	margin-left: 35px;
+	height: 61px;
+	position: absolute;
+	display: none;
+}
+
+#unit-choice li, #time-choice li {
+	float: left;
+	margin-left: 7px;
+}
+
+#time-choice li {
+	background: url(../images/time-icon-sprites.png) no-repeat;
+	width: 61px;
+	height: 61px;
+}
+#time-choice-hour-icon {
+	background-position: 0 0;
+}
+#time-choice-hour-icon:hover {
+	background-position: 0 -62px !important;
+}
+#time-choice-day-icon {
+	background-position: -62px 0px !important;
+}
+#time-choice-day-icon:hover {
+	background-position: -62px -62px !important;
+}
+#time-choice-night-icon {
+	background-position: -124px 0 !important;
+}
+#time-choice-night-icon:hover {
+	background-position: -124px -62px !important;
+}
+#time-choice-week-icon {
+	background-position: -186px 0 !important;
+}
+#time-choice-week-icon:hover {
+	background-position: -186px -62px !important;
+}
+#time-choice-month-icon {
+	background-position: -248px 0 !important;
+}
+#time-choice-month-icon:hover {
+	background-position: -248px -62px !important;
+}
+#time-choice-year-icon {
+	background-position: -310px 0 !important;
+}
+#time-choice-year-icon:hover {
+	background-position: -310px -62px !important;
+}
+#time-choice-realtime-icon {
+	background-position: -372px 0 !important;
+}
+#time-choice-realtime-icon:hover {
+	background-position: -372px -62px !important;
 }

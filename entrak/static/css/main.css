@@ -197,8 +197,6 @@ html, body {
 	width: 196px;
 	height: 30px;
 	color: #fff;
-	cursor: pointer;
-	cursor: hand;
 }
 
 #menu-links span{
@@ -266,141 +264,7 @@ html, body {
 	margin-top: 73px;
 }
 
-/*-- Sub Menu --*/
-#sub-menu{
-	position: absolute;
-	width: 300px;
-	margin-top: 133px;
-	margin-left: 35px;
-}
-#header #unit {
-	float: left;
-	vertical-align: bottom;
-	text-decoration: none;
-	font-size: 14px;
-	width: 42px;
-	height: 22px;
-
-	padding-left: 18px;
-	padding-top: 8px;
-	color: #ffffff;
-	background-color: #9bceda;
-	border-top-left-radius: 5px;
-	-moz-border-top-left-radius: 5px;
-	-webkit-border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
-	-moz-border-top-right-radius: 5px;
-	-webkit-border-top-right-radius: 5px;
-}
-#header #unit:hover{
-	font-weight: bold;
-	background-color: #7fd51e;
-	letter-spacing: 0.6px;
-}
-#header #time {
-	float: left;
-	vertical-align: bottom;
-	text-decoration: none;
-	font-size: 14px;
-	width: 44px;
-	height: 22px;
-	margin-left: 1px;
-	
-	padding-left: 16px;
-	padding-top: 8px;
-	color: #ffffff;
-	background-color: #9bceda;
-	border-top-left-radius: 5px;
-	-moz-border-top-left-radius: 5px;
-	-webkit-border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
-	-moz-border-top-right-radius: 5px;
-	-webkit-border-top-right-radius: 5px;
-}
-
-#header #time:hover{
-	font-weight: bold;
-	background-color: #7fd51e;
-	letter-spacing: 0.6px;
-}
-
-#header #source {
-	float: left;
-	vertical-align: bottom;
-	text-decoration: none;
-	font-size: 14px;
-	width: 62px;
-	height: 22px;
-	margin-left: 1px;
-	
-	padding-left: 14px;
-	padding-top: 8px;
-	color: #ffffff;
-	background-color: #9bceda;
-	border-top-left-radius: 5px;
-	-moz-border-top-left-radius: 5px;
-	-webkit-border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
-	-moz-border-top-right-radius: 5px;
-	-webkit-border-top-right-radius: 5px;
-}
-
-#header #source:hover{
-	font-weight: bold;
-	background-color: #7fd51e;
-	letter-spacing: 0.6px;
-}
-
-#header #days {
-	float: left;
-	vertical-align: bottom;
-	text-decoration: none;
-	font-size: 14px;
-	width: 48px;
-	height: 22px;
-	margin-left: 1px;
-
-	padding-left: 14px;
-	padding-top: 8px;
-	color: #ffffff;
-	background-color: #9bceda;
-	border-top-left-radius: 5px;
-	-moz-border-top-left-radius: 5px;
-	-webkit-border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
-	-moz-border-top-right-radius: 5px;
-	-webkit-border-top-right-radius: 5px;
-}
-#header #days:hover{
-	font-weight: bold;
-	background-color: #7fd51e;
-	letter-spacing: 0.6px;
-}
-
-#sub-menu img{
-	margin-left: 10px;	
-	margin-top: 5px;
-}
-
 /*-- Main heading Ends --*/
-
-/*-- Sub menu items --*/
-#sub-menu-links{
-	width: 100%;
-	height: 95px;
-	background-color: #fff1cd;
-}
-
-#sub-menu-links ul{
-	padding-top: 17px;
-	margin-left: 35px;
-	height: 61px;
-}
-
-#unit-choice li{
-	float: left;
-	margin-left: 7px;
-}
 
 /*Main Graph*/
 
@@ -441,10 +305,6 @@ html, body {
 #breadcrumbs p:last-child{
 	color: -webkit-link;
 }
-#breadcrumbs p:hover {
-	cursor: pointer;
-	cursor: hand;
-}
 .next{
 	float: left;
 	margin-top: 12px;
@@ -473,19 +333,16 @@ html, body {
 	font-size: 13px;
 }
 #current-dt{
+	width: 69%;
+	text-align: center;
 	float: left;
 	margin-top: 4px;
-	margin-left: 12px;
 	color: white;
 }
 #dt-panel img {
 	float:right;
 	width: 19px;
 	height: 18px;
-}
-#dt-panel img:hover {
-	cursor: hand;
-	cursor: pointer;
 }
 #dt-prev-icon{
 	background-image: url(../images/prev-day.png);
@@ -500,7 +357,7 @@ html, body {
 	background-image: url(../images/today-hover.png);	
 }
 #dt-next-icon {
-	margin-right: 4px;
+	margin-right: 3px;
 	background-image: url(../images/next-day.png)
 }
 #dt-next-icon:hover {
@@ -515,8 +372,6 @@ html, body {
 }
 
 #clear-graph:hover{
-	cursor: hand;
-	cursor: pointer;
 	background-image: url(../images/clear-graph-hover.png);
 }
 
