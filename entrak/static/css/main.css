@@ -1,7 +1,14 @@
-/**
- * Eric Meyer's Reset CSS v2.0 (http://meyerweb.com/eric/tools/css/reset/)
- * http://cssreset.com
- */
+@font-face {
+	font-family: 'ITCAvantGardeStd-Bk';
+	src: url('../fonts/itc-avant-garde-std-bk.eot');
+	src: url('../fonts/itc-avant-garde-std-bk.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/itc-avant-garde-std-bk.woff') format('woff'),
+		url('../fonts/itc-avant-garde-std-bk.ttf') format('truetype'),
+		url('../fonts/itc-avant-garde-std-bk.svg#ITCAvantGardeStd-Bk') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -66,7 +73,7 @@ html, body {
 #page-container{
     height: 100%;
 	width: 100%;
-	font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+	font-family: "ITCAvantGardeStd-Bk", ITCAvantGardeStd-Bk, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
 }
 
 /* ---------------------------- */
@@ -460,7 +467,7 @@ html, body {
 	font-size: 10px;
 	font-weight: 500;
 	letter-spacing: 0.5px;
-	font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+	font-family: "ITCAvantGardeStd-Bk", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
 }
 
 #copyright{

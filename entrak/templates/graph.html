@@ -215,6 +215,11 @@ $(function() {
 	$("#y-axis-slider").slider({
 		orientation: "vertical",
 		animate: "fast",
+		create: function(event, ui) {
+			var wrapDiv = $('<div>')
+			wrapDiv.append($(this).find('a'));
+			$(this).append(wrapDiv);
+		}
 	});
 
 	$("#x-axis-slider").slider({
