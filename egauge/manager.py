@@ -9,6 +9,7 @@ from mongoengine import Q
 from .models import Source, SourceReadingMin, SourceReadingHour,\
 	SourceReadingDay, SourceReadingWeek, SourceReadingMonth, SourceReadingYear, SourceReadingMinInvalid
 from lxml import etree
+from collections import defaultdict
 from utils.utils import Utils
 
 class SourceManager:

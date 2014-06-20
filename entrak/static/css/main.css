@@ -72,31 +72,10 @@ html, body {
 
 #page-container{
     height: 100%;
-	width: 100%;
+	width: 1245px;
 	font-family: "ITCAvantGardeStd-Bk", ITCAvantGardeStd-Bk, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
-}
-
-/* ---------------------------- */
-/* ---- LEFT Sidebar   -------- */
-/* ---------------------------- */
-
-#open-menu{
-	position: absolute;
-	width: 35px;
-	height: 100%;
-	background-color: #bec6c7;	
-}
-
-#open-menu-icon{
-	margin-left: 6px;
-	margin-top: 5px;
-	width: 23px;
-	height: 20px;
-	background-image: url(../images/slidebar_icon.png);
-}
-
-#open-menu-icon:hover{
-	background-image: url(../images/slidebar-icon-hover.png) !important;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 /* ---------------------------- */
@@ -106,7 +85,7 @@ html, body {
 /* Menu Background */
 #menu{
 	position: absolute;
-	width: 245px;
+	width: 222px;
  	height: 100%;
 	background: -webkit-gradient(linear, left top, left bottom, from(#eff2f3), to(#cbcfd1));
 	margin-right: 10px;
@@ -115,24 +94,24 @@ html, body {
 /* User's logo */
 
 #users-logo{
-	margin-left: 47px;
 	width: 187px;
 	height: 201px;
 	margin-top: 65px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 /* Company Name*/
 #company{
-	padding-left: 72px;
 	font-weight: bolder;
 	padding-top: 15px;
+	text-align: center;
 }
 
 /* --- Admin - Logout - Settings --- */
 #admin{
 	height: 40px;
 	padding-top: 10px;
-	margin-left: 30px;
 }
 #admin #logout p{
 	margin-left: 40px;
@@ -194,7 +173,7 @@ html, body {
 	padding-bottom: 8px;
 	padding-top: 10px;
 	color: #31363e;
-	margin-left: 55px;
+	margin-left: 33px;
 	font-weight: lighter;
 }
 
@@ -219,7 +198,7 @@ html, body {
 .right-content {
 	min-height: 100%; /*equal to footer height*/
 	margin-bottom: -76px;
-	padding-left: 245px;
+	padding-left: 222px;
 }
 
 .right-content:after {
@@ -461,7 +440,9 @@ html, body {
 	position: relative; /* set this to relative if want to have the footer stick to bottom upon changing screen size */
 	/*bottom: 0;  delete if not want to have at the bottom */
 	height: 76px;
-	width: 100%;
+	width: 1245px;
+	margin-left: auto;
+	margin-right: auto;
   	background-image: url(../images/footer_bg.png);
 	color: white;
 	font-size: 10px;

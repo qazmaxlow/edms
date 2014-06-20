@@ -85,18 +85,25 @@ Graph.prototype.getSourceReadings = function () {
 			end_dt: startEndDt.endDt.unix(),
 		},
 	}).done(function(data) {
-		for (var sourceId in data) {
-			var systemNode = graphThis.findSystemNodeBySourceId(sourceId);
-			systemNode.data.sources[sourceId]['data'] = {};
-			$.each(data[sourceId], function(readingTimestamp, value) {
-				systemNode.data.sources[sourceId]['data'][readingTimestamp] = value;
-			})
-		}
+		$.each({data: data['readings'], lastData: data['last_readings']}, function (dataKey, readings) {
+			graphThis.addDataToSystem(dataKey, readings);
+		})
 
 		graphThis.updateXAxisOptions(startEndDt.startDt);
 		graphThis.transformReadingToChartDatasets();
 		graphThis.plotGraph();
 	});
+}
+
+Graph.prototype.addDataToSystem = function (dataKey, readings) {
+	var graphThis = this;
+	for (var sourceId in readings) {
+		var systemNode = graphThis.findSystemNodeBySourceId(sourceId);
+		systemNode.data.sources[sourceId][dataKey] = {};
+		$.each(readings[sourceId], function(readingTimestamp, value) {
+			systemNode.data.sources[sourceId][dataKey][readingTimestamp] = value;
+		})
+	}
 }
 
 Graph.prototype.addSourceToSystem = function (systemCode, sourceId, source) {

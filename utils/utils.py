@@ -49,6 +49,32 @@ class Utils:
 		return (start_time, end_time)
 
 	@staticmethod
+	def get_last_dt_range(range_type, start_dt, end_dt):
+		if range_type in [Utils.RANGE_TYPE_HOUR, Utils.RANGE_TYPE_DAY, Utils.RANGE_TYPE_WEEK]:
+			if range_type == Utils.RANGE_TYPE_HOUR:
+				dt_delta = datetime.timedelta(hours=1)
+			elif range_type == Utils.RANGE_TYPE_DAY:
+				dt_delta = datetime.timedelta(days=1)
+			elif range_type == Utils.RANGE_TYPE_WEEK:
+				dt_delta = datetime.timedelta(weeks=1)
+			last_start_dt = start_dt - dt_delta
+			last_end_dt = end_dt - dt_delta
+		elif range_type == Utils.RANGE_TYPE_MONTH:
+			if start_dt.month == 1:
+				last_start_dt = start_dt.replace(year=(start_dt.year-1), month=12)
+			else:
+				last_start_dt = start_dt.replace(month=(start_dt.month-1))
+			if end_dt.month == 1:
+				last_end_dt = end_dt.replace(year=(start_dt.year-1), month=12)
+			else:
+				last_end_dt = end_dt.replace(month=(end_dt.month-1))
+		elif range_type == Utils.RANGE_TYPE_YEAR:
+			last_start_dt = start_dt.replace(year=(start_dt.year-1))
+			last_end_dt = end_dt.replace(year=(end_dt.year-1))
+
+		return last_start_dt, last_end_dt
+
+	@staticmethod
 	def json_response(data):
 		return HttpResponse(json.dumps(data), content_type="application/json")
 
