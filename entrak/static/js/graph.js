@@ -1,8 +1,9 @@
-function Graph(graphEleSel, sourceChoiceEleSel, yAxisSliderEleSel, xAxisSliderEleSel) {
+function Graph(graphEleSel, sourceChoiceEleSel, yAxisSliderEleSel, xAxisSliderEleSel, retrieveReadingCallback) {
 	this.graphEleSel = graphEleSel;
 	this.sourceChoiceEleSel = sourceChoiceEleSel;
 	this.yAxisSliderEleSel = yAxisSliderEleSel;
 	this.xAxisSliderEleSel = xAxisSliderEleSel;
+	this.retrieveReadingCallback = retrieveReadingCallback;
 
 	this.plot = null;
 	this.systemTree = null;
@@ -69,11 +70,13 @@ Graph.prototype.SERIES_BASE_OPTIONS = {
 		fillColor: "#FFFFFF",
 		show: true
 	},
+	clickable: false,
 };
 
 Graph.prototype.getSourceReadings = function () {
 	var graphThis = this;
-	var startEndDt = this.genStartEndDt();
+	var startEndDt = this.genCurrentStartEndDt();
+	var lastStartEndDt = this.genLastStartEndDt(startEndDt.startDt, this.currentRangeType);
 	var sourceIds = this.getSourceIdsUnderTree();
 	$.ajax({
 		type: "POST",
@@ -83,15 +86,19 @@ Graph.prototype.getSourceReadings = function () {
 			range_type: graphThis.API_RANGE_TYPES[graphThis.currentRangeType],
 			start_dt: startEndDt.startDt.unix(),
 			end_dt: startEndDt.endDt.unix(),
+			last_start_dt: lastStartEndDt.startDt.unix(),
+			last_end_dt: lastStartEndDt.endDt.unix(),
 		},
 	}).done(function(data) {
-		$.each({data: data['readings'], lastData: data['last_readings']}, function (dataKey, readings) {
+		$.each({data: data['readings']}, function (dataKey, readings) {
 			graphThis.addDataToSystem(dataKey, readings);
 		})
 
 		graphThis.updateXAxisOptions(startEndDt.startDt);
 		graphThis.transformReadingToChartDatasets();
 		graphThis.plotGraph();
+
+		graphThis.retrieveReadingCallback();
 	});
 }
 
@@ -130,10 +137,10 @@ Graph.prototype.findSystemNodeBySourceId = function (sourceId) {
 	});
 }
 
-Graph.prototype.sumUpSourceReading = function (sourceReadings, sources) {
+Graph.prototype.sumUpSourceReading = function (sourceReadings, sources, dataName) {
 	var graphThis = this;
 	$.each(sources, function (sourceId, source) {
-		$.each(source.data, function(readingTimestamp, readingVal) {
+		$.each(source[dataName], function(readingTimestamp, readingVal) {
 			var transformedVal = graphThis.transformReading(source, readingTimestamp, readingVal);
 			if (readingTimestamp in sourceReadings) {
 				sourceReadings[readingTimestamp] += transformedVal;
@@ -152,10 +159,10 @@ Graph.prototype.transformXCoordinate = function (value) {
 		value = value_dt.hour();
 	} else if (this.currentRangeType === this.RANGE_TYPE_NIGHT) {
 		value = value_dt.hour();
-		if (value >= 12) {
-			value -= 12;
+		if (value >= 20) {
+			value -= 20;
 		} else {
-			value += 12;
+			value += 4;
 		}
 	} else if (this.currentRangeType === this.RANGE_TYPE_WEEK) {
 		value = value_dt.day();
@@ -209,9 +216,8 @@ Graph.prototype.transformReadingToChartDatasets = function () {
 	var tree = this.currentSelectedSystem;
 	this.sourceDatasets = [];
 	var totalReadings = {};
-	var sourceLineOptions = {show: true};
 
-	this.sumUpSourceReading(totalReadings, tree.data.sources);
+	this.sumUpSourceReading(totalReadings, tree.data.sources, 'data');
 	for (var sourceId in tree.data.sources) {
 		var source = tree.data.sources[sourceId];
 
@@ -240,10 +246,8 @@ Graph.prototype.transformReadingToChartDatasets = function () {
 			this.SERIES_BASE_OPTIONS);
 		var sourceReadings = {};
 
-		this.sumUpSourceReading(sourceReadings, subTree.data.sources);
-
 		subTree.traverseDown(function (node) {
-			graphThis.sumUpSourceReading(sourceReadings, node.data.sources);
+			graphThis.sumUpSourceReading(sourceReadings, node.data.sources, 'data');
 		});
 
 		for (var readingTimestamp in sourceReadings) {
@@ -261,6 +265,21 @@ Graph.prototype.transformReadingToChartDatasets = function () {
 	this.totalSeries = $.extend(true, {data: []}, this.TOTAL_SERIES_BASE_OPTIONS);
 	for (var readingTimestamp in totalReadings) {
 		this.totalSeries.data.push([graphThis.transformXCoordinate(readingTimestamp), totalReadings[readingTimestamp]]);
+	}
+}
+
+Graph.prototype.genTotalSeries = function (seriesName, dataName) {
+	var tree = this.currentSelectedSystem;
+	var totalReadings = {};
+	var graphThis = this;
+
+	tree.traverseDown(function (node) {
+		graphThis.sumUpSourceReading(totalReadings, node.data.sources, dataName);
+	});
+
+	this[seriesName] = $.extend(true, {data: []}, this.SERIES_BASE_OPTIONS);
+	for (var readingTimestamp in totalReadings) {
+		this[seriesName].data.push([this.transformXCoordinate(readingTimestamp), totalReadings[readingTimestamp]]);
 	}
 }
 
@@ -305,6 +324,7 @@ Graph.prototype.plotGraph = function () {
 			noColumns: 6,
 		},
 		grid: {
+			clickable: true,
 			hoverable: true,
 			borderWidth: {
 				'top': 0,
@@ -340,6 +360,12 @@ Graph.prototype.plotGraph = function () {
 	this.plot.draw();
 
 	this.refreshXAxisSlider();
+
+	$(this.graphEleSel).off('plotclick').on('plotclick', function(event, pos, item) {
+		if (item) {
+			//TODO: 
+		}
+	});
 }
 
 Graph.prototype.setupSourceChoice = function () {
@@ -404,7 +430,7 @@ Graph.prototype.refreshYAxisSlider = function () {
 
 Graph.prototype.refreshXAxisSlider = function () {
 	var graphThis = this;
-	var startEndDt = this.genStartEndDt();
+	var startEndDt = this.genCurrentStartEndDt();
 	var xAxisSlider = $(this.xAxisSliderEleSel);
 	xAxisSlider.slider("option", "min", this.currentXaxisOptions.min+1);
 	xAxisSlider.slider("option", "max", this.currentXaxisOptions.max);
@@ -455,36 +481,64 @@ Graph.prototype.sumUpSeriesValueInRange = function (startIdx, endIdx) {
 	});
 }
 
-Graph.prototype.genStartEndDt = function () {
+Graph.prototype.genStartEndDt = function (targetDt, rangeType) {
 	var startDt = null;
 	var endDt = null;
-	var currentDtClone = moment(this.currentDt);
+	var dtClone = moment(targetDt).startOf('hour');
 
-	if (this.currentRangeType === this.RANGE_TYPE_HOUR) {
-		startDt = currentDtClone;
+	if (rangeType === this.RANGE_TYPE_HOUR) {
+		startDt = dtClone;
 		endDt = moment(startDt).add('h', 1);
-	} else if (this.currentRangeType === this.RANGE_TYPE_DAY) {
-		startDt = currentDtClone.startOf('day');
+	} else if (rangeType === this.RANGE_TYPE_DAY) {
+		startDt = dtClone.startOf('day');
 		endDt = moment(startDt).add('d', 1);
-	} else if (this.currentRangeType == this.RANGE_TYPE_NIGHT) {
-		if (currentDtClone.hour() >= 12) {
-			startDt = currentDtClone.hour(12);
+	} else if (rangeType == this.RANGE_TYPE_NIGHT) {
+		if (dtClone.hour() >= 8) {
+			startDt = dtClone.subtract('d', 1).hour(20);
 		} else {
-			startDt = currentDtClone.hour(12).subtract('d', 1);
+			startDt = dtClone.subtract('d', 2).hour(20);
 		}
-		endDt = moment(startDt).add('d', 1);
-	} else if (this.currentRangeType == this.RANGE_TYPE_WEEK) {
-		startDt = currentDtClone.startOf('week');
+		endDt = moment(startDt).add('h', 12);
+	} else if (rangeType == this.RANGE_TYPE_WEEK) {
+		startDt = dtClone.startOf('week');
 		endDt = moment(startDt).add('d', 7);
-	} else if (this.currentRangeType == this.RANGE_TYPE_MONTH) {
-		startDt = currentDtClone.startOf('month');
+	} else if (rangeType == this.RANGE_TYPE_MONTH) {
+		startDt = dtClone.startOf('month');
 		endDt = moment(startDt).add('M', 1);
-	} else if (this.currentRangeType == this.RANGE_TYPE_YEAR) {
-		startDt = currentDtClone.startOf('year');
+	} else if (rangeType == this.RANGE_TYPE_YEAR) {
+		startDt = dtClone.startOf('year');
 		endDt = moment(startDt).add('y', 1);
 	}
 
 	return {startDt: startDt, endDt: endDt}
+}
+
+Graph.prototype.genCurrentStartEndDt = function () {
+	return this.genStartEndDt(this.currentDt, this.currentRangeType);
+}
+
+Graph.prototype.getDtDetlaUnit = function (rangeType) {
+	var deltaUnit = null;
+	if (rangeType === this.RANGE_TYPE_HOUR) {
+		deltaUnit = 'h';
+	} else if (rangeType === this.RANGE_TYPE_DAY || rangeType === this.RANGE_TYPE_NIGHT) {
+		deltaUnit = 'd';
+	} else if (rangeType === this.RANGE_TYPE_WEEK) {
+		deltaUnit = 'w';
+	} else if (rangeType === this.RANGE_TYPE_MONTH) {
+		deltaUnit = 'M';
+	} else if (rangeType === this.RANGE_TYPE_YEAR) {
+		deltaUnit = 'y';
+	}
+	return deltaUnit;
+}
+
+Graph.prototype.genLastStartEndDt = function (targetDt, rangeType) {
+	var deltaUnit = this.getDtDetlaUnit(rangeType);
+	var endDtUnit = null;
+	var lastStartDt = moment(targetDt).subtract(deltaUnit, 1);
+
+	return {startDt: lastStartDt, endDt: targetDt};
 }
 
 Graph.prototype.updateXAxisOptions = function (startDt) {
@@ -499,11 +553,19 @@ Graph.prototype.updateXAxisOptions = function (startDt) {
 			var tickLabel = moment(startDt).add('m', i*5).format('h:mma');
 			ticks.push([i*5, tickLabel]);
 		};
-	} else if (this.currentRangeType === this.RANGE_TYPE_DAY || this.currentRangeType === this.RANGE_TYPE_NIGHT) {
+	} else if (this.currentRangeType === this.RANGE_TYPE_DAY) {
 		min = -1;
 		max = 24;
 		
 		for (var i = 0; i < 12; i++) {
+			var tickLabel = moment(startDt).add('h', i*2).format('ha');
+			ticks.push([i*2, tickLabel]);
+		};
+	} else if (this.currentRangeType === this.RANGE_TYPE_NIGHT) {
+		min = -1;
+		max = 12;
+
+		for (var i = 0; i < 6; i++) {
 			var tickLabel = moment(startDt).add('h', i*2).format('ha');
 			ticks.push([i*2, tickLabel]);
 		};
@@ -554,17 +616,8 @@ Graph.prototype.selectSystem = function (node) {
 
 Graph.prototype.goPrevOrNext = function (direction) {
 	var delta = (direction === 'prev') ? -1 : 1;
-	if (this.currentRangeType === this.RANGE_TYPE_HOUR) {
-		this.currentDt.add('h', delta);
-	} else if (this.currentRangeType === this.RANGE_TYPE_DAY || this.currentRangeType === this.RANGE_TYPE_NIGHT) {
-		this.currentDt.add('d', delta);
-	} else if (this.currentRangeType === this.RANGE_TYPE_WEEK) {
-		this.currentDt.add('w', delta);
-	} else if (this.currentRangeType === this.RANGE_TYPE_MONTH) {
-		this.currentDt.add('M', delta);
-	} else if (this.currentRangeType === this.RANGE_TYPE_YEAR) {
-		this.currentDt.add('y', delta);
-	}
+	var deltaUnit = this.getDtDetlaUnit(this.currentRangeType);
+	this.currentDt.add(deltaUnit, delta);
 	this.getSourceReadings();
 }
 
@@ -574,4 +627,57 @@ Graph.prototype.goPrev = function () {
 
 Graph.prototype.goNext = function () {
 	this.goPrevOrNext('next');
+}
+
+Graph.prototype.calculateSummary = function () {
+	var totalReadings = {};
+	var lastTotalReadings = {};
+	var graphThis = this;
+	this.systemTree.traverseDown(function (node) {
+		graphThis.sumUpSourceReading(totalReadings, node.data.sources, 'realtimeData');
+		graphThis.sumUpSourceReading(lastTotalReadings, node.data.sources, 'realtimeLastData');
+	});
+
+	var totalConsumption = 0;
+	var lastTotalConsumption = 0;
+	$.each(totalReadings, function(timestamp, val) {
+		totalConsumption += val;
+	});
+	$.each(lastTotalReadings, function(timestamp, val) {
+		lastTotalConsumption += val;
+	});
+
+	this.realtimeConsumption = totalConsumption;
+	this.lastConsumption = lastTotalConsumption;
+}
+
+Graph.prototype.getSummary = function(getSummaryCallback) {
+	var graphThis = this;
+	// TODO: don't HARDCODE if have realtime data
+	// var uptilMoment = moment();
+	var uptilMoment = moment().year(2014).month(5).date(3);
+	var startDt = moment(uptilMoment).startOf('day');
+	var lastStartDt = moment(startDt).subtract('d', 1);
+	var lastEndDt = moment(uptilMoment).subtract('d', 1);
+
+	var sourceIds = this.getSourceIdsUnderTree();
+	$.ajax({
+		type: "POST",
+		url: "../source_readings/",
+		data: {
+			source_ids: sourceIds,
+			range_type: graphThis.API_RANGE_TYPES[graphThis.RANGE_TYPE_HOUR],
+			start_dt: startDt.unix(),
+			end_dt: uptilMoment.unix(),
+			last_start_dt: lastStartDt.unix(),
+			last_end_dt: lastEndDt.unix(),
+		},
+	}).done(function(data) {
+		$.each({realtimeData: data['readings'], realtimeLastData: data['last_readings']}, function (dataKey, readings) {
+			graphThis.addDataToSystem(dataKey, readings);
+		})
+
+		graphThis.calculateSummary();
+		getSummaryCallback();
+	});
 }

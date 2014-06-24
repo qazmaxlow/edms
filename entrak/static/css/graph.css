@@ -173,6 +173,7 @@
 #selection-summary-value{
 	font-size: 37px;
 	font-weight: bolder;
+	padding-top: 2px;
 }
 #selection-summary-unit{
 	font-size: 18px;
@@ -305,4 +306,68 @@
 }
 #time-choice-realtime-icon:hover {
 	background-position: -372px -62px !important;
+}
+
+#summary{
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	background-color: #eaeeef;
+	height: 165px;
+	width: 962px;
+}
+#summary-header{
+	background-image: url(../images/summary-header.png);
+	width: 100%;
+	height: 32px;
+}
+
+#summary-image{
+	background-image: url(../images/summary-main.png);
+	background-repeat: no-repeat;
+	margin-top: 5px;
+	height: 150px;
+}
+
+#last-summary {
+	position: absolute;
+	left: 120px;
+	top: 52px;
+	width: 155px;
+}
+.summary-text{
+	font-size: 15px;
+}
+.electricity-icon{
+	margin-top: 22px;
+}
+.consumption-val{
+	font-size: 25px;
+	font-weight: bolder;
+	vertical-align: 10%;
+}
+.consumption-unit{
+	font-size: 18px;
+	padding-left: 5px;
+}
+#this-summary {
+	position: absolute;
+	left: 350px;
+	top: 52px;
+	width: 155px;
+}
+
+#summary-percentage{
+	position: absolute;
+	top: 70px;
+	left: 632px;
+}
+#summary-percentage span{
+	width: 80px;
+	font-size: 40px;
+	font-weight: bolder;
+}
+#percentage-icon{
+	margin-left: 4px;
 }

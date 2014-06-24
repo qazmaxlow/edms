@@ -28,9 +28,12 @@ def source_readings_view(request, system_code):
 	start_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('start_dt'))))
 	end_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('end_dt'))))
 
-	readings = SourceManager.get_readings(source_ids, range_type, start_dt, end_dt)
+	result = {}
+	result['readings'] = SourceManager.get_readings(source_ids, range_type, start_dt, end_dt)
 
-	last_start_dt, last_end_dt = Utils.get_last_dt_range(range_type, start_dt, end_dt);
-	last_readings = SourceManager.get_readings(source_ids, range_type, last_start_dt, last_end_dt)
+	if (request.POST.get('last_start_dt') and request.POST.get('last_end_dt')):
+		last_start_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('last_start_dt'))))
+		last_end_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('last_end_dt'))))
+		result['last_readings'] = SourceManager.get_readings(source_ids, range_type, last_start_dt, last_end_dt)
 
-	return Utils.json_response({'readings': readings, 'last_readings':last_readings})
+	return Utils.json_response(result)

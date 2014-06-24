@@ -143,13 +143,30 @@ function getNowMoment() {
 	return moment().year(2014).month(5).date(3).startOf('hour');
 }
 
+function retrieveReadingFinished() {
+	//
+}
+
+function retrieveSummaryFinished() {
+	$("#last-consumption-val").text(graph.lastConsumption.toFixed(0));
+	$("#this-consumption-val").text(graph.realtimeConsumption.toFixed(0));
+
+	var diffPercentage = (((graph.realtimeConsumption - graph.lastConsumption)/graph.realtimeConsumption)*100).toFixed(1);
+	$("#summary-percentage span").text(diffPercentage);
+
+	setTimeout(function() {
+		graph.getSummary(retrieveSummaryFinished);
+	}, 60000);
+}
+
 $(function() {
 
 	graph = new Graph(
 		"#chart",
 		"#source-choice",
 		"#y-axis-slider",
-		"#x-axis-slider");
+		"#x-axis-slider",
+		retrieveReadingFinished);
 	graph.currentRangeType = graph.RANGE_TYPE_DAY;
 	graph.currentDt = getNowMoment();
 	graph.currentUnit = graph.UNIT_KWH;
@@ -405,14 +422,14 @@ $(function() {
 
 	updateSelectSystem(graph.systemTree);
 	resetGraphNPanel();
+
+	graph.getSummary(retrieveSummaryFinished);
 });
 
 </script>
 {% endblock %}
 
 {% block content %}
-
-<div id="source-choice"></div>
 
 <div id="page-container">
 
@@ -504,7 +521,7 @@ $(function() {
 		<div id="sub-menu-links">
 			<ul id="unit-choice"></ul>
 			<ul id="time-choice"></ul>
-			<ul id="source-choice"></ul>
+			<ul id="source-choice"><div id="source-choice"></div></ul>
 			<ul id="day-choice"></ul>
 		</div>
 		<div style="clear: both;"></div>
@@ -565,22 +582,21 @@ $(function() {
 		<div id="summary">
 			<div id="summary-header"><img src="{% static 'images/summary.png' %}"></div>
 
-			<!-- this part is temporarely -->
 			<div id="summary-image">
-				<div id="last-week-summary">
-					<p class="week-summary-text">This time last week you had used </p>
+				<div id="last-summary">
+					<p class="summary-text">This time last week you had used </p>
 					<img class="electricity-icon" src="{% static 'images/red-electricity.png' %}">
-					<span class="week-consumption">3680<span>kwh</span></span>
+					<span id="last-consumption-val" class="consumption-val"></span><span class="consumption-unit">kwh</span>
 				</div>
 
-				<div id="this-week-summary">
-					<p class="week-summary-text">So far today you have used </p>
+				<div id="this-summary">
+					<p class="summary-text">So far today you have used </p>
 					<img class="electricity-icon" src="{% static 'images/green-electricity.png' %}">
-					<span class="week-consumption">3220<span>kwh</span></span>
+					<span id="this-consumption-val" class="consumption-val"></span><span class="consumption-unit">kwh</span>
 				</div>
 
 				<div id="summary-percentage">
-					<p>6 <img id="percentage-icon" src="{% static 'images/percentage.png' %}"></p>
+					<span></span><img id="percentage-icon" src="{% static 'images/percentage.png' %}">
 				</div>
 			</div>
 		</div>
