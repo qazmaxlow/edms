@@ -144,7 +144,7 @@ function getNowMoment() {
 }
 
 function retrieveReadingFinished() {
-	//
+	resetGraphNPanel();
 }
 
 function retrieveSummaryFinished() {
@@ -321,9 +321,9 @@ $(function() {
 		graph.updateUnit($(this).attr("unit_category"));
 	});
 
-	var timeRangeTypes = [graph.RANGE_TYPE_HOUR, graph.RANGE_TYPE_DAY, graph.RANGE_TYPE_NIGHT,
+	var timeRangeTypes = [graph.RANGE_TYPE_DAY, graph.RANGE_TYPE_NIGHT,
 		graph.RANGE_TYPE_WEEK, graph.RANGE_TYPE_MONTH,
-		graph.RANGE_TYPE_YEAR, graph.RANGE_TYPE_REALTIME];
+		graph.RANGE_TYPE_YEAR, graph.RANGE_TYPE_HOUR];
 	var timeChoice = $("#time-choice");
 	$.each(timeRangeTypes, function(idx, rangeType) {
 		var timeLiDom = $("<li id='time-choice-" + rangeType + "-icon' range_type='" + rangeType + "'></li>");
@@ -331,19 +331,10 @@ $(function() {
 	})
 	timeChoice.find("li").click(function () {
 		var newRangeType = $(this).attr("range_type");
-		if (newRangeType === graph.RANGE_TYPE_REALTIME) {
-			var nowMoment = getNowMoment();
-			if (graph.currentRangeType !== graph.RANGE_TYPE_HOUR || !(nowMoment.isSame(graph.currentDt))) {
-				graph.currentDt = nowMoment;
-				graph.currentRangeType = graph.RANGE_TYPE_HOUR;
-				graph.getSourceReadings();
-				resetGraphNPanel();
-			}
-		} else {
-			if (graph.currentRangeType !== newRangeType) {
-				graph.updateCurrentRangeType(newRangeType);
-				resetGraphNPanel();
-			}
+		if (graph.currentRangeType !== newRangeType) {
+			graph.currentDt = graph.genStartEndDt(getNowMoment(), newRangeType).startDt;
+			graph.updateCurrentRangeType(newRangeType);
+			resetGraphNPanel();
 		}
 	});
 

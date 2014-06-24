@@ -24,7 +24,6 @@ Graph.prototype.RANGE_TYPE_NIGHT	= 'night';
 Graph.prototype.RANGE_TYPE_WEEK		= 'week';
 Graph.prototype.RANGE_TYPE_MONTH	= 'month';
 Graph.prototype.RANGE_TYPE_YEAR		= 'year';
-Graph.prototype.RANGE_TYPE_REALTIME	= 'realtime';
 
 Graph.prototype.API_RANGE_TYPES = {
 	'hour': 'hour',
@@ -362,8 +361,21 @@ Graph.prototype.plotGraph = function () {
 	this.refreshXAxisSlider();
 
 	$(this.graphEleSel).off('plotclick').on('plotclick', function(event, pos, item) {
-		if (item) {
-			//TODO: 
+		if (item && graphThis.currentRangeType !== graphThis.RANGE_TYPE_HOUR) {
+			var startEndDt = graphThis.genCurrentStartEndDt();
+			graphThis.currentDt = graphThis.transformXToDt(startEndDt.startDt, item.dataIndex);
+
+			if (graphThis.currentRangeType === graphThis.RANGE_TYPE_DAY
+				|| graphThis.currentRangeType === graphThis.RANGE_TYPE_NIGHT) {
+				graphThis.currentRangeType = graphThis.RANGE_TYPE_HOUR;
+			} else if (graphThis.currentRangeType === graphThis.RANGE_TYPE_WEEK
+				|| graphThis.currentRangeType === graphThis.RANGE_TYPE_MONTH) {
+				graphThis.currentRangeType = graphThis.RANGE_TYPE_DAY;
+			} else if (graphThis.currentRangeType === graphThis.RANGE_TYPE_YEAR) {
+				graphThis.currentRangeType = graphThis.RANGE_TYPE_MONTH;
+			}
+			
+			graphThis.getSourceReadings();
 		}
 	});
 }
