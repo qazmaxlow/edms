@@ -499,17 +499,8 @@ $(function() {
 			<div id="image-carousel"></div>
 			
 			<!-- Header Wording -->
-			<div id="sub-heading"><h2> Check this out!</h2></div>
 			<div id="heading"><h1> Graph - Days </h1></div>
-
-			<!-- Sub Menu Item -->
-			<div id="sub-menu">
-				<h3 id="sub-menu-unit">Unit</h3>
-				<h3 id="sub-menu-time">Time</h3>
-				<h3 id="sub-menu-source">Source</h3>
-				<h3 id="sub-menu-days">Days</h3>
-				<img id="expand-menu-btn" src="{% static 'images/expandable_button.png' %}">
-			</div>
+			<div id="sub-heading"><h2> Check this out!</h2></div>
 
 		</div>
 		<!-- Header End -->
@@ -517,17 +508,55 @@ $(function() {
 		<!-- Blue Bar bottom -->
 		<div class="blue-bar"></div>
 
-		<!-- Sub Menu Item Links -->
-		<div id="sub-menu-links">
-			<ul id="unit-choice"></ul>
-			<ul id="time-choice"></ul>
-			<ul id="source-choice"><div id="source-choice"></div></ul>
-			<ul id="day-choice"></ul>
+		<div id="sub-heading-facilities">
+			<span><h3>You are at:</h3></span>
+			<span id="breadcrumbs-path">
+				<span style="font-weight: 200; color:#cedee2;">OTIS World Wide</span>
+				<span>-</span>
+				<span>Kowloon Bay</span>
+			</span>
 		</div>
-		<div style="clear: both;"></div>
-	
+
+		<div class="graph-component">
+			<div id="graph-panel-header">
+				<!-- Sub Menu Item -->
+				<div id="sub-menu">
+					<!-- write this way to remove space between inline-blocks -->
+					<!-- http://css-tricks.com/fighting-the-space-between-inline-block-elements/ -->
+					<h3 id="sub-menu-unit">
+						Unit</h3><h3 id="sub-menu-time">
+						Time</h3><h3 id="sub-menu-source">
+						Source</h3><h3 id="sub-menu-days">Days</h3>
+					<img id="expand-menu-btn" src="{% static 'images/expandable_button.png' %}">
+				</div>
+
+				<!-- Date -->
+				<p id="dt-panel">
+					<img id="dt-next-icon">
+					<img id="dt-now-icon">
+					<img id="dt-prev-icon">
+					<span id="current-dt"></span>
+					<span style='clear: both;'></span>				
+				</p>
+			</div>
+
+			<!-- Sub Menu Item Links -->
+			<div id="sub-menu-links">
+				<ul id="unit-choice"></ul>
+				<ul id="time-choice"></ul>
+				<ul id="source-choice"><div id="source-choice"></div></ul>
+				<ul id="day-choice"></ul>
+			</div>
+			<div style="clear: both;"></div>
+
+			<!-- Simple bar for decoration -->
+			<div id="main-graph-bar"></div>
+		</div>
+
 		<!-- Main Graph -->
-		<div id="graph-panel">
+		<div id="graph-panel" class="graph-component">
+
+			{% comment %}
 			<!-- Sub Level -->
 			<ul id="system-menu" class="sf-menu">
 				<li>
@@ -540,19 +569,11 @@ $(function() {
 			<!-- Calendar -->
 			<input type="text" id="current-dt-picker">
 			<img id="calendar">
-			<!-- Date -->
-			<p id="dt-panel"><span id="current-dt"></span>
-				<img id="dt-next-icon">
-				<img id="dt-now-icon">
-				<img id="dt-prev-icon">
-				<span style='clear: both;'></span>				
-			</p>
+			
 			<!-- Clear Graph -->
 			<img id="clear-graph">
 			<div style="clear: both;"></div>
-
-			<!-- Simple bar for decoration -->
-			<div id="main-graph-bar"></div>
+			{% endcomment %}
 			
 			<div id="chart"></div>
 			<div id="y-axis-slider"></div>

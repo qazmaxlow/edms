@@ -94,20 +94,10 @@
 	padding: 0px;
 	border: 0px;
 }
-#system-menu > li > a:after {
-	content: none;
-}
 
 #selection-summary-chart {
 	width: 172px;
 	height: 172px;
-}
-
-#expand-menu-btn {
-	-webkit-transition: 0.5s ease-in-out;
-    -moz-transition: 0.5s ease-in-out;
-    -o-transition: 0.5s ease-in-out;
-    transition: 0.5s ease-in-out;
 }
 
 #selection-summary{
@@ -173,7 +163,6 @@
 #selection-summary-value{
 	font-size: 37px;
 	font-weight: bolder;
-	padding-top: 2px;
 }
 #selection-summary-unit{
 	font-size: 18px;
@@ -193,37 +182,71 @@
 	text-align: center;
 }
 
+.graph-component {
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	width: 972px;
+	margin-top: 16px;
+}
+
+#graph-panel{
+	background-color: #f9f9f9;
+	height: 380px;
+	margin-top: 0px;
+}
+
+#system-menu-icon{
+	background-image: url(../images/sub-category-icon.png);
+	width: 36px;
+	height: 32px;
+	float: left;
+}
+#system-menu-icon:hover{
+	background-image: url(../images/sub-category-icon-hover.png);
+}
+#breadcrumbs{
+	float: left;
+	width: 597px;
+	height: 32px;
+	background-color: #9bceda;
+	color: white;
+	font-size: 13px;
+	padding-left: 10px;
+}
+#breadcrumbs p{
+	float: left;
+	margin-top: 10px;
+	margin-left: 10px;
+}
+#breadcrumbs p:last-child{
+	color: -webkit-link;
+}
+.next{
+	float: left;
+	margin-top: 12px;
+	padding-left: 10px;
+}
+#level3:hover{
+	color: #18515f;
+}
+
+#main-graph-bar{
+	background-image: url(../images/main-graph-bar.png);
+	height: 6px;
+	width: 100%;
+}
+
 #current-dt-picker {
 	position: absolute;
 	visibility: hidden;
 	top: -240px;
 }
 
-/*-- Sub Menu --*/
-#sub-menu{
-	position: absolute;
-	width: 320px;
-	margin-top: 133px;
-	margin-left: 35px;
-}
-#sub-menu img{
-	margin-left: 4px;	
-	margin-top: 5px;
-	display: inline;
-}
-#sub-menu h3{
-	display: inline;
-	vertical-align: bottom;
-	text-decoration: none;
-	font-size: 14px;
-	width: 42px;
-	height: 22px;
-	padding-left: 18px;
-	padding-top: 8px;
-	padding-right: 18px;
-	padding-bottom: 2px;
-	margin-left: -4px;
-	color: #ffffff;
+#graph-panel-header {
+	position: relative;
+	width: 100%;
+	height: 33px;
 	background-color: #9bceda;
 	border-top-left-radius: 5px;
 	-moz-border-top-left-radius: 5px;
@@ -232,13 +255,109 @@
 	-moz-border-top-right-radius: 5px;
 	-webkit-border-top-right-radius: 5px;
 }
+
+/*-- Sub Menu --*/
+#sub-menu{
+	position: absolute;
+	width: 50%; 
+	height: 33px;
+	background-color: #9bceda;
+	border-top-left-radius: 5px;
+	-moz-border-top-left-radius: 5px;
+	-webkit-border-top-left-radius: 5px;
+}
+#expand-menu-btn {
+	display: inline-block;
+	margin-bottom: 3px;
+	margin-left: 3px;
+	-webkit-transition: 0.5s ease-in-out;
+    -moz-transition: 0.5s ease-in-out;
+    -o-transition: 0.5s ease-in-out;
+    transition: 0.5s ease-in-out;
+}
+
+#calendar{
+	background-image: url(../images/calendar.png);
+	width: 38px;
+	height: 32px;
+	float: left;
+}
+#calendar:hover{
+	background-image: url(../images/calendar-hover.png);
+}
+
+#dt-panel{
+	float: right;
+	padding-top: 8px;
+	height: 24px;
+	font-size: 13px;
+	margin-right: 10px;
+}
+#current-dt{
+	text-align: center;
+	float: right;
+	margin-top: 2px;
+	margin-right: 14px;
+	color: white;
+}
+#dt-panel img {
+	float:right;
+	width: 19px;
+	height: 18px;
+}
+#dt-prev-icon{
+	background-image: url(../images/prev-day.png);
+}
+#dt-prev-icon:hover{
+	background-image: url(../images/prev-day-hover.png);	
+}
+#dt-now-icon{
+	background-image: url(../images/today.png);
+}
+#dt-now-icon:hover{
+	background-image: url(../images/today-hover.png);	
+}
+#dt-next-icon {
+	margin-right: 3px;
+	background-image: url(../images/next-day.png)
+}
+#dt-next-icon:hover {
+	background-image: url(../images/next-day-hover.png);	
+}
+
+#clear-graph{
+	float: left;
+	background-image: url(../images/clear-graph.png);
+	width: 97px;
+	height: 32px;
+}
+
+#clear-graph:hover{
+	background-image: url(../images/clear-graph-hover.png);
+}
+
+#sub-menu h3{
+	display: inline-block;
+	vertical-align: bottom;
+	text-decoration: none;
+	font-size: 14px;
+	height: 22px;
+	padding-left: 18px;
+	padding-top: 10px;
+	padding-right: 18px;
+	color: #ffffff;
+	background-color: #9bceda;
+	border-right:1px solid white;
+}
 #sub-menu h3:hover {
 	font-weight: bold;
 	background-color: #7fd51e;
 	letter-spacing: 0.6px;
 }
 #sub-menu-unit {
-	margin-left: 0px;
+	border-top-left-radius: 5px;
+	-moz-border-top-left-radius: 5px;
+	-webkit-border-top-left-radius: 5px;
 }
 
 #sub-menu-links{
@@ -249,7 +368,7 @@
 }
 #sub-menu-links ul{
 	padding-top: 17px;
-	margin-left: 35px;
+	margin-left: 12px;
 	height: 61px;
 	position: absolute;
 	display: none;

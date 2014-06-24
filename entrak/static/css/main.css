@@ -71,9 +71,9 @@ html, body {
 /* ---------------------------- */
 
 #page-container{
-    height: 100%;
+	position: relative;
 	width: 1245px;
-	font-family: "ITCAvantGardeStd-Bk", ITCAvantGardeStd-Bk, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+	font-family: Verdana, Geneva, sans-serif;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -197,8 +197,8 @@ html, body {
 /* ------------------------------------------- */
 .right-content {
 	min-height: 100%; /*equal to footer height*/
-	margin-bottom: -76px;
 	padding-left: 222px;
+	padding-bottom: 30px;
 }
 
 .right-content:after {
@@ -212,6 +212,26 @@ html, body {
 	width: 100%;
 	height: 3px;
 	background-color: #9bceda;
+}
+
+#sub-heading-facilities{
+	width: 100%;
+	height: 31px;
+	background-color: #528e9b;
+}
+
+#sub-heading-facilities h3{
+	display: inline-block;
+	color: #cedee2;
+	margin-top: 9px;
+	margin-left: 38px;
+	font-size: 14px
+}
+
+#breadcrumbs-path span{
+	margin-left: 20px;
+	color: white;
+	font-weight: bold;
 }
 
 /*-- Header -- */
@@ -252,128 +272,11 @@ html, body {
 
 /*-- Main heading Ends --*/
 
-/*Main Graph*/
-
-
-#graph-panel{
-	margin-top: 16px;
-	margin-left: auto;
-	margin-right: auto;
-	position: relative;
-	background-color: #f9f9f9;
-	height: 406px;
-	width: 972px;
-}
-
-#system-menu-icon{
-	background-image: url(../images/sub-category-icon.png);
-	width: 36px;
-	height: 32px;
-	float: left;
-}
-#system-menu-icon:hover{
-	background-image: url(../images/sub-category-icon-hover.png);
-}
-#breadcrumbs{
-	float: left;
-	width: 597px;
-	height: 32px;
-	background-color: #9bceda;
-	color: white;
-	font-size: 13px;
-	padding-left: 10px;
-}
-#breadcrumbs p{
-	float: left;
-	margin-top: 10px;
-	margin-left: 10px;
-}
-#breadcrumbs p:last-child{
-	color: -webkit-link;
-}
-.next{
-	float: left;
-	margin-top: 12px;
-	padding-left: 10px;
-}
-#level3:hover{
-	color: #18515f;
-}
-
-#calendar{
-	background-image: url(../images/calendar.png);
-	width: 38px;
-	height: 32px;
-	float: left;
-}
-#calendar:hover{
-	background-image: url(../images/calendar-hover.png);
-}
-
-#dt-panel{
-	float: left;
-	padding-top: 8px;
-	background-color: #9bceda;
-	height: 24px;
-	width: 194px;
-	font-size: 13px;
-}
-#current-dt{
-	width: 69%;
-	text-align: center;
-	float: left;
-	margin-top: 4px;
-	color: white;
-}
-#dt-panel img {
-	float:right;
-	width: 19px;
-	height: 18px;
-}
-#dt-prev-icon{
-	background-image: url(../images/prev-day.png);
-}
-#dt-prev-icon:hover{
-	background-image: url(../images/prev-day-hover.png);	
-}
-#dt-now-icon{
-	background-image: url(../images/today.png);
-}
-#dt-now-icon:hover{
-	background-image: url(../images/today-hover.png);	
-}
-#dt-next-icon {
-	margin-right: 3px;
-	background-image: url(../images/next-day.png)
-}
-#dt-next-icon:hover {
-	background-image: url(../images/next-day-hover.png);	
-}
-
-#clear-graph{
-	float: left;
-	background-image: url(../images/clear-graph.png);
-	width: 97px;
-	height: 32px;
-}
-
-#clear-graph:hover{
-	background-image: url(../images/clear-graph-hover.png);
-}
-
-#main-graph-bar{
-	background-image: url(../images/main-graph-bar.png);
-	height: 6px;
-	width: 100%;
-}
-
 /* ---------------------------- */
 /* ---- Footer (Done) -------- */
 /* ---------------------------- */
-.site-footer, .page-wrap:after { .push must be the same height as footer height: 76px; }
 .site-footer {
-	position: relative; /* set this to relative if want to have the footer stick to bottom upon changing screen size */
-	/*bottom: 0;  delete if not want to have at the bottom */
+	position: relative;
 	height: 76px;
 	width: 1245px;
 	margin-left: auto;
@@ -383,7 +286,7 @@ html, body {
 	font-size: 10px;
 	font-weight: 500;
 	letter-spacing: 0.5px;
-	font-family: "ITCAvantGardeStd-Bk", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+	font-family: Verdana, Geneva, sans-serif;
 }
 
 #copyright{
