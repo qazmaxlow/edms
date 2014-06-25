@@ -327,7 +327,8 @@ $(function() {
 	var timeChoice = $("#time-choice");
 	$.each(timeRangeTypes, function(idx, rangeType) {
 		var timeLiDom = $("<li id='time-choice-" + rangeType + "-icon' range_type='" + rangeType + "'></li>");
-		timeChoice.append(timeLiDom);
+		// timeChoice.append(timeLiDom);
+		timeLiDom.insertBefore("#select-dt-section");
 	})
 	timeChoice.find("li").click(function () {
 		var newRangeType = $(this).attr("range_type");
@@ -371,27 +372,27 @@ $(function() {
 	$('#system-menu').superfish({
 	});
 
-	$("#calendar").click(function () {
-		$('#current-dt-picker').datetimepicker('destroy');
-
-		var dtPickerOptions = {
-			format: "unixtime",
-			value: graph.currentDt.unix(),
-			scrollMonth: false,
-			onClose: function() {
-				$("#current-dt-picker").off("change");
-			},
-			onShow: function() {
-				$("#current-dt-picker").change(function() {
-					graph.updateCurrentDt(moment.unix($(this).val()).startOf('hour'));
-					resetGraphNPanel();
-				});
-			}
-		};
-		if (graph.currentRangeType !== graph.RANGE_TYPE_HOUR) {
-			dtPickerOptions.timepicker = false;
+	Date.parseDate = function( input, format ){
+		return moment(input,format).toDate();
+	};
+	Date.prototype.dateFormat = function( format ){
+		return moment(this).format(format);
+	};
+	var dtPickerFormat = "D MMM YYYY, dddd";
+	$("#current-dt-picker").datetimepicker({
+		format: dtPickerFormat,
+		formatTime: "h:mm a",
+		formatDate: "DD.MM.YYYY",
+		scrollMonth: false,
+		timepicker: false,
+		onSelectDate: function(input) {
+			graph.updateCurrentDt(moment(input).startOf('hour'));
+			resetGraphNPanel();
 		}
-		$("#current-dt-picker").datetimepicker(dtPickerOptions).datetimepicker('show');
+	});
+
+	$("#calendar").click(function () {
+		$('#current-dt-picker').datetimepicker('show');
 	})
 
 	$("#dt-prev-icon").click(function () {
@@ -534,7 +535,13 @@ $(function() {
 			<!-- Sub Menu Item Links -->
 			<div id="sub-menu-links">
 				<ul id="unit-choice"></ul>
-				<ul id="time-choice"></ul>
+				<ul id="time-choice">
+					<div id="select-dt-section">
+						<div>CUSTOM SELECT</div>
+						<img id="calendar">
+						<input type="text" id="current-dt-picker">
+					</div>
+				</ul>
 				<ul id="source-choice"><div id="source-choice"></div></ul>
 				<ul id="day-choice"></ul>
 			</div>
