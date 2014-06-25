@@ -1,6 +1,5 @@
-function Graph(graphEleSel, sourceChoiceEleSel, yAxisSliderEleSel, xAxisSliderEleSel, retrieveReadingCallback) {
+function Graph(graphEleSel, yAxisSliderEleSel, xAxisSliderEleSel, retrieveReadingCallback) {
 	this.graphEleSel = graphEleSel;
-	this.sourceChoiceEleSel = sourceChoiceEleSel;
 	this.yAxisSliderEleSel = yAxisSliderEleSel;
 	this.xAxisSliderEleSel = xAxisSliderEleSel;
 	this.retrieveReadingCallback = retrieveReadingCallback;
@@ -13,6 +12,7 @@ function Graph(graphEleSel, sourceChoiceEleSel, yAxisSliderEleSel, xAxisSliderEl
 	this.sourceDatasets = null;
 	this.currentRangeType = null;
 	this.currentDt = null;
+	this.currentSelectedSourceIdx = [];
 	this.currentXaxisOptions = {};
 	this.currentUnit = null;
 	this.xAxisSliderCallback = null;
@@ -180,10 +180,9 @@ Graph.prototype.updateUnit = function (newUnit) {
 	this.transformReadingToChartDatasets();
 
 	var willPlotSeries = [this.totalSeries];
-	$(this.sourceChoiceEleSel).find("input:checked").each(function () {
-		var seriesIdx = parseInt($(this).attr("series_idx"), 10);
-		willPlotSeries.push(graphThis.sourceDatasets[seriesIdx]);
-	});
+	for (var seriesIdx in this.currentSelectedSourceIdx) {
+		willPlotSeries.push(this.sourceDatasets[seriesIdx]);
+	}
 
 	this.plot.setData(willPlotSeries);
 	this.refreshYAxisSlider();
@@ -353,7 +352,6 @@ Graph.prototype.plotGraph = function () {
 		graphThis.plot.getOptions().series.grow.active = false;
 		$(this.graphEleSel).off('growFinished');
 	});
-	this.setupSourceChoice();
 	this.refreshYAxisSlider();
 	this.plot.setupGrid();
 	this.plot.draw();
@@ -380,34 +378,20 @@ Graph.prototype.plotGraph = function () {
 	});
 }
 
-Graph.prototype.setupSourceChoice = function () {
-	var graphThis = this;
-	var choiceContainer = $(this.sourceChoiceEleSel);
-	choiceContainer.empty();
+Graph.prototype.updateSourceChoice = function (selectedSeriesIdxs) {
+	this.currentSelectedSourceIdx = selectedSeriesIdxs;
 
-	$.each(this.sourceDatasets, function(seriesIdx, series) {
-		var choiceHtml = "<div>";
-		choiceHtml += "<input type='checkbox' " + "series_idx='" + seriesIdx + "'"
-			+ " name='" + series.label + "'"
-			+ " ></input><label>" + series.label + "</label></div>";
-		choiceContainer.append(choiceHtml);
-	});
+	var willPlotSeries = [];
+	for (var seriesIdx in this.currentSelectedSourceIdx) {
+		willPlotSeries.push(this.sourceDatasets[seriesIdx]);
+	}
+	this.setSeriesLineColor(willPlotSeries);
 
-	choiceContainer.find("input").click(function () {
-		var willPlotSeries = [];
+	willPlotSeries.splice(0, 0, this.totalSeries);
 
-		choiceContainer.find("input:checked").each(function () {
-			var seriesIdx = parseInt($(this).attr("series_idx"), 10);
-			willPlotSeries.push(graphThis.sourceDatasets[seriesIdx]);
-		});
-		graphThis.setSeriesLineColor(willPlotSeries);
-
-		willPlotSeries.splice(0, 0, graphThis.totalSeries);
-
-		graphThis.plot.setData(willPlotSeries);
-		graphThis.plot.setupGrid();
-		graphThis.plot.draw();
-	});
+	this.plot.setData(willPlotSeries);
+	this.plot.setupGrid();
+	this.plot.draw();
 }
 
 function roundMax(val) {

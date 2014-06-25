@@ -26,6 +26,7 @@
 <script type="text/javascript">
 
 var graph = null;
+var sourceChoiceContainerHeight = 0;
 
 function updateDonutChart(data) {
 	$("#selection-summary-chart").empty();
@@ -118,6 +119,9 @@ function updateCurrentDtText() {
 }
 
 function resetGraphNPanel() {
+	$("#source-choice-container input").prop("checked", false);
+	graph.currentSelectedSourceIdx = [];
+
 	updateCurrentDtText();
 
 	$("#x-axis-slider").slider("values", [0, 0]);
@@ -159,11 +163,63 @@ function retrieveSummaryFinished() {
 	}, 60000);
 }
 
+function setupSourceChoice() {
+	var choiceContainer = $("#source-choice-container");
+	choiceContainer.empty();
+
+	var sourceNames = [];
+	$.each(graph.systemTree.data.sources, function(sourceIdx, source) {
+		sourceNames.push(source.name);
+	});
+	$.each(graph.systemTree.children, function(idx, subSystem) {
+		sourceNames.push(subSystem.data.name);
+	});
+
+	sourceChoiceContainerHeight = Math.ceil(sourceNames.length/4.0)*22 + 100;
+
+	$.each(sourceNames, function(seriesIdx, sourceName) {
+		var choiceHtml = "<div>";
+		var checkboxId = "source-checkbox-" + seriesIdx;
+		choiceHtml += "<div class='circle-checkbox'><input id='" + checkboxId + "'"
+			+ "' type='checkbox' " + "series_idx='" + seriesIdx + "'"
+			+ " name='" + sourceName + "'"
+			+ " ></input>"
+			+ "<label for='" + checkboxId + "'></label></div>"
+			+ "<label class='source-label' for='" + checkboxId + "'>" + sourceName + "</label>"
+			+ "</div>";
+		choiceContainer.append(choiceHtml);
+	});
+
+	choiceContainer.find("input").click(function () {
+		if (choiceContainer.find("input:checked").length >= 5) {
+			choiceContainer.find("input:not(:checked)").prop('disabled', true);
+			choiceContainer.find("input:not(:checked)").parent().parent().find(".source-label").addClass('source-label-disabled');
+		} else {
+			choiceContainer.find("input").prop('disabled', false);
+			choiceContainer.find(".source-label").removeClass('source-label-disabled');
+		}
+
+		var selectedSeriesIdxs = [];
+
+		choiceContainer.find("input:checked").each(function () {
+			var seriesIdx = parseInt($(this).attr("series_idx"), 10);
+			selectedSeriesIdxs.push(seriesIdx);
+		});
+
+		graph.updateSourceChoice(selectedSeriesIdxs);
+	});
+
+	$("#source-choice-clear").click(function() {
+		choiceContainer.find("input").prop('disabled', false).prop('checked', false);
+		choiceContainer.find(".source-label").removeClass('source-label-disabled');
+		graph.updateSourceChoice([]);
+	});
+}
+
 $(function() {
 
 	graph = new Graph(
 		"#chart",
-		"#source-choice",
 		"#y-axis-slider",
 		"#x-axis-slider",
 		retrieveReadingFinished);
@@ -211,8 +267,8 @@ $(function() {
 	graph.units.push({
 		category: 'kwh',
 		catName: 'kwh',
-		imgOff: 'kwh-unit-off.png',
-		imgOn: 'kwh-unit-on.png',
+		imgOff: 'kwh.png',
+		imgOn: 'kwh-hover.png',
 	});
 	{% for unit in units %}
 		var unit = {};
@@ -274,6 +330,8 @@ $(function() {
 		}
 	};
 
+	setupSourceChoice();
+
 	var subMenuPanel = $("#sub-menu-links ul");
 	var subMenu = $("#sub-menu h3").each(function (eleIdx) {
 		$(this).click({connectedPanel: subMenuPanel[eleIdx]}, function (event) {
@@ -281,6 +339,12 @@ $(function() {
 			if (!(connectedPanel.hasClass('selected-submenu'))) {
 				subMenuPanel.filter(".selected-submenu").removeClass('selected-submenu').hide();
 				connectedPanel.addClass('selected-submenu').fadeIn();
+			}
+
+			if ($(connectedPanel).attr('id') === "source-choice") {
+				$("#sub-menu-links").height(sourceChoiceContainerHeight + "px");
+			} else {
+				$("#sub-menu-links").height("95px");
 			}
 
 			var menuLinks = $('#sub-menu-links');
@@ -327,7 +391,6 @@ $(function() {
 	var timeChoice = $("#time-choice");
 	$.each(timeRangeTypes, function(idx, rangeType) {
 		var timeLiDom = $("<li id='time-choice-" + rangeType + "-icon' range_type='" + rangeType + "'></li>");
-		// timeChoice.append(timeLiDom);
 		timeLiDom.insertBefore("#select-dt-section");
 	})
 	timeChoice.find("li").click(function () {
@@ -391,7 +454,7 @@ $(function() {
 		}
 	});
 
-	$("#calendar").click(function () {
+	$("#custom-calendar-icon").click(function () {
 		$('#current-dt-picker').datetimepicker('show');
 	})
 
@@ -538,11 +601,21 @@ $(function() {
 				<ul id="time-choice">
 					<div id="select-dt-section">
 						<div>CUSTOM SELECT</div>
-						<img id="calendar">
+						<img id="custom-calendar-icon">
 						<input type="text" id="current-dt-picker">
 					</div>
 				</ul>
-				<ul id="source-choice"><div id="source-choice"></div></ul>
+				<ul id="source-choice">
+					<div>
+						<div id="source-choice-header">Compare between Sources 
+							<span style="font-weight: lighter; font-size: 12px;">(Max 5)</span>
+							<span id="source-choice-clear">Clear all</span>
+						</div>
+						<hr>
+						<div id="source-choice-container"></div>
+						<div style="clear: both;"></div>
+					</div>
+				</ul>
 				<ul id="day-choice"></ul>
 			</div>
 			<div style="clear: both;"></div>
@@ -564,9 +637,6 @@ $(function() {
 			</ul>
 			<!-- Breadcrumbs -->
 			<div id="breadcrumbs"></div>
-			<!-- Calendar -->
-			<input type="text" id="current-dt-picker">
-			<img id="calendar">
 			
 			<!-- Clear Graph -->
 			<img id="clear-graph">

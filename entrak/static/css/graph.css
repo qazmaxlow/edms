@@ -1,6 +1,6 @@
 #expand-menu-btn, #system-menu > li > a, #unit-choice li, #time-choice li,
 #breadcrumbs p, #calendar, #dt-panel img, #clear-graph, #sub-menu h3,
-#menu-links li {
+#menu-links li, .source-label, #source-choice-clear {
 	cursor: pointer;
 	cursor: hand;
 }
@@ -365,50 +365,44 @@
 
 #time-choice li {
 	background: url(../images/time-icon-sprites.png) no-repeat;
-	width: 61px;
-	height: 61px;
+	width: 62px;
+	height: 62px;
 }
 #time-choice-hour-icon {
-	background-position: 0 0;
+	background-position: -450px -2px !important;
 }
 #time-choice-hour-icon:hover {
-	background-position: 0 -62px !important;
+	background-position: -386px -2px !important;
 }
 #time-choice-day-icon {
-	background-position: -62px 0px !important;
+	background-position: -66px -2px !important;
 }
 #time-choice-day-icon:hover {
-	background-position: -62px -62px !important;
+	background-position: -2px -2px !important;
 }
 #time-choice-night-icon {
-	background-position: -124px 0 !important;
+	background-position: -322px -2px !important;
 }
 #time-choice-night-icon:hover {
-	background-position: -124px -62px !important;
+	background-position: -258px -2px !important;
 }
 #time-choice-week-icon {
-	background-position: -186px 0 !important;
+	background-position: -578px -2px !important;
 }
 #time-choice-week-icon:hover {
-	background-position: -186px -62px !important;
+	background-position: -514px -2px !important;
 }
 #time-choice-month-icon {
-	background-position: -248px 0 !important;
+	background-position: -194px -2px !important;
 }
 #time-choice-month-icon:hover {
-	background-position: -248px -62px !important;
+	background-position: -130px -2px !important;
 }
 #time-choice-year-icon {
-	background-position: -310px 0 !important;
+	background-position: -706px -2px !important;
 }
 #time-choice-year-icon:hover {
-	background-position: -310px -62px !important;
-}
-#time-choice-realtime-icon {
-	background-position: -372px 0 !important;
-}
-#time-choice-realtime-icon:hover {
-	background-position: -372px -62px !important;
+	background-position: -642px -2px !important;
 }
 
 #select-dt-section {
@@ -418,19 +412,106 @@
 	height: 61px;
 	margin-left: 30px;
 }
-
-#calendar{
-	background-image: url(../images/calendar.png);
-	width: 38px;
-	height: 32px;
+#custom-calendar-icon{
+	background-image: url(../images/custom-calendar-icon.png);
+	width: 25px;
+	height: 26px;
 	display: inline-block;
 }
-#calendar:hover{
-	background-image: url(../images/calendar-hover.png);
-}
-
 #current-dt-picker {
 	width: 140px;
+}
+
+#source-choice > div {
+	font-size: 13px;
+	width: 643px;
+	padding: 8px 14px 18px 14px;
+	background-color: #c3dbdc;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#source-choice-header{
+	font-weight: bold;
+	font-size: 15px;	
+	height: 18px;
+	color: #699eab;	
+	
+	-moz-border-top-left-radius: 6px;
+	-webkit-border-top-left-radius: 6px;
+	border-top-left-radius: 6px;
+	
+	-moz-border-top-right-radius: 6px;
+	-webkit-border-top-right-radius:6px;
+	border-top-right-radius: 6px;
+}
+#source-choice-clear{
+	position: absolute;
+	right: 8px;
+	font-weight: lighter;
+	padding-right: 10px;
+	font-size: 12px;
+	margin-top: 3px;
+}
+#source-choice hr{
+	width: 100%;
+	height: 2px;
+	background-color: #deecec;
+	border-style: none;
+	margin-top: 3px;
+	margin-bottom: 10px;
+}
+#source-choice-container > div{
+	float: left;
+	width: 156px;
+	margin-right: 4px;
+	margin-top: 8px;
+	position: relative;
+}
+#source-choice-container input[type=checkbox]{
+	visibility: hidden;
+}
+.circle-checkbox{
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	background: #fff;
+	border-radius: 100%;
+	position: relative;
+	-webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+	-moz-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+	box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+}
+.circle-checkbox label {
+	display: block;
+	width: 10px;
+	height: 10px;
+	border-radius: 100px;
+
+	-webkit-transition: all .5s ease;
+	-moz-transition: all .5s ease;
+	-o-transition: all .5s ease;
+	-ms-transition: all .5s ease;
+	transition: all .5s ease;
+	cursor: pointer;
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	z-index: 1;
+	background: #fff;
+}
+.circle-checkbox input:checked + label {
+	background: #B3E850;
+}
+.source-label{
+	position: absolute;
+	top: 1px;
+	left: 20px;
+	color: #242c36;
+}
+.source-label-disabled{
+	color: #999;
 }
 
 #summary{
