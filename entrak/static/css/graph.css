@@ -1,4 +1,4 @@
-#expand-menu-btn, #system-menu > li > a, #unit-choice li, #time-choice li,
+#expand-menu-btn, #unit-choice li, #time-choice li,
 #breadcrumbs p, #calendar, #dt-panel img, #clear-graph, #sub-menu h3,
 #menu-links li, .source-label, #source-choice-clear {
 	cursor: pointer;
@@ -80,19 +80,6 @@
 	background: linear-gradient(#b5e952, #53be0c) !important;
 	height: 8px;
 	top: 2px;
-}
-
-#system-menu {
-	margin-bottom: 0px;
-}
-
-#system-menu > li > a {
-	padding: 0px;
-	border: 0px;
-}
-#system-menu > li > a:hover {
-	padding: 0px;
-	border: 0px;
 }
 
 #selection-summary-chart {
@@ -196,15 +183,6 @@
 	margin-top: 0px;
 }
 
-#system-menu-icon{
-	background-image: url(../images/sub-category-icon.png);
-	width: 36px;
-	height: 32px;
-	float: left;
-}
-#system-menu-icon:hover{
-	background-image: url(../images/sub-category-icon-hover.png);
-}
 #breadcrumbs{
 	float: left;
 	width: 597px;

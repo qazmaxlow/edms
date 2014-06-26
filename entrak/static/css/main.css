@@ -30,6 +30,11 @@ time, mark, audio, video {
 	vertical-align: baseline;
 }
 
+#system-menu > li > a {
+	cursor: pointer;
+	cursor: hand;
+}
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {
@@ -219,18 +224,61 @@ html, body {
 	height: 31px;
 	background-color: #528e9b;
 }
-
+/*#system-menu {
+	position: absolute;
+	z-index: 1;
+	left: 250px;
+	display: none;
+}*/
+#system-menu img{
+	margin-left: 30px;
+	display: inline-block;
+	margin-left: 30px;
+	margin-top: 3px;
+}
+#system-menu {
+	margin-bottom: 0px;
+}
+#system-menu > li:first-child{
+	background: none;
+}
+#system-menu > li:first-child a{
+	margin-top: 6px;
+}
+#system-menu > li:first-child > a:after{
+	content: '';
+	content: none;
+}
+#system-menu > li > a {
+	padding: 0px;
+	border: 0px;
+}
+#system-menu > li > a:hover {
+	padding: 0px;
+	border: 0px;
+}
+#sub-heading-facilities span, #sub-heading-facilities a{
+	display: inline-block;
+	position: relative;
+	bottom: 6px;
+}
 #sub-heading-facilities h3{
 	display: inline-block;
 	color: #cedee2;
 	margin-top: 9px;
-	margin-left: 38px;
+	margin-left: 8px;
 	font-size: 14px
 }
-
-#breadcrumbs-path span{
-	margin-left: 20px;
+#sub-heading-facilities #breadcrumbs-path{
+	bottom: 0px;
+}
+#breadcrumbs-path span, #breadcrumbs-path a{
+	margin-left: 5px;
 	color: white;
+	font-weight: 200;
+	text-decoration: none;
+}
+#breadcrumbs-path a:last-child{
 	font-weight: bold;
 }
 
@@ -238,7 +286,7 @@ html, body {
 
 #header{
 	width: 100%;
-	height: 163px;
+	height: 140px;
 	background-color: #6e9faa;
 	top: 0px;
 }
@@ -248,7 +296,7 @@ html, body {
 	float: right;
 	margin-right: 50px;
 	width: 486px;
-	height: 163px;
+	height: 132px;
 	background-image: url(../images/illustration.png);
 }
 

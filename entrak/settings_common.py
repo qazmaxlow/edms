@@ -26,6 +26,7 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'entrak', 'media')
 
 # Application definition
 
@@ -40,6 +41,7 @@ INSTALLED_APPS = (
     'egauge',
     'system',
     'unit',
+    'user',
     'entrak',
 )
 
@@ -56,16 +58,6 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'entrak.urls'
 
 WSGI_APPLICATION = 'entrak.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/1.6/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': '',
-    }
-}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
@@ -109,13 +101,4 @@ LOGGING = {
 
 STATIC_URL = '/static/'
 
-# mongoengine setup
-
-AUTHENTICATION_BACKENDS = (
-    'mongoengine.django.auth.MongoEngineBackend',
-)
-
-AUTH_USER_MODEL = 'mongo_auth.MongoUser'
-
-SESSION_ENGINE = 'mongoengine.django.sessions'
-SESSION_SERIALIZER = 'mongoengine.django.sessions.BSONSerializer'
+AUTH_USER_MODEL = 'user.EntrakUser'

@@ -44,13 +44,13 @@ def init_test_source():
 
 def init_test_system():
 	systems = []
-	systems.append(System(code='adidas', path=None, name='Adidas'))
+	systems.append(System(code='adidas', path='', name='Adidas'))
 	systems.append(System(code='adidas-hk', path=',adidas,', name='Adidas Hong Kong'))
 	systems.append(System(code='adidas-tw', path=',adidas,', name='Adidas Taiwan'))
-	systems.append(System(code='nike', path=None, name='Nike'))
+	systems.append(System(code='nike', path='', name='Nike'))
 	systems.append(System(code='adidas-shatin', path=',adidas,adidas-hk,', name='Adidas Shatin'))
 
-	System.objects.insert(systems)
+	System.objects.bulk_create(systems)
 
 def init_test_unit():
 	units = []

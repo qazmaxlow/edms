@@ -8,6 +8,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/graph.css' %}">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="{% static 'js/superfish-master/dist/css/superfish.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'js/superfish-master/dist/css/superfish-vertical.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'js/datetimepicker-master/jquery.datetimepicker.css' %}">
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
@@ -25,6 +26,7 @@
 
 <script type="text/javascript">
 
+var userSystemTree = null;
 var graph = null;
 var sourceChoiceContainerHeight = 0;
 
@@ -91,27 +93,6 @@ function formatDtFromToStr(dt, rangeType) {
 	}
 
 	return dt.format(formatStr);
-}
-
-function updateSelectSystem(node) {
-	var breadcrumbs = $("#breadcrumbs");
-	breadcrumbs.empty();
-	var targetNode = node;
-	while(targetNode !== null) {
-		var pDom = $("<p> " + targetNode.data.name + " </p>")
-			.click({node: targetNode}, function(event) {
-				updateSelectSystem(event.data.node);
-			});
-		breadcrumbs.prepend(pDom);
-
-		if (targetNode.parent !== null) {
-			breadcrumbs.prepend("<img class=\"next\" src=\"{% static 'images/next-icon.png' %}\">");
-		}
-		
-		targetNode = targetNode.parent;
-	}
-
-	graph.selectSystem(node);
 }
 
 function updateCurrentDtText() {
@@ -218,6 +199,27 @@ function setupSourceChoice() {
 
 $(function() {
 
+	{% for system in user_systems %}
+		var system = {};
+		system.code = '{{system.code}}';
+		system.name = '{{system.name}}';
+		system.path = '{{system.path}}';
+		system.sources = {};
+
+		{% if forloop.first %}
+		userSystemTree = new Arboreal(null, system);
+		{% else %}
+		parentCodes = $(system.path.split(',')).filter(function(){
+			return this != "";
+		});
+		parentCode = parentCodes[parentCodes.length - 1];
+		parentNode = userSystemTree.find(function (node) {
+			return node.data.code == parentCode;
+		});
+		parentNode.appendChild(system);
+		{% endif %}
+	{% endfor %}
+
 	graph = new Graph(
 		"#chart",
 		"#y-axis-slider",
@@ -233,18 +235,19 @@ $(function() {
 		system.name = '{{system.name}}';
 		system.path = '{{system.path}}';
 		system.sources = {};
-		if (system.path == 'None') {
-			graph.systemTree = new Arboreal(null, system);
-		} else {
-			parentCodes = $(system.path.split(',')).filter(function(){
-				return this != "";
-			});
-			parentCode = parentCodes[parentCodes.length - 1];
-			parentNode = graph.systemTree.find(function (node) {
-				return node.data.code == parentCode;
-			});
-			parentNode.appendChild(system);
-		}
+
+		{% if forloop.first %}
+		graph.systemTree = new Arboreal(null, system);
+		{% else %}
+		parentCodes = $(system.path.split(',')).filter(function(){
+			return this != "";
+		});
+		parentCode = parentCodes[parentCodes.length - 1];
+		parentNode = graph.systemTree.find(function (node) {
+			return node.data.code == parentCode;
+		});
+		parentNode.appendChild(system);
+		{% endif %}
 	{% endfor %}
 	graph.currentSelectedSystem = graph.systemTree;
 
@@ -405,10 +408,12 @@ $(function() {
 	graph.getSourceReadings();
 
 	var menuTreeDom = null;
-	graph.systemTree.traverseDown(function (node) {
+	userSystemTree.traverseDown(function (node) {
 		var aDom = $('<a href="#" onclick="return false;">' + node.data.name +'</a>');
 		aDom.click({node: node}, function(event) {
-			updateSelectSystem(event.data.node);
+			if (userSystemTree.data.node !== event.data.node) {
+				window.location.href = "/" + event.data.node.data.code + "/graph/";
+			}
 		});
 		var appendDom = $('<li system_code="' + node.data.code + '">');
 		appendDom.append(aDom);
@@ -475,7 +480,6 @@ $(function() {
 		resetGraphNPanel();
 	});
 
-	updateSelectSystem(graph.systemTree);
 	resetGraphNPanel();
 
 	graph.getSummary(retrieveSummaryFinished);
@@ -564,11 +568,22 @@ $(function() {
 		<div class="blue-bar"></div>
 
 		<div id="sub-heading-facilities">
-			<span><h3>You are at:</h3></span>
+
+			<ul id="system-menu" class="sf-menu">
+				<li>
+					<a><img src="{% static 'images/menu-icon.png' %}"></a>
+					<ul></ul>
+				</li>
+			</ul>
+
+			<span><h3>You are viewing:</h3></span>
 			<span id="breadcrumbs-path">
-				<span style="font-weight: 200; color:#cedee2;">OTIS World Wide</span>
-				<span>-</span>
-				<span>Kowloon Bay</span>
+				{% for code in system_path_components %}
+				<a href="{% url 'graph' system_code=code %}">{{code}}</a>
+					{% if not forloop.last %}
+					<span>-</span>
+					{% endif %}
+				{% endfor %}
 			</span>
 		</div>
 
@@ -626,23 +641,6 @@ $(function() {
 
 		<!-- Main Graph -->
 		<div id="graph-panel" class="graph-component">
-
-			{% comment %}
-			<!-- Sub Level -->
-			<ul id="system-menu" class="sf-menu">
-				<li>
-					<a><img id="system-menu-icon"></a>
-					<ul></ul>
-				</li>
-			</ul>
-			<!-- Breadcrumbs -->
-			<div id="breadcrumbs"></div>
-			
-			<!-- Clear Graph -->
-			<img id="clear-graph">
-			<div style="clear: both;"></div>
-			{% endcomment %}
-			
 			<div id="chart"></div>
 			<div id="y-axis-slider"></div>
 			<div id="x-axis-slider"></div>

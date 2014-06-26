@@ -1,22 +1,21 @@
-from mongoengine.document import Document
-from mongoengine.fields import *
-from mongoengine import Q
+from django.db import models
 import datetime
 import treelib
 
-class System(Document):
-	code = StringField(max_length=100, unique=True)
-	name = StringField(max_length=200)
-	name_tc = StringField(max_length=200)
-	intro = StringField(max_length=2000)
-	intro_tc = StringField(max_length=2000)
-	path = StringField(max_length=2000)
-	logo = StringField(max_length=300)
-	images = ListField(StringField(max_length=300))
-	last_update = DateTimeField(default=datetime.datetime.now)
-	location = GeoPointField()
-	population = IntField()
-	night_time = DictField()
+class System(models.Model):
+	code = models.CharField(max_length=100, unique=True)
+	name = models.CharField(max_length=200)
+	name_tc = models.CharField(max_length=200, blank=True)
+	intro = models.CharField(max_length=2000, blank=True)
+	intro_tc = models.CharField(max_length=2000, blank=True)
+	path = models.CharField(max_length=2000, blank=True)
+	logo = models.CharField(max_length=300, blank=True)
+	last_update = models.DateTimeField(auto_now=True, blank=True, null=True)
+	lat = models.FloatField(default=0)
+	lng = models.FloatField(default=0)
+	population = models.PositiveIntegerField(default=1)
+	night_time_start = models.DateTimeField(blank=True, null=True)
+	night_time_end = models.DateTimeField(blank=True, null=True)
 
 	# @staticmethod
 	# def get_system_tree(school_code):
@@ -34,8 +33,13 @@ class System(Document):
 
 	# 	return system_tree
 
-class Holiday(Document):
-	system_id = ListField(ReferenceField('System'))
-	name = StringField(max_length=200)
-	name_tc = StringField(max_length=200)
-	date = DateTimeField()
+class SystemHomeImages(models.Model):
+	image = models.ImageField(upload_to="system_home/%Y/%m")
+	system = models.ForeignKey(System)
+
+# TODO: not implement yet
+# class Holiday(Document):
+# 	system_id = ListField(ReferenceField('System'))
+# 	name = StringField(max_length=200)
+# 	name_tc = StringField(max_length=200)
+# 	date = DateTimeField()

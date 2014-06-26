@@ -283,7 +283,7 @@ class SourceManager:
 
 	@staticmethod
 	def get_sources(system_code, system_path):
-		if system_path is None:
+		if not system_path:
 			target_path = ',%s,'%system_code
 		else:
 			target_path = '%s%s,'%(system_path, system_code)
