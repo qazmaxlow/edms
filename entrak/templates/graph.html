@@ -136,8 +136,18 @@ function retrieveSummaryFinished() {
 	$("#last-consumption-val").text(graph.lastConsumption.toFixed(0));
 	$("#this-consumption-val").text(graph.realtimeConsumption.toFixed(0));
 
-	var diffPercentage = (((graph.realtimeConsumption - graph.lastConsumption)/graph.realtimeConsumption)*100).toFixed(1);
+	var diffPercentage = ((Math.abs(graph.realtimeConsumption - graph.lastConsumption)/graph.realtimeConsumption)*100).toFixed(1);
 	$("#summary-percentage span").text(diffPercentage);
+
+	var summaryBgImg = null;
+	if (graph.lastConsumption > graph.realtimeConsumption) {
+		summaryBgImg = "{% static 'images/summary-lower.png' %}";
+	} else if (graph.lastConsumption < graph.realtimeConsumption) {
+		summaryBgImg = "{% static 'images/summary-higher.png' %}";
+	} else {
+		summaryBgImg = "{% static 'images/summary-neutral.png' %}";
+	}
+	$("#summary-image").css("background-image", 'url(' + summaryBgImg + ')');
 
 	setTimeout(function() {
 		graph.getSummary(retrieveSummaryFinished);
@@ -496,8 +506,8 @@ $(function() {
 	<div id="menu">
 
 		<!-- User's Company Logo -->			
-		<div id="users-logo">
-			<img src="{% static 'images/users-logo-bg.png' %}" width="187" height="201" usemap="#config">
+		<div id="user-logo">
+			<img src="{% static 'images/user-logo-bg.png' %}" usemap="#config">
 			
 			<map name="config">
 				<area shape="circle" coords="164,22,25" href="#" alt="config">
@@ -506,16 +516,6 @@ $(function() {
 				
 		<!-- User's Company Name -->
 		<h2 id="company">OTIS WORLD WIDE</h2>
-		
-		<!-- Admin - Logout - Settings -->
-		<div id="admin">
-			<a href="#">
-				<div id="logout"><p>Logout</p></div>
-			</a>
-			<a href="#">
-				<div id="settings"><p>Settings</p></div>
-			</a>
-		</div>
 
 		<!-- Main Sidebar Links -->
 		<nav>
@@ -538,6 +538,12 @@ $(function() {
 				</li>
 				<li>
 					<a href="#"><img width="31" height="21" src="{% static 'images/prov-icon.png' %}"><span>Pro V</span></a>
+				</li>
+				<li>
+					<a href="#"><img width="23" height="22" src="{% static 'images/settings-icon.png' %}"><span>Settings</span></a>
+				</li>
+				<li>
+					<a href="#"><img width="23" height="24" src="{% static 'images/logout-icon.png' %}"><span>Logout</span></a>
 				</li>
 			</ul>
 		</nav>
@@ -683,7 +689,7 @@ $(function() {
 				</div>
 
 				<div id="summary-percentage">
-					<span></span><img id="percentage-icon" src="{% static 'images/percentage.png' %}">
+					<span></span>
 				</div>
 			</div>
 		</div>
