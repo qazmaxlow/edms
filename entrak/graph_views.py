@@ -11,11 +11,10 @@ from egauge.manager import SourceManager
 from unit.models import Unit
 from utils.utils import Utils
 from user.models import EntrakUser
+from utils.auth import permission_required
 
+@permission_required
 def graph_view(request, system_code=None):
-	#TODO: hardcode first as no login
-	request.user = EntrakUser.objects.get(username="test")
-
 	path = ',%s,'%system_code
 	systems = System.objects.filter(Q(code=system_code) | Q(path__contains=path)).order_by('path')
 
