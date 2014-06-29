@@ -135,20 +135,6 @@ GraphChart.prototype.getAllSourceIds = function () {
 	return sourceIds;
 }
 
-GraphChart.prototype.sumUpSourceReading = function (sourceReadings, sources, dataName) {
-	var graphThis = this;
-	$.each(sources, function (sourceId, source) {
-		$.each(source[dataName], function(readingTimestamp, readingVal) {
-			var transformedVal = graphThis.transformReading(source, readingTimestamp, readingVal);
-			if (readingTimestamp in sourceReadings) {
-				sourceReadings[readingTimestamp] += transformedVal;
-			} else {
-				sourceReadings[readingTimestamp] = transformedVal;
-			}
-		})
-	})
-}
-
 GraphChart.prototype.transformXCoordinate = function (value) {
 	value_dt = moment.unix(value);
 	if (this.currentRangeType === this.RANGE_TYPE_HOUR) {
@@ -546,30 +532,8 @@ GraphChart.prototype.goNext = function () {
 	this.goPrevOrNext('next');
 }
 
-GraphChart.prototype.calculateSummary = function () {
-	var totalReadings = {};
-	var lastTotalReadings = {};
-	var graphThis = this;
-	this.systemTree.traverseDown(function (node) {
-		graphThis.sumUpSourceReading(totalReadings, node.data.sources, 'realtimeData');
-		graphThis.sumUpSourceReading(lastTotalReadings, node.data.sources, 'realtimeLastData');
-	});
-
-	var totalConsumption = 0;
-	var lastTotalConsumption = 0;
-	$.each(totalReadings, function(timestamp, val) {
-		totalConsumption += val;
-	});
-	$.each(lastTotalReadings, function(timestamp, val) {
-		lastTotalConsumption += val;
-	});
-
-	this.realtimeConsumption = totalConsumption;
-	this.lastConsumption = lastTotalConsumption;
-}
-
 GraphChart.prototype.getSummary = function(getSummaryCallback) {
-	var graphThis = this;
+	var graphChartThis = this;
 	// TODO: don't HARDCODE if have realtime data
 	// var uptilMoment = moment();
 	var uptilMoment = moment().year(2014).month(5).date(3);
@@ -580,21 +544,18 @@ GraphChart.prototype.getSummary = function(getSummaryCallback) {
 	var sourceIds = this.getAllSourceIds();
 	$.ajax({
 		type: "POST",
-		url: "../source_readings/",
+		url: "../summary/",
 		data: {
-			source_ids: sourceIds,
-			range_type: graphThis.API_RANGE_TYPES[graphThis.RANGE_TYPE_HOUR],
+			source_ids: JSON.stringify(sourceIds),
+			range_type: graphChartThis.API_RANGE_TYPES[graphChartThis.RANGE_TYPE_HOUR],
 			start_dt: startDt.unix(),
 			end_dt: uptilMoment.unix(),
 			last_start_dt: lastStartDt.unix(),
 			last_end_dt: lastEndDt.unix(),
 		},
 	}).done(function(data) {
-		$.each({realtimeData: data['readings'], realtimeLastData: data['last_readings']}, function (dataKey, readings) {
-			graphThis.addDataToSystem(dataKey, readings);
-		})
-
-		graphThis.calculateSummary();
+		graphChartThis.realtimeConsumption = data.realtime;
+		graphChartThis.lastConsumption = data.last;
 		getSummaryCallback();
 	});
 }

@@ -14,7 +14,7 @@ from unit.models import UnitCategory, Unit, KWH_CATEGORY_ID
 from utils.utils import Utils
 from user.models import EntrakUser
 from utils.auth import permission_required
-from utils.calculation import transform_reading
+from utils.calculation import transform_reading, sum_all_readings
 
 @permission_required
 def graph_view(request, system_code=None):
@@ -76,3 +76,20 @@ def source_readings_view(request, system_code):
 				target_group[timestamp] = val
 
 	return Utils.json_response(grouped_readings)
+
+@csrf_exempt
+def summary_view(request, system_code):
+	source_ids = json.loads(request.POST.get('source_ids'))
+	range_type = request.POST.get('range_type')
+	start_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('start_dt'))))
+	end_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('end_dt'))))
+	last_start_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('last_start_dt'))))
+	last_end_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('last_end_dt'))))
+
+	source_readings = SourceManager.get_readings(source_ids, range_type, start_dt, end_dt)
+	usage = sum_all_readings(source_readings)
+
+	last_source_readings = SourceManager.get_readings(source_ids, range_type, last_start_dt, last_end_dt)
+	last_usage = sum_all_readings(last_source_readings)
+
+	return Utils.json_response({'realtime': usage, 'last': last_usage})
