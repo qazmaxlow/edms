@@ -1,4 +1,4 @@
-function Graph(graphEleSel, yAxisSliderEleSel, xAxisSliderEleSel, retrieveReadingCallback) {
+function GraphChart(graphEleSel, yAxisSliderEleSel, xAxisSliderEleSel, retrieveReadingCallback) {
 	this.graphEleSel = graphEleSel;
 	this.yAxisSliderEleSel = yAxisSliderEleSel;
 	this.xAxisSliderEleSel = xAxisSliderEleSel;
@@ -6,10 +6,8 @@ function Graph(graphEleSel, yAxisSliderEleSel, xAxisSliderEleSel, retrieveReadin
 
 	this.plot = null;
 	this.systemTree = null;
-	this.units = [];
-	this.currentSelectedSystem = null;
 	this.totalSeries = null;
-	this.sourceDatasets = null;
+	this.sourceSeries = null;
 	this.currentRangeType = null;
 	this.currentDt = null;
 	this.currentSelectedSourceIdx = [];
@@ -18,14 +16,14 @@ function Graph(graphEleSel, yAxisSliderEleSel, xAxisSliderEleSel, retrieveReadin
 	this.xAxisSliderCallback = null;
 }
 
-Graph.prototype.RANGE_TYPE_HOUR		= 'hour';
-Graph.prototype.RANGE_TYPE_DAY		= 'day';
-Graph.prototype.RANGE_TYPE_NIGHT	= 'night';
-Graph.prototype.RANGE_TYPE_WEEK		= 'week';
-Graph.prototype.RANGE_TYPE_MONTH	= 'month';
-Graph.prototype.RANGE_TYPE_YEAR		= 'year';
+GraphChart.prototype.RANGE_TYPE_HOUR	= 'hour';
+GraphChart.prototype.RANGE_TYPE_DAY		= 'day';
+GraphChart.prototype.RANGE_TYPE_NIGHT	= 'night';
+GraphChart.prototype.RANGE_TYPE_WEEK	= 'week';
+GraphChart.prototype.RANGE_TYPE_MONTH	= 'month';
+GraphChart.prototype.RANGE_TYPE_YEAR	= 'year';
 
-Graph.prototype.API_RANGE_TYPES = {
+GraphChart.prototype.API_RANGE_TYPES = {
 	'hour': 'hour',
 	'day': 'day',
 	'night': 'day',
@@ -34,9 +32,9 @@ Graph.prototype.API_RANGE_TYPES = {
 	'year': 'year',
 };
 
-Graph.prototype.UNIT_KWH = 'kwh';
+GraphChart.prototype.UNIT_KWH = -1;
 
-Graph.prototype.TOTAL_SERIES_BASE_OPTIONS = {
+GraphChart.prototype.TOTAL_SERIES_BASE_OPTIONS = {
 	color: '#81D51D',
 	label: 'Total',
 	lines: {
@@ -57,8 +55,8 @@ Graph.prototype.TOTAL_SERIES_BASE_OPTIONS = {
 	},
 };
 
-Graph.prototype.SERIES_LINE_COLORS = ['#FFAE20', '#EF7C56', '#35BC99', '#C94CD7', '#587EFF'];
-Graph.prototype.SERIES_BASE_OPTIONS = {
+GraphChart.prototype.SERIES_LINE_COLORS = ['#FFAE20', '#EF7C56', '#35BC99', '#C94CD7', '#587EFF'];
+GraphChart.prototype.SERIES_BASE_OPTIONS = {
 	lines: {
 		lineWidth: 2.5,
 		show: true,
@@ -67,61 +65,68 @@ Graph.prototype.SERIES_BASE_OPTIONS = {
 		radius: 4,
 		symbol: 'circle',
 		fillColor: "#FFFFFF",
-		show: true
+		show: true,
 	},
 	clickable: false,
 };
 
-Graph.prototype.getSourceReadings = function () {
-	var graphThis = this;
+GraphChart.prototype.getSourceReadings = function () {
+	var graphChartThis = this;
 	var startEndDt = this.genCurrentStartEndDt();
 	var lastStartEndDt = this.genLastStartEndDt(startEndDt.startDt, this.currentRangeType);
-	var sourceIds = this.getSourceIdsUnderTree();
+	var grouped_source_infos = this.getGroupedSourceInfos();
 	$.ajax({
 		type: "POST",
 		url: "../source_readings/",
 		data: {
-			source_ids: sourceIds,
-			range_type: graphThis.API_RANGE_TYPES[graphThis.currentRangeType],
+			grouped_source_infos: JSON.stringify(grouped_source_infos),
+			range_type: graphChartThis.API_RANGE_TYPES[graphChartThis.currentRangeType],
+			unit_category_id: graphChartThis.currentUnit,
 			start_dt: startEndDt.startDt.unix(),
 			end_dt: startEndDt.endDt.unix(),
 			last_start_dt: lastStartEndDt.startDt.unix(),
 			last_end_dt: lastStartEndDt.endDt.unix(),
 		},
 	}).done(function(data) {
-		$.each({data: data['readings']}, function (dataKey, readings) {
-			graphThis.addDataToSystem(dataKey, readings);
-		})
+		graphChartThis.updateXAxisOptions(startEndDt.startDt);
+		graphChartThis.transformReadingToChartDatasets(data);
+		graphChartThis.plotGraphChart();
 
-		graphThis.updateXAxisOptions(startEndDt.startDt);
-		graphThis.transformReadingToChartDatasets();
-		graphThis.plotGraph();
-
-		graphThis.retrieveReadingCallback();
+		graphChartThis.retrieveReadingCallback();
 	});
 }
 
-Graph.prototype.addDataToSystem = function (dataKey, readings) {
-	var graphThis = this;
-	for (var sourceId in readings) {
-		var systemNode = graphThis.findSystemNodeBySourceId(sourceId);
-		systemNode.data.sources[sourceId][dataKey] = {};
-		$.each(readings[sourceId], function(readingTimestamp, value) {
-			systemNode.data.sources[sourceId][dataKey][readingTimestamp] = value;
-		})
-	}
-}
-
-Graph.prototype.addSourceToSystem = function (systemCode, sourceId, source) {
+GraphChart.prototype.addSourceToSystem = function (systemCode, sourceId, source) {
 	var systemNode = this.systemTree.find(function (node) {
 		return (systemCode === node.data.code);
 	});
 	systemNode.data.sources[sourceId] = source;
 }
 
-Graph.prototype.getSourceIdsUnderTree = function () {
+GraphChart.prototype.getGroupedSourceInfos = function() {
+	var graphChartThis = this;
+	var groupedSourceIds = [];
+	$.each(graphChartThis.systemTree.children, function(subSystemIdx, subSystem) {
+		var sourceIds = [];
+		subSystem.traverseDown(function (node){
+			for (var sourceId in node.data.sources) {
+				sourceIds.push(sourceId);
+			}
+		});
+
+		groupedSourceIds.push({name: subSystem.data.name, source_ids:sourceIds});
+	})
+
+	$.each(graphChartThis.systemTree.data.sources, function(sourceId, source){
+		groupedSourceIds.push({name: source.name, source_ids:[sourceId]});
+	});
+
+	return groupedSourceIds;
+}
+
+GraphChart.prototype.getAllSourceIds = function () {
 	var sourceIds = [];
-	this.currentSelectedSystem.traverseDown(function (node) {
+	this.systemTree.traverseDown(function (node) {
 		for (var sourceId in node.data.sources) {
 			sourceIds.push(sourceId);
 		}
@@ -130,13 +135,7 @@ Graph.prototype.getSourceIdsUnderTree = function () {
 	return sourceIds;
 }
 
-Graph.prototype.findSystemNodeBySourceId = function (sourceId) {
-	return this.currentSelectedSystem.find(function (node) {
-		return (sourceId in node.data.sources);
-	});
-}
-
-Graph.prototype.sumUpSourceReading = function (sourceReadings, sources, dataName) {
+GraphChart.prototype.sumUpSourceReading = function (sourceReadings, sources, dataName) {
 	var graphThis = this;
 	$.each(sources, function (sourceId, source) {
 		$.each(source[dataName], function(readingTimestamp, readingVal) {
@@ -150,7 +149,7 @@ Graph.prototype.sumUpSourceReading = function (sourceReadings, sources, dataName
 	})
 }
 
-Graph.prototype.transformXCoordinate = function (value) {
+GraphChart.prototype.transformXCoordinate = function (value) {
 	value_dt = moment.unix(value);
 	if (this.currentRangeType === this.RANGE_TYPE_HOUR) {
 		value = value_dt.minute();
@@ -174,121 +173,51 @@ Graph.prototype.transformXCoordinate = function (value) {
 	return value;
 }
 
-Graph.prototype.updateUnit = function (newUnit) {
-	var graphThis = this;
+GraphChart.prototype.updateUnit = function (newUnit) {
 	this.currentUnit = newUnit;
-	this.transformReadingToChartDatasets();
-
-	var willPlotSeries = [this.totalSeries];
-	for (var seriesIdx in this.currentSelectedSourceIdx) {
-		willPlotSeries.push(this.sourceDatasets[seriesIdx]);
-	}
-
-	this.plot.setData(willPlotSeries);
-	this.refreshYAxisSlider();
-	this.plot.setupGrid();
-	this.plot.draw();
+	this.getSourceReadings();
 }
 
-Graph.prototype.transformReading = function (source, readingTimestamp, value) {
-	var graphThis = this;
-	if (this.currentUnit === this.UNIT_KWH) {
-		return value;
-	}
-
-	var matchUnits = $.grep(this.units, function (unit) {
-		return (unit.category === graphThis.currentUnit
-			&& unit.catId === source.units[graphThis.currentUnit]
-			&& unit.effectiveDate.unix() < readingTimestamp)
-	});
-	matchUnits.sort(function (a, b) {
-		return b.effectiveDate.unix() - a.effectiveDate.unix();
-	});
-	var matchUnit = matchUnits[0];
-
-	return matchUnit.rate*value;
-}
-
-Graph.prototype.transformReadingToChartDatasets = function () {
-	var graphThis = this;
-	var tree = this.currentSelectedSystem;
-	this.sourceDatasets = [];
+GraphChart.prototype.transformReadingToChartDatasets = function (groupedReadings) {
+	var graphChartThis = this;
+	graphChartThis.sourceSeries = [];
 	var totalReadings = {};
 
-	this.sumUpSourceReading(totalReadings, tree.data.sources, 'data');
-	for (var sourceId in tree.data.sources) {
-		var source = tree.data.sources[sourceId];
-
+	$.each(groupedReadings, function(groupIdx, readingInfos) {
 		var series = $.extend(
 			true,
 			{
-				label: source.name,
+				label: readingInfos.name,
 				data: []
 			},
-			this.SERIES_BASE_OPTIONS);
-		$.each(source.data, function(readingTimestamp, readingVal) {
-			var transformedVal = graphThis.transformReading(source, readingTimestamp, readingVal);
-			series.data.push([graphThis.transformXCoordinate(readingTimestamp), transformedVal]);
-		});
-		this.sourceDatasets.push(series);
-	}
+			graphChartThis.SERIES_BASE_OPTIONS);
+		$.each(readingInfos.readings, function(readingTimestamp, readingVal) {
+			var transformedX = graphChartThis.transformXCoordinate(readingTimestamp);
+			series.data.push([transformedX, readingVal]);
 
-	for (var childrenIdx in tree.children) {
-		var subTree = tree.children[childrenIdx];
-		var series = $.extend(
-			true,
-			{
-				label: subTree.data.name,
-				data: []
-			},
-			this.SERIES_BASE_OPTIONS);
-		var sourceReadings = {};
-
-		subTree.traverseDown(function (node) {
-			graphThis.sumUpSourceReading(sourceReadings, node.data.sources, 'data');
-		});
-
-		for (var readingTimestamp in sourceReadings) {
-			series.data.push([graphThis.transformXCoordinate(readingTimestamp), sourceReadings[readingTimestamp]]);
-
-			if (readingTimestamp in totalReadings) {
-				totalReadings[readingTimestamp] += sourceReadings[readingTimestamp];
+			if (transformedX in totalReadings) {
+				totalReadings[transformedX] += readingVal;
 			} else {
-				totalReadings[readingTimestamp] = sourceReadings[readingTimestamp];
+				totalReadings[transformedX] = readingVal;
 			}
-		};
-		this.sourceDatasets.push(series);
-	};
+		});
+		graphChartThis.sourceSeries.push(series);
+	});
 
 	this.totalSeries = $.extend(true, {data: []}, this.TOTAL_SERIES_BASE_OPTIONS);
-	for (var readingTimestamp in totalReadings) {
-		this.totalSeries.data.push([graphThis.transformXCoordinate(readingTimestamp), totalReadings[readingTimestamp]]);
-	}
-}
-
-Graph.prototype.genTotalSeries = function (seriesName, dataName) {
-	var tree = this.currentSelectedSystem;
-	var totalReadings = {};
-	var graphThis = this;
-
-	tree.traverseDown(function (node) {
-		graphThis.sumUpSourceReading(totalReadings, node.data.sources, dataName);
+	$.each(totalReadings, function(readingTimestamp, readingVal) {
+		graphChartThis.totalSeries.data.push([readingTimestamp, readingVal]);
 	});
-
-	this[seriesName] = $.extend(true, {data: []}, this.SERIES_BASE_OPTIONS);
-	for (var readingTimestamp in totalReadings) {
-		this[seriesName].data.push([this.transformXCoordinate(readingTimestamp), totalReadings[readingTimestamp]]);
-	}
 }
 
-Graph.prototype.setSeriesLineColor = function (sourceSeries) {
+GraphChart.prototype.setSeriesLineColor = function (sourceSeries) {
 	var graphThis = this;
 	$.each(sourceSeries, function (idx, series) {
 		series.color = graphThis.SERIES_LINE_COLORS[idx];
 	});
 }
 
-Graph.prototype.plotGraph = function () {
+GraphChart.prototype.plotGraphChart = function () {
 	var graphThis = this;
 	this.plot = $(this.graphEleSel).plot([this.totalSeries], {
 		series: {
@@ -378,13 +307,14 @@ Graph.prototype.plotGraph = function () {
 	});
 }
 
-Graph.prototype.updateSourceChoice = function (selectedSeriesIdxs) {
+GraphChart.prototype.updateSourceChoice = function (selectedSeriesIdxs) {
+	var graphChartThis = this;
 	this.currentSelectedSourceIdx = selectedSeriesIdxs;
 
 	var willPlotSeries = [];
-	for (var seriesIdx in this.currentSelectedSourceIdx) {
-		willPlotSeries.push(this.sourceDatasets[seriesIdx]);
-	}
+	$.each(this.currentSelectedSourceIdx, function(idx, seriesIdx) {
+		willPlotSeries.push(graphChartThis.sourceSeries[seriesIdx]);
+	});
 	this.setSeriesLineColor(willPlotSeries);
 
 	willPlotSeries.splice(0, 0, this.totalSeries);
@@ -399,7 +329,7 @@ function roundMax(val) {
 	return Math.ceil(val/(Math.pow(10, targetRoundDigit))+3)*Math.pow(10, targetRoundDigit);
 }
 
-Graph.prototype.refreshYAxisSlider = function () {
+GraphChart.prototype.refreshYAxisSlider = function () {
 	var graphThis = this;
 	// first series is total and should be largest
 	var targetDatas = (graphThis.plot.getData()[0].dataOrg !== undefined) ? graphThis.plot.getData()[0].dataOrg : graphThis.plot.getData()[0].data;
@@ -424,7 +354,7 @@ Graph.prototype.refreshYAxisSlider = function () {
 	});
 }
 
-Graph.prototype.refreshXAxisSlider = function () {
+GraphChart.prototype.refreshXAxisSlider = function () {
 	var graphThis = this;
 	var startEndDt = this.genCurrentStartEndDt();
 	var xAxisSlider = $(this.xAxisSliderEleSel);
@@ -451,7 +381,7 @@ Graph.prototype.refreshXAxisSlider = function () {
 	});
 }
 
-Graph.prototype.transformXToDt = function (startDt, xVal) {
+GraphChart.prototype.transformXToDt = function (startDt, xVal) {
 	var dtUnit = null;
 	if (this.currentRangeType === this.RANGE_TYPE_HOUR) {
 		dtUnit = 'm';
@@ -466,8 +396,8 @@ Graph.prototype.transformXToDt = function (startDt, xVal) {
 	return moment(startDt).add(dtUnit, xVal);
 }
 
-Graph.prototype.sumUpSeriesValueInRange = function (startIdx, endIdx) {
-	return this.sourceDatasets.map(function (series) {
+GraphChart.prototype.sumUpSeriesValueInRange = function (startIdx, endIdx) {
+	return this.sourceSeries.map(function (series) {
 		var value = series.data.reduce(function (previousVal, currentPts, index, array) {
 			var value = (currentPts[0] >= startIdx && currentPts[0] < endIdx) ? currentPts[1] : 0;
 			return previousVal + value;
@@ -477,7 +407,7 @@ Graph.prototype.sumUpSeriesValueInRange = function (startIdx, endIdx) {
 	});
 }
 
-Graph.prototype.genStartEndDt = function (targetDt, rangeType) {
+GraphChart.prototype.genStartEndDt = function (targetDt, rangeType) {
 	var startDt = null;
 	var endDt = null;
 	var dtClone = moment(targetDt).startOf('hour');
@@ -509,11 +439,11 @@ Graph.prototype.genStartEndDt = function (targetDt, rangeType) {
 	return {startDt: startDt, endDt: endDt}
 }
 
-Graph.prototype.genCurrentStartEndDt = function () {
+GraphChart.prototype.genCurrentStartEndDt = function () {
 	return this.genStartEndDt(this.currentDt, this.currentRangeType);
 }
 
-Graph.prototype.getDtDetlaUnit = function (rangeType) {
+GraphChart.prototype.getDtDetlaUnit = function (rangeType) {
 	var deltaUnit = null;
 	if (rangeType === this.RANGE_TYPE_HOUR) {
 		deltaUnit = 'h';
@@ -529,7 +459,7 @@ Graph.prototype.getDtDetlaUnit = function (rangeType) {
 	return deltaUnit;
 }
 
-Graph.prototype.genLastStartEndDt = function (targetDt, rangeType) {
+GraphChart.prototype.genLastStartEndDt = function (targetDt, rangeType) {
 	var deltaUnit = this.getDtDetlaUnit(rangeType);
 	var endDtUnit = null;
 	var lastStartDt = moment(targetDt).subtract(deltaUnit, 1);
@@ -537,7 +467,7 @@ Graph.prototype.genLastStartEndDt = function (targetDt, rangeType) {
 	return {startDt: lastStartDt, endDt: targetDt};
 }
 
-Graph.prototype.updateXAxisOptions = function (startDt) {
+GraphChart.prototype.updateXAxisOptions = function (startDt) {
 	var min = null;
 	var max = null;
 	var ticks = [];
@@ -591,41 +521,32 @@ Graph.prototype.updateXAxisOptions = function (startDt) {
 	this.currentXaxisOptions = {min: min, max: max, ticks: ticks};
 }
 
-Graph.prototype.updateCurrentDt = function (newDt) {
+GraphChart.prototype.updateCurrentDt = function (newDt) {
 	this.currentDt = newDt;
 	this.getSourceReadings();
 }
 
-Graph.prototype.updateCurrentRangeType = function (newRangeType) {
+GraphChart.prototype.updateCurrentRangeType = function (newRangeType) {
 	this.currentRangeType = newRangeType;
 	this.getSourceReadings();
 }
 
-Graph.prototype.selectSystem = function (node) {
-	if (node === this.currentSelectedSystem) {
-		return;
-	}
-
-	this.currentSelectedSystem = node;
-	this.getSourceReadings();
-}
-
-Graph.prototype.goPrevOrNext = function (direction) {
+GraphChart.prototype.goPrevOrNext = function (direction) {
 	var delta = (direction === 'prev') ? -1 : 1;
 	var deltaUnit = this.getDtDetlaUnit(this.currentRangeType);
 	this.currentDt.add(deltaUnit, delta);
 	this.getSourceReadings();
 }
 
-Graph.prototype.goPrev = function () {
+GraphChart.prototype.goPrev = function () {
 	this.goPrevOrNext('prev');
 }
 
-Graph.prototype.goNext = function () {
+GraphChart.prototype.goNext = function () {
 	this.goPrevOrNext('next');
 }
 
-Graph.prototype.calculateSummary = function () {
+GraphChart.prototype.calculateSummary = function () {
 	var totalReadings = {};
 	var lastTotalReadings = {};
 	var graphThis = this;
@@ -647,7 +568,7 @@ Graph.prototype.calculateSummary = function () {
 	this.lastConsumption = lastTotalConsumption;
 }
 
-Graph.prototype.getSummary = function(getSummaryCallback) {
+GraphChart.prototype.getSummary = function(getSummaryCallback) {
 	var graphThis = this;
 	// TODO: don't HARDCODE if have realtime data
 	// var uptilMoment = moment();
@@ -656,7 +577,7 @@ Graph.prototype.getSummary = function(getSummaryCallback) {
 	var lastStartDt = moment(startDt).subtract('d', 1);
 	var lastEndDt = moment(uptilMoment).subtract('d', 1);
 
-	var sourceIds = this.getSourceIdsUnderTree();
+	var sourceIds = this.getAllSourceIds();
 	$.ajax({
 		type: "POST",
 		url: "../source_readings/",
@@ -676,4 +597,8 @@ Graph.prototype.getSummary = function(getSummaryCallback) {
 		graphThis.calculateSummary();
 		getSummaryCallback();
 	});
+}
+
+GraphChart.prototype.getPrevDtForCompare = function() {
+	//
 }

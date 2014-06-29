@@ -2,16 +2,19 @@ import treelib
 import decimal
 import pytz
 import operator
+import json
+import itertools
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
-from mongoengine import Q as mongoengineQ
 from system.models import System
 from egauge.manager import SourceManager
-from unit.models import Unit
+from egauge.models import Source
+from unit.models import UnitCategory, Unit, KWH_CATEGORY_ID
 from utils.utils import Utils
 from user.models import EntrakUser
 from utils.auth import permission_required
+from utils.calculation import transform_reading
 
 @permission_required
 def graph_view(request, system_code=None):
@@ -25,29 +28,51 @@ def graph_view(request, system_code=None):
 	# TODO: trim out path that not under user system
 
 	sources = SourceManager.get_sources(system_code, systems[0].path)
-	unit_qs = []
-	for source in sources:
-		for category, cat_id in source.units.items():
-			unit_qs.append(mongoengineQ(category=category, cat_id=cat_id))
-	units = Unit.objects(reduce(operator.or_, unit_qs))
+
+	unit_categorys = list(UnitCategory.objects.all().order_by('order'))
+	# add kWh as the first unit category
+	unit_categorys.insert(0, UnitCategory.getKwhCategory())
 
 	info = {'systems': systems, 'user_systems': user_systems,
-		'system_path_components': system_path_components, 'sources': sources, 'units': units}
+		'system_path_components': system_path_components, 'sources': sources, 'unit_categorys': unit_categorys}
 	return render_to_response('graph.html', info)
 
 @csrf_exempt
 def source_readings_view(request, system_code):
-	source_ids = request.POST.getlist('source_ids[]')
+	grouped_source_infos = json.loads(request.POST.get('grouped_source_infos'))
 	range_type = request.POST.get('range_type')
+	unit_category_id = int(request.POST.get('unit_category_id'))
 	start_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('start_dt'))))
 	end_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('end_dt'))))
 
-	result = {}
-	result['readings'] = SourceManager.get_readings(source_ids, range_type, start_dt, end_dt)
+	source_group_map = {}
+	all_source_ids = []
+	for group_idx, source_info in enumerate(grouped_source_infos):
+		all_source_ids += source_info['source_ids']
+		for source_id in source_info['source_ids']:
+			source_group_map[source_id] = group_idx
 
-	if (request.POST.get('last_start_dt') and request.POST.get('last_end_dt')):
-		last_start_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('last_start_dt'))))
-		last_end_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('last_end_dt'))))
-		result['last_readings'] = SourceManager.get_readings(source_ids, range_type, last_start_dt, last_end_dt)
+	source_readings = SourceManager.get_readings(all_source_ids, range_type, start_dt, end_dt)
 
-	return Utils.json_response(result)
+	if unit_category_id != KWH_CATEGORY_ID:
+		sources = Source.objects(id__in=all_source_ids)
+		source_infos = {}
+		for source in sources:
+			source_infos[str(source.id)] = source
+
+		units = Unit.objects.filter(category_id=unit_category_id)
+
+		for source_id, readings in source_readings.items():
+			for reading_timestamp, reading_val in readings.items():
+				readings[reading_timestamp] = transform_reading(source_infos[source_id], reading_timestamp, reading_val, unit_category_id, units)
+
+	grouped_readings = [{'name': info['name'], 'readings': {}} for info in grouped_source_infos]
+	for source_id, readings in source_readings.items():
+		target_group = grouped_readings[source_group_map[source_id]]['readings']
+		for timestamp, val in readings.items():
+			if timestamp in target_group:
+				target_group[timestamp] += val
+			else:
+				target_group[timestamp] = val
+
+	return Utils.json_response(grouped_readings)

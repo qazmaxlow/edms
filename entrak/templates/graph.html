@@ -22,13 +22,12 @@
 <script src="{% static 'js/morris.js-0.4.3/raphael-min.js' %}"></script>
 <script src="{% static 'js/morris.js-0.4.3/morris-customized.js' %}"></script>
 <script src="{% static 'js/datetimepicker-master/jquery.datetimepicker-customized.js' %}"></script>
-<script src="{% static 'js/graph.js' %}"></script>
+<script src="{% static 'js/graph-chart.js' %}"></script>
 
 <script type="text/javascript">
 
-var userSystemTree = null;
-var graph = null;
-var sourceChoiceContainerHeight = 0;
+var graph = {};
+graph.sourceChoiceContainerHeight = 0;
 
 function updateDonutChart(data) {
 	$("#selection-summary-chart").empty();
@@ -41,21 +40,25 @@ function updateDonutChart(data) {
 	});
 	donutChart.on('select', function(i, row){
 		$("#selection-summary-value").text(row.orgValue.toFixed(0));
-		$("#selection-summary-unit").text(graph.currentUnit);
 		$("#selection-summary-source").text(row.label);
+
+		var currentUnitCategory = $.grep(graph.unitCategorys, function(unitCategory) {
+			return (unitCategory.id === graph.graphChart.currentUnit);
+		})[0];
+		$("#selection-summary-unit").text(currentUnitCategory.name);
 	});
 	donutChart.fire("select", 0, data[0]);
 }
 
 function formatDtAtStr(dt, rangeType) {
 	var formatStr = null;
-	if (rangeType === graph.RANGE_TYPE_HOUR
-		|| rangeType === graph.RANGE_TYPE_DAY
-		|| rangeType === graph.RANGE_TYPE_NIGHT) {
+	if (rangeType === graph.graphChart.RANGE_TYPE_HOUR
+		|| rangeType === graph.graphChart.RANGE_TYPE_DAY
+		|| rangeType === graph.graphChart.RANGE_TYPE_NIGHT) {
 		formatStr = 'D MMM YYYY, ddd';
-	} else if (rangeType === graph.RANGE_TYPE_WEEK) {
+	} else if (rangeType === graph.graphChart.RANGE_TYPE_WEEK) {
 		formatStr = 'D MMM YYYY';
-	} else if (rangeType === graph.RANGE_TYPE_MONTH) {
+	} else if (rangeType === graph.graphChart.RANGE_TYPE_MONTH) {
 		formatStr = 'MMM YYYY';
 	}
 
@@ -64,14 +67,14 @@ function formatDtAtStr(dt, rangeType) {
 
 function formatCurrentDtStr(dt, rangeType) {
 	var formatStr = null;
-	if (rangeType === graph.RANGE_TYPE_HOUR
-		|| rangeType === graph.RANGE_TYPE_DAY
-		|| rangeType === graph.RANGE_TYPE_NIGHT
-		|| rangeType === graph.RANGE_TYPE_WEEK) {
+	if (rangeType === graph.graphChart.RANGE_TYPE_HOUR
+		|| rangeType === graph.graphChart.RANGE_TYPE_DAY
+		|| rangeType === graph.graphChart.RANGE_TYPE_NIGHT
+		|| rangeType === graph.graphChart.RANGE_TYPE_WEEK) {
 		formatStr = 'D MMM YYYY, ddd';
-	} else if (rangeType === graph.RANGE_TYPE_MONTH) {
+	} else if (rangeType === graph.graphChart.RANGE_TYPE_MONTH) {
 		formatStr = 'MMM YYYY';
-	} else if (rangeType === graph.RANGE_TYPE_YEAR) {
+	} else if (rangeType === graph.graphChart.RANGE_TYPE_YEAR) {
 		formatStr = 'YYYY';
 	}
 
@@ -80,15 +83,15 @@ function formatCurrentDtStr(dt, rangeType) {
 
 function formatDtFromToStr(dt, rangeType) {
 	var formatStr = null;
-	if (rangeType === graph.RANGE_TYPE_HOUR
-		|| rangeType === graph.RANGE_TYPE_DAY
-		|| rangeType === graph.RANGE_TYPE_NIGHT) {
+	if (rangeType === graph.graphChart.RANGE_TYPE_HOUR
+		|| rangeType === graph.graphChart.RANGE_TYPE_DAY
+		|| rangeType === graph.graphChart.RANGE_TYPE_NIGHT) {
 		formatStr = 'hh:mma';
-	} else if (rangeType === graph.RANGE_TYPE_WEEK) {
+	} else if (rangeType === graph.graphChart.RANGE_TYPE_WEEK) {
 		formatStr = 'ddd';
-	} else if (rangeType === graph.RANGE_TYPE_MONTH) {
+	} else if (rangeType === graph.graphChart.RANGE_TYPE_MONTH) {
 		formatStr = 'D';
-	} else if (rangeType === graph.RANGE_TYPE_YEAR) {
+	} else if (rangeType === graph.graphChart.RANGE_TYPE_YEAR) {
 		formatStr = 'MMM';
 	}
 
@@ -96,12 +99,12 @@ function formatDtFromToStr(dt, rangeType) {
 }
 
 function updateCurrentDtText() {
-	$("#current-dt").text(' ' + formatCurrentDtStr(graph.currentDt, graph.currentRangeType) + ' ');
+	$("#current-dt").text(' ' + formatCurrentDtStr(graph.graphChart.currentDt, graph.graphChart.currentRangeType) + ' ');
 }
 
 function resetGraphNPanel() {
 	$("#source-choice-container input").prop("checked", false);
-	graph.currentSelectedSourceIdx = [];
+	graph.graphChart.currentSelectedSourceIdx = [];
 
 	updateCurrentDtText();
 
@@ -112,8 +115,8 @@ function resetGraphNPanel() {
 		selectionSummary.fadeOut();
 	}
 
-	if (graph.plot !== null) {
-		graph.plot.setSelection({
+	if (graph.graphChart.plot !== null) {
+		graph.graphChart.plot.setSelection({
 			xaxis: {
 				from: 0,
 				to: 0,
@@ -133,16 +136,16 @@ function retrieveReadingFinished() {
 }
 
 function retrieveSummaryFinished() {
-	$("#last-consumption-val").text(graph.lastConsumption.toFixed(0));
-	$("#this-consumption-val").text(graph.realtimeConsumption.toFixed(0));
+	$("#last-consumption-val").text(graph.graphChart.lastConsumption.toFixed(0));
+	$("#this-consumption-val").text(graph.graphChart.realtimeConsumption.toFixed(0));
 
-	var diffPercentage = ((Math.abs(graph.realtimeConsumption - graph.lastConsumption)/graph.realtimeConsumption)*100).toFixed(1);
+	var diffPercentage = ((Math.abs(graph.graphChart.realtimeConsumption - graph.graphChart.lastConsumption)/graph.graphChart.realtimeConsumption)*100).toFixed(1);
 	$("#summary-percentage span").text(diffPercentage);
 
 	var summaryBgImg = null;
-	if (graph.lastConsumption > graph.realtimeConsumption) {
+	if (graph.graphChart.lastConsumption > graph.graphChart.realtimeConsumption) {
 		summaryBgImg = "{% static 'images/summary-lower.png' %}";
-	} else if (graph.lastConsumption < graph.realtimeConsumption) {
+	} else if (graph.graphChart.lastConsumption < graph.graphChart.realtimeConsumption) {
 		summaryBgImg = "{% static 'images/summary-higher.png' %}";
 	} else {
 		summaryBgImg = "{% static 'images/summary-neutral.png' %}";
@@ -150,7 +153,7 @@ function retrieveSummaryFinished() {
 	$("#summary-image").css("background-image", 'url(' + summaryBgImg + ')');
 
 	setTimeout(function() {
-		graph.getSummary(retrieveSummaryFinished);
+		graph.graphChart.getSummary(retrieveSummaryFinished);
 	}, 60000);
 }
 
@@ -159,14 +162,14 @@ function setupSourceChoice() {
 	choiceContainer.empty();
 
 	var sourceNames = [];
-	$.each(graph.systemTree.data.sources, function(sourceIdx, source) {
-		sourceNames.push(source.name);
-	});
-	$.each(graph.systemTree.children, function(idx, subSystem) {
+	$.each(graph.graphChart.systemTree.children, function(idx, subSystem) {
 		sourceNames.push(subSystem.data.name);
 	});
+	$.each(graph.graphChart.systemTree.data.sources, function(sourceIdx, source) {
+		sourceNames.push(source.name);
+	});
 
-	sourceChoiceContainerHeight = Math.ceil(sourceNames.length/4.0)*22 + 100;
+	graph.sourceChoiceContainerHeight = Math.ceil(sourceNames.length/4.0)*22 + 100;
 
 	$.each(sourceNames, function(seriesIdx, sourceName) {
 		var choiceHtml = "<div>";
@@ -197,13 +200,13 @@ function setupSourceChoice() {
 			selectedSeriesIdxs.push(seriesIdx);
 		});
 
-		graph.updateSourceChoice(selectedSeriesIdxs);
+		graph.graphChart.updateSourceChoice(selectedSeriesIdxs);
 	});
 
 	$("#source-choice-clear").click(function() {
 		choiceContainer.find("input").prop('disabled', false).prop('checked', false);
 		choiceContainer.find(".source-label").removeClass('source-label-disabled');
-		graph.updateSourceChoice([]);
+		graph.graphChart.updateSourceChoice([]);
 	});
 }
 
@@ -217,27 +220,27 @@ $(function() {
 		system.sources = {};
 
 		{% if forloop.first %}
-		userSystemTree = new Arboreal(null, system);
+		graph.userSystemTree = new Arboreal(null, system);
 		{% else %}
 		parentCodes = $(system.path.split(',')).filter(function(){
 			return this != "";
 		});
 		parentCode = parentCodes[parentCodes.length - 1];
-		parentNode = userSystemTree.find(function (node) {
+		parentNode = graph.userSystemTree.find(function (node) {
 			return node.data.code == parentCode;
 		});
 		parentNode.appendChild(system);
 		{% endif %}
 	{% endfor %}
 
-	graph = new Graph(
+	graph.graphChart = new GraphChart(
 		"#chart",
 		"#y-axis-slider",
 		"#x-axis-slider",
 		retrieveReadingFinished);
-	graph.currentRangeType = graph.RANGE_TYPE_DAY;
-	graph.currentDt = getNowMoment();
-	graph.currentUnit = graph.UNIT_KWH;
+	graph.graphChart.currentRangeType = graph.graphChart.RANGE_TYPE_DAY;
+	graph.graphChart.currentDt = getNowMoment();
+	graph.graphChart.currentUnit = graph.graphChart.UNIT_KWH;
 
 	{% for system in systems %}
 		var system = {};
@@ -247,55 +250,39 @@ $(function() {
 		system.sources = {};
 
 		{% if forloop.first %}
-		graph.systemTree = new Arboreal(null, system);
+		graph.graphChart.systemTree = new Arboreal(null, system);
 		{% else %}
 		parentCodes = $(system.path.split(',')).filter(function(){
 			return this != "";
 		});
 		parentCode = parentCodes[parentCodes.length - 1];
-		parentNode = graph.systemTree.find(function (node) {
+		parentNode = graph.graphChart.systemTree.find(function (node) {
 			return node.data.code == parentCode;
 		});
 		parentNode.appendChild(system);
 		{% endif %}
 	{% endfor %}
-	graph.currentSelectedSystem = graph.systemTree;
+	graph.graphChart.currentSelectedSystem = graph.graphChart.systemTree;
 
 	{% for source in sources %}
 		var source = {};
 		source.name = '{{source.d_name}}';
 		source.name_tc = '{{source.d_name_tc}}';
 		source.order = '{{source.order}}';
-		source.units = {};
 
-		{% for category, cat_id in source.units.items %}
-			source.units['{{category}}'] = {{cat_id}};
-		{% endfor %}
-
-		graph.addSourceToSystem('{{source.system_code}}', '{{source.id}}', source);
+		graph.graphChart.addSourceToSystem('{{source.system_code}}', '{{source.id}}', source);
 	{% endfor %}
 
-	var unitCategorys = [];
-	// kwh is default unit
-	graph.units.push({
-		category: 'kwh',
-		catName: 'kwh',
-		imgOff: 'kwh.png',
-		imgOn: 'kwh-hover.png',
-	});
-	{% for unit in units %}
-		var unit = {};
-		unit.category = '{{unit.category}}';
-		unit.catName = '{{unit.cat_name}}';
-		unit.catId = {{unit.cat_id}};
-		unit.name = '{{unit.name}}';
-		unit.rate = {{unit.rate}};
-		unit.effectiveDate = moment.unix({{unit.effective_date|date:"U"}});
-		unit.order = {{unit.order}};
-		unit.imgOff = '{{unit.img_off}}';
-		unit.imgOn = '{{unit.img_on}}';
+	graph.unitCategorys = [];
+	{% for unit_category in unit_categorys %}
+		var unitCategory = {};
+		unitCategory.id = {{unit_category.id}};
+		unitCategory.name = '{{unit_category.name}}';
+		unitCategory.imgOff = '{{unit_category.img_off}}';
+		unitCategory.imgOn = '{{unit_category.img_on}}';
+		unitCategory.bgImg = '{{unit_category.bg_img}}';
 
-		graph.units.push(unit);
+		graph.unitCategorys.push(unitCategory);
 	{% endfor %}
 
 	$("#y-axis-slider").slider({
@@ -315,7 +302,7 @@ $(function() {
 		step: 1,
 		animate: "fast",
 	});
-	graph.xAxisSliderCallback = function (ranges, fromDt, toDt, data) {
+	graph.graphChart.xAxisSliderCallback = function (ranges, fromDt, toDt, data) {
 		var selectionSummary = $("#selection-summary");
 		if (fromDt.unix() === toDt.unix()) {
 			if (selectionSummary.css('display') !== 'none') {
@@ -325,9 +312,9 @@ $(function() {
 			if (selectionSummary.css('display') === 'none') {
 				selectionSummary.fadeIn();
 			}
-			$("#selection-summary-at span").text(formatDtAtStr(graph.currentDt, graph.currentRangeType));
-			$("#selection-summary-from span").text(formatDtFromToStr(fromDt, graph.currentRangeType));
-			$("#selection-summary-to span").text(formatDtFromToStr(toDt, graph.currentRangeType));
+			$("#selection-summary-at span").text(formatDtAtStr(graph.graphChart.currentDt, graph.graphChart.currentRangeType));
+			$("#selection-summary-from span").text(formatDtFromToStr(fromDt, graph.graphChart.currentRangeType));
+			$("#selection-summary-to span").text(formatDtFromToStr(toDt, graph.graphChart.currentRangeType));
 
 			var total = data.reduce(function (previousVal, current, index, array) {
 				return previousVal + current.value;
@@ -355,7 +342,9 @@ $(function() {
 			}
 
 			if ($(connectedPanel).attr('id') === "source-choice") {
-				$("#sub-menu-links").height(sourceChoiceContainerHeight + "px");
+				$("#sub-menu-links").height(graph.sourceChoiceContainerHeight + "px");
+			} else if ($(connectedPanel).attr('id') === "day-choice") {
+				$("#sub-menu-links").height("125px");
 			} else {
 				$("#sub-menu-links").height("95px");
 			}
@@ -378,29 +367,25 @@ $(function() {
 		menuLinks.slideToggle(700, "easeOutBounce", function() {});
 	});
 
-	var distinctUnitCategorys = [];
 	var unitChoice = $('#unit-choice');
-	$.each(graph.units, function(idx, unit) {
-		if ($.inArray(unit.category, distinctUnitCategorys) === -1) {
-			distinctUnitCategorys.push(unit.category);
-			var unitLiDom = $("<li unit_category='" + unit.category + "'>"
-				+ "<img src='{% get_static_prefix %}images/unit/" + unit.imgOff + "'>"
-				+ "</li>");
-			unitLiDom.find('img').hover(function() {
-				$(this).attr("src", "{% get_static_prefix %}images/unit/" + unit.imgOn);
-			}, function() {
-				$(this).attr("src", "{% get_static_prefix %}images/unit/" + unit.imgOff);
-			});
-			unitChoice.append(unitLiDom);
-		}
+	$.each(graph.unitCategorys, function(idx, unitCategory) {
+		var unitLiDom = $("<li unit_category='" + unitCategory.id + "'>"
+			+ "<img src='{% get_static_prefix %}images/unit/" + unitCategory.imgOff + "'>"
+			+ "</li>");
+		unitLiDom.find('img').hover(function() {
+			$(this).attr("src", "{% get_static_prefix %}images/unit/" + unitCategory.imgOn);
+		}, function() {
+			$(this).attr("src", "{% get_static_prefix %}images/unit/" + unitCategory.imgOff);
+		});
+		unitChoice.append(unitLiDom);
 	});
 	unitChoice.find("li").click(function () {
-		graph.updateUnit($(this).attr("unit_category"));
+		graph.graphChart.updateUnit(parseInt($(this).attr("unit_category"), 10));
 	});
 
-	var timeRangeTypes = [graph.RANGE_TYPE_DAY, graph.RANGE_TYPE_NIGHT,
-		graph.RANGE_TYPE_WEEK, graph.RANGE_TYPE_MONTH,
-		graph.RANGE_TYPE_YEAR, graph.RANGE_TYPE_HOUR];
+	var timeRangeTypes = [graph.graphChart.RANGE_TYPE_DAY, graph.graphChart.RANGE_TYPE_NIGHT,
+		graph.graphChart.RANGE_TYPE_WEEK, graph.graphChart.RANGE_TYPE_MONTH,
+		graph.graphChart.RANGE_TYPE_YEAR, graph.graphChart.RANGE_TYPE_HOUR];
 	var timeChoice = $("#time-choice");
 	$.each(timeRangeTypes, function(idx, rangeType) {
 		var timeLiDom = $("<li id='time-choice-" + rangeType + "-icon' range_type='" + rangeType + "'></li>");
@@ -408,20 +393,20 @@ $(function() {
 	})
 	timeChoice.find("li").click(function () {
 		var newRangeType = $(this).attr("range_type");
-		if (graph.currentRangeType !== newRangeType) {
-			graph.currentDt = graph.genStartEndDt(getNowMoment(), newRangeType).startDt;
-			graph.updateCurrentRangeType(newRangeType);
+		if (graph.graphChart.currentRangeType !== newRangeType) {
+			graph.graphChart.currentDt = graph.graphChart.genStartEndDt(getNowMoment(), newRangeType).startDt;
+			graph.graphChart.updateCurrentRangeType(newRangeType);
 			resetGraphNPanel();
 		}
 	});
 
-	graph.getSourceReadings();
+	graph.graphChart.getSourceReadings();
 
 	var menuTreeDom = null;
-	userSystemTree.traverseDown(function (node) {
+	graph.userSystemTree.traverseDown(function (node) {
 		var aDom = $('<a href="#" onclick="return false;">' + node.data.name +'</a>');
 		aDom.click({node: node}, function(event) {
-			if (userSystemTree.data.node !== event.data.node) {
+			if (graph.userSystemTree.data.node !== event.data.node) {
 				window.location.href = "/" + event.data.node.data.code + "/graph/";
 			}
 		});
@@ -464,7 +449,7 @@ $(function() {
 		scrollMonth: false,
 		timepicker: false,
 		onSelectDate: function(input) {
-			graph.updateCurrentDt(moment(input).startOf('hour'));
+			graph.graphChart.updateCurrentDt(moment(input).startOf('hour'));
 			resetGraphNPanel();
 		}
 	});
@@ -474,15 +459,15 @@ $(function() {
 	})
 
 	$("#dt-prev-icon").click(function () {
-		graph.goPrev();
+		graph.graphChart.goPrev();
 		resetGraphNPanel();
 	});
 	$("#dt-next-icon").click(function () {
-		graph.goNext();
+		graph.graphChart.goNext();
 		resetGraphNPanel();
 	});
 	$("#dt-now-icon").click(function() {
-		graph.updateCurrentDt(getNowMoment());
+		graph.graphChart.updateCurrentDt(getNowMoment());
 		resetGraphNPanel();
 	});
 
@@ -492,7 +477,7 @@ $(function() {
 
 	resetGraphNPanel();
 
-	graph.getSummary(retrieveSummaryFinished);
+	// graph.graphChart.getSummary(retrieveSummaryFinished);
 });
 
 </script>
@@ -526,9 +511,11 @@ $(function() {
 				<li>
 					<a href="#"><img width="26" height="22" src="{% static 'images/graph-icon.png' %}"><span>Graph</span></a>
 				</li>
-
 				<li>
 					<a href="#"><img width="26" height="23" src="{% static 'images/ranking-icon.png' %}"><span>Ranking</span></a>
+				</li>
+				<li>
+					<a href="#"><img width="26" height="23" src="{% static 'images/progress-icon.png' %}"><span>Progress</span></a>
 				</li>
 				<li>
 					<a href="#"><img width="26" height="24" src="{% static 'images/reports-icon.png' %}"><span>Reports</span></a>
@@ -627,17 +614,76 @@ $(function() {
 					</div>
 				</ul>
 				<ul id="source-choice">
-					<div>
-						<div id="source-choice-header">Compare between Sources 
+					<div class="choice-panel">
+						<div class="choice-header">Compare between Sources 
 							<span style="font-weight: lighter; font-size: 12px;">(Max 5)</span>
-							<span id="source-choice-clear">Clear all</span>
+							<span id="source-choice-clear" class="choice-clear">Clear all</span>
 						</div>
 						<hr>
 						<div id="source-choice-container"></div>
 						<div style="clear: both;"></div>
 					</div>
 				</ul>
-				<ul id="day-choice"></ul>
+				<ul id="day-choice">
+					<div class="choice-panel">
+						<div class="choice-header">Compare between days
+							<span id="day-choice-clear" class="choice-clear">Clear all</span>
+						</div>
+						<hr>
+						<div class="day-choice-block">
+							<div>
+								<div class='circle-checkbox'>
+									<input type='checkbox' id="compare-prev-checkbox"></input>
+									<label for="compare-prev-checkbox"></label>
+								</div>
+								<label for="compare-prev-checkbox" style="color: #F7AF25;">Previous</label>
+							</div>
+							<div>
+								<img src="{% static 'images/compare-previous.png' %}">
+								<span id="compare-prev-date"></span>
+							</div>
+						</div>
+						<div class="day-choice-block" style="left: 200px;">
+							<div>
+								<div class='circle-checkbox'>
+									<input type='checkbox' id="compare-highest-checkbox"></input>
+									<label for="compare-highest-checkbox"></label>
+								</div>
+								<label for="compare-highest-checkbox" style="color: #ED6D43;">Highest</label>
+							</div>
+							<div>
+								<img src="{% static 'images/compare-highest.png' %}">
+								<span id="compare-highest-date"></span>
+							</div>
+						</div>
+						<div class="day-choice-block" style="left: 400px;">
+							<div>
+								<div class='circle-checkbox'>
+									<input type='checkbox' id="compare-lowest-checkbox"></input>
+									<label for="compare-lowest-checkbox"></label>
+								</div>
+								<label for="compare-lowest-checkbox" style="color: #35BC99;">Lowest</label>
+							</div>
+							<div>
+								<img src="{% static 'images/compre-lowest.png' %}">
+								<span id="compare-lowest-date"></span>
+							</div>
+						</div>
+						<div class="day-choice-block" style="left: 600px;">
+							<div>
+								<div class='circle-checkbox'>
+									<input type='checkbox' id="compare-custom-checkbox"></input>
+									<label for="compare-custom-checkbox"></label>
+								</div>
+								<label for="compare-custom-checkbox" style="color: #587EFF;">Custom date selection</label>
+							</div>
+							<div>
+								<img src="{% static 'images/compare-calendar.png' %}">
+								<span id="compare-custom-date"></span>
+							</div>
+						</div>
+					</div>
+				</ul>
 			</div>
 			<div style="clear: both;"></div>
 
@@ -693,7 +739,7 @@ $(function() {
 				</div>
 			</div>
 
-			<a href="#">See Details &#9654;</a>
+			<a href="{% url 'progress' system_code=systems.0.code %}">See Details &#9654;</a>
 		</div>
 		<!-- Summary Ends -->
 

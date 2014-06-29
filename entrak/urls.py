@@ -12,5 +12,6 @@ urlpatterns = patterns('',
     url(r'^(?P<system_code>[\w\-]+)/', include(patterns('',
     	url(r'^graph/$', 'entrak.graph_views.graph_view', name='graph'),
     	url(r'^source_readings/$', 'entrak.graph_views.source_readings_view'),
+    	url(r'^progress/$', 'entrak.progress_views.progress_view', name='progress'),
     ))),
 )

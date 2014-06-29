@@ -1,6 +1,6 @@
 #expand-menu-btn, #unit-choice li, #time-choice li,
 #breadcrumbs p, #calendar, #dt-panel img, #clear-graph, #sub-menu h3,
-#menu-links li, .source-label, #source-choice-clear {
+#menu-links li, .source-label, .choice-clear {
 	cursor: pointer;
 	cursor: hand;
 }
@@ -400,17 +400,15 @@
 	width: 140px;
 }
 
-#source-choice > div {
+.choice-panel{
 	font-size: 13px;
-	width: 643px;
 	padding: 8px 14px 18px 14px;
 	background-color: #c3dbdc;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
 }
-
-#source-choice-header{
+.choice-header{
 	font-weight: bold;
 	font-size: 15px;	
 	height: 18px;
@@ -424,7 +422,7 @@
 	-webkit-border-top-right-radius:6px;
 	border-top-right-radius: 6px;
 }
-#source-choice-clear{
+.choice-clear{
 	position: absolute;
 	right: 8px;
 	font-weight: lighter;
@@ -432,13 +430,17 @@
 	font-size: 12px;
 	margin-top: 3px;
 }
-#source-choice hr{
+.choice-panel hr{
 	width: 100%;
 	height: 2px;
 	background-color: #deecec;
 	border-style: none;
 	margin-top: 3px;
 	margin-bottom: 10px;
+}
+
+#source-choice > div {
+	width: 643px;
 }
 #source-choice-container > div{
 	float: left;
@@ -447,9 +449,16 @@
 	margin-top: 8px;
 	position: relative;
 }
-#source-choice-container input[type=checkbox]{
-	visibility: hidden;
+.source-label{
+	position: absolute;
+	top: 1px;
+	left: 20px;
+	color: #242c36;
 }
+.source-label-disabled{
+	color: #999;
+}
+
 .circle-checkbox{
 	display: inline-block;
 	width: 14px;
@@ -460,6 +469,9 @@
 	-webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
 	-moz-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
 	box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+}
+.circle-checkbox input[type=checkbox]{
+	visibility: hidden;
 }
 .circle-checkbox label {
 	display: block;
@@ -482,14 +494,34 @@
 .circle-checkbox input:checked + label {
 	background: #B3E850;
 }
-.source-label{
-	position: absolute;
-	top: 1px;
-	left: 20px;
-	color: #242c36;
+
+#day-choice > div {
+	width: 762px;
+	height: 72px;
 }
-.source-label-disabled{
-	color: #999;
+.day-choice-block{
+	display: inline-block;
+	width: 180px;
+	height: 38px;
+	position: absolute;
+}
+.day-choice-block > div:last-child{
+	margin-top: 8px;
+}
+.day-choice-block > div > label{
+	margin-left: 2px;
+}
+#compare-prev-checkbox:checked + label {
+	background: #F7AF25;
+}
+#compare-highest-checkbox:checked + label {
+	background: #ED6D43;
+}
+#compare-lowest-checkbox:checked + label {
+	background: #35BC99;
+}
+#compare-custom-checkbox:checked + label {
+	background: #587EFF;
 }
 
 #summary{
