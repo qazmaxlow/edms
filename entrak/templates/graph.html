@@ -382,6 +382,8 @@ $(function() {
 
 		graph.unitCategorys.push(unitCategory);
 	{% endfor %}
+	$("#unit-label").text(graph.unitCategorys[0].name);
+	$("#unit-bg").attr("src", "{% get_static_prefix %}images/unit/" + graph.unitCategorys[0].bgImg);
 
 	$("#y-axis-slider").slider({
 		orientation: "vertical",
@@ -478,8 +480,12 @@ $(function() {
 		});
 		unitChoice.append(unitLiDom);
 	});
-	unitChoice.find("li").click(function () {
-		graph.graphChart.updateUnit(parseInt($(this).attr("unit_category"), 10));
+	unitChoice.find("li").each(function (unitCategoryIdx) {
+		$(this).click({unitCategory: graph.unitCategorys[unitCategoryIdx]}, function(event) {
+			graph.graphChart.updateUnit(event.data.unitCategory.id);
+			$("#unit-label").text(event.data.unitCategory.name);
+			$("#unit-bg").attr("src", "{% get_static_prefix %}images/unit/" + event.data.unitCategory.bgImg);
+		});
 	});
 
 	var timeRangeTypes = [graph.graphChart.RANGE_TYPE_DAY, graph.graphChart.RANGE_TYPE_NIGHT,
@@ -812,6 +818,7 @@ $(function() {
 
 		<!-- Main Graph -->
 		<div id="graph-panel" class="graph-component">
+			<img id="unit-bg">
 			<div id="chart"></div>
 			<div id="y-axis-slider"></div>
 			<div id="x-axis-slider"></div>
@@ -833,6 +840,8 @@ $(function() {
 				</div>
 				<p style="clear: both;"></p>
 			</div>
+
+			<div id="unit-label"></div>
 		</div>
 		<!-- Main Graph Ends -->
 
