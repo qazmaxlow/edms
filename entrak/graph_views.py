@@ -78,6 +78,28 @@ def source_readings_view(request, system_code):
 	return Utils.json_response(grouped_readings)
 
 @csrf_exempt
+def highest_lowest_source_readings_view(request, system_code):
+	source_infos = json.loads(request.POST.get('source_infos'))
+	range_type = request.POST.get('range_type')
+	tz_offset = int(request.POST.get('tz_offset'))/60
+	is_highest = (request.POST.get('is_highest') == "true")
+	sort_order = -1 if is_highest else 1
+
+	source_readings_info = SourceManager.get_most_readings(source_infos['source_ids'], range_type, tz_offset, sort_order)
+	source_readings_info['name'] = source_infos['name']
+
+	total_readings = {}
+	for _, readings in source_readings_info['readings'].items():
+		for timestamp, val in readings.items():
+			if timestamp in total_readings:
+				total_readings[timestamp] += val
+			else:
+				total_readings[timestamp] = val
+	source_readings_info['readings'] = total_readings
+
+	return Utils.json_response(source_readings_info)
+
+@csrf_exempt
 def summary_view(request, system_code):
 	source_ids = json.loads(request.POST.get('source_ids'))
 	range_type = request.POST.get('range_type')

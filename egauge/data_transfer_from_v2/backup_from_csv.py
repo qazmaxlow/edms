@@ -90,7 +90,7 @@ for dir_name in file_loop_generator:
 						client.entrak[DATA_MAPPING[data_type]['collection']].insert([{
 							'source_id': source_id,
 							'datetime': datetime_obj,
-							'value': source_values[idx]
+							'value': float(source_values[idx])
 						} for (idx, source_id) in enumerate(source_ids)], continue_on_error=True)
 					except pymongo.errors.DuplicateKeyError, e:
 						# do nothing

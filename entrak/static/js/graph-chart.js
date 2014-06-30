@@ -8,8 +8,20 @@ function GraphChart(graphEleSel, yAxisSliderEleSel, xAxisSliderEleSel, retrieveR
 	this.systemTree = null;
 	this.totalSeries = null;
 	this.sourceSeries = null;
+	this.lastSeries = null;
+	this.highestSeries = null;
+	this.lowestSeries = null;
+	this.customSeries = null;
+	this.showLast = false;
+	this.showHighest = false;
+	this.showLowest = false;
+	this.showCustom = false;
+	this.highestDt = null;
+	this.lowestDt = null;
+	this.customDt = null;
 	this.currentRangeType = null;
 	this.currentDt = null;
+	this.lastStartEndDt = null;
 	this.currentSelectedSourceIdx = [];
 	this.currentXaxisOptions = {};
 	this.currentUnit = null;
@@ -70,29 +82,104 @@ GraphChart.prototype.SERIES_BASE_OPTIONS = {
 	clickable: false,
 };
 
-GraphChart.prototype.getSourceReadings = function () {
+GraphChart.prototype._retrieveSourceReadings = function(groupedSourceInfos, startDt, endDt, doneFunc) {
 	var graphChartThis = this;
-	var startEndDt = this.genCurrentStartEndDt();
-	var lastStartEndDt = this.genLastStartEndDt(startEndDt.startDt, this.currentRangeType);
-	var grouped_source_infos = this.getGroupedSourceInfos();
+
 	$.ajax({
 		type: "POST",
 		url: "../source_readings/",
 		data: {
-			grouped_source_infos: JSON.stringify(grouped_source_infos),
+			grouped_source_infos: JSON.stringify(groupedSourceInfos),
 			range_type: graphChartThis.API_RANGE_TYPES[graphChartThis.currentRangeType],
 			unit_category_id: graphChartThis.currentUnit,
-			start_dt: startEndDt.startDt.unix(),
-			end_dt: startEndDt.endDt.unix(),
-			last_start_dt: lastStartEndDt.startDt.unix(),
-			last_end_dt: lastStartEndDt.endDt.unix(),
+			start_dt: startDt.unix(),
+			end_dt: endDt.unix(),
 		},
 	}).done(function(data) {
+		doneFunc(data);
+	});
+}
+
+GraphChart.prototype.getSourceReadings = function () {
+	var graphChartThis = this;
+	var startEndDt = this.genCurrentStartEndDt();
+	this.lastStartEndDt = this.genLastStartEndDt(startEndDt.startDt, this.currentRangeType);
+	var groupedSourceInfos = this.getGroupedSourceInfos();
+
+	this._retrieveSourceReadings(groupedSourceInfos, startEndDt.startDt, startEndDt.endDt, function(data) {
 		graphChartThis.updateXAxisOptions(startEndDt.startDt);
 		graphChartThis.transformReadingToChartDatasets(data);
 		graphChartThis.plotGraphChart();
 
 		graphChartThis.retrieveReadingCallback();
+	});
+}
+
+GraphChart.prototype.getLastSourceReadings = function() {
+	var graphChartThis = this;
+	var startEndDt = this.lastStartEndDt;
+	var groupedSourceInfos = [{name: 'Previous', source_ids: graphChartThis.getAllSourceIds()}];
+	this._retrieveSourceReadings(groupedSourceInfos, startEndDt.startDt, startEndDt.endDt, function(data) {
+		graphChartThis.transformReadingToSeries(data[0], 'lastSeries');
+		graphChartThis.lastSeries.color = "#F7AF25";
+		graphChartThis.updateCompareChoice();
+	});
+}
+
+GraphChart.prototype.getCompareSourceReadings = function() {
+	var graphChartThis = this;
+	var startEndDt = this.customDt;
+	var groupedSourceInfos = [{name: 'Custom', source_ids: graphChartThis.getAllSourceIds()}];
+	this._retrieveSourceReadings(groupedSourceInfos, startEndDt.startDt, startEndDt.endDt, function(data) {
+		graphChartThis.transformReadingToSeries(data[0], 'customSeries');
+		graphChartThis.customSeries.color = "#587EFF";
+		graphChartThis.updateCompareChoice();
+	});
+}
+
+GraphChart.prototype.getHighestSourceReadings = function(doneCallback) {
+	var graphChartThis = this;
+	var sourceInfos = {name: 'Highest', source_ids: graphChartThis.getAllSourceIds()};
+
+	$.ajax({
+		type: "POST",
+		url: "../highest_lowest_source_readings/",
+		data: {
+			source_infos: JSON.stringify(sourceInfos),
+			range_type: graphChartThis.API_RANGE_TYPES[graphChartThis.currentRangeType],
+			tz_offset: graphChartThis.currentDt.toDate().getTimezoneOffset(),
+			is_highest: true,
+		},
+	}).done(function(data) {
+		graphChartThis.highestDt = moment.unix(data["timestamp"]);
+		graphChartThis.transformReadingToSeries(data, 'highestSeries');
+		graphChartThis.highestSeries.color = "#ED6D43";
+		graphChartThis.updateCompareChoice();
+
+		doneCallback();
+	});
+}
+
+GraphChart.prototype.getLowestSourceReadings = function(doneCallback) {
+	var graphChartThis = this;
+	var sourceInfos = {name: 'Lowest', source_ids: graphChartThis.getAllSourceIds()};
+
+	$.ajax({
+		type: "POST",
+		url: "../highest_lowest_source_readings/",
+		data: {
+			source_infos: JSON.stringify(sourceInfos),
+			range_type: graphChartThis.API_RANGE_TYPES[graphChartThis.currentRangeType],
+			tz_offset: graphChartThis.currentDt.toDate().getTimezoneOffset(),
+			is_highest: false,
+		},
+	}).done(function(data) {
+		graphChartThis.lowestDt = moment.unix(data["timestamp"]);
+		graphChartThis.transformReadingToSeries(data, 'lowestSeries');
+		graphChartThis.lowestSeries.color = "#35BC99";
+		graphChartThis.updateCompareChoice();
+
+		doneCallback();
 	});
 }
 
@@ -166,7 +253,8 @@ GraphChart.prototype.updateUnit = function (newUnit) {
 
 GraphChart.prototype.transformReadingToChartDatasets = function (groupedReadings) {
 	var graphChartThis = this;
-	graphChartThis.sourceSeries = [];
+	this.sourceSeries = [];
+	
 	var totalReadings = {};
 
 	$.each(groupedReadings, function(groupIdx, readingInfos) {
@@ -187,6 +275,7 @@ GraphChart.prototype.transformReadingToChartDatasets = function (groupedReadings
 				totalReadings[transformedX] = readingVal;
 			}
 		});
+
 		graphChartThis.sourceSeries.push(series);
 	});
 
@@ -194,6 +283,24 @@ GraphChart.prototype.transformReadingToChartDatasets = function (groupedReadings
 	$.each(totalReadings, function(readingTimestamp, readingVal) {
 		graphChartThis.totalSeries.data.push([readingTimestamp, readingVal]);
 	});
+}
+
+GraphChart.prototype.transformReadingToSeries = function (readingInfo, targetName) {
+	var graphChartThis = this;
+
+	var series = $.extend(
+		true,
+		{
+			label: readingInfo.name,
+			data: []
+		},
+		graphChartThis.SERIES_BASE_OPTIONS);
+	$.each(readingInfo.readings, function(readingTimestamp, readingVal) {
+		var transformedX = graphChartThis.transformXCoordinate(readingTimestamp);
+		series.data.push([transformedX, readingVal]);
+	});
+
+	this[targetName] = series;
 }
 
 GraphChart.prototype.setSeriesLineColor = function (sourceSeries) {
@@ -310,6 +417,30 @@ GraphChart.prototype.updateSourceChoice = function (selectedSeriesIdxs) {
 	this.plot.draw();
 }
 
+GraphChart.prototype.updateCompareChoice = function () {
+	var graphChartThis = this;
+	var willPlotSeries = [];
+	if (this.showLast && graphChartThis.lastSeries !== null) {
+		willPlotSeries.push(graphChartThis.lastSeries);
+	}
+	if (this.showHighest && graphChartThis.highestSeries !== null) {
+		willPlotSeries.push(graphChartThis.highestSeries);
+	}
+	if (this.showLowest && graphChartThis.lowestSeries !== null) {
+		willPlotSeries.push(graphChartThis.lowestSeries);
+	}
+	if (this.showCustom && graphChartThis.customSeries !== null) {
+		willPlotSeries.push(graphChartThis.customSeries);
+	}
+
+	willPlotSeries.splice(0, 0, this.totalSeries);
+
+	this.plot.setData(willPlotSeries);
+	this.refreshYAxisSlider();
+	this.plot.setupGrid();
+	this.plot.draw();
+}
+
 function roundMax(val) {
 	var targetRoundDigit = val.toFixed(0).length - 2;
 	return Math.ceil(val/(Math.pow(10, targetRoundDigit))+3)*Math.pow(10, targetRoundDigit);
@@ -317,11 +448,16 @@ function roundMax(val) {
 
 GraphChart.prototype.refreshYAxisSlider = function () {
 	var graphThis = this;
-	// first series is total and should be largest
-	var targetDatas = (graphThis.plot.getData()[0].dataOrg !== undefined) ? graphThis.plot.getData()[0].dataOrg : graphThis.plot.getData()[0].data;
-	var currentYMax = Math.max.apply(Math, targetDatas.map(function(val) {
-		return val[1];
-	}));
+
+	var currentYMax = 0;
+	$.each(graphThis.plot.getData(), function(seriesIdx, series) {
+		var targetDatas = (series.dataOrg !== undefined) ? series.dataOrg : series.data;
+		var yMax = Math.max.apply(Math, targetDatas.map(function(val) {
+			return val[1];
+		}));
+		currentYMax = Math.max(currentYMax, yMax);
+	});
+
 	currentYMax = roundMax(currentYMax);
 	graphThis.plot.getAxes().yaxis.options.max = currentYMax;
 	var yMin = currentYMax*0.25;
@@ -446,11 +582,22 @@ GraphChart.prototype.getDtDetlaUnit = function (rangeType) {
 }
 
 GraphChart.prototype.genLastStartEndDt = function (targetDt, rangeType) {
-	var deltaUnit = this.getDtDetlaUnit(rangeType);
-	var endDtUnit = null;
+	var deltaUnit = null;
+	if (rangeType === this.RANGE_TYPE_DAY
+		|| rangeType === this.RANGE_TYPE_NIGHT
+		|| rangeType === this.RANGE_TYPE_WEEK) {
+		deltaUnit = 'w';
+	} else if (rangeType === this.RANGE_TYPE_MONTH) {
+		deltaUnit = 'M';
+	} else if (rangeType === this.RANGE_TYPE_YEAR) {
+		deltaUnit = 'y';
+	} else if (rangeType === this.RANGE_TYPE_HOUR) {
+		deltaUnit = 'h'
+	}
 	var lastStartDt = moment(targetDt).subtract(deltaUnit, 1);
+	var lastEndDt = moment(lastStartDt).add(this.getDtDetlaUnit(rangeType), 1);
 
-	return {startDt: lastStartDt, endDt: targetDt};
+	return {startDt: lastStartDt, endDt: lastEndDt};
 }
 
 GraphChart.prototype.updateXAxisOptions = function (startDt) {
@@ -510,6 +657,10 @@ GraphChart.prototype.updateXAxisOptions = function (startDt) {
 GraphChart.prototype.updateCurrentDt = function (newDt) {
 	this.currentDt = newDt;
 	this.getSourceReadings();
+}
+
+GraphChart.prototype.updateCompareDt = function (newDt) {
+	this.customDt = this.genStartEndDt(newDt, this.currentRangeType);;
 }
 
 GraphChart.prototype.updateCurrentRangeType = function (newRangeType) {

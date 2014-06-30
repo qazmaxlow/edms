@@ -4,6 +4,7 @@ import calendar
 import time
 import datetime
 from bson.code import Code
+from bson.objectid import ObjectId
 from mongoengine import connection
 from mongoengine import Q
 from .models import Source, SourceReadingMin, SourceReadingHour,\
@@ -314,3 +315,36 @@ class SourceManager:
 			group_readings[str(reading.source_id)][dt_key] = reading.value
 
 		return group_readings
+
+	@staticmethod
+	def get_most_readings(source_ids, range_type, tz_offset, sort_order):
+		range_type_mapping = {
+			Utils.RANGE_TYPE_HOUR: {'compare_collection': 'source_reading_hour'},
+			Utils.RANGE_TYPE_DAY: {'compare_collection': 'source_reading_day'},
+			Utils.RANGE_TYPE_WEEK: {'compare_collection': 'source_reading_week'},
+			Utils.RANGE_TYPE_MONTH: {'compare_collection': 'source_reading_month'},
+			Utils.RANGE_TYPE_YEAR: {'compare_collection': 'source_reading_year'},
+		}
+
+		mapped_info = range_type_mapping[range_type]
+		current_db_conn = connection.get_db()
+		result = current_db_conn[mapped_info['compare_collection']].aggregate([
+			{"$match": {'source_id': {'$in': [ObjectId(source_id) for source_id in source_ids]}}},
+			{
+				"$group": {
+					"_id": "$datetime",
+					"total": {"$sum": "$value"}
+				}
+			},
+			{"$sort": {"total": sort_order}},
+			{"$limit": 1}
+		])
+
+		start_dt = pytz.utc.localize(result["result"][0]["_id"])
+		end_dt = Utils.gen_end_dt(range_type, start_dt, tz_offset)
+
+		info = {}
+		info['timestamp'] = calendar.timegm(start_dt.utctimetuple())
+		info['readings'] = SourceManager.get_readings(source_ids, range_type, start_dt, end_dt)
+
+		return info

@@ -1,6 +1,7 @@
 #expand-menu-btn, #unit-choice li, #time-choice li,
 #breadcrumbs p, #calendar, #dt-panel img, #clear-graph, #sub-menu h3,
-#menu-links li, .source-label, .choice-clear {
+#menu-links li, .source-label, .choice-clear, .compare-choice-block label,
+#compare-calendar-icon {
 	cursor: pointer;
 	cursor: hand;
 }
@@ -499,16 +500,16 @@
 	width: 762px;
 	height: 72px;
 }
-.day-choice-block{
+.compare-choice-block{
 	display: inline-block;
 	width: 180px;
 	height: 38px;
 	position: absolute;
 }
-.day-choice-block > div:last-child{
+.compare-choice-block > div:last-child{
 	margin-top: 8px;
 }
-.day-choice-block > div > label{
+.compare-choice-block > div > label{
 	margin-left: 2px;
 }
 #compare-prev-checkbox:checked + label {
@@ -522,6 +523,14 @@
 }
 #compare-custom-checkbox:checked + label {
 	background: #587EFF;
+}
+.compare-disabled label{
+	color: #999999 !important;
+}
+#compare-dt-picker {
+	position: absolute;
+	display: inline-block;
+	visibility: hidden;
 }
 
 #summary{
