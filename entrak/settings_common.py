@@ -40,7 +40,6 @@ INSTALLED_APPS = (
     'mongoengine.django.mongo_auth',
     'egauge',
     'system',
-    'unit',
     'user',
     'entrak',
 )

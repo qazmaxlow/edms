@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block extra_head %}
+{{block.super}}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="{% static 'js/superfish-master/dist/css/superfish.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'js/superfish-master/dist/css/superfish-vertical.css' %}">
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script src="{% static 'js/arboreal.js' %}"></script>
+<script src="{% static 'js/moment.min.js' %}"></script>
+<script src="{% static 'js/superfish-master/dist/js/superfish.min.js' %}"></script>
+{% endblock %}
+
+{% block extra_script %}
+
+<script type="text/javascript">
+
+var page = {};
+
+$(function() {
+	{% for system in user_systems %}
+		var system = {};
+		system.code = '{{system.code}}';
+		system.name = '{{system.name}}';
+		system.path = '{{system.path}}';
+		system.sources = {};
+
+		{% if forloop.first %}
+		page.userSystemTree = new Arboreal(null, system);
+		{% else %}
+		parentCodes = $(system.path.split(',')).filter(function(){
+			return this != "";
+		});
+		parentCode = parentCodes[parentCodes.length - 1];
+		parentNode = page.userSystemTree.find(function (node) {
+			return node.data.code == parentCode;
+		});
+		parentNode.appendChild(system);
+		{% endif %}
+	{% endfor %}
+
+	var menuTreeDom = null;
+	page.userSystemTree.traverseDown(function (node) {
+		var aDom = $('<a href="#" onclick="return false;">' + node.data.name +'</a>');
+		aDom.click({node: node}, function(event) {
+			if (page.userSystemTree.data.node !== event.data.node) {
+				window.location.href = "/" + event.data.node.data.code + "/graph/";
+			}
+		});
+		var appendDom = $('<li system_code="' + node.data.code + '">');
+		appendDom.append(aDom);
+
+		var parentNode = node.parent;
+		if (parentNode !== null) {
+			var targetDom = null;
+			var parentDom = menuTreeDom.find('*').andSelf().filter("li[system_code='" + parentNode.data.code + "']");
+			var ulDoms = parentDom.find("> ul");
+			if (ulDoms.length === 0) {
+				targetDom = $("<ul></ul>");
+				parentDom.append(targetDom);
+			} else {
+				targetDom = ulDoms;
+			}
+
+			targetDom.append(appendDom);
+		} else {
+			menuTreeDom = appendDom;
+		}
+	});
+	$("#system-menu ul").append(menuTreeDom);
+
+	$('#system-menu').superfish({
+		// TODO: remove after ricard tunning
+		delay: 80000,
+	});
+
+	$("#{% block selected-menu-link-id %}menu-link-home{% endblock %}").addClass('menu-links-selected');
+});
+</script>
+
+{% endblock %}
+
+{% block content %}
+
+<div id="page-container">
+
+	<!-- Left Sidebar Main -->
+	<div id="menu">
+
+		<!-- User's Company Logo -->			
+		<div id="user-logo">
+			<img src="{% static 'images/user-logo-bg.png' %}" usemap="#config">
+			
+			<map name="config">
+				<area shape="circle" coords="164,22,25" href="#" alt="config">
+			</map>
+		</div>
+				
+		<!-- User's Company Name -->
+		<h2 id="company">OTIS WORLD WIDE</h2>
+
+		<!-- Main Sidebar Links -->
+		<nav>
+			<ul id="menu-links">
+				<li id="menu-link-home">
+					<a href="#"><img width="26" height="22" src="{% static 'images/home-icon.png' %}"><span>Home</span></a>
+				</li>
+				<li id="menu-link-graph">
+					<a href="{% url 'graph' system_code=systems.0.code %}"><img width="26" height="22" src="{% static 'images/graph-icon.png' %}"><span>Graph</span></a>
+				</li>
+				<li id="menu-link-ranking">
+					<a href="#"><img width="26" height="23" src="{% static 'images/ranking-icon.png' %}"><span>Ranking</span></a>
+				</li>
+				<li id="menu-link-progress">
+					<a href="{% url 'progress' system_code=systems.0.code %}"><img width="26" height="23" src="{% static 'images/progress-icon.png' %}"><span>Progress</span></a>
+				</li>
+				<li id="menu-link-reports">
+					<a href="#"><img width="26" height="24" src="{% static 'images/reports-icon.png' %}"><span>Reports</span></a>
+				</li>
+				<li id="menu-link-display">
+					<a href="#"><img width="26" height="22" src="{% static 'images/display-icon.png' %}"><span>Display</span></a>
+				</li>
+				<li id="menu-link-pro-v">
+					<a href="#"><img width="31" height="21" src="{% static 'images/prov-icon.png' %}"><span>Pro V</span></a>
+				</li>
+				<li id="menu-link-settings">
+					<a href="#"><img width="23" height="22" src="{% static 'images/settings-icon.png' %}"><span>Settings</span></a>
+				</li>
+				<li>
+					<a href="#"><img width="23" height="24" src="{% static 'images/logout-icon.png' %}"><span>Logout</span></a>
+				</li>
+			</ul>
+		</nav>
+
+	</div>	
+	<!-- Left Sidebar Main End -->
+	
+	<!-- Main Content -->
+	<div class="right-content">
+		
+		<!-- Blue Bar top -->
+		<div class="blue-bar"></div>
+
+		<!-- Header -->
+		<div id="header">
+
+			<!-- Image Carousel - Illustrations -->
+			<div id="image-carousel"></div>
+			
+			<!-- Header Wording -->
+			<div id="heading"><h1> Graph - Days </h1></div>
+			<div id="sub-heading"><h2> Check this out!</h2></div>
+
+		</div>
+		<!-- Header End -->
+		
+		<!-- Blue Bar bottom -->
+		<div class="blue-bar"></div>
+
+		<div id="sub-heading-facilities">
+
+			<ul id="system-menu" class="sf-menu">
+				<li>
+					<a><img src="{% static 'images/menu-icon.png' %}"></a>
+					<ul></ul>
+				</li>
+			</ul>
+
+			<span><h3>You are viewing:</h3></span>
+			<span id="breadcrumbs-path">
+				{% for code in system_path_components %}
+				<a href="{% url 'graph' system_code=code %}">{{code}}</a>
+					{% if not forloop.last %}
+					<span>-</span>
+					{% endif %}
+				{% endfor %}
+			</span>
+		</div>
+
+		{% block page_content %}{% endblock %}
+
+	</div>
+</div>
+
+{% block footer %}
+<footer class="site-footer">
+	<p style="clear: both;"></p>
+	<p id="copyright">Copyright © En-trak Pte Ltd 2014. All rights reserved.</p>
+	<a href="#"><img id="entrak-logo" src="{% static 'images/entrakLogo.png' %}"></a>
+	<p id="disclaimer_main"><a class="disclaimer" href="#">Print </a>
+	<a class="disclaimer" href="#"> |  Contact & Support</a>
+	<a class="disclaimer" href="#"> |  Settings</a>
+	<a href="#" class="disclaimer"> |  Legal </a>
+	<a class="disclaimer" href="#"> |  Download</a></p>				
+	<p style="clear: both;"></p>
+</footer>
+{% endblock %}
+
+{% endblock %}

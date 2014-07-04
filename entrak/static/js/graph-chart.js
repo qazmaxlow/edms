@@ -126,7 +126,7 @@ GraphChart.prototype.getLastSourceReadings = function() {
 	});
 }
 
-GraphChart.prototype.getCompareSourceReadings = function() {
+GraphChart.prototype.getCustomSourceReadings = function() {
 	var graphChartThis = this;
 	var startEndDt = this.customDt;
 	var groupedSourceInfos = [{name: 'Custom', source_ids: graphChartThis.getAllSourceIds()}];

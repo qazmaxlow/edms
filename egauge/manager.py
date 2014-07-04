@@ -283,7 +283,9 @@ class SourceManager:
 		return result
 
 	@staticmethod
-	def get_sources(system_code, system_path):
+	def get_sources(system):
+		system_code = system.code
+		system_path = system.path
 		if not system_path:
 			target_path = ',%s,'%system_code
 		else:
@@ -295,26 +297,37 @@ class SourceManager:
 	@staticmethod
 	def get_readings(source_ids, range_type, start_dt, end_dt):
 		range_type_mapping = {
-			Utils.RANGE_TYPE_HOUR: {'target_class': SourceReadingMin, 'dt_formatter': '%M'},
-			Utils.RANGE_TYPE_DAY: {'target_class': SourceReadingHour, 'dt_formatter': '%H'},
-			Utils.RANGE_TYPE_WEEK: {'target_class': SourceReadingDay, 'dt_formatter': '%w'},
-			Utils.RANGE_TYPE_MONTH: {'target_class': SourceReadingDay, 'dt_formatter': '%d'},
-			Utils.RANGE_TYPE_YEAR: {'target_class': SourceReadingMonth, 'dt_formatter': '%m'},
+			Utils.RANGE_TYPE_HOUR: {'target_class': SourceReadingMin},
+			Utils.RANGE_TYPE_DAY: {'target_class': SourceReadingHour},
+			Utils.RANGE_TYPE_WEEK: {'target_class': SourceReadingDay},
+			Utils.RANGE_TYPE_MONTH: {'target_class': SourceReadingDay},
+			Utils.RANGE_TYPE_YEAR: {'target_class': SourceReadingMonth},
 		}
+		target_class = range_type_mapping[range_type]['target_class']
 
-		readings = range_type_mapping[range_type]['target_class'].objects(
+		return SourceManager.get_readings_with_target_class(source_ids, target_class, start_dt, end_dt)
+
+	@staticmethod
+	def get_readings_with_target_class(source_ids, target_class, start_dt, end_dt):
+		readings = target_class.objects(
 			source_id__in=source_ids,
 			datetime__gte=start_dt,
 			datetime__lt=end_dt)
 
-		group_readings = {}
-		for source_id in source_ids:
-			group_readings[source_id] = {}
-		for reading in readings:
-			dt_key = calendar.timegm(reading.datetime.utctimetuple())
-			group_readings[str(reading.source_id)][dt_key] = reading.value
+		return SourceManager.group_readings_with_source_id(readings)
 
-		return group_readings
+	@staticmethod
+	def group_readings_with_source_id(readings):
+		grouped_readings = {}
+
+		for reading in readings:
+			if str(reading.source_id) not in grouped_readings:
+				grouped_readings[str(reading.source_id)] = {}
+
+			dt_key = calendar.timegm(reading.datetime.utctimetuple())
+			grouped_readings[str(reading.source_id)][dt_key] = reading.value
+
+		return grouped_readings
 
 	@staticmethod
 	def get_most_readings(source_ids, range_type, tz_offset, sort_order):

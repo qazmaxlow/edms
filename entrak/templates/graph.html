@@ -1,28 +1,27 @@
-{% extends "base.html" %}
+{% extends "page_base.html" %}
 
 {% load static %}
 {% load staticfiles %}
 
 {% block extra_head %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+{{block.super}}
+
 <link rel="stylesheet" type="text/css" href="{% static 'css/graph.css' %}">
-<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-<link rel="stylesheet" type="text/css" href="{% static 'js/superfish-master/dist/css/superfish.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'js/superfish-master/dist/css/superfish-vertical.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'js/datetimepicker-master/jquery.datetimepicker.css' %}">
-<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-<script src="{% static 'js/arboreal.js' %}"></script>
 <script src="{% static 'js/flot/jquery.flot.min.js' %}"></script>
 <script src="{% static 'js/growraf/jquery.flot.growraf.js' %}"></script>
 <script src="{% static 'js/tooltip/jquery.flot.tooltip.min.js' %}"></script>
 <script src="{% static 'js/flot/jquery.flot.selection-customized.js' %}"></script>
-<script src="{% static 'js/moment.min.js' %}"></script>
-<script src="{% static 'js/superfish-master/dist/js/superfish.min.js' %}"></script>
 <script src="{% static 'js/morris.js-0.4.3/raphael-min.js' %}"></script>
 <script src="{% static 'js/morris.js-0.4.3/morris-customized.js' %}"></script>
 <script src="{% static 'js/datetimepicker-master/jquery.datetimepicker-customized.js' %}"></script>
 <script src="{% static 'js/graph-chart.js' %}"></script>
+{% endblock %}
+
+{% block selected-menu-link-id %}menu-link-graph{% endblock %}
+
+{% block extra_script %}
+{{block.super}}
 
 <script type="text/javascript">
 
@@ -294,7 +293,7 @@ function setupComparePanel() {
 		if ($(this).prop("checked")) {
 			graph.graphChart.showCustom = true;
 			if (graph.graphChart.customDt !== null) {
-				graph.graphChart.getCompareSourceReadings();
+				graph.graphChart.getCustomSourceReadings();
 			}
 		} else {
 			graph.graphChart.showCustom = false;
@@ -309,27 +308,6 @@ function setupComparePanel() {
 }
 
 $(function() {
-
-	{% for system in user_systems %}
-		var system = {};
-		system.code = '{{system.code}}';
-		system.name = '{{system.name}}';
-		system.path = '{{system.path}}';
-		system.sources = {};
-
-		{% if forloop.first %}
-		graph.userSystemTree = new Arboreal(null, system);
-		{% else %}
-		parentCodes = $(system.path.split(',')).filter(function(){
-			return this != "";
-		});
-		parentCode = parentCodes[parentCodes.length - 1];
-		parentNode = graph.userSystemTree.find(function (node) {
-			return node.data.code == parentCode;
-		});
-		parentNode.appendChild(system);
-		{% endif %}
-	{% endfor %}
 
 	graph.graphChart = new GraphChart(
 		"#chart",
@@ -507,39 +485,6 @@ $(function() {
 
 	graph.graphChart.getSourceReadings();
 
-	var menuTreeDom = null;
-	graph.userSystemTree.traverseDown(function (node) {
-		var aDom = $('<a href="#" onclick="return false;">' + node.data.name +'</a>');
-		aDom.click({node: node}, function(event) {
-			if (graph.userSystemTree.data.node !== event.data.node) {
-				window.location.href = "/" + event.data.node.data.code + "/graph/";
-			}
-		});
-		var appendDom = $('<li system_code="' + node.data.code + '">');
-		appendDom.append(aDom);
-
-		var parentNode = node.parent;
-		if (parentNode !== null) {
-			var targetDom = null;
-			var parentDom = menuTreeDom.find('*').andSelf().filter("li[system_code='" + parentNode.data.code + "']");
-			var ulDoms = parentDom.find("> ul");
-			if (ulDoms.length === 0) {
-				targetDom = $("<ul></ul>");
-				parentDom.append(targetDom);
-			} else {
-				targetDom = ulDoms;
-			}
-
-			targetDom.append(appendDom);
-		} else {
-			menuTreeDom = appendDom;
-		}
-	});
-	$("#system-menu ul").append(menuTreeDom);
-
-	$('#system-menu').superfish({
-	});
-
 	Date.parseDate = function( input, format ){
 		return moment(input,format).toDate();
 	};
@@ -558,7 +503,7 @@ $(function() {
 			graph.graphChart.updateCompareDt(moment(input).startOf('hour'));
 			$("#compare-custom-date").text(formatCompareDtStr(graph.graphChart.customDt.startDt, graph.graphChart.currentRangeType))
 			if (graph.graphChart.showCustom) {
-				graph.graphChart.getCompareSourceReadings();
+				graph.graphChart.getCustomSourceReadings();
 			}
 		}
 	});
@@ -607,286 +552,170 @@ $(function() {
 </script>
 {% endblock %}
 
-{% block content %}
-
-<div id="page-container">
-
-	<!-- Left Sidebar Main -->
-	<div id="menu">
-
-		<!-- User's Company Logo -->			
-		<div id="user-logo">
-			<img src="{% static 'images/user-logo-bg.png' %}" usemap="#config">
-			
-			<map name="config">
-				<area shape="circle" coords="164,22,25" href="#" alt="config">
-			</map>
-		</div>
-				
-		<!-- User's Company Name -->
-		<h2 id="company">OTIS WORLD WIDE</h2>
-
-		<!-- Main Sidebar Links -->
-		<nav>
-			<ul id="menu-links">
-				<li>
-					<a href="#"><img width="26" height="22" src="{% static 'images/home-icon.png' %}"><span>Home</span></a>
-				</li>
-				<li>
-					<a href="#"><img width="26" height="22" src="{% static 'images/graph-icon.png' %}"><span>Graph</span></a>
-				</li>
-				<li>
-					<a href="#"><img width="26" height="23" src="{% static 'images/ranking-icon.png' %}"><span>Ranking</span></a>
-				</li>
-				<li>
-					<a href="#"><img width="26" height="23" src="{% static 'images/progress-icon.png' %}"><span>Progress</span></a>
-				</li>
-				<li>
-					<a href="#"><img width="26" height="24" src="{% static 'images/reports-icon.png' %}"><span>Reports</span></a>
-				</li>
-				<li>
-					<a href="#"><img width="26" height="22" src="{% static 'images/display-icon.png' %}"><span>Display</span></a>
-				</li>
-				<li>
-					<a href="#"><img width="31" height="21" src="{% static 'images/prov-icon.png' %}"><span>Pro V</span></a>
-				</li>
-				<li>
-					<a href="#"><img width="23" height="22" src="{% static 'images/settings-icon.png' %}"><span>Settings</span></a>
-				</li>
-				<li>
-					<a href="#"><img width="23" height="24" src="{% static 'images/logout-icon.png' %}"><span>Logout</span></a>
-				</li>
-			</ul>
-		</nav>
-
-	</div>	
-	<!-- Left Sidebar Main End -->
-	
-	<!-- Main Content -->
-	<div class="right-content">
-		
-		<!-- Blue Bar top -->
-		<div class="blue-bar"></div>
-
-		<!-- Header -->
-		<div id="header">
-
-			<!-- Image Carousel - Illustrations -->
-			<div id="image-carousel"></div>
-			
-			<!-- Header Wording -->
-			<div id="heading"><h1> Graph - Days </h1></div>
-			<div id="sub-heading"><h2> Check this out!</h2></div>
-
-		</div>
-		<!-- Header End -->
-		
-		<!-- Blue Bar bottom -->
-		<div class="blue-bar"></div>
-
-		<div id="sub-heading-facilities">
-
-			<ul id="system-menu" class="sf-menu">
-				<li>
-					<a><img src="{% static 'images/menu-icon.png' %}"></a>
-					<ul></ul>
-				</li>
-			</ul>
-
-			<span><h3>You are viewing:</h3></span>
-			<span id="breadcrumbs-path">
-				{% for code in system_path_components %}
-				<a href="{% url 'graph' system_code=code %}">{{code}}</a>
-					{% if not forloop.last %}
-					<span>-</span>
-					{% endif %}
-				{% endfor %}
-			</span>
+{% block page_content %}
+<div class="graph-component">
+	<div id="graph-panel-header">
+		<!-- Sub Menu Item -->
+		<div id="sub-menu">
+			<!-- write this way to remove space between inline-blocks -->
+			<!-- http://css-tricks.com/fighting-the-space-between-inline-block-elements/ -->
+			<h3 id="sub-menu-unit">
+				Unit</h3><h3 id="sub-menu-time">
+				Time</h3><h3 id="sub-menu-source">
+				Source</h3><h3 id="sub-menu-days">Compare</h3>
+			<img id="expand-menu-btn" src="{% static 'images/expandable_button.png' %}">
 		</div>
 
-		<div class="graph-component">
-			<div id="graph-panel-header">
-				<!-- Sub Menu Item -->
-				<div id="sub-menu">
-					<!-- write this way to remove space between inline-blocks -->
-					<!-- http://css-tricks.com/fighting-the-space-between-inline-block-elements/ -->
-					<h3 id="sub-menu-unit">
-						Unit</h3><h3 id="sub-menu-time">
-						Time</h3><h3 id="sub-menu-source">
-						Source</h3><h3 id="sub-menu-days">Compare</h3>
-					<img id="expand-menu-btn" src="{% static 'images/expandable_button.png' %}">
-				</div>
-
-				<!-- Date -->
-				<p id="dt-panel">
-					<img id="dt-next-icon">
-					<img id="dt-now-icon">
-					<img id="dt-prev-icon">
-					<span id="current-dt"></span>
-					<span style='clear: both;'></span>				
-				</p>
-			</div>
-
-			<!-- Sub Menu Item Links -->
-			<div id="sub-menu-links">
-				<ul id="unit-choice"></ul>
-				<ul id="time-choice">
-					<div id="select-dt-section">
-						<div>CUSTOM SELECT</div>
-						<img id="custom-calendar-icon">
-						<input type="text" id="current-dt-picker">
-					</div>
-				</ul>
-				<ul id="source-choice">
-					<div class="choice-panel">
-						<div class="choice-header">Compare between Sources 
-							<span style="font-weight: lighter; font-size: 12px;">(Max 5)</span>
-							<span id="source-choice-clear" class="choice-clear">Clear all</span>
-						</div>
-						<hr>
-						<div id="source-choice-container"></div>
-						<div style="clear: both;"></div>
-					</div>
-				</ul>
-				<ul id="day-choice">
-					<div class="choice-panel">
-						<div class="choice-header">Compare between days
-							<span id="compare-choice-clear" class="choice-clear">Clear all</span>
-						</div>
-						<hr>
-						<div class="compare-choice-block">
-							<div>
-								<div class='circle-checkbox'>
-									<input type='checkbox' id="compare-prev-checkbox"></input>
-									<label for="compare-prev-checkbox"></label>
-								</div>
-								<label for="compare-prev-checkbox" style="color: #F7AF25;">Previous</label>
-							</div>
-							<div>
-								<img src="{% static 'images/compare-previous.png' %}">
-								<span id="compare-prev-date"></span>
-							</div>
-						</div>
-						<div class="compare-choice-block" style="left: 200px;">
-							<div class="compare-highest-lowest-container">
-								<div class='circle-checkbox'>
-									<input type='checkbox' id="compare-highest-checkbox"></input>
-									<label for="compare-highest-checkbox"></label>
-								</div>
-								<label for="compare-highest-checkbox" style="color: #ED6D43;">Highest</label>
-							</div>
-							<div>
-								<img src="{% static 'images/compare-highest.png' %}">
-								<span id="compare-highest-date"></span>
-							</div>
-						</div>
-						<div class="compare-choice-block" style="left: 400px;">
-							<div class="compare-highest-lowest-container">
-								<div class='circle-checkbox'>
-									<input type='checkbox' id="compare-lowest-checkbox"></input>
-									<label for="compare-lowest-checkbox"></label>
-								</div>
-								<label for="compare-lowest-checkbox" style="color: #35BC99;">Lowest</label>
-							</div>
-							<div>
-								<img src="{% static 'images/compre-lowest.png' %}">
-								<span id="compare-lowest-date"></span>
-							</div>
-						</div>
-						<div class="compare-choice-block" style="left: 600px;">
-							<div>
-								<div class='circle-checkbox'>
-									<input type='checkbox' id="compare-custom-checkbox"></input>
-									<label for="compare-custom-checkbox"></label>
-								</div>
-								<label for="compare-custom-checkbox" style="color: #587EFF;">Custom date selection</label>
-							</div>
-							<div>
-								<img id="compare-calendar-icon" src="{% static 'images/compare-calendar.png' %}">
-								<input type="text" id="compare-dt-picker">
-								<span id="compare-custom-date"></span>
-							</div>
-						</div>
-					</div>
-				</ul>
-			</div>
-			<div style="clear: both;"></div>
-
-			<!-- Simple bar for decoration -->
-			<div id="main-graph-bar"></div>
-		</div>
-
-		<!-- Main Graph -->
-		<div id="graph-panel" class="graph-component">
-			<img id="unit-bg">
-			<div id="chart"></div>
-			<div id="y-axis-slider"></div>
-			<div id="x-axis-slider"></div>
-
-			<div id="selection-summary">
-				<div id="selection-summary-left">
-					<p id="selection-summary-at">Amount of energy consumed on:<span></span></p>
-					<p id="selection-summary-from">from:<span></span></p>
-					<p id="selection-summary-to">to:<span></span></p>
-					<p id="selection-summary-equal">which equates to:</p>
-					<p id="selection-summary-value-container">
-						<span id="selection-summary-value"></span>
-						<span id="selection-summary-unit"></span>
-					</p>
-				</div>
-				<div id="selection-summary-right">
-					<div id="selection-summary-chart"></div>
-					<p id="selection-summary-source"></p>
-				</div>
-				<p style="clear: both;"></p>
-			</div>
-
-			<div id="unit-label"></div>
-		</div>
-		<!-- Main Graph Ends -->
-
-		<!-- Summary -->
-		<div id="summary">
-			<div id="summary-header"><img src="{% static 'images/summary.png' %}"></div>
-
-			<div id="summary-image">
-				<div id="last-summary">
-					<p class="summary-text">This time last week you had used </p>
-					<img class="electricity-icon" src="{% static 'images/red-electricity.png' %}">
-					<span id="last-consumption-val" class="consumption-val"></span><span class="consumption-unit">kwh</span>
-				</div>
-
-				<div id="this-summary">
-					<p class="summary-text">So far today you have used </p>
-					<img class="electricity-icon" src="{% static 'images/green-electricity.png' %}">
-					<span id="this-consumption-val" class="consumption-val"></span><span class="consumption-unit">kwh</span>
-				</div>
-
-				<div id="summary-percentage">
-					<span></span>
-				</div>
-			</div>
-
-			<a href="{% url 'progress' system_code=systems.0.code %}">See Details &#9654;</a>
-		</div>
-		<!-- Summary Ends -->
-
+		<!-- Date -->
+		<p id="dt-panel">
+			<img id="dt-next-icon">
+			<img id="dt-now-icon">
+			<img id="dt-prev-icon">
+			<span id="current-dt"></span>
+			<span style='clear: both;'></span>				
+		</p>
 	</div>
-	<!-- Main Content Ends -->
+
+	<!-- Sub Menu Item Links -->
+	<div id="sub-menu-links">
+		<ul id="unit-choice"></ul>
+		<ul id="time-choice">
+			<div id="select-dt-section">
+				<div>CUSTOM SELECT</div>
+				<img id="custom-calendar-icon">
+				<input type="text" id="current-dt-picker">
+			</div>
+		</ul>
+		<ul id="source-choice">
+			<div class="choice-panel">
+				<div class="choice-header">Compare between Sources 
+					<span style="font-weight: lighter; font-size: 12px;">(Max 5)</span>
+					<span id="source-choice-clear" class="choice-clear">Clear all</span>
+				</div>
+				<hr>
+				<div id="source-choice-container"></div>
+				<div style="clear: both;"></div>
+			</div>
+		</ul>
+		<ul id="day-choice">
+			<div class="choice-panel">
+				<div class="choice-header">Compare between days
+					<span id="compare-choice-clear" class="choice-clear">Clear all</span>
+				</div>
+				<hr>
+				<div class="compare-choice-block">
+					<div>
+						<div class='circle-checkbox'>
+							<input type='checkbox' id="compare-prev-checkbox"></input>
+							<label for="compare-prev-checkbox"></label>
+						</div>
+						<label for="compare-prev-checkbox" style="color: #F7AF25;">Previous</label>
+					</div>
+					<div>
+						<img src="{% static 'images/compare-previous.png' %}">
+						<span id="compare-prev-date"></span>
+					</div>
+				</div>
+				<div class="compare-choice-block" style="left: 200px;">
+					<div class="compare-highest-lowest-container">
+						<div class='circle-checkbox'>
+							<input type='checkbox' id="compare-highest-checkbox"></input>
+							<label for="compare-highest-checkbox"></label>
+						</div>
+						<label for="compare-highest-checkbox" style="color: #ED6D43;">Highest</label>
+					</div>
+					<div>
+						<img src="{% static 'images/compare-highest.png' %}">
+						<span id="compare-highest-date"></span>
+					</div>
+				</div>
+				<div class="compare-choice-block" style="left: 400px;">
+					<div class="compare-highest-lowest-container">
+						<div class='circle-checkbox'>
+							<input type='checkbox' id="compare-lowest-checkbox"></input>
+							<label for="compare-lowest-checkbox"></label>
+						</div>
+						<label for="compare-lowest-checkbox" style="color: #35BC99;">Lowest</label>
+					</div>
+					<div>
+						<img src="{% static 'images/compre-lowest.png' %}">
+						<span id="compare-lowest-date"></span>
+					</div>
+				</div>
+				<div class="compare-choice-block" style="left: 600px;">
+					<div>
+						<div class='circle-checkbox'>
+							<input type='checkbox' id="compare-custom-checkbox"></input>
+							<label for="compare-custom-checkbox"></label>
+						</div>
+						<label for="compare-custom-checkbox" style="color: #587EFF;">Custom date selection</label>
+					</div>
+					<div>
+						<img id="compare-calendar-icon" src="{% static 'images/compare-calendar.png' %}">
+						<input type="text" id="compare-dt-picker">
+						<span id="compare-custom-date"></span>
+					</div>
+				</div>
+			</div>
+		</ul>
+	</div>
+	<div style="clear: both;"></div>
+
+	<!-- Simple bar for decoration -->
+	<div id="main-graph-bar"></div>
 </div>
-<!-- Page Container Ends -->
 
-<!-- Footer  -->
-<footer class="site-footer">
-	<p style="clear: both;"></p>
-	<p id="copyright">Copyright © En-trak Pte Ltd 2014. All rights reserved.</p>
-	<a href="#"><img id="entrak-logo" src="{% static 'images/entrakLogo.png' %}"></a>
-	<p id="disclaimer_main"><a class="disclaimer" href="#">Print </a>
-	<a class="disclaimer" href="#"> |  Contact & Support</a>
-	<a class="disclaimer" href="#"> |  Settings</a>
-	<a href="#" class="disclaimer"> |  Legal </a>
-	<a class="disclaimer" href="#"> |  Download</a></p>				
-	<p style="clear: both;"></p>
-</footer>
+<!-- Main Graph -->
+<div id="graph-panel" class="graph-component">
+	<img id="unit-bg">
+	<div id="chart"></div>
+	<div id="y-axis-slider"></div>
+	<div id="x-axis-slider"></div>
 
+	<div id="selection-summary">
+		<div id="selection-summary-left">
+			<p id="selection-summary-at">Amount of energy consumed on:<span></span></p>
+			<p id="selection-summary-from">from:<span></span></p>
+			<p id="selection-summary-to">to:<span></span></p>
+			<p id="selection-summary-equal">which equates to:</p>
+			<p id="selection-summary-value-container">
+				<span id="selection-summary-value"></span>
+				<span id="selection-summary-unit"></span>
+			</p>
+		</div>
+		<div id="selection-summary-right">
+			<div id="selection-summary-chart"></div>
+			<p id="selection-summary-source"></p>
+		</div>
+		<p style="clear: both;"></p>
+	</div>
+
+	<div id="unit-label"></div>
+</div>
+<!-- Main Graph Ends -->
+
+<!-- Summary -->
+<div id="summary">
+	<div id="summary-header"><img src="{% static 'images/summary.png' %}"></div>
+
+	<div id="summary-image">
+		<div id="last-summary">
+			<p class="summary-text">This time last week you had used </p>
+			<img class="electricity-icon" src="{% static 'images/red-electricity.png' %}">
+			<span id="last-consumption-val" class="consumption-val"></span><span class="consumption-unit">kwh</span>
+		</div>
+
+		<div id="this-summary">
+			<p class="summary-text">So far today you have used </p>
+			<img class="electricity-icon" src="{% static 'images/green-electricity.png' %}">
+			<span id="this-consumption-val" class="consumption-val"></span><span class="consumption-unit">kwh</span>
+		</div>
+
+		<div id="summary-percentage">
+			<span></span>
+		</div>
+	</div>
+
+	<a href="{% url 'progress' system_code=systems.0.code %}">See Details &#9654;</a>
+</div>
 {% endblock %}

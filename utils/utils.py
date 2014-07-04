@@ -2,6 +2,8 @@ import logging
 import datetime
 import json
 import pytz
+import math
+import calendar
 from django.http import HttpResponse
 
 class Utils:
@@ -38,15 +40,21 @@ class Utils:
 			end_time = start_time + datetime.timedelta(days=7)
 		elif range_type == Utils.RANGE_TYPE_MONTH:
 			start_time = input_datetime.replace(day=1, hour=0, minute=0)
-			if start_time.month == 12:
-				end_time = start_time.replace(year=(start_time.year+1), month=1)
-			else:
-				end_time = start_time.replace(month=(start_time.month+1))
+			end_time = Utils.add_month(start_time, 1)
 		elif range_type == Utils.RANGE_TYPE_YEAR:
 			start_time = input_datetime.replace(month=1, day=1, hour=0, minute=0)
 			end_time = start_time.replace(year=(start_time.year+1))
 
 		return (start_time, end_time)
+
+	@staticmethod
+	def add_month(target_dt, val):
+		result_month = target_dt.month - 1 + val
+		result_year = target_dt.year + (result_month/12)
+		result_month = result_month % 12 + 1
+		result_day = min(target_dt.day, calendar.monthrange(result_year, result_month)[1])
+
+		return target_dt.replace(year=result_year, month=result_month, day=result_day)
 
 	@staticmethod
 	def gen_end_dt(range_type, start_dt, tz_offset):
@@ -58,10 +66,7 @@ class Utils:
 			end_dt = start_dt + datetime.timedelta(days=7)
 		elif range_type == Utils.RANGE_TYPE_MONTH:
 			transform_dt = start_dt - datetime.timedelta(hours=tz_offset)
-			if transform_dt.month == 12:
-				end_dt = transform_dt.replace(year=(transform_dt.year+1), month=1)
-			else:
-				end_dt = transform_dt.replace(month=(transform_dt.month+1))
+			end_dt = Utils.add_month(transform_dt, 1)
 			end_dt += datetime.timedelta(hours=tz_offset)
 		elif range_type == Utils.RANGE_TYPE_YEAR:
 			end_dt = start_dt.replace(year=(start_dt.year+1))
