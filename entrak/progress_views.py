@@ -11,6 +11,8 @@ from egauge.models import SourceReadingMonth
 from utils import calculation
 from settings import CO2_CATEGORY_ID, MONEY_CATEGORY_ID
 
+REDUCTION_LEVELS = [0, 5, 10, 15, 20, 25, 30, 40]
+
 def assign_source_under_system(systems, sources):
 	result = {}
 	for system in systems:
@@ -20,7 +22,7 @@ def assign_source_under_system(systems, sources):
 
 	return result
 
-def get_last_12_month_co2_consumption(unit_code, unit_rates, source, readings, current_dt):
+def get_last_12_month_co2_consumption(unit_code, unit_rates, baselines, source, readings, current_dt):
 	source_tz = pytz.timezone(source.tz)
 	end_dt = current_dt.astimezone(source_tz)
 	end_dt = end_dt.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
@@ -30,7 +32,11 @@ def get_last_12_month_co2_consumption(unit_code, unit_rates, source, readings, c
 	for month_diff in xrange(12):
 		target_dt = Utils.add_month(end_dt, -month_diff)
 		timestamp = calendar.timegm(target_dt.utctimetuple())
-		energy_usage = target_readings.get(timestamp, 0)
+		if timestamp in target_readings:
+			energy_usage = target_readings[timestamp]
+		else:
+			# use baseline val for the missing month
+			energy_usage = baselines[target_dt.month]['usage']
 		co2_consumption += calculation.transform_reading(unit_code, timestamp,
 			energy_usage, CO2_CATEGORY_ID, unit_rates)
 
@@ -105,7 +111,7 @@ def progress_view(request, system_code=None):
 		total_baseline_co2_consumption += baseline_co2_consumption
 
 		for source in attached_sources:
-			co2_consumption = get_last_12_month_co2_consumption(co2_unit_code, unit_rates,
+			co2_consumption = get_last_12_month_co2_consumption(co2_unit_code, unit_rates, baseline_monthly_usages,
 				source, grouped_monthly_readings, current_dt)
 			last_12_months_co2_consumption += co2_consumption
 
@@ -113,12 +119,29 @@ def progress_view(request, system_code=None):
 				unit_rates, baseline_monthly_usages, source, grouped_monthly_readings, current_dt)
 			total_co2_saving += savings['co2']
 			total_money_saving += savings['money']
-			print total_co2_saving, total_money_saving
+
+	first_day_record = datetime.datetime(3000, 1, 1)
+	first_day_tz = None
+	for source in sources:
+		if source.first_record < first_day_record:
+			first_day_record = source.first_record
+			first_day_tz = source.tz
+	first_day_record = pytz.utc.localize(first_day_record).astimezone(pytz.timezone(first_day_tz))
 
 	m = systems_info
 	m['percengate_change'] = (last_12_months_co2_consumption-total_baseline_co2_consumption)/total_baseline_co2_consumption*100.0
 	m['last_12_months_co2_consumption'] = int(last_12_months_co2_consumption/1000)
 	m['total_co2_saving'] = int(total_co2_saving/1000)
 	m['total_money_saving'] = total_money_saving
+	m['first_day_record'] = first_day_record
+
+	archived_level = REDUCTION_LEVELS[0]
+	target_level = REDUCTION_LEVELS[1]
+	for level_idx, level in enumerate(REDUCTION_LEVELS):
+		if m['percengate_change'] >= level:
+			archived_level = level
+			target_level = REDUCTION_LEVELS[min(level_idx+1, len(REDUCTION_LEVELS)-1)]
+	m['archived_level'] = archived_level
+	m['target_level'] = target_level
 
 	return render_to_response('progress.html', m)

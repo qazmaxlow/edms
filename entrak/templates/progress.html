@@ -1,3 +1,88 @@
 {% extends "page_base.html" %}
 
+{% load entrak_extras %}
+{% load static %}
+{% load humanize %}
+
+{% block extra_head %}
+{{block.super}}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/progress.css' %}">
+{% endblock %}
+
 {% block selected-menu-link-id %}menu-link-progress{% endblock %}
+
+{% block page_content %}
+
+<div>Over the past 12 months you have emitted<span class="{% if percengate_change >= 0 %}positive-saving{% else %}negative-saving{% endif %}"> {{percengate_change|abs_float|round_if_larger_than_10}}% {% if percengate_change >= 0 %}LESS{% else %}MORE{% endif %} </span>than your baseline</div>
+<hr>
+
+<div id="saving-container" style="background-image:url('{% static 'images/progress/factory-bg.png' %}');">
+	<div id="saving-block">
+		<div id="co2-saving-info" class="saving-info">
+			<img src="{% static 'images/progress/co2.png' %}">
+			<div>Which is equivalent to<br><span>{{total_co2_saving|abs_int|intcomma}} tons</span> of CO2<br>emissions {% if total_co2_saving >= 0 %}reduced{% else %}increase{% endif %},<br>since {{first_day_record|date:"jS M Y"}}</div>
+		</div>
+
+		<div class="separate-line"></div>
+
+		<div id="target-block">
+			<div>
+				<img src="{% static 'images/progress/award.png' %}">
+				<div id="archived_percentage">{{archived_level}}%</div>
+			</div>
+			<div>Next target would be</div>
+			<div>{{target_level}}% REDUCTION</div>
+		</div>
+
+		<div class="separate-line"></div>
+
+		<div id="money-saving-info" class="saving-info">
+			<img src="{% static 'images/progress/money.png' %}">
+			<div>Saving up to<br><span>${{total_money_saving|abs_int|intcomma}}</span><br>worth of money</div>
+		</div>
+
+	</div>
+</div>
+
+<div id="carbon-footprint-container">
+	<div id="carbon-footprint-bar">
+		<img src="{% static 'images/progress/carbon-footprint-bar.png' %}">
+		<div>Total carbon Footprint</div>
+	</div>
+	<div id="carbon-footprint-desc">{{last_12_months_co2_consumption}} tons of CO2 were emitted over the last 12 months</div>
+
+	<div id="carbon-footprint-block">
+		<div id="tennis-courts-info" class="footprint-info">
+			<div><img src="{% static 'images/progress/arrow-down.png' %}"></div>
+			<div><img src="{% static 'images/progress/tennis.png' %}"></div>
+			<div>
+				<span> tennis courts</span><br>filled with solar panels would<br>be needed to cancel out<br>
+				this carbon footparint
+			</div>
+		</div>
+
+		<div class="separate-line"></div>
+
+		<div id="elephants-info" class="footprint-info">
+			<div><img src="{% static 'images/progress/arrow-down.png' %}"></div>
+			<div><img src="{% static 'images/progress/elephant.png' %}"></div>
+			<div>The weight of<br><span></span><br><span>elephants</span></div>
+		</div>
+
+		<div class="separate-line"></div>
+
+		<div id="taxi-info" class="footprint-info">
+			<div><img src="{% static 'images/progress/arrow-down.png' %}"></div>
+			<div><img src="{% static 'images/progress/taxi.png' %}"></div>
+			<div>
+				The emissions of<br><span> taxi trips</span><br>
+				from Hong Kong Airport<br>
+				to Time Square
+			</div>
+		</div>
+
+	</div>
+</div>
+
+{% endblock %}

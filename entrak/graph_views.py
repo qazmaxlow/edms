@@ -100,6 +100,6 @@ def summary_view(request, system_code):
 	usage = calculation.sum_all_readings(source_readings)
 
 	last_source_readings = SourceManager.get_readings(source_ids, range_type, last_start_dt, last_end_dt)
-	last_usage = sum_all_readings(last_source_readings)
+	last_usage = calculation.sum_all_readings(last_source_readings)
 
 	return Utils.json_response({'realtime': usage, 'last': last_usage})
