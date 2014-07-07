@@ -12,6 +12,11 @@ from utils import calculation
 from settings import CO2_CATEGORY_ID, MONEY_CATEGORY_ID
 
 REDUCTION_LEVELS = [0, 5, 10, 15, 20, 25, 30, 40]
+HK_TAXI_TRIP = {'multiplicand': 0.157, 'from': 'Hong Kong Airport', 'to': 'Times Square'}
+TAXI_TRIP_INFO = {
+	'hk': HK_TAXI_TRIP,
+	'sg': {'multiplicand': 0.253, 'from': 'Singapore Airport', 'to': 'Marina Bay Sands'},
+}
 
 def assign_source_under_system(systems, sources):
 	result = {}
@@ -130,7 +135,6 @@ def progress_view(request, system_code=None):
 
 	m = systems_info
 	m['percengate_change'] = (last_12_months_co2_consumption-total_baseline_co2_consumption)/total_baseline_co2_consumption*100.0
-	m['last_12_months_co2_consumption'] = int(last_12_months_co2_consumption/1000)
 	m['total_co2_saving'] = int(total_co2_saving/1000)
 	m['total_money_saving'] = total_money_saving
 	m['first_day_record'] = first_day_record
@@ -143,5 +147,15 @@ def progress_view(request, system_code=None):
 			target_level = REDUCTION_LEVELS[min(level_idx+1, len(REDUCTION_LEVELS)-1)]
 	m['archived_level'] = archived_level
 	m['target_level'] = target_level
+
+	m['last_12_months_co2_consumption'] = int(last_12_months_co2_consumption/1000)
+	m['elephant_num'] = int(round(last_12_months_co2_consumption*0.0033))
+	m['tennis_court_num'] = int(round(last_12_months_co2_consumption*0.0000246))
+	taxi_trip_info = TAXI_TRIP_INFO.get(current_system.city, HK_TAXI_TRIP)
+	m['taxi_trip'] = {
+		'count': int(round(last_12_months_co2_consumption*taxi_trip_info['multiplicand'])),
+		'from': taxi_trip_info['from'],
+		'to': taxi_trip_info['to']
+	}
 
 	return render_to_response('progress.html', m)
