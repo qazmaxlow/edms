@@ -49,16 +49,16 @@ GraphChart.prototype.UNIT_KWH = -1;
 GraphChart.prototype.TOTAL_SERIES_BASE_OPTIONS = {
 	color: '#81D51D',
 	label: 'Total',
-	lines: {
-		lineWidth: 2.5,
-		show: true
-	},
-	points: {
-		radius: 4,
-		symbol: 'circle',
-		fillColor: "#81D51D",
-		show: true
-	},
+	// lines: {
+	// 	lineWidth: 2.5,
+	// 	show: true
+	// },
+	// points: {
+	// 	radius: 4,
+	// 	symbol: 'circle',
+	// 	fillColor: "#81D51D",
+	// 	show: true
+	// },
 	bars: {
 		barWidth: 0.4,
 		align: "center",

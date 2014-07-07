@@ -1,6 +1,6 @@
 #expand-menu-btn, #unit-choice li, #time-choice li,
 #breadcrumbs p, #calendar, #dt-panel div, #clear-graph, #sub-menu h3,
-#menu-links li, .source-label, .choice-clear, .compare-choice-block label,
+.source-label, .choice-clear, .compare-choice-block label,
 #compare-calendar-icon {
 	cursor: pointer;
 	cursor: hand;
@@ -27,6 +27,7 @@
 	top: -296px;
 	left: 20px;
 	background: url(../images/line.png) no-repeat #fff;
+	border-color: #e6e7e8;
 
 	-moz-box-shadow:    inset 0 0 3px #d5d5d5;
     -webkit-box-shadow: inset 0 0 3px #d5d5d5;
@@ -62,7 +63,7 @@
 	top: -296px;
 	left: 96px;
 	background: url(../images/x-line.png) no-repeat #fff;
-
+	border-color: #e6e7e8;
 	
 	-moz-box-shadow:    inset 0 0 3px #d5d5d5;
     -webkit-box-shadow: inset 0 0 3px #d5d5d5;
@@ -150,7 +151,7 @@
 	width: 185px;
 	height: 2px;
 	background-color: #9bceda;
-	margin-top: 6px;
+	margin-top: 11px;
 	margin-bottom: 8px;
 }
 #selection-summary-value-container {
@@ -190,9 +191,10 @@
 }
 
 #graph-panel{
-	background-color: #f9f9f9;
+	background-color: #fcfcfc;
 	height: 380px;
 	margin-top: 0px;
+	padding-top: 20px;
 }
 
 #breadcrumbs{
@@ -317,6 +319,9 @@
 	font-size: 10pt;
 	color: #2e3e52;
 	padding-left: 10px;
+}
+.legend table {
+	background-color: #fcfcfc;
 }
 
 #sub-menu h3{
@@ -446,7 +451,7 @@
 	border-radius: 5px;
 }
 .choice-header{
-	font-weight: lighter;
+	font-weight: bolder;
 	font-size: 14px;	
 	height: 18px;
 	color: #699eab;
@@ -577,7 +582,7 @@
 
 #unit-label {
 	position: absolute;
-	top: 10px;
+	top: 30px;
 	left: 120px;
 	font-weight: bold;
 	font-size: 12pt;
@@ -659,8 +664,8 @@
 }
 #summary > a{
 	position: absolute;
-	right: 2px;
-	bottom: -12px;
+	right: 8px;
+	bottom: 10px;
 	text-decoration: none;
 	font-size: 12px;
 	margin-top: 90px;

@@ -40,6 +40,7 @@ function updateDonutChart(data) {
 	donutChart.on('select', function(i, row){
 		$("#selection-summary-value").text(row.orgValue.toFixed(0));
 		$("#selection-summary-source").text(row.label);
+		$("#selection-summary-source").css("color", donutChart.options.colors[i]);
 
 		var currentUnitCategory = $.grep(graph.unitCategorys, function(unitCategory) {
 			return (unitCategory.id === graph.graphChart.currentUnit);
@@ -134,6 +135,25 @@ function resetGraphNPanel() {
 		compareHighestLowestContainer.find("input").prop('disabled', false);
 		compareHighestLowestContainer.removeClass('compare-disabled');
 	}
+
+	var compareBetweenText;
+	var compareTargetText;
+	if (graph.graphChart.currentRangeType === graph.graphChart.RANGE_TYPE_DAY) {
+		compareBetweenText = 'days';
+		compareTargetText = graph.graphChart.currentDt.format('dddd');
+	} else if (graph.graphChart.currentRangeType === graph.graphChart.RANGE_TYPE_NIGHT) {
+		compareBetweenText = compareTargetText = 'nights';
+	} else if (graph.graphChart.currentRangeType === graph.graphChart.RANGE_TYPE_WEEK) {
+		compareBetweenText = compareTargetText = 'weeks';
+	} else if (graph.graphChart.currentRangeType === graph.graphChart.RANGE_TYPE_MONTH) {
+		compareBetweenText = compareTargetText = 'months';
+	} else if (graph.graphChart.currentRangeType === graph.graphChart.RANGE_TYPE_YEAR) {
+		compareBetweenText = compareTargetText = 'years';
+	} else if (graph.graphChart.currentRangeType === graph.graphChart.RANGE_TYPE_HOUR) {
+		compareBetweenText = compareTargetText = 'hours';
+	}
+	$("#compare-between").text(compareBetweenText);
+	$(".compare-target-text").text(compareTargetText);
 
 	$("#x-axis-slider").slider("values", [0, 0]);
 
@@ -444,7 +464,7 @@ $(function() {
 			$(this).css({transform: 'rotate(0deg)'});
 		}
 		menuLinks.slideToggle(700, "easeOutBounce", function() {});
-	});
+	}).css({transform: 'rotate(180deg)'});
 
 	var unitChoice = $('#unit-choice');
 	$.each(graph.unitCategorys, function(idx, unitCategory) {
@@ -466,9 +486,9 @@ $(function() {
 		});
 	});
 
-	var timeRangeTypes = [graph.graphChart.RANGE_TYPE_DAY, graph.graphChart.RANGE_TYPE_NIGHT,
-		graph.graphChart.RANGE_TYPE_WEEK, graph.graphChart.RANGE_TYPE_MONTH,
-		graph.graphChart.RANGE_TYPE_YEAR, graph.graphChart.RANGE_TYPE_HOUR];
+	var timeRangeTypes = [graph.graphChart.RANGE_TYPE_YEAR, graph.graphChart.RANGE_TYPE_MONTH,
+		graph.graphChart.RANGE_TYPE_WEEK, graph.graphChart.RANGE_TYPE_DAY,
+		graph.graphChart.RANGE_TYPE_NIGHT, graph.graphChart.RANGE_TYPE_HOUR];
 	var timeChoice = $("#time-choice");
 	$.each(timeRangeTypes, function(idx, rangeType) {
 		var timeLiDom = $("<li id='time-choice-" + rangeType + "-icon' range_type='" + rangeType + "'></li>");
@@ -565,7 +585,7 @@ $(function() {
 			<h3 id="sub-menu-unit">
 				Unit</h3><h3 id="sub-menu-time">
 				Time</h3><h3 id="sub-menu-source">
-				Source</h3><h3 id="sub-menu-days">Compare</h3>
+				End-use</h3><h3 id="sub-menu-days">Compare</h3>
 			<img id="expand-menu-btn" src="{% static 'images/expandable_button.png' %}">
 		</div>
 
@@ -602,7 +622,7 @@ $(function() {
 		</ul>
 		<ul id="day-choice">
 			<div class="choice-panel">
-				<div class="choice-header">Compare between days
+				<div class="choice-header">Compare between <span id="compare-between">days</span>
 					<span id="compare-choice-clear" class="choice-clear">Clear all</span>
 				</div>
 				<hr>
@@ -612,7 +632,7 @@ $(function() {
 							<input type='checkbox' id="compare-prev-checkbox"></input>
 							<label for="compare-prev-checkbox"></label>
 						</div>
-						<label for="compare-prev-checkbox" style="color: #F7AF25;">Previous</label>
+						<label for="compare-prev-checkbox" style="color: #F7AF25;">Previous <span class="compare-target-text"></span></label>
 					</div>
 					<div>
 						<img src="{% static 'images/compare-previous.png' %}">
@@ -625,7 +645,7 @@ $(function() {
 							<input type='checkbox' id="compare-highest-checkbox"></input>
 							<label for="compare-highest-checkbox"></label>
 						</div>
-						<label for="compare-highest-checkbox" style="color: #ED6D43;">Highest</label>
+						<label for="compare-highest-checkbox" style="color: #ED6D43;">Highest <span class="compare-target-text"></span></label>
 					</div>
 					<div>
 						<img src="{% static 'images/compare-highest.png' %}">
@@ -638,7 +658,7 @@ $(function() {
 							<input type='checkbox' id="compare-lowest-checkbox"></input>
 							<label for="compare-lowest-checkbox"></label>
 						</div>
-						<label for="compare-lowest-checkbox" style="color: #35BC99;">Lowest</label>
+						<label for="compare-lowest-checkbox" style="color: #35BC99;">Lowest <span class="compare-target-text"></span></label>
 					</div>
 					<div>
 						<img src="{% static 'images/compre-lowest.png' %}">
@@ -677,7 +697,7 @@ $(function() {
 
 	<div id="selection-summary">
 		<div id="selection-summary-left">
-			<p id="selection-summary-at">Amount of energy consumed on:<span></span></p>
+			<p id="selection-summary-at">Amount of energy consumed on: <span></span></p>
 			<p id="selection-summary-from">from:<span></span></p>
 			<p id="selection-summary-to">to:<span></span></p>
 			<p id="selection-summary-line"></p>

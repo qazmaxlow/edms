@@ -92,15 +92,13 @@ $(function() {
 
 		<!-- User's Company Logo -->			
 		<div id="user-logo">
-			<img src="{% static 'images/user-logo-bg.png' %}" usemap="#config">
-			
-			<map name="config">
-				<area shape="circle" coords="164,22,25" href="#" alt="config">
-			</map>
+			<div class="logo-circle-bound" style="background-image: url('https://fbcdn-profile-a.akamaihd.net/hprofile-ak-frc3/t1/c47.14.172.172/p200x200/422237_395524407163824_1138246441_n.jpg');">
+			</div>
+			<img src="{% static 'images/user-logo-bg.png' %}">
 		</div>
 				
 		<!-- User's Company Name -->
-		<h2 id="company">OTIS WORLD WIDE</h2>
+		<h2 id="company">{{systems.0.name|upper}}</h2>
 
 		<!-- Main Sidebar Links -->
 		<nav>
