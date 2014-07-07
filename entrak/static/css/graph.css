@@ -27,7 +27,6 @@
 	top: -296px;
 	left: 20px;
 	background: url(../images/line.png) no-repeat #fff;
-	/*border: 1px #e6e7e8;*/
 
 	-moz-box-shadow:    inset 0 0 3px #d5d5d5;
     -webkit-box-shadow: inset 0 0 3px #d5d5d5;
@@ -147,8 +146,12 @@
 	font-weight: bold;
 	padding-left: 29px;
 }
-#selection-summary-equal{
-	margin-top: 9px;
+#selection-summary-line{
+	width: 185px;
+	height: 2px;
+	background-color: #9bceda;
+	margin-top: 6px;
+	margin-bottom: 8px;
 }
 #selection-summary-value-container {
 	margin-top: 7px;
@@ -332,6 +335,8 @@
 #sub-menu h3:hover {
 	background-color: #7fd51e;
 	background: -webkit-gradient(linear, left top, left bottom, from(#aee428), to(#67cd18));
+	background: -moz-linear-gradient(#aee428, #67cd18);
+	background: linear-gradient(linear, left top, left bottom, from(#aee428), to(#67cd18));
 }
 #sub-menu-unit {
 	border-top-left-radius: 5px;
@@ -406,6 +411,9 @@
 	width: 200px;
 	height: 61px;
 	margin-left: 30px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
 }
 #custom-select-title {
 	font-size: 8pt;
