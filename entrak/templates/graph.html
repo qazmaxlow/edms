@@ -167,7 +167,7 @@ function retrieveSummaryFinished() {
 	$("#this-consumption-val").text(graph.graphChart.realtimeConsumption.toFixed(0));
 
 	var diffPercentage = ((Math.abs(graph.graphChart.realtimeConsumption - graph.graphChart.lastConsumption)/graph.graphChart.realtimeConsumption)*100).toFixed(1);
-	$("#summary-percentage span").text(diffPercentage);
+	$("#summary-percentage-number").text(diffPercentage);
 
 	var summaryBgImg = null;
 	if (graph.graphChart.lastConsumption > graph.graphChart.realtimeConsumption) {
@@ -570,13 +570,13 @@ $(function() {
 		</div>
 
 		<!-- Date -->
-		<p id="dt-panel">
-			<img id="dt-next-icon">
-			<img id="dt-now-icon">
-			<img id="dt-prev-icon">
+		<div id="dt-panel">
+			<div id="dt-next-icon"></div>
+			<div id="dt-now-icon"></div>
+			<div id="dt-prev-icon"></div>
 			<span id="current-dt"></span>
 			<span style='clear: both;'></span>				
-		</p>
+		</div>
 	</div>
 
 	<!-- Sub Menu Item Links -->
@@ -584,8 +584,8 @@ $(function() {
 		<ul id="unit-choice"></ul>
 		<ul id="time-choice">
 			<div id="select-dt-section">
-				<div>CUSTOM SELECT</div>
-				<img id="custom-calendar-icon">
+				<div id="custom-select-title">CUSTOM SELECT</div>
+				<div id="custom-calendar-icon"></div>
 				<input type="text" id="current-dt-picker">
 			</div>
 		</ul>
@@ -715,7 +715,8 @@ $(function() {
 		</div>
 
 		<div id="summary-percentage">
-			<span></span>
+			<span id="summary-percentage-number"></span>
+			<span id="summary-percentage-symbol">%</span>
 		</div>
 	</div>
 

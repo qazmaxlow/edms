@@ -1,5 +1,5 @@
 #expand-menu-btn, #unit-choice li, #time-choice li,
-#breadcrumbs p, #calendar, #dt-panel img, #clear-graph, #sub-menu h3,
+#breadcrumbs p, #calendar, #dt-panel div, #clear-graph, #sub-menu h3,
 #menu-links li, .source-label, .choice-clear, .compare-choice-block label,
 #compare-calendar-icon {
 	cursor: pointer;
@@ -22,12 +22,13 @@
 }
 
 #y-axis-slider {
-	width: 14px;
+	width: 13px;
 	height: 324px;
 	top: -296px;
 	left: 20px;
 	background: url(../images/line.png) no-repeat #fff;
-	
+	/*border: 1px #e6e7e8;*/
+
 	-moz-box-shadow:    inset 0 0 3px #d5d5d5;
     -webkit-box-shadow: inset 0 0 3px #d5d5d5;
     box-shadow:         inset 0 0 3px #d5d5d5;
@@ -179,7 +180,10 @@
 	margin-right: auto;
 	position: relative;
 	width: 972px;
-	margin-top: 16px;
+	margin-top: 25px;
+	-moz-box-shadow: -6px 6px 10px 0px #e8e8e8;
+	-webkit-box-shadow: -6px 6px 10px 0px #e8e8e8;
+	box-shadow: -6px 6px 10px 0px #e8e8e8;
 }
 
 #graph-panel{
@@ -215,9 +219,11 @@
 }
 
 #main-graph-bar{
-	background-image: url(../images/main-graph-bar.png);
-	height: 6px;
+	background-color: #90C7D5;
+	height: 2px;
 	width: 100%;
+	margin-top: 2px;
+	margin-bottom: 2px;
 }
 
 #graph-panel-header {
@@ -257,7 +263,7 @@
 	float: right;
 	padding-top: 8px;
 	height: 24px;
-	font-size: 13px;
+	font-size: 11pt;
 	margin-right: 10px;
 }
 #current-dt{
@@ -267,10 +273,11 @@
 	margin-right: 14px;
 	color: white;
 }
-#dt-panel img {
+#dt-panel div {
 	float:right;
 	width: 19px;
 	height: 18px;
+	display: inline-block;
 }
 #dt-prev-icon{
 	background-image: url(../images/prev-day.png);
@@ -303,23 +310,28 @@
 	background-image: url(../images/clear-graph-hover.png);
 }
 
+.legendLabel {
+	font-size: 10pt;
+	color: #2e3e52;
+	padding-left: 10px;
+}
+
 #sub-menu h3{
 	display: inline-block;
 	vertical-align: bottom;
 	text-decoration: none;
-	font-size: 14px;
-	height: 22px;
+	font-size: 11pt;
+	height: 24px;
 	padding-left: 18px;
-	padding-top: 10px;
+	padding-top: 9px;
 	padding-right: 18px;
 	color: #ffffff;
 	background-color: #9bceda;
 	border-right:1px solid white;
 }
 #sub-menu h3:hover {
-	font-weight: bold;
 	background-color: #7fd51e;
-	letter-spacing: 0.6px;
+	background: -webkit-gradient(linear, left top, left bottom, from(#aee428), to(#67cd18));
 }
 #sub-menu-unit {
 	border-top-left-radius: 5px;
@@ -336,7 +348,7 @@
 #sub-menu-links ul{
 	padding-top: 17px;
 	margin-left: 12px;
-	height: 61px;
+	height: 62px;
 	position: absolute;
 	display: none;
 }
@@ -390,19 +402,31 @@
 
 #select-dt-section {
 	float: left;
-	background: #ffff00 none;
+	background: #f4d6ab none;
 	width: 200px;
 	height: 61px;
 	margin-left: 30px;
+}
+#custom-select-title {
+	font-size: 8pt;
+	font-weight: bold;
+	color: #354960;
+	margin-top: 6px;
+	margin-left: 10px;
 }
 #custom-calendar-icon{
 	background-image: url(../images/custom-calendar-icon.png);
 	width: 25px;
 	height: 26px;
 	display: inline-block;
+	margin-top: 10px;
+	margin-left: 10px;
 }
 #current-dt-picker {
+	position: absolute;
 	width: 140px;
+	margin-top: 15px;
+	margin-left: 7px;
 }
 
 .choice-panel{
@@ -414,10 +438,10 @@
 	border-radius: 5px;
 }
 .choice-header{
-	font-weight: bold;
-	font-size: 15px;	
+	font-weight: lighter;
+	font-size: 14px;	
 	height: 18px;
-	color: #699eab;	
+	color: #699eab;
 	
 	-moz-border-top-left-radius: 6px;
 	-webkit-border-top-left-radius: 6px;
@@ -449,16 +473,17 @@
 }
 #source-choice-container > div{
 	float: left;
-	width: 156px;
-	margin-right: 4px;
+	width: 154px;
+	margin-right: 5px;
 	margin-top: 8px;
 	position: relative;
+	background-color: #B8D8E0;
 }
 .source-label{
 	position: absolute;
 	top: 1px;
 	left: 20px;
-	color: #242c36;
+	color: #354960;
 }
 .source-label-disabled{
 	color: #999;
@@ -509,9 +534,11 @@
 	width: 180px;
 	height: 38px;
 	position: absolute;
+	margin-top: 4px;
 }
 .compare-choice-block > div:last-child{
 	margin-top: 8px;
+	color: #354960;
 }
 .compare-choice-block > div > label{
 	margin-left: 2px;
@@ -536,11 +563,17 @@
 	display: inline-block;
 	visibility: hidden;
 }
+#compare-prev-date{
+	vertical-align: text-top;
+}
 
 #unit-label {
 	position: absolute;
-	top: 22px;
+	top: 10px;
 	left: 120px;
+	font-weight: bold;
+	font-size: 12pt;
+	color: #2e3e52;
 }
 #unit-bg {
 	position: absolute;
@@ -552,10 +585,13 @@
 	position: relative;
 	margin-left: auto;
 	margin-right: auto;
-	margin-top: 20px;
-	background-color: #eaeeef;
-	height: 165px;
-	width: 962px;
+	margin-top: 25px;
+	background-color: #F9F9F9;
+	height: 180px;
+	width: 972px;
+	moz-box-shadow: -6px 6px 10px 0px #e8e8e8;
+	-webkit-box-shadow: -6px 6px 10px 0px #e8e8e8;
+	box-shadow: -6px 6px 10px 0px #e8e8e8;
 }
 #summary-header{
 	background-image: url(../images/summary-header.png);
@@ -566,14 +602,14 @@
 #summary-image{
 	background-image: url(../images/summary-neutral.png);
 	background-repeat: no-repeat;
-	margin-top: 15px;
+	margin-top: 13px;
 	height: 150px;
 }
 
 #last-summary {
 	position: absolute;
 	left: 120px;
-	top: 62px;
+	top: 55px;
 	width: 155px;
 }
 .summary-text{
@@ -588,25 +624,30 @@
 	vertical-align: 10%;
 }
 .consumption-unit{
-	font-size: 18px;
+	font-size: 16px;
 	padding-left: 5px;
+	font-weight: bold;
 }
 #this-summary {
 	position: absolute;
 	left: 350px;
-	top: 62px;
+	top: 55px;
 	width: 155px;
 }
 
 #summary-percentage{
 	position: absolute;
-	top: 74px;
+	top: 79px;
 	left: 632px;
 }
-#summary-percentage span{
+#summary-percentage-number {
 	width: 80px;
-	font-size: 40px;
+	font-size: 25px;
 	font-weight: bolder;
+}
+#summary-percentage-symbol {
+	font-weight: bolder;
+	font-size: 16px;
 }
 #summary > a{
 	position: absolute;
@@ -614,4 +655,6 @@
 	bottom: -12px;
 	text-decoration: none;
 	font-size: 12px;
+	margin-top: 90px;
+	color: #354960;
 }
