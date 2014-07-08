@@ -1,0 +1,89 @@
+{% extends "page_base.html" %}
+
+{% load static %}
+{% load entrak_extras %}
+
+{% block extra_head %}
+{{block.super}}
+
+<script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
+<script src="{% static 'js/csrf_ajax.js' %}"></script>
+<script src="{% static 'js/entrak-system.js' %}"></script>
+<script src="{% static 'js/entrak-utils.js' %}"></script>
+{% endblock %}
+
+{% block selected-menu-link-id %}menu-link-ranking{% endblock %}
+{% block system_menu_target_view %}ranking{% endblock %}
+{% block breadcrumb_target_view %}ranking{% endblock %}
+
+{% block page_title %}THE RANKING PAGE{% endblock %}
+{% block page_subtitle %}Find out where you stand at the{% endblock %}
+
+{% block extra_script %}
+{{block.super}}
+
+<script type="text/javascript">
+RANKING_TYPE_TOTAL = 'total';
+RANKING_TYPE_PER_PERSON = 'per_person';
+RANKING_TYPE_PERCENT = 'percent';
+
+var ranking = {};
+
+function getRankingData() {
+	var startEndDt = Utils.genStartEndDt(ranking.currentDt, ranking.currentRangeType);
+	var requestData = {
+		grouped_source_infos: JSON.stringify(ranking.entrakSystem.getGroupedSourceInfos()),
+		range_type: Utils.API_RANGE_TYPES[ranking.currentRangeType],
+		unit_category_id: ranking.currentUnit,
+		start_dt: startEndDt.startDt.unix(),
+		end_dt: startEndDt.endDt.unix(),
+		ranking_type: ranking.currentRankingType
+	};
+
+	if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
+		var lastStartEndDt = Utils.genLastStartEndDt(startEndDt.startDt, ranking.currentRangeType);
+		requestData.last_start_dt = lastStartEndDt.startDt.unix();
+		requestData.last_end_dt = lastStartEndDt.endDt.unix();
+	}
+
+	$.ajax({
+		type: "POST",
+		url: "{% url 'ranking_data' system_code=systems.0.code %}",
+		data: requestData,
+	}).done(function(data) {
+		if (ranking.currentRankingType === RANKING_TYPE_TOTAL
+			|| ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
+			finishReceiveTotalOrPerPerson(data);
+		} else if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
+			finishReceivePercent(data);
+		}
+	});
+}
+
+function finishReceiveTotalOrPerPerson(data) {
+	console.log(data);
+}
+
+function finishReceivePercent(data) {
+	console.log(data);
+}
+
+$(function() {
+	setupAjaxForCsrf($.cookie('csrftoken'));
+
+	ranking.entrakSystem = new EntrakSystem();
+	ranking.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
+	ranking.entrakSystem.addSourceToSystem('{{sources|jsonifySources}}');
+
+	ranking.currentDt = Utils.getNowMoment('hour');
+	ranking.currentRangeType = Utils.RANGE_TYPE_DAY;
+	ranking.currentUnit = Utils.UNIT_KWH;
+	ranking.currentRankingType = RANKING_TYPE_PER_PERSON;
+
+	getRankingData();
+});
+</script>
+{% endblock %}
+
+{% block page_content %}
+{% endblock %}

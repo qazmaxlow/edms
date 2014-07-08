@@ -8,6 +8,16 @@
 	font-weight: normal;
 	font-style: normal;
 }
+@font-face {
+	font-family: 'ITCAvantGardeStd-Bold';
+	src: url('../fonts/itc-avant-garde-std-bold.eot');
+	src: url('../fonts/itc-avant-garde-std-bold.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/itc-avant-garde-std-bold.woff') format('woff'),
+		url('../fonts/itc-avant-garde-std-bold.ttf') format('truetype'),
+		url('../fonts/itc-avant-garde-std-bold.svg#ITCAvantGardeStd-Bold') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -298,21 +308,21 @@ html, body {
 /*-- Sub heading --*/
 #sub-heading {
 	position: absolute;
-	color: white;
-	font-weight: lighter;
-	font-size: 13pt;
+	color: #cedee2;
+	font-size: 12pt;
 	letter-spacing: 0.2pt;
 	margin-left: 35px;
 	margin-top: 40px;
+	font-family: 'ITCAvantGardeStd-Bk', "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 /* Main heading --*/
 #heading{	
 	position: absolute;
-	font-weight: bolder;
-	font-size: 35px;
+	font-size: 30px;
 	color: white;
 	margin-left: 35px;
 	margin-top: 70px;
+	font-family: 'ITCAvantGardeStd-Bold', "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 
 /*-- Main heading Ends --*/

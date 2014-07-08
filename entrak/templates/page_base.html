@@ -49,7 +49,7 @@ $(function() {
 		var aDom = $('<a href="#" onclick="return false;">' + node.data.name +'</a>');
 		aDom.click({node: node}, function(event) {
 			if (page.userSystemTree.data.node !== event.data.node) {
-				window.location.href = "/" + event.data.node.data.code + "/graph/";
+				window.location.href = "/" + event.data.node.data.code + "/{% block system_menu_target_view %}{% endblock %}/";
 			}
 		});
 		var appendDom = $('<li system_code="' + node.data.code + '">');
@@ -110,7 +110,7 @@ $(function() {
 					<a href="{% url 'graph' system_code=systems.0.code %}"><img width="26" height="22" src="{% static 'images/graph-icon.png' %}"><span>Graph</span></a>
 				</li>
 				<li id="menu-link-ranking">
-					<a href="#"><img width="26" height="23" src="{% static 'images/ranking-icon.png' %}"><span>Ranking</span></a>
+					<a href="{% url 'ranking' system_code=systems.0.code %}"><img width="26" height="23" src="{% static 'images/ranking-icon.png' %}"><span>Ranking</span></a>
 				</li>
 				<li id="menu-link-progress">
 					<a href="{% url 'progress' system_code=systems.0.code %}"><img width="26" height="23" src="{% static 'images/progress-icon.png' %}"><span>Progress</span></a>
@@ -170,7 +170,7 @@ $(function() {
 			<span><h3>You are viewing:</h3></span>
 			<span id="breadcrumbs-path">
 				{% for code in system_path_components %}
-				<a href="{% url 'graph' system_code=code %}">{{code}}</a>
+				<a href="/{{code}}/{% block breadcrumb_target_view %}{% endblock %}/">{{code}}</a>
 					{% if not forloop.last %}
 					<span>-</span>
 					{% endif %}

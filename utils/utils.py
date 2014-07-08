@@ -80,3 +80,18 @@ class Utils:
 	@staticmethod
 	def utc_dt_from_utc_timestamp(timestamp):
 		return datetime.datetime.fromtimestamp(timestamp, pytz.utc)
+
+	@staticmethod
+	def gen_source_group_map(grouped_source_infos):
+		source_group_map = {}
+		for group_idx, source_info in enumerate(grouped_source_infos):
+			for source_id in source_info['source_ids']:
+				source_group_map[source_id] = group_idx
+
+		return source_group_map
+
+	@staticmethod
+	def get_source_ids_from_grouped_source_info(grouped_source_infos):
+		return reduce(
+			lambda source_ids, source_info: source_ids+source_info['source_ids'],
+			grouped_source_infos, [])

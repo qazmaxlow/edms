@@ -1,5 +1,9 @@
 import calendar
 import json
+from .utils import Utils
+from system.models import System, UnitCategory, UnitRate, KWH_CATEGORY_ID
+from egauge.manager import SourceManager
+from egauge.models import Source
 
 def transform_reading(unit_code, timestamp, val, unit_category_id, unit_rates):
 	match_units = [unit_rate for unit_rate in unit_rates if (unit_rate.unit.code == unit_code and timestamp >= calendar.timegm(unit_rate.effective_date.utctimetuple()))]
@@ -46,3 +50,27 @@ def combine_readings_by_timestamp(sources_readings):
 				result[timestamp] = val
 
 	return result
+
+def calculate_group_readings(system_code, grouped_source_infos, range_type, unit_category_id, start_dt, end_dt):
+	source_group_map = Utils.gen_source_group_map(grouped_source_infos)
+	all_source_ids = Utils.get_source_ids_from_grouped_source_info(grouped_source_infos)
+
+	source_readings = SourceManager.get_readings(all_source_ids, range_type, start_dt, end_dt)
+
+	if unit_category_id != KWH_CATEGORY_ID:
+		systems = System.get_systems_within_root(system_code)
+		sources = Source.objects(id__in=all_source_ids)
+		unit_rates = UnitRate.objects.select_related('unit').filter(unit__category_id=unit_category_id)
+
+		transform_source_readings(source_readings, systems, sources, unit_rates, unit_category_id)
+
+	grouped_readings = [{'name': info['name'], 'readings': {}} for info in grouped_source_infos]
+	for source_id, readings in source_readings.items():
+		target_group = grouped_readings[source_group_map[source_id]]['readings']
+		for timestamp, val in readings.items():
+			if timestamp in target_group:
+				target_group[timestamp] += val
+			else:
+				target_group[timestamp] = val
+
+	return (systems, sources, grouped_readings)

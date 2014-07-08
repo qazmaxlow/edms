@@ -2,6 +2,7 @@
 
 {% load static %}
 {% load staticfiles %}
+{% load entrak_extras %}
 
 {% block extra_head %}
 {{block.super}}
@@ -15,10 +16,16 @@
 <script src="{% static 'js/morris.js-0.4.3/raphael-min.js' %}"></script>
 <script src="{% static 'js/morris.js-0.4.3/morris-customized.js' %}"></script>
 <script src="{% static 'js/datetimepicker-master/jquery.datetimepicker-customized.js' %}"></script>
+<script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
+<script src="{% static 'js/csrf_ajax.js' %}"></script>
+<script src="{% static 'js/entrak-system.js' %}"></script>
+<script src="{% static 'js/entrak-utils.js' %}"></script>
 <script src="{% static 'js/graph-chart.js' %}"></script>
 {% endblock %}
 
 {% block selected-menu-link-id %}menu-link-graph{% endblock %}
+{% block system_menu_target_view %}graph{% endblock %}
+{% block breadcrumb_target_view %}graph{% endblock %}
 
 {% block extra_script %}
 {{block.super}}
@@ -52,13 +59,13 @@ function updateDonutChart(data) {
 
 function formatDtAtStr(dt, rangeType) {
 	var formatStr = null;
-	if (rangeType === graph.graphChart.RANGE_TYPE_HOUR
-		|| rangeType === graph.graphChart.RANGE_TYPE_DAY
-		|| rangeType === graph.graphChart.RANGE_TYPE_NIGHT) {
+	if (rangeType === Utils.RANGE_TYPE_HOUR
+		|| rangeType === Utils.RANGE_TYPE_DAY
+		|| rangeType === Utils.RANGE_TYPE_NIGHT) {
 		formatStr = 'D MMM YYYY, ddd';
-	} else if (rangeType === graph.graphChart.RANGE_TYPE_WEEK) {
+	} else if (rangeType === Utils.RANGE_TYPE_WEEK) {
 		formatStr = 'D MMM YYYY';
-	} else if (rangeType === graph.graphChart.RANGE_TYPE_MONTH) {
+	} else if (rangeType === Utils.RANGE_TYPE_MONTH) {
 		formatStr = 'MMM YYYY';
 	}
 
@@ -67,14 +74,14 @@ function formatDtAtStr(dt, rangeType) {
 
 function formatDtStr(dt, rangeType) {
 	var formatStr = null;
-	if (rangeType === graph.graphChart.RANGE_TYPE_HOUR
-		|| rangeType === graph.graphChart.RANGE_TYPE_DAY
-		|| rangeType === graph.graphChart.RANGE_TYPE_NIGHT
-		|| rangeType === graph.graphChart.RANGE_TYPE_WEEK) {
+	if (rangeType === Utils.RANGE_TYPE_HOUR
+		|| rangeType === Utils.RANGE_TYPE_DAY
+		|| rangeType === Utils.RANGE_TYPE_NIGHT
+		|| rangeType === Utils.RANGE_TYPE_WEEK) {
 		formatStr = 'D MMM YYYY, ddd';
-	} else if (rangeType === graph.graphChart.RANGE_TYPE_MONTH) {
+	} else if (rangeType === Utils.RANGE_TYPE_MONTH) {
 		formatStr = 'MMM YYYY';
-	} else if (rangeType === graph.graphChart.RANGE_TYPE_YEAR) {
+	} else if (rangeType === Utils.RANGE_TYPE_YEAR) {
 		formatStr = 'YYYY';
 	}
 
@@ -83,15 +90,15 @@ function formatDtStr(dt, rangeType) {
 
 function formatCompareDtStr(dt, rangeType) {
 	var formatStr = null;
-	if (rangeType === graph.graphChart.RANGE_TYPE_HOUR) {
+	if (rangeType === Utils.RANGE_TYPE_HOUR) {
 		formatStr = 'HH:mm D MMM YYYY, ddd';
-	} else if (rangeType === graph.graphChart.RANGE_TYPE_DAY
-		|| rangeType === graph.graphChart.RANGE_TYPE_NIGHT
-		|| rangeType === graph.graphChart.RANGE_TYPE_WEEK) {
+	} else if (rangeType === Utils.RANGE_TYPE_DAY
+		|| rangeType === Utils.RANGE_TYPE_NIGHT
+		|| rangeType === Utils.RANGE_TYPE_WEEK) {
 		formatStr = 'D MMM YYYY, ddd';
-	} else if (rangeType === graph.graphChart.RANGE_TYPE_MONTH) {
+	} else if (rangeType === Utils.RANGE_TYPE_MONTH) {
 		formatStr = 'MMM YYYY';
-	} else if (rangeType === graph.graphChart.RANGE_TYPE_YEAR) {
+	} else if (rangeType === Utils.RANGE_TYPE_YEAR) {
 		formatStr = 'YYYY';
 	}
 
@@ -100,15 +107,15 @@ function formatCompareDtStr(dt, rangeType) {
 
 function formatDtFromToStr(dt, rangeType) {
 	var formatStr = null;
-	if (rangeType === graph.graphChart.RANGE_TYPE_HOUR
-		|| rangeType === graph.graphChart.RANGE_TYPE_DAY
-		|| rangeType === graph.graphChart.RANGE_TYPE_NIGHT) {
+	if (rangeType === Utils.RANGE_TYPE_HOUR
+		|| rangeType === Utils.RANGE_TYPE_DAY
+		|| rangeType === Utils.RANGE_TYPE_NIGHT) {
 		formatStr = 'hh:mma';
-	} else if (rangeType === graph.graphChart.RANGE_TYPE_WEEK) {
+	} else if (rangeType === Utils.RANGE_TYPE_WEEK) {
 		formatStr = 'ddd';
-	} else if (rangeType === graph.graphChart.RANGE_TYPE_MONTH) {
+	} else if (rangeType === Utils.RANGE_TYPE_MONTH) {
 		formatStr = 'D';
-	} else if (rangeType === graph.graphChart.RANGE_TYPE_YEAR) {
+	} else if (rangeType === Utils.RANGE_TYPE_YEAR) {
 		formatStr = 'MMM';
 	}
 
@@ -128,7 +135,7 @@ function resetGraphNPanel() {
 	clearCompareChoice();
 
 	var compareHighestLowestContainer = $(".compare-highest-lowest-container");
-	if (graph.graphChart.currentRangeType === graph.graphChart.RANGE_TYPE_NIGHT) {
+	if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_NIGHT) {
 		compareHighestLowestContainer.find("input").prop('disabled', true);
 		compareHighestLowestContainer.addClass('compare-disabled');
 	} else {
@@ -138,18 +145,18 @@ function resetGraphNPanel() {
 
 	var compareBetweenText;
 	var compareTargetText;
-	if (graph.graphChart.currentRangeType === graph.graphChart.RANGE_TYPE_DAY) {
+	if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_DAY) {
 		compareBetweenText = 'days';
 		compareTargetText = graph.graphChart.currentDt.format('dddd');
-	} else if (graph.graphChart.currentRangeType === graph.graphChart.RANGE_TYPE_NIGHT) {
+	} else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_NIGHT) {
 		compareBetweenText = compareTargetText = 'nights';
-	} else if (graph.graphChart.currentRangeType === graph.graphChart.RANGE_TYPE_WEEK) {
+	} else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_WEEK) {
 		compareBetweenText = compareTargetText = 'weeks';
-	} else if (graph.graphChart.currentRangeType === graph.graphChart.RANGE_TYPE_MONTH) {
+	} else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_MONTH) {
 		compareBetweenText = compareTargetText = 'months';
-	} else if (graph.graphChart.currentRangeType === graph.graphChart.RANGE_TYPE_YEAR) {
+	} else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_YEAR) {
 		compareBetweenText = compareTargetText = 'years';
-	} else if (graph.graphChart.currentRangeType === graph.graphChart.RANGE_TYPE_HOUR) {
+	} else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_HOUR) {
 		compareBetweenText = compareTargetText = 'hours';
 	}
 	$("#compare-between").text(compareBetweenText);
@@ -170,12 +177,6 @@ function resetGraphNPanel() {
 			}
 		});
 	}
-}
-
-function getNowMoment() {
-	// TODO: hardcode now
-	// return moment().startOf('hour');
-	return moment().year(2014).month(5).date(3).startOf('hour');
 }
 
 function retrieveReadingFinished() {
@@ -209,10 +210,10 @@ function setupSourceChoice() {
 	choiceContainer.empty();
 
 	var sourceNames = [];
-	$.each(graph.graphChart.systemTree.children, function(idx, subSystem) {
+	$.each(graph.graphChart.entrakSystem.systemTree.children, function(idx, subSystem) {
 		sourceNames.push(subSystem.data.name);
 	});
-	$.each(graph.graphChart.systemTree.data.sources, function(sourceIdx, source) {
+	$.each(graph.graphChart.entrakSystem.systemTree.data.sources, function(sourceIdx, source) {
 		sourceNames.push(source.name);
 	});
 
@@ -328,58 +329,25 @@ function setupComparePanel() {
 }
 
 $(function() {
+	setupAjaxForCsrf($.cookie('csrftoken'));
 
 	graph.graphChart = new GraphChart(
 		"#chart",
 		"#y-axis-slider",
 		"#x-axis-slider",
 		retrieveReadingFinished);
-	graph.graphChart.currentRangeType = graph.graphChart.RANGE_TYPE_DAY;
-	graph.graphChart.currentDt = getNowMoment();
-	graph.graphChart.currentUnit = graph.graphChart.UNIT_KWH;
+	graph.graphChart.currentRangeType = Utils.RANGE_TYPE_DAY;
+	graph.graphChart.currentDt = Utils.getNowMoment('hour');
+	graph.graphChart.currentUnit = Utils.UNIT_KWH;
 
-	{% for system in systems %}
-		var system = {};
-		system.code = '{{system.code}}';
-		system.name = '{{system.name}}';
-		system.path = '{{system.path}}';
-		system.sources = {};
+	graph.graphChart.entrakSystem = new EntrakSystem();
+	graph.graphChart.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
+	graph.graphChart.currentSelectedSystem = graph.graphChart.entrakSystem.systemTree;
 
-		{% if forloop.first %}
-		graph.graphChart.systemTree = new Arboreal(null, system);
-		{% else %}
-		parentCodes = $(system.path.split(',')).filter(function(){
-			return this != "";
-		});
-		parentCode = parentCodes[parentCodes.length - 1];
-		parentNode = graph.graphChart.systemTree.find(function (node) {
-			return node.data.code == parentCode;
-		});
-		parentNode.appendChild(system);
-		{% endif %}
-	{% endfor %}
-	graph.graphChart.currentSelectedSystem = graph.graphChart.systemTree;
+	graph.graphChart.entrakSystem.addSourceToSystem('{{sources|jsonifySources}}');
 
-	{% for source in sources %}
-		var source = {};
-		source.name = '{{source.d_name}}';
-		source.name_tc = '{{source.d_name_tc}}';
-		source.order = '{{source.order}}';
+	graph.unitCategorys = JSON.parse('{{unit_categorys|jsonifyUnitCategorys}}');
 
-		graph.graphChart.addSourceToSystem('{{source.system_code}}', '{{source.id}}', source);
-	{% endfor %}
-
-	graph.unitCategorys = [];
-	{% for unit_category in unit_categorys %}
-		var unitCategory = {};
-		unitCategory.id = {{unit_category.id}};
-		unitCategory.name = '{{unit_category.name}}';
-		unitCategory.imgOff = '{{unit_category.img_off}}';
-		unitCategory.imgOn = '{{unit_category.img_on}}';
-		unitCategory.bgImg = '{{unit_category.bg_img}}';
-
-		graph.unitCategorys.push(unitCategory);
-	{% endfor %}
 	$("#unit-label").text(graph.unitCategorys[0].name);
 	$("#unit-bg").attr("src", "{% get_static_prefix %}images/unit/" + graph.unitCategorys[0].bgImg);
 
@@ -486,9 +454,9 @@ $(function() {
 		});
 	});
 
-	var timeRangeTypes = [graph.graphChart.RANGE_TYPE_YEAR, graph.graphChart.RANGE_TYPE_MONTH,
-		graph.graphChart.RANGE_TYPE_WEEK, graph.graphChart.RANGE_TYPE_DAY,
-		graph.graphChart.RANGE_TYPE_NIGHT, graph.graphChart.RANGE_TYPE_HOUR];
+	var timeRangeTypes = [Utils.RANGE_TYPE_YEAR, Utils.RANGE_TYPE_MONTH,
+		Utils.RANGE_TYPE_WEEK, Utils.RANGE_TYPE_DAY,
+		Utils.RANGE_TYPE_NIGHT, Utils.RANGE_TYPE_HOUR];
 	var timeChoice = $("#time-choice");
 	$.each(timeRangeTypes, function(idx, rangeType) {
 		var timeLiDom = $("<li id='time-choice-" + rangeType + "-icon' range_type='" + rangeType + "'></li>");
@@ -497,7 +465,7 @@ $(function() {
 	timeChoice.find("li").click(function () {
 		var newRangeType = $(this).attr("range_type");
 		if (graph.graphChart.currentRangeType !== newRangeType) {
-			graph.graphChart.currentDt = graph.graphChart.genStartEndDt(getNowMoment(), newRangeType).startDt;
+			graph.graphChart.currentDt = Utils.genStartEndDt(Utils.getNowMoment('hour'), newRangeType).startDt;
 			graph.graphChart.updateCurrentRangeType(newRangeType);
 			resetGraphNPanel();
 		}
@@ -556,7 +524,7 @@ $(function() {
 		resetGraphNPanel();
 	});
 	$("#dt-now-icon").click(function() {
-		graph.graphChart.updateCurrentDt(getNowMoment());
+		graph.graphChart.updateCurrentDt(Utils.getNowMoment('hour'));
 		resetGraphNPanel();
 	});
 
@@ -572,7 +540,7 @@ $(function() {
 </script>
 {% endblock %}
 
-{% block page_title %}Graph - Days{% endblock %}
+{% block page_title %}THE GRAPH SECTION{% endblock %}
 {% block page_subtitle %}Check this out!{% endblock %}
 
 {% block page_content %}

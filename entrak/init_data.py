@@ -35,7 +35,7 @@ def init_test_source():
 		system_path=',adidas,', d_name='Lights & Plugs', d_name_tc=u'燈及電制', order=1,
 		first_record=pytz.timezone("Asia/Hong_Kong").localize(datetime.datetime(2013, 10, 15))))
 	sources.append(Source(name='Lights & Plugs', xml_url='egauge984.egaug.es', system_code='adidas-shatin',
-		system_path=',adidas,adidas-hk', d_name='Lights & Plugs', d_name_tc=u'燈及電制', order=1,
+		system_path=',adidas,adidas-hk,', d_name='Lights & Plugs', d_name_tc=u'燈及電制', order=1,
 		first_record=pytz.timezone("Asia/Hong_Kong").localize(datetime.datetime(2013, 10, 15))))
 	sources.append(Source(name='Blocks AB', xml_url='en-trak1010.d.en-trak.com', system_code='adidas',
 		system_path=None, d_name='Blocks AB', d_name_tc=u'AB大樓', order=1,

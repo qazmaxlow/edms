@@ -5,7 +5,8 @@ import operator
 import json
 import itertools
 from django.shortcuts import render_to_response
-from django.views.decorators.csrf import csrf_exempt
+from django.core.context_processors import csrf
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.db.models import Q
 from system.models import System, UnitCategory, UnitRate, KWH_CATEGORY_ID
 from egauge.manager import SourceManager
@@ -16,6 +17,7 @@ from utils.auth import permission_required
 from utils import calculation
 
 @permission_required
+@ensure_csrf_cookie
 def graph_view(request, system_code=None):
 	systems_info = System.get_systems_info(system_code, request.user.system.code)
 
@@ -27,10 +29,10 @@ def graph_view(request, system_code=None):
 
 	m = systems_info
 	m.update({'sources': sources, 'unit_categorys': unit_categorys})
+	m.update(csrf(request))
 
 	return render_to_response('graph.html', m)
 
-@csrf_exempt
 def source_readings_view(request, system_code):
 	grouped_source_infos = json.loads(request.POST.get('grouped_source_infos'))
 	range_type = request.POST.get('range_type')
@@ -38,12 +40,8 @@ def source_readings_view(request, system_code):
 	start_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('start_dt')))
 	end_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('end_dt')))
 
-	source_group_map = {}
-	all_source_ids = []
-	for group_idx, source_info in enumerate(grouped_source_infos):
-		all_source_ids += source_info['source_ids']
-		for source_id in source_info['source_ids']:
-			source_group_map[source_id] = group_idx
+	source_group_map = Utils.gen_source_group_map(grouped_source_infos)
+	all_source_ids = Utils.get_source_ids_from_grouped_source_info(grouped_source_infos)
 
 	source_readings = SourceManager.get_readings(all_source_ids, range_type, start_dt, end_dt)
 
@@ -65,7 +63,6 @@ def source_readings_view(request, system_code):
 
 	return Utils.json_response(grouped_readings)
 
-@csrf_exempt
 def highest_lowest_source_readings_view(request, system_code):
 	source_infos = json.loads(request.POST.get('source_infos'))
 	range_type = request.POST.get('range_type')
@@ -87,7 +84,6 @@ def highest_lowest_source_readings_view(request, system_code):
 
 	return Utils.json_response(source_readings_info)
 
-@csrf_exempt
 def summary_view(request, system_code):
 	source_ids = json.loads(request.POST.get('source_ids'))
 	range_type = request.POST.get('range_type')

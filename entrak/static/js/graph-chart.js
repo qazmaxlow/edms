@@ -5,7 +5,7 @@ function GraphChart(graphEleSel, yAxisSliderEleSel, xAxisSliderEleSel, retrieveR
 	this.retrieveReadingCallback = retrieveReadingCallback;
 
 	this.plot = null;
-	this.systemTree = null;
+	this.entrakSystem = null;
 	this.totalSeries = null;
 	this.sourceSeries = null;
 	this.lastSeries = null;
@@ -27,24 +27,6 @@ function GraphChart(graphEleSel, yAxisSliderEleSel, xAxisSliderEleSel, retrieveR
 	this.currentUnit = null;
 	this.xAxisSliderCallback = null;
 }
-
-GraphChart.prototype.RANGE_TYPE_HOUR	= 'hour';
-GraphChart.prototype.RANGE_TYPE_DAY		= 'day';
-GraphChart.prototype.RANGE_TYPE_NIGHT	= 'night';
-GraphChart.prototype.RANGE_TYPE_WEEK	= 'week';
-GraphChart.prototype.RANGE_TYPE_MONTH	= 'month';
-GraphChart.prototype.RANGE_TYPE_YEAR	= 'year';
-
-GraphChart.prototype.API_RANGE_TYPES = {
-	'hour': 'hour',
-	'day': 'day',
-	'night': 'day',
-	'week': 'week',
-	'month': 'month',
-	'year': 'year',
-};
-
-GraphChart.prototype.UNIT_KWH = -1;
 
 GraphChart.prototype.TOTAL_SERIES_BASE_OPTIONS = {
 	color: '#81D51D',
@@ -90,7 +72,7 @@ GraphChart.prototype._retrieveSourceReadings = function(groupedSourceInfos, star
 		url: "../source_readings/",
 		data: {
 			grouped_source_infos: JSON.stringify(groupedSourceInfos),
-			range_type: graphChartThis.API_RANGE_TYPES[graphChartThis.currentRangeType],
+			range_type: Utils.API_RANGE_TYPES[graphChartThis.currentRangeType],
 			unit_category_id: graphChartThis.currentUnit,
 			start_dt: startDt.unix(),
 			end_dt: endDt.unix(),
@@ -103,8 +85,8 @@ GraphChart.prototype._retrieveSourceReadings = function(groupedSourceInfos, star
 GraphChart.prototype.getSourceReadings = function () {
 	var graphChartThis = this;
 	var startEndDt = this.genCurrentStartEndDt();
-	this.lastStartEndDt = this.genLastStartEndDt(startEndDt.startDt, this.currentRangeType);
-	var groupedSourceInfos = this.getGroupedSourceInfos();
+	this.lastStartEndDt = Utils.genLastStartEndDt(startEndDt.startDt, this.currentRangeType);
+	var groupedSourceInfos = this.entrakSystem.getGroupedSourceInfos();
 
 	this._retrieveSourceReadings(groupedSourceInfos, startEndDt.startDt, startEndDt.endDt, function(data) {
 		graphChartThis.updateXAxisOptions(startEndDt.startDt);
@@ -118,7 +100,7 @@ GraphChart.prototype.getSourceReadings = function () {
 GraphChart.prototype.getLastSourceReadings = function() {
 	var graphChartThis = this;
 	var startEndDt = this.lastStartEndDt;
-	var groupedSourceInfos = [{name: 'Previous', source_ids: graphChartThis.getAllSourceIds()}];
+	var groupedSourceInfos = [{name: 'Previous', source_ids: graphChartThis.entrakSystem.getAllSourceIds()}];
 	this._retrieveSourceReadings(groupedSourceInfos, startEndDt.startDt, startEndDt.endDt, function(data) {
 		graphChartThis.transformReadingToSeries(data[0], 'lastSeries');
 		graphChartThis.lastSeries.color = "#F7AF25";
@@ -129,7 +111,7 @@ GraphChart.prototype.getLastSourceReadings = function() {
 GraphChart.prototype.getCustomSourceReadings = function() {
 	var graphChartThis = this;
 	var startEndDt = this.customDt;
-	var groupedSourceInfos = [{name: 'Custom', source_ids: graphChartThis.getAllSourceIds()}];
+	var groupedSourceInfos = [{name: 'Custom', source_ids: graphChartThis.entrakSystem.getAllSourceIds()}];
 	this._retrieveSourceReadings(groupedSourceInfos, startEndDt.startDt, startEndDt.endDt, function(data) {
 		graphChartThis.transformReadingToSeries(data[0], 'customSeries');
 		graphChartThis.customSeries.color = "#587EFF";
@@ -139,14 +121,14 @@ GraphChart.prototype.getCustomSourceReadings = function() {
 
 GraphChart.prototype.getHighestSourceReadings = function(doneCallback) {
 	var graphChartThis = this;
-	var sourceInfos = {name: 'Highest', source_ids: graphChartThis.getAllSourceIds()};
+	var sourceInfos = {name: 'Highest', source_ids: graphChartThis.entrakSystem.getAllSourceIds()};
 
 	$.ajax({
 		type: "POST",
 		url: "../highest_lowest_source_readings/",
 		data: {
 			source_infos: JSON.stringify(sourceInfos),
-			range_type: graphChartThis.API_RANGE_TYPES[graphChartThis.currentRangeType],
+			range_type: Utils.API_RANGE_TYPES[graphChartThis.currentRangeType],
 			tz_offset: graphChartThis.currentDt.toDate().getTimezoneOffset(),
 			is_highest: true,
 		},
@@ -162,14 +144,14 @@ GraphChart.prototype.getHighestSourceReadings = function(doneCallback) {
 
 GraphChart.prototype.getLowestSourceReadings = function(doneCallback) {
 	var graphChartThis = this;
-	var sourceInfos = {name: 'Lowest', source_ids: graphChartThis.getAllSourceIds()};
+	var sourceInfos = {name: 'Lowest', source_ids: graphChartThis.entrakSystem.getAllSourceIds()};
 
 	$.ajax({
 		type: "POST",
 		url: "../highest_lowest_source_readings/",
 		data: {
 			source_infos: JSON.stringify(sourceInfos),
-			range_type: graphChartThis.API_RANGE_TYPES[graphChartThis.currentRangeType],
+			range_type: Utils.API_RANGE_TYPES[graphChartThis.currentRangeType],
 			tz_offset: graphChartThis.currentDt.toDate().getTimezoneOffset(),
 			is_highest: false,
 		},
@@ -183,63 +165,24 @@ GraphChart.prototype.getLowestSourceReadings = function(doneCallback) {
 	});
 }
 
-GraphChart.prototype.addSourceToSystem = function (systemCode, sourceId, source) {
-	var systemNode = this.systemTree.find(function (node) {
-		return (systemCode === node.data.code);
-	});
-	systemNode.data.sources[sourceId] = source;
-}
-
-GraphChart.prototype.getGroupedSourceInfos = function() {
-	var graphChartThis = this;
-	var groupedSourceIds = [];
-	$.each(graphChartThis.systemTree.children, function(subSystemIdx, subSystem) {
-		var sourceIds = [];
-		subSystem.traverseDown(function (node){
-			for (var sourceId in node.data.sources) {
-				sourceIds.push(sourceId);
-			}
-		});
-
-		groupedSourceIds.push({name: subSystem.data.name, source_ids:sourceIds});
-	})
-
-	$.each(graphChartThis.systemTree.data.sources, function(sourceId, source){
-		groupedSourceIds.push({name: source.name, source_ids:[sourceId]});
-	});
-
-	return groupedSourceIds;
-}
-
-GraphChart.prototype.getAllSourceIds = function () {
-	var sourceIds = [];
-	this.systemTree.traverseDown(function (node) {
-		for (var sourceId in node.data.sources) {
-			sourceIds.push(sourceId);
-		}
-	});
-
-	return sourceIds;
-}
-
 GraphChart.prototype.transformXCoordinate = function (value) {
 	value_dt = moment.unix(value);
-	if (this.currentRangeType === this.RANGE_TYPE_HOUR) {
+	if (this.currentRangeType === Utils.RANGE_TYPE_HOUR) {
 		value = value_dt.minute();
-	} else if (this.currentRangeType === this.RANGE_TYPE_DAY) {
+	} else if (this.currentRangeType === Utils.RANGE_TYPE_DAY) {
 		value = value_dt.hour();
-	} else if (this.currentRangeType === this.RANGE_TYPE_NIGHT) {
+	} else if (this.currentRangeType === Utils.RANGE_TYPE_NIGHT) {
 		value = value_dt.hour();
 		if (value >= 20) {
 			value -= 20;
 		} else {
 			value += 4;
 		}
-	} else if (this.currentRangeType === this.RANGE_TYPE_WEEK) {
+	} else if (this.currentRangeType === Utils.RANGE_TYPE_WEEK) {
 		value = value_dt.day();
-	} else if (this.currentRangeType === this.RANGE_TYPE_MONTH) {
+	} else if (this.currentRangeType === Utils.RANGE_TYPE_MONTH) {
 		value = value_dt.date() - 1;
-	} else if (this.currentRangeType === this.RANGE_TYPE_YEAR) {
+	} else if (this.currentRangeType === Utils.RANGE_TYPE_YEAR) {
 		value = value_dt.month();
 	}
 
@@ -381,18 +324,18 @@ GraphChart.prototype.plotGraphChart = function () {
 	this.refreshXAxisSlider();
 
 	$(this.graphEleSel).off('plotclick').on('plotclick', function(event, pos, item) {
-		if (item && graphThis.currentRangeType !== graphThis.RANGE_TYPE_HOUR) {
+		if (item && graphThis.currentRangeType !== Utils.RANGE_TYPE_HOUR) {
 			var startEndDt = graphThis.genCurrentStartEndDt();
 			graphThis.currentDt = graphThis.transformXToDt(startEndDt.startDt, item.dataIndex);
 
-			if (graphThis.currentRangeType === graphThis.RANGE_TYPE_DAY
-				|| graphThis.currentRangeType === graphThis.RANGE_TYPE_NIGHT) {
-				graphThis.currentRangeType = graphThis.RANGE_TYPE_HOUR;
-			} else if (graphThis.currentRangeType === graphThis.RANGE_TYPE_WEEK
-				|| graphThis.currentRangeType === graphThis.RANGE_TYPE_MONTH) {
-				graphThis.currentRangeType = graphThis.RANGE_TYPE_DAY;
-			} else if (graphThis.currentRangeType === graphThis.RANGE_TYPE_YEAR) {
-				graphThis.currentRangeType = graphThis.RANGE_TYPE_MONTH;
+			if (graphThis.currentRangeType === Utils.RANGE_TYPE_DAY
+				|| graphThis.currentRangeType === Utils.RANGE_TYPE_NIGHT) {
+				graphThis.currentRangeType = Utils.RANGE_TYPE_HOUR;
+			} else if (graphThis.currentRangeType === Utils.RANGE_TYPE_WEEK
+				|| graphThis.currentRangeType === Utils.RANGE_TYPE_MONTH) {
+				graphThis.currentRangeType = Utils.RANGE_TYPE_DAY;
+			} else if (graphThis.currentRangeType === Utils.RANGE_TYPE_YEAR) {
+				graphThis.currentRangeType = Utils.RANGE_TYPE_MONTH;
 			}
 			
 			graphThis.getSourceReadings();
@@ -505,13 +448,13 @@ GraphChart.prototype.refreshXAxisSlider = function () {
 
 GraphChart.prototype.transformXToDt = function (startDt, xVal) {
 	var dtUnit = null;
-	if (this.currentRangeType === this.RANGE_TYPE_HOUR) {
+	if (this.currentRangeType === Utils.RANGE_TYPE_HOUR) {
 		dtUnit = 'm';
-	} else if (this.currentRangeType === this.RANGE_TYPE_DAY || this.currentRangeType === this.RANGE_TYPE_NIGHT) {
+	} else if (this.currentRangeType === Utils.RANGE_TYPE_DAY || this.currentRangeType === Utils.RANGE_TYPE_NIGHT) {
 		dtUnit = 'h';
-	} else if (this.currentRangeType === this.RANGE_TYPE_WEEK || this.currentRangeType === this.RANGE_TYPE_MONTH) {
+	} else if (this.currentRangeType === Utils.RANGE_TYPE_WEEK || this.currentRangeType === Utils.RANGE_TYPE_MONTH) {
 		dtUnit = 'd';
-	} else if (this.currentRangeType === this.RANGE_TYPE_YEAR) {
+	} else if (this.currentRangeType === Utils.RANGE_TYPE_YEAR) {
 		dtUnit = 'M';
 	}
 
@@ -529,75 +472,8 @@ GraphChart.prototype.sumUpSeriesValueInRange = function (startIdx, endIdx) {
 	});
 }
 
-GraphChart.prototype.genStartEndDt = function (targetDt, rangeType) {
-	var startDt = null;
-	var endDt = null;
-	var dtClone = moment(targetDt).startOf('hour');
-
-	if (rangeType === this.RANGE_TYPE_HOUR) {
-		startDt = dtClone;
-		endDt = moment(startDt).add('h', 1);
-	} else if (rangeType === this.RANGE_TYPE_DAY) {
-		startDt = dtClone.startOf('day');
-		endDt = moment(startDt).add('d', 1);
-	} else if (rangeType == this.RANGE_TYPE_NIGHT) {
-		if (dtClone.hour() >= 8) {
-			startDt = dtClone.subtract('d', 1).hour(20);
-		} else {
-			startDt = dtClone.subtract('d', 2).hour(20);
-		}
-		endDt = moment(startDt).add('h', 12);
-	} else if (rangeType == this.RANGE_TYPE_WEEK) {
-		startDt = dtClone.startOf('week');
-		endDt = moment(startDt).add('d', 7);
-	} else if (rangeType == this.RANGE_TYPE_MONTH) {
-		startDt = dtClone.startOf('month');
-		endDt = moment(startDt).add('M', 1);
-	} else if (rangeType == this.RANGE_TYPE_YEAR) {
-		startDt = dtClone.startOf('year');
-		endDt = moment(startDt).add('y', 1);
-	}
-
-	return {startDt: startDt, endDt: endDt}
-}
-
 GraphChart.prototype.genCurrentStartEndDt = function () {
-	return this.genStartEndDt(this.currentDt, this.currentRangeType);
-}
-
-GraphChart.prototype.getDtDetlaUnit = function (rangeType) {
-	var deltaUnit = null;
-	if (rangeType === this.RANGE_TYPE_HOUR) {
-		deltaUnit = 'h';
-	} else if (rangeType === this.RANGE_TYPE_DAY || rangeType === this.RANGE_TYPE_NIGHT) {
-		deltaUnit = 'd';
-	} else if (rangeType === this.RANGE_TYPE_WEEK) {
-		deltaUnit = 'w';
-	} else if (rangeType === this.RANGE_TYPE_MONTH) {
-		deltaUnit = 'M';
-	} else if (rangeType === this.RANGE_TYPE_YEAR) {
-		deltaUnit = 'y';
-	}
-	return deltaUnit;
-}
-
-GraphChart.prototype.genLastStartEndDt = function (targetDt, rangeType) {
-	var deltaUnit = null;
-	if (rangeType === this.RANGE_TYPE_DAY
-		|| rangeType === this.RANGE_TYPE_NIGHT
-		|| rangeType === this.RANGE_TYPE_WEEK) {
-		deltaUnit = 'w';
-	} else if (rangeType === this.RANGE_TYPE_MONTH) {
-		deltaUnit = 'M';
-	} else if (rangeType === this.RANGE_TYPE_YEAR) {
-		deltaUnit = 'y';
-	} else if (rangeType === this.RANGE_TYPE_HOUR) {
-		deltaUnit = 'h'
-	}
-	var lastStartDt = moment(targetDt).subtract(deltaUnit, 1);
-	var lastEndDt = moment(lastStartDt).add(this.getDtDetlaUnit(rangeType), 1);
-
-	return {startDt: lastStartDt, endDt: lastEndDt};
+	return Utils.genStartEndDt(this.currentDt, this.currentRangeType);
 }
 
 GraphChart.prototype.updateXAxisOptions = function (startDt) {
@@ -605,14 +481,14 @@ GraphChart.prototype.updateXAxisOptions = function (startDt) {
 	var max = null;
 	var ticks = [];
 
-	if (this.currentRangeType === this.RANGE_TYPE_HOUR) {
+	if (this.currentRangeType === Utils.RANGE_TYPE_HOUR) {
 		min = -1;
 		max = 60;
 		for (var i = 0; i < 12; i++) {
 			var tickLabel = moment(startDt).add('m', i*5).format('h:mma');
 			ticks.push([i*5, tickLabel]);
 		};
-	} else if (this.currentRangeType === this.RANGE_TYPE_DAY) {
+	} else if (this.currentRangeType === Utils.RANGE_TYPE_DAY) {
 		min = -1;
 		max = 24;
 		
@@ -620,7 +496,7 @@ GraphChart.prototype.updateXAxisOptions = function (startDt) {
 			var tickLabel = moment(startDt).add('h', i*2).format('ha');
 			ticks.push([i*2, tickLabel]);
 		};
-	} else if (this.currentRangeType === this.RANGE_TYPE_NIGHT) {
+	} else if (this.currentRangeType === Utils.RANGE_TYPE_NIGHT) {
 		min = -1;
 		max = 12;
 
@@ -628,21 +504,21 @@ GraphChart.prototype.updateXAxisOptions = function (startDt) {
 			var tickLabel = moment(startDt).add('h', i*2).format('ha');
 			ticks.push([i*2, tickLabel]);
 		};
-	} else if (this.currentRangeType === this.RANGE_TYPE_WEEK) {
+	} else if (this.currentRangeType === Utils.RANGE_TYPE_WEEK) {
 		min = -1;
 		max = 7;
 		var tickLabels = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 		for (var i = 0; i < tickLabels.length; i++) {
 			ticks.push([i, tickLabels[i]]);
 		};
-	} else if (this.currentRangeType === this.RANGE_TYPE_MONTH) {
+	} else if (this.currentRangeType === Utils.RANGE_TYPE_MONTH) {
 		var dayOfEndOfMonth = moment(startDt).endOf('month').date();
 		min = -1;
 		max = dayOfEndOfMonth+1;
 		for (var i = 0; i < max; i++) {
 			ticks.push([i, i+1]);
 		};
-	} else if (this.currentRangeType === this.RANGE_TYPE_YEAR) {
+	} else if (this.currentRangeType === Utils.RANGE_TYPE_YEAR) {
 		min = -1;
 		max = 12;
 		for (var i = 0; i < max; i++) {
@@ -660,7 +536,7 @@ GraphChart.prototype.updateCurrentDt = function (newDt) {
 }
 
 GraphChart.prototype.updateCompareDt = function (newDt) {
-	this.customDt = this.genStartEndDt(newDt, this.currentRangeType);;
+	this.customDt = Utils.genStartEndDt(newDt, this.currentRangeType);;
 }
 
 GraphChart.prototype.updateCurrentRangeType = function (newRangeType) {
@@ -670,7 +546,7 @@ GraphChart.prototype.updateCurrentRangeType = function (newRangeType) {
 
 GraphChart.prototype.goPrevOrNext = function (direction) {
 	var delta = (direction === 'prev') ? -1 : 1;
-	var deltaUnit = this.getDtDetlaUnit(this.currentRangeType);
+	var deltaUnit = Utils.getDtDetlaUnit(this.currentRangeType);
 	this.currentDt.add(deltaUnit, delta);
 	this.getSourceReadings();
 }
@@ -685,20 +561,18 @@ GraphChart.prototype.goNext = function () {
 
 GraphChart.prototype.getSummary = function(getSummaryCallback) {
 	var graphChartThis = this;
-	// TODO: don't HARDCODE if have realtime data
-	// var uptilMoment = moment();
-	var uptilMoment = moment().year(2014).month(5).date(3);
+	var uptilMoment = Utils.getNowMoment();
 	var startDt = moment(uptilMoment).startOf('day');
 	var lastStartDt = moment(startDt).subtract('d', 1);
 	var lastEndDt = moment(uptilMoment).subtract('d', 1);
 
-	var sourceIds = this.getAllSourceIds();
+	var sourceIds = this.entrakSystem.getAllSourceIds();
 	$.ajax({
 		type: "POST",
 		url: "../summary/",
 		data: {
 			source_ids: JSON.stringify(sourceIds),
-			range_type: graphChartThis.API_RANGE_TYPES[graphChartThis.RANGE_TYPE_HOUR],
+			range_type: Utils.API_RANGE_TYPES[Utils.RANGE_TYPE_HOUR],
 			start_dt: startDt.unix(),
 			end_dt: uptilMoment.unix(),
 			last_start_dt: lastStartDt.unix(),
@@ -709,8 +583,4 @@ GraphChart.prototype.getSummary = function(getSummaryCallback) {
 		graphChartThis.lastConsumption = data.last;
 		getSummaryCallback();
 	});
-}
-
-GraphChart.prototype.getPrevDtForCompare = function() {
-	//
 }
