@@ -193,7 +193,7 @@ html, body {
 /* --  Main Content (Graph) + Header (Done) -- */
 /* ------------------------------------------- */
 .right-content {
-	min-height: 100%; /*equal to footer height*/
+	min-height: 700px; /*equal to footer height*/
 	padding-left: 222px;
 }
 
@@ -215,12 +215,6 @@ html, body {
 	height: 31px;
 	background-color: #528e9b;
 }
-/*#system-menu {
-	position: absolute;
-	z-index: 1;
-	left: 250px;
-	display: none;
-}*/
 #system-menu img{
 	margin-left: 30px;
 	display: inline-block;
@@ -326,6 +320,25 @@ html, body {
 }
 
 /*-- Main heading Ends --*/
+
+.panel-component {
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	width: 972px;
+	margin-top: 25px;
+	-moz-box-shadow: -6px 6px 10px 0px #e8e8e8;
+	-webkit-box-shadow: -6px 6px 10px 0px #e8e8e8;
+	box-shadow: -6px 6px 10px 0px #e8e8e8;
+}
+
+.panel-separator{
+	background-color: #90C7D5;
+	height: 2px;
+	width: 100%;
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
 
 /* ---------------------------- */
 /* ---- Footer (Done) -------- */

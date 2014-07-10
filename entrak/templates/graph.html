@@ -7,6 +7,7 @@
 {% block extra_head %}
 {{block.super}}
 
+<link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/graph.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'js/datetimepicker-master/jquery.datetimepicker.css' %}">
 <script src="{% static 'js/flot/jquery.flot.min.js' %}"></script>
@@ -399,8 +400,8 @@ $(function() {
 	setupSourceChoice();
 	setupComparePanel();
 
-	var subMenuPanel = $("#sub-menu-links ul");
-	var subMenu = $("#sub-menu h3").each(function (eleIdx) {
+	var subMenuPanel = $(".drop-down-panel-content ul");
+	$(".panel-header-left-menu h3").each(function (eleIdx) {
 		$(this).click({connectedPanel: subMenuPanel[eleIdx]}, function (event) {
 			var connectedPanel = $(event.data.connectedPanel);
 			if (!(connectedPanel.hasClass('selected-submenu'))) {
@@ -409,61 +410,31 @@ $(function() {
 			}
 
 			if ($(connectedPanel).attr('id') === "source-choice") {
-				$("#sub-menu-links").height(graph.sourceChoiceContainerHeight + "px");
+				$(".drop-down-panel-content").height(graph.sourceChoiceContainerHeight + "px");
 			} else if ($(connectedPanel).attr('id') === "day-choice") {
-				$("#sub-menu-links").height("125px");
+				$(".drop-down-panel-content").height("125px");
 			} else {
-				$("#sub-menu-links").height("95px");
+				$(".drop-down-panel-content").height("95px");
 			}
 
-			var menuLinks = $('#sub-menu-links');
+			var menuLinks = $('.drop-down-panel-content');
 			if (menuLinks.css("display") === 'none') {
 				menuLinks.slideToggle(700, "easeOutBounce", function() {});
+				$('.expand-drop-down-panel-btn').css({transform: 'rotate(180deg)'});
 			}
 		});
 	});
 	$("#unit-choice").addClass('selected-submenu').show();
 
-	$('#expand-menu-btn').click(function () {
-		var menuLinks = $('#sub-menu-links');
-		if (menuLinks.css('display') === 'none') {
-			$(this).css({transform: 'rotate(180deg)'});
-		} else {
-			$(this).css({transform: 'rotate(0deg)'});
-		}
-		menuLinks.slideToggle(700, "easeOutBounce", function() {});
-	}).css({transform: 'rotate(180deg)'});
+	Utils.setupDropDownPanelBtn();
 
-	var unitChoice = $('#unit-choice');
-	$.each(graph.unitCategorys, function(idx, unitCategory) {
-		var unitLiDom = $("<li unit_category='" + unitCategory.id + "'>"
-			+ "<img src='{% get_static_prefix %}images/unit/" + unitCategory.imgOff + "'>"
-			+ "</li>");
-		unitLiDom.find('img').hover(function() {
-			$(this).attr("src", "{% get_static_prefix %}images/unit/" + unitCategory.imgOn);
-		}, function() {
-			$(this).attr("src", "{% get_static_prefix %}images/unit/" + unitCategory.imgOff);
-		});
-		unitChoice.append(unitLiDom);
-	});
-	unitChoice.find("li").each(function (unitCategoryIdx) {
-		$(this).click({unitCategory: graph.unitCategorys[unitCategoryIdx]}, function(event) {
-			graph.graphChart.updateUnit(event.data.unitCategory.id);
-			$("#unit-label").text(event.data.unitCategory.name);
-			$("#unit-bg").attr("src", "{% get_static_prefix %}images/unit/" + event.data.unitCategory.bgImg);
-		});
+	Utils.setupUnitChoiceLayout('#unit-choice', graph.unitCategorys, '{% get_static_prefix %}', function(unitCategory) {
+		graph.graphChart.updateUnit(unitCategory.id);
+		$("#unit-label").text(unitCategory.name);
+		$("#unit-bg").attr("src", "{% get_static_prefix %}images/unit/" + unitCategory.bgImg);
 	});
 
-	var timeRangeTypes = [Utils.RANGE_TYPE_YEAR, Utils.RANGE_TYPE_MONTH,
-		Utils.RANGE_TYPE_WEEK, Utils.RANGE_TYPE_DAY,
-		Utils.RANGE_TYPE_NIGHT, Utils.RANGE_TYPE_HOUR];
-	var timeChoice = $("#time-choice");
-	$.each(timeRangeTypes, function(idx, rangeType) {
-		var timeLiDom = $("<li id='time-choice-" + rangeType + "-icon' range_type='" + rangeType + "'></li>");
-		timeLiDom.insertBefore("#select-dt-section");
-	})
-	timeChoice.find("li").click(function () {
-		var newRangeType = $(this).attr("range_type");
+	Utils.setupTimeChoiceLayout('#time-choice', function(newRangeType) {
 		if (graph.graphChart.currentRangeType !== newRangeType) {
 			graph.graphChart.currentDt = Utils.genStartEndDt(Utils.getNowMoment('hour'), newRangeType).startDt;
 			graph.graphChart.updateCurrentRangeType(newRangeType);
@@ -544,17 +515,17 @@ $(function() {
 {% block page_subtitle %}Check this out!{% endblock %}
 
 {% block page_content %}
-<div class="graph-component">
-	<div id="graph-panel-header">
+<div class="panel-component">
+	<div id="graph-panel-header" class="drop-down-panel-header">
 		<!-- Sub Menu Item -->
-		<div id="sub-menu">
+		<div class="panel-header-left-menu">
 			<!-- write this way to remove space between inline-blocks -->
 			<!-- http://css-tricks.com/fighting-the-space-between-inline-block-elements/ -->
 			<h3 id="sub-menu-unit">
 				Unit</h3><h3 id="sub-menu-time">
 				Time</h3><h3 id="sub-menu-source">
 				End-use</h3><h3 id="sub-menu-days">Compare</h3>
-			<img id="expand-menu-btn" src="{% static 'images/expandable_button.png' %}">
+			<img class="expand-drop-down-panel-btn" src="{% static 'images/expandable_button.png' %}">
 		</div>
 
 		<!-- Date -->
@@ -563,12 +534,12 @@ $(function() {
 			<div id="dt-now-icon"></div>
 			<div id="dt-prev-icon"></div>
 			<span id="current-dt"></span>
-			<span style='clear: both;'></span>				
+			<span style='clear: both;'></span>
 		</div>
 	</div>
 
 	<!-- Sub Menu Item Links -->
-	<div id="sub-menu-links">
+	<div class="drop-down-panel-content">
 		<ul id="unit-choice"></ul>
 		<ul id="time-choice">
 			<div id="select-dt-section">
@@ -653,11 +624,11 @@ $(function() {
 	<div style="clear: both;"></div>
 
 	<!-- Simple bar for decoration -->
-	<div id="main-graph-bar"></div>
+	<div class="panel-separator"></div>
 </div>
 
 <!-- Main Graph -->
-<div id="graph-panel" class="graph-component">
+<div id="graph-panel" class="panel-component">
 	<img id="unit-bg">
 	<div id="chart"></div>
 	<div id="y-axis-slider"></div>

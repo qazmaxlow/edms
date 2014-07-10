@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import SystemHomeImage
 
-# Register your models here.
+class SystemHomeImageAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(SystemHomeImage, SystemHomeImageAdmin)

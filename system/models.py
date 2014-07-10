@@ -16,7 +16,7 @@ class System(models.Model):
 	intro = models.CharField(max_length=2000, blank=True)
 	intro_tc = models.CharField(max_length=2000, blank=True)
 	path = models.CharField(max_length=2000, blank=True)
-	logo = models.CharField(max_length=300, blank=True)
+	logo = models.ImageField(blank=True, upload_to="system_logo/%Y/%m")
 	last_update = models.DateTimeField(auto_now=True, blank=True, null=True)
 	lat = models.FloatField(default=0)
 	lng = models.FloatField(default=0)
@@ -52,7 +52,7 @@ class System(models.Model):
 		return {'systems': systems, 'user_systems': user_systems,
 			'system_path_components': system_path_components}
 
-class SystemHomeImages(models.Model):
+class SystemHomeImage(models.Model):
 	image = models.ImageField(upload_to="system_home/%Y/%m")
 	system = models.ForeignKey(System)
 

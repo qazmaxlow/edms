@@ -6,6 +6,8 @@
 {% block extra_head %}
 {{block.super}}
 
+<link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/ranking.css' %}">
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
 <script src="{% static 'js/entrak-system.js' %}"></script>
@@ -34,7 +36,7 @@ function getRankingData() {
 	var requestData = {
 		grouped_source_infos: JSON.stringify(ranking.entrakSystem.getGroupedSourceInfos()),
 		range_type: Utils.API_RANGE_TYPES[ranking.currentRangeType],
-		unit_category_id: ranking.currentUnit,
+		unit_category_id: ranking.currentUnit.id,
 		start_dt: startEndDt.startDt.unix(),
 		end_dt: startEndDt.endDt.unix(),
 		ranking_type: ranking.currentRankingType
@@ -51,21 +53,80 @@ function getRankingData() {
 		url: "{% url 'ranking_data' system_code=systems.0.code %}",
 		data: requestData,
 	}).done(function(data) {
-		if (ranking.currentRankingType === RANKING_TYPE_TOTAL
-			|| ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
-			finishReceiveTotalOrPerPerson(data);
-		} else if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
-			finishReceivePercent(data);
-		}
+		finishReceiveRankData(data);
 	});
 }
 
-function finishReceiveTotalOrPerPerson(data) {
-	console.log(data);
+function finishReceiveRankData(data) {
+	var itemContainer = $("#ranking-item-container");
+	itemContainer.empty();
+	$.each(data, function(idx, item) {
+		var matchSystem = ranking.entrakSystem.systemTree.find(function (node) {
+			return node.data.code == item.code;
+		});
+
+		var rankingEleHtml = '<div class="ranking-item';
+		if (ranking.currentRankingType === RANKING_TYPE_TOTAL
+			|| ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
+			rankingEleHtml += ' ranking-total-or-person';
+		} else if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
+			rankingEleHtml += ' ranking-percent';
+		}
+		rankingEleHtml += '">';
+
+		rankingEleHtml += '<div class="rank-name">' + item.name + '</div>'
+			+ '<div class="rank-separate-line"></div>';
+
+		if (matchSystem !== null) {
+			rankingEleHtml += '<div class="rank-img" style="background-image: url(\'' + matchSystem.data.logo + '\');">';
+		} else {
+			rankingEleHtml += '<div class="rank-img" style="background-image: url(\'src-default.png\');">';
+		}
+		rankingEleHtml += '</div><img src="">'
+			+ '<span class="rank-digit">' + (idx + 1) + '</span>';
+
+		if (ranking.currentRankingType === RANKING_TYPE_TOTAL
+			|| ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
+			var valueText = Utils.formatWithCommas(item.value.toFixed(0));
+			valueText += ' '+ranking.currentUnit.name;
+			if (ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
+				valueText += '/person';
+			}
+
+			rankingEleHtml += '<div class="rank-meter-bar"><div class="rank-meter-bar-inner"></div></div>'
+			+ '<div class="rank-detail-value">' + valueText + '</div>';
+		} else if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
+			var transformedVal = Utils.fixed1DecIfLessThan10(item.value);
+		}
+
+		rankingEleHtml += '</div>';
+
+		itemContainer.append(rankingEleHtml);
+	});
 }
 
-function finishReceivePercent(data) {
-	console.log(data);
+function formatFromToDt(targetDt, rangeType) {
+	var startEndDt = Utils.genStartEndDt(targetDt, rangeType);
+
+	var resultText = '';
+	if (rangeType === Utils.RANGE_TYPE_HOUR) {
+		resultText = startEndDt.startDt.format('D MMM YYYY, ddd hA');
+		resultText += startEndDt.endDt.format(' - hA');
+	} else if (rangeType === Utils.RANGE_TYPE_DAY) {
+		resultText = startEndDt.startDt.format('D MMM YYYY, ddd');
+	} else if (rangeType === Utils.RANGE_TYPE_NIGHT) {
+		resultText = startEndDt.startDt.format('D MMM YYYY, ddd hA');
+		resultText += startEndDt.endDt.format(' - D MMM YYYY, ddd hA');
+	} else if (rangeType === Utils.RANGE_TYPE_WEEK) {
+		resultText = startEndDt.startDt.format('D MMM YYYY, ddd');
+		resultText += startEndDt.endDt.format(' - D MMM YYYY, ddd');
+	} else if (rangeType === Utils.RANGE_TYPE_MONTH) {
+		resultText = startEndDt.startDt.format('MMM YYYY');
+	} else if (rangeType === Utils.RANGE_TYPE_YEAR) {
+		resultText = startEndDt.startDt.format('YYYY');
+	}
+
+	return resultText;
 }
 
 $(function() {
@@ -77,13 +138,102 @@ $(function() {
 
 	ranking.currentDt = Utils.getNowMoment('hour');
 	ranking.currentRangeType = Utils.RANGE_TYPE_DAY;
-	ranking.currentUnit = Utils.UNIT_KWH;
-	ranking.currentRankingType = RANKING_TYPE_PER_PERSON;
+	ranking.currentRankingType = RANKING_TYPE_TOTAL;
 
+	var subMenuPanel = $(".drop-down-panel-content ul");
+	$(".panel-header-left-menu h3").each(function (eleIdx) {
+		$(this).click({connectedPanel: subMenuPanel[eleIdx]}, function (event) {
+			var connectedPanel = $(event.data.connectedPanel);
+			if (!(connectedPanel.hasClass('selected-submenu'))) {
+				subMenuPanel.filter(".selected-submenu").removeClass('selected-submenu').hide();
+				connectedPanel.addClass('selected-submenu').fadeIn();
+			}
+
+			$(".drop-down-panel-content").height("95px");
+
+			var menuLinks = $('.drop-down-panel-content');
+			if (menuLinks.css("display") === 'none') {
+				menuLinks.slideToggle(700, "easeOutBounce", function() {});
+				$('.expand-drop-down-panel-btn').css({transform: 'rotate(180deg)'});
+			}
+		});
+	});
+	$("#unit-choice").addClass('selected-submenu').show();
+
+	ranking.unitCategorys = JSON.parse('{{unit_categorys|jsonifyUnitCategorys}}');
+	ranking.currentUnit = ranking.unitCategorys[0];
+	Utils.setupUnitChoiceLayout('#unit-choice', ranking.unitCategorys, '{% get_static_prefix %}', function(unitCategory) {
+		if (ranking.currentUnit.id !== unitCategory.id) {
+			ranking.currentUnit = unitCategory;
+			getRankingData();
+		}
+	});
+
+	Utils.setupTimeChoiceLayout('#time-choice', function(newRangeType) {
+		if (ranking.currentRangeType !== newRangeType) {
+			ranking.currentRangeType = newRangeType;
+			$("#current-dt").text(formatFromToDt(ranking.currentDt, ranking.currentRangeType));
+			getRankingData();
+		}
+	});
+
+	$(".panel-header-right-menu h3").click(function(event) {
+		var newRankingType = $(this).attr('ranking-type');
+		if (ranking.currentRankingType !== newRankingType) {
+			ranking.currentRankingType = newRankingType;
+			$(".panel-header-right-menu h3").removeClass('selected-submenu');
+			$(this).addClass('selected-submenu');
+			getRankingData();
+		}
+	});
+	$(".panel-header-right-menu [ranking-type='total']").addClass('selected-submenu');
+
+	Utils.setupDropDownPanelBtn();
+
+	$("#current-dt").text(formatFromToDt(ranking.currentDt, ranking.currentRangeType));
 	getRankingData();
 });
 </script>
 {% endblock %}
 
 {% block page_content %}
+<div class="panel-component">
+	<div id="ranking-panel-header" class="drop-down-panel-header">
+		<!-- Sub Menu Item -->
+		<div class="panel-header-left-menu">
+			<!-- write this way to remove space between inline-blocks -->
+			<!-- http://css-tricks.com/fighting-the-space-between-inline-block-elements/ -->
+			<h3 id="sub-menu-unit">
+				Unit</h3><h3 id="sub-menu-time">
+				Time</h3>
+			<img class="expand-drop-down-panel-btn" src="{% static 'images/expandable_button.png' %}">
+
+			<span id="current-dt"></span>
+		</div>
+
+		<div class="panel-header-right-menu">
+			<h3 ranking-type='percent'>% Change</h3>
+			<h3 ranking-type='per_person'>Per person</h3>
+			<h3 ranking-type='total'>Total</h3>
+			<h3>Sort by</h3>
+			<span style='clear: both;'></span>
+		</div>
+	</div>
+
+	<div class="drop-down-panel-content">
+		<ul id="unit-choice"></ul>
+		<ul id="time-choice">
+			<div id="select-dt-section">
+				<div id="custom-select-title">CUSTOM SELECT</div>
+				<div id="custom-calendar-icon"></div>
+				<input type="text" id="current-dt-picker">
+			</div>
+		</ul>
+	</div>
+
+	<div class="panel-separator"></div>
+</div>
+
+<div id="ranking-item-container" class="panel-component"></div>
+
 {% endblock %}

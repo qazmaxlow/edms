@@ -13,6 +13,7 @@ DATABASES = {
 
 connect('entrak')
 
+MEDIA_URL = '/media/'
 LOGGING['handlers']['timed_rotating_handler']['filename'] = os.path.join(os.path.dirname(BASE_DIR), 'logs', 'entrak', 'error_log')
 
 CO2_CATEGORY_ID = 1

@@ -1,0 +1,54 @@
+.panel-header-right-menu h3 {
+	cursor: pointer;
+	cursor: hand;
+}
+
+.panel-header-left-menu{
+	width: 65% !important;
+}
+#current-dt {
+	top: 8px;
+	right: 0px;
+	padding-right: 10px;
+	position: absolute;
+	color: white;
+}
+
+.panel-header-right-menu {
+	position: absolute;
+	right: 0px;
+	height: 100%;
+	width: 35%;
+	background-color: #ff00ff;
+	border-top-right-radius: 5px;
+	-moz-border-top-right-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+}
+.panel-header-right-menu h3 {
+	float: right;
+}
+.panel-header-right-menu h3:first-child {
+	border-top-right-radius: 5px;
+	-moz-border-top-right-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+}
+.panel-header-right-menu h3.selected-submenu {
+	background-color: green;
+}
+
+.ranking-item {
+	height: 50px;
+}
+.rank-separate-line {
+	position: absolute;
+	top: 50px;
+	left: 80px;
+	width: 892px;
+	height: 2px;
+	background-color: #AA00AA;
+}
+.rank-detail-value {
+	position: absolute;
+	right: 0px;
+	background-color: #00FF00;
+}

@@ -1,4 +1,7 @@
 from django.conf.urls import patterns, include, url
+from django.conf.urls.static import static
+from django.contrib.staticfiles import views
+from entrak import settings
 
 from django.contrib import admin
 admin.autodiscover()
@@ -19,3 +22,9 @@ urlpatterns = patterns('',
     	url(r'^ranking_data/$', 'entrak.ranking_views.ranking_data_view', name='ranking_data'),
     ))),
 )
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += [
+        url(r'^media/(?P<path>.*)$', views.serve),
+    ]

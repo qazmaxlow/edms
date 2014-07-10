@@ -47,7 +47,7 @@ EntrakSystem.prototype.getGroupedSourceInfos = function() {
 			}
 		});
 
-		groupedSourceIds.push({name: subSystem.data.name, source_ids:sourceIds});
+		groupedSourceIds.push({name: subSystem.data.name, code: subSystem.data.code, source_ids:sourceIds});
 	})
 
 	$.each(entrakSysThis.systemTree.data.sources, function(sourceId, source){

@@ -96,3 +96,59 @@ Utils.genLastStartEndDt = function (targetDt, rangeType) {
 
 	return {startDt: lastStartDt, endDt: lastEndDt};
 }
+
+Utils.setupUnitChoiceLayout = function (targetEleSel, unitCategorys, staticPrefix, unitClickedFunc) {
+	var unitChoice = $(targetEleSel);
+	$.each(unitCategorys, function(idx, unitCategory) {
+		var unitLiDom = $("<li unit_category='" + unitCategory.id + "'>"
+			+ "<img src='" + staticPrefix + "images/unit/" + unitCategory.imgOff + "'>"
+			+ "</li>");
+		unitLiDom.find('img').hover(function() {
+			$(this).attr("src", staticPrefix + "images/unit/" + unitCategory.imgOn);
+		}, function() {
+			$(this).attr("src", staticPrefix + "images/unit/" + unitCategory.imgOff);
+		});
+		unitChoice.append(unitLiDom);
+	});
+	unitChoice.find("li").each(function (unitCategoryIdx) {
+		$(this).click({unitCategory: unitCategorys[unitCategoryIdx]}, function(event) {
+			unitClickedFunc(event.data.unitCategory);
+		});
+	});
+}
+
+Utils.setupTimeChoiceLayout = function(targetEleSel, timeRangeClickedFunc) {
+	var timeRangeTypes = [Utils.RANGE_TYPE_YEAR, Utils.RANGE_TYPE_MONTH,
+		Utils.RANGE_TYPE_WEEK, Utils.RANGE_TYPE_DAY,
+		Utils.RANGE_TYPE_NIGHT, Utils.RANGE_TYPE_HOUR];
+	var timeChoice = $(targetEleSel);
+	$.each(timeRangeTypes, function(idx, rangeType) {
+		var timeLiDom = $("<li id='time-choice-" + rangeType + "-icon' range_type='" + rangeType + "'></li>");
+		timeLiDom.insertBefore("#select-dt-section");
+	})
+	timeChoice.find("li").click(function () {
+		var newRangeType = $(this).attr("range_type");
+		timeRangeClickedFunc(newRangeType);
+	});
+}
+
+Utils.setupDropDownPanelBtn = function() {
+	$('.expand-drop-down-panel-btn').click(function () {
+		var menuLinks = $('.drop-down-panel-content');
+		if (menuLinks.css('display') === 'none') {
+			$(this).css({transform: 'rotate(180deg)'});
+		} else {
+			$(this).css({transform: 'rotate(0deg)'});
+		}
+		menuLinks.slideToggle(700, "easeOutBounce", function() {});
+	}).css({transform: 'rotate(180deg)'});
+}
+
+Utils.formatWithCommas = function (val) {
+    return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+Utils.fixed1DecIfLessThan10 = function(val) {
+	var numOfDec = (val < 10) ? 1 : 0;
+	return val.toFixed(numOfDec);
+}

@@ -37,14 +37,16 @@ def ranking_data_view(request, system_code=None):
 	start_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('start_dt')))
 	end_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('end_dt')))
 	ranking_type = request.POST.get('ranking_type')
-	if ranking_type == RANKING_TYPE_PERCENT:
-		last_start_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('last_start_dt')))
-		last_end_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('last_end_dt')))
 
 	source_group_map = Utils.gen_source_group_map(grouped_source_infos)
 	all_source_ids = Utils.get_source_ids_from_grouped_source_info(grouped_source_infos)
 
 	source_readings = SourceManager.get_readings(all_source_ids, range_type, start_dt, end_dt)
+
+	if ranking_type == RANKING_TYPE_PERCENT:
+		last_start_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('last_start_dt')))
+		last_end_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('last_end_dt')))
+		last_source_readings = SourceManager.get_readings(all_source_ids, range_type, last_start_dt, last_end_dt)
 
 	if unit_category_id != KWH_CATEGORY_ID:
 		systems = System.get_systems_within_root(system_code)
@@ -52,6 +54,8 @@ def ranking_data_view(request, system_code=None):
 		unit_rates = UnitRate.objects.select_related('unit').filter(unit__category_id=unit_category_id)
 
 		calculation.transform_source_readings(source_readings, systems, sources, unit_rates, unit_category_id)
+		if ranking_type == RANKING_TYPE_PERCENT:
+			calculation.transform_source_readings(last_source_readings, systems, sources, unit_rates, unit_category_id)
 	else:
 		systems = None
 		sources = None
@@ -71,7 +75,12 @@ def ranking_data_view(request, system_code=None):
 		for source_id in sources_sum_info.keys():
 			sources_sum_info[source_id] /= system_source_mapping[source_id].population
 
-	grouped_readings = [{'name': info['name'], 'value': 0} for info in grouped_source_infos]
+	elif ranking_type == RANKING_TYPE_PERCENT:
+		for source_id, total in sources_sum_info.items():
+			last_total = reduce(lambda prev, reading: prev+reading[1], last_source_readings[source_id].items(), 0)
+			sources_sum_info[source_id] = (total-last_total)/last_total*100.0
+
+	grouped_readings = [{'name': info['name'], 'code': info.get('code', None), 'value': 0} for info in grouped_source_infos]
 	for source_id, reading_val in sources_sum_info.items():
 		target_group = grouped_readings[source_group_map[source_id]]
 		target_group['value'] += reading_val
