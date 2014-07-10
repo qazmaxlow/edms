@@ -19,7 +19,7 @@
 
 {% block page_content %}
 
-<div>Over the past 12 months you have emitted<span class="{% if percengate_change >= 0 %}positive-saving{% else %}negative-saving{% endif %}"> {{percengate_change|abs_float|round_if_larger_than_10}}% {% if percengate_change >= 0 %}LESS{% else %}MORE{% endif %} </span>than your baseline</div>
+<div class="saving-header"><h2>Over the past 12 months you have emitted<span class="{% if percengate_change >= 0 %}positive-saving{% else %}negative-saving{% endif %}"> {{percengate_change|abs_float|round_if_larger_than_10}}<span>%</span> {% if percengate_change >= 0 %}LESS{% else %}MORE{% endif %} </span>than your baseline</h2></div>
 <hr>
 
 <div id="saving-container" style="background-image:url('{% static 'images/progress/factory-bg.png' %}');">
@@ -36,8 +36,8 @@
 				<img src="{% static 'images/progress/award.png' %}">
 				<div id="archived_percentage">{{archived_level}}%</div>
 			</div>
-			<div>Next target would be</div>
-			<div>{{target_level}}% REDUCTION</div>
+			<div class="next-target-text">Next target would be</div>
+			<div class="next-target-percent">{{target_level}}% REDUCTION</div>
 		</div>
 
 		<div class="separate-line"></div>
@@ -55,7 +55,7 @@
 		<img src="{% static 'images/progress/carbon-footprint-bar.png' %}">
 		<div>Total carbon Footprint</div>
 	</div>
-	<div id="carbon-footprint-desc">{{last_12_months_co2_consumption}} tons of CO2 were emitted over the last 12 months</div>
+	<div id="carbon-footprint-desc"><p><span>{{last_12_months_co2_consumption}} tons</span> of CO2 were emitted over the last 12 months</p></div>
 
 	<div id="carbon-footprint-block">
 		<div id="tennis-courts-info" class="footprint-info">
@@ -72,7 +72,7 @@
 		<div id="elephants-info" class="footprint-info">
 			<div><img src="{% static 'images/progress/arrow-down.png' %}"></div>
 			<div><img src="{% static 'images/progress/elephant.png' %}"></div>
-			<div>The weight of<br><span>{{elephant_num}}</span><br><span>elephants</span></div>
+			<div>The weight of<br><span>{{elephant_num}} elephants</span></div>
 		</div>
 
 		<div class="separate-line"></div>
