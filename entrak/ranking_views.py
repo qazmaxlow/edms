@@ -2,10 +2,11 @@ import json
 from django.shortcuts import render_to_response
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.db.models import Q
 from utils.auth import permission_required
 from utils.utils import Utils
 from utils import calculation
-from system.models import System, UnitCategory, UnitRate, KWH_CATEGORY_ID
+from system.models import System, UnitCategory, UnitRate, KWH_CATEGORY_CODE, CITY_ALL
 from egauge.models import Source
 from egauge.manager import SourceManager
 
@@ -20,9 +21,7 @@ def ranking_view(request, system_code=None):
 
 	sources = SourceManager.get_sources(systems_info["systems"][0])
 
-	unit_categorys = list(UnitCategory.objects.all().order_by('order'))
-	# add kWh as the first unit category
-	unit_categorys.insert(0, UnitCategory.getKwhCategory())
+	unit_categorys = list(UnitCategory.objects.filter(Q(city=CITY_ALL) | Q(city=systems_info["systems"][0].city)).order_by('order'))
 
 	m = systems_info
 	m.update({'sources': sources, 'unit_categorys': unit_categorys})
@@ -33,7 +32,9 @@ def ranking_view(request, system_code=None):
 def ranking_data_view(request, system_code=None):
 	grouped_source_infos = json.loads(request.POST.get('grouped_source_infos'))
 	range_type = request.POST.get('range_type')
-	unit_category_id = int(request.POST.get('unit_category_id'))
+	unit_category_code = request.POST.get('unit_category_code')
+	has_detail_rate = (request.POST.get('has_detail_rate') == 'true')
+	global_rate = float(request.POST.get('global_rate'))
 	start_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('start_dt')))
 	end_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('end_dt')))
 	ranking_type = request.POST.get('ranking_type')
@@ -48,14 +49,19 @@ def ranking_data_view(request, system_code=None):
 		last_end_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('last_end_dt')))
 		last_source_readings = SourceManager.get_readings(all_source_ids, range_type, last_start_dt, last_end_dt)
 
-	if unit_category_id != KWH_CATEGORY_ID:
-		systems = System.get_systems_within_root(system_code)
-		sources = Source.objects(id__in=all_source_ids)
-		unit_rates = UnitRate.objects.select_related('unit').filter(unit__category_id=unit_category_id)
+	if unit_category_code != KWH_CATEGORY_CODE:
+		if has_detail_rate:
+			systems = System.get_systems_within_root(system_code)
+			sources = Source.objects(id__in=all_source_ids)
+			unit_rates = UnitRate.objects.filter(category_code=unit_category_code)
 
-		calculation.transform_source_readings(source_readings, systems, sources, unit_rates, unit_category_id)
-		if ranking_type == RANKING_TYPE_PERCENT:
-			calculation.transform_source_readings(last_source_readings, systems, sources, unit_rates, unit_category_id)
+			calculation.transform_source_readings(source_readings, systems, sources, unit_rates, unit_category_code)
+			if ranking_type == RANKING_TYPE_PERCENT:
+				calculation.transform_source_readings(last_source_readings, systems, sources, unit_rates, unit_category_code)
+		else:
+			calculation.transform_source_readings_with_global_rate(source_readings, global_rate)
+			if ranking_type == RANKING_TYPE_PERCENT:
+				calculation.transform_source_readings_with_global_rate(last_source_readings, global_rate)
 	else:
 		systems = None
 		sources = None

@@ -73,7 +73,9 @@ GraphChart.prototype._retrieveSourceReadings = function(groupedSourceInfos, star
 		data: {
 			grouped_source_infos: JSON.stringify(groupedSourceInfos),
 			range_type: Utils.API_RANGE_TYPES[graphChartThis.currentRangeType],
-			unit_category_id: graphChartThis.currentUnit,
+			unit_category_code: graphChartThis.currentUnit.code,
+			has_detail_rate: graphChartThis.currentUnit.hasDetailRate,
+			global_rate: graphChartThis.currentUnit.globalRate,
 			start_dt: startDt.unix(),
 			end_dt: endDt.unix(),
 		},

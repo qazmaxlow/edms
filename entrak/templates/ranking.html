@@ -9,6 +9,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/ranking.css' %}">
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
+<script src="{% static 'js/jquery.tinysort.min.js' %}"></script>
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
 <script src="{% static 'js/entrak-system.js' %}"></script>
 <script src="{% static 'js/entrak-utils.js' %}"></script>
@@ -36,7 +37,9 @@ function getRankingData() {
 	var requestData = {
 		grouped_source_infos: JSON.stringify(ranking.entrakSystem.getGroupedSourceInfos()),
 		range_type: Utils.API_RANGE_TYPES[ranking.currentRangeType],
-		unit_category_id: ranking.currentUnit.id,
+		unit_category_code: ranking.currentUnit.code,
+		has_detail_rate: ranking.currentUnit.hasDetailRate,
+		global_rate: ranking.currentUnit.globalRate,
 		start_dt: startEndDt.startDt.unix(),
 		end_dt: startEndDt.endDt.unix(),
 		ranking_type: ranking.currentRankingType
@@ -58,6 +61,8 @@ function getRankingData() {
 }
 
 function finishReceiveRankData(data) {
+	ranking.rankingData = data;
+
 	var itemContainer = $("#ranking-item-container");
 	itemContainer.empty();
 	$.each(data, function(idx, item) {
@@ -65,7 +70,7 @@ function finishReceiveRankData(data) {
 			return node.data.code == item.code;
 		});
 
-		var rankingEleHtml = '<div class="ranking-item';
+		var rankingEleHtml = '<div value="' + item.value + '" class="ranking-item';
 		if (ranking.currentRankingType === RANKING_TYPE_TOTAL
 			|| ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
 			rankingEleHtml += ' ranking-total-or-person';
@@ -127,6 +132,32 @@ function formatFromToDt(targetDt, rangeType) {
 	}
 
 	return resultText;
+}
+
+function sortRankValAsc() {
+	sortRankingItem({order: 'asc', attr: 'value'});
+}
+
+function sortRankValDesc() {
+	sortRankingItem({order: 'desc', attr: 'value'});
+}
+
+function sortRankAlphabetical() {
+	sortRankingItem('.rank-name', {order: 'asc', attr: 'value'});
+}
+
+function sortRankingItem(options) {
+	var rankingItems = $("#ranking-item-container>div");
+	rankingItems.tsort(options).each(function(idx, ele) {
+		var rankingItem = $(ele);
+		rankingItem.find(".rank-digit").text(idx+1);
+		rankingItem.css({
+			position: 'absolute',
+			top: rankingItem.position.top
+		}).animate({
+			top: idx*50
+		}, 500);
+	});
 }
 
 $(function() {

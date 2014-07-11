@@ -50,10 +50,7 @@ function updateDonutChart(data) {
 		$("#selection-summary-source").text(row.label);
 		$("#selection-summary-source").css("color", donutChart.options.colors[i]);
 
-		var currentUnitCategory = $.grep(graph.unitCategorys, function(unitCategory) {
-			return (unitCategory.id === graph.graphChart.currentUnit);
-		})[0];
-		$("#selection-summary-unit").text(currentUnitCategory.name);
+		$("#selection-summary-unit").text(graph.graphChart.currentUnit.shortDesc);
 	});
 	donutChart.fire("select", 0, data[0]);
 }
@@ -339,7 +336,6 @@ $(function() {
 		retrieveReadingFinished);
 	graph.graphChart.currentRangeType = Utils.RANGE_TYPE_DAY;
 	graph.graphChart.currentDt = Utils.getNowMoment('hour');
-	graph.graphChart.currentUnit = Utils.UNIT_KWH;
 
 	graph.graphChart.entrakSystem = new EntrakSystem();
 	graph.graphChart.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
@@ -348,6 +344,7 @@ $(function() {
 	graph.graphChart.entrakSystem.addSourceToSystem('{{sources|jsonifySources}}');
 
 	graph.unitCategorys = JSON.parse('{{unit_categorys|jsonifyUnitCategorys}}');
+	graph.graphChart.currentUnit = graph.unitCategorys[0];
 
 	$("#unit-label").text(graph.unitCategorys[0].name);
 	$("#unit-bg").attr("src", "{% get_static_prefix %}images/unit/" + graph.unitCategorys[0].bgImg);
@@ -429,7 +426,7 @@ $(function() {
 	Utils.setupDropDownPanelBtn();
 
 	Utils.setupUnitChoiceLayout('#unit-choice', graph.unitCategorys, '{% get_static_prefix %}', function(unitCategory) {
-		graph.graphChart.updateUnit(unitCategory.id);
+		graph.graphChart.updateUnit(unitCategory);
 		$("#unit-label").text(unitCategory.name);
 		$("#unit-bg").attr("src", "{% get_static_prefix %}images/unit/" + unitCategory.bgImg);
 	});

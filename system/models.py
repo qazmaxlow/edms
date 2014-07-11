@@ -7,7 +7,8 @@ from django.db.models import Q
 
 SOURCE_TZ_HK = u'Asia/Hong_Kong'
 UNIT_IMG_DIR = os.path.join(BASE_DIR, 'entrak', 'static', 'images', 'unit')
-KWH_CATEGORY_ID = -1
+CITY_ALL = 'all'
+KWH_CATEGORY_CODE = 'kwh'
 
 class System(models.Model):
 	code = models.CharField(max_length=100, unique=True)
@@ -121,23 +122,23 @@ class BaselineUsage(models.Model):
 		return result
 
 class UnitCategory(models.Model):
+	code = models.CharField(max_length=200)
 	name = models.CharField(max_length=300)
 	name_tc = models.CharField(max_length=300, blank=True)
+	short_desc = models.CharField(max_length=200)
+	short_desc_tc = models.CharField(max_length=200)
 	order = models.PositiveSmallIntegerField(default=1)
 	img_off = models.CharField(max_length=200)
 	img_on = models.CharField(max_length=200)
 	bg_img = models.CharField(max_length=200)
-
-	@staticmethod
-	def getKwhCategory():
-		return UnitCategory(id=KWH_CATEGORY_ID, name='kWh', order=0, img_off='kwh.png', img_on='kwh-hover.png', bg_img='burger-bg.png')
-
-class Unit(models.Model):
-	category = models.ForeignKey(UnitCategory)
-	code = models.CharField(max_length=200, unique=True)
+	is_suffix = models.BooleanField(default=True)
+	global_rate = models.FloatField(default=1)
+	has_detail_rate = models.BooleanField(default=False)
+	city = models.CharField(max_length=200)
 
 class UnitRate(models.Model):
-	unit = models.ForeignKey(Unit)
+	category_code = models.CharField(max_length=200)
+	code = models.CharField(max_length=200)
 	rate = models.FloatField(default=1)
 	effective_date = models.DateTimeField()
 

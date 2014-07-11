@@ -8,7 +8,7 @@ from django.shortcuts import render_to_response
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.db.models import Q
-from system.models import System, UnitCategory, UnitRate, KWH_CATEGORY_ID
+from system.models import System, UnitCategory, UnitRate, CITY_ALL, KWH_CATEGORY_CODE
 from egauge.manager import SourceManager
 from egauge.models import Source
 from utils.utils import Utils
@@ -23,9 +23,7 @@ def graph_view(request, system_code=None):
 
 	sources = SourceManager.get_sources(systems_info["systems"][0])
 
-	unit_categorys = list(UnitCategory.objects.all().order_by('order'))
-	# add kWh as the first unit category
-	unit_categorys.insert(0, UnitCategory.getKwhCategory())
+	unit_categorys = list(UnitCategory.objects.filter(Q(city=CITY_ALL) | Q(city=systems_info["systems"][0].city)).order_by('order'))
 
 	m = systems_info
 	m.update({'sources': sources, 'unit_categorys': unit_categorys})
@@ -36,7 +34,9 @@ def graph_view(request, system_code=None):
 def source_readings_view(request, system_code):
 	grouped_source_infos = json.loads(request.POST.get('grouped_source_infos'))
 	range_type = request.POST.get('range_type')
-	unit_category_id = int(request.POST.get('unit_category_id'))
+	unit_category_code = request.POST.get('unit_category_code')
+	has_detail_rate = (request.POST.get('has_detail_rate') == 'true')
+	global_rate = float(request.POST.get('global_rate'))
 	start_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('start_dt')))
 	end_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('end_dt')))
 
@@ -45,12 +45,15 @@ def source_readings_view(request, system_code):
 
 	source_readings = SourceManager.get_readings(all_source_ids, range_type, start_dt, end_dt)
 
-	if unit_category_id != KWH_CATEGORY_ID:
-		systems = System.get_systems_within_root(system_code)
-		sources = Source.objects(id__in=all_source_ids)
-		unit_rates = UnitRate.objects.select_related('unit').filter(unit__category_id=unit_category_id)
+	if unit_category_code != KWH_CATEGORY_CODE:
+		if has_detail_rate:
+			systems = System.get_systems_within_root(system_code)
+			sources = Source.objects(id__in=all_source_ids)
+			unit_rates = UnitRate.objects.filter(category_code=unit_category_code)
 
-		calculation.transform_source_readings(source_readings, systems, sources, unit_rates, unit_category_id)
+			calculation.transform_source_readings(source_readings, systems, sources, unit_rates, unit_category_code)
+		else:
+			calculation.transform_source_readings_with_global_rate(source_readings, global_rate)
 
 	grouped_readings = [{'name': info['name'], 'readings': {}} for info in grouped_source_infos]
 	for source_id, readings in source_readings.items():

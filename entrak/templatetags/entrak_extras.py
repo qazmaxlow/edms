@@ -51,10 +51,13 @@ def jsonifyUnitCategorys(unit_categorys):
 	unit_categorys_info = []
 	for unit_category in unit_categorys:
 		info = {
-			'id': unit_category.id,
+			'code': unit_category.code,
+			'shortDesc': unit_category.short_desc,
 			'name': unit_category.name,
 			'imgOff': unit_category.img_off, 'imgOn': unit_category.img_on,
-			'bgImg': unit_category.bg_img}
+			'bgImg': unit_category.bg_img,
+			'hasDetailRate': unit_category.has_detail_rate,
+			'globalRate': unit_category.global_rate}
 		unit_categorys_info.append(info)
 
 	return escapejs(json.dumps(unit_categorys_info))

@@ -16,7 +16,7 @@ Utils.API_RANGE_TYPES = {
 	'year': 'year',
 };
 
-Utils.UNIT_KWH = -1;
+Utils.UNIT_KWH = 'kwh';
 
 Utils.getNowMoment = function (startOf) {
 

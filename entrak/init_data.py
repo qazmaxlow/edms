@@ -3,7 +3,7 @@ import datetime
 import json
 import pytz
 from egauge.models import Source
-from system.models import System, BaselineUsage, UnitCategory, Unit, UnitRate
+from system.models import System, BaselineUsage, UnitCategory, UnitRate
 
 def init_test_source():
 	sources = []
@@ -47,7 +47,7 @@ def init_test_system():
 	systems = []
 	systems.append(System(code='adidas', path='', name='Adidas', unit_info=json.dumps({'1': 'hk-co2' ,'2': 'clp'})))
 	systems.append(System(code='adidas-hk', path=',adidas,', name='Adidas Hong Kong', unit_info=json.dumps({'1': 'hk-co2' ,'2': 'clp'})))
-	systems.append(System(code='adidas-tw', path=',adidas,', name='Adidas Taiwan', unit_info=json.dumps({'1': 'tw-co2', '2': 'twec'})))
+	systems.append(System(code='adidas-tw', path=',adidas,', name='Adidas Singapore', unit_info=json.dumps({'1': 'tw-co2', '2': 'twec'})))
 	systems.append(System(code='nike', path='', name='Nike', unit_info=json.dumps({'1': 'hk-co2' ,'2': 'clp'})))
 	systems.append(System(code='adidas-shatin', path=',adidas,adidas-hk,', name='Adidas Shatin',
 		unit_info=json.dumps({'1': 'tw-co2', '2': 'clp'})))
@@ -56,25 +56,55 @@ def init_test_system():
 
 def init_test_unit():
 	unit_cats = []
-	unit_cats.append(UnitCategory(name='co2', order=1, img_off='co2.png', img_on='co2-hover.png', bg_img='burger-bg.png'))
-	unit_cats.append(UnitCategory(name='currency', order=2, img_off='money.png', img_on='money-hover.png', bg_img='burger-bg.png'))
+	unit_cats.append(UnitCategory(code='kwh', name='kWh', order=0,
+		short_desc='kWh', img_off='kwh.png', img_on='kwh-hover.png', bg_img='burger-bg.png',
+		city='all'))
+	unit_cats.append(UnitCategory(code='money', name='HK$', short_desc='HK$', order=1,
+		img_off='money.png', img_on='money-hover.png', bg_img='burger-bg.png', city='hk',
+		has_detail_rate=True, is_suffix=False))
+	unit_cats.append(UnitCategory(code='money', name='SG$', short_desc='SG$', order=1,
+		img_off='money.png', img_on='money-hover.png', bg_img='burger-bg.png', city='sg',
+		has_detail_rate=True, is_suffix=False))
+	unit_cats.append(UnitCategory(code='co2', name='kg CO2', short_desc='kg CO2', order=2,
+		img_off='co2.png', img_on='co2-hover.png', bg_img='burger-bg.png', city='all',
+		has_detail_rate=True))
+	unit_cats.append(UnitCategory(code='burger', name='bugers', short_desc='bugers', order=3,
+		img_off='burger.png', img_on='burger-hover.png', bg_img='burger-bg.png', city='all',
+		global_rate=2.15))
+	unit_cats.append(UnitCategory(code='noodle', name='bowls of instant noodle',
+		short_desc='bowls of instant noodle', order=4, img_off='ramen.png', img_on='ramen-hover.png',
+		bg_img='burger-bg.png', city='all', global_rate=0.52))
+	unit_cats.append(UnitCategory(code='pineapplebuns', name='pineapple buns', short_desc='pineapple buns', order=5,
+		img_off='bun.png', img_on='bun-hover.png', bg_img='burger-bg.png', city='all', global_rate=3.3))
+	unit_cats.append(UnitCategory(code='icecream', name='ice cream cones', short_desc='ice cream cones', order=6,
+		img_off='icecream.png', img_on='icecream-hover.png', bg_img='burger-bg.png', city='all', global_rate=0.2))
+	unit_cats.append(UnitCategory(code='taxitrip', name='taxi trips btwn HK Airport and Times Square',
+		short_desc='taxi trips', order=7, img_off='taxi.png', img_on='taxi-hover.png',
+		bg_img='burger-bg.png', city='hk', global_rate=0.0325))
+	unit_cats.append(UnitCategory(code='taxitrip', name='taxi trips btwn Changi Airport and Marina Bay Sands',
+		short_desc='taxi trips', order=7, img_off='taxi.png', img_on='taxi-hover.png',
+		bg_img='burger-bg.png', city='sg', global_rate=0.065))
+	unit_cats.append(UnitCategory(code='biketrip', name='bike trips btwn HK Airport and Times Square',
+		short_desc='bike trips', order=8, img_off='bike.png', img_on='bike-hover.png',
+		bg_img='burger-bg.png', city='hk', global_rate=1.87))
+	unit_cats.append(UnitCategory(code='biketrip', name='bike trips btwn Changi Airport and Marina Bay Sands',
+		short_desc='bike trips', order=8, img_off='bike.png', img_on='bike-hover.png',
+		bg_img='burger-bg.png', city='sg', global_rate=3.74))
+	unit_cats.append(UnitCategory(code='walkingtrip', name='walking trips btwn HK Airport and Times Square',
+		short_desc='walking trips', order=9, img_off='walking.png', img_on='walking-hover.png',
+		bg_img='burger-bg.png', city='hk', global_rate=0.357))
+	unit_cats.append(UnitCategory(code='walkingtrip', name='walking trips btwn Changi Airport and Marina Bay Sands',
+		short_desc='walking trips', order=9, img_off='walking.png', img_on='walking-hover.png',
+		bg_img='burger-bg.png', city='sg', global_rate=0.714))
 	UnitCategory.objects.bulk_create(unit_cats)
 
-	units = []
-	units.append(Unit(category_id=1, code='hk-co2'))
-	units.append(Unit(category_id=1, code='tw-co2'))
-	units.append(Unit(category_id=2, code=u'clp'))
-	units.append(Unit(category_id=2, code=u'hkec'))
-	units.append(Unit(category_id=2, code=u'twec'))
-	Unit.objects.bulk_create(units)
-
 	unit_rates = []
-	unit_rates.append(UnitRate(unit_id=1, rate=0.5, effective_date=datetime.datetime(2014, 4, 30, 16)))
-	unit_rates.append(UnitRate(unit_id=1, rate=0.75, effective_date=datetime.datetime(2014, 6, 3, 16)))
-	unit_rates.append(UnitRate(unit_id=2, rate=0.25, effective_date=datetime.datetime(2014, 4, 30, 16)))
-	unit_rates.append(UnitRate(unit_id=3, rate=1.5, effective_date=datetime.datetime(2014, 4, 30, 16)))
-	unit_rates.append(UnitRate(unit_id=4, rate=4.5, effective_date=datetime.datetime(2014, 4, 30, 16)))
-	unit_rates.append(UnitRate(unit_id=5, rate=0.8, effective_date=datetime.datetime(2014, 4, 30, 16)))
+	unit_rates.append(UnitRate(category_code='co2', code='hk-co2', rate=0.5, effective_date=datetime.datetime(2014, 4, 30, 16)))
+	unit_rates.append(UnitRate(category_code='co2', code='hk-co2', rate=0.75, effective_date=datetime.datetime(2014, 6, 3, 16)))
+	unit_rates.append(UnitRate(category_code='co2', code='sg-co2', rate=0.25, effective_date=datetime.datetime(2014, 4, 30, 16)))
+	unit_rates.append(UnitRate(category_code='money', code=u'clp', rate=1.5, effective_date=datetime.datetime(2014, 4, 30, 16)))
+	unit_rates.append(UnitRate(category_code='money', code=u'hkec', rate=4.5, effective_date=datetime.datetime(2014, 4, 30, 16)))
+	unit_rates.append(UnitRate(category_code='money', code=u'sgec', rate=0.8, effective_date=datetime.datetime(2014, 4, 30, 16)))
 	UnitRate.objects.bulk_create(unit_rates)
 
 def init_test_baseline_usage():
