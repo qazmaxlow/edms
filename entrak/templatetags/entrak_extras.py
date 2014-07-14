@@ -57,7 +57,8 @@ def jsonifyUnitCategorys(unit_categorys):
 			'imgOff': unit_category.img_off, 'imgOn': unit_category.img_on,
 			'bgImg': unit_category.bg_img,
 			'hasDetailRate': unit_category.has_detail_rate,
-			'globalRate': unit_category.global_rate}
+			'globalRate': unit_category.global_rate,
+			'isSuffix': unit_category.is_suffix}
 		unit_categorys_info.append(info)
 
 	return escapejs(json.dumps(unit_categorys_info))

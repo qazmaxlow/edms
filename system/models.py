@@ -9,6 +9,8 @@ SOURCE_TZ_HK = u'Asia/Hong_Kong'
 UNIT_IMG_DIR = os.path.join(BASE_DIR, 'entrak', 'static', 'images', 'unit')
 CITY_ALL = 'all'
 KWH_CATEGORY_CODE = 'kwh'
+CO2_CATEGORY_CODE = 'co2'
+MONEY_CATEGORY_CODE = 'money'
 
 class System(models.Model):
 	code = models.CharField(max_length=100, unique=True)
@@ -141,7 +143,6 @@ class UnitRate(models.Model):
 	code = models.CharField(max_length=200)
 	rate = models.FloatField(default=1)
 	effective_date = models.DateTimeField()
-
 
 # TODO: not implement yet
 # class Holiday(Document):

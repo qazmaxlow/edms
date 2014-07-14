@@ -50,7 +50,14 @@ function updateDonutChart(data) {
 		$("#selection-summary-source").text(row.label);
 		$("#selection-summary-source").css("color", donutChart.options.colors[i]);
 
-		$("#selection-summary-unit").text(graph.graphChart.currentUnit.shortDesc);
+		if (graph.graphChart.currentUnit.isSuffix) {
+			$("#selection-summary-unit-prefix").text('');
+			$("#selection-summary-unit-suffix").text(graph.graphChart.currentUnit.shortDesc);
+		} else {
+			$("#selection-summary-unit-prefix").text(graph.graphChart.currentUnit.shortDesc);
+			$("#selection-summary-unit-suffix").text('');
+		}
+		
 	});
 	donutChart.fire("select", 0, data[0]);
 }
@@ -639,8 +646,9 @@ $(function() {
 			<p id="selection-summary-line"></p>
 			<!-- <p id="selection-summary-equal">which equates to:</p> -->
 			<p id="selection-summary-value-container">
+				<span id="selection-summary-unit-prefix"></span>
 				<span id="selection-summary-value"></span>
-				<span id="selection-summary-unit"></span>
+				<span id="selection-summary-unit-suffix"></span>
 			</p>
 		</div>
 		<div id="selection-summary-right">
