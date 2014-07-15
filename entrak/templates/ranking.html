@@ -8,6 +8,8 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/ranking.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'js/datetimepicker-master/jquery.datetimepicker.css' %}">
+<script src="{% static 'js/datetimepicker-master/jquery.datetimepicker-customized.js' %}"></script>
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
 <script src="{% static 'js/jquery.tinysort.min.js' %}"></script>
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
@@ -29,6 +31,11 @@
 RANKING_TYPE_TOTAL = 'total';
 RANKING_TYPE_PER_PERSON = 'per_person';
 RANKING_TYPE_PERCENT = 'percent';
+RANKING_SORT_BY_ALPHABET = 'alphabet';
+RANKING_SORT_BY_VAL_DESC = 'value-desc';
+RANKING_SORT_BY_VAL_ASC = 'value-asc';
+
+RANKING_ITEM_HEIGHT = 124;
 
 var ranking = {};
 
@@ -61,7 +68,30 @@ function getRankingData() {
 }
 
 function finishReceiveRankData(data) {
+	if (ranking.currentSortBy === RANKING_SORT_BY_VAL_DESC) {
+		data.sort(function(a, b) {
+			return b.value - a.value;
+		});
+	} else if (ranking.currentSortBy === RANKING_SORT_BY_VAL_ASC) {
+		data.sort(function(a, b) {
+			return a.value - b.value;
+		})
+	} else if (ranking.currentSortBy === RANKING_SORT_BY_ALPHABET) {
+		data.sort(function(a, b) {
+			if(a.name < b.name) {
+				return -1;
+			} else {
+				return 1;
+			}
+		})
+	}
+
 	ranking.rankingData = data;
+
+	var maxValue = data.reduce(function (prevVal, currentItem, idx, array) {
+		return (prevVal < Math.abs(currentItem.value)) ? Math.abs(currentItem.value) : prevVal;
+	}, 0);
+	var barBoundValue = maxValue*1.1;
 
 	var itemContainer = $("#ranking-item-container");
 	itemContainer.empty();
@@ -70,7 +100,8 @@ function finishReceiveRankData(data) {
 			return node.data.code == item.code;
 		});
 
-		var rankingEleHtml = '<div value="' + item.value + '" class="ranking-item';
+		var rankingEleHtml = '<div style="top: ' + idx*RANKING_ITEM_HEIGHT
+			+ 'px;" value="' + item.value + '" class="ranking-item';
 		if (ranking.currentRankingType === RANKING_TYPE_TOTAL
 			|| ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
 			rankingEleHtml += ' ranking-total-or-person';
@@ -87,18 +118,24 @@ function finishReceiveRankData(data) {
 		} else {
 			rankingEleHtml += '<div class="rank-img" style="background-image: url(\'src-default.png\');">';
 		}
-		rankingEleHtml += '</div><img src="">'
+		rankingEleHtml += '</div><img class="rank-cover-img" src="{% static "images/ranking/rank-cover.png" %}">'
 			+ '<span class="rank-digit">' + (idx + 1) + '</span>';
 
 		if (ranking.currentRankingType === RANKING_TYPE_TOTAL
 			|| ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
 			var valueText = Utils.formatWithCommas(item.value.toFixed(0));
-			valueText += ' '+ranking.currentUnit.name;
+			if (ranking.currentUnit.isSuffix) {
+				valueText += ' '+ranking.currentUnit.shortDesc;
+			} else {
+				valueText = ranking.currentUnit.shortDesc+' '+valueText;
+			}
 			if (ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
 				valueText += '/person';
 			}
 
-			rankingEleHtml += '<div class="rank-meter-bar"><div class="rank-meter-bar-inner"></div></div>'
+			var barPercentage = item.value/barBoundValue*100;
+			rankingEleHtml += '<div class="rank-meter-bar"><div style="width: '
+			+ barPercentage + '%;" class="rank-meter-bar-inner"></div></div>'
 			+ '<div class="rank-detail-value">' + valueText + '</div>';
 		} else if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
 			var transformedVal = Utils.fixed1DecIfLessThan10(item.value);
@@ -134,28 +171,24 @@ function formatFromToDt(targetDt, rangeType) {
 	return resultText;
 }
 
-function sortRankValAsc() {
-	sortRankingItem({order: 'asc', attr: 'value'});
-}
-
-function sortRankValDesc() {
-	sortRankingItem({order: 'desc', attr: 'value'});
-}
-
-function sortRankAlphabetical() {
-	sortRankingItem('.rank-name', {order: 'asc', attr: 'value'});
-}
-
-function sortRankingItem(options) {
+function sortRankingItem(sortType) {
 	var rankingItems = $("#ranking-item-container>div");
-	rankingItems.tsort(options).each(function(idx, ele) {
+	if (sortType === RANKING_SORT_BY_VAL_DESC) {
+		rankingItems.tsort({order: 'desc', attr: 'value'});
+	} else if (sortType === RANKING_SORT_BY_VAL_ASC) {
+		rankingItems.tsort({order: 'asc', attr: 'value'});
+	} else if (sortType === RANKING_SORT_BY_ALPHABET) {
+		rankingItems.tsort('.rank-name', {order: 'asc'});
+	}
+
+	rankingItems.each(function(idx, ele) {
 		var rankingItem = $(ele);
 		rankingItem.find(".rank-digit").text(idx+1);
 		rankingItem.css({
 			position: 'absolute',
-			top: rankingItem.position.top
+			top: rankingItem.position().top
 		}).animate({
-			top: idx*50
+			top: idx*RANKING_ITEM_HEIGHT
 		}, 500);
 	});
 }
@@ -170,6 +203,7 @@ $(function() {
 	ranking.currentDt = Utils.getNowMoment('hour');
 	ranking.currentRangeType = Utils.RANGE_TYPE_DAY;
 	ranking.currentRankingType = RANKING_TYPE_TOTAL;
+	ranking.currentSortBy = RANKING_SORT_BY_VAL_DESC;
 
 	var subMenuPanel = $(".drop-down-panel-content ul");
 	$(".panel-header-left-menu h3").each(function (eleIdx) {
@@ -194,7 +228,7 @@ $(function() {
 	ranking.unitCategorys = JSON.parse('{{unit_categorys|jsonifyUnitCategorys}}');
 	ranking.currentUnit = ranking.unitCategorys[0];
 	Utils.setupUnitChoiceLayout('#unit-choice', ranking.unitCategorys, '{% get_static_prefix %}', function(unitCategory) {
-		if (ranking.currentUnit.id !== unitCategory.id) {
+		if (ranking.currentUnit.code !== unitCategory.code) {
 			ranking.currentUnit = unitCategory;
 			getRankingData();
 		}
@@ -208,7 +242,31 @@ $(function() {
 		}
 	});
 
-	$(".panel-header-right-menu h3").click(function(event) {
+	Date.parseDate = function( input, format ){
+		return moment(input,format).toDate();
+	};
+	Date.prototype.dateFormat = function( format ){
+		return moment(this).format(format);
+	};
+
+	var dtPickerFormat = "D MMM YYYY, dddd";
+	$("#current-dt-picker").datetimepicker({
+		format: dtPickerFormat,
+		formatTime: "h:mm a",
+		formatDate: "DD.MM.YYYY",
+		scrollMonth: false,
+		timepicker: false,
+		onSelectDate: function(input) {
+			ranking.currentDt = moment(input).startOf('hour');
+			$("#current-dt").text(formatFromToDt(ranking.currentDt, ranking.currentRangeType));
+			getRankingData();
+		}
+	});
+	$("#custom-calendar-icon").click(function () {
+		$('#current-dt-picker').datetimepicker('show');
+	})
+
+	$(".panel-header-right-menu h3:not(.sort-by-btn)").click(function(event) {
 		var newRankingType = $(this).attr('ranking-type');
 		if (ranking.currentRankingType !== newRankingType) {
 			ranking.currentRankingType = newRankingType;
@@ -220,6 +278,24 @@ $(function() {
 	$(".panel-header-right-menu [ranking-type='total']").addClass('selected-submenu');
 
 	Utils.setupDropDownPanelBtn();
+
+	$(".sort-by-btn, .sort-menu li").hover(
+		function() {
+			$(".sort-menu").stop().slideDown(150);
+		},
+		function() {
+			$(".sort-menu").stop().slideUp(150);
+		}
+	);
+	var sortTypes = [RANKING_SORT_BY_VAL_DESC, RANKING_SORT_BY_VAL_ASC, RANKING_SORT_BY_ALPHABET];
+	$(".sort-menu li").each(function(idx) {
+		$(this).attr('sort-type', sortTypes[idx]);
+	});
+	$(".sort-menu li").click(function() {
+		var sortType = $(this).attr('sort-type');
+		ranking.currentSortBy = sortType;
+		sortRankingItem(ranking.currentSortBy);
+	});
 
 	$("#current-dt").text(formatFromToDt(ranking.currentDt, ranking.currentRangeType));
 	getRankingData();
@@ -246,8 +322,14 @@ $(function() {
 			<h3 ranking-type='percent'>% Change</h3>
 			<h3 ranking-type='per_person'>Per person</h3>
 			<h3 ranking-type='total'>Total</h3>
-			<h3>Sort by</h3>
+			<h3 class='sort-by-btn'>Sort by &#8194; &#9662;</h3>
 			<span style='clear: both;'></span>
+
+			<ul class="sort-menu">
+				<li>Descending</li>
+				<li>Ascending</li>
+				<li>Alphabetical</li>
+			</ul>
 		</div>
 	</div>
 

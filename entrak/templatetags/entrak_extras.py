@@ -2,6 +2,7 @@ import json
 from django import template
 from django.utils.safestring import mark_safe
 from django.utils.html import escapejs
+from entrak.settings import MEDIA_URL
 register = template.Library()
 
 @register.filter
@@ -29,6 +30,8 @@ def jsonifySystems(systems):
 			'name': system.name, 'nameTc': system.name_tc,
 			'intro': system.intro, 'introTc': system.intro_tc,
 			'path': system.path}
+		if system.logo:
+			info['logo'] = system.logo.url
 		systems_info.append(info)
 
 	return escapejs(json.dumps(systems_info))
