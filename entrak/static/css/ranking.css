@@ -83,13 +83,20 @@
 	border-bottom-right-radius: 10px;
 	color: #fff;
 	font-weight: bold;
-
 }
-.rank-separate-line {
+.ranking-total-or-person .rank-separate-line {
 	position: absolute;
 	top: 97px;
 	left: 80px;
 	width: 892px;
+	height: 2px;
+	background-color: #fbac1c;
+}
+.ranking-percent .rank-separate-line {
+	position: absolute;
+	top: 59px;
+	left: 80px;
+	width: 229px;
 	height: 2px;
 	background-color: #fbac1c;
 }
@@ -113,10 +120,12 @@
 }
 .rank-digit {
 	position: absolute;
-	margin-top: 29px;
-	margin-left: 18px;
+	top: 29px;
+	left: 18px;
+	width: 24px;
 	font-size: 11pt;
 	color: #fff;
+	text-align: center;
 	z-index: 1200;
 }
 .rank-detail-value {
@@ -133,7 +142,7 @@
 	font-weight: bolder;
 	letter-spacing: 0.02em;
 }
-.rank-meter-bar {
+.ranking-total-or-person .rank-meter-bar {
 	position: absolute;
 	top: 68px;
 	height: 27px;
@@ -141,8 +150,75 @@
 	left: 100px;
 	background-image: url(../images/ranking/rank-meter-bar-bg.png);
 }
-.rank-meter-bar-inner {
+.ranking-total-or-person .rank-meter-bar-inner {
 	height: 100%;
 	background-color: #04B73A;
 	opacity: 0.6;
+}
+.ranking-percent .rank-meter-bar-container {
+	position: absolute;
+	top: 26px;
+	right: 45px;
+	width: 575px;
+	height: 80px;
+}
+.ranking-percent .rank-meter-bar {
+	position: absolute;
+	width: 573px;
+	height: 35px;
+	left: 1px;
+	background-color: #f8f8f8;
+	box-shadow: inset 0px 0px 1px 1px rgba(0,0,0,0.1);
+}
+.ranking-percent .rank-meter-bar>div {
+	position: relative;
+	top: 4px;
+	margin-left: auto;
+	margin-right: auto;
+	background-image: url(../images/ranking/rank-meter-bar-bg.png);
+	width: 565px;
+	height: 27px;
+}
+.ranking-percent .rank-meter-bar-inner {
+	position: absolute;
+	height: 100%;
+	opacity: 0.6;
+}
+.ranking-percent .rank-positive .rank-meter-bar-inner {
+	background-color: #C00000;
+	left: 286px;
+}
+.ranking-percent .rank-negative .rank-meter-bar-inner {
+	background-color: #04B73A;
+	right: 287px;
+}
+.meter-indicator {
+	position: absolute;
+	width: 48px;
+	height: 32px;
+	top: 40px;
+}
+.meter-indicator>div{
+	font-size: 10pt;
+	font-weight: bold;
+	color: #fff;
+	margin-top: 14px;
+	margin-left: 2px;
+	margin-right: 2px;
+	text-align: center;
+}
+.ranking-percent .rank-positive .meter-indicator {
+	background-image: url(../images/ranking/meter-indicator-red.png);
+}
+.ranking-percent .rank-negative .meter-indicator {
+	background-image: url(../images/ranking/meter-indicator-green.png);
+}
+.rank-meter-bar-middle {
+	position: absolute;
+	top: 0px;
+	left: 281px;
+	width: 2px;
+	height: 27px;
+	background-color: #bdbdbd;
+	z-index: 10;
 }

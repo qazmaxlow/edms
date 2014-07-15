@@ -9,9 +9,10 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/ranking.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'js/datetimepicker-master/jquery.datetimepicker.css' %}">
-<script src="{% static 'js/datetimepicker-master/jquery.datetimepicker-customized.js' %}"></script>
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
 <script src="{% static 'js/jquery.tinysort.min.js' %}"></script>
+<script src="{% static 'js/datetimepicker-master/jquery.datetimepicker-customized.js' %}"></script>
+<script src="{% static 'js/mustache.js-master/mustache.js' %}"></script>
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
 <script src="{% static 'js/entrak-system.js' %}"></script>
 <script src="{% static 'js/entrak-utils.js' %}"></script>
@@ -27,6 +28,41 @@
 {% block extra_script %}
 {{block.super}}
 
+<script id="total-rank-template" type="x-tmpl-mustache">
+<div style="top: {% templatetag openvariable %}topPos{% templatetag closevariable %}px;" value="{% templatetag openvariable %}value{% templatetag closevariable %}" class="ranking-item ranking-total-or-person">
+	<div class="rank-name">{% templatetag openvariable %}rankName{% templatetag closevariable %}</div>
+	<div class="rank-separate-line"></div>
+	<div class="rank-img" style="background-image: url('{% templatetag openvariable %}logoUrl{% templatetag closevariable %}');"></div>
+	<img class="rank-cover-img" src="{% static 'images/ranking/rank-cover.png' %}">
+	<span class="rank-digit">{% templatetag openvariable %}rankDigit{% templatetag closevariable %}</span>
+	<div class="rank-meter-bar">
+		<div style="width: {% templatetag openvariable %}meterWidth{% templatetag closevariable %}%;" class="rank-meter-bar-inner"></div>
+	</div>
+	<div class="rank-detail-value">{% templatetag openvariable %}valueText{% templatetag closevariable %}</div>
+</div>
+</script>
+
+<script id="percent-rank-template" type="x-tmpl-mustache">
+<div style="top: {% templatetag openvariable %}topPos{% templatetag closevariable %}px;" value="{% templatetag openvariable %}value{% templatetag closevariable %}" class="ranking-item ranking-percent">
+	<div class="rank-name">{% templatetag openvariable %}rankName{% templatetag closevariable %}</div>
+	<div class="rank-separate-line"></div>
+	<div class="rank-img" style="background-image: url('{% templatetag openvariable %}logoUrl{% templatetag closevariable %}');"></div>
+	<img class="rank-cover-img" src="{% static 'images/ranking/rank-cover.png' %}">
+	<span class="rank-digit">{% templatetag openvariable %}rankDigit{% templatetag closevariable %}</span>
+	<div class="rank-meter-bar-container {% templatetag openvariable %}meterContainerClass{% templatetag closevariable %}">
+		<div class="rank-meter-bar">
+			<div>
+				<div style="width: {% templatetag openvariable %}meterWidth{% templatetag closevariable %}%;" class="rank-meter-bar-inner">
+				</div>
+				<div class="rank-meter-bar-middle"></div> 
+			</div>
+		</div>
+
+		<div style="left: {% templatetag openvariable %}indicatorLeft{% templatetag closevariable %}px;" class="meter-indicator"><div>{% templatetag openvariable %}valueText{% templatetag closevariable %}</div></div>
+	</div>
+</div>
+</script>
+
 <script type="text/javascript">
 RANKING_TYPE_TOTAL = 'total';
 RANKING_TYPE_PER_PERSON = 'per_person';
@@ -36,6 +72,10 @@ RANKING_SORT_BY_VAL_DESC = 'value-desc';
 RANKING_SORT_BY_VAL_ASC = 'value-asc';
 
 RANKING_ITEM_HEIGHT = 124;
+METER_WIDTH = 565;
+METER_MID_POS = 282;
+INDICATOR_POSITIVE_OFFSET = -15;
+INDICATOR_NEGATIVE_OFFSET = -22;
 
 var ranking = {};
 
@@ -93,6 +133,15 @@ function finishReceiveRankData(data) {
 	}, 0);
 	var barBoundValue = maxValue*1.1;
 
+	if (ranking.currentRankingType === RANKING_TYPE_TOTAL
+		|| ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
+		var templateSelector = '#total-rank-template';
+	} else if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
+		var templateSelector = '#percent-rank-template';
+	}
+	var template = $(templateSelector).html();
+	Mustache.parse(template);
+
 	var itemContainer = $("#ranking-item-container");
 	itemContainer.empty();
 	$.each(data, function(idx, item) {
@@ -100,29 +149,19 @@ function finishReceiveRankData(data) {
 			return node.data.code == item.code;
 		});
 
-		var rankingEleHtml = '<div style="top: ' + idx*RANKING_ITEM_HEIGHT
-			+ 'px;" value="' + item.value + '" class="ranking-item';
-		if (ranking.currentRankingType === RANKING_TYPE_TOTAL
-			|| ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
-			rankingEleHtml += ' ranking-total-or-person';
-		} else if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
-			rankingEleHtml += ' ranking-percent';
-		}
-		rankingEleHtml += '">';
+		var logoUrl = (matchSystem !== null) ? matchSystem.data.logo : 'src-default.png';
 
-		rankingEleHtml += '<div class="rank-name">' + item.name + '</div>'
-			+ '<div class="rank-separate-line"></div>';
-
-		if (matchSystem !== null) {
-			rankingEleHtml += '<div class="rank-img" style="background-image: url(\'' + matchSystem.data.logo + '\');">';
-		} else {
-			rankingEleHtml += '<div class="rank-img" style="background-image: url(\'src-default.png\');">';
-		}
-		rankingEleHtml += '</div><img class="rank-cover-img" src="{% static "images/ranking/rank-cover.png" %}">'
-			+ '<span class="rank-digit">' + (idx + 1) + '</span>';
+		var info = {
+			topPos: idx*RANKING_ITEM_HEIGHT,
+			value: item.value,
+			rankName: item.name,
+			rankDigit: (idx + 1),
+			logoUrl: logoUrl
+		};
 
 		if (ranking.currentRankingType === RANKING_TYPE_TOTAL
 			|| ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
+
 			var valueText = Utils.formatWithCommas(item.value.toFixed(0));
 			if (ranking.currentUnit.isSuffix) {
 				valueText += ' '+ranking.currentUnit.shortDesc;
@@ -133,16 +172,29 @@ function finishReceiveRankData(data) {
 				valueText += '/person';
 			}
 
-			var barPercentage = item.value/barBoundValue*100;
-			rankingEleHtml += '<div class="rank-meter-bar"><div style="width: '
-			+ barPercentage + '%;" class="rank-meter-bar-inner"></div></div>'
-			+ '<div class="rank-detail-value">' + valueText + '</div>';
+			var meterWidth = item.value/barBoundValue*100;
+
 		} else if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
-			var transformedVal = Utils.fixed1DecIfLessThan10(item.value);
+			if (item.value >= 0) {
+				var meterContainerClass = "rank-positive";
+				var valueText = "+"+Utils.fixed1DecIfLessThan10(item.value)+"%";
+				console.log((METER_WIDTH*item.value/barBoundValue/2));
+				var indicatorLeft = METER_MID_POS + (METER_WIDTH*item.value/barBoundValue/2) + INDICATOR_POSITIVE_OFFSET;
+			} else {
+				var meterContainerClass = "rank-negative";
+				var valueText = Utils.fixed1DecIfLessThan10(item.value)+"%";
+				var indicatorLeft = METER_MID_POS + (METER_WIDTH*item.value/barBoundValue/2) + INDICATOR_NEGATIVE_OFFSET;
+			}
+			var meterWidth = Math.abs(item.value/barBoundValue*100/2);
+
+			info['meterContainerClass'] = meterContainerClass;
+			info['indicatorLeft'] = indicatorLeft;
 		}
 
-		rankingEleHtml += '</div>';
+		info['meterWidth'] = meterWidth;
+		info['valueText'] = valueText;
 
+		var rankingEleHtml = Mustache.render(template, info);
 		itemContainer.append(rankingEleHtml);
 	});
 }
