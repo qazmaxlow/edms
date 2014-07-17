@@ -202,9 +202,9 @@ class SourceManager:
 
 		for hour_idx in xrange(total_hour):
 			start_time = start_dt + datetime.timedelta(hours=hour_idx)
-			end_time = start_time + datetime.timedelta(hours=1)
-			start_timestamp = calendar.timegm(start_time.utctimetuple())
-			reading_datetimes = [(start_time + datetime.timedelta(minutes=minute)) for minute in xrange(60)]
+			end_time = start_time + datetime.timedelta(minutes=59)
+			end_timestamp = calendar.timegm(end_time.utctimetuple())
+			reading_datetimes = [(end_time - datetime.timedelta(minutes=minute)) for minute in xrange(60)]
 
 			print 'processing: ', start_time
 			for grouped_sources in all_grouped_sources:
@@ -215,14 +215,14 @@ class SourceManager:
 				SourceReadingMin.objects(
 					source_id__in=[source['_id'] for source in sources],
 					datetime__gte=start_time,
-					datetime__lt=end_time
+					datetime__lte=end_time
 				).delete()
 
 				source_reading_mins = []
 				source_reading_mins_invalid = []
 				need_update_source_ids = []
 				try:
-					readings = SourceManager.__get_egauge_data(xml_url, start_timestamp, 60)
+					readings = SourceManager.__get_egauge_data(xml_url, end_timestamp, 60)
 					for source in sources:
 						if source['name'] in readings:
 							source_reading_mins += [SourceReadingMin(
