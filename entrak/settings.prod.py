@@ -17,4 +17,4 @@ DATABASES = {
 connect('entrak', username="entrak", password="entrak8888")
 
 MEDIA_URL = '/media/'
-LOGGING['handlers']['timed_rotating_handler']['filename'] = os.path.join('/mnt', 'logs', 'entrak', 'django_error_log')
+LOGGING['handlers']['timed_rotating_handler']['filename'] = os.path.join('/mnt', 'logs', 'entrak', 'django_error.log')
