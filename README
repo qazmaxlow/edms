@@ -31,3 +31,10 @@ RESTART SERVER:
 a) restart uWsgi
 	1. su entrak
 	2. touch /app/entrak/entrak_uwsgi.ini
+
+
+DEPLOY:
+
+a) git pull
+b) python manage.py collectstatic
+c) restart entrak uwsgi instance

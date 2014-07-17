@@ -54,7 +54,7 @@ def init_test_system():
 
 	System.objects.bulk_create(systems)
 
-def init_test_unit():
+def init_unit_category():
 	unit_cats = []
 	unit_cats.append(UnitCategory(code='kwh', name='kWh', order=0,
 		short_desc='kWh', img_off='kwh.png', img_on='kwh-hover.png', bg_img='burger-bg.png',
@@ -98,6 +98,7 @@ def init_test_unit():
 		bg_img='burger-bg.png', city='sg', global_rate=0.714))
 	UnitCategory.objects.bulk_create(unit_cats)
 
+def init_test_unit_rates():
 	unit_rates = []
 	unit_rates.append(UnitRate(category_code='co2', code='hk-co2', rate=0.5, effective_date=datetime.datetime(2014, 4, 30, 16)))
 	unit_rates.append(UnitRate(category_code='co2', code='hk-co2', rate=0.75, effective_date=datetime.datetime(2014, 6, 3, 16)))
