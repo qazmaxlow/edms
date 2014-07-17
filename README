@@ -1,4 +1,4 @@
-require:
+SETUP:
 
 a) pip
 	1. download get-pip.py (http://pip.readthedocs.org/en/latest/installing.html)
@@ -9,12 +9,12 @@ b) virtualenv, virtualenv-wrapper
 	2. edit ~/.profile
 		export WORKON_HOME=/app/ENV
 		source /usr/local/bin/virtualenvwrapper.sh
-	3. edit or create ~/.virtualenv/virtualenv.ini if not exist
-		[virtualenv]
-		distribute = true
 
 c) mongodb
-	1. brew install mongodb
+	1a. brew install mongodb
+	OR
+	1b. apt-get install mongodb (http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/)
+
 	2. run mongodb daemon mode
 
 d) celery
@@ -22,3 +22,12 @@ d) celery
 	2. run rabbitmq
 	3. pip install celery
 	4. run celery worker (worker for processing task) AND beat (beat for fire periodic task)
+
+f) nginx
+	1. sudo pip install uwsgi (http://uwsgi-docs.readthedocs.org/en/latest/tutorials/Django_and_nginx.html)
+
+RESTART SERVER:
+
+a) restart uWsgi
+	1. su entrak
+	2. touch /app/entrak/entrak_uwsgi.ini
