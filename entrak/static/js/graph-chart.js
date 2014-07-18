@@ -328,7 +328,7 @@ GraphChart.prototype.plotGraphChart = function () {
 	$(this.graphEleSel).off('plotclick').on('plotclick', function(event, pos, item) {
 		if (item && graphThis.currentRangeType !== Utils.RANGE_TYPE_HOUR) {
 			var startEndDt = graphThis.genCurrentStartEndDt();
-			graphThis.currentDt = graphThis.transformXToDt(startEndDt.startDt, item.dataIndex);
+			graphThis.currentDt = graphThis.transformXToDt(startEndDt.startDt, item.datapoint[0]);
 
 			if (graphThis.currentRangeType === Utils.RANGE_TYPE_DAY
 				|| graphThis.currentRangeType === Utils.RANGE_TYPE_NIGHT) {
