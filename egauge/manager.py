@@ -5,8 +5,7 @@ import time
 import datetime
 from bson.code import Code
 from bson.objectid import ObjectId
-from mongoengine import connection
-from mongoengine import Q
+from mongoengine import connection, Q, NotUniqueError
 from .models import Source, SourceReadingMin, SourceReadingHour,\
 	SourceReadingDay, SourceReadingWeek, SourceReadingMonth, SourceReadingYear, SourceReadingMinInvalid
 from lxml import etree
@@ -183,7 +182,11 @@ class SourceManager:
 			pass
 
 		if source_reading_mins:
-			SourceReadingMin.objects.insert(source_reading_mins)
+			try:
+				SourceReadingMin.objects.insert(source_reading_mins. continue_on_error=True)
+			except NotUniqueError, e:
+				# do nothing
+				pass
 		if need_update_source_ids:
 			source_tz = sources[0]['tz']
 			SourceManager.update_sum(retrieve_time, source_tz, need_update_source_ids)

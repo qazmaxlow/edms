@@ -45,12 +45,12 @@ def init_test_source():
 
 def init_test_system():
 	systems = []
-	systems.append(System(code='adidas', path='', name='Adidas', unit_info=json.dumps({'1': 'hk-co2' ,'2': 'clp'})))
-	systems.append(System(code='adidas-hk', path=',adidas,', name='Adidas Hong Kong', unit_info=json.dumps({'1': 'hk-co2' ,'2': 'clp'})))
-	systems.append(System(code='adidas-tw', path=',adidas,', name='Adidas Singapore', unit_info=json.dumps({'1': 'tw-co2', '2': 'twec'})))
-	systems.append(System(code='nike', path='', name='Nike', unit_info=json.dumps({'1': 'hk-co2' ,'2': 'clp'})))
+	systems.append(System(code='adidas', path='', name='Adidas', unit_info=json.dumps({'co2': 'hk-co2' ,'money': 'clp'})))
+	systems.append(System(code='adidas-hk', path=',adidas,', name='Adidas Hong Kong', unit_info=json.dumps({'co2': 'hk-co2' ,'money': 'clp'})))
+	systems.append(System(code='adidas-tw', path=',adidas,', name='Adidas Singapore', unit_info=json.dumps({'co2': 'tw-co2', 'money': 'twec'})))
+	systems.append(System(code='nike', path='', name='Nike', unit_info=json.dumps({'co2': 'hk-co2' ,'money': 'clp'})))
 	systems.append(System(code='adidas-shatin', path=',adidas,adidas-hk,', name='Adidas Shatin',
-		unit_info=json.dumps({'1': 'tw-co2', '2': 'clp'})))
+		unit_info=json.dumps({'co2': 'tw-co2', 'money': 'clp'})))
 
 	System.objects.bulk_create(systems)
 
