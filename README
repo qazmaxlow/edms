@@ -32,8 +32,12 @@ a) restart uWsgi
 	1. su entrak
 	2. touch /app/entrak/entrak_uwsgi.ini
 
+b) restart celery (REMEMBER to restart celery as it always use old version of code)
+	1. /etc/init.d/celeryd restart
+
 
 DEPLOY:
 
 a) git pull
 b) restart entrak uwsgi instance
+c) restart celery

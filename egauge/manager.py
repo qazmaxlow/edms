@@ -21,9 +21,10 @@ class SourceManager:
 		pass
 
 	@staticmethod
-	def get_grouped_sources():
+	def get_grouped_sources(system_codes=None):
 		current_db_conn = connection.get_db()
-		result = current_db_conn.source.aggregate([
+		aggregate_pipeline = [
+			{ "$match": {"active": True} },
 			{ "$project": {"_id": 1, "name": 1, "tz": 1, "xml_url": 1}},
 			{
 				"$group": {
@@ -31,7 +32,10 @@ class SourceManager:
 					"sources": {"$push": {"_id": "$_id", "name": "$name", "tz": "$tz"}}
 				}
 			}
-		])
+		]
+		if system_codes:
+			aggregate_pipeline[0]["$match"]["system_code"] = {"$in": system_codes}
+		result = current_db_conn.source.aggregate(aggregate_pipeline)
 
 		return result['result']
 
@@ -193,11 +197,11 @@ class SourceManager:
 			SourceReadingMinInvalid.objects(id__in=will_remove_invalid_reading).delete()
 
 	@staticmethod
-	def force_retrieve_all_reading(start_dt, end_dt):
+	def force_retrieve_reading(start_dt, end_dt, system_codes):
 		'''
 		The start_dt and end_dt should be timezone aware
 		'''
-		all_grouped_sources = SourceManager.get_grouped_sources()
+		all_grouped_sources = SourceManager.get_grouped_sources(system_codes)
 		start_dt = start_dt.replace(minute=0, second=0, microsecond=0)
 		end_dt = end_dt.replace(minute=0, second=0, microsecond=0) + datetime.timedelta(hours=1)
 		total_hour = int((end_dt - start_dt).total_seconds()/3600)
@@ -260,6 +264,10 @@ class SourceManager:
 				if need_update_source_ids:
 					source_tz = sources[0]['tz']
 					SourceManager.update_sum(start_time, source_tz, need_update_source_ids)
+
+	@staticmethod
+	def force_retrieve_all_reading(start_dt, end_dt):
+		SourceManager.force_retrieve_reading(start_dt, end_dt, None)
 
 	@staticmethod
 	def __get_egauge_data(xml_url, start_timestamp, row):
