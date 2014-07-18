@@ -183,7 +183,7 @@ class SourceManager:
 
 		if source_reading_mins:
 			try:
-				SourceReadingMin.objects.insert(source_reading_mins, write_concern={continue_on_error: True})
+				SourceReadingMin.objects.insert(source_reading_mins, write_concern={'continue_on_error': True})
 			except NotUniqueError, e:
 				# do nothing
 				pass
