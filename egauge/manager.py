@@ -76,8 +76,7 @@ class SourceManager:
 					construct_info['xml_url'] = xml_url
 					construct_info['name'] = info['name']
 					construct_info['tz'] = info['tz']
-					source_reading_mins_invalid = SourceReadingMinInvalid(**construct_info)
-					source_reading_mins_invalid.append(source_reading_mins_invalid)
+					source_reading_mins_invalid.append(SourceReadingMinInvalid(**construct_info))
 		except SourceManager.GetEgaugeDataError, e:
 			source_reading_mins_invalid = [SourceReadingMinInvalid(
 					datetime=retrieve_time,
