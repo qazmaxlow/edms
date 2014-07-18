@@ -40,7 +40,7 @@ def get_last_12_month_co2_consumption(unit_code, unit_rates, baselines, source, 
 			energy_usage = target_readings[timestamp]
 		else:
 			# use baseline val for the missing month
-			energy_usage = baselines[target_dt.month]['usage']
+			energy_usage = baselines[target_dt.month].get(['usage'], 0)
 		co2_consumption += calculation.transform_reading(unit_code, timestamp,
 			energy_usage, unit_rates)
 
