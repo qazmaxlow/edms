@@ -69,7 +69,10 @@ def calulcate_accumulated_saving(co2_unit_code, money_unit_code, unit_rates, bas
 	while target_dt <= end_dt:
 		timestamp = calendar.timegm(target_dt.utctimetuple())
 		energy_usage = target_readings.get(timestamp, 0)
-		baseline_usage = baselines[target_dt.month]['usage']
+		if target_dt.month in baselines:
+			baseline_usage = baselines[target_dt.month]['usage']
+		else:
+			baseline_usage = 0
 		usage_diff = baseline_usage - energy_usage
 
 		total_co2_saving += calculation.transform_reading(co2_unit_code, timestamp,
