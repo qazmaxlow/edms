@@ -39,8 +39,8 @@ class SourceManager:
 	def gen_retrieve_time():
 		retrieve_time = datetime.datetime.utcnow()
 		retrieve_time = pytz.utc.localize(retrieve_time.replace(second=0, microsecond=0))
-		# delay 1 seconds to ensure data at meter is ready
-		retrieve_time -= datetime.timedelta(minutes=1)
+		# delay 2 minutes to ensure data at meter is ready
+		retrieve_time -= datetime.timedelta(minutes=2)
 
 		return retrieve_time
 
