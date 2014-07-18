@@ -1,0 +1,21 @@
+{% extends "page_base.html" %}
+
+{% load entrak_extras %}
+{% load static %}
+{% load humanize %}
+
+{% block extra_head %}
+{{block.super}}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/report.css' %}">
+{% endblock %}
+
+{% block selected-menu-link-id %}menu-link-report{% endblock %}
+{% block system_menu_target_view %}report{% endblock %}
+{% block breadcrumb_target_view %}report{% endblock %}
+
+{% block page_title %}THE REPORTS PAGE{% endblock %}
+{% block page_subtitle %}Get all your information here at the{% endblock %}
+
+{% block page_content %}
+{% endblock %}

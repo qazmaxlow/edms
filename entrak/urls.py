@@ -20,6 +20,7 @@ urlpatterns = patterns('',
         url(r'^progress/$', 'entrak.progress_views.progress_view', name='progress'),
         url(r'^ranking/$', 'entrak.ranking_views.ranking_view', name='ranking'),
     	url(r'^ranking_data/$', 'entrak.ranking_views.ranking_data_view', name='ranking_data'),
+        url(r'^report/$', 'entrak.report_views.report_view', name='report'),
     ))),
 )
 

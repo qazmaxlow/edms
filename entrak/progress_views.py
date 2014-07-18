@@ -3,6 +3,7 @@ import pytz
 import calendar
 import json
 from django.shortcuts import render_to_response
+from django.db.models import Q
 from system.models import System, BaselineUsage, UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
 from utils.auth import permission_required
 from utils.utils import Utils
@@ -49,7 +50,8 @@ def get_last_12_month_co2_consumption(unit_code, unit_rates, baselines, source, 
 
 	return co2_consumption
 
-def calulcate_accumulated_saving(co2_unit_code, money_unit_code, unit_rates, baselines, source, readings, current_dt):
+def calulcate_accumulated_saving(co2_unit_code, money_unit_code, co2_unit_rates, money_unit_rates,
+	baselines, source, readings, current_dt):
 	source_tz = pytz.timezone(source.tz)
 	start_dt = pytz.utc.localize(source.first_record).astimezone(source_tz)
 	if start_dt.day != 1:
@@ -76,9 +78,9 @@ def calulcate_accumulated_saving(co2_unit_code, money_unit_code, unit_rates, bas
 		usage_diff = baseline_usage - energy_usage
 
 		total_co2_saving += calculation.transform_reading(co2_unit_code, timestamp,
-			usage_diff, unit_rates)
+			usage_diff, co2_unit_rates)
 		total_money_saving += calculation.transform_reading(money_unit_code, timestamp,
-			usage_diff, unit_rates)
+			usage_diff, money_unit_rates)
 
 		target_dt = Utils.add_month(target_dt, 1)
 
@@ -99,7 +101,9 @@ def progress_view(request, system_code=None):
 	monthly_source_readings = SourceReadingMonth.objects(source_id__in=[str(source.id) for source in sources])
 	grouped_monthly_readings = SourceManager.group_readings_with_source_id(monthly_source_readings)
 
-	unit_rates = UnitRate.objects.filter(category_code=CO2_CATEGORY_CODE)
+	unit_rates = UnitRate.objects.filter(Q(category_code=CO2_CATEGORY_CODE) | Q(category_code=MONEY_CATEGORY_CODE))
+	co2_unit_rates = [unit_rate for unit_rate in unit_rates if unit_rate.category_code == CO2_CATEGORY_CODE]
+	money_unit_rates = [unit_rate for unit_rate in unit_rates if unit_rate.category_code == MONEY_CATEGORY_CODE]
 
 	total_baseline_co2_consumption = 0
 	last_12_months_co2_consumption = 0
@@ -117,16 +121,17 @@ def progress_view(request, system_code=None):
 		for month, month_info in baseline_monthly_usages.items():
 			timestamp = calendar.timegm(month_info['dt'].utctimetuple())
 			baseline_co2_consumption += calculation.transform_reading(co2_unit_code, timestamp,
-				month_info['usage'], unit_rates)
+				month_info['usage'], co2_unit_rates)
 		total_baseline_co2_consumption += baseline_co2_consumption
 
 		for source in attached_sources:
-			co2_consumption = get_last_12_month_co2_consumption(co2_unit_code, unit_rates, baseline_monthly_usages,
+			co2_consumption = get_last_12_month_co2_consumption(co2_unit_code, co2_unit_rates, baseline_monthly_usages,
 				source, grouped_monthly_readings, current_dt)
 			last_12_months_co2_consumption += co2_consumption
 
 			savings = calulcate_accumulated_saving(co2_unit_code, money_unit_code,
-				unit_rates, baseline_monthly_usages, source, grouped_monthly_readings, current_dt)
+				co2_unit_rates, money_unit_rates, baseline_monthly_usages, source,
+				grouped_monthly_readings, current_dt)
 			total_co2_saving += savings['co2']
 			total_money_saving += savings['money']
 
