@@ -32,7 +32,6 @@ def get_last_12_month_co2_consumption(unit_code, unit_rates, baselines, system, 
 	end_dt = current_dt.astimezone(source_tz)
 	end_dt = Utils.add_month(end_dt.replace(day=1, hour=0, minute=0, second=0, microsecond=0), -1)
 	system_first_record = system.first_record.astimezone(source_tz)
-	first_record_timestamp = calendar.timegm(system.first_record.utctimetuple())
 
 	co2_consumption = 0
 	for month_diff in xrange(12):
@@ -48,7 +47,7 @@ def get_last_12_month_co2_consumption(unit_code, unit_rates, baselines, system, 
 				energy_usage = 0
 
 		# need to add missing day from baseline
-		if timestamp == first_record_timestamp \
+		if (target_dt.year == system_first_record.year and target_dt.month == system_first_record.month) \
 			and system_first_record.day != 1 \
 			and target_dt.month in baselines:
 			missing_day_num = system_first_record.day - 1
