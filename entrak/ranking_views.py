@@ -81,14 +81,22 @@ def ranking_data_view(request, system_code=None):
 		for source_id in sources_sum_info.keys():
 			sources_sum_info[source_id] /= system_source_mapping[source_id].population
 
-	elif ranking_type == RANKING_TYPE_PERCENT:
-		for source_id, total in sources_sum_info.items():
-			last_total = reduce(lambda prev, reading: prev+reading[1], last_source_readings[source_id].items(), 0)
-			sources_sum_info[source_id] = (total-last_total)/last_total*100.0
-
 	grouped_readings = [{'name': info['name'], 'code': info.get('code', None), 'value': 0} for info in grouped_source_infos]
-	for source_id, reading_val in sources_sum_info.items():
-		target_group = grouped_readings[source_group_map[source_id]]
-		target_group['value'] += reading_val
+	if ranking_type == RANKING_TYPE_TOTAL or ranking_type == RANKING_TYPE_PER_PERSON:
+		for source_id, reading_val in sources_sum_info.items():
+			target_group = grouped_readings[source_group_map[source_id]]
+			target_group['value'] += reading_val
+
+	elif ranking_type == RANKING_TYPE_PERCENT:
+		for source_id, reading_val in sources_sum_info.items():
+			target_group = grouped_readings[source_group_map[source_id]]
+			target_group['current'] = reading_val + target_group.get('current', 0)
+			target_group['last'] = reduce(
+				lambda prev,reading: prev+reading[1],
+				last_source_readings[source_id].items(),
+				0) + target_group.get('last', 0)
+
+		for info in grouped_readings:
+			info['value'] = (info['current']-info['last'])/info['last']*100.0
 
 	return Utils.json_response(grouped_readings)
