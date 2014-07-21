@@ -68,7 +68,7 @@ def calulcate_accumulated_saving(co2_unit_code, money_unit_code, co2_unit_rates,
 		start_dt = Utils.add_month(start_dt, 1)
 	else:
 		start_dt = start_dt.replace(hour=0, minute=0, second=0, microsecond=0)
-	end_dt = current_dt.astimezone(source_tz).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+	end_dt = Utils.add_month(current_dt.astimezone(source_tz).replace(day=1, hour=0, minute=0, second=0, microsecond=0), -1)
 
 	total_co2_saving = 0
 	total_money_saving = 0
