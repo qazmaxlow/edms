@@ -27,9 +27,12 @@ def assign_source_under_system(systems, sources):
 
 	return result
 
-def get_last_12_month_co2_consumption(unit_code, unit_rates, baselines, source_tz, readings, current_dt):
+def get_last_12_month_co2_consumption(unit_code, unit_rates, baselines, system, readings, current_dt):
+	source_tz = pytz.timezone(system.timezone)
 	end_dt = current_dt.astimezone(source_tz)
-	end_dt = end_dt.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+	end_dt = Utils.add_month(end_dt.replace(day=1, hour=0, minute=0, second=0, microsecond=0), -1)
+	system_first_record = system.first_record.astimezone(source_tz)
+	first_record_timestamp = calendar.timegm(system.first_record.utctimetuple())
 
 	co2_consumption = 0
 	for month_diff in xrange(12):
@@ -43,6 +46,15 @@ def get_last_12_month_co2_consumption(unit_code, unit_rates, baselines, source_t
 				energy_usage = baselines[target_dt.month]['usage']
 			else:
 				energy_usage = 0
+
+		# need to add missing day from baseline
+		if timestamp == first_record_timestamp \
+			and system_first_record.day != 1 \
+			and target_dt.month in baselines:
+			missing_day_num = system_first_record.day - 1
+			days_of_month = calendar.monthrange(system_first_record.year, system_first_record.month)[1]
+			energy_usage += (baselines[target_dt.month]['usage']/days_of_month)*missing_day_num
+
 		co2_consumption += calculation.transform_reading(unit_code, timestamp,
 			energy_usage, unit_rates)
 
@@ -125,14 +137,12 @@ def progress_view(request, system_code=None):
 			for timestamp, reading in target_readings.items():
 				combined_readings[timestamp] = combined_readings.get(timestamp, 0) + reading
 
-		source_tz = pytz.timezone(system.timezone)
-
 		co2_consumption = get_last_12_month_co2_consumption(co2_unit_code, co2_unit_rates, baseline_monthly_usages,
-			source_tz, combined_readings, current_dt)
+			system, combined_readings, current_dt)
 		last_12_months_co2_consumption += co2_consumption
 
 		savings = calulcate_accumulated_saving(co2_unit_code, money_unit_code,
-			co2_unit_rates, money_unit_rates, baseline_monthly_usages, source_tz,
+			co2_unit_rates, money_unit_rates, baseline_monthly_usages, pytz.timezone(system.timezone),
 			system.first_record, combined_readings, current_dt)
 		total_co2_saving += savings['co2']
 		total_money_saving += savings['money']
