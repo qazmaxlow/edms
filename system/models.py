@@ -26,6 +26,7 @@ class System(models.Model):
 	city = models.CharField(max_length=200)
 	timezone = models.CharField(max_length=50, default=SOURCE_TZ_HK)
 	population = models.PositiveIntegerField(default=1)
+	first_record = models.DateTimeField()
 	night_time_start = models.DateTimeField(blank=True, null=True)
 	night_time_end = models.DateTimeField(blank=True, null=True)
 

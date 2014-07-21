@@ -27,18 +27,16 @@ def assign_source_under_system(systems, sources):
 
 	return result
 
-def get_last_12_month_co2_consumption(unit_code, unit_rates, baselines, source, readings, current_dt):
-	source_tz = pytz.timezone(source.tz)
+def get_last_12_month_co2_consumption(unit_code, unit_rates, baselines, source_tz, readings, current_dt):
 	end_dt = current_dt.astimezone(source_tz)
 	end_dt = end_dt.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-	target_readings = readings[str(source.id)]
 
 	co2_consumption = 0
 	for month_diff in xrange(12):
 		target_dt = Utils.add_month(end_dt, -month_diff)
 		timestamp = calendar.timegm(target_dt.utctimetuple())
-		if timestamp in target_readings:
-			energy_usage = target_readings[timestamp]
+		if timestamp in readings:
+			energy_usage = readings[timestamp]
 		else:
 			# use baseline val for the missing month
 			if target_dt.month in baselines:
@@ -51,9 +49,8 @@ def get_last_12_month_co2_consumption(unit_code, unit_rates, baselines, source, 
 	return co2_consumption
 
 def calulcate_accumulated_saving(co2_unit_code, money_unit_code, co2_unit_rates, money_unit_rates,
-	baselines, source, readings, current_dt):
-	source_tz = pytz.timezone(source.tz)
-	start_dt = pytz.utc.localize(source.first_record).astimezone(source_tz)
+	baselines, source_tz, first_record, readings, current_dt):
+	start_dt = first_record.astimezone(source_tz)
 	if start_dt.day != 1:
 		# skip the incomplete month
 		start_dt = start_dt.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
@@ -62,15 +59,13 @@ def calulcate_accumulated_saving(co2_unit_code, money_unit_code, co2_unit_rates,
 		start_dt = start_dt.replace(hour=0, minute=0, second=0, microsecond=0)
 	end_dt = current_dt.astimezone(source_tz).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
 
-	target_readings = readings[str(source.id)]
-
 	total_co2_saving = 0
 	total_money_saving = 0
 
 	target_dt = start_dt
 	while target_dt <= end_dt:
 		timestamp = calendar.timegm(target_dt.utctimetuple())
-		energy_usage = target_readings.get(timestamp, 0)
+		energy_usage = readings.get(timestamp, 0)
 		if target_dt.month in baselines:
 			baseline_usage = baselines[target_dt.month]['usage']
 		else:
@@ -124,24 +119,31 @@ def progress_view(request, system_code=None):
 				month_info['usage'], co2_unit_rates)
 		total_baseline_co2_consumption += baseline_co2_consumption
 
+		combined_readings = {}
 		for source in attached_sources:
-			co2_consumption = get_last_12_month_co2_consumption(co2_unit_code, co2_unit_rates, baseline_monthly_usages,
-				source, grouped_monthly_readings, current_dt)
-			last_12_months_co2_consumption += co2_consumption
+			target_readings = grouped_monthly_readings[str(source.id)]
+			for timestamp, reading in target_readings.items():
+				combined_readings[timestamp] = combined_readings.get(timestamp, 0) + reading
 
-			savings = calulcate_accumulated_saving(co2_unit_code, money_unit_code,
-				co2_unit_rates, money_unit_rates, baseline_monthly_usages, source,
-				grouped_monthly_readings, current_dt)
-			total_co2_saving += savings['co2']
-			total_money_saving += savings['money']
+		source_tz = pytz.timezone(system.timezone)
 
-	first_day_record = datetime.datetime(3000, 1, 1)
+		co2_consumption = get_last_12_month_co2_consumption(co2_unit_code, co2_unit_rates, baseline_monthly_usages,
+			source_tz, combined_readings, current_dt)
+		last_12_months_co2_consumption += co2_consumption
+
+		savings = calulcate_accumulated_saving(co2_unit_code, money_unit_code,
+			co2_unit_rates, money_unit_rates, baseline_monthly_usages, source_tz,
+			system.first_record, combined_readings, current_dt)
+		total_co2_saving += savings['co2']
+		total_money_saving += savings['money']
+
+	first_day_record = pytz.utc.localize(datetime.datetime(3000, 1, 1))
 	first_day_tz = None
-	for source in sources:
-		if source.first_record < first_day_record:
-			first_day_record = source.first_record
-			first_day_tz = source.tz
-	first_day_record = pytz.utc.localize(first_day_record).astimezone(pytz.timezone(first_day_tz))
+	for system in need_calculate_systems.keys():
+		if system.first_record < first_day_record:
+			first_day_record = system.first_record
+			first_day_tz = system.timezone
+	first_day_record = first_day_record.astimezone(pytz.timezone(first_day_tz))
 
 	m = systems_info
 	m['percengate_change'] = (last_12_months_co2_consumption-total_baseline_co2_consumption)/total_baseline_co2_consumption*100.0

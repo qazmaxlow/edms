@@ -31,6 +31,7 @@ def report_view(request, system_code=None):
 
 	source_ids = [str(source.id) for source in sources]
 	source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingMonth, start_dt, end_dt)
+	energy_usages = calculation.combine_readings_by_timestamp(source_readings)
 
 	unit_rates = UnitRate.objects.filter(Q(category_code=CO2_CATEGORY_CODE) | Q(category_code=MONEY_CATEGORY_CODE))
 	co2_unit_rates = [unit_rate for unit_rate in unit_rates if unit_rate.category_code == CO2_CATEGORY_CODE]
@@ -38,10 +39,18 @@ def report_view(request, system_code=None):
 
 	co2_usages = copy.deepcopy(source_readings)
 	calculation.transform_source_readings(co2_usages, systems, sources, co2_unit_rates, CO2_CATEGORY_CODE)
+	co2_usages = calculation.combine_readings_by_timestamp(co2_usages)
 
 	money_usages = copy.deepcopy(source_readings)
 	calculation.transform_source_readings(money_usages, systems, sources, money_unit_rates, MONEY_CATEGORY_CODE)
-	
+	money_usages = calculation.combine_readings_by_timestamp(money_usages)
+
+	monthly_summary = []
+	for timestamp, usage in energy_usages.items():
+		monthly_summary.append({'timestamp': timestamp, 'energy_usage': usage,
+			'co2_usage': co2_usages[timestamp], 'money_usage': money_usages[timestamp]})
+
 	m = systems_info
+	m["monthly_summary"] = sorted(monthly_summary, key=lambda x: x['timestamp'])
 
 	return render_to_response('report.html', m)

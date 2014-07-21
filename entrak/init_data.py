@@ -9,48 +9,45 @@ def init_test_source():
 	sources = []
 	sources.append(Source(
 		name='Aircon Total', xml_url='egauge4459.egaug.es', system_code='nike',
-		system_path=None, d_name='Aircon Total', d_name_tc=u'總冷氣', order=2,
-		first_record=pytz.timezone("Asia/Hong_Kong").localize(datetime.datetime(2013, 10, 15))))
+		system_path=None, d_name='Aircon Total', d_name_tc=u'總冷氣', order=2))
 	sources.append(Source(
 		name='Showroom Sockets', xml_url='en-trak1039.d.en-trak.com', system_code='adidas-hk',
-		system_path=',adidas,', d_name='Showroom Sockets', d_name_tc=u'電制', order=1,
-		first_record=pytz.timezone("Asia/Hong_Kong").localize(datetime.datetime(2013, 11, 15))))
+		system_path=',adidas,', d_name='Showroom Sockets', d_name_tc=u'電制', order=1))
 	sources.append(Source(name='Lights Plugs Total', xml_url='egauge4459.egaug.es',system_code='nike',
-		system_path=None, d_name='Lights Plugs Total', d_name_tc=u'燈及電制', order=1,
-		first_record=pytz.timezone("Asia/Hong_Kong").localize(datetime.datetime(2013, 10, 15))))
+		system_path=None, d_name='Lights Plugs Total', d_name_tc=u'燈及電制', order=1))
 	sources.append(Source(
 		name='showroom Lights', xml_url='en-trak1039.d.en-trak.com', system_code='adidas-hk',
-		system_path=',adidas,', d_name='showroom Lights', d_name_tc=u'燈', order=2,
-		first_record=pytz.timezone("Asia/Hong_Kong").localize(datetime.datetime(2013, 10, 1))))
+		system_path=',adidas,', d_name='showroom Lights', d_name_tc=u'燈', order=2))
 	sources.append(Source(name='Aircon Main', xml_url='egauge4459.egaug.es', system_code='nike',
-		system_path=None, d_name='Aircon Main', d_name_tc=u'主冷氣', order=4,
-		first_record=pytz.timezone("Asia/Hong_Kong").localize(datetime.datetime(2013, 10, 15))))
+		system_path=None, d_name='Aircon Main', d_name_tc=u'主冷氣', order=4))
 	sources.append(Source(name='Aircon Hall', xml_url='egauge4459.egaug.es', system_code='nike',
-		system_path=None, d_name='Aircon Hall', d_name_tc=u'禮堂空調', order=3,
-		first_record=pytz.timezone("Asia/Hong_Kong").localize(datetime.datetime(2013, 10, 15))))
+		system_path=None, d_name='Aircon Hall', d_name_tc=u'禮堂空調', order=3))
 	sources.append(Source(name='Air Conditioning', xml_url='en-trak1012.d.en-trak.com', system_code='adidas-tw',
-		system_path=',adidas,', d_name='Air Conditioning', d_name_tc=u'空調', order=2,
-		first_record=pytz.timezone("Asia/Hong_Kong").localize(datetime.datetime(2013, 10, 15))))
+		system_path=',adidas,', d_name='Air Conditioning', d_name_tc=u'空調', order=2))
 	sources.append(Source(name='Lights & Plugs', xml_url='en-trak1012.d.en-trak.com', system_code='adidas-tw',
-		system_path=',adidas,', d_name='Lights & Plugs', d_name_tc=u'燈及電制', order=1,
-		first_record=pytz.timezone("Asia/Hong_Kong").localize(datetime.datetime(2013, 10, 15))))
+		system_path=',adidas,', d_name='Lights & Plugs', d_name_tc=u'燈及電制', order=1))
 	sources.append(Source(name='Lights & Plugs', xml_url='egauge984.egaug.es', system_code='adidas-shatin',
-		system_path=',adidas,adidas-hk,', d_name='Lights & Plugs', d_name_tc=u'燈及電制', order=1,
-		first_record=pytz.timezone("Asia/Hong_Kong").localize(datetime.datetime(2013, 10, 15))))
+		system_path=',adidas,adidas-hk,', d_name='Lights & Plugs', d_name_tc=u'燈及電制', order=1))
 	sources.append(Source(name='Blocks AB', xml_url='en-trak1010.d.en-trak.com', system_code='adidas',
-		system_path=None, d_name='Blocks AB', d_name_tc=u'AB大樓', order=1,
-		first_record=pytz.timezone("Asia/Hong_Kong").localize(datetime.datetime(2013, 10, 15))))
+		system_path=None, d_name='Blocks AB', d_name_tc=u'AB大樓', order=1))
 
 	Source.objects.insert(sources)
 
 def init_test_system():
 	systems = []
-	systems.append(System(code='adidas', path='', name='Adidas', unit_info=json.dumps({'co2': 'hk-co2' ,'money': 'clp'})))
-	systems.append(System(code='adidas-hk', path=',adidas,', name='Adidas Hong Kong', unit_info=json.dumps({'co2': 'hk-co2' ,'money': 'clp'})))
-	systems.append(System(code='adidas-tw', path=',adidas,', name='Adidas Singapore', unit_info=json.dumps({'co2': 'tw-co2', 'money': 'twec'})))
-	systems.append(System(code='nike', path='', name='Nike', unit_info=json.dumps({'co2': 'hk-co2' ,'money': 'clp'})))
+	systems.append(System(code='adidas', path='', name='Adidas', unit_info=json.dumps({'co2': 'hk-co2' ,'money': 'clp'}),
+		first_record=pytz.timezone("Asia/Hong_Kong").localize(datetime.datetime(2013, 10, 15))))
+	systems.append(System(code='adidas-hk', path=',adidas,', name='Adidas Hong Kong',
+		unit_info=json.dumps({'co2': 'hk-co2' ,'money': 'clp'}),
+		first_record=pytz.timezone("Asia/Hong_Kong").localize(datetime.datetime(2013, 10, 15))))
+	systems.append(System(code='adidas-tw', path=',adidas,', name='Adidas Singapore',
+		unit_info=json.dumps({'co2': 'tw-co2', 'money': 'twec'}),
+		first_record=pytz.timezone("Asia/Hong_Kong").localize(datetime.datetime(2013, 10, 15))))
+	systems.append(System(code='nike', path='', name='Nike', unit_info=json.dumps({'co2': 'hk-co2' ,'money': 'clp'}),
+		first_record=pytz.timezone("Asia/Hong_Kong").localize(datetime.datetime(2013, 10, 15))))
 	systems.append(System(code='adidas-shatin', path=',adidas,adidas-hk,', name='Adidas Shatin',
-		unit_info=json.dumps({'co2': 'tw-co2', 'money': 'clp'})))
+		unit_info=json.dumps({'co2': 'tw-co2', 'money': 'clp'}),
+		first_record=pytz.timezone("Asia/Hong_Kong").localize(datetime.datetime(2013, 10, 15))))
 
 	System.objects.bulk_create(systems)
 

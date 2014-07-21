@@ -32,6 +32,9 @@ a) restart uWsgi
 	1. su entrak
 	2. touch /app/entrak/entrak_uwsgi.ini
 
+b) complete restart uWsgi in Emperor mode
+	1. sudo service uwsgi restart
+
 b) restart celery (REMEMBER to restart celery as it always use old version of code)
 	1. /etc/init.d/celeryd restart
 

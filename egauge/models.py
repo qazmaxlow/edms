@@ -14,7 +14,6 @@ class Source(Document):
 	d_name_tc = StringField(max_length=200)
 	order = IntField(default=1)
 	tz = StringField(max_length=50, default=SOURCE_TZ_HK)
-	first_record = DateTimeField()
 	active = BooleanField(default=True)
 
 class BaseSourceReading(Document):
