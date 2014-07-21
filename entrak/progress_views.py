@@ -155,7 +155,7 @@ def progress_view(request, system_code=None):
 	first_day_record = first_day_record.astimezone(pytz.timezone(first_day_tz))
 
 	m = systems_info
-	m['percengate_change'] = (last_12_months_co2_consumption-total_baseline_co2_consumption)/total_baseline_co2_consumption*100.0
+	m['percengate_change'] = (total_baseline_co2_consumption-last_12_months_co2_consumption)/total_baseline_co2_consumption*100.0
 	m['total_co2_saving'] = int(total_co2_saving/1000)
 	m['total_money_saving'] = total_money_saving
 	m['first_day_record'] = first_day_record

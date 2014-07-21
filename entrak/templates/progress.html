@@ -19,12 +19,12 @@
 
 {% block page_content %}
 
-<div class="saving-header"><h2>Over the past 12 months you have emitted<span class="{% if percengate_change <= 0 %}positive-saving{% else %}negative-saving{% endif %}"> {{percengate_change|abs_float|round_if_larger_than_10}}<span>%</span> {% if percengate_change <= 0 %}LESS{% else %}MORE{% endif %} </span>than your baseline</h2></div>
+<div class="saving-header"><h2>Over the past 12 months you have emitted<span class="{% if percengate_change >= 0 %}positive-saving{% else %}negative-saving{% endif %}"> {{percengate_change|abs_float|round_if_larger_than_10}}<span>%</span> {% if percengate_change >= 0 %}LESS{% else %}MORE{% endif %} </span>than your baseline</h2></div>
 <hr>
 
 <div id="saving-container" style="background-image:url('{% static 'images/progress/factory-bg.png' %}');">
 	<div id="saving-block">
-		<div id="co2-saving-info" class="saving-info">
+		<div id="co2-saving-info" class="saving-info {% if total_co2_saving >= 0 %}positive-saving{% else %}negative-saving{% endif %}">
 			<img src="{% static 'images/progress/co2.png' %}">
 			<div>Which is equivalent to<br><span>{{total_co2_saving|abs_int|intcomma}} tons</span> of CO2<br>emissions {% if total_co2_saving >= 0 %}reduced{% else %}increase{% endif %},<br>since {{first_day_record|date:"jS M Y"}}</div>
 		</div>
@@ -42,9 +42,9 @@
 
 		<div class="separate-line"></div>
 
-		<div id="money-saving-info" class="saving-info">
+		<div id="money-saving-info" class="saving-info {% if total_money_saving >= 0 %}positive-saving{% else %}negative-saving{% endif %}">
 			<img src="{% static 'images/progress/money.png' %}">
-			<div>Saving up to<br><span>${{total_money_saving|abs_int|intcomma}}</span><br>worth of money</div>
+			<div>{% if total_money_saving >= 0 %}Saving up to{% else %}Extra spending up to{% endif %}<br><span>${{total_money_saving|abs_int|intcomma}}</span></div>
 		</div>
 
 	</div>
