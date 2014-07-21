@@ -19,7 +19,7 @@
 
 {% block page_content %}
 
-<div class="saving-header"><h2>Over the past 12 months you have emitted<span class="{% if percengate_change >= 0 %}positive-saving{% else %}negative-saving{% endif %}"> {{percengate_change|abs_float|round_if_larger_than_10}}<span>%</span> {% if percengate_change >= 0 %}LESS{% else %}MORE{% endif %} </span>than your baseline</h2></div>
+<div class="saving-header"><h2>Over the past 12 months you have emitted<span class="{% if percengate_change <= 0 %}positive-saving{% else %}negative-saving{% endif %}"> {{percengate_change|abs_float|round_if_larger_than_10}}<span>%</span> {% if percengate_change <= 0 %}LESS{% else %}MORE{% endif %} </span>than your baseline</h2></div>
 <hr>
 
 <div id="saving-container" style="background-image:url('{% static 'images/progress/factory-bg.png' %}');">
