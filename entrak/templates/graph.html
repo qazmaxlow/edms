@@ -51,11 +51,11 @@ function updateDonutChart(data) {
 		$("#selection-summary-source").css("color", donutChart.options.colors[i]);
 
 		if (graph.graphChart.currentUnit.isSuffix) {
-			$("#selection-summary-unit-prefix").text('');
-			$("#selection-summary-unit-suffix").text(graph.graphChart.currentUnit.shortDesc);
+			$("#selection-summary-unit-prefix").html('');
+			$("#selection-summary-unit-suffix").html(graph.graphChart.currentUnit.shortDesc);
 		} else {
-			$("#selection-summary-unit-prefix").text(graph.graphChart.currentUnit.shortDesc);
-			$("#selection-summary-unit-suffix").text('');
+			$("#selection-summary-unit-prefix").html(graph.graphChart.currentUnit.shortDesc);
+			$("#selection-summary-unit-suffix").html('');
 		}
 		
 	});
@@ -353,7 +353,7 @@ $(function() {
 	graph.unitCategorys = JSON.parse('{{unit_categorys|jsonifyUnitCategorys}}');
 	graph.graphChart.currentUnit = graph.unitCategorys[0];
 
-	$("#unit-label").text(graph.unitCategorys[0].name);
+	$("#unit-label").html(graph.unitCategorys[0].name);
 	$("#unit-bg").attr("src", "{% get_static_prefix %}images/unit/" + graph.unitCategorys[0].bgImg);
 
 	$("#y-axis-slider").slider({
@@ -434,7 +434,7 @@ $(function() {
 
 	Utils.setupUnitChoiceLayout('#unit-choice', graph.unitCategorys, '{% get_static_prefix %}', function(unitCategory) {
 		graph.graphChart.updateUnit(unitCategory);
-		$("#unit-label").text(unitCategory.name);
+		$("#unit-label").html(unitCategory.name);
 		$("#unit-bg").attr("src", "{% get_static_prefix %}images/unit/" + unitCategory.bgImg);
 	});
 

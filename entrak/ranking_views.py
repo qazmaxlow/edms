@@ -97,6 +97,9 @@ def ranking_data_view(request, system_code=None):
 				0) + target_group.get('last', 0)
 
 		for info in grouped_readings:
-			info['value'] = (info['current']-info['last'])/info['last']*100.0
+			if sources_sum_info:
+				info['value'] = (info['current']-info['last'])/info['last']*100.0
+			else:
+				info['value'] = 0
 
 	return Utils.json_response(grouped_readings)

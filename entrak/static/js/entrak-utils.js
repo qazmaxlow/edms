@@ -78,7 +78,7 @@ Utils.getDtDetlaUnit = function (rangeType) {
 	return deltaUnit;
 }
 
-Utils.genLastStartEndDt = function (targetDt, rangeType) {
+Utils.genLastDtDeltaUnit = function (rangeType) {
 	var deltaUnit = null;
 	if (rangeType === Utils.RANGE_TYPE_DAY
 		|| rangeType === Utils.RANGE_TYPE_NIGHT
@@ -91,6 +91,12 @@ Utils.genLastStartEndDt = function (targetDt, rangeType) {
 	} else if (rangeType === Utils.RANGE_TYPE_HOUR) {
 		deltaUnit = 'h'
 	}
+
+	return deltaUnit;
+}
+
+Utils.genLastStartEndDt = function (targetDt, rangeType) {
+	var deltaUnit = Utils.genLastDtDeltaUnit(rangeType);
 	var lastStartDt = moment(targetDt).subtract(deltaUnit, 1);
 	var lastEndDt = moment(lastStartDt).add(Utils.getDtDetlaUnit(rangeType), 1);
 

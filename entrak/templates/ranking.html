@@ -38,7 +38,7 @@
 	<div class="rank-meter-bar">
 		<div style="width: {% templatetag openvariable %}meterWidth{% templatetag closevariable %}%;" class="rank-meter-bar-inner"></div>
 	</div>
-	<div class="rank-detail-value">{% templatetag openvariable %}valueText{% templatetag closevariable %}</div>
+	<div class="rank-detail-value">{% templatetag openvariable %}& valueText{% templatetag closevariable %}</div>
 </div>
 </script>
 
@@ -58,7 +58,7 @@
 			</div>
 		</div>
 
-		<div style="left: {% templatetag openvariable %}indicatorLeft{% templatetag closevariable %}px;" class="meter-indicator"><div>{% templatetag openvariable %}valueText{% templatetag closevariable %}</div></div>
+		<div style="left: {% templatetag openvariable %}indicatorLeft{% templatetag closevariable %}px;" class="meter-indicator"><div>{% templatetag openvariable %}& valueText{% templatetag closevariable %}</div></div>
 	</div>
 </div>
 </script>
@@ -81,6 +81,13 @@ var ranking = {};
 
 function getRankingData() {
 	var startEndDt = Utils.genStartEndDt(ranking.currentDt, ranking.currentRangeType);
+	if (ranking.currentRangeType === Utils.RANGE_TYPE_NIGHT) {
+		var endDt = startEndDt.endDt;
+	} else if (ranking.currentRangeType === Utils.RANGE_TYPE_HOUR) {
+		var endDt = moment(ranking.currentDt).minute(Utils.getNowMoment().minute());
+	} else {
+		var endDt = moment(ranking.currentDt);
+	}
 	var requestData = {
 		grouped_source_infos: JSON.stringify(ranking.entrakSystem.getGroupedSourceInfos()),
 		range_type: Utils.API_RANGE_TYPES[ranking.currentRangeType],
@@ -88,14 +95,14 @@ function getRankingData() {
 		has_detail_rate: ranking.currentUnit.hasDetailRate,
 		global_rate: ranking.currentUnit.globalRate,
 		start_dt: startEndDt.startDt.unix(),
-		end_dt: startEndDt.endDt.unix(),
+		end_dt: endDt.unix(),
 		ranking_type: ranking.currentRankingType
 	};
 
 	if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
-		var lastStartEndDt = Utils.genLastStartEndDt(startEndDt.startDt, ranking.currentRangeType);
-		requestData.last_start_dt = lastStartEndDt.startDt.unix();
-		requestData.last_end_dt = lastStartEndDt.endDt.unix();
+		var deltaUnit = Utils.genLastDtDeltaUnit(ranking.currentRangeType);
+		requestData.last_start_dt = moment(startEndDt.startDt).subtract(deltaUnit, 1).unix();
+		requestData.last_end_dt = moment(endDt).subtract(deltaUnit, 1).unix();
 	}
 
 	$.ajax({
