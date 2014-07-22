@@ -40,18 +40,30 @@ class System(models.Model):
 		return systems
 
 	@staticmethod
-	def get_system_path_components(path, system_code, start_from_code):
+	def get_system_path_components(path, system_code, start_from_code, user_systems):
 		system_path_components = [code for code in path.split(',') if code !='']
 		system_path_components.append(system_code)
 		start_idx = system_path_components.index(start_from_code)
 
-		return system_path_components[start_idx:]
+		code_name_map = {}
+		for system in user_systems:
+			code_name_map[system.code] = {'name': system.name, 'name_tc': system.name_tc}
+
+		result = []
+		for code in system_path_components[start_idx:]:
+			result.append({
+				'code': code,
+				'name': code_name_map[code]['name'],
+				'name_tc': code_name_map[code]['name_tc']
+			})
+
+		return result
 
 	@staticmethod
 	def get_systems_info(system_code, user_system_code):
 		systems = System.get_systems_within_root(system_code)
 		user_systems = System.get_systems_within_root(user_system_code)
-		system_path_components = System.get_system_path_components(systems[0].path, systems[0].code, user_system_code)
+		system_path_components = System.get_system_path_components(systems[0].path, systems[0].code, user_system_code, user_systems)
 
 		return {'systems': systems, 'user_systems': user_systems,
 			'system_path_components': system_path_components}

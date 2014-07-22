@@ -18,8 +18,8 @@ def report_view(request, system_code=None):
 	sources = SourceManager.get_sources(current_system)
 
 	current_system_tz = pytz.timezone(current_system.timezone)
-	first_record = min([source.first_record for source in sources])
-	first_record = current_system_tz.localize(first_record).replace(
+	first_record = min([system.first_record for system in systems])
+	first_record = first_record.astimezone(current_system_tz).replace(
 		hour=0, minute=0, second=0, microsecond=0)
 	if first_record.day == 1:
 		start_dt = first_record
@@ -47,10 +47,13 @@ def report_view(request, system_code=None):
 
 	monthly_summary = []
 	for timestamp, usage in energy_usages.items():
-		monthly_summary.append({'timestamp': timestamp, 'energy_usage': usage,
-			'co2_usage': co2_usages[timestamp], 'money_usage': money_usages[timestamp]})
+		monthly_summary.append({
+			'dt': Utils.utc_dt_from_utc_timestamp(timestamp).astimezone(current_system_tz),
+			'timestamp': timestamp,
+			'energy_usage': usage, 'co2_usage': co2_usages[timestamp],
+			'money_usage': money_usages[timestamp]})
 
 	m = systems_info
-	m["monthly_summary"] = sorted(monthly_summary, key=lambda x: x['timestamp'])
+	m["monthly_summary"] = sorted(monthly_summary, key=lambda x: x['timestamp'], reverse=True)
 
 	return render_to_response('report.html', m)

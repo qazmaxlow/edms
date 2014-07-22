@@ -7,6 +7,7 @@
 {% block extra_head %}
 {{block.super}}
 
+<link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/report.css' %}">
 {% endblock %}
 
@@ -18,4 +19,35 @@
 {% block page_subtitle %}Get all your information here at the{% endblock %}
 
 {% block page_content %}
+
+<div class="panel-component">
+	<div class="drop-down-panel-header">
+		<div class="panel-header-left-menu">
+			<h3>Monthly Report</h3><h3>Customize Report</h3><h3>Download Data</h3>
+		</div>
+	</div>
+
+	<div id="panel-content">
+		<div id="monthly-report">
+			<div id="monthly-report-header">
+				<span>Monthly Reports</span>
+				<span>Energy Consumption (kWh)</span>
+				<span>CO<sub>2</sub> Emissions (kg)</span>
+				<span>Energy Cost ($)</span>
+				<span>Download</span>
+			</div>
+			<div id="monthly-report-content">
+				{% for summary in monthly_summary %}
+				<div>
+					<span class="summary-date-col">{{summary.dt|date:"M Y"}}</span>
+					<span>{{summary.energy_usage|floatformat:"0"|intcomma}}</span>
+					<span>{{summary.co2_usage|floatformat:"0"|intcomma}}</span>
+					<span>{{summary.money_usage|floatformat:"0"|intcomma}}</span>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+
 {% endblock %}

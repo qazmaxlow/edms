@@ -169,8 +169,8 @@ $(function() {
 
 			<span><h3>You are viewing:</h3></span>
 			<span id="breadcrumbs-path">
-				{% for code in system_path_components %}
-				<a href="/{{code}}/{% block breadcrumb_target_view %}{% endblock %}/">{{code}}</a>
+				{% for info in system_path_components %}
+				<a href="/{{info.code}}/{% block breadcrumb_target_view %}{% endblock %}/">{{info.name}}</a>
 					{% if not forloop.last %}
 					<span>-</span>
 					{% endif %}
