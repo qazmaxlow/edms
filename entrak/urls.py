@@ -21,6 +21,7 @@ urlpatterns = patterns('',
         url(r'^ranking/$', 'entrak.ranking_views.ranking_view', name='ranking'),
     	url(r'^ranking_data/$', 'entrak.ranking_views.ranking_data_view', name='ranking_data'),
         url(r'^report/$', 'entrak.report_views.report_view', name='report'),
+        url(r'^report_data/$', 'entrak.report_views.report_data_view', name='report_data'),
     ))),
 )
 

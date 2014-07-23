@@ -213,6 +213,9 @@ GraphChart.prototype.transformReadingToChartDatasets = function (groupedReadings
 		$.each(readingInfos.readings, function(readingTimestamp, readingVal) {
 			var transformedX = graphChartThis.transformXCoordinate(readingTimestamp);
 			series.data.push([transformedX, readingVal]);
+			series.data.sort(function (a, b) {
+				return a[0]-b[0];
+			});
 
 			if (transformedX in totalReadings) {
 				totalReadings[transformedX] += readingVal;
@@ -243,6 +246,9 @@ GraphChart.prototype.transformReadingToSeries = function (readingInfo, targetNam
 	$.each(readingInfo.readings, function(readingTimestamp, readingVal) {
 		var transformedX = graphChartThis.transformXCoordinate(readingTimestamp);
 		series.data.push([transformedX, readingVal]);
+		series.data.sort(function (a, b) {
+			return a[0]-b[0];
+		});
 	});
 
 	this[targetName] = series;

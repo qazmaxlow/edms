@@ -9,6 +9,10 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/report.css' %}">
+<script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
+<script src="{% static 'js/csrf_ajax.js' %}"></script>
+<script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
+<script src="{% static 'js/entrak-utils.js' %}"></script>
 {% endblock %}
 
 {% block selected-menu-link-id %}menu-link-report{% endblock %}
@@ -17,6 +21,142 @@
 
 {% block page_title %}THE REPORTS PAGE{% endblock %}
 {% block page_subtitle %}Get all your information here at the{% endblock %}
+
+{% block extra_script %}
+{{block.super}}
+
+<script type="text/javascript">
+
+REPORT_TYPE_MONTH = 'month';
+
+var report = {};
+
+function getReportData(startDt, separateDt, endDt) {
+	var requestData = {
+		start_dt: startDt.unix(),
+		separate_dt: separateDt.unix(),
+		end_dt: endDt.unix()
+	};
+
+	$.ajax({
+		type: "POST",
+		url: "{% url 'report_data' system_code=systems.0.code %}",
+		data: requestData,
+	}).done(function(data) {
+		generateReport(data);
+	});
+}
+
+function generateReport(data) {
+	var groupedSourceInfos = data.grouped_source_infos;
+	generateKeyStaticReport(groupedSourceInfos);
+}
+
+function generateKeyStaticReport(groupedSourceInfos) {
+	var totalEnergyUsage = 0;
+	var lastTotalEnergyUsage = 0;
+	var totalCo2Usage = 0;
+	var lastTotalCo2Usage = 0;
+	var totalMoneyUsage = 0;
+	var lastTotalMoneyUsage = 0;
+
+	$.each(groupedSourceInfos, function(idx, info) {
+		totalEnergyUsage += info["total_energy"];
+		lastTotalEnergyUsage += info["last_total_energy"];
+		totalCo2Usage += info["total_co2"];
+		lastTotalCo2Usage += info["last_total_co2"];
+		totalMoneyUsage += info["total_money"];
+		lastTotalMoneyUsage += info["last_total_money"];
+	});
+
+	$("#current-energy-usage").text(Utils.formatWithCommas(totalEnergyUsage.toFixed(0)) + " kWh");
+	$("#current-co2-usage").html(Utils.formatWithCommas((totalCo2Usage/1000).toFixed(0)) + " tons CO<sub>2</sub>");
+	$("#current-money-usage").text(Utils.formatWithCommas("$ " + totalMoneyUsage.toFixed(0)));
+
+	var savedEnergyPercentSuffix, savedCo2SubText, savedMoneySubText,
+		carImpactSubText, forestImpactSubText, elephantImpactSubText;
+	var savedEnergyPercent = (lastTotalEnergyUsage - totalEnergyUsage)/lastTotalEnergyUsage;
+	if (savedEnergyPercent >= 0) {
+		savedEnergyPercentSuffix = "less";
+		savedCo2SubText = "of CO<sub>2</sub> reduced";
+		savedMoneySubText = "in savings";
+		carImpactSubText = "taken off the road for a month";
+		forestImpactSubText = "of tropical rainforest protected";
+		elephantImpactSubText = "Reduced CO<sub>2</sub> emissions equal to the weight of";
+	} else {
+		savedEnergyPercentSuffix = "more";
+		savedCo2SubText = "of CO<sub>2</sub> increased";
+		savedMoneySubText = "extra spending";
+		carImpactSubText = "more on the road for a month";
+		forestImpactSubText = "of tropical rainforest cut down";
+		elephantImpactSubText = "Extra CO<sub>2</sub> emissions equal to the weight of";
+	}
+	var savedEnergyText = Utils.formatWithCommas(Math.abs(Utils.fixed1DecIfLessThan10(savedEnergyPercent))) + "% ";
+	savedEnergyText += savedEnergyPercentSuffix;
+	$("#save-energy-usage").text(savedEnergyText);
+	$("#save-energy-subtext").text("than " + genReportName(genLastDt(report.currentDt, REPORT_TYPE_MONTH)));
+	var co2Saving = lastTotalCo2Usage-totalCo2Usage;
+	var savedCo2Text = Utils.formatWithCommas((Math.abs(co2Saving)/1000).toFixed(0));
+	savedCo2Text += " tons";
+	$("#save-co2-usage").text(savedCo2Text);
+	$("#save-co2-subtext").html(savedCo2SubText);
+	var savedMoneyText = "$ " + Utils.formatWithCommas(Math.abs(lastTotalMoneyUsage-totalMoneyUsage).toFixed(0));
+	$("#save-money-usage").text(savedMoneyText);
+	$("#save-money-subtext").text(savedMoneySubText);
+
+	var co2InCar = Math.abs(Utils.formatWithCommas((co2Saving*0.003).toFixed(0)));
+	$("#car-impact").text(co2InCar + " cars");
+	$("#car-impact-subtext").text(carImpactSubText);
+	var co2InForest = Math.abs(Utils.formatWithCommas((co2Saving*0.016).toFixed(0)));
+	$("#forest-impact").text(co2InForest + " m²");
+	$("#forest-impact-subtext").text(forestImpactSubText);
+	var co2InElephant = Math.abs(Utils.formatWithCommas((co2Saving*0.00033).toFixed(0)));
+	$("#elephant-impact").text(co2InElephant + " elephants");
+	$("#elephant-impact-subtext").html(elephantImpactSubText);
+}
+
+function genLastDt(targetDt, reportType) {
+	var result;
+	if (reportType === REPORT_TYPE_MONTH) {
+		result = moment(targetDt).subtract('M', 1);
+	}
+
+	return result;
+}
+
+function genReportName(targetDt) {
+	var reportName = "";
+	if (report.currentReportType === REPORT_TYPE_MONTH) {
+		reportName = targetDt.format("MMM YYYY");
+	}
+
+	return reportName;
+}
+
+function updateReportName() {
+	var reportName = genReportName(report.currentDt);
+	$(".report-name").text(reportName + " - Monthly Energy Report");
+}
+
+$(function() {
+	setupAjaxForCsrf($.cookie('csrftoken'));
+
+	report.currentReportType = REPORT_TYPE_MONTH;
+	report.timezone = '{{systems.0.timezone}}';
+	{% if monthly_summary|length >= 1 %}
+	report.currentDt =  moment.unix({{monthly_summary.0.timestamp}}).tz(report.timezone);
+	{% endif %}
+
+	updateReportName();
+
+	if ("currentDt" in report) {
+		var startDt = genLastDt(report.currentDt, REPORT_TYPE_MONTH);
+		var endDt = moment(report.currentDt).add('M', 1);
+		getReportData(startDt, report.currentDt, endDt);
+	}
+});
+</script>
+{% endblock %}
 
 {% block page_content %}
 
@@ -47,6 +187,74 @@
 				{% endfor %}
 			</div>
 		</div>
+	</div>
+</div>
+
+<div class="system-name">{{systems.0.name}}</div>
+<hr class="title-separator">
+<div class="report-name"></div>
+<hr class="head-separator">
+
+<div class="report-component">
+	<div class="report-component-header">WHAT ARE OUR KEY STATISTICS FOR THIS MONTH</div>
+	<hr class="report-component-separator">
+	<div class="basic-info-container">
+		<div id="current-usage-col" class="basic-info-col">
+			<div>HOW MUCH ENERGY<br>DID WE USE?</div>
+			<div>
+				<img src="">
+				<span id="current-energy-usage"></span>
+			</div>
+			<div>
+				<img src="">
+				<span id="current-co2-usage"></span>
+			</div>
+			<div>
+				<img src="">
+				<span id="current-money-usage"></span>
+			</div>
+		</div>
+
+		<div id="save-usage-col" class="basic-info-col">
+			<div>HOW MUCH ENERGY<br>DID WE SAVE?</div>
+			<div>
+				<img src="">
+				<span id="save-energy-usage"></span><br>
+				<span id="save-energy-subtext"></span>
+			</div>
+			<div>
+				<img src="">
+				<span id="save-co2-usage"></span><br>
+				<span id="save-co2-subtext"></span>
+			</div>
+			<div>
+				<img src="">
+				<span id="save-money-usage"></span><br>
+				<span id="save-money-subtext"></span>
+			</div>
+		</div>
+
+		<div id="impact-col" class="basic-info-col">
+			<div>WHAT WAS OUR<br>ENVIRONMENTAL IMPACT?</div>
+			<div>
+				<img src="">
+				<span id="car-impact"></span><br>
+				<span id="car-impact-subtext"></span>
+			</div>
+			<div>
+				<img src="">
+				<span id="forest-impact"></span><br>
+				<span id="forest-impact-subtext"></span>
+			</div>
+			<div>
+				<img src="">
+				<span id="elephant-impact-subtext"></span><br>
+				<span id="elephant-impact"></span>
+			</div>
+		</div>
+	</div>
+	<div class="report-component-footer">
+		<button>HIDE DETAILS</button>
 	</div>
 </div>
 
