@@ -171,9 +171,9 @@ function finishReceiveRankData(data) {
 
 			var valueText = Utils.formatWithCommas(item.value.toFixed(0));
 			if (ranking.currentUnit.isSuffix) {
-				valueText += ' '+ranking.currentUnit.shortDesc;
+				valueText += ' '+'<span>'+ranking.currentUnit.shortDesc+'</span>';
 			} else {
-				valueText = ranking.currentUnit.shortDesc+' '+valueText;
+				valueText = '<span>'+ranking.currentUnit.shortDesc+'</span>'+' '+valueText;
 			}
 			if (ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
 				valueText += '/person';
@@ -266,6 +266,9 @@ $(function() {
 	var subMenuPanel = $(".drop-down-panel-content ul");
 	$(".panel-header-left-menu h3").each(function (eleIdx) {
 		$(this).click({connectedPanel: subMenuPanel[eleIdx]}, function (event) {
+			$(".panel-header-left-menu h3").removeClass('selected-tab');
+			$(this).addClass('selected-tab');
+
 			var connectedPanel = $(event.data.connectedPanel);
 			if (!(connectedPanel.hasClass('selected-submenu'))) {
 				subMenuPanel.filter(".selected-submenu").removeClass('selected-submenu').hide();
@@ -281,6 +284,7 @@ $(function() {
 			}
 		});
 	});
+	$('#sub-menu-unit').addClass('selected-tab');
 	$("#unit-choice").addClass('selected-submenu').show();
 
 	ranking.unitCategorys = JSON.parse('{{unit_categorys|jsonifyUnitCategorys}}');
@@ -289,6 +293,18 @@ $(function() {
 		if (ranking.currentUnit.code !== unitCategory.code) {
 			ranking.currentUnit = unitCategory;
 			getRankingData();
+
+			if (unitCategory.code === 'walkingtrip'
+				|| unitCategory.code === 'biketrip'
+				|| unitCategory.code === 'taxitrip') {
+				if ($('#trip-unit-desc').length == 0) {
+					$('.drop-down-panel-content').append("<p id='trip-unit-desc'></p>");
+				}
+
+				$('#trip-unit-desc').text(unitCategory.name);
+			} else {
+				$('.drop-down-panel-content').find('#trip-unit-desc').remove();
+			};
 		}
 	});
 
@@ -315,7 +331,9 @@ $(function() {
 		scrollMonth: false,
 		timepicker: false,
 		onSelectDate: function(input) {
+			var nowMoment = Utils.getNowMoment();
 			ranking.currentDt = moment(input).startOf('hour');
+			ranking.currentDt.hour(nowMoment.hour());
 			$("#current-dt").text(formatFromToDt(ranking.currentDt, ranking.currentRangeType));
 			getRankingData();
 		}
@@ -350,6 +368,7 @@ $(function() {
 		$(this).attr('sort-type', sortTypes[idx]);
 	});
 	$(".sort-menu li").click(function() {
+		$('#sort-by-text').text($(this).text());
 		var sortType = $(this).attr('sort-type');
 		ranking.currentSortBy = sortType;
 		sortRankingItem(ranking.currentSortBy);
@@ -380,7 +399,7 @@ $(function() {
 			<h3 ranking-type='percent'>% Change</h3>
 			<h3 ranking-type='per_person'>Per person</h3>
 			<h3 ranking-type='total'>Total</h3>
-			<h3 class='sort-by-btn'>Sort by &#8194; &#9662;</h3>
+			<h3 class='sort-by-btn'><span id="sort-by-text">Sort by</span> &nbsp;&nbsp; &#9662;</h3>
 			<span style='clear: both;'></span>
 
 			<ul class="sort-menu">

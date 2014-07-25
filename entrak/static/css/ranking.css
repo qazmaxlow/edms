@@ -4,7 +4,7 @@
 }
 
 .panel-header-left-menu{
-	width: 65% !important;
+	width: 62.5% !important;
 	font-size: 11pt;
 }
 #current-dt {
@@ -41,24 +41,54 @@
 }
 .panel-header-right-menu .sort-by-btn {
 	padding-left: 10px;
-	padding-right: 10px;
+	padding-right: 14px;
 }
 .panel-header-right-menu h3.selected-submenu {
 	background-color: #7fd51e;
+}
+.panel-header-right-menu h3:hover{
+	background: -webkit-linear-gradient(top, #aee428, #67cd18);
+	background: -o-linear-gradient(top, #aee428, #67cd18);
+	background: -moz-linear-gradient(top, #aee428, #67cd18);
+	background: linear-gradient(to bottom, #aee428, #67cd18);
+}
+
+.drop-down-panel-content>p{
+	position: absolute;
+	font-size: 11pt;
+	line-height: 1.3em;
+	color: #354960;
+	top: 19px;
+	left: 750px;
+	right: 15px;
 }
 
 .sort-menu {
 	display: none;
 	position: absolute;
 	width: 100px;
-	height: 60px;
+	height: 95px;
 	z-index: 100;
 	top: 33px;
 	left: 1px;
-	background-color: #FF00FF;
+	background-color: #354960;
+	color: white;
+	font-size: 11pt;
+}
+.sort-menu li{
+	padding: 8px 2px 8px 11px;
+	border-bottom: 1px solid #ffffff;
+}
+.sort-menu li:hover{
+	background: -webkit-linear-gradient(right, #aee428, #67cd18);
+	background: -o-linear-gradient(left, #aee428, #67cd18);
+	background: -moz-linear-gradient(left, #aee428, #67cd18);
+	background: linear-gradient(to left, #aee428, #67cd18);
 }
 
 #ranking-item-container {
+	height: 490px;
+	overflow: scroll;
 	margin-top: 0px !important;
 }
 .ranking-item {
@@ -138,9 +168,12 @@
 	color: #fff;
 	padding-top: 13px;
 	padding-left: 54px;
-	font-size: 14pt;
+	font-size: 16pt;
 	font-weight: bolder;
 	letter-spacing: 0.02em;
+}
+.rank-detail-value>span {
+	font-size: 10pt;
 }
 .ranking-total-or-person .rank-meter-bar {
 	position: absolute;
@@ -193,6 +226,7 @@
 	right: 287px;
 }
 .meter-indicator {
+	font-size: 8pt;
 	position: absolute;
 	width: 48px;
 	height: 32px;

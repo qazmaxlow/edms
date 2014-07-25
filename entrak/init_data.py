@@ -68,8 +68,8 @@ def init_unit_category():
 	unit_cats.append(UnitCategory(code='burger', name='bugers', short_desc='bugers', order=3,
 		img_off='burger.png', img_on='burger-hover.png', bg_img='burger-bg.png', city='all',
 		global_rate=2.15))
-	unit_cats.append(UnitCategory(code='noodle', name='bowls of instant noodle',
-		short_desc='bowls of instant noodle', order=4, img_off='ramen.png', img_on='ramen-hover.png',
+	unit_cats.append(UnitCategory(code='noodle', name='bowls of noodle',
+		short_desc='bowls of noodle', order=4, img_off='ramen.png', img_on='ramen-hover.png',
 		bg_img='burger-bg.png', city='all', global_rate=0.52))
 	unit_cats.append(UnitCategory(code='pineapplebuns', name='pineapple buns', short_desc='pineapple buns', order=5,
 		img_off='bun.png', img_on='bun-hover.png', bg_img='burger-bg.png', city='all', global_rate=3.3))

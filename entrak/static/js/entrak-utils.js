@@ -106,7 +106,7 @@ Utils.genLastStartEndDt = function (targetDt, rangeType) {
 Utils.setupUnitChoiceLayout = function (targetEleSel, unitCategorys, staticPrefix, unitClickedFunc) {
 	var unitChoice = $(targetEleSel);
 	$.each(unitCategorys, function(idx, unitCategory) {
-		var unitLiDom = $("<li unit_category='" + unitCategory.id + "'>"
+		var unitLiDom = $("<li>"
 			+ "<img src='" + staticPrefix + "images/unit/" + unitCategory.imgOff + "'>"
 			+ "</li>");
 		unitLiDom.find('img').hover(function() {

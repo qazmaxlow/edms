@@ -407,6 +407,9 @@ $(function() {
 	var subMenuPanel = $(".drop-down-panel-content ul");
 	$(".panel-header-left-menu h3").each(function (eleIdx) {
 		$(this).click({connectedPanel: subMenuPanel[eleIdx]}, function (event) {
+			$(".panel-header-left-menu h3").removeClass('selected-tab');
+			$(this).addClass('selected-tab');
+			
 			var connectedPanel = $(event.data.connectedPanel);
 			if (!(connectedPanel.hasClass('selected-submenu'))) {
 				subMenuPanel.filter(".selected-submenu").removeClass('selected-submenu').hide();
@@ -428,6 +431,7 @@ $(function() {
 			}
 		});
 	});
+	$('#sub-menu-unit').addClass('selected-tab');
 	$("#unit-choice").addClass('selected-submenu').show();
 
 	Utils.setupDropDownPanelBtn();
