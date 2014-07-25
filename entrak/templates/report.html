@@ -12,7 +12,13 @@
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
 <script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
+<script src="{% static 'js/mustache.js-master/mustache.js' %}"></script>
+<script src="{% static 'js/jquery.tinysort.min.js' %}"></script>
+<script src="{% static 'js/flot/jquery.flot.min.js' %}"></script>
+<script src="{% static 'js/flot/jquery.flot.pie.min.js' %}"></script>
+<script src="{% static 'js/entrak-system.js' %}"></script>
 <script src="{% static 'js/entrak-utils.js' %}"></script>
+<script src="{% static 'js/report-generator.js' %}"></script>
 {% endblock %}
 
 {% block selected-menu-link-id %}menu-link-report{% endblock %}
@@ -24,6 +30,22 @@
 
 {% block extra_script %}
 {{block.super}}
+
+<script id="key-statistics-row-template" type="x-tmpl-mustache">
+<div class="key-statistics-row">
+	<span class="usage-type-name" style="background-color: {% templatetag openvariable %}nameBackgroundColor{% templatetag closevariable %};" order="{% templatetag openvariable %}order{% templatetag closevariable %}">{% templatetag openvariable %}usageTypeName{% templatetag closevariable %}</span>
+	<span>{% templatetag openvariable %}energyVal{% templatetag closevariable %}</span>
+	<span>{% templatetag openvariable %}co2Val{% templatetag closevariable %}</span>
+	<span>{% templatetag openvariable %}moneyVal{% templatetag closevariable %}</span>
+</div>
+</script>
+
+<script id="key-percent-sub-info-template" type="x-tmpl-mustache">
+<div class="key-percent-sub-info" style="color: {% templatetag openvariable %}color{% templatetag closevariable %};">
+	<span>{% templatetag openvariable %}bullet{% templatetag closevariable %}</span><span class="sub-info-name">{% templatetag openvariable %}name{% templatetag closevariable %}</span><br>
+	<span class="sub-info-percent">{% templatetag openvariable %}percentVal{% templatetag closevariable %}</span>
+</div>
+</script>
 
 <script type="text/javascript">
 
@@ -48,71 +70,9 @@ function getReportData(startDt, separateDt, endDt) {
 }
 
 function generateReport(data) {
-	var groupedSourceInfos = data.grouped_source_infos;
-	generateKeyStaticReport(groupedSourceInfos);
-}
+	var reportGenerator = new ReportGenerator(data.groupedSourceInfos, report.entrakSystem.systemTree);
 
-function generateKeyStaticReport(groupedSourceInfos) {
-	var totalEnergyUsage = 0;
-	var lastTotalEnergyUsage = 0;
-	var totalCo2Usage = 0;
-	var lastTotalCo2Usage = 0;
-	var totalMoneyUsage = 0;
-	var lastTotalMoneyUsage = 0;
-
-	$.each(groupedSourceInfos, function(idx, info) {
-		totalEnergyUsage += info["total_energy"];
-		lastTotalEnergyUsage += info["last_total_energy"];
-		totalCo2Usage += info["total_co2"];
-		lastTotalCo2Usage += info["last_total_co2"];
-		totalMoneyUsage += info["total_money"];
-		lastTotalMoneyUsage += info["last_total_money"];
-	});
-
-	$("#current-energy-usage").text(Utils.formatWithCommas(totalEnergyUsage.toFixed(0)) + " kWh");
-	$("#current-co2-usage").html(Utils.formatWithCommas((totalCo2Usage/1000).toFixed(0)) + " tons CO<sub>2</sub>");
-	$("#current-money-usage").text(Utils.formatWithCommas("$ " + totalMoneyUsage.toFixed(0)));
-
-	var savedEnergyPercentSuffix, savedCo2SubText, savedMoneySubText,
-		carImpactSubText, forestImpactSubText, elephantImpactSubText;
-	var savedEnergyPercent = (lastTotalEnergyUsage - totalEnergyUsage)/lastTotalEnergyUsage;
-	if (savedEnergyPercent >= 0) {
-		savedEnergyPercentSuffix = "less";
-		savedCo2SubText = "of CO<sub>2</sub> reduced";
-		savedMoneySubText = "in savings";
-		carImpactSubText = "taken off the road for a month";
-		forestImpactSubText = "of tropical rainforest protected";
-		elephantImpactSubText = "Reduced CO<sub>2</sub> emissions equal to the weight of";
-	} else {
-		savedEnergyPercentSuffix = "more";
-		savedCo2SubText = "of CO<sub>2</sub> increased";
-		savedMoneySubText = "extra spending";
-		carImpactSubText = "more on the road for a month";
-		forestImpactSubText = "of tropical rainforest cut down";
-		elephantImpactSubText = "Extra CO<sub>2</sub> emissions equal to the weight of";
-	}
-	var savedEnergyText = Utils.formatWithCommas(Math.abs(Utils.fixed1DecIfLessThan10(savedEnergyPercent))) + "% ";
-	savedEnergyText += savedEnergyPercentSuffix;
-	$("#save-energy-usage").text(savedEnergyText);
-	$("#save-energy-subtext").text("than " + genReportName(genLastDt(report.currentDt, REPORT_TYPE_MONTH)));
-	var co2Saving = lastTotalCo2Usage-totalCo2Usage;
-	var savedCo2Text = Utils.formatWithCommas((Math.abs(co2Saving)/1000).toFixed(0));
-	savedCo2Text += " tons";
-	$("#save-co2-usage").text(savedCo2Text);
-	$("#save-co2-subtext").html(savedCo2SubText);
-	var savedMoneyText = "$ " + Utils.formatWithCommas(Math.abs(lastTotalMoneyUsage-totalMoneyUsage).toFixed(0));
-	$("#save-money-usage").text(savedMoneyText);
-	$("#save-money-subtext").text(savedMoneySubText);
-
-	var co2InCar = Math.abs(Utils.formatWithCommas((co2Saving*0.003).toFixed(0)));
-	$("#car-impact").text(co2InCar + " cars");
-	$("#car-impact-subtext").text(carImpactSubText);
-	var co2InForest = Math.abs(Utils.formatWithCommas((co2Saving*0.016).toFixed(0)));
-	$("#forest-impact").text(co2InForest + " m²");
-	$("#forest-impact-subtext").text(forestImpactSubText);
-	var co2InElephant = Math.abs(Utils.formatWithCommas((co2Saving*0.00033).toFixed(0)));
-	$("#elephant-impact").text(co2InElephant + " elephants");
-	$("#elephant-impact-subtext").html(elephantImpactSubText);
+	reportGenerator.generateKeyStatistics();
 }
 
 function genLastDt(targetDt, reportType) {
@@ -140,6 +100,9 @@ function updateReportName() {
 
 $(function() {
 	setupAjaxForCsrf($.cookie('csrftoken'));
+
+	report.entrakSystem = new EntrakSystem();
+	report.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
 
 	report.currentReportType = REPORT_TYPE_MONTH;
 	report.timezone = '{{systems.0.timezone}}';
@@ -193,6 +156,7 @@ $(function() {
 <div class="system-name">{{systems.0.name}}</div>
 <hr class="title-separator">
 <div class="report-name"></div>
+<div>Save Report</div>
 <hr class="head-separator">
 
 <div class="report-component">
@@ -254,7 +218,51 @@ $(function() {
 		</div>
 	</div>
 	<div class="report-component-footer">
-		<button>HIDE DETAILS</button>
+		<div>HIDE DETAILS</div>
+	</div>
+
+	<div class="detail-container">
+		<div>
+			<span>Usage Type</span>
+			<span>Total Energy Consumed (kWh)</span>
+			<span>Total CO<sub>2</sub> Emissions (kg)</span>
+			<span>Total Money Spent ($)</span>
+		</div>
+		<div id="key-statistic-sub-data"></div>
+		<div>HOW DOES THAT SPLIT BY PERCENTAGE?</div>
+		<div class="key-statistics-percentage">
+			<div id="energy-donut"></div>
+			<div class="donut-center-text">kWh</div>
+			<div id="energy-percent-sub-info"></div>
+			<div style="clear: both;"></div>
+			<div class="percent-other-info">
+				<div>• Other:</div>
+				<div id="energy-percent-other-info"></div>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+		<div class="key-statistics-percentage">
+			<div id="co2-donut"></div>
+			<div class="donut-center-text">CO<sub>2</sub></div>
+			<div id="co2-percent-sub-info"></div>
+			<div style="clear: both;"></div>
+			<div class="percent-other-info">
+				<div>• Other:</div>
+				<div id="co2-percent-other-info"></div>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+		<div class="key-statistics-percentage">
+			<div id="money-donut"></div>
+			<div class="donut-center-text">Money</div>
+			<div id="money-percent-sub-info"></div>
+			<div style="clear: both;"></div>
+			<div class="percent-other-info">
+				<div>• Other:</div>
+				<div id="money-percent-other-info"></div>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
 	</div>
 </div>
 

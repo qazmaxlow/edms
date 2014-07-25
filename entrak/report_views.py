@@ -77,7 +77,8 @@ def report_data_view(request, system_code=None):
 	grouped_source_infos = []
 	for source in sources:
 		if source.system_code == system_code:
-			grouped_source_infos.append({"system_code": system_code, "source_ids": [str(source.id)]})
+			grouped_source_infos.append({"systemCode": system_code,
+				"sourceIds": [str(source.id)], "sourceName": source.d_name, "sourceOrder": source.order})
 		else:
 			system_path_components = [code for code in source.system_path.split(',') if code != '']
 			system_path_idx = system_path_components.index(system_code)
@@ -87,22 +88,22 @@ def report_data_view(request, system_code=None):
 				grouped_system_code = system_path_components[system_path_idx+1]
 			match_group_idx = None
 			for group_idx, info in enumerate(grouped_source_infos):
-				if grouped_system_code == info["system_code"]:
+				if grouped_system_code == info["systemCode"]:
 					match_group_idx = group_idx
 					break
 
 			if match_group_idx is None:
-				grouped_source_infos.append({"system_code": grouped_system_code, "source_ids": [str(source.id)]})
+				grouped_source_infos.append({"systemCode": grouped_system_code, "sourceIds": [str(source.id)]})
 			else:
-				grouped_source_infos[match_group_idx]["source_ids"].append(str(source.id))
+				grouped_source_infos[match_group_idx]["sourceIds"].append(str(source.id))
 
 	source_group_map = {}
 	for group_idx, info in enumerate(grouped_source_infos):
-		for source_id in info["source_ids"]:
+		for source_id in info["sourceIds"]:
 			source_group_map[source_id] = group_idx
 
-			info["source_readings"] = {}
-			info["last_source_readings"] = {}
+			info["sourceReadings"] = {}
+			info["lastSourceReadings"] = {}
 
 	unit_rates = UnitRate.objects.filter(Q(category_code=CO2_CATEGORY_CODE) | Q(category_code=MONEY_CATEGORY_CODE))
 	co2_unit_rates = [unit_rate for unit_rate in unit_rates if unit_rate.category_code == CO2_CATEGORY_CODE]
@@ -117,15 +118,15 @@ def report_data_view(request, system_code=None):
 		target_info = grouped_source_infos[source_group_map[source_id]]
 		for timestamp, val in readings.items():
 			if (timestamp >= separate_timestamp):
-				readings_key = "source_readings"
-				energy_key = "total_energy"
-				co2_key = "total_co2"
-				money_key = "total_money"
+				readings_key = "sourceReadings"
+				energy_key = "totalEnergy"
+				co2_key = "totalCo2"
+				money_key = "totalMoney"
 			else:
-				readings_key = "last_source_readings"
-				energy_key = "last_total_energy"
-				co2_key = "last_total_co2"
-				money_key = "last_total_money"
+				readings_key = "lastSourceReadings"
+				energy_key = "lastTotalEnergy"
+				co2_key = "lastTotalCo2"
+				money_key = "lastTotalMoney"
 			target_info[readings_key][timestamp] = val + target_info[readings_key].get(timestamp, 0)
 			target_info[energy_key] = val + target_info.get(energy_key, 0)
 			target_info[co2_key] = calculation.transform_reading(
@@ -133,4 +134,4 @@ def report_data_view(request, system_code=None):
 			target_info[money_key] = calculation.transform_reading(
 				money_unit_rate_code, timestamp, val, money_unit_rates) + target_info.get(money_key, 0)
 
-	return Utils.json_response({'grouped_source_infos': grouped_source_infos})
+	return Utils.json_response({'groupedSourceInfos': grouped_source_infos})
