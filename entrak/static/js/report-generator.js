@@ -1,17 +1,71 @@
-function ReportGenerator(groupedSourceInfoData, systemTree) {
-	var reportGenThis = this;
-	this.groupedSourceInfos = groupedSourceInfoData;
-	$.each(this.groupedSourceInfos, function(idx, sourceInfo) {
-		var systemNode = systemTree.find(function (node) {
-			return (sourceInfo.systemCode === node.data.code);
-		});
-		sourceInfo.system = systemNode;
-	});
-}
+function ReportGenerator(systemTree, timezone) {
+	this.systemTree = systemTree;
+	this.timezone = timezone;
+	this.groupedSourceInfos = null;
+	this.savingInfo = null;
+};
+
+ReportGenerator.REPORT_TYPE_MONTH = 'month';
 
 ReportGenerator.MAX_PERCENTAGE_PIECE = 5;
 ReportGenerator.DONUT_COLORS = ['#5DB9CF', '#814864', '#CF498D', '#807647', '#CFB948'];
 ReportGenerator.OTHER_INFO_COLOR = '#000000';
+
+ReportGenerator.prototype.getReportData = function(currentDt, callbackFunc) {
+	var reportGenThis = this;
+	var endDt = moment(currentDt).add('M', 1);
+
+	var firstRecordDt = moment.unix(this.systemTree.data.firstRecord).tz(this.timezone);
+	var beginningStartDt;
+	if (firstRecordDt.date() === 1) {
+		beginningStartDt = moment(firstRecordDt).startOf('M');
+	} else {
+		beginningStartDt = moment(firstRecordDt).add('M', 1).startOf('M');
+	}
+	var beginningEndDt = moment(beginningStartDt).add('M', 1);
+
+	var lastSamePeriodStartDt = moment(currentDt).subtract('y', 1);
+	var lastSamePeriodEndDt = moment(endDt).subtract('y', 1);
+
+	var requestData = {
+		start_dt: currentDt.unix(),
+		end_dt: endDt.unix(),
+		beginning_start_dt: beginningStartDt.unix(),
+		beginning_end_dt: beginningEndDt.unix(),
+		last_same_period_start_dt: lastSamePeriodStartDt.unix(),
+		last_same_period_end_dt: lastSamePeriodEndDt.unix()
+	};
+
+	$.ajax({
+		type: "POST",
+		url: "../report_data/",
+		data: requestData,
+	}).done(function(data) {
+		callbackFunc(data);
+	});
+}
+
+ReportGenerator.prototype.genLastDt = function(targetDt, reportType) {
+	var result;
+	if (reportType === ReportGenerator.REPORT_TYPE_MONTH) {
+		result = moment(targetDt).subtract('M', 1);
+	}
+
+	return result;
+}
+
+ReportGenerator.prototype.assignData = function(data) {
+	var reportGenThis = this;
+	this.groupedSourceInfos = data.groupedSourceInfos;
+	$.each(this.groupedSourceInfos, function(idx, sourceInfo) {
+		var systemNode = reportGenThis.systemTree.find(function (node) {
+			return (sourceInfo.systemCode === node.data.code);
+		});
+		sourceInfo.system = systemNode;
+	});
+
+	this.savingInfo = data.savingInfo;
+}
 
 ReportGenerator.prototype.insertSubInfo = function(target, template, bullet, color, name, percentVal) {
 	var templateInfo = {
@@ -27,19 +81,13 @@ ReportGenerator.prototype.insertSubInfo = function(target, template, bullet, col
 ReportGenerator.prototype.generateKeyStatistics = function() {
 	var reportGenThis = this;
 	var totalEnergyUsage = 0;
-	var lastTotalEnergyUsage = 0;
 	var totalCo2Usage = 0;
-	var lastTotalCo2Usage = 0;
 	var totalMoneyUsage = 0;
-	var lastTotalMoneyUsage = 0;
 
 	$.each(reportGenThis.groupedSourceInfos, function(idx, info) {
 		totalEnergyUsage += info.totalEnergy;
-		lastTotalEnergyUsage += info.lastTotalEnergy;
 		totalCo2Usage += info.totalCo2;
-		lastTotalCo2Usage += info.lastTotalCo2;
 		totalMoneyUsage += info.totalMoney;
-		lastTotalMoneyUsage += info.lastTotalMoney;
 	});
 
 	$("#current-energy-usage").text(Utils.formatWithCommas(totalEnergyUsage.toFixed(0)) + " kWh");
@@ -48,8 +96,7 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 
 	var savedEnergyPercentSuffix, savedCo2SubText, savedMoneySubText,
 		carImpactSubText, forestImpactSubText, elephantImpactSubText;
-	var savedEnergyPercent = (lastTotalEnergyUsage - totalEnergyUsage)/lastTotalEnergyUsage;
-	if (savedEnergyPercent >= 0) {
+	if (reportGenThis.savingInfo.energy >= 0) {
 		savedEnergyPercentSuffix = "less";
 		savedCo2SubText = "of CO<sub>2</sub> reduced";
 		savedMoneySubText = "in savings";
@@ -64,26 +111,25 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 		forestImpactSubText = "of tropical rainforest cut down";
 		elephantImpactSubText = "Extra CO<sub>2</sub> emissions equal to the weight of";
 	}
-	var savedEnergyText = Utils.formatWithCommas(Math.abs(Utils.fixed1DecIfLessThan10(savedEnergyPercent))) + "% ";
+	var savedEnergyText = Utils.formatWithCommas(Math.abs(Utils.fixed1DecIfLessThan10(reportGenThis.savingInfo.energy))) + "% ";
 	savedEnergyText += savedEnergyPercentSuffix;
 	$("#save-energy-usage").text(savedEnergyText);
-	$("#save-energy-subtext").text("than " + genReportName(genLastDt(report.currentDt, REPORT_TYPE_MONTH)));
-	var co2Saving = lastTotalCo2Usage-totalCo2Usage;
-	var savedCo2Text = Utils.formatWithCommas((Math.abs(co2Saving)/1000).toFixed(0));
+	$("#save-energy-subtext").text("than " + genReportName(this.genLastDt(report.currentDt, ReportGenerator.REPORT_TYPE_MONTH)));
+	var savedCo2Text = Utils.formatWithCommas((Math.abs(reportGenThis.savingInfo.co2)/1000).toFixed(0));
 	savedCo2Text += " tons";
 	$("#save-co2-usage").text(savedCo2Text);
 	$("#save-co2-subtext").html(savedCo2SubText);
-	var savedMoneyText = "$ " + Utils.formatWithCommas(Math.abs(lastTotalMoneyUsage-totalMoneyUsage).toFixed(0));
+	var savedMoneyText = "$ " + Utils.formatWithCommas(Math.abs(reportGenThis.savingInfo.money).toFixed(0));
 	$("#save-money-usage").text(savedMoneyText);
 	$("#save-money-subtext").text(savedMoneySubText);
 
-	var co2InCar = Math.abs(Utils.formatWithCommas((co2Saving*0.003).toFixed(0)));
+	var co2InCar = Utils.formatWithCommas(Math.abs((reportGenThis.savingInfo.co2*0.003).toFixed(0)));
 	$("#car-impact").text(co2InCar + " cars");
 	$("#car-impact-subtext").text(carImpactSubText);
-	var co2InForest = Math.abs(Utils.formatWithCommas((co2Saving*0.016).toFixed(0)));
+	var co2InForest = Utils.formatWithCommas(Math.abs((reportGenThis.savingInfo.co2*0.016).toFixed(0)));
 	$("#forest-impact").text(co2InForest + " m²");
 	$("#forest-impact-subtext").text(forestImpactSubText);
-	var co2InElephant = Math.abs(Utils.formatWithCommas((co2Saving*0.00033).toFixed(0)));
+	var co2InElephant = Utils.formatWithCommas(Math.abs((reportGenThis.savingInfo.co2*0.00033).toFixed(0)));
 	$("#elephant-impact").text(co2InElephant + " elephants");
 	$("#elephant-impact-subtext").html(elephantImpactSubText);
 
@@ -255,4 +301,8 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 		});
 		
 	});
+}
+
+ReportGenerator.prototype.generateCalendarReport = function() {
+	//
 }

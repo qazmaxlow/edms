@@ -49,44 +49,11 @@
 
 <script type="text/javascript">
 
-REPORT_TYPE_MONTH = 'month';
-
 var report = {};
-
-function getReportData(startDt, separateDt, endDt) {
-	var requestData = {
-		start_dt: startDt.unix(),
-		separate_dt: separateDt.unix(),
-		end_dt: endDt.unix()
-	};
-
-	$.ajax({
-		type: "POST",
-		url: "{% url 'report_data' system_code=systems.0.code %}",
-		data: requestData,
-	}).done(function(data) {
-		generateReport(data);
-	});
-}
-
-function generateReport(data) {
-	var reportGenerator = new ReportGenerator(data.groupedSourceInfos, report.entrakSystem.systemTree);
-
-	reportGenerator.generateKeyStatistics();
-}
-
-function genLastDt(targetDt, reportType) {
-	var result;
-	if (reportType === REPORT_TYPE_MONTH) {
-		result = moment(targetDt).subtract('M', 1);
-	}
-
-	return result;
-}
 
 function genReportName(targetDt) {
 	var reportName = "";
-	if (report.currentReportType === REPORT_TYPE_MONTH) {
+	if (report.currentReportType === ReportGenerator.REPORT_TYPE_MONTH) {
 		reportName = targetDt.format("MMM YYYY");
 	}
 
@@ -104,7 +71,7 @@ $(function() {
 	report.entrakSystem = new EntrakSystem();
 	report.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
 
-	report.currentReportType = REPORT_TYPE_MONTH;
+	report.currentReportType = ReportGenerator.REPORT_TYPE_MONTH;
 	report.timezone = '{{systems.0.timezone}}';
 	{% if monthly_summary|length >= 1 %}
 	report.currentDt =  moment.unix({{monthly_summary.0.timestamp}}).tz(report.timezone);
@@ -112,10 +79,13 @@ $(function() {
 
 	updateReportName();
 
+	report.reportGenerator = new ReportGenerator(report.entrakSystem.systemTree, report.timezone);
 	if ("currentDt" in report) {
-		var startDt = genLastDt(report.currentDt, REPORT_TYPE_MONTH);
-		var endDt = moment(report.currentDt).add('M', 1);
-		getReportData(startDt, report.currentDt, endDt);
+		report.reportGenerator.getReportData(report.currentDt, function(data) {
+			report.reportGenerator.assignData(data);
+			report.reportGenerator.generateKeyStatistics();
+			report.reportGenerator.generateCalendarReport();
+		});
 	}
 });
 </script>

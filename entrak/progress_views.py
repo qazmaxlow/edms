@@ -18,15 +18,6 @@ TAXI_TRIP_INFO = {
 	'sg': {'multiplicand': 0.253, 'from': 'Singapore Airport', 'to': 'Marina Bay Sands'},
 }
 
-def assign_source_under_system(systems, sources):
-	result = {}
-	for system in systems:
-		match_sources = [source for source in sources if source.system_code == system.code]
-		if match_sources:
-			result[system] = match_sources
-
-	return result
-
 def get_last_12_month_co2_consumption(unit_code, unit_rates, baselines, system, readings, current_dt):
 	source_tz = pytz.timezone(system.timezone)
 	end_dt = current_dt.astimezone(source_tz)
@@ -98,7 +89,7 @@ def progress_view(request, system_code=None):
 
 	current_system = systems_info['systems'][0]
 	sources = SourceManager.get_sources(current_system)
-	need_calculate_systems = assign_source_under_system(systems_info['systems'], sources)
+	need_calculate_systems = System.assign_source_under_system(systems_info['systems'], sources)
 
 	grouped_baselines = BaselineUsage.get_baselines_for_systems([system.id for system in need_calculate_systems.keys()])
 

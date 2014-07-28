@@ -63,8 +63,8 @@ def report_view(request, system_code=None):
 
 @permission_required
 def report_data_view(request, system_code=None):
-	start_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('start_dt')))
-	separate_timestamp = int(request.POST.get('separate_dt'))
+	start_dt_timestamp = int(request.POST.get('start_dt'))
+	start_dt = Utils.utc_dt_from_utc_timestamp(start_dt_timestamp)
 	end_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('end_dt')))
 
 	systems = System.get_systems_within_root(system_code)
@@ -117,16 +117,11 @@ def report_data_view(request, system_code=None):
 
 		target_info = grouped_source_infos[source_group_map[source_id]]
 		for timestamp, val in readings.items():
-			if (timestamp >= separate_timestamp):
-				readings_key = "sourceReadings"
-				energy_key = "totalEnergy"
-				co2_key = "totalCo2"
-				money_key = "totalMoney"
-			else:
-				readings_key = "lastSourceReadings"
-				energy_key = "lastTotalEnergy"
-				co2_key = "lastTotalCo2"
-				money_key = "lastTotalMoney"
+			readings_key = "sourceReadings"
+			energy_key = "totalEnergy"
+			co2_key = "totalCo2"
+			money_key = "totalMoney"
+
 			target_info[readings_key][timestamp] = val + target_info[readings_key].get(timestamp, 0)
 			target_info[energy_key] = val + target_info.get(energy_key, 0)
 			target_info[co2_key] = calculation.transform_reading(
@@ -134,4 +129,34 @@ def report_data_view(request, system_code=None):
 			target_info[money_key] = calculation.transform_reading(
 				money_unit_rate_code, timestamp, val, money_unit_rates) + target_info.get(money_key, 0)
 
-	return Utils.json_response({'groupedSourceInfos': grouped_source_infos})
+	total_energy = 0 
+	for info in grouped_source_infos:
+		total_energy += info['totalEnergy']
+
+	total_baseline_energy = 0
+	need_calculate_systems = System.assign_source_under_system(systems, sources)
+	grouped_baselines = BaselineUsage.get_baselines_for_systems([system.id for system in need_calculate_systems.keys()])
+	for system, attached_sources in need_calculate_systems.items():
+		system_timezone = pytz.timezone(system.timezone)
+
+		baselines = grouped_baselines[system.id]
+		baseline_daily_usages = BaselineUsage.transform_to_daily_usages(baselines, system_timezone)
+		total_baseline_energy += calculation.calculate_total_baseline_energy_usage(
+			start_dt.astimezone(system_timezone), end_dt.astimezone(system_timezone), baseline_daily_usages)
+
+	saving_info = {}
+	unit_info = json.loads(current_system.unit_info)
+	co2_unit_code = unit_info[CO2_CATEGORY_CODE]
+	money_unit_code = unit_info[MONEY_CATEGORY_CODE]
+	energy_saving = total_baseline_energy-total_energy
+	print total_baseline_energy, energy_saving
+	saving_info["energy"] = energy_saving/total_baseline_energy*100
+	saving_info["co2"] = calculation.transform_reading(co2_unit_code, start_dt_timestamp, energy_saving, co2_unit_rates)
+	saving_info["money"] = calculation.transform_reading(money_unit_code, start_dt_timestamp, energy_saving, money_unit_rates)
+
+	result = {}
+	result['groupedSourceInfos'] = grouped_source_infos
+	result['holidays'] = current_system.get_all_holidays(start_dt, end_dt)
+	result['savingInfo'] = saving_info
+
+	return Utils.json_response(result)

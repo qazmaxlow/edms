@@ -1,4 +1,5 @@
 import json
+import calendar
 from django import template
 from django.utils.safestring import mark_safe
 from django.utils.html import escapejs
@@ -29,7 +30,7 @@ def jsonifySystems(systems):
 			'code': system.code,
 			'name': system.name, 'nameTc': system.name_tc,
 			'intro': system.intro, 'introTc': system.intro_tc,
-			'path': system.path}
+			'path': system.path, 'firstRecord': calendar.timegm(system.first_record.utctimetuple())}
 		if system.logo:
 			info['logo'] = system.logo.url
 		systems_info.append(info)
@@ -44,7 +45,8 @@ def jsonifySources(sources):
 			'id': str(source.id),
 			'systemCode': source.system_code,
 			'name': source.d_name, 'nameTc': source.d_name_tc,
-			'order': source.order}
+			'order': source.order
+		}
 		sources_info.append(info)
 
 	return escapejs(json.dumps(sources_info))

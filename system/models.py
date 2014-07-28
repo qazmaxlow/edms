@@ -1,6 +1,8 @@
 import os
 import datetime
 import calendar
+import csv
+import pytz
 from django.db import models
 from entrak.settings import BASE_DIR
 from django.db.models import Q
@@ -11,6 +13,9 @@ CITY_ALL = 'all'
 KWH_CATEGORY_CODE = 'kwh'
 CO2_CATEGORY_CODE = 'co2'
 MONEY_CATEGORY_CODE = 'money'
+
+DEFAULT_NIGHT_TIME_START = 20
+DEFAULT_NIGHT_TIME_END = 6
 
 class System(models.Model):
 	code = models.CharField(max_length=100, unique=True)
@@ -27,8 +32,8 @@ class System(models.Model):
 	timezone = models.CharField(max_length=50, default=SOURCE_TZ_HK)
 	population = models.PositiveIntegerField(default=1)
 	first_record = models.DateTimeField()
-	night_time_start = models.DateTimeField(blank=True, null=True)
-	night_time_end = models.DateTimeField(blank=True, null=True)
+	night_time_start = models.TimeField(default=datetime.time(DEFAULT_NIGHT_TIME_START))
+	night_time_end = models.TimeField(default=datetime.time(DEFAULT_NIGHT_TIME_END))
 
 	unit_info = models.TextField(default='{}')
 
@@ -67,6 +72,26 @@ class System(models.Model):
 
 		return {'systems': systems, 'user_systems': user_systems,
 			'system_path_components': system_path_components}
+
+	@staticmethod
+	def assign_source_under_system(systems, sources):
+		result = {}
+		for system in systems:
+			match_sources = [source for source in sources if source.system_code == system.code]
+			if match_sources:
+				result[system] = match_sources
+
+		return result
+
+	def get_all_holidays(self, start_dt, end_dt):
+		system_timezone = pytz.timezone(self.timezone)
+		start_date = start_dt.astimezone(system_timezone).date()
+		end_date = end_dt.astimezone(system_timezone).date()
+		city_holidays = CityHoliday.objects.filter(city=self.city, date__gte=start_date, date__lt=end_date).values_list('date', flat=True)
+		holidays = Holiday.objects.filter(system=self, date__gte=start_date, date__lt=end_date).values_list('date', flat=True)
+
+		all_holidays = set(city_holidays).union(holidays)
+		return [holiday.strftime("%Y-%m-%d") for holiday in all_holidays]
 
 class SystemHomeImage(models.Model):
 	image = models.ImageField(upload_to="system_home/%Y/%m")
@@ -157,9 +182,30 @@ class UnitRate(models.Model):
 	rate = models.FloatField(default=1)
 	effective_date = models.DateTimeField()
 
-# TODO: not implement yet
-# class Holiday(Document):
-# 	system_id = ListField(ReferenceField('System'))
-# 	name = StringField(max_length=200)
-# 	name_tc = StringField(max_length=200)
-# 	date = DateTimeField()
+class CityHoliday(models.Model):
+	city = models.CharField(max_length=200)
+	date = models.DateField()
+	desc = models.CharField(max_length=200, blank=True)
+
+	@staticmethod
+	def insert_holidays_in_csv(city, csv_path):
+		holiday_date_infos = []
+		with open(csv_path, 'rb') as csv_file:
+			csv_reader = csv.reader(csv_file)
+			for row in csv_reader:
+				holiday_date_infos.append((datetime.datetime.strptime(row[0], '%Y-%m-%d').date(), row[1]))
+
+		duplicate_holiday_dates = CityHoliday.objects.filter(
+			city=city, date__in=[info[0] for info in holiday_date_infos]
+		).values_list('date', flat=True)
+		need_insert_holidays = []
+		for info in holiday_date_infos:
+			if info[0] not in duplicate_holiday_dates:
+				need_insert_holidays.append(CityHoliday(city=city, date=info[0], desc=info[1]))
+
+		CityHoliday.objects.bulk_create(need_insert_holidays)
+
+class Holiday(models.Model):
+	system = models.ForeignKey(System)
+	date = models.DateField()
+	desc = models.CharField(max_length=200, blank=True)
