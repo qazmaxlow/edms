@@ -3,9 +3,12 @@ function ReportGenerator(systemTree, timezone) {
 	this.timezone = timezone;
 	this.groupedSourceInfos = null;
 	this.savingInfo = null;
+	this.currentDt = null;
 };
 
 ReportGenerator.REPORT_TYPE_MONTH = 'month';
+
+ReportGenerator.KEY_STATISTICS_ROW_COLORS = ['#67C3D8', '#8C516F', '#D85299'];
 
 ReportGenerator.MAX_PERCENTAGE_PIECE = 5;
 ReportGenerator.DONUT_COLORS = ['#5DB9CF', '#814864', '#CF498D', '#807647', '#CFB948'];
@@ -13,6 +16,7 @@ ReportGenerator.OTHER_INFO_COLOR = '#000000';
 
 ReportGenerator.prototype.getReportData = function(currentDt, callbackFunc) {
 	var reportGenThis = this;
+	this.currentDt = currentDt;
 	var endDt = moment(currentDt).add('M', 1);
 	var	lastStartDt = reportGenThis.genLastDt(currentDt, ReportGenerator.REPORT_TYPE_MONTH);
 
@@ -94,8 +98,8 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 		totalMoneyUsage += info.currentTotalMoney;
 	});
 
-	$("#current-energy-usage").text(Utils.formatWithCommas(totalEnergyUsage.toFixed(0)) + " kWh");
-	$("#current-co2-usage").html(Utils.formatWithCommas((totalCo2Usage/1000).toFixed(0)) + " tons CO<sub>2</sub>");
+	$("#current-energy-usage").text(Utils.formatWithCommas(totalEnergyUsage.toFixed(0)));
+	$("#current-co2-usage").html(Utils.formatWithCommas((totalCo2Usage/1000).toFixed(0)) + " tons");
 	$("#current-money-usage").text(Utils.formatWithCommas("$ " + totalMoneyUsage.toFixed(0)));
 
 	var savedEnergyPercentSuffix, savedCo2SubText, savedMoneySubText,
@@ -118,7 +122,15 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 	var savedEnergyText = Utils.formatWithCommas(Math.abs(Utils.fixed1DecIfLessThan10(reportGenThis.savingInfo.energy))) + "% ";
 	savedEnergyText += savedEnergyPercentSuffix;
 	$("#save-energy-usage").text(savedEnergyText);
-	$("#save-energy-subtext").text("than " + genReportName(this.genLastDt(report.currentDt, ReportGenerator.REPORT_TYPE_MONTH)));
+
+	// baseline should be just before first record
+	var firstRecordMonth = moment.unix(this.systemTree.data.firstRecord).tz(this.timezone).startOf('M');
+	var compareToDt = moment(this.currentDt).year(firstRecordMonth.year());
+	if (compareToDt >= firstRecordMonth) {
+		compareToDt.subtract('y', 1);
+	}
+
+	$("#save-energy-subtext").text("than " + compareToDt.format('MMM YYYY'));
 	var savedCo2Text = Utils.formatWithCommas((Math.abs(reportGenThis.savingInfo.co2)/1000).toFixed(0));
 	savedCo2Text += " tons";
 	$("#save-co2-usage").text(savedCo2Text);
@@ -159,6 +171,9 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 			templateInfo.usageTypeName = info.system.data.name;
 			templateInfo.order = -1;
 		}
+		templateInfo.nameBackgroundColor = ReportGenerator.KEY_STATISTICS_ROW_COLORS[(
+				idx%ReportGenerator.KEY_STATISTICS_ROW_COLORS.length
+			)]
 
 		var rowHtml = Mustache.render(keyRowTemplate, templateInfo);
 		keyStatSubDataContainer.append(rowHtml);
@@ -233,7 +248,7 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 			$.each(transformedDatas, function(dataIdx, dataInfo) {
 				var matchColor = ReportGenerator.DONUT_COLORS[dataIdx];
 				plotData.push({
-					label: dataInfo[targetKey]+"%",
+					label: dataInfo[targetKey],
 					data: dataInfo[targetKey],
 					color: matchColor
 				});
@@ -253,7 +268,7 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 			for (var i=0; i<ReportGenerator.MAX_PERCENTAGE_PIECE-1; i++) {
 				var matchColor = ReportGenerator.DONUT_COLORS[i];
 				plotData.push({
-					label: transformedDatas[i][targetKey]+"%",
+					label: transformedDatas[i][targetKey],
 					data: transformedDatas[i][targetKey],
 					color: matchColor
 				});
@@ -268,7 +283,7 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 					transformedDatas[i][targetKey]);
 			}
 			plotData.push({
-				label: (100-donutSumPercent)+"%",
+				label: parseFloat((100-donutSumPercent).toFixed(1)),
 				data: (100-donutSumPercent),
 				color: ReportGenerator.DONUT_COLORS[ReportGenerator.MAX_PERCENTAGE_PIECE-1]
 			});
@@ -297,7 +312,7 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 					label: {
 						radius: 0.92,
 						formatter: function(label, series) {
-							return label;
+							return '<span>' + label + '</span><span class="pie-text-percent">%</span>';
 						}
 					}
 				}
