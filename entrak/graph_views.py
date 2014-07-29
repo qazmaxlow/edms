@@ -7,7 +7,8 @@ from django.shortcuts import render_to_response
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.db.models import Q
-from system.models import System, UnitCategory, UnitRate, CITY_ALL, KWH_CATEGORY_CODE
+from system.models import System, CITY_ALL
+from unit.models import UnitCategory, UnitRate, KWH_CATEGORY_CODE
 from egauge.manager import SourceManager
 from egauge.models import Source
 from utils.utils import Utils

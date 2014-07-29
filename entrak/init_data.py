@@ -3,7 +3,9 @@ import datetime
 import json
 import pytz
 from egauge.models import Source
-from system.models import System, BaselineUsage, UnitCategory, UnitRate
+from system.models import System
+from unit.models import UnitCategory, UnitRate
+from baseline.models import BaselineUsage
 
 def init_test_source():
 	sources = []

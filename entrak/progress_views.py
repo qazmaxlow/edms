@@ -4,7 +4,9 @@ import calendar
 import json
 from django.shortcuts import render_to_response
 from django.db.models import Q
-from system.models import System, BaselineUsage, UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
+from system.models import System
+from unit.models import UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
+from baseline.models import BaselineUsage
 from utils.auth import permission_required
 from utils.utils import Utils
 from egauge.manager import SourceManager

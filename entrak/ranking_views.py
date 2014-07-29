@@ -6,7 +6,8 @@ from django.db.models import Q
 from utils.auth import permission_required
 from utils.utils import Utils
 from utils import calculation
-from system.models import System, UnitCategory, UnitRate, KWH_CATEGORY_CODE, CITY_ALL
+from system.models import System, CITY_ALL
+from unit.models import UnitCategory, UnitRate, KWH_CATEGORY_CODE
 from egauge.models import Source
 from egauge.manager import SourceManager
 

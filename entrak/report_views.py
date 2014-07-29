@@ -8,7 +8,9 @@ from django.shortcuts import render_to_response
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.db.models import Q
 from mongoengine import Q as MongoQ
-from system.models import System, BaselineUsage, UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
+from system.models import System
+from unit.models import UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
+from baseline.models import BaselineUsage
 from egauge.manager import SourceManager
 from egauge.models import SourceReadingMonth, SourceReadingDay
 from utils.auth import permission_required
@@ -212,7 +214,7 @@ def report_data_view(request, system_code=None):
 							money_unit_rate_code, timestamp, val, money_unit_rates) + target_info.get("currentTotalMoney", 0)
 
 	total_energy = 0 
-	all_holidays = current_system.get_all_holidays()
+	all_holidays = current_system.get_all_holidays(timestamp_info)
 	current_system_timezone = pytz.timezone(current_system.timezone)
 	for info in grouped_source_infos:
 		total_energy += info['currentTotalEnergy']

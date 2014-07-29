@@ -47,6 +47,9 @@ INSTALLED_APPS = (
     'egauge',
     'system',
     'user',
+    'baseline',
+    'holiday',
+    'unit',
     'entrak',
 )
 

@@ -2,7 +2,8 @@ import calendar
 import json
 import datetime
 from .utils import Utils
-from system.models import System, UnitCategory, UnitRate, KWH_CATEGORY_CODE, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
+from system.models import System
+from unit.models import UnitCategory, UnitRate, KWH_CATEGORY_CODE, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
 from egauge.manager import SourceManager
 from egauge.models import Source
 
