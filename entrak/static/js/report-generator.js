@@ -14,6 +14,7 @@ ReportGenerator.OTHER_INFO_COLOR = '#000000';
 ReportGenerator.prototype.getReportData = function(currentDt, callbackFunc) {
 	var reportGenThis = this;
 	var endDt = moment(currentDt).add('M', 1);
+	var	lastStartDt = reportGenThis.genLastDt(currentDt, ReportGenerator.REPORT_TYPE_MONTH);
 
 	var firstRecordDt = moment.unix(this.systemTree.data.firstRecord).tz(this.timezone);
 	var beginningStartDt;
@@ -33,7 +34,9 @@ ReportGenerator.prototype.getReportData = function(currentDt, callbackFunc) {
 		beginning_start_dt: beginningStartDt.unix(),
 		beginning_end_dt: beginningEndDt.unix(),
 		last_same_period_start_dt: lastSamePeriodStartDt.unix(),
-		last_same_period_end_dt: lastSamePeriodEndDt.unix()
+		last_same_period_end_dt: lastSamePeriodEndDt.unix(),
+		last_start_dt: lastStartDt.unix(),
+		last_end_dt: currentDt.unix(),
 	};
 
 	$.ajax({
@@ -41,6 +44,7 @@ ReportGenerator.prototype.getReportData = function(currentDt, callbackFunc) {
 		url: "../report_data/",
 		data: requestData,
 	}).done(function(data) {
+		console.log(data);
 		callbackFunc(data);
 	});
 }
@@ -85,9 +89,9 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 	var totalMoneyUsage = 0;
 
 	$.each(reportGenThis.groupedSourceInfos, function(idx, info) {
-		totalEnergyUsage += info.totalEnergy;
-		totalCo2Usage += info.totalCo2;
-		totalMoneyUsage += info.totalMoney;
+		totalEnergyUsage += info.currentTotalEnergy;
+		totalCo2Usage += info.currentTotalCo2;
+		totalMoneyUsage += info.currentTotalMoney;
 	});
 
 	$("#current-energy-usage").text(Utils.formatWithCommas(totalEnergyUsage.toFixed(0)) + " kWh");
@@ -140,9 +144,9 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 	keyStatSubDataContainer.empty();
 	$.each(reportGenThis.groupedSourceInfos, function(idx, info) {
 		var templateInfo = {
-			energyVal: info.totalEnergy,
-			co2Val: info.totalCo2,
-			moneyVal: info.totalMoney
+			energyVal: info.currentTotalEnergy,
+			co2Val: info.currentTotalCo2,
+			moneyVal: info.currentTotalMoney
 		};
 		$.each(templateInfo, function(key, value) {
 			templateInfo[key] = Utils.formatWithCommas(value.toFixed(0));
@@ -172,12 +176,15 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 	var co2PercentSum = 0;
 	var moneyPercentSum = 0;
 	$.each(reportGenThis.groupedSourceInfos, function(infoIdx, info) {
-		var dataInfo = {totalEnergy: info.totalEnergy, totalCo2: info.totalCo2, totalMoney: info.totalMoney};
+		var dataInfo = {
+			totalEnergy: info.currentTotalEnergy,
+			totalCo2: info.currentTotalCo2,
+			totalMoney: info.currentTotalMoney};
 		dataInfo.name = (info.systemCode === report.entrakSystem.systemTree.data.code) ? info.sourceName : info.system.data.name;
 		if (infoIdx < reportGenThis.groupedSourceInfos.length-1) {
-			dataInfo.energyPercent = parseFloat(Utils.fixed1DecIfLessThan10((info.totalEnergy/totalEnergyUsage)*100));
-			dataInfo.co2Percent = parseFloat(Utils.fixed1DecIfLessThan10((info.totalCo2/totalCo2Usage)*100));
-			dataInfo.moneyPercent = parseFloat(Utils.fixed1DecIfLessThan10((info.totalMoney/totalMoneyUsage)*100));
+			dataInfo.energyPercent = parseFloat(Utils.fixed1DecIfLessThan10((info.currentTotalEnergy/totalEnergyUsage)*100));
+			dataInfo.co2Percent = parseFloat(Utils.fixed1DecIfLessThan10((info.currentTotalCo2/totalCo2Usage)*100));
+			dataInfo.moneyPercent = parseFloat(Utils.fixed1DecIfLessThan10((info.currentTotalMoney/totalMoneyUsage)*100));
 			energyPercentSum += dataInfo.energyPercent;
 			co2PercentSum += dataInfo.co2Percent;
 			moneyPercentSum += dataInfo.moneyPercent;

@@ -83,15 +83,12 @@ class System(models.Model):
 
 		return result
 
-	def get_all_holidays(self, start_dt, end_dt):
-		system_timezone = pytz.timezone(self.timezone)
-		start_date = start_dt.astimezone(system_timezone).date()
-		end_date = end_dt.astimezone(system_timezone).date()
-		city_holidays = CityHoliday.objects.filter(city=self.city, date__gte=start_date, date__lt=end_date).values_list('date', flat=True)
-		holidays = Holiday.objects.filter(system=self, date__gte=start_date, date__lt=end_date).values_list('date', flat=True)
+	def get_all_holidays(self):
+		city_holidays = CityHoliday.objects.filter(city=self.city).values_list('date', flat=True)
+		holidays = Holiday.objects.filter(system=self).values_list('date', flat=True)
 
 		all_holidays = set(city_holidays).union(holidays)
-		return [holiday.strftime("%Y-%m-%d") for holiday in all_holidays]
+		return list(all_holidays)
 
 class SystemHomeImage(models.Model):
 	image = models.ImageField(upload_to="system_home/%Y/%m")
