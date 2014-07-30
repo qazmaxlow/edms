@@ -3,7 +3,10 @@ function ReportGenerator(systemTree, timezone) {
 	this.timezone = timezone;
 	this.groupedSourceInfos = null;
 	this.savingInfo = null;
+	this.holidays = null;
 	this.currentDt = null;
+	this.currentEndDt = null;
+	this.beginningStartDt = null;
 };
 
 ReportGenerator.REPORT_TYPE_MONTH = 'month';
@@ -13,34 +16,35 @@ ReportGenerator.KEY_STATISTICS_ROW_COLORS = ['#67C3D8', '#8C516F', '#D85299'];
 ReportGenerator.MAX_PERCENTAGE_PIECE = 5;
 ReportGenerator.DONUT_COLORS = ['#5DB9CF', '#814864', '#CF498D', '#807647', '#CFB948'];
 ReportGenerator.OTHER_INFO_COLOR = '#000000';
+ReportGenerator.FIRST_SPLIT_PIE_COLOR = '#7ACB39';
+ReportGenerator.SECOND_SPLIT_PIE_COLOR = '#3F952C';
 
 ReportGenerator.prototype.getReportData = function(currentDt, callbackFunc) {
 	var reportGenThis = this;
 	this.currentDt = currentDt;
-	var endDt = moment(currentDt).add('M', 1);
-	var	lastStartDt = reportGenThis.genLastDt(currentDt, ReportGenerator.REPORT_TYPE_MONTH);
+	this.currentEndDt = moment(this.currentDt).add('M', 1);
+	var	lastStartDt = reportGenThis.genLastDt(this.currentDt, ReportGenerator.REPORT_TYPE_MONTH);
 
 	var firstRecordDt = moment.unix(this.systemTree.data.firstRecord).tz(this.timezone);
-	var beginningStartDt;
 	if (firstRecordDt.date() === 1) {
-		beginningStartDt = moment(firstRecordDt).startOf('M');
+		this.beginningStartDt = moment(firstRecordDt).startOf('M');
 	} else {
-		beginningStartDt = moment(firstRecordDt).add('M', 1).startOf('M');
+		this.beginningStartDt = moment(firstRecordDt).add('M', 1).startOf('M');
 	}
-	var beginningEndDt = moment(beginningStartDt).add('M', 1);
+	var beginningEndDt = moment(this.beginningStartDt).add('M', 1);
 
-	var lastSamePeriodStartDt = moment(currentDt).subtract('y', 1);
-	var lastSamePeriodEndDt = moment(endDt).subtract('y', 1);
+	var lastSamePeriodStartDt = moment(this.currentDt).subtract('y', 1);
+	var lastSamePeriodEndDt = moment(this.currentEndDt).subtract('y', 1);
 
 	var requestData = {
-		start_dt: currentDt.unix(),
-		end_dt: endDt.unix(),
-		beginning_start_dt: beginningStartDt.unix(),
+		start_dt: this.currentDt.unix(),
+		end_dt: this.currentEndDt.unix(),
+		beginning_start_dt: this.beginningStartDt.unix(),
 		beginning_end_dt: beginningEndDt.unix(),
 		last_same_period_start_dt: lastSamePeriodStartDt.unix(),
 		last_same_period_end_dt: lastSamePeriodEndDt.unix(),
 		last_start_dt: lastStartDt.unix(),
-		last_end_dt: currentDt.unix(),
+		last_end_dt: this.currentDt.unix(),
 	};
 
 	$.ajax({
@@ -73,6 +77,7 @@ ReportGenerator.prototype.assignData = function(data) {
 	});
 
 	this.savingInfo = data.savingInfo;
+	this.holidays = data.holidays;
 }
 
 ReportGenerator.prototype.insertSubInfo = function(target, template, bullet, color, name, percentVal) {
@@ -84,6 +89,21 @@ ReportGenerator.prototype.insertSubInfo = function(target, template, bullet, col
 	};
 	var subInfoHtml = Mustache.render(template, templateInfo);
 	target.append(subInfoHtml);
+}
+
+ReportGenerator.prototype.generateFullReport = function() {
+	this.generateKeyStatistics();
+
+	var combinedCurrentReadings = {};
+
+	$.each(this.groupedSourceInfos, function(groupIdx, info) {
+		$.each(info.currentReadings, function(timestamp, readingVal) {
+			combinedCurrentReadings[timestamp] = ((timestamp in combinedCurrentReadings) ? combinedCurrentReadings[timestamp] : 0)
+				+ readingVal; 
+		});
+	});
+
+	this.generateWeekdayReport(combinedCurrentReadings);
 }
 
 ReportGenerator.prototype.generateKeyStatistics = function() {
@@ -327,4 +347,163 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 
 ReportGenerator.prototype.generateCalendarReport = function() {
 	//
+}
+
+ReportGenerator.prototype._fillInComparePercent = function(eleSel, oldUsage, newUsage, compareToDateText) {
+	var comparePercentEle = $(eleSel);
+	if (oldUsage === 0) {
+		comparePercentEle.addClass("invalid-saving");
+		comparePercentEle.removeClass("negative-saving");
+		comparePercentEle.removeClass("negative-saving");
+		comparePercentEle.find(".compare-percent").text("-");
+
+		lessMoreText = "";
+	} else {
+		var usagePercent = (oldUsage-newUsage)/oldUsage*100;
+		var lessMoreText;
+		comparePercentEle.removeClass("invalid-saving");
+		if (usagePercent >= 0 ) {
+			comparePercentEle.addClass("positive-saving");
+			comparePercentEle.removeClass("negative-saving");
+			lessMoreText = "less";
+		} else {
+			comparePercentEle.addClass("negative-saving");
+			comparePercentEle.removeClass("positive-saving");
+			lessMoreText = "more";
+		}
+		comparePercentEle.find(".compare-percent").text(Utils.fixed1DecIfLessThan10(Math.abs(usagePercent)));
+	}
+
+	var comparedSubtext;
+	if (oldUsage === 0) {
+		comparedSubtext = "compared<br>to "+compareToDateText+" ***";
+	} else {
+		comparedSubtext = lessMoreText+" compared<br>to "+compareToDateText;
+	}
+	comparePercentEle.find(".compare-subtext").html(comparedSubtext);
+}
+
+ReportGenerator.prototype._fillCalendar = function(eleSel, readings, averageUsage) {
+	var reportGenThis = this;
+	var calendarInfoContainer = $(eleSel);
+	calendarInfoContainer.find(".calendar-title").text(this.currentDt.format('MMM YYYY'));
+
+	var calendarContainer = calendarInfoContainer.find(".calendar-day-container");
+	calendarContainer.empty();
+
+	var calendarStartDt = moment(this.currentDt).startOf('w');
+	var calendarEndDt = moment(this.currentEndDt).endOf('w');
+	for (var calendarNowDt=calendarStartDt; calendarNowDt.isBefore(calendarEndDt); calendarNowDt.add('d', 1)) {
+		var calendarDayEle = $("<div class='calendar-day'></div>");
+		calendarDayEle.append("<div class='calendar-day-digit'>"+calendarNowDt.date()+"</div>");
+
+		if (calendarNowDt.isBefore(reportGenThis.currentDt)
+			|| calendarNowDt.isSame(reportGenThis.currentEndDt)
+			|| calendarNowDt.isAfter(reportGenThis.currentEndDt)) {
+			calendarDayEle.addClass('calendar-day-out-range');
+		} else if (calendarNowDt.day() == 0
+			|| calendarNowDt.day() == 6
+			|| ($.inArray(calendarNowDt.format("YYYY-MM-DD"), reportGenThis.holidays) != -1)) {
+			calendarDayEle.addClass('calendar-day-not-concern');
+		} else {
+			var diffPercent = (readings[calendarNowDt.unix()]-averageUsage)/averageUsage*100;
+			var diffPercentText;
+			if (diffPercent >= 0) {
+				diffPercentText = "<span class='calendar-day-plus-symbol'>+</span> "+diffPercent.toFixed(0);
+			} else {
+				diffPercentText = "<span class='calendar-day-minus-symbol'>-</span> "+Math.abs(diffPercent.toFixed(0));
+			}
+			if (diffPercent >= 5) {
+				calendarDayEle.addClass('calendar-day-better');
+			} else if (diffPercent <= -5) {
+				calendarDayEle.addClass('calendar-day-worse');
+			}
+			calendarDayEle.append("<div class='calendar-day-percent'>"
+				+diffPercentText
+				+"<span class='calendar-day-percent-symbol'>%</span></div>");
+		}
+
+		calendarContainer.append(calendarDayEle);
+	}
+}
+
+ReportGenerator.prototype.generateWeekdayReport = function(combinedReadings) {
+	var reportGenThis = this;
+
+	var allTotalUsage = 0;
+	var totalUsage = 0;
+	var averageUsage = 0;
+	var beginningUsage = 0;
+	var lastUsage = 0;
+	var lastSamePeriodUsage = 0;
+
+	var lowestWeekdayUsage = Number.MAX_SAFE_INTEGER;
+	var lowestDt = null;
+	var highestWeekdayUsage = 0;
+	var highestDt = null;
+
+	$.each(this.groupedSourceInfos, function(groupIdx, info) {
+		allTotalUsage += info.currentTotalEnergy;
+		totalUsage += info.currentWeekdayInfo.total;
+		averageUsage += info.currentWeekdayInfo.average;
+		beginningUsage += info.beginningWeekdayInfo.average;
+		lastUsage += info.lastWeekdayInfo.average;
+		lastSamePeriodUsage += info.lastSamePeriodWeekdayInfo.average;
+	});
+
+	var filteredReadings = {};
+	$.each(combinedReadings, function(timestamp, val) {
+		var dt = moment.unix(timestamp).tz(reportGenThis.timezone);
+		if ((dt.day() >= 1 && dt.day() <= 5) && ($.inArray(dt.format("YYYY-MM-DD"), reportGenThis.holidays) == -1)) {
+			filteredReadings[timestamp] = val;
+			if (val > highestWeekdayUsage) {
+				highestWeekdayUsage = val;
+				highestDt = dt;
+			}
+			if (val < lowestWeekdayUsage) {
+				lowestWeekdayUsage = Math.min(val, lowestWeekdayUsage);
+				lowestDt = dt;
+			}
+		}
+	});
+
+	$("#weekday-info .average-usage").text(Utils.formatWithCommas(averageUsage.toFixed(0)));
+	var beginningDateText = this.beginningStartDt.format("MMMM YYYY") + " **";
+	this._fillInComparePercent("#weekday-info .compare-beginning", beginningUsage, averageUsage, beginningDateText);
+	this._fillInComparePercent("#weekday-info .compare-last", lastUsage, averageUsage, "last month");
+	this._fillInComparePercent("#weekday-info .compare-last-same-period", lastSamePeriodUsage, averageUsage, "same period last year");
+
+	$("#weekday-info .lowest-usage-val").text(Utils.formatWithCommas(lowestWeekdayUsage.toFixed(0))+" kWh");
+	$("#weekday-info .lowest-usage-date").text(lowestDt.format('D MMM YYYY'));
+	$("#weekday-info .highest-usage-val").text(Utils.formatWithCommas(highestWeekdayUsage.toFixed(0))+" kWh");
+	$("#weekday-info .highest-usage-date").text(highestDt.format('D MMM YYYY'));
+
+	var weekdaySplitPercent = parseFloat((totalUsage/allTotalUsage*100).toFixed(1));
+	var weekendSplitPercent = parseFloat((100-weekdaySplitPercent).toFixed(1));
+	$("#weekday-info .first-split-val").text(weekdaySplitPercent);
+	$("#weekday-info .second-split-val").text(weekendSplitPercent);
+
+	var plotData = [
+		{data: weekdaySplitPercent, color: ReportGenerator.FIRST_SPLIT_PIE_COLOR},
+		{data: weekendSplitPercent, color: ReportGenerator.SECOND_SPLIT_PIE_COLOR},
+	];
+	$.plot("#weekday-info .energy-split-pie", plotData, {
+		series: {
+			pie: {
+				show: true,
+				stroke: {
+					width: 0
+				},
+				label: {
+					show: false
+				}
+			}
+		},
+		legend: {
+			show: false,
+		}
+	});
+
+	this._fillCalendar("#weekday-info .calendar-info-container", combinedReadings, averageUsage);
+
 }

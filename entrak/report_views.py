@@ -68,6 +68,7 @@ def report_view(request, system_code=None):
 
 def __calculcate_total_max_min(readings, timezone):
 	total_val = 0
+	total_day = 0
 	max_usage_val = 0
 	max_usage_date = None
 	min_usage_val = sys.float_info.max
@@ -75,6 +76,7 @@ def __calculcate_total_max_min(readings, timezone):
 	for timestamp, val in readings.items():
 		dt = Utils.utc_dt_from_utc_timestamp(timestamp).astimezone(timezone)
 		total_val += val
+		total_day += 1
 		if val > max_usage_val:
 			max_usage_val = val;
 			max_usage_date = dt.date()
@@ -88,12 +90,13 @@ def __calculcate_total_max_min(readings, timezone):
 	else:
 		max_usage_date = max_usage_date.strftime("%Y-%m-%d")
 	if min_usage_date is None:
-		min_usage_date = None
+		min_usage_val = None
 	else:
 		min_usage_date = min_usage_date.strftime("%Y-%m-%d")
 
 	return {
 		'total': total_val,
+		'average': (total_val/total_day) if (total_day != 0) else 0,
 		'max': {'date': max_usage_date, 'val': max_usage_val},
 		'min': {'date': min_usage_date, 'val': min_usage_val},
 	}

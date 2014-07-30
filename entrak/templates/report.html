@@ -83,8 +83,7 @@ $(function() {
 	if ("currentDt" in report) {
 		report.reportGenerator.getReportData(report.currentDt, function(data) {
 			report.reportGenerator.assignData(data);
-			report.reportGenerator.generateKeyStatistics();
-			report.reportGenerator.generateCalendarReport();
+			report.reportGenerator.generateFullReport();
 		});
 	}
 
@@ -283,5 +282,84 @@ $(function() {
 		</div>
 	</div>
 </div>
+
+<div id="weekday-info" class="report-component calendar-component">
+	<div class="report-component-header">HOW MUCH ENERGY DID WE USE ON WEEKDAYS?</div>
+	<hr class="report-component-separator">
+	<div>
+		<div class="calendar-left-info">
+			<div class="calendar-average-cell">
+				<div>Average<br>Weekday<br>Energy Use:</div>
+				<div>
+					<div class="average-usage"></div>
+					<div class="average-usage-unit">kWh</div>
+				</div>
+			</div>
+			<div class="calendar-left-compare-info compare-beginning">
+				<span class="compare-percent"></span><span>%</span>
+				<div class="compare-subtext"></div>
+			</div>
+			<div class="calendar-left-compare-info compare-last">
+				<span class="compare-percent"></span><span>%</span>
+				<div class="compare-subtext"></div>
+			</div>
+			<div class="calendar-left-compare-info compare-last-same-period">
+				<span class="compare-percent"></span><span>%</span>
+				<div class="compare-subtext"></div>
+			</div>
+		</div>
+		<div class="calendar-info-container">
+			<div class="calendar-title"></div>
+			<hr>
+			<div class='calendar-weekday-header'>
+				<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
+			</div>
+			<div class="calendar-day-container"></div>
+			<div class="calendar-legend-container">
+				<div class="legend-color-block legend-color-block-better"></div>
+				<div class="legend-label">Better than<br>average weekday</div>
+				<div class="legend-color-block legend-color-block-worse"></div>
+				<div class="legend-label">Worse than<br>average weekday</div>
+				<div class="legend-color-block legend-color-block-average"></div>
+				<div class="legend-label">Average weekday</div>
+			</div>
+		</div>
+	</div>
+	<hr>
+	<div class="calendar-bottom-info">
+		<div>
+			<div>Lowest Weekday Energy Use:</div>
+			<div class="lowest-usage-val"></div>
+			<div class="lowest-usage-date"></div>
+		</div>
+		<div>
+			<div>Highest Weekday Energy Use:</div>
+			<div class="highest-usage-val"></div>
+			<div class="highest-usage-date"></div>
+		</div>
+		<div>
+			<div class="energy-split-pie"></div>
+			<div class="energy-split-info">
+				<div>Energy Split by:</div>
+				<div>
+					<span>Weekdays: </span><span class="first-split-val"></span>
+				</div>
+				<div>
+					<span>Weekends: </span><span class="second-split-val"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="calendar-footnote">** The first month you started using En-trak</div>
+	<div class="report-component-footer">
+		<div class="hide-details-btn btn-down">HIDE DETAILS</div>
+	</div>
+
+	<div class="detail-container">
+	</div>
+</div>
+
+<div class="bottom-save-report-btn">Save Report</div>
+<div class="bottom-space"></div>
 
 {% endblock %}

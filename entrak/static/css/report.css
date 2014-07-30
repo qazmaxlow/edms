@@ -8,7 +8,7 @@
 	margin-right: auto;
 	position: relative;
 	width: 972px;
-	margin-top: 25px;
+	margin-top: 35px;
 	-moz-box-shadow: -6px 6px 10px 0px #e8e8e8;
 	-webkit-box-shadow: -6px 6px 10px 0px #e8e8e8;
 	box-shadow: -6px 6px 10px 0px #e8e8e8;
@@ -448,4 +448,138 @@
 }
 .percent-other-info .sub-info-name {
 	margin-left: 8px;
+}
+
+.calendar-component {
+	background-color: #F5F5F5;
+}
+
+.calendar-left-info {
+	display: inline-block;
+	width: 320px;
+	height: 282px;
+	margin-top: 30px;
+	margin-left: 30px;
+	vertical-align: top;
+	background-color: #E2E2E2;
+}
+.calendar-average-cell {
+	height: 104px;
+}
+.calendar-average-cell>div {
+	display: inline-block;
+	vertical-align: middle;
+}
+.calendar-average-cell>div:first-child {
+	width: 150px;
+}
+.calendar-average-cell>div:last-child {
+	width: 166px;
+	text-align: right;
+}
+.calendar-left-compare-info>div {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.calendar-info-container {
+	display: inline-block;
+	width: 520px;
+	height: 320px;
+	vertical-align: top;
+}
+.calendar-weekday-header>div {
+	display: inline-block;
+	width: 66px;
+	height: 18px;
+}
+.calendar-weekday-header>div:nth-child(odd) {
+	background-color: #62949F;
+}
+.calendar-weekday-header>div:nth-child(even) {
+	background-color: #95C8D3;
+}
+.calendar-day {
+	display: inline-block;
+	position: relative;
+	float: left;
+	width: 68px;
+	height: 40px;
+	background-color: #E5D17E;
+	color: #FFF;
+}
+.calendar-day-digit {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	font-size: 10pt;
+}
+.calendar-day-out-range {
+	background-color: #E2E2E2;
+}
+.calendar-day-out-range .calendar-day-digit {
+	color: #C5C5C5;
+}
+.calendar-day-not-concern {
+	background-color: #E2E2FF;
+}
+.calendar-day-not-concern .calendar-day-digit {
+	color: #7F7F7F;
+}
+.calendar-day-percent {
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+}
+.calendar-day-better {
+	background-color: #7ACB39;
+}
+.calendar-day-worse {
+	background-color: #C3593D;
+}
+.calendar-legend-container {
+	clear: both;
+}
+.calendar-legend-container>div {
+	display: inline-block;
+}
+.legend-color-block {
+	width: 48px;
+	height: 10px;
+}
+.legend-color-block-better {
+	background-color: #7ACB39;
+}
+.legend-color-block-worse {
+	background-color: #C3593D;
+}
+.legend-color-block-average {
+	background-color: #E5D17E;
+}
+
+.calendar-bottom-info {
+	width: 880px;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #E2E2E2;
+}
+.calendar-bottom-info>div {
+	display: inline-block;
+}
+
+.energy-split-pie {
+	display: inline-block;
+	width: 78px;
+	height: 78px;
+}
+.energy-split-info {
+	display: inline-block;
+}
+
+.bottom-save-report-btn {
+	margin-top: 20px;
+}
+
+.bottom-space {
+	height: 30px;
 }
