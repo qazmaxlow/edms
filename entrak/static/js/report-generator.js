@@ -383,6 +383,28 @@ ReportGenerator.prototype._fillInComparePercent = function(eleSel, oldUsage, new
 	comparePercentEle.find(".compare-subtext").html(comparedSubtext);
 }
 
+ReportGenerator.prototype._genSubComparePercentInfo = function(oldUsage, newUsage, compareToDateText) {
+	var result = {};
+	if (oldUsage === 0) {
+		result.percentText = "-";
+		result.subText = "compared<br>to "+compareToDateText+" ***";
+		result.savingClass = "invalid-saving";
+	} else {
+		var percent = (oldUsage-newUsage)/oldUsage*100;
+		if (percent >= 0) {
+			result.subText = "more";
+			result.savingClass = "negative-saving";
+		} else {
+			result.subText = "less";
+			result.savingClass = "positive-saving";
+		}
+		result.subText += " compared<br>to "+compareToDateText;
+		result.percentText = Utils.formatWithCommas(Math.abs(percent).toFixed(0));
+	}
+
+	return result;
+}
+
 ReportGenerator.prototype._fillCalendar = function(eleSel, readings, averageUsage) {
 	var reportGenThis = this;
 	var calendarInfoContainer = $(eleSel);
@@ -425,6 +447,86 @@ ReportGenerator.prototype._fillCalendar = function(eleSel, readings, averageUsag
 
 		calendarContainer.append(calendarDayEle);
 	}
+}
+
+ReportGenerator.prototype._insertCalendarSubInfo = function(eleSel, classIdPrefix,
+	calendarTypeName, beginningDateText, firstSplitText, secondSplitText) {
+	var reportGenThis = this;
+	var detailContainer = $(eleSel);
+	var subInfoTemplate = $("#sub-calendar-info-template").html();
+	Mustache.parse(subInfoTemplate);
+
+	$.each(this.groupedSourceInfos, function(groupIdx, info) {
+		var classIdentifier = classIdPrefix+groupIdx;
+		var averageUsage = info.currentWeekdayInfo.average;
+		var compareBeginningInfo = reportGenThis._genSubComparePercentInfo(
+			info.beginningWeekdayInfo.average, averageUsage, beginningDateText);
+		var compareLastInfo = reportGenThis._genSubComparePercentInfo(
+			info.lastWeekdayInfo.average, averageUsage, "last month");
+		var compareLastSamePeriodInfo = reportGenThis._genSubComparePercentInfo(
+			info.lastSamePeriodWeekdayInfo.average, averageUsage, "same period last year");
+		var firstSplitPercent = parseFloat((info.currentWeekdayInfo.total/info.currentTotalEnergy*100).toFixed(1));
+		var secondSplitPercent = parseFloat((100-firstSplitPercent).toFixed(1));
+		var lowestDt = moment(info.currentWeekdayInfo.min.date, 'YYYY-MM-DD');
+		var lowestText = lowestDt.format('D MMM YYYY')+' - '
+			+Utils.formatWithCommas(info.currentWeekdayInfo.min.val.toFixed(0))
+			+' kWh';
+		var highestDt = moment(info.currentWeekdayInfo.max.date, 'YYYY-MM-DD');
+		var highestText = highestDt.format('D MMM YYYY')+' - '
+			+Utils.formatWithCommas(info.currentWeekdayInfo.max.val.toFixed(0))
+			+' kWh';
+
+		var templateInfo = {
+			classIdentifier: classIdentifier,
+			typeName: calendarTypeName,
+			name: ('sourceName' in info) ? info.sourceName : info.system.data.name,
+			averageUsage: Utils.formatWithCommas(averageUsage.toFixed(0)),
+			compareBeginningClass: compareBeginningInfo.savingClass,
+			compareBeginningPercent: compareBeginningInfo.percentText,
+			compareBeginningSubtext: compareBeginningInfo.subText,
+			compareLastClass: compareLastInfo.savingClass,
+			compareLastPercent: compareLastInfo.percentText,
+			compareLastSubtext: compareLastInfo.subText,
+			compareLastSamePeriodClass: compareLastSamePeriodInfo.savingClass,
+			compareLastSamePeriodPercent: compareLastSamePeriodInfo.percentText,
+			compareLastSamePeriodSubtext: compareLastSamePeriodInfo.subText,
+			firstSplitText: firstSplitText,
+			secondSplitText: secondSplitText,
+			firstSplitPercent: firstSplitPercent+"%",
+			secondSplitPercent: secondSplitPercent+"%",
+			lowestText: lowestText,
+			highestText: highestText,
+		};
+		var subInfoHtml = Mustache.render(subInfoTemplate, templateInfo);
+		detailContainer.append(subInfoHtml);
+
+		reportGenThis._plotCalendarSubPieChart("."+classIdentifier+" .energy-split-pie",
+			firstSplitPercent, secondSplitPercent,
+			ReportGenerator.FIRST_SPLIT_PIE_COLOR, ReportGenerator.SECOND_SPLIT_PIE_COLOR);
+	});
+}
+
+ReportGenerator.prototype._plotCalendarSubPieChart = function(eleSel, firstSplitPercent, secondSplitPercent, firstSplitColor, secondSplitColor) {
+	var plotData = [
+		{data: firstSplitPercent, color: firstSplitColor},
+		{data: secondSplitPercent, color: secondSplitColor},
+	];
+	$.plot(eleSel, plotData, {
+		series: {
+			pie: {
+				show: true,
+				stroke: {
+					width: 0
+				},
+				label: {
+					show: false
+				}
+			}
+		},
+		legend: {
+			show: false,
+		}
+	});
 }
 
 ReportGenerator.prototype.generateWeekdayReport = function(combinedReadings) {
@@ -483,27 +585,12 @@ ReportGenerator.prototype.generateWeekdayReport = function(combinedReadings) {
 	$("#weekday-info .first-split-val").text(weekdaySplitPercent);
 	$("#weekday-info .second-split-val").text(weekendSplitPercent);
 
-	var plotData = [
-		{data: weekdaySplitPercent, color: ReportGenerator.FIRST_SPLIT_PIE_COLOR},
-		{data: weekendSplitPercent, color: ReportGenerator.SECOND_SPLIT_PIE_COLOR},
-	];
-	$.plot("#weekday-info .energy-split-pie", plotData, {
-		series: {
-			pie: {
-				show: true,
-				stroke: {
-					width: 0
-				},
-				label: {
-					show: false
-				}
-			}
-		},
-		legend: {
-			show: false,
-		}
-	});
+	this._plotCalendarSubPieChart("#weekday-info .energy-split-pie",
+		weekdaySplitPercent, weekendSplitPercent,
+		ReportGenerator.FIRST_SPLIT_PIE_COLOR, ReportGenerator.SECOND_SPLIT_PIE_COLOR);
 
 	this._fillCalendar("#weekday-info .calendar-info-container", combinedReadings, averageUsage);
 
+	this._insertCalendarSubInfo("#weekday-info .detail-container",
+		'weekday-sub-calendar', 'Weekday', beginningDateText, 'Weekdays', 'Weekends');
 }
