@@ -95,7 +95,6 @@ ReportGenerator.prototype.generateFullReport = function() {
 	this.generateKeyStatistics();
 
 	var combinedCurrentReadings = {};
-
 	$.each(this.groupedSourceInfos, function(groupIdx, info) {
 		$.each(info.currentReadings, function(timestamp, readingVal) {
 			combinedCurrentReadings[timestamp] = ((timestamp in combinedCurrentReadings) ? combinedCurrentReadings[timestamp] : 0)
@@ -105,6 +104,16 @@ ReportGenerator.prototype.generateFullReport = function() {
 
 	this.generateWeekdayReport(combinedCurrentReadings);
 	this.generateWeekendReport(combinedCurrentReadings);
+
+	var combinedOvernightCurrentReadings = {};
+	$.each(this.groupedSourceInfos, function(groupIdx, info) {
+		$.each(info.overnightcurrentReadings, function(timestamp, readingVal) {
+			combinedOvernightCurrentReadings[timestamp] = 
+				((timestamp in combinedOvernightCurrentReadings) ? combinedOvernightCurrentReadings[timestamp] : 0)
+				+ readingVal; 
+		});
+	});
+	this.generateOvernightReport(combinedOvernightCurrentReadings);
 }
 
 ReportGenerator.prototype.generateKeyStatistics = function() {
@@ -423,7 +432,13 @@ ReportGenerator.prototype._fillCalendar = function(eleSel, readings, averageUsag
 		} else if (isNotConcernFunc(calendarNowDt)) {
 			calendarDayEle.addClass('calendar-day-not-concern');
 		} else {
-			var diffPercent = (readings[calendarNowDt.unix()]-averageUsage)/averageUsage*100;
+			var diffPercent;
+			if (calendarNowDt.unix() in readings) {
+				diffPercent = (readings[calendarNowDt.unix()]-averageUsage)/averageUsage*100;
+			} else {
+				diffPercent = 0;
+			}
+			
 			var diffPercentText;
 			if (diffPercent >= 0) {
 				diffPercentText = "<span class='calendar-day-plus-symbol'>+</span> "+diffPercent.toFixed(0);
@@ -431,9 +446,9 @@ ReportGenerator.prototype._fillCalendar = function(eleSel, readings, averageUsag
 				diffPercentText = "<span class='calendar-day-minus-symbol'>-</span> "+Math.abs(diffPercent.toFixed(0));
 			}
 			if (diffPercent >= 5) {
-				calendarDayEle.addClass('calendar-day-better');
-			} else if (diffPercent <= -5) {
 				calendarDayEle.addClass('calendar-day-worse');
+			} else if (diffPercent <= -5) {
+				calendarDayEle.addClass('calendar-day-better');
 			}
 			calendarDayEle.append("<div class='calendar-day-percent'>"
 				+diffPercentText
@@ -445,7 +460,8 @@ ReportGenerator.prototype._fillCalendar = function(eleSel, readings, averageUsag
 }
 
 ReportGenerator.prototype._insertCalendarSubInfo = function(eleSel, classIdPrefix,
-	calendarTypeName, beginningDateText, firstSplitText, secondSplitText) {
+	calendarTypeName, currentUsageKey, beginningUsageKey, lastUsageKey, lastSamePeriodUsageKey,
+	beginningDateText, firstSplitText, secondSplitText, swapSplitPercent) {
 	var reportGenThis = this;
 	var detailContainer = $(eleSel);
 	var subInfoTemplate = $("#sub-calendar-info-template").html();
@@ -453,23 +469,29 @@ ReportGenerator.prototype._insertCalendarSubInfo = function(eleSel, classIdPrefi
 
 	$.each(this.groupedSourceInfos, function(groupIdx, info) {
 		var classIdentifier = classIdPrefix+groupIdx;
-		var averageUsage = info.currentWeekdayInfo.average;
+		var averageUsage = info[currentUsageKey].average;
 		var compareBeginningInfo = reportGenThis._genSubComparePercentInfo(
-			info.beginningWeekdayInfo.average, averageUsage, beginningDateText);
+			info[beginningUsageKey].average, averageUsage, beginningDateText);
 		var compareLastInfo = reportGenThis._genSubComparePercentInfo(
-			info.lastWeekdayInfo.average, averageUsage, "last month");
+			info[lastUsageKey].average, averageUsage, "last month");
 		var compareLastSamePeriodInfo = reportGenThis._genSubComparePercentInfo(
-			info.lastSamePeriodWeekdayInfo.average, averageUsage, "same period last year");
-		var firstSplitPercent = parseFloat((info.currentWeekdayInfo.total/info.currentTotalEnergy*100).toFixed(1));
+			info[lastSamePeriodUsageKey].average, averageUsage, "same period last year");
+		var firstSplitPercent = parseFloat((info[currentUsageKey].total/info.currentTotalEnergy*100).toFixed(1));
 		var secondSplitPercent = parseFloat((100-firstSplitPercent).toFixed(1));
-		var lowestDt = moment(info.currentWeekdayInfo.min.date, 'YYYY-MM-DD');
+		var lowestDt = moment(info[currentUsageKey].min.date, 'YYYY-MM-DD');
 		var lowestText = lowestDt.format('D MMM YYYY')+' - '
-			+Utils.formatWithCommas(info.currentWeekdayInfo.min.val.toFixed(0))
+			+Utils.formatWithCommas(info[currentUsageKey].min.val.toFixed(0))
 			+' kWh';
-		var highestDt = moment(info.currentWeekdayInfo.max.date, 'YYYY-MM-DD');
+		var highestDt = moment(info[currentUsageKey].max.date, 'YYYY-MM-DD');
 		var highestText = highestDt.format('D MMM YYYY')+' - '
-			+Utils.formatWithCommas(info.currentWeekdayInfo.max.val.toFixed(0))
+			+Utils.formatWithCommas(info[currentUsageKey].max.val.toFixed(0))
 			+' kWh';
+
+		if (swapSplitPercent) {
+			var tempSplitPercent = secondSplitPercent;
+			secondSplitPercent = firstSplitPercent;
+			firstSplitPercent = tempSplitPercent;
+		}
 
 		var templateInfo = {
 			classIdentifier: classIdentifier,
@@ -524,8 +546,8 @@ ReportGenerator.prototype._plotCalendarSubPieChart = function(eleSel, firstSplit
 	});
 }
 
-ReportGenerator.prototype.generateCalendarReportMainPart = function(targetSel, combinedReadings, currentUsageKey, beginningUsageKey,
-	lastUsageKey, lastSamePeriodUsageKey, lowestUsage, lowestDt, highestUsage, highestDt, isNotConcernFunc,
+ReportGenerator.prototype.generateCalendarReport = function(targetSel, combinedReadings, currentUsageKey, beginningUsageKey,
+	lastUsageKey, lastSamePeriodUsageKey, lowestUsage, lowestDt, highestUsage, highestDt, swapSplitPercent, isNotConcernFunc,
 	classIdPrefix, calendarTypeName, firstSplitText, secondSplitText) {
 	var reportGenThis = this;
 
@@ -559,6 +581,11 @@ ReportGenerator.prototype.generateCalendarReportMainPart = function(targetSel, c
 
 	var firstSplitPercent = parseFloat((totalUsage/allTotalUsage*100).toFixed(1));
 	var secondSplitPercent = parseFloat((100-firstSplitPercent).toFixed(1));
+	if (swapSplitPercent) {
+		var tempSplitPercent = secondSplitPercent;
+		secondSplitPercent = firstSplitPercent;
+		firstSplitPercent = tempSplitPercent;
+	}
 	targetContainer.find(".first-split-val").text(firstSplitPercent+"%");
 	targetContainer.find(".second-split-val").text(secondSplitPercent+"%");
 
@@ -568,8 +595,9 @@ ReportGenerator.prototype.generateCalendarReportMainPart = function(targetSel, c
 
 	this._fillCalendar(targetSel+" .calendar-info-container", combinedReadings, averageUsage, isNotConcernFunc);
 
-	this._insertCalendarSubInfo(targetSel+" .detail-container",
-		classIdPrefix, calendarTypeName, beginningDateText, firstSplitText, secondSplitText);
+	this._insertCalendarSubInfo(targetSel+" .detail-container", classIdPrefix, calendarTypeName,
+		currentUsageKey, beginningUsageKey, lastUsageKey, lastSamePeriodUsageKey,
+		beginningDateText, firstSplitText, secondSplitText, swapSplitPercent);
 }
 
 ReportGenerator.prototype.generateWeekdayReport = function(combinedReadings) {
@@ -599,10 +627,10 @@ ReportGenerator.prototype.generateWeekdayReport = function(combinedReadings) {
 			|| ($.inArray(targetDt.format("YYYY-MM-DD"), reportGenThis.holidays) != -1))
 	}
 
-	this.generateCalendarReportMainPart('#weekday-info', combinedReadings,
+	this.generateCalendarReport('#weekday-info', combinedReadings,
 		'currentWeekdayInfo', 'beginningWeekdayInfo',
 		'lastWeekdayInfo', 'lastSamePeriodWeekdayInfo', lowestUsage, lowestDt, highestUsage, highestDt,
-		isNotConcernFunc, 'weekday-sub-calendar', 'Weekday', 'Weekdays', 'Weekends');
+		false, isNotConcernFunc, 'weekday-sub-calendar', 'Weekday', 'Weekdays', 'Weekends');
 }
 
 ReportGenerator.prototype.generateWeekendReport = function(combinedReadings) {
@@ -630,8 +658,37 @@ ReportGenerator.prototype.generateWeekendReport = function(combinedReadings) {
 		return (targetDt.day() >= 1 && targetDt.day() <= 5)
 	}
 
-	this.generateCalendarReportMainPart('#weekend-info', combinedReadings,
+	this.generateCalendarReport('#weekend-info', combinedReadings,
 		'currentWeekendInfo', 'beginningWeekendInfo',
 		'lastWeekendInfo', 'lastSamePeriodWeekendInfo', lowestUsage, lowestDt, highestUsage, highestDt,
-		isNotConcernFunc, 'weekend-sub-calendar', 'Weekend', 'Weekdays', 'Weekends');
+		true, isNotConcernFunc, 'weekend-sub-calendar', 'Weekend', 'Weekdays', 'Weekends');
+}
+
+ReportGenerator.prototype.generateOvernightReport = function(combinedReadings) {
+	var reportGenThis = this;
+	var lowestUsage = Number.MAX_SAFE_INTEGER;
+	var lowestDt = null;
+	var highestUsage = 0;
+	var highestDt = null;
+
+	$.each(combinedReadings, function(timestamp, val) {
+		var dt = moment.unix(timestamp).tz(reportGenThis.timezone);
+		if (val > highestUsage) {
+			highestUsage = val;
+			highestDt = dt;
+		}
+		if (val < lowestUsage) {
+			lowestUsage = Math.min(val, lowestUsage);
+			lowestDt = dt;
+		}
+	});
+
+	var isNotConcernFunc = function(targetDt) {
+		return false;
+	}
+
+	this.generateCalendarReport('#overnight-info', combinedReadings,
+		'currentOvernightInfo', 'beginningOvernightInfo',
+		'lastOvernightInfo', 'lastSamePeriodOvernightInfo', lowestUsage, lowestDt, highestUsage, highestDt,
+		true, isNotConcernFunc, 'overnight-sub-calendar', 'Overnight', 'Daytime', 'Overnight');
 }

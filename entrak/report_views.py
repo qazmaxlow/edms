@@ -4,6 +4,7 @@ import datetime
 import copy
 import json
 import operator
+import calendar
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.db.models import Q
@@ -12,7 +13,7 @@ from system.models import System
 from unit.models import UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
 from baseline.models import BaselineUsage
 from egauge.manager import SourceManager
-from egauge.models import SourceReadingMonth, SourceReadingDay
+from egauge.models import SourceReadingMonth, SourceReadingDay, SourceReadingHour
 from utils.auth import permission_required
 from utils.utils import Utils
 from utils import calculation
@@ -119,14 +120,28 @@ def __calculate_weekend_info(readings, timezone):
 
 	return __calculcate_total_max_min(filterd_readings, timezone)
 
-def __calculate_overnight_info(readings, timezone, night_time_start, night_time_end):
-	filterd_readings = {}
-	for timestamp, val in readings.items():
-		dt = Utils.utc_dt_from_utc_timestamp(timestamp).astimezone(timezone)
-		if dt.time() >= night_time_start and dt.time() < night_time_end:
-			filterd_readings[timestamp] = val
+def __calculate_overnight_info(readings, timezone):
+	return __calculcate_total_max_min(readings, timezone)
 
-	return __calculcate_total_max_min(filterd_readings, timezone)
+def __transform_to_daily_overnight_readings(source_readings, timezone, night_time_start, night_time_end):
+	result = {}
+	for source_id, readings in source_readings.items():
+		result[source_id] = {}
+		for timestamp, val in readings.items():
+			dt = Utils.utc_dt_from_utc_timestamp(timestamp).astimezone(timezone)
+			if dt.time() >= night_time_start:
+				target_dt = dt.replace(hour=0, minute=0, second=0, microsecond=0)
+			elif dt.time() < night_time_end:
+				target_dt = dt.replace(hour=0, minute=0, second=0, microsecond=0)
+				target_dt -= datetime.timedelta(days=1)
+			else:
+				target_dt = None
+
+			if target_dt is not None:
+				target_timestamp = calendar.timegm(target_dt.utctimetuple())
+				result[source_id][target_timestamp] = val + result[source_id].get(target_timestamp, 0)
+
+	return result
 
 @permission_required
 def report_data_view(request, system_code=None):
@@ -191,6 +206,10 @@ def report_data_view(request, system_code=None):
 			info["lastReadings"] = {}
 			info["beginningReadings"] = {}
 			info["lastSamePeriodReadings"] = {}
+			info["overnightcurrentReadings"] = {}
+			info["overnightlastReadings"] = {}
+			info["overnightbeginningReadings"] = {}
+			info["overnightlastSamePeriodReadings"] = {}
 
 	unit_rates = UnitRate.objects.filter(Q(category_code=CO2_CATEGORY_CODE) | Q(category_code=MONEY_CATEGORY_CODE))
 	co2_unit_rates = [unit_rate for unit_rate in unit_rates if unit_rate.category_code == CO2_CATEGORY_CODE]
@@ -216,9 +235,27 @@ def report_data_view(request, system_code=None):
 						target_info["currentTotalMoney"] = calculation.transform_reading(
 							money_unit_rate_code, timestamp, val, money_unit_rates) + target_info.get("currentTotalMoney", 0)
 
+	current_system_timezone = pytz.timezone(current_system.timezone)
+	overnight_timestamp_bounds = reduce(
+		operator.or_,
+		[MongoQ(
+			datetime__gte=(info['start']-datetime.timedelta(days=1)),
+			datetime__lt=(info['end']+datetime.timedelta(days=1))) for (key, info) in timestamp_info.items()])
+	overnight_source_readings = SourceReadingHour.objects(overnight_timestamp_bounds, source_id__in=source_ids)
+	overnight_source_readings = SourceManager.group_readings_with_source_id(overnight_source_readings)
+	overnight_source_readings = __transform_to_daily_overnight_readings(overnight_source_readings, current_system_timezone,
+		current_system.night_time_start, current_system.night_time_end)
+	for source_id, readings in overnight_source_readings.items():
+		target_info = grouped_source_infos[source_group_map[source_id]]
+		for timestamp, val in readings.items():
+			reading_dt = Utils.utc_dt_from_utc_timestamp(timestamp)
+			for name, bound_info in timestamp_info.items():
+				if reading_dt >= bound_info['start'] and reading_dt < bound_info['end']:
+					overnight_name = "overnight"+name
+					target_info[overnight_name][timestamp] = val + target_info[overnight_name].get(timestamp, 0)
+
 	total_energy = 0 
 	all_holidays = current_system.get_all_holidays(timestamp_info)
-	current_system_timezone = pytz.timezone(current_system.timezone)
 	for info in grouped_source_infos:
 		total_energy += info['currentTotalEnergy']
 		calculate_info = [
@@ -233,8 +270,8 @@ def report_data_view(request, system_code=None):
 				all_holidays, current_system_timezone)
 			info[cal_info['keyPrefix']+'WeekendInfo'] = __calculate_weekend_info(info[cal_info["targetReadings"]],
 				current_system_timezone)
-			info[cal_info['keyPrefix']+'OvernighInfo'] = __calculate_overnight_info(info[cal_info["targetReadings"]],
-				current_system_timezone, current_system.night_time_start, current_system.night_time_end)
+			overnight_name = "overnight"+cal_info["targetReadings"]
+			info[cal_info['keyPrefix']+'OvernightInfo'] = __calculate_overnight_info(info[overnight_name], current_system_timezone)
 
 	total_baseline_energy = 0
 	need_calculate_systems = System.assign_source_under_system(systems, sources)
@@ -261,7 +298,8 @@ def report_data_view(request, system_code=None):
 	result['holidays'] = [holiday.strftime("%Y-%m-%d") for holiday in all_holidays]
 
 	for info in grouped_source_infos:
-		for will_remove_data in ['beginningReadings', 'lastSamePeriodReadings']:
+		for will_remove_data in ['beginningReadings', 'lastSamePeriodReadings',
+			'overnightlastReadings', 'overnightbeginningReadings', 'overnightlastSamePeriodReadings']:
 			info.pop(will_remove_data, None)
 	result['groupedSourceInfos'] = grouped_source_infos
 
