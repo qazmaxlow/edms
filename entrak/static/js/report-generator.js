@@ -1,9 +1,11 @@
-function ReportGenerator(systemTree, timezone) {
+function ReportGenerator(systemTree, timezone, reportType) {
 	this.systemTree = systemTree;
 	this.timezone = timezone;
+	this.reportType = reportType;
 	this.groupedSourceInfos = null;
 	this.savingInfo = null;
 	this.holidays = null;
+	this.sumUpUsages = null;
 	this.currentDt = null;
 	this.currentEndDt = null;
 	this.beginningStartDt = null;
@@ -23,7 +25,7 @@ ReportGenerator.prototype.getReportData = function(currentDt, callbackFunc) {
 	var reportGenThis = this;
 	this.currentDt = currentDt;
 	this.currentEndDt = moment(this.currentDt).add('M', 1);
-	var	lastStartDt = reportGenThis.genLastDt(this.currentDt, ReportGenerator.REPORT_TYPE_MONTH);
+	var	lastStartDt = reportGenThis.genLastDt(this.currentDt, this.reportType);
 
 	var firstRecordDt = moment.unix(this.systemTree.data.firstRecord).tz(this.timezone);
 	if (firstRecordDt.date() === 1) {
@@ -45,6 +47,7 @@ ReportGenerator.prototype.getReportData = function(currentDt, callbackFunc) {
 		last_same_period_end_dt: lastSamePeriodEndDt.unix(),
 		last_start_dt: lastStartDt.unix(),
 		last_end_dt: this.currentDt.unix(),
+		consecutive_lasts: JSON.stringify(this.genConsecutiveLasts(4, lastStartDt)),
 	};
 
 	$.ajax({
@@ -57,10 +60,22 @@ ReportGenerator.prototype.getReportData = function(currentDt, callbackFunc) {
 	});
 }
 
-ReportGenerator.prototype.genLastDt = function(targetDt, reportType) {
+ReportGenerator.prototype.genLastDt = function(targetDt) {
 	var result;
-	if (reportType === ReportGenerator.REPORT_TYPE_MONTH) {
+	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
 		result = moment(targetDt).subtract('M', 1);
+	}
+
+	return result;
+}
+
+ReportGenerator.prototype.genConsecutiveLasts = function(numOfLast, startDt) {
+	var result = [];
+	result.push(startDt.unix());
+	var nextDt = startDt;
+	for (var i = 0; i < numOfLast; i++) {
+		nextDt = this.genLastDt(nextDt);
+		result.push(nextDt.unix());
 	}
 
 	return result;
@@ -78,6 +93,7 @@ ReportGenerator.prototype.assignData = function(data) {
 
 	this.savingInfo = data.savingInfo;
 	this.holidays = data.holidays;
+	this.sumUpUsages = data.sumUpUsages;
 }
 
 ReportGenerator.prototype.insertSubInfo = function(target, template, bullet, color, name, percentVal) {
@@ -93,6 +109,7 @@ ReportGenerator.prototype.insertSubInfo = function(target, template, bullet, col
 
 ReportGenerator.prototype.generateFullReport = function() {
 	this.generateKeyStatistics();
+	this.generateComparePast();
 
 	var combinedCurrentReadings = {};
 	$.each(this.groupedSourceInfos, function(groupIdx, info) {
@@ -352,6 +369,59 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 			}
 		});
 		
+	});
+}
+
+ReportGenerator.prototype.generateComparePast = function() {
+	var reportGenThis = this;
+	var currentTotalUsage = this.sumUpUsages[0];
+	var lastTotalUsage = this.sumUpUsages[1];
+	var pastDiffPercentText, pastDiffPercentSuffix;
+	if (lastTotalUsage === 0) {
+		pastDiffPercentText = "-";
+		pastDiffPercentSuffix = "";
+		$(".compare-past-desc").addClass('invalid-saving');
+		$(".compare-past-desc").removeClass('positive-saving');
+		$(".compare-past-desc").removeClass('negative-saving');
+	} else {
+		var pastDiffPercent = (currentTotalUsage-lastTotalUsage)/lastTotalUsage*100;
+		pastDiffPercentText = parseFloat(Utils.fixed1DecIfLessThan10(Math.abs(pastDiffPercent)));
+		if (pastDiffPercent >= 0) {
+			pastDiffPercentSuffix = "more";
+			$(".compare-past-desc").addClass("negative-saving");
+			$(".compare-past-desc").removeClass("positive-saving");
+		} else {
+			pastDiffPercentSuffix = "less";
+			$(".compare-past-desc").addClass("positive-saving");
+			$(".compare-past-desc").removeClass("negative-saving");
+		}
+
+		$(".compare-past-desc").removeClass("invalid-saving");
+	}
+	$(".compare-past-percent").text(pastDiffPercentText);
+	$(".compare-past-percent-suffix").text(pastDiffPercentSuffix);
+
+	var maxUsage = Math.max.apply(Math, this.sumUpUsages);
+	$(".compare-past-basic-info .compare-past-bar-container").each(function (eleIdx) {
+		var usageIdx = reportGenThis.sumUpUsages.length-1-eleIdx;
+		var usageVal = reportGenThis.sumUpUsages[usageIdx];
+		if (usageVal > 0) {
+			var eleHeight = usageVal/maxUsage*100;
+			$(this).find(".compare-past-bar").css("height", eleHeight*0.9+"%");
+			$(this).find(".compare-past-bar-val").css("bottom", eleHeight*0.9+"%")
+			.text(Utils.formatWithCommas(usageVal.toFixed(0)));
+			$(this).show();
+		} else {
+			$(this).hide();
+		}
+	});
+
+	var barNameEles = $(".compare-past-bar-name");
+	var lastPeriodDts = this.genConsecutiveLasts(5, this.currentDt);
+	$.each(lastPeriodDts, function(periodIdx, periodUnix) {
+		var periodDt = moment.unix(periodUnix).tz(reportGenThis.timezone);
+		var barNameEleIdx = lastPeriodDts.length-1-periodIdx;
+		$(barNameEles[barNameEleIdx]).text(periodDt.format("MMM").toUpperCase());
 	});
 }
 

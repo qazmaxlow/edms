@@ -143,6 +143,26 @@ def __transform_to_daily_overnight_readings(source_readings, timezone, night_tim
 
 	return result
 
+def __get_sum_up_usage_within_periods(source_ids, periods):
+	period_dts = map(lambda timestamp: Utils.utc_dt_from_utc_timestamp(timestamp), periods)
+
+	start_dt = period_dts[-1]
+	end_dt = period_dts[0]
+	source_readings = SourceReadingDay.objects(source_id__in=source_ids, datetime__gte=start_dt, datetime__lt=end_dt)
+
+	results = [0]*(len(periods)-1)
+	for source_reading in source_readings:
+		reading_dt = pytz.utc.localize(source_reading.datetime)
+
+		for period_idx in xrange(0,len(period_dts)-1):
+			bound_start = period_dts[period_idx+1]
+			bound_end = period_dts[period_idx]
+			if reading_dt >= bound_start and reading_dt < bound_end:
+				results[period_idx] += source_reading.value
+				break
+
+	return results
+
 @permission_required
 def report_data_view(request, system_code=None):
 	start_dt_timestamp = int(request.POST.get('start_dt'))
@@ -154,6 +174,7 @@ def report_data_view(request, system_code=None):
 	last_same_period_end_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('last_same_period_end_dt')))
 	last_start_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('last_start_dt')))
 	last_end_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('last_end_dt')))
+	consecutive_lasts = json.loads(request.POST.get('consecutive_lasts'))
 
 	systems = System.get_systems_within_root(system_code)
 	current_system = systems[0]
@@ -234,6 +255,8 @@ def report_data_view(request, system_code=None):
 							co2_unit_rate_code, timestamp, val, co2_unit_rates) + target_info.get("currentTotalCo2", 0)
 						target_info["currentTotalMoney"] = calculation.transform_reading(
 							money_unit_rate_code, timestamp, val, money_unit_rates) + target_info.get("currentTotalMoney", 0)
+					elif name == "lastReadings":
+						target_info["lastTotalEnergy"] = val + target_info.get("lastTotalEnergy", 0)
 
 	current_system_timezone = pytz.timezone(current_system.timezone)
 	overnight_timestamp_bounds = reduce(
@@ -254,10 +277,12 @@ def report_data_view(request, system_code=None):
 					overnight_name = "overnight"+name
 					target_info[overnight_name][timestamp] = val + target_info[overnight_name].get(timestamp, 0)
 
-	total_energy = 0 
+	total_energy = 0
+	last_total_energy = 0
 	all_holidays = current_system.get_all_holidays(timestamp_info)
 	for info in grouped_source_infos:
 		total_energy += info['currentTotalEnergy']
+		last_total_energy += info['lastTotalEnergy']
 		calculate_info = [
 			{'targetReadings': 'currentReadings', 'keyPrefix': 'current'},
 			{'targetReadings': 'lastReadings', 'keyPrefix': 'last'},
@@ -293,9 +318,14 @@ def report_data_view(request, system_code=None):
 	saving_info["co2"] = calculation.transform_reading(co2_unit_code, start_dt_timestamp, energy_saving, co2_unit_rates)
 	saving_info["money"] = calculation.transform_reading(money_unit_code, start_dt_timestamp, energy_saving, money_unit_rates)
 
+	sum_up_usages = __get_sum_up_usage_within_periods(source_ids, consecutive_lasts)
+	sum_up_usages.insert(0, total_energy)
+	sum_up_usages.insert(1, last_total_energy)
+
 	result = {}
 	result['savingInfo'] = saving_info
 	result['holidays'] = [holiday.strftime("%Y-%m-%d") for holiday in all_holidays]
+	result['sumUpUsages'] = sum_up_usages
 
 	for info in grouped_source_infos:
 		for will_remove_data in ['beginningReadings', 'lastSamePeriodReadings',

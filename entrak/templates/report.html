@@ -123,7 +123,8 @@ $(function() {
 
 	updateReportName();
 
-	report.reportGenerator = new ReportGenerator(report.entrakSystem.systemTree, report.timezone);
+	report.reportGenerator = new ReportGenerator(report.entrakSystem.systemTree, report.timezone,
+		ReportGenerator.REPORT_TYPE_MONTH);
 	if ("currentDt" in report) {
 		report.reportGenerator.getReportData(report.currentDt, function(data) {
 			report.reportGenerator.assignData(data);
@@ -324,6 +325,66 @@ $(function() {
 			</div>
 			<div style="clear: both;"></div>
 		</div>
+	</div>
+</div>
+
+<div class="report-component">
+	<div class="report-component-header">HOW MUCH MORE / LESS DID WE USE COMPARED TO LAST MONTH</div>
+	<hr class="report-component-separator">
+	<div class="compare-past-basic-info">
+		<div class="compare-past-desc">Your energy consumption this<br>month was 
+			<span>
+				<span class="compare-past-percent"></span>
+				<span class="percent-symbol">%</span>
+				<span class="compare-past-percent-suffix"></span>
+			</span> 
+			than<br> it was last month. <span class="footnote-sybmol">**</span>
+		</div>
+		<div class="compare-past-chart-info">
+			<div class="compare-past-chart-title">Total energy consumption for the last 6 months</div>
+			<hr>
+			<div class="compare-past-chart-subtitle">(kWh)</div>
+			<hr>
+			<div class="compare-past-chart">
+				<div class="compare-past-bar-container">
+					<div class="compare-past-bar-val"></div>
+					<div class="compare-past-bar"></div>
+				</div>
+				<div class="compare-past-bar-container">
+					<div class="compare-past-bar-val"></div>
+					<div class="compare-past-bar"></div>
+				</div>
+				<div class="compare-past-bar-container">
+					<div class="compare-past-bar-val"></div>
+					<div class="compare-past-bar"></div>
+				</div>
+				<div class="compare-past-bar-container">
+					<div class="compare-past-bar-val"></div>
+					<div class="compare-past-bar"></div>
+				</div>
+				<div class="compare-past-bar-container">
+					<div class="compare-past-bar-val"></div>
+					<div class="compare-past-bar"></div>
+				</div>
+				<div class="compare-past-bar-container">
+					<div class="compare-past-bar-val"></div>
+					<div class="compare-past-bar"></div>
+				</div>
+			</div>
+		</div>
+		<hr>
+		<div class="compare-past-bar-name-container">
+			<span class="compare-past-bar-name"></span>
+			<span class="compare-past-bar-name"></span>
+			<span class="compare-past-bar-name"></span>
+			<span class="compare-past-bar-name"></span>
+			<span class="compare-past-bar-name"></span>
+			<span class="compare-past-bar-name"></span>
+		</div>
+		<div>** Total energy consumption for the last 6 months</div>
+	</div>
+	<div class="report-component-footer">
+		<div class="hide-details-btn btn-down">HIDE DETAILS</div>
 	</div>
 </div>
 
