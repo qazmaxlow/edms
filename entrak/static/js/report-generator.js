@@ -150,7 +150,6 @@ ReportGenerator.prototype.getReportData = function(currentDt, callbackFunc) {
 		url: "../report_data/",
 		data: requestData,
 	}).done(function(data) {
-		console.log(data);
 		callbackFunc(data);
 	});
 }
@@ -381,6 +380,9 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 		var targetKey = donutInfo.targetKey;
 		var subInfoContainer = $(donutInfo.subInfoContainerSel);
 		var otherInfoContainer = $(donutInfo.otherInfoContainerSel);
+
+		subInfoContainer.empty();
+		otherInfoContainer.empty();
 
 		transformedDatas.sort(function(a, b) {
 			return b[donutInfo.sortVal]-a[donutInfo.sortVal];
@@ -770,6 +772,8 @@ ReportGenerator.prototype._insertCalendarSubInfo = function(eleSel, classIdPrefi
 	var detailContainer = $(eleSel);
 	var subInfoTemplate = $("#sub-calendar-info-template").html();
 	Mustache.parse(subInfoTemplate);
+
+	detailContainer.empty();
 
 	$.each(this.groupedSourceInfos, function(groupIdx, info) {
 		var classIdentifier = classIdPrefix+groupIdx;

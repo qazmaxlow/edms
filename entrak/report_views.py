@@ -282,7 +282,11 @@ def report_data_view(request, system_code=None):
 	all_holidays = current_system.get_all_holidays(timestamp_info)
 	for info in grouped_source_infos:
 		total_energy += info['currentTotalEnergy']
+
+		if 'lastTotalEnergy' not in info:
+			info['lastTotalEnergy'] = 0
 		last_total_energy += info['lastTotalEnergy']
+		
 		calculate_info = [
 			{'targetReadings': 'currentReadings', 'keyPrefix': 'current'},
 			{'targetReadings': 'lastReadings', 'keyPrefix': 'last'},

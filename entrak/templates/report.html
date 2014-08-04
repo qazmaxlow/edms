@@ -133,6 +133,7 @@ $(function() {
 	{% endif %}
 
 	updateReportName();
+	$(".report-component").hide();
 
 	report.reportGenerator = new ReportGenerator(report.entrakSystem.systemTree, report.timezone,
 		ReportGenerator.REPORT_TYPE_MONTH);
@@ -140,8 +141,21 @@ $(function() {
 		report.reportGenerator.getReportData(report.currentDt, function(data) {
 			report.reportGenerator.assignData(data);
 			report.reportGenerator.generateFullReport();
+			$(".report-component").fadeIn(600);
 		});
 	}
+
+	$(".summary-date-col").click(function() {
+		$(".report-component").fadeOut(600);
+		var targetDt = moment.unix(parseInt($(this).attr("dt_timestamp")));
+		report.currentDt = targetDt;
+		report.reportGenerator.getReportData(report.currentDt, function(data) {
+			report.reportGenerator.assignData(data);
+			report.reportGenerator.generateFullReport();
+			$(".report-component").fadeIn(600);
+		});
+		updateReportName();
+	});
 
 	$(".hide-details-btn").click(function() {
 		$(this).toggleClass('btn-down');
@@ -174,7 +188,7 @@ $(function() {
 			<div id="monthly-report-content">
 				{% for summary in monthly_summary %}
 				<div>
-					<span class="summary-date-col">{{summary.dt|date:"M Y"}}</span>
+					<span class="summary-date-col" dt_timestamp="{{summary.timestamp}}">{{summary.dt|date:"M Y"}}</span>
 					<span>{{summary.energy_usage|floatformat:"0"|intcomma}}</span>
 					<span>{{summary.co2_usage|floatformat:"0"|intcomma}}</span>
 					<span>{{summary.money_usage|floatformat:"0"|intcomma}}</span>
