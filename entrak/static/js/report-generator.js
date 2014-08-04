@@ -21,11 +21,106 @@ ReportGenerator.OTHER_INFO_COLOR = '#000000';
 ReportGenerator.FIRST_SPLIT_PIE_COLOR = '#7ACB39';
 ReportGenerator.SECOND_SPLIT_PIE_COLOR = '#3F952C';
 
+ReportGenerator.MAIN_SERIES_BASE_OPTIONS = {
+	lines: {
+		lineWidth: 2.5,
+		show: true,
+	},
+	points: {
+		radius: 4,
+		symbol: 'circle',
+		show: true,
+	},
+};
+ReportGenerator.MAIN_PLOT_OPTIONS = {
+	legend: {
+		show: true,
+		noColumns: 2,
+		backgroundColor: "#F4F3F4",
+	},
+	yaxis: {
+		font: {
+			size: 12,
+			weight: "bold",
+			family: "sans-serif",
+			color: "#5B5B5B"
+		},
+	},
+	xaxis: {
+		tickLength: 0,
+		font: {
+			size: 12,
+			weight: "bold",
+			family: "sans-serif",
+			color: "#5B5B5B"
+		},
+	},
+	grid: {
+		borderWidth: {
+			'top': 0,
+			'right': 0,
+			'bottom': 2,
+			'left': 2,
+		},
+		borderColor: {
+			'bottom': "#FFFFFF",
+			'left': "#FFFFFF",
+		},
+	},
+}
+
+ReportGenerator.SUB_INFO_SERIES_BASE_OPTIONS = {
+	lines: {
+		lineWidth: 1.5,
+		show: true,
+	},
+};
+ReportGenerator.SUB_INFO_PLOT_OPTIONS = {
+	legend: {
+		show: true,
+		noColumns: 2,
+		backgroundColor: "#F4F3F4",
+	},
+	yaxis: {
+		tickLength: 0,
+		font: {
+			size: 10,
+			weight: "bold",
+			family: "sans-serif",
+			color: "#5B5B5B"
+		},
+	},
+	xaxis: {
+		tickLength: 0,
+		font: {
+			size: 10,
+			weight: "bold",
+			family: "sans-serif",
+			color: "#5B5B5B"
+		},
+	},
+	grid: {
+		borderWidth: {
+			'top': 0,
+			'right': 0,
+			'bottom': 2,
+			'left': 2,
+		},
+		borderColor: {
+			'bottom': "#FFFFFF",
+			'left': "#FFFFFF",
+		},
+	},
+}
+
+ReportGenerator.LINE_CHART_CURRENT_COLOR = "#047FA1";
+ReportGenerator.LINE_CHART_LAST_COLOR = "#EDBA3C";
+
 ReportGenerator.prototype.getReportData = function(currentDt, callbackFunc) {
 	var reportGenThis = this;
 	this.currentDt = currentDt;
 	this.currentEndDt = moment(this.currentDt).add('M', 1);
-	var	lastStartDt = reportGenThis.genLastDt(this.currentDt, this.reportType);
+	var	lastStartDt = reportGenThis.genLastDt(this.currentDt);
 
 	var firstRecordDt = moment.unix(this.systemTree.data.firstRecord).tz(this.timezone);
 	if (firstRecordDt.date() === 1) {
@@ -372,6 +467,111 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 	});
 }
 
+ReportGenerator.prototype.transformXCoordinate = function(timestamp) {
+	var result;
+	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
+		result = moment.unix(timestamp).tz(this.timezone).date();
+	}
+
+	return result;
+}
+
+ReportGenerator.prototype.genCompareSeriesFromReadings = function(readings, options, label, color) {
+	var reportGenThis = this;
+	var series = $.extend(true, {data: []}, options);
+	$.each(readings, function(timestamp, value) {
+		series.data.push([reportGenThis.transformXCoordinate(timestamp), value]);
+	});
+	series.data.sort(function (a, b) {
+		return a[0]-b[0];
+	});
+	series.label = label;
+	series.color = color;
+	if ("points" in series) {
+		series.points.fillColor = color;
+	}
+
+	return series;
+}
+
+ReportGenerator.prototype.genXAxisOptions = function() {
+	options = {};
+	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
+		options.min = 0;
+		options.max = 31;
+		options.ticks = [];
+		for (var i = options.min; i < options.max; i+=2) {
+			options.ticks.push([i, i]);
+		}
+	}
+
+	return options;
+}
+
+ReportGenerator.prototype.genComparePastLabel = function(targetDt) {
+	var result;
+
+	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
+		result = targetDt.format("MMM");
+	}
+
+	return result;
+}
+
+ReportGenerator.prototype.plotCompareLineChart = function(targetEleSel, currentReadings, lastReadings, plotOptions, seriesOptions) {
+	var reportGenThis = this;
+
+	var currentSeries = this.genCompareSeriesFromReadings(currentReadings,
+		seriesOptions,
+		this.genComparePastLabel(this.currentDt),
+		ReportGenerator.LINE_CHART_CURRENT_COLOR);
+	var lastSeries = this.genCompareSeriesFromReadings(lastReadings,
+		seriesOptions,
+		this.genComparePastLabel(this.genLastDt(this.currentDt)),
+		ReportGenerator.LINE_CHART_LAST_COLOR);
+
+	var xAxisOptions = this.genXAxisOptions();
+	plotOptions.xaxis.min = xAxisOptions.min;
+	plotOptions.xaxis.max = xAxisOptions.max;
+	plotOptions.xaxis.ticks = xAxisOptions.ticks;
+
+	$(targetEleSel).empty();
+	$(targetEleSel).plot([lastSeries, currentSeries], plotOptions);
+}
+
+ReportGenerator.prototype.insertComparePastSubInfo = function(template, info, classIdentifier) {
+	var titleText, infoClass;
+	if (info.lastTotalEnergy === 0) {
+		titleText = "-";
+		infoClass = "invalid-saving";
+	} else {
+		titleText = "Overall: ";
+		var pastDiffPercent = (info.currentTotalEnergy-info.lastTotalEnergy)/info.lastTotalEnergy*100;
+		titleText += parseFloat(Utils.fixed1DecIfLessThan10(Math.abs(pastDiffPercent)));
+		if (pastDiffPercent >= 0) {
+			infoClass = "negative-saving";
+			titleText += "% more";
+		} else {
+			infoClass = "positive-saving";
+			titleText += "% less";
+		}
+		titleText += " energy than last month";
+	}
+
+	var name = ("sourceName" in info) ? info.sourceName : info.system.data.name;
+	name.toUpperCase();
+
+	var templateInfo = {
+		classIdentifier: classIdentifier,
+		name: name,
+		lineChartTitle: titleText,
+		infoClass: infoClass,
+	};
+
+	var subInfoHtml = Mustache.render(template, templateInfo);
+	$(".compare-past-sub-info-container").append(subInfoHtml);
+}
+
 ReportGenerator.prototype.generateComparePast = function() {
 	var reportGenThis = this;
 	var currentTotalUsage = this.sumUpUsages[0];
@@ -421,7 +621,41 @@ ReportGenerator.prototype.generateComparePast = function() {
 	$.each(lastPeriodDts, function(periodIdx, periodUnix) {
 		var periodDt = moment.unix(periodUnix).tz(reportGenThis.timezone);
 		var barNameEleIdx = lastPeriodDts.length-1-periodIdx;
-		$(barNameEles[barNameEleIdx]).text(periodDt.format("MMM").toUpperCase());
+		$(barNameEles[barNameEleIdx]).text(reportGenThis.genComparePastLabel(periodDt).toUpperCase());
+	});
+
+	var combinedCurrentReadings = {};
+	var combinedLastReadings = {};
+	$.each(this.groupedSourceInfos, function(groupIdx, info) {
+		$.each(info.currentReadings, function(timestamp, value) {
+			if (timestamp in combinedCurrentReadings) {
+				combinedCurrentReadings[timestamp] += value;
+			} else {
+				combinedCurrentReadings[timestamp] = value;
+			}
+		});
+		$.each(info.lastReadings, function(timestamp, value) {
+			if (timestamp in combinedLastReadings) {
+				combinedLastReadings[timestamp] += value;
+			} else {
+				combinedLastReadings[timestamp] = value;
+			}
+		});
+	});
+	this.plotCompareLineChart(".detail-container>div.compare-past-line-chart",
+		combinedCurrentReadings, combinedLastReadings,
+		ReportGenerator.MAIN_PLOT_OPTIONS, ReportGenerator.MAIN_SERIES_BASE_OPTIONS);
+
+	$(".compare-past-sub-info-container").empty();
+	var subInfoTemplate = $("#compare-past-sub-info-template").html();
+	Mustache.parse(subInfoTemplate);
+	$.each(this.groupedSourceInfos, function(groupIdx, info) {
+		var classIdentifier = "compare-past-sub-info-"+groupIdx;
+		reportGenThis.insertComparePastSubInfo(subInfoTemplate, info, classIdentifier);
+
+		reportGenThis.plotCompareLineChart("."+classIdentifier+" .compare-past-line-chart",
+			info.currentReadings, info.lastReadings,
+			ReportGenerator.SUB_INFO_PLOT_OPTIONS, ReportGenerator.SUB_INFO_SERIES_BASE_OPTIONS);
 	});
 }
 

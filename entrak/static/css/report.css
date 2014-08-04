@@ -429,7 +429,7 @@
 	margin-right: auto;
 	margin-top: 15px;
 }
-.sub-info-name {
+.key-percent-sub-info .sub-info-name {
 	position: relative;
 	left: 3px;
 }
@@ -516,6 +516,68 @@
 	border-top-right-radius: 22px;
 	-moz-border-top-left-radius: 22px;
 	-moz-border-top-right-radius: 22px;
+}
+
+#compare-past .detail-container {
+	background-color: #F5F5F5;
+	position: relative;
+}
+
+.line-chart-title-container {
+	text-align: center;
+}
+.line-chart-title {
+	font-size: 9pt;
+	border-bottom: 1px solid;
+}
+
+.detail-container>div.compare-past-line-chart {
+	width: 885px;
+	height: 420px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.detail-container>div.compare-past-line-chart .legendLabel {
+	font-size: 8pt;
+}
+
+.y-axis-title {
+	position: absolute;
+	top: 230px;
+	left: 14px;
+	font-size: 10pt;
+	transform:rotate(-90deg);
+	-ms-transform:rotate(-90deg);
+	-webkit-transform:rotate(-90deg);
+}
+.x-axis-title {
+	font-size: 10pt;
+	text-align: center;
+	margin-top: 10px;
+	margin-bottom: 30px;
+}
+
+.compare-past-sub-info {
+	display: inline-block;
+	position: relative;
+	float: left;
+	width: 50%;
+}
+.compare-past-sub-info-container .sub-info-name {
+	font-size: 10pt;
+}
+.compare-past-sub-info .compare-past-line-chart {
+	width: 450px;
+	height: 250px;
+	margin-left: 25px;
+}
+.compare-past-sub-info .legendLabel {
+	font-size: 9pt;
+}
+.compare-past-sub-info .y-axis-title {
+	top: 45px;
+	left: 60px;
+	font-size: 7pt;
 }
 
 .calendar-component {

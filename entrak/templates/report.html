@@ -91,6 +91,17 @@
 </div>
 </script>
 
+<script id="compare-past-sub-info-template" type="x-tmpl-mustache">
+<div class="compare-past-sub-info {% templatetag openvariable %}classIdentifier{% templatetag closevariable %} {% templatetag openvariable %}infoClass{% templatetag closevariable %}">
+	<div class="sub-info-name">{% templatetag openvariable %}name{% templatetag closevariable %}</div>
+	<div class="line-chart-title">{% templatetag openvariable %}lineChartTitle{% templatetag closevariable %}</div>
+	<hr>
+	<div class="compare-past-line-chart"></div>
+	<span class="y-axis-title">kWh</span>
+	<div class="x-axis-title">Day of the month</div>
+</div>
+</script>
+
 <script type="text/javascript">
 
 var report = {};
@@ -134,6 +145,7 @@ $(function() {
 
 	$(".hide-details-btn").click(function() {
 		$(this).toggleClass('btn-down');
+		$(this).parent().parent().find(".detail-container").slideToggle();
 	})
 });
 </script>
@@ -328,7 +340,7 @@ $(function() {
 	</div>
 </div>
 
-<div class="report-component">
+<div id="compare-past" class="report-component">
 	<div class="report-component-header">HOW MUCH MORE / LESS DID WE USE COMPARED TO LAST MONTH</div>
 	<hr class="report-component-separator">
 	<div class="compare-past-basic-info">
@@ -385,6 +397,20 @@ $(function() {
 	</div>
 	<div class="report-component-footer">
 		<div class="hide-details-btn btn-down">HIDE DETAILS</div>
+	</div>
+
+	<div class="detail-container">
+		<div class="detail-split-title">WHEN DID WE ARCHIEVE OUR SAVINGS?</div>
+		<hr>
+		<div class="line-chart-title-container">
+			<span class="line-chart-title">Total consumption by days</span>
+		</div>
+		<div class="compare-past-line-chart"></div>
+		<span class="y-axis-title">kWh</span>
+		<div class="x-axis-title">Day of the month</div>
+		<hr>
+		<div class="compare-past-sub-info-container"></div>
+		<div style="clear: both;"></div>
 	</div>
 </div>
 
