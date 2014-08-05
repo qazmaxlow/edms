@@ -57,6 +57,13 @@ class Utils:
 		return target_dt.replace(year=result_year, month=result_month, day=result_day)
 
 	@staticmethod
+	def add_year(target_dt, val):
+		result_year = target_dt.year + val
+		result_day = min(target_dt.day, calendar.monthrange(result_year, target_dt.month)[1])
+
+		return target_dt.replace(year=result_year, day=result_day)
+
+	@staticmethod
 	def gen_end_dt(range_type, start_dt, tz_offset):
 		if range_type == Utils.RANGE_TYPE_HOUR:
 			end_dt = start_dt + datetime.timedelta(hours=1)

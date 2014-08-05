@@ -1,4 +1,4 @@
-.summary-date-col, #save-report-btn, .hide-details-btn {
+.summary-date-col, .save-report-btn, .hide-details-btn {
 	cursor: pointer;
 	cursor: hand;
 }
@@ -126,7 +126,7 @@
 	margin-left: auto;
 	margin-right: auto;
 }
-#save-report-btn{
+.save-report-btn{
 	position: absolute;
 	width: 72px;
 	height: 18px;
@@ -764,4 +764,8 @@
 
 .bottom-space {
 	height: 30px;
+}
+
+.download-pdf-form {
+	display: none;
 }

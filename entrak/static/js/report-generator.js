@@ -8,7 +8,13 @@ function ReportGenerator(systemTree, timezone, reportType) {
 	this.sumUpUsages = null;
 	this.currentDt = null;
 	this.currentEndDt = null;
-	this.beginningStartDt = null;
+
+	var firstRecordDt = moment.unix(this.systemTree.data.firstRecord).tz(this.timezone);
+	if (firstRecordDt.date() === 1) {
+		this.beginningStartDt = moment(firstRecordDt).startOf('M');
+	} else {
+		this.beginningStartDt = moment(firstRecordDt).add('M', 1).startOf('M');
+	}
 };
 
 ReportGenerator.REPORT_TYPE_MONTH = 'month';
@@ -116,34 +122,21 @@ ReportGenerator.SUB_INFO_PLOT_OPTIONS = {
 ReportGenerator.LINE_CHART_CURRENT_COLOR = "#047FA1";
 ReportGenerator.LINE_CHART_LAST_COLOR = "#EDBA3C";
 
+ReportGenerator.prototype.updateDtInfo = function(startDt, endDt) {
+	this.currentDt = startDt;
+	this.currentEndDt = moment(this.currentDt).add('M', 1);
+}
+
 ReportGenerator.prototype.getReportData = function(currentDt, callbackFunc) {
 	var reportGenThis = this;
 	this.currentDt = currentDt;
 	this.currentEndDt = moment(this.currentDt).add('M', 1);
-	var	lastStartDt = reportGenThis.genLastDt(this.currentDt);
-
-	var firstRecordDt = moment.unix(this.systemTree.data.firstRecord).tz(this.timezone);
-	if (firstRecordDt.date() === 1) {
-		this.beginningStartDt = moment(firstRecordDt).startOf('M');
-	} else {
-		this.beginningStartDt = moment(firstRecordDt).add('M', 1).startOf('M');
-	}
-	var beginningEndDt = moment(this.beginningStartDt).add('M', 1);
-
-	var lastSamePeriodStartDt = moment(this.currentDt).subtract('y', 1);
-	var lastSamePeriodEndDt = moment(this.currentEndDt).subtract('y', 1);
 
 	var requestData = {
-		start_dt: this.currentDt.unix(),
-		end_dt: this.currentEndDt.unix(),
-		beginning_start_dt: this.beginningStartDt.unix(),
-		beginning_end_dt: beginningEndDt.unix(),
-		last_same_period_start_dt: lastSamePeriodStartDt.unix(),
-		last_same_period_end_dt: lastSamePeriodEndDt.unix(),
-		last_start_dt: lastStartDt.unix(),
-		last_end_dt: this.currentDt.unix(),
-		consecutive_lasts: JSON.stringify(this.genConsecutiveLasts(4, lastStartDt)),
-	};
+		report_type: this.reportType,
+		start_timestamp: this.currentDt.unix(),
+		end_timestamp: this.currentEndDt.unix(),
+	}
 
 	$.ajax({
 		type: "POST",
@@ -305,7 +298,7 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 			templateInfo[key] = Utils.formatWithCommas(value.toFixed(0));
 		});
 
-		if (info.systemCode === report.entrakSystem.systemTree.data.code) {
+		if (info.systemCode === reportGenThis.systemTree.data.code) {
 			templateInfo.usageTypeName = info.sourceName;
 			templateInfo.order = info.sourceOrder;
 		} else {
@@ -336,7 +329,7 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 			totalEnergy: info.currentTotalEnergy,
 			totalCo2: info.currentTotalCo2,
 			totalMoney: info.currentTotalMoney};
-		dataInfo.name = (info.systemCode === report.entrakSystem.systemTree.data.code) ? info.sourceName : info.system.data.name;
+		dataInfo.name = (info.systemCode === reportGenThis.systemTree.data.code) ? info.sourceName : info.system.data.name;
 		if (infoIdx < reportGenThis.groupedSourceInfos.length-1) {
 			dataInfo.energyPercent = parseFloat(Utils.fixed1DecIfLessThan10((info.currentTotalEnergy/totalEnergyUsage)*100));
 			dataInfo.co2Percent = parseFloat(Utils.fixed1DecIfLessThan10((info.currentTotalCo2/totalCo2Usage)*100));
@@ -910,7 +903,7 @@ ReportGenerator.prototype.generateCalendarReport = function(targetSel, combinedR
 
 ReportGenerator.prototype.generateWeekdayReport = function(combinedReadings) {
 	var reportGenThis = this;
-	var lowestUsage = Number.MAX_SAFE_INTEGER;
+	var lowestUsage = null;
 	var lowestDt = null;
 	var highestUsage = 0;
 	var highestDt = null;
@@ -922,7 +915,9 @@ ReportGenerator.prototype.generateWeekdayReport = function(combinedReadings) {
 				highestUsage = val;
 				highestDt = dt;
 			}
-			if (val < lowestUsage) {
+			if (lowestUsage === null) {
+				lowestUsage = val;
+			} else if (val < lowestUsage) {
 				lowestUsage = Math.min(val, lowestUsage);
 				lowestDt = dt;
 			}
@@ -943,7 +938,7 @@ ReportGenerator.prototype.generateWeekdayReport = function(combinedReadings) {
 
 ReportGenerator.prototype.generateWeekendReport = function(combinedReadings) {
 	var reportGenThis = this;
-	var lowestUsage = Number.MAX_SAFE_INTEGER;
+	var lowestUsage = null;
 	var lowestDt = null;
 	var highestUsage = 0;
 	var highestDt = null;
@@ -955,7 +950,9 @@ ReportGenerator.prototype.generateWeekendReport = function(combinedReadings) {
 				highestUsage = val;
 				highestDt = dt;
 			}
-			if (val < lowestUsage) {
+			if (lowestUsage === null) {
+				lowestUsage = val;
+			} else if (val < lowestUsage) {
 				lowestUsage = Math.min(val, lowestUsage);
 				lowestDt = dt;
 			}
@@ -974,7 +971,7 @@ ReportGenerator.prototype.generateWeekendReport = function(combinedReadings) {
 
 ReportGenerator.prototype.generateOvernightReport = function(combinedReadings) {
 	var reportGenThis = this;
-	var lowestUsage = Number.MAX_SAFE_INTEGER;
+	var lowestUsage = null;
 	var lowestDt = null;
 	var highestUsage = 0;
 	var highestDt = null;
@@ -985,7 +982,10 @@ ReportGenerator.prototype.generateOvernightReport = function(combinedReadings) {
 			highestUsage = val;
 			highestDt = dt;
 		}
-		if (val < lowestUsage) {
+
+		if (lowestUsage === null) {
+			lowestUsage = val;
+		} else if (val < lowestUsage) {
 			lowestUsage = Math.min(val, lowestUsage);
 			lowestDt = dt;
 		}

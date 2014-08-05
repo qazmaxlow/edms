@@ -1,0 +1,44 @@
+{% extends "report.html" %}
+
+{% load entrak_extras %}
+{% load static %}
+{% load humanize %}
+
+{% block extra_head %}
+{{block.super}}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/report-pdf.css' %}">
+{% endblock %}
+
+{% block extra_script %}
+
+{% include "report_inner_template.html" %}
+
+<script type="text/javascript">
+
+var report = {};
+
+$(function() {
+	report.entrakSystem = new EntrakSystem();
+	report.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
+
+	report.currentReportType = '{{report_type}}';
+	report.timezone = '{{systems.0.timezone}}';
+	report.currentDt =  moment.unix({{start_timestamp}}).tz(report.timezone);
+
+	// updateReportName();
+
+	report.reportGenerator = new ReportGenerator(report.entrakSystem.systemTree, report.timezone,
+		report.currentReportType);
+	report.reportGenerator.updateDtInfo(report.currentDt, null);
+	report.reportGenerator.assignData(JSON.parse("{{report_data}}"));
+	report.reportGenerator.generateFullReport();
+});
+</script>
+{% endblock %}
+
+{% block content %}
+
+{% include "report_main_content_pdf.html" %}
+
+{% endblock %}

@@ -1,3 +1,4 @@
+import os
 import sys
 import pytz
 import datetime
@@ -5,10 +6,17 @@ import copy
 import json
 import operator
 import calendar
+import pdfkit
+import uuid
+from django.http import HttpResponse
 from django.shortcuts import render_to_response
+from django.core.urlresolvers import reverse
+from django.core.context_processors import csrf
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.db.models import Q
+from django.utils.html import escapejs
 from mongoengine import Q as MongoQ
+from entrak.settings import DOMAIN_URL, MEDIA_ROOT
 from system.models import System
 from unit.models import UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
 from baseline.models import BaselineUsage
@@ -17,6 +25,9 @@ from egauge.models import SourceReadingMonth, SourceReadingDay, SourceReadingHou
 from utils.auth import permission_required
 from utils.utils import Utils
 from utils import calculation
+
+TEMP_MEDIA_DIR = os.path.join(MEDIA_ROOT, 'temp')
+REPORT_TYPE_MONTH = 'month'
 
 @permission_required
 @ensure_csrf_cookie
@@ -64,6 +75,7 @@ def report_view(request, system_code=None):
 
 	m = systems_info
 	m["monthly_summary"] = sorted(monthly_summary, key=lambda x: x['timestamp'], reverse=True)
+	m.update(csrf(request))
 
 	return render_to_response('report.html', m)
 
@@ -143,14 +155,12 @@ def __transform_to_daily_overnight_readings(source_readings, timezone, night_tim
 
 	return result
 
-def __get_sum_up_usage_within_periods(source_ids, periods):
-	period_dts = map(lambda timestamp: Utils.utc_dt_from_utc_timestamp(timestamp), periods)
-
+def __get_sum_up_usage_within_periods(source_ids, period_dts):
 	start_dt = period_dts[-1]
 	end_dt = period_dts[0]
 	source_readings = SourceReadingDay.objects(source_id__in=source_ids, datetime__gte=start_dt, datetime__lt=end_dt)
 
-	results = [0]*(len(periods)-1)
+	results = [0]*(len(period_dts)-1)
 	for source_reading in source_readings:
 		reading_dt = pytz.utc.localize(source_reading.datetime)
 
@@ -163,32 +173,70 @@ def __get_sum_up_usage_within_periods(source_ids, periods):
 
 	return results
 
-@permission_required
-def report_data_view(request, system_code=None):
-	start_dt_timestamp = int(request.POST.get('start_dt'))
-	start_dt = Utils.utc_dt_from_utc_timestamp(start_dt_timestamp)
-	end_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('end_dt')))
-	beginning_start_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('beginning_start_dt')))
-	beginning_end_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('beginning_end_dt')))
-	last_same_period_start_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('last_same_period_start_dt')))
-	last_same_period_end_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('last_same_period_end_dt')))
-	last_start_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('last_start_dt')))
-	last_end_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('last_end_dt')))
-	consecutive_lasts = json.loads(request.POST.get('consecutive_lasts'))
+def __gen_report_last_dt(report_type, target_dt):
+	if report_type == REPORT_TYPE_MONTH:
+		result = Utils.add_month(target_dt, -1)
 
-	systems = System.get_systems_within_root(system_code)
+	return result
+
+def __gen_consecutive_lasts(report_type, target_dt, num_of_last):
+	result = []
+	result.append(target_dt)
+	next_dt = target_dt
+	for idx in xrange(num_of_last):
+		next_dt = __gen_report_last_dt(report_type, next_dt)
+		result.append(next_dt)
+
+	return result
+
+def __gen_report_dt_info(report_type, timezone, system_first_record, start_timestamp, end_timestamp):
+	dt_info = {}
+
+	start_dt = Utils.utc_dt_from_utc_timestamp(start_timestamp).astimezone(timezone)
+	dt_info['start_dt'] = start_dt
+
+	if report_type == REPORT_TYPE_MONTH:
+		end_dt = Utils.add_month(start_dt, 1)
+	dt_info['end_dt'] = end_dt
+
+	system_first_record = system_first_record.astimezone(timezone).replace(hour=0, minute=0, second=0, microsecond=0)
+	if system_first_record.day == 1:
+		beginning_start_dt = system_first_record
+	else:
+		beginning_start_dt = Utils.add_month(system_first_record.replace(day=1), 1)
+	dt_info['beginning_start_dt'] = beginning_start_dt
+	dt_info['beginning_end_dt'] = Utils.add_month(beginning_start_dt, 1)
+
+	dt_info['last_same_period_start_dt'] = Utils.add_year(start_dt, -1)
+	dt_info['last_same_period_end_dt'] = Utils.add_year(end_dt, -1)
+
+	last_start_dt = __gen_report_last_dt(report_type, start_dt)
+	dt_info['last_start_dt'] = last_start_dt
+	dt_info['last_end_dt'] = start_dt
+
+	dt_info['consecutive_lasts'] = __gen_consecutive_lasts(report_type, last_start_dt, 4)
+
+	return dt_info
+
+def __generate_report_data(systems, report_type, start_timestamp, end_timestamp):
 	current_system = systems[0]
-	sources = SourceManager.get_sources(current_system)
+	system_code = current_system.code
+	current_system_timezone = pytz.timezone(current_system.timezone)
 
+	dt_info = __gen_report_dt_info(report_type, current_system_timezone,
+		current_system.first_record, start_timestamp, end_timestamp)
+
+	sources = SourceManager.get_sources(current_system)
 	source_ids = [str(source.id) for source in sources]
 	timestamp_info = {
-		'currentReadings': {'start': start_dt, 'end': end_dt},
-		'beginningReadings': {'start': beginning_start_dt, 'end': beginning_end_dt},
+		'currentReadings': {'start': dt_info['start_dt'], 'end': dt_info['end_dt']},
+		'beginningReadings': {'start': dt_info['beginning_start_dt'], 'end': dt_info['beginning_end_dt']},
 	}
-	if last_same_period_start_dt >= current_system.first_record:
-		timestamp_info['lastSamePeriodReadings'] = {'start': last_same_period_start_dt, 'end': last_same_period_end_dt}
-	if last_start_dt >= current_system.first_record:
-		timestamp_info['lastReadings'] = {'start': last_start_dt, 'end': last_end_dt}
+	if dt_info['last_same_period_start_dt'] >= current_system.first_record:
+		timestamp_info['lastSamePeriodReadings'] = {'start': dt_info['last_same_period_start_dt'],
+			'end': dt_info['last_same_period_end_dt']}
+	if dt_info['last_start_dt'] >= current_system.first_record:
+		timestamp_info['lastReadings'] = {'start': dt_info['last_start_dt'], 'end': dt_info['last_end_dt']}
 	timestamp_bounds = reduce(
 		operator.or_,
 		[MongoQ(datetime__gte=info['start'], datetime__lt=info['end']) for (key, info) in timestamp_info.items()])
@@ -258,7 +306,6 @@ def report_data_view(request, system_code=None):
 					elif name == "lastReadings":
 						target_info["lastTotalEnergy"] = val + target_info.get("lastTotalEnergy", 0)
 
-	current_system_timezone = pytz.timezone(current_system.timezone)
 	overnight_timestamp_bounds = reduce(
 		operator.or_,
 		[MongoQ(
@@ -286,7 +333,7 @@ def report_data_view(request, system_code=None):
 		if 'lastTotalEnergy' not in info:
 			info['lastTotalEnergy'] = 0
 		last_total_energy += info['lastTotalEnergy']
-		
+
 		calculate_info = [
 			{'targetReadings': 'currentReadings', 'keyPrefix': 'current'},
 			{'targetReadings': 'lastReadings', 'keyPrefix': 'last'},
@@ -311,7 +358,7 @@ def report_data_view(request, system_code=None):
 		baselines = grouped_baselines[system.id]
 		baseline_daily_usages = BaselineUsage.transform_to_daily_usages(baselines, system_timezone)
 		total_baseline_energy += calculation.calculate_total_baseline_energy_usage(
-			start_dt.astimezone(system_timezone), end_dt.astimezone(system_timezone), baseline_daily_usages)
+			dt_info['start_dt'].astimezone(system_timezone), dt_info['end_dt'].astimezone(system_timezone), baseline_daily_usages)
 
 	saving_info = {}
 	unit_info = json.loads(current_system.unit_info)
@@ -319,10 +366,10 @@ def report_data_view(request, system_code=None):
 	money_unit_code = unit_info[MONEY_CATEGORY_CODE]
 	energy_saving = total_baseline_energy-total_energy
 	saving_info["energy"] = energy_saving/total_baseline_energy*100
-	saving_info["co2"] = calculation.transform_reading(co2_unit_code, start_dt_timestamp, energy_saving, co2_unit_rates)
-	saving_info["money"] = calculation.transform_reading(money_unit_code, start_dt_timestamp, energy_saving, money_unit_rates)
+	saving_info["co2"] = calculation.transform_reading(co2_unit_code, start_timestamp, energy_saving, co2_unit_rates)
+	saving_info["money"] = calculation.transform_reading(money_unit_code, start_timestamp, energy_saving, money_unit_rates)
 
-	sum_up_usages = __get_sum_up_usage_within_periods(source_ids, consecutive_lasts)
+	sum_up_usages = __get_sum_up_usage_within_periods(source_ids, dt_info['consecutive_lasts'])
 	sum_up_usages.insert(0, total_energy)
 	sum_up_usages.insert(1, last_total_energy)
 
@@ -337,4 +384,62 @@ def report_data_view(request, system_code=None):
 			info.pop(will_remove_data, None)
 	result['groupedSourceInfos'] = grouped_source_infos
 
+	return result
+
+@permission_required
+def report_data_view(request, system_code=None):
+	report_type = request.POST.get('report_type')
+	start_timestamp = int(request.POST.get('start_timestamp'))
+	end_timestamp = int(request.POST.get('end_timestamp'))
+
+	systems = System.get_systems_within_root(system_code)
+
+	result = __generate_report_data(systems, report_type, start_timestamp, end_timestamp)
+
 	return Utils.json_response(result)
+
+@permission_required
+def report_pdf_view(request, system_code=None):
+	start_timestamp = request.POST.get("start_timestamp")
+	end_timestamp = request.POST.get("end_timestamp", 0)
+	report_type = request.POST.get("report_type")
+
+	request_url = DOMAIN_URL + reverse('generate_report_pdf', kwargs={
+		'system_code': system_code,
+		'report_type': report_type,
+		'start_timestamp': start_timestamp,
+		'end_timestamp': end_timestamp,
+	})
+
+	report_pdf_name = datetime.datetime.now().strftime("%Y%m%d")
+	report_pdf_name += "-" + uuid.uuid4().hex[:10] + ".pdf"
+	report_pdf_path = os.path.join(TEMP_MEDIA_DIR, report_pdf_name)
+	pdf_options = {
+		"javascript-delay": '3000',
+		'quiet': '',
+		'margin-left': '18mm',
+		'page-size': 'A3',
+	}
+	pdfkit.from_url(request_url, report_pdf_path, options=pdf_options)
+
+	with open(report_pdf_path, 'rb') as f:
+		response = HttpResponse(f.read(), content_type='application/pdf')
+	response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+	os.remove(report_pdf_path)
+
+	return response
+
+def generate_report_pdf_view(request, system_code, report_type, start_timestamp, end_timestamp):
+	systems = System.get_systems_within_root(system_code)
+	start_timestamp = int(start_timestamp)
+	end_timestamp = int(end_timestamp)
+
+	m = {}
+	m['systems'] = systems
+	m["report_type"] = report_type
+	m["start_timestamp"] = start_timestamp
+	m["end_timestamp"] = end_timestamp
+
+	m["report_data"] = escapejs(json.dumps(__generate_report_data(systems, report_type, start_timestamp, end_timestamp)))
+
+	return render_to_response('generate_report_pdf.html', m)

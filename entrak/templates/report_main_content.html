@@ -1,0 +1,458 @@
+<div class="report-component">
+	<div class="report-component-header">WHAT ARE OUR KEY STATISTICS FOR THIS MONTH</div>
+	<hr class="report-component-separator">
+	<div class="basic-info-container">
+		<div id="current-usage-col" class="basic-info-col">
+			<div>HOW MUCH ENERGY<br>DID WE USE?</div>
+			<hr class="current-usage-separator-dark-grey">
+			<hr class="current-usage-separator-light-grey">
+			<div>
+				<img src="">
+				<div class="basic-info-text-container">
+					<span id="current-energy-usage"></span><span class="basic-info-col-unit"> kWh</span>
+				</div>
+			</div>
+			<hr class="current-usage-separator-dark-grey">
+			<hr class="current-usage-separator-light-grey">
+			<div>
+				<img src="">
+				<div class="basic-info-text-container">
+					<span id="current-co2-usage"></span><span class="basic-info-col-unit"> CO<sub>2</sub></span>
+				</div>
+			</div>
+			<hr class="current-usage-separator-dark-grey">
+			<hr class="current-usage-separator-light-grey">
+			<div>
+				<img src="">
+				<div class="basic-info-text-container">
+					<span id="current-money-usage"></span>
+				</div>
+			</div>
+		</div>
+
+		<div id="save-usage-col" class="basic-info-col">
+			<div>HOW MUCH ENERGY<br>DID WE SAVE?</div>
+			<hr class="current-usage-separator-dark-grey">
+			<hr class="current-usage-separator-light-grey">
+			<div>
+				<img src="">
+				<div class="basic-info-text-container">
+					<span id="save-energy-usage"></span><br>
+					<span id="save-energy-subtext" class="basic-info-col-subtext"></span>
+				</div>
+			</div>
+			<hr class="current-usage-separator-dark-grey">
+			<hr class="current-usage-separator-light-grey">
+			<div>
+				<img src="">
+				<div class="basic-info-text-container">
+					<span id="save-co2-usage"></span><br>
+					<span id="save-co2-subtext" class="basic-info-col-subtext"></span>
+				</div>
+			</div>
+			<hr class="current-usage-separator-dark-grey">
+			<hr class="current-usage-separator-light-grey">
+			<div>
+				<img src="">
+				<div class="basic-info-text-container">
+					<span id="save-money-usage"></span><br>
+					<span id="save-money-subtext" class="basic-info-col-subtext"></span>
+				</div>
+			</div>
+		</div>
+
+		<div id="impact-col" class="basic-info-col">
+			<div>WHAT WAS OUR<br>ENVIRONMENTAL IMPACT?</div>
+			<hr class="current-usage-separator-dark-grey">
+			<hr class="current-usage-separator-light-grey">
+			<div>
+				<img src="">
+				<div class="basic-info-text-container">
+					<span id="car-impact"></span><br>
+					<span id="car-impact-subtext" class="basic-info-col-subtext"></span>
+				</div>
+			</div>
+			<hr class="current-usage-separator-dark-grey">
+			<hr class="current-usage-separator-light-grey">
+			<div>
+				<img src="">
+				<div class="basic-info-text-container">
+					<span id="forest-impact"></span><br>
+					<span id="forest-impact-subtext" class="basic-info-col-subtext"></span>
+				</div>
+			</div>
+			<hr class="current-usage-separator-dark-grey">
+			<hr class="current-usage-separator-light-grey">
+			<div>
+				<img src="">
+				<div class="basic-info-text-container">
+					<span id="elephant-impact-subtext" class="basic-info-col-subtext"></span><br>
+					<span id="elephant-impact"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% block hide_detail_bar_1 %}
+	<div class="report-component-footer">
+		<div class="hide-details-btn btn-down">HIDE DETAILS</div>
+	</div>
+	{% endblock %}
+
+	<div class="detail-container">
+		<div class="detail-title">
+			<span>Usage Type</span>
+			<span>Total Energy Consumed (kWh)</span>
+			<span>Total CO<sub>2</sub> Emissions (kg)</span>
+			<span>Total Money Spent ($)</span>
+		</div>
+		<hr class="detail-container-separator-dark-grey">
+		<hr class="detail-container-separator-light-grey">
+		<div id="key-statistic-sub-data"></div>
+		<div class="detail-split-title">HOW DOES THAT SPLIT BY PERCENTAGE?</div>
+		<hr class="detail-container-separator-dark-grey">
+		<hr class="detail-container-separator-light-grey">
+		<div class="key-statistics-percentage">
+			<div id="energy-donut" class="css3-shadow"></div>
+			<div class="donut-center-text">kWh</div>
+			<div id="energy-percent-sub-info"></div>
+			<div style="clear: both;"></div>
+			<div class="percent-other-info">
+				<div>• Other:</div>
+				<div id="energy-percent-other-info"></div>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+		<div class="key-statistics-percentage">
+			<div id="co2-donut" class="css3-shadow"></div>
+			<div class="donut-center-text">CO<sub>2</sub></div>
+			<div id="co2-percent-sub-info"></div>
+			<div style="clear: both;"></div>
+			<div class="percent-other-info">
+				<div>• Other:</div>
+				<div id="co2-percent-other-info"></div>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+		<div class="key-statistics-percentage">
+			<div id="money-donut" class="css3-shadow"></div>
+			<div class="donut-center-text">Money</div>
+			<div id="money-percent-sub-info"></div>
+			<div style="clear: both;"></div>
+			<div class="percent-other-info">
+				<div>• Other:</div>
+				<div id="money-percent-other-info"></div>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+	</div>
+</div>
+
+<div id="compare-past" class="report-component">
+	<div class="report-component-header">HOW MUCH MORE / LESS DID WE USE COMPARED TO LAST MONTH</div>
+	<hr class="report-component-separator">
+	<div class="compare-past-basic-info">
+		<div class="compare-past-desc">Your energy consumption this<br>month was 
+			<span>
+				<span class="compare-past-percent"></span>
+				<span class="percent-symbol">%</span>
+				<span class="compare-past-percent-suffix"></span>
+			</span> 
+			than<br> it was last month. <span class="footnote-sybmol">**</span>
+		</div>
+		<div class="compare-past-chart-info">
+			<div class="compare-past-chart-title">Total energy consumption for the last 6 months</div>
+			<hr>
+			<div class="compare-past-chart-subtitle">(kWh)</div>
+			<hr>
+			<div class="compare-past-chart">
+				<div class="compare-past-bar-container">
+					<div class="compare-past-bar-val"></div>
+					<div class="compare-past-bar"></div>
+				</div>
+				<div class="compare-past-bar-container">
+					<div class="compare-past-bar-val"></div>
+					<div class="compare-past-bar"></div>
+				</div>
+				<div class="compare-past-bar-container">
+					<div class="compare-past-bar-val"></div>
+					<div class="compare-past-bar"></div>
+				</div>
+				<div class="compare-past-bar-container">
+					<div class="compare-past-bar-val"></div>
+					<div class="compare-past-bar"></div>
+				</div>
+				<div class="compare-past-bar-container">
+					<div class="compare-past-bar-val"></div>
+					<div class="compare-past-bar"></div>
+				</div>
+				<div class="compare-past-bar-container">
+					<div class="compare-past-bar-val"></div>
+					<div class="compare-past-bar"></div>
+				</div>
+			</div>
+		</div>
+		<hr>
+		<div class="compare-past-bar-name-container">
+			<span class="compare-past-bar-name"></span>
+			<span class="compare-past-bar-name"></span>
+			<span class="compare-past-bar-name"></span>
+			<span class="compare-past-bar-name"></span>
+			<span class="compare-past-bar-name"></span>
+			<span class="compare-past-bar-name"></span>
+		</div>
+		<div>** Total energy consumption for the last 6 months</div>
+	</div>
+	{% block hide_detail_bar_2 %}
+	<div class="report-component-footer">
+		<div class="hide-details-btn btn-down">HIDE DETAILS</div>
+	</div>
+	{% endblock %}
+
+	<div class="detail-container">
+		<div class="detail-split-title">WHEN DID WE ARCHIEVE OUR SAVINGS?</div>
+		<hr>
+		<div class="line-chart-title-container">
+			<span class="line-chart-title">Total consumption by days</span>
+		</div>
+		<div class="compare-past-line-chart"></div>
+		<span class="y-axis-title">kWh</span>
+		<div class="x-axis-title">Day of the month</div>
+		<hr>
+		<div class="compare-past-sub-info-container"></div>
+		<div style="clear: both;"></div>
+	</div>
+</div>
+
+<div id="weekday-info" class="report-component calendar-component">
+	<div class="report-component-header">HOW MUCH ENERGY DID WE USE ON WEEKDAYS?</div>
+	<hr class="report-component-separator">
+	<div>
+		<div class="calendar-left-info">
+			<div class="calendar-average-cell">
+				<div>Average<br>Weekday<br>Energy Use:</div>
+				<div>
+					<div class="average-usage"></div>
+					<div class="average-usage-unit">kWh</div>
+				</div>
+			</div>
+			<div class="calendar-left-compare-info compare-beginning">
+				<span class="compare-percent"></span><span>%</span>
+				<div class="compare-subtext"></div>
+			</div>
+			<div class="calendar-left-compare-info compare-last">
+				<span class="compare-percent"></span><span>%</span>
+				<div class="compare-subtext"></div>
+			</div>
+			<div class="calendar-left-compare-info compare-last-same-period">
+				<span class="compare-percent"></span><span>%</span>
+				<div class="compare-subtext"></div>
+			</div>
+		</div>
+		<div class="calendar-info-container">
+			<div class="calendar-title"></div>
+			<hr>
+			<div class='calendar-weekday-header'>
+				<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
+			</div>
+			<div class="calendar-day-container"></div>
+			<div class="calendar-legend-container">
+				<div class="legend-color-block legend-color-block-better"></div>
+				<div class="legend-label">Better than<br>average weekday</div>
+				<div class="legend-color-block legend-color-block-worse"></div>
+				<div class="legend-label">Worse than<br>average weekday</div>
+				<div class="legend-color-block legend-color-block-average"></div>
+				<div class="legend-label">Average weekday</div>
+			</div>
+		</div>
+	</div>
+	<hr>
+	<div class="calendar-bottom-info">
+		<div>
+			<div>Lowest Weekday Energy Use:</div>
+			<div class="lowest-usage-val"></div>
+			<div class="lowest-usage-date"></div>
+		</div>
+		<div>
+			<div>Highest Weekday Energy Use:</div>
+			<div class="highest-usage-val"></div>
+			<div class="highest-usage-date"></div>
+		</div>
+		<div>
+			<div class="energy-split-pie"></div>
+			<div class="energy-split-info">
+				<div>Energy Split by:</div>
+				<div>
+					<span>Weekdays: </span><span class="first-split-val"></span>
+				</div>
+				<div>
+					<span>Weekends: </span><span class="second-split-val"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="calendar-footnote">** The first month you started using En-trak</div>
+	{% block hide_detail_bar_3 %}
+	<div class="report-component-footer">
+		<div class="hide-details-btn btn-down">HIDE DETAILS</div>
+	</div>
+	{% endblock %}
+
+	<div class="detail-container"></div>
+	<div style="clear:both;"></div>
+</div>
+
+<div id="weekend-info" class="report-component calendar-component">
+	<div class="report-component-header">HOW MUCH ENERGY DID WE USE ON WEEKENDS?</div>
+	<hr class="report-component-separator">
+	<div>
+		<div class="calendar-left-info">
+			<div class="calendar-average-cell">
+				<div>Average<br>Weekend<br>Energy Use:</div>
+				<div>
+					<div class="average-usage"></div>
+					<div class="average-usage-unit">kWh</div>
+				</div>
+			</div>
+			<div class="calendar-left-compare-info compare-beginning">
+				<span class="compare-percent"></span><span>%</span>
+				<div class="compare-subtext"></div>
+			</div>
+			<div class="calendar-left-compare-info compare-last">
+				<span class="compare-percent"></span><span>%</span>
+				<div class="compare-subtext"></div>
+			</div>
+			<div class="calendar-left-compare-info compare-last-same-period">
+				<span class="compare-percent"></span><span>%</span>
+				<div class="compare-subtext"></div>
+			</div>
+		</div>
+		<div class="calendar-info-container">
+			<div class="calendar-title"></div>
+			<hr>
+			<div class='calendar-weekday-header'>
+				<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
+			</div>
+			<div class="calendar-day-container"></div>
+			<div class="calendar-legend-container">
+				<div class="legend-color-block legend-color-block-better"></div>
+				<div class="legend-label">Better than<br>average weekend</div>
+				<div class="legend-color-block legend-color-block-worse"></div>
+				<div class="legend-label">Worse than<br>average weekend</div>
+				<div class="legend-color-block legend-color-block-average"></div>
+				<div class="legend-label">Average weekend</div>
+			</div>
+		</div>
+	</div>
+	<hr>
+	<div class="calendar-bottom-info">
+		<div>
+			<div>Lowest Weekend Energy Use:</div>
+			<div class="lowest-usage-val"></div>
+			<div class="lowest-usage-date"></div>
+		</div>
+		<div>
+			<div>Highest Weekend Energy Use:</div>
+			<div class="highest-usage-val"></div>
+			<div class="highest-usage-date"></div>
+		</div>
+		<div>
+			<div class="energy-split-pie"></div>
+			<div class="energy-split-info">
+				<div>Energy Split by:</div>
+				<div>
+					<span>Weekdays: </span><span class="first-split-val"></span>
+				</div>
+				<div>
+					<span>Weekends: </span><span class="second-split-val"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="calendar-footnote">** The first month you started using En-trak</div>
+	{% block hide_detail_bar_4 %}
+	<div class="report-component-footer">
+		<div class="hide-details-btn btn-down">HIDE DETAILS</div>
+	</div>
+	{% endblock %}
+
+	<div class="detail-container"></div>
+	<div style="clear:both;"></div>
+</div>
+
+<div id="overnight-info" class="report-component calendar-component">
+	<div class="report-component-header">HOW MUCH ENERGY DID WE USE OVERNIGHT?</div>
+	<hr class="report-component-separator">
+	<div>
+		<div class="calendar-left-info">
+			<div class="calendar-average-cell">
+				<div>Average<br>Overnight<br>Energy Use:</div>
+				<div>
+					<div class="average-usage"></div>
+					<div class="average-usage-unit">kWh</div>
+				</div>
+			</div>
+			<div class="calendar-left-compare-info compare-beginning">
+				<span class="compare-percent"></span><span>%</span>
+				<div class="compare-subtext"></div>
+			</div>
+			<div class="calendar-left-compare-info compare-last">
+				<span class="compare-percent"></span><span>%</span>
+				<div class="compare-subtext"></div>
+			</div>
+			<div class="calendar-left-compare-info compare-last-same-period">
+				<span class="compare-percent"></span><span>%</span>
+				<div class="compare-subtext"></div>
+			</div>
+		</div>
+		<div class="calendar-info-container">
+			<div class="calendar-title"></div>
+			<hr>
+			<div class='calendar-weekday-header'>
+				<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
+			</div>
+			<div class="calendar-day-container"></div>
+			<div class="calendar-legend-container">
+				<div class="legend-color-block legend-color-block-better"></div>
+				<div class="legend-label">Better than<br>average overnight</div>
+				<div class="legend-color-block legend-color-block-worse"></div>
+				<div class="legend-label">Worse than<br>average overnight</div>
+				<div class="legend-color-block legend-color-block-average"></div>
+				<div class="legend-label">Average overnight</div>
+			</div>
+		</div>
+	</div>
+	<hr>
+	<div class="calendar-bottom-info">
+		<div>
+			<div>Lowest Overnight Energy Use:</div>
+			<div class="lowest-usage-val"></div>
+			<div class="lowest-usage-date"></div>
+		</div>
+		<div>
+			<div>Highest Overnight Energy Use:</div>
+			<div class="highest-usage-val"></div>
+			<div class="highest-usage-date"></div>
+		</div>
+		<div>
+			<div class="energy-split-pie"></div>
+			<div class="energy-split-info">
+				<div>Energy Split by:</div>
+				<div>
+					<span>Daytime: </span><span class="first-split-val"></span>
+				</div>
+				<div>
+					<span>Overnight: </span><span class="second-split-val"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="calendar-footnote">** The first month you started using En-trak</div>
+	{% block hide_detail_bar_5 %}
+	<div class="report-component-footer">
+		<div class="hide-details-btn btn-down">HIDE DETAILS</div>
+	</div>
+	{% endblock %}
+
+	<div class="detail-container"></div>
+	<div style="clear:both;"></div>
+</div>

@@ -1,0 +1,70 @@
+<script id="key-statistics-row-template" type="x-tmpl-mustache">
+<div class="key-statistics-row">
+	<span class="usage-type-name" style="background-color: {% templatetag openvariable %}nameBackgroundColor{% templatetag closevariable %};" order="{% templatetag openvariable %}order{% templatetag closevariable %}">{% templatetag openvariable %}usageTypeName{% templatetag closevariable %}</span>
+	<span>{% templatetag openvariable %}energyVal{% templatetag closevariable %}</span>
+	<span>{% templatetag openvariable %}co2Val{% templatetag closevariable %}</span>
+	<span>{% templatetag openvariable %}moneyVal{% templatetag closevariable %}</span>
+</div>
+</script>
+
+<script id="key-percent-sub-info-template" type="x-tmpl-mustache">
+<div class="key-percent-sub-info" style="color: {% templatetag openvariable %}color{% templatetag closevariable %};">
+	<span>{% templatetag openvariable %}bullet{% templatetag closevariable %}</span><span class="sub-info-name">{% templatetag openvariable %}name{% templatetag closevariable %}</span><br>
+	<span class="sub-info-percent">{% templatetag openvariable %}percentVal{% templatetag closevariable %}</span>
+</div>
+</script>
+
+<script id="sub-calendar-info-template" type="x-tmpl-mustache">
+<div class="sub-calendar-info-block {% templatetag openvariable %}classIdentifier{% templatetag closevariable %}">
+	<div class="sub-calendar-title">{% templatetag openvariable %}name{% templatetag closevariable %}</div>
+	<div class="calendar-left-info">
+		<div class="calendar-average-cell">
+			<div>Average<br>{% templatetag openvariable %}typeName{% templatetag closevariable %}<br>Energy Use:</div>
+			<div>
+				<div class="average-usage">{% templatetag openvariable %}averageUsage{% templatetag closevariable %}</div>
+				<div class="average-usage-unit">kWh</div>
+			</div>
+		</div>
+		<div class="calendar-left-compare-info compare-beginning {% templatetag openvariable %}compareBeginningClass{% templatetag closevariable %}">
+			<span class="compare-percent">{% templatetag openvariable %}compareBeginningPercent{% templatetag closevariable %}</span><span>%</span>
+			<div class="compare-subtext">{% templatetag openvariable %} & compareBeginningSubtext{% templatetag closevariable %}</div>
+		</div>
+		<div class="calendar-left-compare-info compare-last {% templatetag openvariable %}compareLastClass{% templatetag closevariable %}">
+			<span class="compare-percent">{% templatetag openvariable %}compareLastPercent{% templatetag closevariable %}</span><span>%</span>
+			<div class="compare-subtext">{% templatetag openvariable %} & compareLastSubtext{% templatetag closevariable %}</div>
+		</div>
+		<div class="calendar-left-compare-info compare-last-same-period {% templatetag openvariable %}compareLastSamePeriodClass{% templatetag closevariable %}">
+			<span class="compare-percent">{% templatetag openvariable %}compareLastSamePeriodPercent{% templatetag closevariable %}</span><span>%</span>
+			<div class="compare-subtext">{% templatetag openvariable %} & compareLastSamePeriodSubtext{% templatetag closevariable %}</div>
+		</div>
+	</div>
+	<div class="calendar-right-info">
+		<div class="energy-split-text">Energy Split by:</div>
+		<div class="energy-split-pie"></div>
+		<div class="energy-split-legend">
+			<div>
+				<span>{% templatetag openvariable %}firstSplitText{% templatetag closevariable %}: </span><span class="first-split-val">{% templatetag openvariable %}firstSplitPercent{% templatetag closevariable %}</span>
+			</div>
+			<div>
+				<span>{% templatetag openvariable %}secondSplitText{% templatetag closevariable %}: </span><span class="second-split-val">{% templatetag openvariable %}secondSplitPercent{% templatetag closevariable %}</span>
+			</div>
+		</div>
+		<hr>
+		<div class="sub-calendar-info-low-hight-title">Lowest {% templatetag openvariable %}typeName{% templatetag closevariable %} Energy Use</div>
+		<div class="sub-calendar-info-lowest">{% templatetag openvariable %}lowestText{% templatetag closevariable %}</div>
+		<div class="sub-calendar-info-low-hight-title">Highest {% templatetag openvariable %}typeName{% templatetag closevariable %} Energy Use</div>
+		<div class="sub-calendar-info-lowest">{% templatetag openvariable %}highestText{% templatetag closevariable %}</div>
+	</div>
+</div>
+</script>
+
+<script id="compare-past-sub-info-template" type="x-tmpl-mustache">
+<div class="compare-past-sub-info {% templatetag openvariable %}classIdentifier{% templatetag closevariable %} {% templatetag openvariable %}infoClass{% templatetag closevariable %}">
+	<div class="sub-info-name">{% templatetag openvariable %}name{% templatetag closevariable %}</div>
+	<div class="line-chart-title">{% templatetag openvariable %}lineChartTitle{% templatetag closevariable %}</div>
+	<hr>
+	<div class="compare-past-line-chart"></div>
+	<span class="y-axis-title">kWh</span>
+	<div class="x-axis-title">Day of the month</div>
+</div>
+</script>
