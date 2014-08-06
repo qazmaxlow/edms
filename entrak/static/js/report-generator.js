@@ -927,6 +927,7 @@ ReportGenerator.prototype.generateWeekdayReport = function(combinedReadings) {
 			}
 			if (lowestUsage === null) {
 				lowestUsage = val;
+				lowestDt = dt;
 			} else if (val < lowestUsage) {
 				lowestUsage = Math.min(val, lowestUsage);
 				lowestDt = dt;
@@ -962,6 +963,7 @@ ReportGenerator.prototype.generateWeekendReport = function(combinedReadings) {
 			}
 			if (lowestUsage === null) {
 				lowestUsage = val;
+				lowestDt = dt;
 			} else if (val < lowestUsage) {
 				lowestUsage = Math.min(val, lowestUsage);
 				lowestDt = dt;
@@ -995,6 +997,7 @@ ReportGenerator.prototype.generateOvernightReport = function(combinedReadings) {
 
 		if (lowestUsage === null) {
 			lowestUsage = val;
+			lowestDt = dt;
 		} else if (val < lowestUsage) {
 			lowestUsage = Math.min(val, lowestUsage);
 			lowestDt = dt;
