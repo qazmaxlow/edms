@@ -26,11 +26,12 @@ $(function() {
 	report.timezone = '{{systems.0.timezone}}';
 	report.currentDt =  moment.unix({{start_timestamp}}).tz(report.timezone);
 
-	// updateReportName();
-
 	report.reportGenerator = new ReportGenerator(report.entrakSystem.systemTree, report.timezone,
 		report.currentReportType);
 	report.reportGenerator.updateDtInfo(report.currentDt, null);
+
+	$(".report-name").text(report.reportGenerator.genReportName());
+	
 	report.reportGenerator.assignData(JSON.parse("{{report_data}}"));
 	report.reportGenerator.generateFullReport();
 });
@@ -38,6 +39,13 @@ $(function() {
 {% endblock %}
 
 {% block content %}
+
+<div class="report-head">
+	<div class="system-name">{{systems.0.name}}</div>
+	<hr class="title-separator">
+	<div class="report-name"></div>
+	<hr class="head-separator">
+</div>
 
 {% include "report_main_content_pdf.html" %}
 

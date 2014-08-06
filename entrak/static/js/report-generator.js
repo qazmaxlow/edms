@@ -122,6 +122,16 @@ ReportGenerator.SUB_INFO_PLOT_OPTIONS = {
 ReportGenerator.LINE_CHART_CURRENT_COLOR = "#047FA1";
 ReportGenerator.LINE_CHART_LAST_COLOR = "#EDBA3C";
 
+ReportGenerator.prototype.genReportName = function() {
+	var reportName = "";
+	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
+		reportName = this.currentDt.format("MMM YYYY");
+		reportName += " - Monthly Energy Report";
+	}
+
+	return reportName;
+}
+
 ReportGenerator.prototype.updateDtInfo = function(startDt, endDt) {
 	this.currentDt = startDt;
 	this.currentEndDt = moment(this.currentDt).add('M', 1);

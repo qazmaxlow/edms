@@ -6,7 +6,20 @@ body {
 	width: 972px;
 }
 
+.report-name {
+	width: auto;
+	margin-left: auto;
+	margin-right: auto;
+}
+
 .report-component {
 	margin-left: 0;
 	margin-right: 0;
+}
+
+.basic-info-container + hr {
+	display: block;
+	height: 1px;
+    border: 0;
+	background-color: #CACACA;
 }

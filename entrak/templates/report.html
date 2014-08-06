@@ -37,18 +37,8 @@
 
 var report = {};
 
-function genReportName(targetDt) {
-	var reportName = "";
-	if (report.currentReportType === ReportGenerator.REPORT_TYPE_MONTH) {
-		reportName = targetDt.format("MMM YYYY");
-	}
-
-	return reportName;
-}
-
 function updateReportName() {
-	var reportName = genReportName(report.currentDt);
-	$(".report-name").text(reportName + " - Monthly Energy Report");
+	$(".report-name").text(report.reportGenerator.genReportName());
 }
 
 $(function() {
@@ -63,12 +53,14 @@ $(function() {
 	report.currentDt =  moment.unix({{monthly_summary.0.timestamp}}).tz(report.timezone);
 	{% endif %}
 
-	updateReportName();
 	$(".report-component").css("opacity", 0.0);
 
 	report.reportGenerator = new ReportGenerator(report.entrakSystem.systemTree, report.timezone,
 		ReportGenerator.REPORT_TYPE_MONTH);
 	if ("currentDt" in report) {
+		report.reportGenerator.updateDtInfo(report.currentDt, null);
+		updateReportName();
+		
 		report.reportGenerator.getReportData(report.currentDt, function(data) {
 			report.reportGenerator.assignData(data);
 			report.reportGenerator.generateFullReport();
