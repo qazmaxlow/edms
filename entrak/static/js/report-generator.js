@@ -714,7 +714,7 @@ ReportGenerator.prototype._genSubComparePercentInfo = function(oldUsage, newUsag
 		result.subText = "compared<br>to "+compareToDateText+" ***";
 		result.savingClass = "invalid-saving";
 	} else {
-		var percent = (oldUsage-newUsage)/oldUsage*100;
+		var percent = (newUsage-oldUsage)/oldUsage*100;
 		if (percent >= 0) {
 			result.subText = "more";
 			result.savingClass = "negative-saving";
@@ -756,12 +756,13 @@ ReportGenerator.prototype._fillCalendar = function(eleSel, readings, averageUsag
 			} else {
 				diffPercent = 0;
 			}
+			diffPercent = parseFloat(diffPercent.toFixed(0));
 			
 			var diffPercentText;
 			if (diffPercent >= 0) {
-				diffPercentText = "<span class='calendar-day-plus-symbol'>+</span> "+diffPercent.toFixed(0);
+				diffPercentText = "<span class='calendar-day-plus-symbol'>+</span> "+diffPercent;
 			} else {
-				diffPercentText = "<span class='calendar-day-minus-symbol'>-</span> "+Math.abs(diffPercent.toFixed(0));
+				diffPercentText = "<span class='calendar-day-minus-symbol'>-</span> "+Math.abs(diffPercent);
 			}
 			if (diffPercent >= 5) {
 				calendarDayEle.addClass('calendar-day-worse');
@@ -816,7 +817,7 @@ ReportGenerator.prototype._insertCalendarSubInfo = function(eleSel, classIdPrefi
 		var templateInfo = {
 			classIdentifier: classIdentifier,
 			typeName: calendarTypeName,
-			name: ('sourceName' in info) ? info.sourceName : info.system.data.name,
+			name: ('sourceName' in info) ? info.sourceName.toUpperCase() : info.system.data.name.toUpperCase(),
 			averageUsage: Utils.formatWithCommas(averageUsage.toFixed(0)),
 			compareBeginningClass: compareBeginningInfo.savingClass,
 			compareBeginningPercent: compareBeginningInfo.percentText,
