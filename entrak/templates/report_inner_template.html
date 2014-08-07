@@ -1,6 +1,8 @@
+{% load static %}
+
 <script id="key-statistics-row-template" type="x-tmpl-mustache">
 <div class="key-statistics-row">
-	<span class="usage-type-name" style="background-color: {% templatetag openvariable %}nameBackgroundColor{% templatetag closevariable %};" order="{% templatetag openvariable %}order{% templatetag closevariable %}">
+	<span class="usage-type-name" order="{% templatetag openvariable %}order{% templatetag closevariable %}">
 		{% templatetag openvariable %}usageTypeName{% templatetag closevariable %}</span><span>
 		{% templatetag openvariable %}energyVal{% templatetag closevariable %}</span><span>
 		{% templatetag openvariable %}co2Val{% templatetag closevariable %}</span><span>
@@ -79,5 +81,12 @@
 	<div class="compare-past-line-chart"></div>
 	<span class="y-axis-title">kWh</span>
 	<div class="x-axis-title">Day of the month</div>
+</div>
+</script>
+
+<script id="empty-block-template" type="x-tmpl-mustache">
+<div class="{% templatetag openvariable %}blockClass{% templatetag closevariable %} empty-block">
+	<div class="empty-top-bar"></div>
+	<img src="{% static 'images/report/empty-block.png' %}" >
 </div>
 </script>

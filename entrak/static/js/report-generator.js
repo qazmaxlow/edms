@@ -19,8 +19,6 @@ function ReportGenerator(systemTree, timezone, reportType) {
 
 ReportGenerator.REPORT_TYPE_MONTH = 'month';
 
-ReportGenerator.KEY_STATISTICS_ROW_COLORS = ['#67C3D8', '#8C516F', '#D85299'];
-
 ReportGenerator.MAX_PERCENTAGE_PIECE = 5;
 ReportGenerator.DONUT_COLORS = ['#5DB9CF', '#814864', '#CF498D', '#807647', '#CFB948'];
 ReportGenerator.OTHER_INFO_COLOR = '#000000';
@@ -315,9 +313,6 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 			templateInfo.usageTypeName = info.system.data.name;
 			templateInfo.order = -1;
 		}
-		templateInfo.nameBackgroundColor = ReportGenerator.KEY_STATISTICS_ROW_COLORS[(
-				idx%ReportGenerator.KEY_STATISTICS_ROW_COLORS.length
-			)]
 
 		var rowHtml = Mustache.render(keyRowTemplate, templateInfo);
 		keyStatSubDataContainer.append(rowHtml);
@@ -544,6 +539,16 @@ ReportGenerator.prototype.plotCompareLineChart = function(targetEleSel, currentR
 	$(targetEleSel).plot([lastSeries, currentSeries], plotOptions);
 }
 
+ReportGenerator.prototype.insertEmptyBlock = function(targetEleSel, blockClass) {
+	var emptyBlockTemplate = $("#empty-block-template").html();
+	Mustache.parse(emptyBlockTemplate);
+
+	var templateInfo = {blockClass: blockClass};
+	var emptyBlockHtml = Mustache.render(emptyBlockTemplate, templateInfo);
+
+	$(targetEleSel).append(emptyBlockHtml);
+}
+
 ReportGenerator.prototype.insertComparePastSubInfo = function(template, info, classIdentifier) {
 	var titleText, infoClass;
 	if (info.lastTotalEnergy === 0) {
@@ -564,7 +569,7 @@ ReportGenerator.prototype.insertComparePastSubInfo = function(template, info, cl
 	}
 
 	var name = ("sourceName" in info) ? info.sourceName : info.system.data.name;
-	name.toUpperCase();
+	name = name.toUpperCase();
 
 	var templateInfo = {
 		classIdentifier: classIdentifier,
@@ -662,6 +667,10 @@ ReportGenerator.prototype.generateComparePast = function() {
 			info.currentReadings, info.lastReadings,
 			ReportGenerator.SUB_INFO_PLOT_OPTIONS, ReportGenerator.SUB_INFO_SERIES_BASE_OPTIONS);
 	});
+
+	if (this.groupedSourceInfos.length%2 !== 0) {
+		this.insertEmptyBlock(".compare-past-sub-info-container", 'compare-past-sub-info');
+	}
 }
 
 ReportGenerator.prototype._fillInComparePercent = function(eleSel, oldUsage, newUsage, compareToDateText) {
@@ -832,6 +841,10 @@ ReportGenerator.prototype._insertCalendarSubInfo = function(eleSel, classIdPrefi
 			firstSplitPercent, secondSplitPercent,
 			ReportGenerator.FIRST_SPLIT_PIE_COLOR, ReportGenerator.SECOND_SPLIT_PIE_COLOR);
 	});
+
+	if (this.groupedSourceInfos.length%2 !== 0) {
+		this.insertEmptyBlock(eleSel, 'sub-calendar-info-block');
+	}
 }
 
 ReportGenerator.prototype._plotCalendarSubPieChart = function(eleSel, firstSplitPercent, secondSplitPercent, firstSplitColor, secondSplitColor) {
