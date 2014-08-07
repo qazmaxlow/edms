@@ -738,7 +738,7 @@ ReportGenerator.prototype._fillCalendar = function(eleSel, readings, averageUsag
 	calendarContainer.empty();
 
 	var calendarStartDt = moment(this.currentDt).startOf('w');
-	var calendarEndDt = moment(this.currentEndDt).endOf('w');
+	var calendarEndDt = moment(this.currentEndDt).subtract('s', 1).endOf('w');
 	for (var calendarNowDt=calendarStartDt; calendarNowDt.isBefore(calendarEndDt); calendarNowDt.add('d', 1)) {
 		var calendarDayEle = $("<div class='calendar-day'></div>");
 		calendarDayEle.append("<div class='calendar-day-digit'>"+calendarNowDt.date()+"</div>");

@@ -835,7 +835,6 @@
 .calendar-info-container {
 	display: inline-block;
 	width: 520px;
-	height: 300px;
 	vertical-align: top;
 	margin-left: 50px;
 	margin-top: 30px;
@@ -918,8 +917,11 @@
 .calendar-day-worse {
 	background-color: #CA6445;
 }
-.calendar-legend-container {
+.calendar-day-container + div {
 	clear: both;
+}
+.calendar-legend-container {
+	margin-top: 2px;
 }
 .calendar-legend-container>div {
 	display: inline-block;
@@ -953,6 +955,7 @@
 	width: 94%;
 	margin-left: auto;
 	margin-right: auto;
+	margin-top: 18px;
 	margin-bottom: 15px
 }
 
