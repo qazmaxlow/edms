@@ -28,6 +28,7 @@ from utils import calculation
 
 TEMP_MEDIA_DIR = os.path.join(MEDIA_ROOT, 'temp')
 REPORT_TYPE_MONTH = 'month'
+REPORT_TYPE_YEAR = 'year'
 
 @permission_required
 @ensure_csrf_cookie
@@ -176,6 +177,8 @@ def __get_sum_up_usage_within_periods(source_ids, period_dts):
 def __gen_report_last_dt(report_type, target_dt):
 	if report_type == REPORT_TYPE_MONTH:
 		result = Utils.add_month(target_dt, -1)
+	elif report_type == REPORT_TYPE_YEAR:
+		result = Utils.add_year(target_dt, -1)
 
 	return result
 
@@ -197,6 +200,8 @@ def __gen_report_dt_info(report_type, timezone, system_first_record, start_times
 
 	if report_type == REPORT_TYPE_MONTH:
 		end_dt = Utils.add_month(start_dt, 1)
+	elif report_type == REPORT_TYPE_YEAR:
+		end_dt = Utils.add_year(start_dt, 1)
 	dt_info['end_dt'] = end_dt
 
 	system_first_record = system_first_record.astimezone(timezone).replace(hour=0, minute=0, second=0, microsecond=0)
@@ -232,7 +237,8 @@ def __generate_report_data(systems, report_type, start_timestamp, end_timestamp)
 		'currentReadings': {'start': dt_info['start_dt'], 'end': dt_info['end_dt']},
 		'beginningReadings': {'start': dt_info['beginning_start_dt'], 'end': dt_info['beginning_end_dt']},
 	}
-	if dt_info['last_same_period_start_dt'] >= current_system.first_record:
+	if report_type != REPORT_TYPE_YEAR \
+		and dt_info['last_same_period_start_dt'] >= current_system.first_record:
 		timestamp_info['lastSamePeriodReadings'] = {'start': dt_info['last_same_period_start_dt'],
 			'end': dt_info['last_same_period_end_dt']}
 	if dt_info['last_start_dt'] >= current_system.first_record:

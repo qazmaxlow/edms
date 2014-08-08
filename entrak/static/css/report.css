@@ -1,6 +1,103 @@
-.summary-date-col, .save-report-btn, .hide-details-btn, .bottom-save-report-btn {
+.summary-date-col, .save-report-btn, .hide-details-btn, .bottom-save-report-btn,
+.year-quarter-calendar-content>div, .create-report-btn, .time-range-section>span,
+.prev-btn, .next-btn {
 	cursor: pointer;
 	cursor: hand;
+}
+
+#panel-content {
+	position: relative;
+	font-size: 0px;
+}
+#panel-content>div {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+#customize-report {
+	display: none;
+	width: 100%;
+}
+
+.customize-section-title {
+	width: 100%;
+	text-align: center;
+	font-size: 10pt;
+	background-color: #FFF1CD;
+}
+
+.time-range-section {
+	background-color: #F0EEE8;
+	text-align: center;
+}
+.time-range-section span{
+	display: inline-block;
+	width: 62px;
+	height: 62px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.customize-detail-section {
+	position: relative;
+}
+
+.two-column-section>div {
+	display: inline-block;
+	width: 50%;
+	vertical-align: top;
+	text-align: center;
+}
+
+.customize-calendar-section {
+	background-color: #F0EEE8;
+}
+
+.year-quarter-calendar {
+	display: inline-block;
+	width: 255px;
+	height: 170px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.year-quarter-calendar-head {
+	height: 27px;
+	background-color: #62949F;
+}
+.year-quarter-calendar-head>span {
+	display: inline-block;
+	font-size: 8pt;
+	height: 100%;
+	vertical-align: middle;
+	color: #FFFFFF;
+}
+.year-quarter-calendar-head .prev-btn {
+	width: 15%;
+	line-height: 25px;
+}
+.year-quarter-calendar-head .target-year {
+	width: 70%;
+	height: auto;
+}
+.year-quarter-calendar-head .next-btn {
+	width: 15%;
+	line-height: 25px;
+}
+.year-quarter-calendar-content {
+	font-size: 9pt;
+	background-color: #90C7D5;
+}
+.year-quarter-calendar-content>div>div {
+	display: inline-block;
+}
+
+.datetime-result {
+	display: inline-block;
+	width: 260px;
+	height: 170px;
+	font-size: 9pt;
 }
 
 .report-component {
@@ -948,7 +1045,45 @@
 	margin-left: 15px;
 }
 
-.calendar-component>hr:nth-of-type(2) {
+.calendar-vertical-info {
+	display: inline-block;
+	width: 520px;
+	vertical-align: top;
+	margin-left: 50px;
+	margin-top: 30px;
+	background-color: #E2E2E2;
+	border-radius: 15px;
+}
+.calendar-vertical-info .calendar-title {
+	margin-top: 10px;
+}
+.calendar-vertical-info>div {
+	margin-left: 20px;
+	margin-right: 20px;
+	color: #354960;
+}
+.calendar-vertical-info>hr{
+	margin-left: 20px;
+	margin-right: 20px;
+	border: none;
+	background-color: #c9c9c9;
+	height: 1px;
+}
+.calendar-vertical-info>hr:nth-of-type(1){
+	margin-left: 0px;
+	margin-right: 0px;
+	background-color: #FFFFFF;
+}
+.calendar-vertical-info>div>div {
+	display: inline-block;
+}
+.calendar-vertical-info .lowest-usage-val, .calendar-vertical-info .highest-usage-val {
+	width: 40%;
+	text-align: right;
+	background-color: #FFFFFF;
+}
+
+.bottom-info-separator {
 	border: none;
 	background-color: #c9c9c9;
 	height: 1px;
@@ -956,7 +1091,7 @@
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 18px;
-	margin-bottom: 15px
+	margin-bottom: 15px;
 }
 
 .calendar-bottom-info {

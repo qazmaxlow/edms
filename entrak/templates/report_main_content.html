@@ -1,7 +1,7 @@
 {% load static %}
 
 <div class="report-component">
-	<div class="report-component-header">WHAT ARE OUR KEY STATISTICS FOR THIS MONTH</div>
+	<div class="report-component-header">WHAT ARE OUR KEY STATISTICS FOR THIS <span class="report-type-name"></span></div>
 	<hr class="report-component-separator">
 	<div class="basic-info-container">
 		<div id="current-usage-col" class="basic-info-col">
@@ -147,19 +147,19 @@
 </div>
 
 <div id="compare-past" class="report-component">
-	<div class="report-component-header">HOW MUCH MORE / LESS DID WE USE COMPARED TO LAST MONTH</div>
+	<div class="report-component-header">HOW MUCH MORE / LESS DID WE USE COMPARED TO LAST <span class="report-type-name"></span></div>
 	<hr class="report-component-separator">
 	<div class="compare-past-basic-info">
-		<div class="compare-past-desc">Your energy consumption this<br>month was 
+		<div class="compare-past-desc">Your energy consumption this<br><span class="report-type-name-lower"></span> was 
 			<span>
 				<span class="compare-past-percent"></span>
 				<span class="percent-symbol">%</span>
 				<span class="compare-past-percent-suffix"></span>
 			</span> 
-			than<br> it was last month. <span class="footnote-sybmol">**</span>
+			than<br> it was last <span class="report-type-name-lower"></span>. <span class="footnote-sybmol">**</span>
 		</div>
 		<div class="compare-past-chart-info">
-			<div class="compare-past-chart-title">Total energy consumption for the last 6 months</div>
+			<div class="compare-past-chart-title">Total energy consumption for the last 6 <span class="report-type-name-lower-plural"></span></div>
 			<hr>
 			<div class="compare-past-chart-subtitle">(kWh)</div>
 			<hr>
@@ -199,7 +199,7 @@
 			<span class="compare-past-bar-name"></span>
 			<span class="compare-past-bar-name"></span>
 		</div>
-		<div>** Total energy consumption for the last 6 months</div>
+		<div>** Total energy consumption for the last 6 <span class="report-type-name-lower-plural"></span></div>
 	</div>
 	{% block hide_detail_bar_2 %}
 	<div class="report-component-footer">
@@ -215,7 +215,7 @@
 		</div>
 		<div class="compare-past-line-chart"></div>
 		<span class="y-axis-title">kWh</span>
-		<div class="x-axis-title">Day of the month</div>
+		<div class="x-axis-title">Day of the <span class="report-type-name-lower"></span></div>
 		<hr>
 		<div class="compare-past-sub-info-container"></div>
 		<div style="clear: both;"></div>
@@ -277,8 +277,36 @@
 				<div class="legend-label">Average weekday</div>
 			</div>
 		</div>
+		<div class="calendar-vertical-info">
+			<div class="calendar-title"></div>
+			<hr>
+			<div>Lowest Weekend Energy Use:</div>
+			<div>
+				<div class="lowest-usage-val"></div>
+				<div class="lowest-usage-date"></div>
+			</div>
+			<hr>
+			<div>Highest Weekend Energy Use:</div>
+			<div>
+				<div class="highest-usage-val"></div>
+				<div class="highest-usage-date"></div>
+			</div>
+			<hr>
+			<div>
+				<div>Energy Split by:</div>
+				<div class="energy-split-pie"></div>
+				<div>
+					<div>
+						<span>Weekdays: </span><span class="first-split-val"></span>
+					</div>
+					<div>
+						<span>Weekends: </span><span class="second-split-val"></span>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
-	<hr>
+	<hr class="bottom-info-separator">
 	<div class="calendar-bottom-info">
 		<div>
 			<div>Lowest Weekday Energy Use:</div>
@@ -369,8 +397,36 @@
 				<div class="legend-label">Average weekend</div>
 			</div>
 		</div>
+		<div class="calendar-vertical-info">
+			<div class="calendar-title"></div>
+			<hr>
+			<div>Lowest Weekend Energy Use:</div>
+			<div>
+				<div class="lowest-usage-val"></div>
+				<div class="lowest-usage-date"></div>
+			</div>
+			<hr>
+			<div>Highest Weekend Energy Use:</div>
+			<div>
+				<div class="highest-usage-val"></div>
+				<div class="highest-usage-date"></div>
+			</div>
+			<hr>
+			<div>
+				<div>Energy Split by:</div>
+				<div class="energy-split-pie"></div>
+				<div>
+					<div>
+						<span>Weekdays: </span><span class="first-split-val"></span>
+					</div>
+					<div>
+						<span>Weekends: </span><span class="second-split-val"></span>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
-	<hr>
+	<hr class="bottom-info-separator">
 	<div class="calendar-bottom-info">
 		<div>
 			<div>Lowest Weekend Energy Use:</div>
@@ -461,8 +517,36 @@
 				<div class="legend-label">Average overnight</div>
 			</div>
 		</div>
+		<div class="calendar-vertical-info">
+			<div class="calendar-title"></div>
+			<hr>
+			<div>Lowest Weekend Energy Use:</div>
+			<div>
+				<div class="lowest-usage-val"></div>
+				<div class="lowest-usage-date"></div>
+			</div>
+			<hr>
+			<div>Highest Weekend Energy Use:</div>
+			<div>
+				<div class="highest-usage-val"></div>
+				<div class="highest-usage-date"></div>
+			</div>
+			<hr>
+			<div>
+				<div>Energy Split by:</div>
+				<div class="energy-split-pie"></div>
+				<div>
+					<div>
+						<span>Weekdays: </span><span class="first-split-val"></span>
+					</div>
+					<div>
+						<span>Weekends: </span><span class="second-split-val"></span>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
-	<hr>
+	<hr class="bottom-info-separator">
 	<div class="calendar-bottom-info">
 		<div>
 			<div>Lowest Overnight Energy Use:</div>

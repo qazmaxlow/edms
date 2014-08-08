@@ -18,6 +18,7 @@ function ReportGenerator(systemTree, timezone, reportType) {
 };
 
 ReportGenerator.REPORT_TYPE_MONTH = 'month';
+ReportGenerator.REPORT_TYPE_YEAR = 'year';
 
 ReportGenerator.MAX_PERCENTAGE_PIECE = 5;
 ReportGenerator.DONUT_COLORS = ['#5DB9CF', '#814864', '#CF498D', '#807647', '#CFB948'];
@@ -120,25 +121,40 @@ ReportGenerator.SUB_INFO_PLOT_OPTIONS = {
 ReportGenerator.LINE_CHART_CURRENT_COLOR = "#047FA1";
 ReportGenerator.LINE_CHART_LAST_COLOR = "#EDBA3C";
 
-ReportGenerator.prototype.genReportName = function() {
-	var reportName = "";
+ReportGenerator.prototype.genDtText = function(targetDt) {
+	var currentDtName = "";
 	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
-		reportName = this.currentDt.format("MMM YYYY");
+		currentDtName = targetDt.format("MMM YYYY");
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
+		currentDtName = targetDt.format('YYYY');
+	}
+
+	return currentDtName;
+}
+
+ReportGenerator.prototype.genReportName = function() {
+	var reportName = this.genDtText(this.currentDt);
+	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
 		reportName += " - Monthly Energy Report";
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
+		reportName += " - Yearly Energy Report";
 	}
 
 	return reportName;
 }
 
-ReportGenerator.prototype.updateDtInfo = function(startDt, endDt) {
+ReportGenerator.prototype.updateDtInfo = function(startDt, customEndDt) {
 	this.currentDt = startDt;
-	this.currentEndDt = moment(this.currentDt).add('M', 1);
+
+	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
+		this.currentEndDt = moment(this.currentDt).add('M', 1);
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
+		this.currentEndDt = moment(this.currentDt).add('Y', 1);
+	}
 }
 
-ReportGenerator.prototype.getReportData = function(currentDt, callbackFunc) {
+ReportGenerator.prototype.getReportData = function(callbackFunc) {
 	var reportGenThis = this;
-	this.currentDt = currentDt;
-	this.currentEndDt = moment(this.currentDt).add('M', 1);
 
 	var requestData = {
 		report_type: this.reportType,
@@ -159,6 +175,8 @@ ReportGenerator.prototype.genLastDt = function(targetDt) {
 	var result;
 	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
 		result = moment(targetDt).subtract('M', 1);
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
+		result = moment(targetDt).subtract('y', 1);
 	}
 
 	return result;
@@ -202,7 +220,28 @@ ReportGenerator.prototype.insertSubInfo = function(target, template, bullet, col
 	target.append(subInfoHtml);
 }
 
+ReportGenerator.prototype.getReportTypeName = function() {
+	var reportTypeName;
+	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
+		reportTypeName = 'month';
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
+		reportTypeName = 'year';
+	}
+
+	return reportTypeName;
+}
+
+ReportGenerator.prototype.updateReportInnerText = function() {
+	var reportTypeName = this.getReportTypeName();
+
+	$(".report-type-name").text(reportTypeName.toUpperCase());
+	$(".report-type-name-lower").text(reportTypeName);
+	$(".report-type-name-lower-plural").text(reportTypeName+'s');
+}
+
 ReportGenerator.prototype.generateFullReport = function() {
+	this.updateReportInnerText();
+
 	this.generateKeyStatistics();
 	this.generateComparePast();
 
@@ -226,6 +265,22 @@ ReportGenerator.prototype.generateFullReport = function() {
 		});
 	});
 	this.generateOvernightReport(combinedOvernightCurrentReadings);
+
+	if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
+		$(".calendar-vertical-info").show();
+
+		$(".compare-last-same-period").hide();
+		$(".calendar-info-container").hide();
+		$(".calendar-bottom-info").hide();
+		$(".bottom-info-separator").hide();
+	} else {
+		$(".compare-last-same-period").show();
+		$(".calendar-info-container").show();
+		$(".calendar-bottom-info").show();
+		$(".bottom-info-separator").show();
+
+		$(".calendar-vertical-info").hide();
+	}
 }
 
 ReportGenerator.prototype.generateKeyStatistics = function() {
@@ -250,14 +305,14 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 		savedEnergyPercentSuffix = "less";
 		savedCo2SubText = "of CO<sub>2</sub> reduced";
 		savedMoneySubText = "in savings";
-		carImpactSubText = "taken off the road for a month";
+		carImpactSubText = "taken off the road for a ";
 		forestImpactSubText = "of tropical rainforest protected";
 		elephantImpactSubText = "Reduced CO<sub>2</sub> emissions equal to the weight of";
 	} else {
 		savedEnergyPercentSuffix = "more";
 		savedCo2SubText = "of CO<sub>2</sub> increased";
 		savedMoneySubText = "extra spending";
-		carImpactSubText = "more on the road for a month";
+		carImpactSubText = "more on the road for a ";
 		forestImpactSubText = "of tropical rainforest cut down";
 		elephantImpactSubText = "Extra CO<sub>2</sub> emissions equal to the weight of";
 	}
@@ -272,7 +327,8 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 		compareToDt.subtract('y', 1);
 	}
 
-	$("#save-energy-subtext").text("than " + compareToDt.format('MMM YYYY'));
+	var saveEnergySubText = this.genDtText(compareToDt);
+	$("#save-energy-subtext").text("than " + saveEnergySubText);
 	var savedCo2Text = Utils.formatWithCommas((Math.abs(reportGenThis.savingInfo.co2)/1000).toFixed(0));
 	savedCo2Text += " tons";
 	$("#save-co2-usage").text(savedCo2Text);
@@ -283,6 +339,7 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 
 	var co2InCar = Utils.formatWithCommas(Math.abs((reportGenThis.savingInfo.co2*0.003).toFixed(0)));
 	$("#car-impact").text(co2InCar + " cars");
+	carImpactSubText += this.getReportTypeName();
 	$("#car-impact-subtext").text(carImpactSubText);
 	var co2InForest = Utils.formatWithCommas(Math.abs((reportGenThis.savingInfo.co2*0.016).toFixed(0)));
 	$("#forest-impact").text(co2InForest + " m²");
@@ -471,6 +528,8 @@ ReportGenerator.prototype.transformXCoordinate = function(timestamp) {
 	var result;
 	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
 		result = moment.unix(timestamp).tz(this.timezone).date();
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
+		result = moment.unix(timestamp).tz(this.timezone).dayOfYear();
 	}
 
 	return result;
@@ -498,9 +557,16 @@ ReportGenerator.prototype.genXAxisOptions = function() {
 	options = {};
 	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
 		options.min = 0;
-		options.max = 31;
+		options.max = 32;
 		options.ticks = [];
-		for (var i = options.min; i < options.max; i+=2) {
+		for (var i = options.min; i < options.max-1; i+=2) {
+			options.ticks.push([i, i]);
+		}
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
+		options.min = 0;
+		options.max = 366;
+		options.ticks = [];
+		for (var i = options.min; i < options.max-1; i+=30) {
 			options.ticks.push([i, i]);
 		}
 	}
@@ -513,6 +579,8 @@ ReportGenerator.prototype.genComparePastLabel = function(targetDt) {
 
 	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
 		result = targetDt.format("MMM");
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
+		result = targetDt.format("YYYY");
 	}
 
 	return result;
@@ -565,7 +633,7 @@ ReportGenerator.prototype.insertComparePastSubInfo = function(template, info, cl
 			infoClass = "positive-saving";
 			titleText += "% less";
 		}
-		titleText += " energy than last month";
+		titleText += " energy than last "+this.getReportTypeName();
 	}
 
 	var name = ("sourceName" in info) ? info.sourceName : info.system.data.name;
@@ -576,6 +644,7 @@ ReportGenerator.prototype.insertComparePastSubInfo = function(template, info, cl
 		name: name,
 		lineChartTitle: titleText,
 		infoClass: infoClass,
+		dayOfThe: this.getReportTypeName(),
 	};
 
 	var subInfoHtml = Mustache.render(template, templateInfo);
@@ -732,7 +801,7 @@ ReportGenerator.prototype._genSubComparePercentInfo = function(oldUsage, newUsag
 ReportGenerator.prototype._fillCalendar = function(eleSel, readings, averageUsage, isNotConcernFunc) {
 	var reportGenThis = this;
 	var calendarInfoContainer = $(eleSel);
-	calendarInfoContainer.find(".calendar-title").text(this.currentDt.format('MMM YYYY'));
+	calendarInfoContainer.find(".calendar-title").text(this.genDtText(this.currentDt));
 
 	var calendarContainer = calendarInfoContainer.find(".calendar-day-container");
 	calendarContainer.empty();
@@ -794,7 +863,7 @@ ReportGenerator.prototype._insertCalendarSubInfo = function(eleSel, classIdPrefi
 		var compareBeginningInfo = reportGenThis._genSubComparePercentInfo(
 			info[beginningUsageKey].average, averageUsage, beginningDateText);
 		var compareLastInfo = reportGenThis._genSubComparePercentInfo(
-			info[lastUsageKey].average, averageUsage, "last month");
+			info[lastUsageKey].average, averageUsage, "last "+reportGenThis.getReportTypeName());
 		var compareLastSamePeriodInfo = reportGenThis._genSubComparePercentInfo(
 			info[lastSamePeriodUsageKey].average, averageUsage, "same period last year");
 		var firstSplitPercent = parseFloat((info[currentUsageKey].total/info.currentTotalEnergy*100).toFixed(1));
@@ -918,7 +987,11 @@ ReportGenerator.prototype.generateCalendarReport = function(targetSel, combinedR
 		firstSplitPercent, secondSplitPercent,
 		ReportGenerator.FIRST_SPLIT_PIE_COLOR, ReportGenerator.SECOND_SPLIT_PIE_COLOR);
 
-	this._fillCalendar(targetSel+" .calendar-info-container", combinedReadings, averageUsage, isNotConcernFunc);
+	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
+		this._fillCalendar(targetSel+" .calendar-info-container", combinedReadings, averageUsage, isNotConcernFunc);
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
+		$(targetSel+" .calendar-title").text(this.genDtText(this.currentDt));
+	}
 
 	this._insertCalendarSubInfo(targetSel+" .detail-container", classIdPrefix, calendarTypeName,
 		currentUsageKey, beginningUsageKey, lastUsageKey, lastSamePeriodUsageKey,
