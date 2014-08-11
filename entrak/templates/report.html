@@ -50,13 +50,22 @@ function updateBoundDt() {
 		}
 
 		report.boundEndDt = moment().tz(report.timezone).startOf('year');
+	} else if (report.currentReportType === ReportGenerator.REPORT_TYPE_QUARTER) {
+		if (report.firstRecord.date() === 1
+			&& (report.firstRecord.month() === 0 || report.firstRecord.month() === 3
+				|| report.firstRecord.month() === 6 || report.firstRecord.month() === 9)) {
+			report.boundStartDt = moment(report.firstRecord).startOf('quarter');
+		} else {
+			report.boundStartDt = moment(report.firstRecord).add('M', 3).startOf('quarter');
+		}
+
+		report.boundEndDt = moment().tz(report.timezone).startOf('quarter');
 	}
 }
 
 function isTargetDtValid(targetDt) {
-	return (targetDt.isAfter(report.boundStartDt)
-		&& targetDt.isBefore(report.boundEndDt)
-		|| targetDt.isSame(report.boundStartDt));
+	return ( (targetDt.isAfter(report.boundStartDt) || targetDt.isSame(report.boundStartDt))
+		&& targetDt.isBefore(report.boundEndDt));
 }
 
 function updateReportType(targetReportType) {
@@ -65,19 +74,20 @@ function updateReportType(targetReportType) {
 
 	if (targetReportType === ReportGenerator.REPORT_TYPE_YEAR) {
 		timeRangeYearSelected();
+	} else if (targetReportType === ReportGenerator.REPORT_TYPE_QUARTER) {
+		timeRangeQuarterSelected();
 	}
 
 	updateGenReportSection();
 }
 
 function timeRangeYearSelected() {
-	report.currentReportType = ReportGenerator.REPORT_TYPE_YEAR;
-	report.currentDt = moment().tz(report.timezone).startOf('year');
+	report.currentDt = moment(report.boundEndDt).subtract('y', 1);
 
 	var targetYearEle = $(".year-quarter-calendar-head .target-year");
 	targetYearEle.text(report.currentDt.format('YYYY'));
 
-	$(".year-quarter-calendar-head .prev-btn").click(function() {
+	$(".year-quarter-calendar-head .prev-btn").off('click').click(function() {
 		var targetDt = moment(report.currentDt).subtract('y', 1);
 		if (isTargetDtValid(targetDt)) {
 			report.currentDt.subtract('y', 1);
@@ -85,7 +95,7 @@ function timeRangeYearSelected() {
 			updateGenReportSection();
 		}
 	});
-	$(".year-quarter-calendar-head .next-btn").click(function() {
+	$(".year-quarter-calendar-head .next-btn").off('click').click(function() {
 		var targetDt = moment(report.currentDt).add('y', 1);
 		if (isTargetDtValid(targetDt)) {
 			report.currentDt.add('y', 1);
@@ -95,11 +105,54 @@ function timeRangeYearSelected() {
 	});
 }
 
+function updateSelectedQuarter() {
+	$(".year-quarter-calendar-content>div").removeClass('selected-quarter');
+	var quarterIdx = report.currentDt.month()/3;
+	$($(".year-quarter-calendar-content>div")[quarterIdx]).addClass('selected-quarter');
+}
+
+function timeRangeQuarterSelected() {
+	report.currentDt = moment(report.boundEndDt).subtract('M', 3);
+
+	var targetYearEle = $(".year-quarter-calendar-head .target-year");
+	targetYearEle.text(report.currentDt.format('YYYY'));
+	updateSelectedQuarter();
+
+	$(".year-quarter-calendar-head .prev-btn").off('click').click(function() {
+		var targetDt = moment(report.currentDt).subtract('y', 1);
+		if (targetDt.year() >= report.boundStartDt.year()) {
+			report.currentDt.subtract('y', 1);
+			while(report.currentDt.isBefore(report.boundStartDt)) {
+				report.currentDt.add('M', 3);
+			}
+			targetYearEle.text(report.currentDt.format('YYYY'));
+			updateSelectedQuarter();
+			updateGenReportSection();
+		}
+	});
+	$(".year-quarter-calendar-head .next-btn").off('click').click(function() {
+		var targetDt = moment(report.currentDt).add('y', 1);
+		if (targetDt.year() < report.boundEndDt.year()
+			|| (targetDt.year() === report.boundEndDt.year() && report.boundEndDt.month() !== 0) ) {
+			report.currentDt.add('y', 1);
+			while(!(report.currentDt.isBefore(report.boundEndDt))) {
+				report.currentDt.subtract('M', 3);
+			}
+			targetYearEle.text(report.currentDt.format('YYYY'));
+			updateSelectedQuarter();
+			updateGenReportSection();
+		}
+	});
+}
+
 function updateGenReportSection() {
 	var fromText, toText;
 	if (report.currentReportType === ReportGenerator.REPORT_TYPE_YEAR) {
 		fromText = report.currentDt.format('YYYY');
-		toText = moment(report.currentDt).add('y', 1).format('YYYY');
+		toText = report.reportGenerator.genEndDt(report.currentDt, report.currentReportType).format('YYYY');
+	} else if (report.currentReportType === ReportGenerator.REPORT_TYPE_QUARTER) {
+		fromText = report.currentDt.format('YYYY MMMM');
+		toText = report.reportGenerator.genEndDt(report.currentDt, report.currentReportType).format('YYYY MMMM');
 	}
 	$(".datetime-result .from-date").text(fromText);
 	$(".datetime-result .to-date").text(toText);
@@ -159,6 +212,8 @@ $(function() {
 			var targetReportType;
 			if (btnIdx === 0) {
 				targetReportType = ReportGenerator.REPORT_TYPE_YEAR;
+			} else if(btnIdx === 1) {
+				targetReportType = ReportGenerator.REPORT_TYPE_QUARTER;
 			}
 
 			if (targetReportType !== report.currentReportType) {
@@ -201,6 +256,18 @@ $(function() {
 			report.reportGenerator.assignData(data);
 			report.reportGenerator.generateFullReport();
 			$(".report-component").fadeTo(600, 1.0);
+		});
+	});
+
+	$(".year-quarter-calendar-content>div").each(function(btnIdx) {
+		$(this).click(function() {
+			var targetDt = moment(report.currentDt).month(btnIdx*3);
+			if (isTargetDtValid(targetDt)) {
+				$(".year-quarter-calendar-content>div").removeClass('selected-quarter');
+				$(this).addClass('selected-quarter');
+				report.currentDt = targetDt;
+				updateGenReportSection();
+			}
 		});
 	});
 });

@@ -19,6 +19,8 @@ function ReportGenerator(systemTree, timezone, reportType) {
 
 ReportGenerator.REPORT_TYPE_MONTH = 'month';
 ReportGenerator.REPORT_TYPE_YEAR = 'year';
+ReportGenerator.REPORT_TYPE_QUARTER = 'quarter';
+ReportGenerator.REPORT_TYPE_CUSTOM_MONTH = 'custom-month';
 
 ReportGenerator.MAX_PERCENTAGE_PIECE = 5;
 ReportGenerator.DONUT_COLORS = ['#5DB9CF', '#814864', '#CF498D', '#807647', '#CFB948'];
@@ -127,6 +129,8 @@ ReportGenerator.prototype.genDtText = function(targetDt) {
 		currentDtName = targetDt.format("MMM YYYY");
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
 		currentDtName = targetDt.format('YYYY');
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_QUARTER) {
+		currentDtName = targetDt.format('YYYY ')+'Q'+this.getQuarterIdx(this.currentDt);
 	}
 
 	return currentDtName;
@@ -138,18 +142,36 @@ ReportGenerator.prototype.genReportName = function() {
 		reportName += " - Monthly Energy Report";
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
 		reportName += " - Yearly Energy Report";
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_QUARTER) {
+		reportName += " - Quarterly Energy Report";
 	}
 
 	return reportName;
 }
 
+ReportGenerator.prototype.getQuarterIdx = function(targetDt) {
+	return (targetDt.month()/3) + 1;
+}
+
+ReportGenerator.prototype.genEndDt = function(startDt, targetReportType) {
+	var endDt;
+	if (targetReportType === ReportGenerator.REPORT_TYPE_MONTH) {
+		endDt = moment(startDt).add('M', 1);
+	} else if (targetReportType === ReportGenerator.REPORT_TYPE_YEAR) {
+		endDt = moment(startDt).add('Y', 1);
+	} else if (targetReportType === ReportGenerator.REPORT_TYPE_QUARTER) {
+		endDt = moment(startDt).add('M', 3);
+	}
+
+	return endDt;
+}
+
 ReportGenerator.prototype.updateDtInfo = function(startDt, customEndDt) {
 	this.currentDt = startDt;
-
-	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
-		this.currentEndDt = moment(this.currentDt).add('M', 1);
-	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
-		this.currentEndDt = moment(this.currentDt).add('Y', 1);
+	if (this.reportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+		this.currentEndDt = customEndDt;
+	} else {
+		this.currentEndDt = this.genEndDt(this.currentDt, this.reportType);
 	}
 }
 
@@ -177,6 +199,8 @@ ReportGenerator.prototype.genLastDt = function(targetDt) {
 		result = moment(targetDt).subtract('M', 1);
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
 		result = moment(targetDt).subtract('y', 1);
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_QUARTER) {
+		result = moment(targetDt).subtract('M', 3);
 	}
 
 	return result;
@@ -226,6 +250,8 @@ ReportGenerator.prototype.getReportTypeName = function() {
 		reportTypeName = 'month';
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
 		reportTypeName = 'year';
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_QUARTER) {
+		reportTypeName = 'quarter';
 	}
 
 	return reportTypeName;
@@ -266,10 +292,15 @@ ReportGenerator.prototype.generateFullReport = function() {
 	});
 	this.generateOvernightReport(combinedOvernightCurrentReadings);
 
-	if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
+	if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR
+		|| this.reportType === ReportGenerator.REPORT_TYPE_QUARTER) {
+		if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
+			$(".compare-last-same-period").hide();
+		} else {
+			$(".compare-last-same-period").show();
+		}
 		$(".calendar-vertical-info").show();
 
-		$(".compare-last-same-period").hide();
 		$(".calendar-info-container").hide();
 		$(".calendar-bottom-info").hide();
 		$(".bottom-info-separator").hide();
@@ -528,7 +559,8 @@ ReportGenerator.prototype.transformXCoordinate = function(timestamp) {
 	var result;
 	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
 		result = moment.unix(timestamp).tz(this.timezone).date();
-	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR
+		|| this.reportType === ReportGenerator.REPORT_TYPE_QUARTER) {
 		result = moment.unix(timestamp).tz(this.timezone).dayOfYear();
 	}
 
@@ -569,6 +601,16 @@ ReportGenerator.prototype.genXAxisOptions = function() {
 		for (var i = options.min; i < options.max-1; i+=30) {
 			options.ticks.push([i, i]);
 		}
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_QUARTER) {
+		options.min = this.currentDt.dayOfYear()-1;
+		options.max = this.currentEndDt.dayOfYear()+1;
+		options.ticks = [];
+		for (var i = 0; i < 3; i++) {
+			var tickDt = moment(this.currentDt).add('M', i);
+			options.ticks.push([tickDt.dayOfYear(), tickDt.format('MMM D')]);
+			tickDt.date(15);
+			options.ticks.push([tickDt.dayOfYear(), tickDt.format('MMM D')]);
+		}
 	}
 
 	return options;
@@ -581,6 +623,8 @@ ReportGenerator.prototype.genComparePastLabel = function(targetDt) {
 		result = targetDt.format("MMM");
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
 		result = targetDt.format("YYYY");
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_QUARTER) {
+		result = targetDt.format("YYYY ")+'Q'+this.getQuarterIdx(targetDt);
 	}
 
 	return result;
@@ -721,9 +765,13 @@ ReportGenerator.prototype.generateComparePast = function() {
 			}
 		});
 	});
+	var mainSeriesBaseOptions = $.extend(true, {}, ReportGenerator.MAIN_SERIES_BASE_OPTIONS);
+	if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
+		delete mainSeriesBaseOptions.points;
+	}
 	this.plotCompareLineChart(".detail-container>div.compare-past-line-chart",
 		combinedCurrentReadings, combinedLastReadings,
-		ReportGenerator.MAIN_PLOT_OPTIONS, ReportGenerator.MAIN_SERIES_BASE_OPTIONS);
+		ReportGenerator.MAIN_PLOT_OPTIONS, mainSeriesBaseOptions);
 
 	$(".compare-past-sub-info-container").empty();
 	var subInfoTemplate = $("#compare-past-sub-info-template").html();
@@ -868,14 +916,23 @@ ReportGenerator.prototype._insertCalendarSubInfo = function(eleSel, classIdPrefi
 			info[lastSamePeriodUsageKey].average, averageUsage, "same period last year");
 		var firstSplitPercent = parseFloat((info[currentUsageKey].total/info.currentTotalEnergy*100).toFixed(1));
 		var secondSplitPercent = parseFloat((100-firstSplitPercent).toFixed(1));
-		var lowestDt = moment(info[currentUsageKey].min.date, 'YYYY-MM-DD');
-		var lowestText = lowestDt.format('D MMM YYYY')+' - '
-			+Utils.formatWithCommas(info[currentUsageKey].min.val.toFixed(0))
-			+' kWh';
-		var highestDt = moment(info[currentUsageKey].max.date, 'YYYY-MM-DD');
-		var highestText = highestDt.format('D MMM YYYY')+' - '
-			+Utils.formatWithCommas(info[currentUsageKey].max.val.toFixed(0))
-			+' kWh';
+		if (info[currentUsageKey].min.date !== null) {
+			var lowestDt = moment(info[currentUsageKey].min.date, 'YYYY-MM-DD');
+			var lowestText = lowestDt.format('D MMM YYYY')+' - '
+				+Utils.formatWithCommas(info[currentUsageKey].min.val.toFixed(0))
+				+' kWh';
+		} else {
+			var lowestText = '-';
+		}
+		if (info[currentUsageKey].max.date !== null) {
+			var highestDt = moment(info[currentUsageKey].max.date, 'YYYY-MM-DD');
+			var highestText = highestDt.format('D MMM YYYY')+' - '
+				+Utils.formatWithCommas(info[currentUsageKey].max.val.toFixed(0))
+				+' kWh';
+		} else {
+			var highestText = '-';
+		}
+		
 
 		if (swapSplitPercent) {
 			var tempSplitPercent = secondSplitPercent;
@@ -989,7 +1046,8 @@ ReportGenerator.prototype.generateCalendarReport = function(targetSel, combinedR
 
 	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
 		this._fillCalendar(targetSel+" .calendar-info-container", combinedReadings, averageUsage, isNotConcernFunc);
-	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR
+		|| this.reportType === ReportGenerator.REPORT_TYPE_QUARTER) {
 		$(targetSel+" .calendar-title").text(this.genDtText(this.currentDt));
 	}
 

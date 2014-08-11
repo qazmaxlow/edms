@@ -29,6 +29,7 @@ from utils import calculation
 TEMP_MEDIA_DIR = os.path.join(MEDIA_ROOT, 'temp')
 REPORT_TYPE_MONTH = 'month'
 REPORT_TYPE_YEAR = 'year'
+REPORT_TYPE_QUARTER = 'quarter'
 
 @permission_required
 @ensure_csrf_cookie
@@ -91,11 +92,11 @@ def __calculcate_total_max_min(readings, timezone):
 		dt = Utils.utc_dt_from_utc_timestamp(timestamp).astimezone(timezone)
 		total_val += val
 		total_day += 1
-		if val > max_usage_val:
+		if val >= max_usage_val:
 			max_usage_val = val;
 			max_usage_date = dt.date()
 
-		if val < min_usage_val:
+		if val <= min_usage_val:
 			min_usage_val = val;
 			min_usage_date = dt.date()
 
@@ -179,6 +180,8 @@ def __gen_report_last_dt(report_type, target_dt):
 		result = Utils.add_month(target_dt, -1)
 	elif report_type == REPORT_TYPE_YEAR:
 		result = Utils.add_year(target_dt, -1)
+	elif report_type == REPORT_TYPE_QUARTER:
+		result = Utils.add_month(target_dt, -3)
 
 	return result
 
@@ -202,6 +205,8 @@ def __gen_report_dt_info(report_type, timezone, system_first_record, start_times
 		end_dt = Utils.add_month(start_dt, 1)
 	elif report_type == REPORT_TYPE_YEAR:
 		end_dt = Utils.add_year(start_dt, 1)
+	elif report_type == REPORT_TYPE_QUARTER:
+		end_dt = Utils.add_month(start_dt, 3)
 	dt_info['end_dt'] = end_dt
 
 	system_first_record = system_first_record.astimezone(timezone).replace(hour=0, minute=0, second=0, microsecond=0)

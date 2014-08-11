@@ -25,6 +25,15 @@
 	font-size: 10pt;
 	background-color: #FFF1CD;
 }
+.customize-section-title>span {
+	display: inline-block;
+	width: 15px;
+	height: 15px;
+	line-height: 15px;
+	border: 1px solid #FF00FF;
+	border-radius: 50%;
+	-moz-border-radius: 50%;
+}
 
 .time-range-section {
 	background-color: #F0EEE8;
@@ -91,6 +100,13 @@
 }
 .year-quarter-calendar-content>div>div {
 	display: inline-block;
+}
+.year-quarter-calendar-content .selected-quarter>div:nth-of-type(1){
+	color: #FFFFFF;
+}
+.year-quarter-calendar-content .selected-quarter>div:nth-of-type(2){
+	color: #FFFFFF;
+	background-color: #00FFFF;
 }
 
 .datetime-result {
@@ -731,19 +747,17 @@
 }
 .line-chart-title {
 	position: absolute;
-	width: 54%;
 	font-size: 10pt;
 	border-bottom: 1px solid;
 	color: #909090;
 	font-weight: bold;
 	padding-top: 14px;
-	right: 203px;
+	left: 20px;
 }
 .line-chart-title-container .line-chart-title{
 	padding-top: 30px;
-	width: 21%;
 	font-size: 11pt;
-	right: 390px;
+	left: 377px;
 }
 
 .detail-container>div.compare-past-line-chart {
