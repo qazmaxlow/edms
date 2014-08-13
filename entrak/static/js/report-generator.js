@@ -123,7 +123,7 @@ ReportGenerator.SUB_INFO_PLOT_OPTIONS = {
 ReportGenerator.LINE_CHART_CURRENT_COLOR = "#047FA1";
 ReportGenerator.LINE_CHART_LAST_COLOR = "#EDBA3C";
 
-ReportGenerator.prototype.genDtText = function(targetDt) {
+ReportGenerator.prototype.genDtText = function(targetDt, endDt) {
 	var currentDtName = "";
 	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
 		currentDtName = targetDt.format("MMM YYYY");
@@ -131,19 +131,27 @@ ReportGenerator.prototype.genDtText = function(targetDt) {
 		currentDtName = targetDt.format('YYYY');
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_QUARTER) {
 		currentDtName = targetDt.format('YYYY ')+'Q'+this.getQuarterIdx(this.currentDt);
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+		if (endDt === undefined || endDt === null) {
+			currentDtName = targetDt.format('D MMM YYYY, ddd');
+		} else {
+			currentDtName = targetDt.format('D MMM YYYY, ddd')+' to '+endDt.format('D MMM YYYY, ddd');
+		}
 	}
 
 	return currentDtName;
 }
 
 ReportGenerator.prototype.genReportName = function() {
-	var reportName = this.genDtText(this.currentDt);
+	var reportName = this.genDtText(this.currentDt, this.currentEndDt);
 	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
 		reportName += " - Monthly Energy Report";
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
 		reportName += " - Yearly Energy Report";
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_QUARTER) {
 		reportName += " - Quarterly Energy Report";
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+		reportName += " - Monthly Energy Report";
 	}
 
 	return reportName;
@@ -193,7 +201,7 @@ ReportGenerator.prototype.getReportData = function(callbackFunc) {
 	});
 }
 
-ReportGenerator.prototype.genLastDt = function(targetDt) {
+ReportGenerator.prototype.genLastDt = function(targetDt, dayDiff) {
 	var result;
 	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
 		result = moment(targetDt).subtract('M', 1);
@@ -201,17 +209,19 @@ ReportGenerator.prototype.genLastDt = function(targetDt) {
 		result = moment(targetDt).subtract('y', 1);
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_QUARTER) {
 		result = moment(targetDt).subtract('M', 3);
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+		result = moment(targetDt).subtract('d', dayDiff);
 	}
 
 	return result;
 }
 
-ReportGenerator.prototype.genConsecutiveLasts = function(numOfLast, startDt) {
+ReportGenerator.prototype.genConsecutiveLasts = function(numOfLast, startDt, dayDiff) {
 	var result = [];
 	result.push(startDt.unix());
 	var nextDt = startDt;
 	for (var i = 0; i < numOfLast; i++) {
-		nextDt = this.genLastDt(nextDt);
+		nextDt = this.genLastDt(nextDt, dayDiff);
 		result.push(nextDt.unix());
 	}
 
@@ -246,7 +256,8 @@ ReportGenerator.prototype.insertSubInfo = function(target, template, bullet, col
 
 ReportGenerator.prototype.getReportTypeName = function() {
 	var reportTypeName;
-	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
+	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH
+		|| this.reportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
 		reportTypeName = 'month';
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
 		reportTypeName = 'year';
@@ -555,23 +566,25 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 	});
 }
 
-ReportGenerator.prototype.transformXCoordinate = function(timestamp) {
+ReportGenerator.prototype.transformXCoordinate = function(timestamp, startDt) {
 	var result;
 	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
 		result = moment.unix(timestamp).tz(this.timezone).date();
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR
 		|| this.reportType === ReportGenerator.REPORT_TYPE_QUARTER) {
 		result = moment.unix(timestamp).tz(this.timezone).dayOfYear();
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+		result = moment.unix(timestamp).tz(this.timezone).diff(startDt, 'days');
 	}
 
 	return result;
 }
 
-ReportGenerator.prototype.genCompareSeriesFromReadings = function(readings, options, label, color) {
+ReportGenerator.prototype.genCompareSeriesFromReadings = function(readings, options, label, color, startDt) {
 	var reportGenThis = this;
 	var series = $.extend(true, {data: []}, options);
 	$.each(readings, function(timestamp, value) {
-		series.data.push([reportGenThis.transformXCoordinate(timestamp), value]);
+		series.data.push([reportGenThis.transformXCoordinate(timestamp, startDt), value]);
 	});
 	series.data.sort(function (a, b) {
 		return a[0]-b[0];
@@ -611,6 +624,17 @@ ReportGenerator.prototype.genXAxisOptions = function() {
 			tickDt.date(15);
 			options.ticks.push([tickDt.dayOfYear(), tickDt.format('MMM D')]);
 		}
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+		var dayDiff = this.currentEndDt.diff(this.currentDt, 'days');
+		options.min = -1;
+		options.max = dayDiff + 1;
+		options.ticks = [];
+		for (var i = 0; i < dayDiff; i++) {
+			var tickDt = moment(this.currentDt).add('d', i);
+			if (tickDt.date() === 1 || tickDt.date()%5 === 0 && tickDt.date() !== 30) {
+				options.ticks.push([i, tickDt.format('MMM D')]);
+			}
+		}
 	}
 
 	return options;
@@ -625,6 +649,8 @@ ReportGenerator.prototype.genComparePastLabel = function(targetDt) {
 		result = targetDt.format("YYYY");
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_QUARTER) {
 		result = targetDt.format("YYYY ")+'Q'+this.getQuarterIdx(targetDt);
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+		result = targetDt.format("MMM D");
 	}
 
 	return result;
@@ -636,11 +662,17 @@ ReportGenerator.prototype.plotCompareLineChart = function(targetEleSel, currentR
 	var currentSeries = this.genCompareSeriesFromReadings(currentReadings,
 		seriesOptions,
 		this.genComparePastLabel(this.currentDt),
-		ReportGenerator.LINE_CHART_CURRENT_COLOR);
+		ReportGenerator.LINE_CHART_CURRENT_COLOR,
+		this.currentDt);
+	var dayDiff = null;
+	if (this.reportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+		dayDiff = this.currentEndDt.diff(this.currentDt, 'days');
+	}
 	var lastSeries = this.genCompareSeriesFromReadings(lastReadings,
 		seriesOptions,
-		this.genComparePastLabel(this.genLastDt(this.currentDt)),
-		ReportGenerator.LINE_CHART_LAST_COLOR);
+		this.genComparePastLabel(this.genLastDt(this.currentDt, dayDiff)),
+		ReportGenerator.LINE_CHART_LAST_COLOR,
+		this.genLastDt(this.currentDt, dayDiff));
 
 	var xAxisOptions = this.genXAxisOptions();
 	plotOptions.xaxis.min = xAxisOptions.min;
@@ -740,7 +772,11 @@ ReportGenerator.prototype.generateComparePast = function() {
 	});
 
 	var barNameEles = $(".compare-past-bar-name");
-	var lastPeriodDts = this.genConsecutiveLasts(5, this.currentDt);
+	var dayDiff = null;
+	if (this.reportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+		dayDiff = this.currentEndDt.diff(this.currentDt, 'days');
+	}
+	var lastPeriodDts = this.genConsecutiveLasts(5, this.currentDt, dayDiff);
 	$.each(lastPeriodDts, function(periodIdx, periodUnix) {
 		var periodDt = moment.unix(periodUnix).tz(reportGenThis.timezone);
 		var barNameEleIdx = lastPeriodDts.length-1-periodIdx;
@@ -1044,7 +1080,8 @@ ReportGenerator.prototype.generateCalendarReport = function(targetSel, combinedR
 		firstSplitPercent, secondSplitPercent,
 		ReportGenerator.FIRST_SPLIT_PIE_COLOR, ReportGenerator.SECOND_SPLIT_PIE_COLOR);
 
-	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
+	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH
+		|| this.reportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
 		this._fillCalendar(targetSel+" .calendar-info-container", combinedReadings, averageUsage, isNotConcernFunc);
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR
 		|| this.reportType === ReportGenerator.REPORT_TYPE_QUARTER) {

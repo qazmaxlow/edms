@@ -16,6 +16,5 @@ DATABASES = {
 
 connect('entrak', username="entrak", password="entrak8888")
 
-DOMAIN_URL = "http://54.179.172.231:8001"
 MEDIA_URL = '/media/'
 LOGGING['handlers']['timed_rotating_handler']['filename'] = os.path.join('/mnt', 'logs', 'entrak', 'django_error.log')

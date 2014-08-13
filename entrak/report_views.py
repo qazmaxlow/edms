@@ -16,7 +16,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.db.models import Q
 from django.utils.html import escapejs
 from mongoengine import Q as MongoQ
-from entrak.settings import DOMAIN_URL, MEDIA_ROOT
+from entrak.settings import MEDIA_ROOT
 from system.models import System
 from unit.models import UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
 from baseline.models import BaselineUsage
@@ -30,6 +30,7 @@ TEMP_MEDIA_DIR = os.path.join(MEDIA_ROOT, 'temp')
 REPORT_TYPE_MONTH = 'month'
 REPORT_TYPE_YEAR = 'year'
 REPORT_TYPE_QUARTER = 'quarter'
+REPORT_TYPE_CUSTOM_MONTH = 'custom-month'
 
 @permission_required
 @ensure_csrf_cookie
@@ -175,22 +176,24 @@ def __get_sum_up_usage_within_periods(source_ids, period_dts):
 
 	return results
 
-def __gen_report_last_dt(report_type, target_dt):
+def __gen_report_last_dt(report_type, target_dt, day_diff=None):
 	if report_type == REPORT_TYPE_MONTH:
 		result = Utils.add_month(target_dt, -1)
 	elif report_type == REPORT_TYPE_YEAR:
 		result = Utils.add_year(target_dt, -1)
 	elif report_type == REPORT_TYPE_QUARTER:
 		result = Utils.add_month(target_dt, -3)
+	elif report_type == REPORT_TYPE_CUSTOM_MONTH:
+		result = target_dt - datetime.timedelta(days=day_diff)
 
 	return result
 
-def __gen_consecutive_lasts(report_type, target_dt, num_of_last):
+def __gen_consecutive_lasts(report_type, target_dt, num_of_last, day_diff=None):
 	result = []
 	result.append(target_dt)
 	next_dt = target_dt
 	for idx in xrange(num_of_last):
-		next_dt = __gen_report_last_dt(report_type, next_dt)
+		next_dt = __gen_report_last_dt(report_type, next_dt, day_diff)
 		result.append(next_dt)
 
 	return result
@@ -201,12 +204,16 @@ def __gen_report_dt_info(report_type, timezone, system_first_record, start_times
 	start_dt = Utils.utc_dt_from_utc_timestamp(start_timestamp).astimezone(timezone)
 	dt_info['start_dt'] = start_dt
 
+	day_diff = None
 	if report_type == REPORT_TYPE_MONTH:
 		end_dt = Utils.add_month(start_dt, 1)
 	elif report_type == REPORT_TYPE_YEAR:
 		end_dt = Utils.add_year(start_dt, 1)
 	elif report_type == REPORT_TYPE_QUARTER:
 		end_dt = Utils.add_month(start_dt, 3)
+	elif report_type == REPORT_TYPE_CUSTOM_MONTH:
+		end_dt = Utils.utc_dt_from_utc_timestamp(end_timestamp).astimezone(timezone)
+		day_diff = (end_dt - start_dt).days
 	dt_info['end_dt'] = end_dt
 
 	system_first_record = system_first_record.astimezone(timezone).replace(hour=0, minute=0, second=0, microsecond=0)
@@ -215,16 +222,19 @@ def __gen_report_dt_info(report_type, timezone, system_first_record, start_times
 	else:
 		beginning_start_dt = Utils.add_month(system_first_record.replace(day=1), 1)
 	dt_info['beginning_start_dt'] = beginning_start_dt
-	dt_info['beginning_end_dt'] = Utils.add_month(beginning_start_dt, 1)
+	if report_type == REPORT_TYPE_CUSTOM_MONTH:
+		dt_info['beginning_end_dt'] = beginning_start_dt + datetime.timedelta(days=day_diff)
+	else:
+		dt_info['beginning_end_dt'] = Utils.add_month(beginning_start_dt, 1)
 
 	dt_info['last_same_period_start_dt'] = Utils.add_year(start_dt, -1)
 	dt_info['last_same_period_end_dt'] = Utils.add_year(end_dt, -1)
 
-	last_start_dt = __gen_report_last_dt(report_type, start_dt)
+	last_start_dt = __gen_report_last_dt(report_type, start_dt, day_diff)
 	dt_info['last_start_dt'] = last_start_dt
 	dt_info['last_end_dt'] = start_dt
 
-	dt_info['consecutive_lasts'] = __gen_consecutive_lasts(report_type, last_start_dt, 4)
+	dt_info['consecutive_lasts'] = __gen_consecutive_lasts(report_type, last_start_dt, 4, day_diff)
 
 	return dt_info
 
@@ -415,7 +425,11 @@ def report_pdf_view(request, system_code=None):
 	end_timestamp = request.POST.get("end_timestamp", 0)
 	report_type = request.POST.get("report_type")
 
-	request_url = DOMAIN_URL + reverse('generate_report_pdf', kwargs={
+	if request.is_secure():
+		domain_url = "https://" + request.META['HTTP_HOST']
+	else:
+		domain_url = "http://" + request.META['HTTP_HOST']
+	request_url = domain_url + reverse('generate_report_pdf', kwargs={
 		'system_code': system_code,
 		'report_type': report_type,
 		'start_timestamp': start_timestamp,

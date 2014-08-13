@@ -68,7 +68,29 @@ function isTargetDtValid(targetDt) {
 		&& targetDt.isBefore(report.boundEndDt));
 }
 
+function isCustomMonthDtValid(targetStartDt, targetEndDt) {
+	var endBound = moment().tz(report.timezone).startOf('day');
+	var dtDiff = targetEndDt.diff(targetStartDt, 'days');
+	return ( (targetStartDt.isAfter(report.firstRecord) || targetStartDt.isSame(report.firstRecord))
+		&& targetStartDt.isBefore(endBound)
+		&& (targetEndDt.isAfter(report.firstRecord) || targetEndDt.isSame(report.firstRecord))
+		&& targetEndDt.isBefore(endBound)
+		&& (dtDiff >= 25 && dtDiff <= 35) )
+}
+
 function updateReportType(targetReportType) {
+	if (targetReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+		$("#panel-content").css('height', '638px');
+
+		$(".customize-detail-section .three-column-section").fadeIn();
+		$(".customize-detail-section .two-column-section").hide();
+	} else {
+		$("#panel-content").css('height', '362px');
+
+		$(".customize-detail-section .two-column-section").fadeIn();
+		$(".customize-detail-section .three-column-section").hide();
+	}
+
 	report.currentReportType = targetReportType;
 	updateBoundDt();
 
@@ -76,6 +98,8 @@ function updateReportType(targetReportType) {
 		timeRangeYearSelected();
 	} else if (targetReportType === ReportGenerator.REPORT_TYPE_QUARTER) {
 		timeRangeQuarterSelected();
+	} else if (targetReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+		timeRangeCustomMonthSelected();
 	}
 
 	updateGenReportSection();
@@ -145,6 +169,34 @@ function timeRangeQuarterSelected() {
 	});
 }
 
+function timeRangeCustomMonthSelected() {
+	$(".month-datepicker-container>div:nth-child(2)").datepicker("destroy");
+	var datepickerOptions = {
+	};
+	$("#month-start-datepicker").datepicker($.extend({
+		minDate: report.firstRecord.toDate(),
+		maxDate: "-26d",
+		onSelect: function(dateText, inst) {
+			var selectDt = moment($(this).datepicker('getDate'));
+			var boundMinDate = moment(selectDt).add('d', 25);
+			var boundMaxDate = moment(selectDt).add('d', 35);
+			$("#month-end-datepicker").datepicker("option", "minDate", boundMinDate.toDate());
+			$("#month-end-datepicker").datepicker("option", "maxDate", boundMaxDate.toDate());
+
+			report.currentDt = selectDt;
+			updateGenReportSection();
+		},
+	}, datepickerOptions));
+	$("#month-end-datepicker").datepicker($.extend({
+		minDate: moment(report.firstRecord).add('d', 25).toDate(),
+		maxDate: "-1d",
+		onSelect: function(dateText, inst) {
+			report.customMonthEndDt = moment($(this).datepicker('getDate'));
+			updateGenReportSection();
+		},
+	}, datepickerOptions));
+}
+
 function updateGenReportSection() {
 	var fromText, toText;
 	if (report.currentReportType === ReportGenerator.REPORT_TYPE_YEAR) {
@@ -153,6 +205,9 @@ function updateGenReportSection() {
 	} else if (report.currentReportType === ReportGenerator.REPORT_TYPE_QUARTER) {
 		fromText = report.currentDt.format('YYYY MMMM');
 		toText = report.reportGenerator.genEndDt(report.currentDt, report.currentReportType).format('YYYY MMMM');
+	} else if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+		fromText = moment($("#month-start-datepicker").datepicker("getDate")).format("D MMM YYYY, ddd");
+		toText = moment($("#month-end-datepicker").datepicker("getDate")).format("D MMM YYYY, ddd");
 	}
 	$(".datetime-result .from-date").text(fromText);
 	$(".datetime-result .to-date").text(toText);
@@ -194,7 +249,7 @@ $(function() {
 			if (btnIdx === 0) {
 				$("#panel-content").css('height', '162px');
 			} else if (btnIdx === 1) {
-				$("#panel-content").css('height', '378px');
+				$("#panel-content").css('height', '362px');
 				updateReportType(ReportGenerator.REPORT_TYPE_YEAR);
 			}
 
@@ -214,6 +269,8 @@ $(function() {
 				targetReportType = ReportGenerator.REPORT_TYPE_YEAR;
 			} else if(btnIdx === 1) {
 				targetReportType = ReportGenerator.REPORT_TYPE_QUARTER;
+			} else if(btnIdx === 2) {
+				targetReportType = ReportGenerator.REPORT_TYPE_CUSTOM_MONTH;
 			}
 
 			if (targetReportType !== report.currentReportType) {
@@ -248,7 +305,11 @@ $(function() {
 
 	$(".create-report-btn").click(function() {
 		report.reportGenerator.reportType = report.currentReportType;
-		report.reportGenerator.updateDtInfo(report.currentDt, null);
+		if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+			report.reportGenerator.updateDtInfo(report.currentDt, report.customMonthEndDt);
+		} else {
+			report.reportGenerator.updateDtInfo(report.currentDt, null);
+		}
 
 		$(".report-component").fadeTo(600, 0.0);
 		updateReportName();
@@ -328,20 +389,20 @@ $(function() {
 								</div>
 								<div class="year-quarter-calendar-content">
 									<div>
-										<div>Q1</div>
-										<div><span>Jan</span><span>Feb</span><span>Mar</span></div>
+										<div class="quarter-idx">Q1</div>
+										<div class="quarter-month"><span>Jan</span><span>Feb</span><span>Mar</span></div>
 									</div>
 									<div>
-										<div>Q2</div>
-										<div><span>Apr</span><span>May</span><span>Jun</span></div>
+										<div class="quarter-idx">Q2</div>
+										<div class="quarter-month"><span>Apr</span><span>May</span><span>Jun</span></div>
 									</div>
 									<div>
-										<div>Q3</div>
-										<div><span>Jul</span><span>Aug</span><span>Sep</span></div>
+										<div class="quarter-idx">Q3</div>
+										<div class="quarter-month"><span>Jul</span><span>Aug</span><span>Sep</span></div>
 									</div>
 									<div>
-										<div>Q4</div>
-										<div><span>Oct</span><span>Nov</span><span>Dec</span></div>
+										<div class="quarter-idx">Q4</div>
+										<div class="quarter-month"><span>Oct</span><span>Nov</span><span>Dec</span></div>
 									</div>
 								</div>
 							</div>
@@ -351,15 +412,46 @@ $(function() {
 						<div class="customize-section-title"><span>3</span>Create your report</div>
 						<div class="create-report-section">
 							<div class="datetime-result">
-								<div>Energy data - kWh</div>
-								<hr>
-								<div>
+								<div class="datetime-result-title">Energy data - kWh</div>
+								<div class="datetime-result-from-to">
 									<div><span>From:</span><span class="from-date"></span></div>
 									<div><span>To:</span><span class="to-date"></span></div>
 								</div>
 								<hr>
 								<div class="create-report-btn">Create Report</div>
 							</div>
+						</div>
+					</div>
+				</div>
+				<div class="three-column-section">
+					<div class="customize-section-title"><span>2</span>Select your time period</div>
+					<hr>
+					<div class="select-time-period-section">
+						<div>Select the start and end date of your monthly electricity bill.</div>
+						<div>If you wish to view a stardard calendar month, click on the Monthly Report tab at the top of the page</div>
+						<hr>
+						<div>
+							<div class="month-datepicker-container">
+								<div>Choose your start date</div>
+								<div id="month-start-datepicker"></div>
+							</div>
+							<div class="month-datepicker-container">
+								<div>Choose your end date</div>
+								<div id="month-end-datepicker"></div>
+							</div>
+						</div>
+					</div>
+					<div class="customize-section-title"><span>3</span>Create your report</div>
+					<hr>
+					<div class="create-report-section">
+						<div class="datetime-result">
+							<div class="datetime-result-title">Energy data - kWh</div>
+							<div class="datetime-result-from-to">
+								<div><span>From:</span><span class="from-date"></span></div>
+								<div><span>To:</span><span class="to-date"></span></div>
+							</div>
+							<hr>
+							<div class="create-report-btn">Create Report</div>
 						</div>
 					</div>
 				</div>

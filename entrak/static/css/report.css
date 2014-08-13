@@ -24,15 +24,22 @@
 	text-align: center;
 	font-size: 10pt;
 	background-color: #FFF1CD;
+	height: 26px;
+	padding-top: 8px;
+	font-weight: bold;
+	border-bottom: 1px solid #FFF;
+	color: #DD931F;
 }
 .customize-section-title>span {
 	display: inline-block;
-	width: 15px;
-	height: 15px;
+	width: 20px;
+	height: 18px;
 	line-height: 15px;
-	border: 1px solid #FF00FF;
+	border: 1px solid #DD931F;
 	border-radius: 50%;
 	-moz-border-radius: 50%;
+	margin-right: 10px;
+	padding-top: 2px;
 }
 
 .time-range-section {
@@ -47,6 +54,32 @@
 	margin-bottom: 10px;
 	margin-left: 5px;
 	margin-right: 5px;
+	background: url(../images/report/time-range-sprites.png) no-repeat;
+	border-radius: 8px;
+}
+.time-range-section span:nth-child(1) {
+	background-position: 0 0;
+}
+.time-range-section span:nth-child(1):hover {
+	background-position: -64px 0;
+}
+.time-range-section span:nth-child(2) {
+	background-position: -128px 0;
+}
+.time-range-section span:nth-child(2):hover {
+	background-position: -192px 0;
+}
+.time-range-section span:nth-child(3) {
+	background-position: -256px 0;
+}
+.time-range-section span:nth-child(3):hover {
+	background-position: -320px 0;
+}
+.time-range-section span:nth-child(4) {
+	background-position: -384px 0;
+}
+.time-range-section span:nth-child(4):hover {
+	background-position: -447px 0;
 }
 
 .customize-detail-section {
@@ -74,6 +107,8 @@
 .year-quarter-calendar-head {
 	height: 27px;
 	background-color: #62949F;
+	box-shadow: 0px 2px 1px #909090;
+	position: relative;
 }
 .year-quarter-calendar-head>span {
 	display: inline-block;
@@ -83,37 +118,154 @@
 	color: #FFFFFF;
 }
 .year-quarter-calendar-head .prev-btn {
-	width: 15%;
+	width: 14%;
 	line-height: 25px;
+	border-right: 1px solid #50767F;
+}
+.year-quarter-calendar-head .prev-btn:hover {
+	background-color: #81D51D;
 }
 .year-quarter-calendar-head .target-year {
-	width: 70%;
+	width: 71%;
 	height: auto;
+	font-size: 12pt;
+	font-weight: bold;
+	letter-spacing: 0.1em;
 }
 .year-quarter-calendar-head .next-btn {
-	width: 15%;
+	width: 14%;
 	line-height: 25px;
+	border-left: 1px solid #50767F;
+}
+.year-quarter-calendar-head .next-btn:hover {
+	background-color: #81D51D;
 }
 .year-quarter-calendar-content {
 	font-size: 9pt;
 	background-color: #90C7D5;
+	padding-top: 6px;
+	padding-bottom: 9px;
+	text-align: left;
 }
 .year-quarter-calendar-content>div>div {
 	display: inline-block;
 }
-.year-quarter-calendar-content .selected-quarter>div:nth-of-type(1){
+.year-quarter-calendar-content .quarter-idx{
+	font-size: 10pt;
+	font-weight: bold;
+	color: #666666;
+	margin-right: 10px;
+	margin-top: 6px;
+	margin-left: 12px;
+}
+.quarter-month{
+	width: 170px;
+	background-color: #EAEAEA;
+	margin-top: 6px;
+	text-align: center;
+	color: #444444;
+	box-shadow: 0px 2px 1px #909090;
+}
+.quarter-month:hover{
+	background-color: #81D51D;
+}
+.quarter-month span{
+	display: inline-block;
+	height: 18px;
+	width: 42px;
+	font-size: 11pt;
+	padding-top: 4px;
+	padding-left: 7px;
+	padding-right: 7px;
+	border-right: 1px solid #F4F4F4;
+}
+.quarter-month span:nth-child(3) {
+	border-right: 0px;
+}
+.year-quarter-calendar-content>div:hover .quarter-idx,
+.year-quarter-calendar-content .selected-quarter .quarter-idx{
 	color: #FFFFFF;
 }
-.year-quarter-calendar-content .selected-quarter>div:nth-of-type(2){
+.year-quarter-calendar-content>div:hover .quarter-month,
+.year-quarter-calendar-content .selected-quarter .quarter-month{
 	color: #FFFFFF;
-	background-color: #00FFFF;
+	background-color: #81D51D;
 }
 
 .datetime-result {
 	display: inline-block;
 	width: 260px;
-	height: 170px;
+	height: 160px;
 	font-size: 9pt;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	background-color: #E9E9E9;
+	border-radius : 8px;
+	border: 2px solid #9ECED7;
+}
+.datetime-result-title {
+	font-size: 12pt;
+	font-weight: bold;
+	color: #354960;
+	padding-top: 10px;
+	height: 26px;
+	border-bottom: 1px solid #9ECED7;
+}
+.datetime-result>hr {
+	width: 88%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+	background-color: #B2B5B6;
+	border: 1px solid #D0D0D0;
+}
+.datetime-result-from-to {
+	text-align: left;
+	font-size: 11pt;
+	color: #354960;
+	padding-top: 13px;
+}
+.datetime-result-from-to span:first-child{
+	display: inline-block;
+	width: 23%;
+	text-align: right;
+	margin-right: 5px;
+}
+.datetime-result-from-to span:nth-child(2){
+	display: inline-block;
+	width: 60%;
+	text-align: center;
+}
+.create-report-btn {
+	font-size: 11pt;
+	width: 55%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+	height: 24px;
+	padding-top: 8px;
+	border-radius: 8px;
+	background: #FFFFFF;
+	border: 2px solid #354960;
+}
+.create-report-btn:hover{
+	background-color: #354960;
+	color: #FFF;
+}
+
+.three-column-section .select-time-period-section>div {
+	font-size: 9pt;
+}
+.three-column-section .create-report-section {
+	text-align: center;
+}
+.month-datepicker-container {
+	display: inline-block;
+	width: 484px;
+}
+.month-datepicker-container>div:nth-child(2) {
+	width: 324px;
+	height: 186px;
 }
 
 .report-component {
