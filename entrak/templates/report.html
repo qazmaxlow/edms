@@ -60,6 +60,14 @@ function updateBoundDt() {
 		}
 
 		report.boundEndDt = moment().tz(report.timezone).startOf('quarter');
+	} else if (report.currentReportType === ReportGenerator.REPORT_TYPE_WEEK) {
+		if (report.firstRecord.day() === 0) {
+			report.boundStartDt = moment(report.firstRecord).startOf('week');
+		} else {
+			report.boundStartDt = moment(report.firstRecord).add('w', 1).startOf('week');
+		}
+
+		report.boundEndDt = moment().tz(report.timezone).startOf('week');
 	}
 }
 
@@ -109,10 +117,22 @@ function updateReportType(targetReportType) {
 
 		$(".customize-detail-section .two-column-section").fadeIn();
 		$(".customize-detail-section .three-column-section").hide();
+
+		if (targetReportType === ReportGenerator.REPORT_TYPE_WEEK) {
+			$(".two-column-section #week-datepicker").fadeIn();
+			$(".two-column-section .year-quarter-calendar").hide();
+		} else {
+			$(".two-column-section .year-quarter-calendar").fadeIn();
+			$(".two-column-section #week-datepicker").hide();
+		}
 	}
 
 	report.currentReportType = targetReportType;
 	updateBoundDt();
+
+	$(".datetime-result .from-date").text('');
+	$(".datetime-result .to-date").text('');
+	$(".create-report-btn").addClass("btn-disable");
 
 	if (targetReportType === ReportGenerator.REPORT_TYPE_YEAR) {
 		timeRangeYearSelected();
@@ -120,9 +140,9 @@ function updateReportType(targetReportType) {
 		timeRangeQuarterSelected();
 	} else if (targetReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
 		timeRangeCustomMonthSelected();
+	} else if (targetReportType === ReportGenerator.REPORT_TYPE_WEEK) {
+		timeRangeWeekSelected();
 	}
-
-	updateGenReportSection();
 }
 
 function timeRangeYearSelected() {
@@ -149,6 +169,8 @@ function timeRangeYearSelected() {
 			updateGenReportSection();
 		}
 	});
+
+	updateGenReportSection();
 }
 
 function updateSelectedQuarter() {
@@ -191,6 +213,8 @@ function timeRangeQuarterSelected() {
 			updateGenReportSection();
 		}
 	});
+
+	updateGenReportSection();
 }
 
 function timeRangeCustomMonthSelected() {
@@ -227,6 +251,56 @@ function timeRangeCustomMonthSelected() {
 	}, datepickerOptions));
 }
 
+function selectWholeWeek() {
+	window.setTimeout(function () {
+		$('#week-datepicker').find('.ui-datepicker-current-day a').addClass('ui-state-active')
+	}, 1);
+}
+
+function setWeekHoverEffect() {
+	window.setTimeout(function () {
+		$('#week-datepicker .ui-datepicker-calendar tr').on("mousemove", function() {
+			$(this).find('td a').addClass('ui-state-hover');
+		});
+		$('#week-datepicker .ui-datepicker-calendar tr').on("mouseleave", function() {
+			$(this).find('td a').removeClass('ui-state-hover');
+		});
+	}, 1);
+}
+
+function timeRangeWeekSelected() {
+	var weekStartDate, weekEndDate;
+	$("#week-datepicker").datepicker('destroy');
+	$("#week-datepicker").datepicker({
+		showOtherMonths: true,
+		selectOtherMonths: true,
+		minDate: report.boundStartDt.toDate(),
+		maxDate: moment(report.boundEndDt).subtract('d', 1).toDate(),
+		onSelect: function(dateText, inst) {
+			var selectDt = moment($(this).datepicker('getDate')).startOf('week');
+			weekStartDate = selectDt.toDate();
+			weekEndDate = moment(selectDt).endOf('week').toDate();
+			selectWholeWeek();
+
+			report.currentDt = selectDt;
+			updateGenReportSection();
+		},
+		beforeShowDay: function(date) {
+			var cssClass = '';
+			if(date >= weekStartDate && date <= weekEndDate) {
+				cssClass = 'ui-datepicker-current-day';
+			}
+			return [true, cssClass];
+		},
+		onChangeMonthYear: function(year, month, inst) {
+			selectWholeWeek();
+			setWeekHoverEffect();
+		}
+	});
+
+	setWeekHoverEffect();
+}
+
 function updateGenReportSection() {
 	var fromText, toText;
 	if (report.currentReportType === ReportGenerator.REPORT_TYPE_YEAR) {
@@ -238,10 +312,17 @@ function updateGenReportSection() {
 	} else if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
 		fromText = moment($("#month-start-datepicker").datepicker("getDate")).format("D MMM YYYY, ddd");
 		toText = moment($("#month-end-datepicker").datepicker("getDate")).format("D MMM YYYY, ddd");
+	} else if (report.currentReportType === ReportGenerator.REPORT_TYPE_WEEK) {
+		fromText = report.currentDt.format("D MMM YYYY, ddd");
+		toText = moment(report.currentDt).add('w', 1).format("D MMM YYYY, ddd");
 	}
 	$(".datetime-result .from-date").text(fromText);
 	$(".datetime-result .to-date").text(toText);
 
+	updateCreateBtnStatus();
+}
+
+function updateCreateBtnStatus() {
 	var createBtnEnable = canCreateCustomReport();
 
 	if (createBtnEnable) {
@@ -309,6 +390,8 @@ $(function() {
 				targetReportType = ReportGenerator.REPORT_TYPE_QUARTER;
 			} else if(btnIdx === 2) {
 				targetReportType = ReportGenerator.REPORT_TYPE_CUSTOM_MONTH;
+			} else if(btnIdx===3) {
+				targetReportType = ReportGenerator.REPORT_TYPE_WEEK;
 			}
 
 			if (targetReportType !== report.currentReportType) {
@@ -450,6 +533,7 @@ $(function() {
 									</div>
 								</div>
 							</div>
+							<div id="week-datepicker" class="report-datepicker"></div>
 						</div>
 					</div>
 					<div>
@@ -478,9 +562,9 @@ $(function() {
 						<div>
 							<div class="month-datepicker-container">
 								<div>Choose your start date</div>
-								<div id="month-start-datepicker"></div>
+								<div id="month-start-datepicker" class="report-datepicker"></div>
 							</div>
-							<div class="month-datepicker-container">
+							<div class="month-datepicker-container" class="report-datepicker">
 								<div>Choose your end date</div>
 								<div id="month-end-datepicker"></div>
 							</div>

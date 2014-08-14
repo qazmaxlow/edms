@@ -31,6 +31,9 @@ REPORT_TYPE_MONTH = 'month'
 REPORT_TYPE_YEAR = 'year'
 REPORT_TYPE_QUARTER = 'quarter'
 REPORT_TYPE_CUSTOM_MONTH = 'custom-month'
+REPORT_TYPE_WEEK = 'week'
+
+CONSECUTIVE_LASTS_COUNT = 4
 
 @permission_required
 @ensure_csrf_cookie
@@ -192,6 +195,8 @@ def __gen_report_last_dt(report_type, target_dt, day_diff=None):
 		result = Utils.add_month(target_dt, -3)
 	elif report_type == REPORT_TYPE_CUSTOM_MONTH:
 		result = target_dt - datetime.timedelta(days=day_diff)
+	elif report_type == REPORT_TYPE_WEEK:
+		result = target_dt - datetime.timedelta(days=7)
 
 	return result
 
@@ -224,6 +229,8 @@ def __gen_report_dt_info(report_type, timezone, system_first_record, start_times
 	elif report_type == REPORT_TYPE_CUSTOM_MONTH:
 		end_dt = Utils.utc_dt_from_utc_timestamp(end_timestamp).astimezone(timezone)
 		day_diff = (end_dt - start_dt).days
+	elif report_type == REPORT_TYPE_WEEK:
+		end_dt = start_dt + datetime.timedelta(days=7)
 	dt_info['end_dt'] = end_dt
 
 	system_first_record = system_first_record.astimezone(timezone).replace(hour=0, minute=0, second=0, microsecond=0)
@@ -244,7 +251,8 @@ def __gen_report_dt_info(report_type, timezone, system_first_record, start_times
 	dt_info['last_start_dt'] = last_start_dt
 	dt_info['last_end_dt'] = start_dt
 
-	dt_info['consecutive_lasts'] = __gen_consecutive_lasts(report_type, last_start_dt, 4, system_first_record, day_diff)
+	dt_info['consecutive_lasts'] = __gen_consecutive_lasts(report_type, last_start_dt,
+		CONSECUTIVE_LASTS_COUNT, system_first_record, day_diff)
 
 	return dt_info
 
@@ -299,6 +307,11 @@ def __generate_report_data(systems, report_type, start_timestamp, end_timestamp)
 
 	source_group_map = {}
 	for group_idx, info in enumerate(grouped_source_infos):
+		info["currentTotalEnergy"] = 0
+		info["currentTotalCo2"] = 0
+		info["currentTotalMoney"] = 0
+		info["lastTotalEnergy"] = 0
+
 		for source_id in info["sourceIds"]:
 			source_group_map[source_id] = group_idx
 
@@ -329,13 +342,13 @@ def __generate_report_data(systems, report_type, start_timestamp, end_timestamp)
 					target_info[name][timestamp] = val + target_info[name].get(timestamp, 0)
 
 					if name == "currentReadings":
-						target_info["currentTotalEnergy"] = val + target_info.get("currentTotalEnergy", 0)
-						target_info["currentTotalCo2"] = calculation.transform_reading(
-							co2_unit_rate_code, timestamp, val, co2_unit_rates) + target_info.get("currentTotalCo2", 0)
-						target_info["currentTotalMoney"] = calculation.transform_reading(
-							money_unit_rate_code, timestamp, val, money_unit_rates) + target_info.get("currentTotalMoney", 0)
+						target_info["currentTotalEnergy"] += val
+						target_info["currentTotalCo2"] += calculation.transform_reading(
+							co2_unit_rate_code, timestamp, val, co2_unit_rates)
+						target_info["currentTotalMoney"] += calculation.transform_reading(
+							money_unit_rate_code, timestamp, val, money_unit_rates)
 					elif name == "lastReadings":
-						target_info["lastTotalEnergy"] = val + target_info.get("lastTotalEnergy", 0)
+						target_info["lastTotalEnergy"] += val
 
 	overnight_timestamp_bounds = reduce(
 		operator.or_,
@@ -360,9 +373,6 @@ def __generate_report_data(systems, report_type, start_timestamp, end_timestamp)
 	all_holidays = current_system.get_all_holidays(timestamp_info)
 	for info in grouped_source_infos:
 		total_energy += info['currentTotalEnergy']
-
-		if 'lastTotalEnergy' not in info:
-			info['lastTotalEnergy'] = 0
 		last_total_energy += info['lastTotalEnergy']
 
 		calculate_info = [
@@ -400,7 +410,7 @@ def __generate_report_data(systems, report_type, start_timestamp, end_timestamp)
 	saving_info["co2"] = calculation.transform_reading(co2_unit_code, start_timestamp, energy_saving, co2_unit_rates)
 	saving_info["money"] = calculation.transform_reading(money_unit_code, start_timestamp, energy_saving, money_unit_rates)
 
-	sum_up_usages = __get_sum_up_usage_within_periods(source_ids, dt_info['consecutive_lasts'], 4)
+	sum_up_usages = __get_sum_up_usage_within_periods(source_ids, dt_info['consecutive_lasts'], CONSECUTIVE_LASTS_COUNT)
 	sum_up_usages.insert(0, total_energy)
 	sum_up_usages.insert(1, last_total_energy)
 
