@@ -158,21 +158,28 @@ def __transform_to_daily_overnight_readings(source_readings, timezone, night_tim
 
 	return result
 
-def __get_sum_up_usage_within_periods(source_ids, period_dts):
-	start_dt = period_dts[-1]
-	end_dt = period_dts[0]
-	source_readings = SourceReadingDay.objects(source_id__in=source_ids, datetime__gte=start_dt, datetime__lt=end_dt)
+def __get_sum_up_usage_within_periods(source_ids, period_dts, target_period_num):
+	if period_dts:
+		start_dt = period_dts[-1]['start_dt']
+		end_dt = period_dts[0]['end_dt']
+		source_readings = SourceReadingDay.objects(source_id__in=source_ids, datetime__gte=start_dt, datetime__lt=end_dt)
+	else:
+		source_readings = []
 
-	results = [0]*(len(period_dts)-1)
+	results = [0]*len(period_dts)
 	for source_reading in source_readings:
 		reading_dt = pytz.utc.localize(source_reading.datetime)
 
-		for period_idx in xrange(0,len(period_dts)-1):
-			bound_start = period_dts[period_idx+1]
-			bound_end = period_dts[period_idx]
+		for period_idx in xrange(len(period_dts)):
+			bound_start = period_dts[period_idx]['start_dt']
+			bound_end = period_dts[period_idx]['end_dt']
 			if reading_dt >= bound_start and reading_dt < bound_end:
 				results[period_idx] += source_reading.value
 				break
+
+	if len(period_dts) != target_period_num:
+		missing_period_num = target_period_num-len(period_dts)
+		results = ([0]*missing_period_num) + results
 
 	return results
 
@@ -188,13 +195,16 @@ def __gen_report_last_dt(report_type, target_dt, day_diff=None):
 
 	return result
 
-def __gen_consecutive_lasts(report_type, target_dt, num_of_last, day_diff=None):
+def __gen_consecutive_lasts(report_type, target_dt, num_of_last, system_first_record, day_diff=None):
 	result = []
-	result.append(target_dt)
 	next_dt = target_dt
 	for idx in xrange(num_of_last):
+		end_dt = next_dt
 		next_dt = __gen_report_last_dt(report_type, next_dt, day_diff)
-		result.append(next_dt)
+		if next_dt < system_first_record:
+			break
+
+		result.append({"start_dt": next_dt, "end_dt": end_dt})
 
 	return result
 
@@ -234,7 +244,7 @@ def __gen_report_dt_info(report_type, timezone, system_first_record, start_times
 	dt_info['last_start_dt'] = last_start_dt
 	dt_info['last_end_dt'] = start_dt
 
-	dt_info['consecutive_lasts'] = __gen_consecutive_lasts(report_type, last_start_dt, 4, day_diff)
+	dt_info['consecutive_lasts'] = __gen_consecutive_lasts(report_type, last_start_dt, 4, system_first_record, day_diff)
 
 	return dt_info
 
@@ -390,7 +400,7 @@ def __generate_report_data(systems, report_type, start_timestamp, end_timestamp)
 	saving_info["co2"] = calculation.transform_reading(co2_unit_code, start_timestamp, energy_saving, co2_unit_rates)
 	saving_info["money"] = calculation.transform_reading(money_unit_code, start_timestamp, energy_saving, money_unit_rates)
 
-	sum_up_usages = __get_sum_up_usage_within_periods(source_ids, dt_info['consecutive_lasts'])
+	sum_up_usages = __get_sum_up_usage_within_periods(source_ids, dt_info['consecutive_lasts'], 4)
 	sum_up_usages.insert(0, total_energy)
 	sum_up_usages.insert(1, last_total_energy)
 

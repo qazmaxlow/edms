@@ -570,10 +570,10 @@ ReportGenerator.prototype.transformXCoordinate = function(timestamp, startDt) {
 	var result;
 	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
 		result = moment.unix(timestamp).tz(this.timezone).date();
-	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR
-		|| this.reportType === ReportGenerator.REPORT_TYPE_QUARTER) {
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
 		result = moment.unix(timestamp).tz(this.timezone).dayOfYear();
-	} else if (this.reportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+	} else if (this.reportType === ReportGenerator.REPORT_TYPE_QUARTER
+		|| this.reportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
 		result = moment.unix(timestamp).tz(this.timezone).diff(startDt, 'days');
 	}
 
@@ -615,14 +615,16 @@ ReportGenerator.prototype.genXAxisOptions = function() {
 			options.ticks.push([i, i]);
 		}
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_QUARTER) {
-		options.min = this.currentDt.dayOfYear()-1;
-		options.max = this.currentEndDt.dayOfYear()+1;
+		var dayDiff = this.currentEndDt.diff(this.currentDt, 'days');
+		options.min = -1;
+		options.max = dayDiff + 2;
 		options.ticks = [];
 		for (var i = 0; i < 3; i++) {
 			var tickDt = moment(this.currentDt).add('M', i);
-			options.ticks.push([tickDt.dayOfYear(), tickDt.format('MMM D')]);
+			var tickDtDayDiff = tickDt.diff(this.currentDt, 'days');
+			options.ticks.push([tickDtDayDiff, tickDt.format('MMM D')]);
 			tickDt.date(15);
-			options.ticks.push([tickDt.dayOfYear(), tickDt.format('MMM D')]);
+			options.ticks.push([tickDtDayDiff+14, tickDt.format('MMM D')]);
 		}
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
 		var dayDiff = this.currentEndDt.diff(this.currentDt, 'days');

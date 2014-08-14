@@ -30,6 +30,9 @@
 	border-bottom: 1px solid #FFF;
 	color: #DD931F;
 }
+.section-three-title {
+	border-left: 1px solid #F6DD9D;
+}
 .customize-section-title>span {
 	display: inline-block;
 	width: 20px;
@@ -40,6 +43,12 @@
 	-moz-border-radius: 50%;
 	margin-right: 10px;
 	padding-top: 2px;
+}
+.customize-section-title + hr {
+	border: none;
+	height: 1px;
+	background-color: #CCCCCC;
+	border-bottom: 1px solid #FFF;
 }
 
 .time-range-section {
@@ -107,7 +116,7 @@
 .year-quarter-calendar-head {
 	height: 27px;
 	background-color: #62949F;
-	box-shadow: 0px 2px 1px #909090;
+	box-shadow: 0px 1px 2px #909090;
 	position: relative;
 }
 .year-quarter-calendar-head>span {
@@ -147,6 +156,9 @@
 	padding-bottom: 9px;
 	text-align: left;
 }
+.year-quarter-calendar-content.quarter-content-disable{
+	background-color: #F4F4F4;
+}
 .year-quarter-calendar-content>div>div {
 	display: inline-block;
 }
@@ -158,6 +170,9 @@
 	margin-top: 6px;
 	margin-left: 12px;
 }
+.quarter-content-disable .quarter-idx {
+	color: #C8C8C8;
+}
 .quarter-month{
 	width: 170px;
 	background-color: #EAEAEA;
@@ -166,8 +181,10 @@
 	color: #444444;
 	box-shadow: 0px 2px 1px #909090;
 }
-.quarter-month:hover{
-	background-color: #81D51D;
+.quarter-content-disable .quarter-month {
+	background-color: #E2E2E2;
+	box-shadow: none;
+	color: #C8C8C8;
 }
 .quarter-month span{
 	display: inline-block;
@@ -186,10 +203,19 @@
 .year-quarter-calendar-content .selected-quarter .quarter-idx{
 	color: #FFFFFF;
 }
+.year-quarter-calendar-content.quarter-content-disable>div:hover .quarter-idx,
+.year-quarter-calendar-content.quarter-content-disable .selected-quarter .quarter-idx{
+	color: #C8C8C8;
+}
 .year-quarter-calendar-content>div:hover .quarter-month,
 .year-quarter-calendar-content .selected-quarter .quarter-month{
 	color: #FFFFFF;
 	background-color: #81D51D;
+}
+.year-quarter-calendar-content.quarter-content-disable>div:hover .quarter-month,
+.year-quarter-calendar-content.quarter-content-disable .selected-quarter .quarter-month{
+	color: #C8C8C8;
+	background-color: #E2E2E2;
 }
 
 .datetime-result {
@@ -225,6 +251,9 @@
 	color: #354960;
 	padding-top: 13px;
 }
+.datetime-result-from-to>div:nth-child(2) {
+	margin-top: 10px;
+}
 .datetime-result-from-to span:first-child{
 	display: inline-block;
 	width: 23%;
@@ -251,6 +280,17 @@
 .create-report-btn:hover{
 	background-color: #354960;
 	color: #FFF;
+}
+.create-report-btn.btn-disable {
+	background-color: #F4F4F4;
+	border: 1px solid #C8C8C8;
+	color: #D8D8D8;
+}
+
+.create-report-section {
+	background-color:#F0EEE8;
+	height: 210px;
+	border-left: 1px solid #e2e2e2;
 }
 
 .three-column-section .select-time-period-section>div {
@@ -844,28 +884,30 @@
 
 .compare-past-bar-name {
 	position: absolute;
+	width: 66px;
+	text-align: center;
 	font-size: 9pt;
 	color: #666666;
 	font-weight: bold;
 	margin-top: 5px;
 }
 .compare-past-bar-name:nth-of-type(1) {
-	right: 488px;
+	right: 468px;
 }
 .compare-past-bar-name:nth-of-type(2) {
-	right: 417px;
+	right: 397px;
 }
 .compare-past-bar-name:nth-of-type(3) {
-	right: 348px;
+	right: 328px;
 }
 .compare-past-bar-name:nth-of-type(4) {
-	right: 276px;
+	right: 256px;
 }
 .compare-past-bar-name:nth-of-type(5) {
-	right: 209px;
+	right: 189px;
 }
 .compare-past-bar-name:nth-of-type(6) {
-	right: 138px;
+	right: 118px;
 }
 
 .compare-past-bar-name-container + div {

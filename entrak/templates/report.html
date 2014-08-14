@@ -69,13 +69,33 @@ function isTargetDtValid(targetDt) {
 }
 
 function isCustomMonthDtValid(targetStartDt, targetEndDt) {
+	if (targetStartDt === undefined || targetEndDt === undefined
+		|| targetStartDt === null || targetEndDt === null) {
+		return false;
+	}
+
 	var endBound = moment().tz(report.timezone).startOf('day');
 	var dtDiff = targetEndDt.diff(targetStartDt, 'days');
 	return ( (targetStartDt.isAfter(report.firstRecord) || targetStartDt.isSame(report.firstRecord))
-		&& targetStartDt.isBefore(endBound)
+		&& (targetStartDt.isBefore(endBound) || targetStartDt.isSame(endBound))
 		&& (targetEndDt.isAfter(report.firstRecord) || targetEndDt.isSame(report.firstRecord))
-		&& targetEndDt.isBefore(endBound)
+		&& (targetEndDt.isBefore(endBound)|| targetEndDt.isSame(endBound))
 		&& (dtDiff >= 25 && dtDiff <= 35) )
+}
+
+function canCreateCustomReport() {
+	var canCreate = true;
+	if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+		if (!(isCustomMonthDtValid(report.currentDt, report.customMonthEndDt))) {
+			canCreate = false;
+		}
+	} else {
+		if (!(isTargetDtValid(report.currentDt))) {
+			canCreate = false;
+		}
+	}
+
+	return canCreate;
 }
 
 function updateReportType(targetReportType) {
@@ -111,6 +131,8 @@ function timeRangeYearSelected() {
 	var targetYearEle = $(".year-quarter-calendar-head .target-year");
 	targetYearEle.text(report.currentDt.format('YYYY'));
 
+	$(".year-quarter-calendar-content").addClass("quarter-content-disable");
+
 	$(".year-quarter-calendar-head .prev-btn").off('click').click(function() {
 		var targetDt = moment(report.currentDt).subtract('y', 1);
 		if (isTargetDtValid(targetDt)) {
@@ -141,6 +163,8 @@ function timeRangeQuarterSelected() {
 	var targetYearEle = $(".year-quarter-calendar-head .target-year");
 	targetYearEle.text(report.currentDt.format('YYYY'));
 	updateSelectedQuarter();
+
+	$(".year-quarter-calendar-content").removeClass("quarter-content-disable");
 
 	$(".year-quarter-calendar-head .prev-btn").off('click').click(function() {
 		var targetDt = moment(report.currentDt).subtract('y', 1);
@@ -179,7 +203,13 @@ function timeRangeCustomMonthSelected() {
 		onSelect: function(dateText, inst) {
 			var selectDt = moment($(this).datepicker('getDate'));
 			var boundMinDate = moment(selectDt).add('d', 25);
+			if (boundMinDate.isAfter(moment(), 'day')) {
+				boundMinDate = moment().startOf('day');
+			}
 			var boundMaxDate = moment(selectDt).add('d', 35);
+			if (boundMaxDate.isAfter(moment(), 'day')) {
+				boundMaxDate = moment().startOf('day');
+			}
 			$("#month-end-datepicker").datepicker("option", "minDate", boundMinDate.toDate());
 			$("#month-end-datepicker").datepicker("option", "maxDate", boundMaxDate.toDate());
 
@@ -189,7 +219,7 @@ function timeRangeCustomMonthSelected() {
 	}, datepickerOptions));
 	$("#month-end-datepicker").datepicker($.extend({
 		minDate: moment(report.firstRecord).add('d', 25).toDate(),
-		maxDate: "-1d",
+		maxDate: "-0d",
 		onSelect: function(dateText, inst) {
 			report.customMonthEndDt = moment($(this).datepicker('getDate'));
 			updateGenReportSection();
@@ -211,6 +241,14 @@ function updateGenReportSection() {
 	}
 	$(".datetime-result .from-date").text(fromText);
 	$(".datetime-result .to-date").text(toText);
+
+	var createBtnEnable = canCreateCustomReport();
+
+	if (createBtnEnable) {
+		$(".create-report-btn").removeClass("btn-disable");
+	} else {
+		$(".create-report-btn").addClass("btn-disable");
+	}
 }
 
 $(function() {
@@ -304,6 +342,10 @@ $(function() {
 	});
 
 	$(".create-report-btn").click(function() {
+		if (!(canCreateCustomReport())) {
+			return;
+		}
+
 		report.reportGenerator.reportType = report.currentReportType;
 		if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
 			report.reportGenerator.updateDtInfo(report.currentDt, report.customMonthEndDt);
@@ -372,6 +414,7 @@ $(function() {
 
 		<div id="customize-report">
 			<div class="customize-section-title"><span>1</span>Select your time range</div>
+			<hr>
 			<div class="time-range-section">
 				<span></span>
 				<span></span>
@@ -382,6 +425,7 @@ $(function() {
 				<div class="two-column-section">
 					<div>
 						<div class="customize-section-title"><span>2</span>Select your time period</div>
+						<hr>
 						<div class="customize-calendar-section">
 							<div class="year-quarter-calendar">
 								<div class="year-quarter-calendar-head">
@@ -409,7 +453,8 @@ $(function() {
 						</div>
 					</div>
 					<div>
-						<div class="customize-section-title"><span>3</span>Create your report</div>
+						<div class="customize-section-title section-three-title"><span>3</span>Create your report</div>
+						<hr>
 						<div class="create-report-section">
 							<div class="datetime-result">
 								<div class="datetime-result-title">Energy data - kWh</div>
