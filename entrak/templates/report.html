@@ -421,6 +421,11 @@ $(function() {
 	$(".save-report-btn, .bottom-save-report-btn").click(function() {
 		$(".download-pdf-form input[name='start_timestamp']").attr("value", report.currentDt.unix());
 		$(".download-pdf-form input[name='report_type']").attr("value", report.currentReportType);
+		if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+			$(".download-pdf-form input[name='end_timestamp']").attr("value", report.customMonthEndDt.unix());
+		} else {
+			$(".download-pdf-form input[name='end_timestamp']").attr("value", 0);
+		}
 		$(".download-pdf-form").submit();
 	});
 
@@ -604,6 +609,7 @@ $(function() {
 
 <form class="download-pdf-form" action="{% url 'report_pdf' system_code=systems.0.code %}" method="POST">{% csrf_token %}
 	<input name="start_timestamp" value="">
+	<input name="end_timestamp" value="">
 	<input name="report_type" value="">
 </form>
 

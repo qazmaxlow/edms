@@ -25,10 +25,15 @@ $(function() {
 	report.currentReportType = '{{report_type}}';
 	report.timezone = '{{systems.0.timezone}}';
 	report.currentDt =  moment.unix({{start_timestamp}}).tz(report.timezone);
+	{% ifequal report_type "custom-month" %}
+	report.customMonthEndDt = moment.unix({{end_timestamp}}).tz(report.timezone);
+	{% else %}
+	report.customMonthEndDt = null;
+	{% endifequal %}
 
 	report.reportGenerator = new ReportGenerator(report.entrakSystem.systemTree, report.timezone,
 		report.currentReportType);
-	report.reportGenerator.updateDtInfo(report.currentDt, null);
+	report.reportGenerator.updateDtInfo(report.currentDt, report.customMonthEndDt);
 
 	$(".report-name").text(report.reportGenerator.genReportName());
 	

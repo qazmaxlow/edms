@@ -23,7 +23,7 @@ urlpatterns = patterns('',
         url(r'^report/$', 'entrak.report_views.report_view', name='report'),
         url(r'^report_data/$', 'entrak.report_views.report_data_view', name='report_data'),
         url(r'^report_pdf/$', 'entrak.report_views.report_pdf_view', name='report_pdf'),
-        url(r'^generate_report_pdf/(?P<report_type>\w+)/(?P<start_timestamp>\d+)/(?P<end_timestamp>\d+)/$',
+        url(r'^generate_report_pdf/(?P<report_type>[\w\-]+)/(?P<start_timestamp>\d+)/(?P<end_timestamp>\d+)/$',
             'entrak.report_views.generate_report_pdf_view', name='generate_report_pdf'),
     ))),
 )
