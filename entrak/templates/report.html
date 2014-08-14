@@ -418,6 +418,15 @@ $(function() {
 		$(this).parent().parent().find(".detail-container").slideToggle();
 	})
 
+	$(".pdf-icon, .pdf-text").click(function() {
+		var targetTimestamp = $(this).parent().find('.summary-date-col').attr('dt_timestamp');
+
+		$(".download-pdf-form input[name='start_timestamp']").attr("value", targetTimestamp);
+		$(".download-pdf-form input[name='report_type']").attr("value", ReportGenerator.REPORT_TYPE_MONTH);
+		$(".download-pdf-form input[name='end_timestamp']").attr("value", 0);
+		$(".download-pdf-form").submit();
+	});
+
 	$(".save-report-btn, .bottom-save-report-btn").click(function() {
 		$(".download-pdf-form input[name='start_timestamp']").attr("value", report.currentDt.unix());
 		$(".download-pdf-form input[name='report_type']").attr("value", report.currentReportType);
@@ -495,6 +504,8 @@ $(function() {
 					<span>{{summary.energy_usage|floatformat:"0"|intcomma}}</span>
 					<span>{{summary.co2_usage|floatformat:"0"|intcomma}}</span>
 					<span>{{summary.money_usage|floatformat:"0"|intcomma}}</span>
+					<img class="pdf-icon" src="{% static 'images/report/pdf-icon.png' %}">
+					<span class="pdf-text">PDF</span>
 				</div>
 				{% endfor %}
 			</div>

@@ -1,6 +1,6 @@
 .summary-date-col, .save-report-btn, .hide-details-btn, .bottom-save-report-btn,
 .year-quarter-calendar-content>div, .create-report-btn, .time-range-section>span,
-.prev-btn, .next-btn {
+.prev-btn, .next-btn, .pdf-icon, .pdf-text {
 	cursor: pointer;
 	cursor: hand;
 }
@@ -390,6 +390,21 @@
 	color: #354960;
 	border-right: 1px solid #FFF;
 	border-bottom: 1px solid #FFF;
+}
+#monthly-report-content .pdf-icon {
+	width: 17px;
+	height: 17px;
+	vertical-align: middle;
+	box-shadow: 1px 1px 2px #9F9F9F;
+	margin-left: 68px;
+}
+#monthly-report-content .pdf-text {
+	width: 30px;
+	height: 12px;
+	padding-top: 3px;
+	margin-left: 10px;
+	box-shadow: 1px 1px 2px #9F9F9F;
+	vertical-align: middle;
 }
 
 .report-head {
