@@ -111,6 +111,8 @@ function getRankingData() {
 		data: requestData,
 	}).done(function(data) {
 		finishReceiveRankData(data);
+	}).fail(function(jqXHR, textStatus) {
+		console.log(jqXHR.responseText);
 	});
 }
 

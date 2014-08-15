@@ -205,6 +205,8 @@ ReportGenerator.prototype.getReportData = function(callbackFunc) {
 		data: requestData,
 	}).done(function(data) {
 		callbackFunc(data);
+	}).fail(function(jqXHR, textStatus) {
+		console.log(jqXHR.responseText);
 	});
 }
 

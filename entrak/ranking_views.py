@@ -50,6 +50,8 @@ def ranking_data_view(request, system_code=None):
 		last_end_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('last_end_dt')))
 		last_source_readings = SourceManager.get_readings(all_source_ids, range_type, last_start_dt, last_end_dt)
 
+	systems = None
+	sources = None
 	if unit_category_code != KWH_CATEGORY_CODE:
 		if has_detail_rate:
 			systems = System.get_systems_within_root(system_code)
@@ -63,9 +65,6 @@ def ranking_data_view(request, system_code=None):
 			calculation.transform_source_readings_with_global_rate(source_readings, global_rate)
 			if ranking_type == RANKING_TYPE_PERCENT:
 				calculation.transform_source_readings_with_global_rate(last_source_readings, global_rate)
-	else:
-		systems = None
-		sources = None
 
 	sources_sum_info = {}
 	for source_id, info in source_readings.items():

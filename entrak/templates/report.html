@@ -337,8 +337,12 @@ function dlRawDataSelected() {
 	$(".datetime-result .to-date").text('');
 	$(".create-report-btn").addClass("btn-disable");
 
+	$('.choose-unit-section>span').removeClass('selected-unit')
+	$('.choose-unit-section>span:eq(0)').addClass('selected-unit');
+
 	report.dlRawDataStartDt = null;
 	report.dlRawDataEndDt = null;
+	report.dlRawDataUnit = 'kwh';
 
 	$("#download-raw-data .report-datepicker").datepicker('destroy');
 	$("#dl-data-start-datepicker").datepicker({
@@ -418,7 +422,9 @@ $(function() {
 	}
 
 	$(".panel-header-left-menu h3").each(function(btnIdx) {
-		$(this).click(function() {
+		$(this).click({btnIdx: btnIdx}, function(event) {
+			var btnIdx = event.data.btnIdx;
+
 			$(".panel-header-left-menu h3").removeClass('selected-tab');
 			$(this).addClass('selected-tab');
 
@@ -444,7 +450,8 @@ $(function() {
 	$(".panel-header-left-menu h3:eq(2)").click();
 
 	$(".time-range-section span").each(function(btnIdx) {
-		$(this).click(function() {
+		$(this).click({btnIdx: btnIdx}, function(event) {
+			var btnIdx = event.data.btnIdx;
 			var targetReportType;
 			if (btnIdx === 0) {
 				targetReportType = ReportGenerator.REPORT_TYPE_YEAR;
@@ -522,7 +529,8 @@ $(function() {
 	});
 
 	$(".year-quarter-calendar-content>div").each(function(btnIdx) {
-		$(this).click(function() {
+		$(this).click({btnIdx: btnIdx}, function(event) {
+			var btnIdx = event.data.btnIdx;
 			var targetDt = moment(report.currentDt).month(btnIdx*3);
 			if (isTargetDtValid(targetDt)) {
 				$(".year-quarter-calendar-content>div").removeClass('selected-quarter');
@@ -533,9 +541,30 @@ $(function() {
 		});
 	});
 
+	$(".choose-unit-section>span").each(function(btnIdx) {
+		$(this).click({btnIdx: btnIdx}, function(event) {
+			var btnIdx = event.data.btnIdx;
+			if (btnIdx === 0) {
+				report.dlRawDataUnit = 'kwh';
+			} else if (btnIdx === 1) {
+				report.dlRawDataUnit = 'money';
+			} else if (btnIdx === 2) {
+				report.dlRawDataUnit = 'co2';
+			} else if (btnIdx === 3) {
+				report.dlRawDataUnit = 'all';
+			}
+
+			$(".choose-unit-section>span").removeClass('selected-unit');
+			$(this).addClass('selected-unit');
+		});
+	});
+
 	$("#download-raw-data .create-report-btn").click(function() {
 		if (canDlRawData()) {
-			//
+			$(".download-raw-data-form input[name='start_timestamp']").attr("value", report.dlRawDataStartDt.unix());
+			$(".download-raw-data-form input[name='end_timestamp']").attr("value", report.dlRawDataEndDt.unix());
+			$(".download-raw-data-form input[name='unit']").attr("value", report.dlRawDataUnit);
+			$(".download-raw-data-form").submit();
 		}
 	});
 });
@@ -687,9 +716,10 @@ $(function() {
 				</div>
 			</div>
 			<div class="two-column-section">
-				<div>
+				<div class="choose-unit-section">
 					<div class="customize-section-title"><span>2</span>Select your units</div>
 					<hr>
+					<span></span><span></span><span></span><span></span>
 				</div>
 				<div>
 					<div class="customize-section-title"><span>3</span>Download your file</div>
@@ -728,6 +758,12 @@ $(function() {
 	<input name="start_timestamp" value="">
 	<input name="end_timestamp" value="">
 	<input name="report_type" value="">
+</form>
+
+<form class="download-raw-data-form" action="{% url 'export_data' system_code=systems.0.code %}" method="POST">{% csrf_token %}
+	<input name="start_timestamp" value="">
+	<input name="end_timestamp" value="">
+	<input name="unit" value="">
 </form>
 
 {% endblock %}

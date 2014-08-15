@@ -158,7 +158,7 @@ class SourceManager:
 	@staticmethod
 	def recover_min_reading(grouped_invalid_reading):
 		xml_url = grouped_invalid_reading['_id']['xml_url']
-		retrieve_time = pytz.utc.localize(grouped_invalid_reading['_id']['datetime'])
+		retrieve_time = (grouped_invalid_reading['_id']['datetime']).astimezone(pytz.utc)
 		sources = grouped_invalid_reading['sources']
 
 		start_timestamp = calendar.timegm(retrieve_time.utctimetuple())
@@ -363,7 +363,7 @@ class SourceManager:
 			{"$limit": 1}
 		])
 
-		start_dt = pytz.utc.localize(result["result"][0]["_id"])
+		start_dt = result["result"][0]["_id"].astimezone(pytz.utc)
 		end_dt = Utils.gen_end_dt(range_type, start_dt, tz_offset)
 
 		info = {}

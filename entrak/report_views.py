@@ -171,7 +171,7 @@ def __get_sum_up_usage_within_periods(source_ids, period_dts, target_period_num)
 
 	results = [0]*len(period_dts)
 	for source_reading in source_readings:
-		reading_dt = pytz.utc.localize(source_reading.datetime)
+		reading_dt = source_reading.datetime.astimezone(pytz.utc)
 
 		for period_idx in xrange(len(period_dts)):
 			bound_start = period_dts[period_idx]['start_dt']

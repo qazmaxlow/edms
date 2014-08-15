@@ -131,6 +131,8 @@ GraphChart.prototype.getHighestSourceReadings = function(doneCallback) {
 		graphChartThis.updateCompareChoice();
 
 		doneCallback();
+	}).fail(function(jqXHR, textStatus) {
+		console.log(jqXHR.responseText);
 	});
 }
 
