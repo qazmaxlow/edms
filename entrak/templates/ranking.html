@@ -156,7 +156,7 @@ function finishReceiveRankData(data) {
 			return node.data.code == item.code;
 		});
 
-		var logoUrl = (matchSystem !== null) ? matchSystem.data.logo : 'src-default.png';
+		var logoUrl = (matchSystem !== null) ? matchSystem.data.logo : "{% static 'images/ranking/src-default.png' %}";
 
 		var info = {
 			topPos: idx*RANKING_ITEM_HEIGHT,

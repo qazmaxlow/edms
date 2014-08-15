@@ -103,6 +103,7 @@
 }
 
 .customize-calendar-section {
+	height: 210px;
 	background-color: #F0EEE8;
 }
 
@@ -305,9 +306,17 @@
 .three-column-section .create-report-section {
 	text-align: center;
 }
-.month-datepicker-container {
+.report-datepicker-container {
 	display: inline-block;
 	width: 484px;
+}
+
+#download-raw-data {
+	display: none;
+	width: 100%;
+}
+.dl-data-title{
+	font-size: 9pt;
 }
 
 .report-component {

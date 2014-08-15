@@ -218,7 +218,7 @@ function timeRangeQuarterSelected() {
 }
 
 function timeRangeCustomMonthSelected() {
-	$(".month-datepicker-container>div:nth-child(2)").datepicker("destroy");
+	$(".month-datepicker-container .report-datepicker").datepicker("destroy");
 	var datepickerOptions = {
 	};
 	$("#month-start-datepicker").datepicker($.extend({
@@ -332,6 +332,63 @@ function updateCreateBtnStatus() {
 	}
 }
 
+function dlRawDataSelected() {
+	$(".datetime-result .from-date").text('');
+	$(".datetime-result .to-date").text('');
+	$(".create-report-btn").addClass("btn-disable");
+
+	report.dlRawDataStartDt = null;
+	report.dlRawDataEndDt = null;
+
+	$("#download-raw-data .report-datepicker").datepicker('destroy');
+	$("#dl-data-start-datepicker").datepicker({
+		minDate: report.firstRecord.toDate(),
+		maxDate: '-1d',
+		onSelect: function(dateText, inst) {
+			var selectDt = moment($(this).datepicker('getDate')).tz(report.timezone);
+			var boundMinDate = moment(selectDt).add('d', 1).toDate();
+			$("#dl-data-end-datepicker").datepicker("option", "minDate", boundMinDate);
+
+			if (report.dlRawDataEndDt !== null
+				&& (selectDt.isSame(report.dlRawDataEndDt)) || selectDt.isAfter(report.dlRawDataEndDt)) {
+				var endDt = moment($("#dl-data-end-datepicker").datepicker('getDate')).tz(report.timezone);
+				report.dlRawDataEndDt = endDt;
+				$(".datetime-result .to-date").text(endDt.format('D MMM YYYY, ddd'));
+			}
+
+			report.dlRawDataStartDt = selectDt;
+			$(".datetime-result .from-date").text(selectDt.format('D MMM YYYY, ddd'));
+
+			updateDlRawBtnStatus();
+		},
+	});
+	$("#dl-data-end-datepicker").datepicker({
+		minDate: report.firstRecord.toDate(),
+		maxDate: '0d',
+		onSelect: function(dateText, inst) {
+			var selectDt = moment($(this).datepicker('getDate')).tz(report.timezone);
+			report.dlRawDataEndDt = selectDt;
+			$(".datetime-result .to-date").text(selectDt.format('D MMM YYYY, ddd'));
+
+			updateDlRawBtnStatus();
+		},
+	});
+}
+
+function canDlRawData() {
+	return (report.dlRawDataStartDt !== null
+		&& report.dlRawDataEndDt !== null
+		&& report.dlRawDataEndDt.isAfter(report.dlRawDataStartDt))
+}
+
+function updateDlRawBtnStatus() {
+	if (canDlRawData()) {
+		$(".create-report-btn").removeClass("btn-disable");
+	} else {
+		$(".create-report-btn").addClass("btn-disable");
+	}
+}
+
 $(function() {
 	setupAjaxForCsrf($.cookie('csrftoken'));
 
@@ -365,12 +422,17 @@ $(function() {
 			$(".panel-header-left-menu h3").removeClass('selected-tab');
 			$(this).addClass('selected-tab');
 
+			var panelContentHeight;
 			if (btnIdx === 0) {
-				$("#panel-content").css('height', '162px');
+				panelContentHeight = '162px';
 			} else if (btnIdx === 1) {
-				$("#panel-content").css('height', '362px');
+				panelContentHeight = '362px';
 				updateReportType(ReportGenerator.REPORT_TYPE_YEAR);
+			} else if (btnIdx === 2) {
+				panelContentHeight = '638px';
+				dlRawDataSelected();
 			}
+			$("#panel-content").css("height", panelContentHeight);
 
 			var targetPanel = $($('#panel-content>div')[btnIdx]);
 			if (targetPanel.css("display") == 'none') {
@@ -379,7 +441,7 @@ $(function() {
 			}
 		});
 	});
-	$(".panel-header-left-menu h3:eq(1)").click();
+	$(".panel-header-left-menu h3:eq(2)").click();
 
 	$(".time-range-section span").each(function(btnIdx) {
 		$(this).click(function() {
@@ -438,7 +500,7 @@ $(function() {
 		$(".download-pdf-form").submit();
 	});
 
-	$(".create-report-btn").click(function() {
+	$("#customize-report .create-report-btn").click(function() {
 		if (!(canCreateCustomReport())) {
 			return;
 		}
@@ -469,6 +531,12 @@ $(function() {
 				updateGenReportSection();
 			}
 		});
+	});
+
+	$("#download-raw-data .create-report-btn").click(function() {
+		if (canDlRawData()) {
+			//
+		}
 	});
 });
 </script>
@@ -576,13 +644,13 @@ $(function() {
 						<div>If you wish to view a stardard calendar month, click on the Monthly Report tab at the top of the page</div>
 						<hr>
 						<div>
-							<div class="month-datepicker-container">
+							<div class="report-datepicker-container">
 								<div>Choose your start date</div>
 								<div id="month-start-datepicker" class="report-datepicker"></div>
 							</div>
-							<div class="month-datepicker-container" class="report-datepicker">
+							<div class="report-datepicker-container">
 								<div>Choose your end date</div>
-								<div id="month-end-datepicker"></div>
+								<div id="month-end-datepicker" class="report-datepicker"></div>
 							</div>
 						</div>
 					</div>
@@ -597,6 +665,44 @@ $(function() {
 							</div>
 							<hr>
 							<div class="create-report-btn">Create Report</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="download-raw-data">
+			<div class="dl-data-title">Here you can download your energy use data to files that can be opened in Microsoft Excel (CSV).</div>
+			<div class="dl-data-title">Simply select the start date/time, the end date/time, and the units you'd like to see in your data file.</div>
+			<div class="customize-section-title"><span>1</span>Choose your date</div>
+			<hr>
+			<div>
+				<div class="report-datepicker-container">
+					<div>Choose your start date</div>
+					<div id="dl-data-start-datepicker" class="report-datepicker"></div>
+				</div>
+				<div class="report-datepicker-container">
+					<div>Choose your end date</div>
+					<div id="dl-data-end-datepicker" class="report-datepicker"></div>
+				</div>
+			</div>
+			<div class="two-column-section">
+				<div>
+					<div class="customize-section-title"><span>2</span>Select your units</div>
+					<hr>
+				</div>
+				<div>
+					<div class="customize-section-title"><span>3</span>Download your file</div>
+					<hr>
+					<div class="create-report-section">
+						<div class="datetime-result">
+							<div class="datetime-result-title">Energy data - kWh</div>
+							<div class="datetime-result-from-to">
+								<div><span>From:</span><span class="from-date"></span></div>
+								<div><span>To:</span><span class="to-date"></span></div>
+							</div>
+							<hr>
+							<div class="create-report-btn">Download File</div>
 						</div>
 					</div>
 				</div>
