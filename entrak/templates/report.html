@@ -108,12 +108,18 @@ function canCreateCustomReport() {
 
 function updateReportType(targetReportType) {
 	if (targetReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-		$("#panel-content").css('height', '638px');
+		$("#panel-content").css('height', '723px');
 
 		$(".customize-detail-section .three-column-section").fadeIn();
 		$(".customize-detail-section .two-column-section").hide();
 	} else {
-		$("#panel-content").css('height', '362px');
+		if (targetReportType === ReportGenerator.REPORT_TYPE_WEEK) {
+			$("#panel-content").css('height', '406px');
+			$("#customize-report .two-column-section").addClass('custom-week');
+		} else {
+			$("#panel-content").css('height', '362px');
+			$("#customize-report .two-column-section").removeClass('custom-week');
+		}
 
 		$(".customize-detail-section .two-column-section").fadeIn();
 		$(".customize-detail-section .three-column-section").hide();
@@ -218,7 +224,7 @@ function timeRangeQuarterSelected() {
 }
 
 function timeRangeCustomMonthSelected() {
-	$(".month-datepicker-container .report-datepicker").datepicker("destroy");
+	$(".three-column-section .report-datepicker").datepicker("destroy");
 	var datepickerOptions = {
 	};
 	$("#month-start-datepicker").datepicker($.extend({
@@ -284,6 +290,7 @@ function timeRangeWeekSelected() {
 
 			report.currentDt = selectDt;
 			updateGenReportSection();
+			setWeekHoverEffect();
 		},
 		beforeShowDay: function(date) {
 			var cssClass = '';
@@ -435,7 +442,7 @@ $(function() {
 				panelContentHeight = '362px';
 				updateReportType(ReportGenerator.REPORT_TYPE_YEAR);
 			} else if (btnIdx === 2) {
-				panelContentHeight = '638px';
+				panelContentHeight = '723px';
 				dlRawDataSelected();
 			}
 			$("#panel-content").css("height", panelContentHeight);
@@ -447,7 +454,7 @@ $(function() {
 			}
 		});
 	});
-	$(".panel-header-left-menu h3:eq(2)").click();
+	$(".panel-header-left-menu h3:eq(1)").click();
 
 	$(".time-range-section span").each(function(btnIdx) {
 		$(this).click({btnIdx: btnIdx}, function(event) {
