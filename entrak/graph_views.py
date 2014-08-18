@@ -10,7 +10,7 @@ from django.db.models import Q
 from system.models import System, CITY_ALL
 from unit.models import UnitCategory, UnitRate, KWH_CATEGORY_CODE
 from egauge.manager import SourceManager
-from egauge.models import Source
+from egauge.models import Source, SourceReadingMin
 from utils.utils import Utils
 from user.models import EntrakUser
 from utils.auth import permission_required
@@ -69,12 +69,25 @@ def source_readings_view(request, system_code):
 def highest_lowest_source_readings_view(request, system_code):
 	source_infos = json.loads(request.POST.get('source_infos'))
 	range_type = request.POST.get('range_type')
+	unit_category_code = request.POST.get('unit_category_code')
+	has_detail_rate = (request.POST.get('has_detail_rate') == 'true')
+	global_rate = float(request.POST.get('global_rate'))
 	tz_offset = int(request.POST.get('tz_offset'))/60
 	is_highest = (request.POST.get('is_highest') == "true")
 	sort_order = -1 if is_highest else 1
 
 	source_readings_info = SourceManager.get_most_readings(source_infos['source_ids'], range_type, tz_offset, sort_order)
 	source_readings_info['name'] = source_infos['name']
+
+	if unit_category_code != KWH_CATEGORY_CODE:
+		if has_detail_rate:
+			systems = System.get_systems_within_root(system_code)
+			sources = Source.objects(id__in=source_infos['source_ids'])
+			unit_rates = UnitRate.objects.filter(category_code=unit_category_code)
+
+			calculation.transform_source_readings(source_readings_info['readings'], systems, sources, unit_rates, unit_category_code)
+		else:
+			calculation.transform_source_readings_with_global_rate(source_readings_info['readings'], global_rate)
 
 	total_readings = {}
 	for _, readings in source_readings_info['readings'].items():
@@ -89,16 +102,15 @@ def highest_lowest_source_readings_view(request, system_code):
 
 def summary_view(request, system_code):
 	source_ids = json.loads(request.POST.get('source_ids'))
-	range_type = request.POST.get('range_type')
 	start_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('start_dt'))))
 	end_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('end_dt'))))
 	last_start_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('last_start_dt'))))
 	last_end_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('last_end_dt'))))
 
-	source_readings = SourceManager.get_readings(source_ids, range_type, start_dt, end_dt)
+	source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingMin, start_dt, end_dt)
 	usage = calculation.sum_all_readings(source_readings)
 
-	last_source_readings = SourceManager.get_readings(source_ids, range_type, last_start_dt, last_end_dt)
+	last_source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingMin, last_start_dt, last_end_dt)
 	last_usage = calculation.sum_all_readings(last_source_readings)
 
 	return Utils.json_response({'realtime': usage, 'last': last_usage})

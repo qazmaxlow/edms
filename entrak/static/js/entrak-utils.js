@@ -22,7 +22,7 @@ Utils.getNowMoment = function (startOf) {
 
 	// TODO: hardcode now should be change after have real data
 	result = moment();
-	// result = moment().year(2014).month(5).date(3);
+	// result = moment().year(2014).month(5).date(9);
 	if (startOf !== undefined) {
 		result.startOf(startOf);
 	}

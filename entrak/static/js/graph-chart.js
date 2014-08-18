@@ -121,6 +121,9 @@ GraphChart.prototype.getHighestSourceReadings = function(doneCallback) {
 		data: {
 			source_infos: JSON.stringify(sourceInfos),
 			range_type: Utils.API_RANGE_TYPES[graphChartThis.currentRangeType],
+			unit_category_code: graphChartThis.currentUnit.code,
+			has_detail_rate: graphChartThis.currentUnit.hasDetailRate,
+			global_rate: graphChartThis.currentUnit.globalRate,
 			tz_offset: graphChartThis.currentDt.toDate().getTimezoneOffset(),
 			is_highest: true,
 		},
@@ -146,6 +149,9 @@ GraphChart.prototype.getLowestSourceReadings = function(doneCallback) {
 		data: {
 			source_infos: JSON.stringify(sourceInfos),
 			range_type: Utils.API_RANGE_TYPES[graphChartThis.currentRangeType],
+			unit_category_code: graphChartThis.currentUnit.code,
+			has_detail_rate: graphChartThis.currentUnit.hasDetailRate,
+			global_rate: graphChartThis.currentUnit.globalRate,
 			tz_offset: graphChartThis.currentDt.toDate().getTimezoneOffset(),
 			is_highest: false,
 		},
@@ -563,8 +569,8 @@ GraphChart.prototype.getSummary = function(getSummaryCallback) {
 	var graphChartThis = this;
 	var uptilMoment = Utils.getNowMoment();
 	var startDt = moment(uptilMoment).startOf('day');
-	var lastStartDt = moment(startDt).subtract('d', 1);
-	var lastEndDt = moment(uptilMoment).subtract('d', 1);
+	var lastStartDt = moment(startDt).subtract('w', 1);
+	var lastEndDt = moment(uptilMoment).subtract('w', 1);
 
 	var sourceIds = this.entrakSystem.getAllSourceIds();
 	$.ajax({
@@ -572,7 +578,6 @@ GraphChart.prototype.getSummary = function(getSummaryCallback) {
 		url: "../summary/",
 		data: {
 			source_ids: JSON.stringify(sourceIds),
-			range_type: Utils.API_RANGE_TYPES[Utils.RANGE_TYPE_HOUR],
 			start_dt: startDt.unix(),
 			end_dt: uptilMoment.unix(),
 			last_start_dt: lastStartDt.unix(),
