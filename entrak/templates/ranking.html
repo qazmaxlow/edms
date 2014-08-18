@@ -14,6 +14,7 @@
 <script src="{% static 'js/datetimepicker-master/jquery.datetimepicker-customized.js' %}"></script>
 <script src="{% static 'js/mustache.js-master/mustache.js' %}"></script>
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
+<script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
 <script src="{% static 'js/entrak-system.js' %}"></script>
 <script src="{% static 'js/entrak-utils.js' %}"></script>
 {% endblock %}
@@ -260,6 +261,9 @@ $(function() {
 	ranking.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
 	ranking.entrakSystem.addSourceToSystem('{{sources|jsonifySources}}');
 
+	ranking.timezone = '{{systems.0.timezone}}';
+	ranking.firstRecord = moment.unix(ranking.entrakSystem.systemTree.data.firstRecord).tz(ranking.timezone);
+
 	ranking.currentDt = Utils.getNowMoment('hour');
 	ranking.currentRangeType = Utils.RANGE_TYPE_DAY;
 	ranking.currentRankingType = RANKING_TYPE_TOTAL;
@@ -332,6 +336,8 @@ $(function() {
 		formatDate: "DD.MM.YYYY",
 		scrollMonth: false,
 		timepicker: false,
+		minDate: ranking.firstRecord.toDate(),
+		maxDate: 0,
 		onSelectDate: function(input) {
 			var nowMoment = Utils.getNowMoment();
 			ranking.currentDt = moment(input).startOf('hour');

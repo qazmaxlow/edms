@@ -19,6 +19,7 @@
 <script src="{% static 'js/datetimepicker-master/jquery.datetimepicker-customized.js' %}"></script>
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
+<script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
 <script src="{% static 'js/entrak-system.js' %}"></script>
 <script src="{% static 'js/entrak-utils.js' %}"></script>
 <script src="{% static 'js/graph-chart.js' %}"></script>
@@ -361,6 +362,9 @@ $(function() {
 	graph.unitCategorys = JSON.parse('{{unit_categorys|jsonifyUnitCategorys}}');
 	graph.graphChart.currentUnit = graph.unitCategorys[0];
 
+	graph.timezone = '{{systems.0.timezone}}';
+	graph.firstRecord = moment.unix(graph.graphChart.entrakSystem.systemTree.data.firstRecord).tz(graph.timezone);
+
 	$("#unit-label").html(graph.unitCategorys[0].name);
 	$("#unit-bg").attr("src", "{% get_static_prefix %}images/unit/" + graph.unitCategorys[0].bgImg);
 
@@ -474,6 +478,8 @@ $(function() {
 		formatDate: "DD.MM.YYYY",
 		scrollMonth: false,
 		timepicker: false,
+		minDate: graph.firstRecord.toDate(),
+		maxDate: 0,
 		onSelectDate: function(input) {
 			graph.graphChart.updateCompareDt(moment(input).startOf('hour'));
 			$("#compare-custom-date").text(formatCompareDtStr(graph.graphChart.customDt.startDt, graph.graphChart.currentRangeType))
@@ -493,6 +499,8 @@ $(function() {
 		formatDate: "DD.MM.YYYY",
 		scrollMonth: false,
 		timepicker: false,
+		minDate: graph.firstRecord.toDate(),
+		maxDate: 0,
 		onSelectDate: function(input) {
 			graph.graphChart.updateCurrentDt(moment(input).startOf('hour'));
 			resetGraphNPanel();
