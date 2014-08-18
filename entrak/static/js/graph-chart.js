@@ -128,10 +128,15 @@ GraphChart.prototype.getHighestSourceReadings = function(doneCallback) {
 			is_highest: true,
 		},
 	}).done(function(data) {
-		graphChartThis.highestDt = moment.unix(data["timestamp"]);
-		graphChartThis.transformReadingToSeries(data, 'highestSeries');
-		graphChartThis.highestSeries.color = "#ED6D43";
-		graphChartThis.updateCompareChoice();
+		if (data["timestamp"] !== null) {
+			graphChartThis.highestDt = moment.unix(data["timestamp"]);
+			graphChartThis.transformReadingToSeries(data, 'highestSeries');
+			graphChartThis.highestSeries.color = "#ED6D43";
+			graphChartThis.updateCompareChoice();
+		} else {
+			graphChartThis.highestDt = null;
+			graphChartThis.highestSeries = null;
+		}
 
 		doneCallback();
 	}).fail(function(jqXHR, textStatus) {
@@ -156,10 +161,15 @@ GraphChart.prototype.getLowestSourceReadings = function(doneCallback) {
 			is_highest: false,
 		},
 	}).done(function(data) {
-		graphChartThis.lowestDt = moment.unix(data["timestamp"]);
-		graphChartThis.transformReadingToSeries(data, 'lowestSeries');
-		graphChartThis.lowestSeries.color = "#35BC99";
-		graphChartThis.updateCompareChoice();
+		if (data["timestamp"] !== null) {
+			graphChartThis.lowestDt = moment.unix(data["timestamp"]);
+			graphChartThis.transformReadingToSeries(data, 'lowestSeries');
+			graphChartThis.lowestSeries.color = "#35BC99";
+			graphChartThis.updateCompareChoice();
+		} else {
+			graphChartThis.lowestDt = null;
+			graphChartThis.lowestSeries = null;
+		}
 
 		doneCallback();
 	});

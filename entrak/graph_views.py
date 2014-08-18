@@ -75,13 +75,15 @@ def highest_lowest_source_readings_view(request, system_code):
 	tz_offset = int(request.POST.get('tz_offset'))/60
 	is_highest = (request.POST.get('is_highest') == "true")
 	sort_order = -1 if is_highest else 1
+	systems = System.get_systems_within_root(system_code)
+	current_system = systems[0]
 
-	source_readings_info = SourceManager.get_most_readings(source_infos['source_ids'], range_type, tz_offset, sort_order)
+	source_readings_info = SourceManager.get_most_readings(source_infos['source_ids'],
+		range_type, tz_offset,sort_order, current_system)
 	source_readings_info['name'] = source_infos['name']
 
 	if unit_category_code != KWH_CATEGORY_CODE:
 		if has_detail_rate:
-			systems = System.get_systems_within_root(system_code)
 			sources = Source.objects(id__in=source_infos['source_ids'])
 			unit_rates = UnitRate.objects.filter(category_code=unit_category_code)
 

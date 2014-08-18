@@ -340,7 +340,7 @@ class SourceManager:
 		return grouped_readings
 
 	@staticmethod
-	def get_most_readings(source_ids, range_type, tz_offset, sort_order):
+	def get_most_readings(source_ids, range_type, tz_offset, sort_order, system):
 		range_type_mapping = {
 			Utils.RANGE_TYPE_HOUR: {'compare_collection': 'source_reading_hour'},
 			Utils.RANGE_TYPE_DAY: {'compare_collection': 'source_reading_day'},
@@ -349,10 +349,38 @@ class SourceManager:
 			Utils.RANGE_TYPE_YEAR: {'compare_collection': 'source_reading_year'},
 		}
 
+		system_timezone = pytz.timezone(system.timezone)
+		dt_lower_bound = system.first_record.astimezone(system_timezone).replace(
+				hour=0, minute=0, second=0, microsecond=0)
+		dt_upper_bound = pytz.utc.localize(datetime.datetime.utcnow()).astimezone(system_timezone).replace(
+			minute=0, second=0, microsecond=0)
+		match_condition = {'source_id': {'$in': [ObjectId(source_id) for source_id in source_ids]}}
+		if range_type == Utils.RANGE_TYPE_HOUR:
+			match_condition["datetime"] = {'$lt': dt_upper_bound}
+		elif range_type == Utils.RANGE_TYPE_DAY:
+			dt_upper_bound = dt_upper_bound.replace(hour=0)
+			match_condition["datetime"] = {'$lt': dt_upper_bound}
+		elif range_type == Utils.RANGE_TYPE_WEEK:
+			dt_upper_bound = dt_upper_bound.replace(hour=0)
+			dt_upper_bound -= datetime.timedelta(days=(dt_upper_bound.weekday()+1))
+			if dt_lower_bound.weekday() != 6:
+				dt_lower_bound += datetime.timedelta(days=(6-dt_lower_bound.weekday()))
+			match_condition["datetime"] = {'$gte': dt_lower_bound, '$lt': dt_upper_bound}
+		elif range_type == Utils.RANGE_TYPE_MONTH:
+			dt_upper_bound = dt_upper_bound.replace(day=1, hour=0)
+			if dt_lower_bound.day != 1:
+				dt_lower_bound = Utils.add_month(dt_lower_bound, 1).replace(day=1)
+			match_condition["datetime"] = {'$gte': dt_lower_bound, '$lt': dt_upper_bound}
+		elif range_type == Utils.RANGE_TYPE_YEAR:
+			dt_upper_bound = dt_upper_bound.replace(month=1, day=1, hour=0)
+			if dt_lower_bound.month != 1 or dt_lower_bound.day != 1:
+				dt_lower_bound = dt_lower_bound.replace(year=(dt_lower_bound.year+1), month=1, day=1)
+			match_condition["datetime"] = {'$gte': dt_lower_bound, '$lt': dt_upper_bound}
+
 		mapped_info = range_type_mapping[range_type]
 		current_db_conn = connection.get_db()
 		result = current_db_conn[mapped_info['compare_collection']].aggregate([
-			{"$match": {'source_id': {'$in': [ObjectId(source_id) for source_id in source_ids]}}},
+			{"$match": match_condition},
 			{
 				"$group": {
 					"_id": "$datetime",
@@ -363,11 +391,16 @@ class SourceManager:
 			{"$limit": 1}
 		])
 
-		start_dt = result["result"][0]["_id"].astimezone(pytz.utc)
-		end_dt = Utils.gen_end_dt(range_type, start_dt, tz_offset)
-
 		info = {}
-		info['timestamp'] = calendar.timegm(start_dt.utctimetuple())
-		info['readings'] = SourceManager.get_readings(source_ids, range_type, start_dt, end_dt)
+
+		if result["result"]:
+			start_dt = result["result"][0]["_id"].astimezone(pytz.utc)
+			end_dt = Utils.gen_end_dt(range_type, start_dt, tz_offset)
+
+			info['timestamp'] = calendar.timegm(start_dt.utctimetuple())
+			info['readings'] = SourceManager.get_readings(source_ids, range_type, start_dt, end_dt)
+		else:
+			info['timestamp'] = None
+			info['readings'] = {}
 
 		return info

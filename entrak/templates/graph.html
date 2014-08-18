@@ -192,7 +192,7 @@ function retrieveSummaryFinished() {
 	$("#last-consumption-val").text(graph.graphChart.lastConsumption.toFixed(0));
 	$("#this-consumption-val").text(graph.graphChart.realtimeConsumption.toFixed(0));
 
-	var diffPercentage = ((Math.abs(graph.graphChart.realtimeConsumption - graph.graphChart.lastConsumption)/graph.graphChart.realtimeConsumption)*100).toFixed(1);
+	var diffPercentage = ((Math.abs(graph.graphChart.realtimeConsumption - graph.graphChart.lastConsumption)/graph.graphChart.lastConsumption)*100).toFixed(1);
 	$("#summary-percentage-number").text(diffPercentage);
 
 	var summaryBgImg = null;
@@ -293,7 +293,11 @@ function setupComparePanel() {
 		if ($(this).prop("checked")) {
 			graph.graphChart.showHighest = true;
 			graph.graphChart.getHighestSourceReadings(function () {
-				$("#compare-highest-date").text(formatCompareDtStr(graph.graphChart.highestDt, graph.graphChart.currentRangeType));
+				if (graph.graphChart.highestDt !== null) {
+					$("#compare-highest-date").text(
+						formatCompareDtStr(graph.graphChart.highestDt, graph.graphChart.currentRangeType)
+					);
+				}
 			});
 		} else {
 			graph.graphChart.showHighest = false;
@@ -306,7 +310,11 @@ function setupComparePanel() {
 		if ($(this).prop("checked")) {
 			graph.graphChart.showLowest = true;
 			graph.graphChart.getLowestSourceReadings(function () {
-				$("#compare-lowest-date").text(formatCompareDtStr(graph.graphChart.lowestDt, graph.graphChart.currentRangeType));
+				if (graph.graphChart.lowestDt !== null) {
+					$("#compare-lowest-date").text(
+						formatCompareDtStr(graph.graphChart.lowestDt, graph.graphChart.currentRangeType)
+					);
+			}
 			});
 		} else {
 			graph.graphChart.showLowest = false;
