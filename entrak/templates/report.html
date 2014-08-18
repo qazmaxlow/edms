@@ -344,8 +344,8 @@ function dlRawDataSelected() {
 	$(".datetime-result .to-date").text('');
 	$(".create-report-btn").addClass("btn-disable");
 
-	$('.choose-unit-section>span').removeClass('selected-unit')
-	$('.choose-unit-section>span:eq(0)').addClass('selected-unit');
+	$('.unit-container>span').removeClass('selected-unit')
+	$('.unit-container>span:eq(0)').addClass('selected-unit');
 
 	report.dlRawDataStartDt = null;
 	report.dlRawDataEndDt = null;
@@ -442,7 +442,7 @@ $(function() {
 				panelContentHeight = '362px';
 				updateReportType(ReportGenerator.REPORT_TYPE_YEAR);
 			} else if (btnIdx === 2) {
-				panelContentHeight = '723px';
+				panelContentHeight = '608px';
 				dlRawDataSelected();
 			}
 			$("#panel-content").css("height", panelContentHeight);
@@ -548,7 +548,7 @@ $(function() {
 		});
 	});
 
-	$(".choose-unit-section>span").each(function(btnIdx) {
+	$(".unit-container>span").each(function(btnIdx) {
 		$(this).click({btnIdx: btnIdx}, function(event) {
 			var btnIdx = event.data.btnIdx;
 			if (btnIdx === 0) {
@@ -561,7 +561,7 @@ $(function() {
 				report.dlRawDataUnit = 'all';
 			}
 
-			$(".choose-unit-section>span").removeClass('selected-unit');
+			$(".unit-container>span").removeClass('selected-unit');
 			$(this).addClass('selected-unit');
 		});
 	});
@@ -712,7 +712,7 @@ $(function() {
 			<div class="dl-data-title">Simply select the start date/time, the end date/time, and the units you'd like to see in your data file.</div>
 			<div class="customize-section-title"><span>1</span>Choose your date</div>
 			<hr>
-			<div>
+			<div class="dl-choose-date-section">
 				<div class="report-datepicker-container">
 					<div>Choose your start date</div>
 					<div id="dl-data-start-datepicker" class="report-datepicker"></div>
@@ -726,7 +726,9 @@ $(function() {
 				<div class="choose-unit-section">
 					<div class="customize-section-title"><span>2</span>Select your units</div>
 					<hr>
-					<span></span><span></span><span></span><span></span>
+					<div class="unit-container">
+						<span></span><span></span><span></span><span></span>
+					</div>
 				</div>
 				<div>
 					<div class="customize-section-title"><span>3</span>Download your file</div>

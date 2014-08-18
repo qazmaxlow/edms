@@ -1,6 +1,6 @@
 .summary-date-col, .save-report-btn, .hide-details-btn, .bottom-save-report-btn,
 .year-quarter-calendar-content>div, .create-report-btn, .time-range-section>span,
-.prev-btn, .next-btn, .pdf-icon, .pdf-text, .choose-unit-section>span {
+.prev-btn, .next-btn, .pdf-icon, .pdf-text, .unit-container>span {
 	cursor: pointer;
 	cursor: hand;
 }
@@ -103,7 +103,7 @@
 }
 .two-column-section.custom-week>div {
 	height: 288px;
-	background-color: #F0EEE8;
+	background-color: #F2F0EB;
 }
 .custom-week .create-report-section {
 	height: 252px;
@@ -111,7 +111,7 @@
 
 .customize-calendar-section {
 	height: 210px;
-	background-color: #F0EEE8;
+	background-color: #F2F0EB;
 }
 
 .year-quarter-calendar {
@@ -135,7 +135,7 @@
 	color: #FFFFFF;
 }
 .year-quarter-calendar-head .prev-btn {
-	width: 14%;
+	width: 15%;
 	line-height: 25px;
 	border-right: 1px solid #50767F;
 }
@@ -143,14 +143,14 @@
 	background-color: #81D51D;
 }
 .year-quarter-calendar-head .target-year {
-	width: 71%;
+	width: 69%;
 	height: auto;
 	font-size: 12pt;
 	font-weight: bold;
 	letter-spacing: 0.1em;
 }
 .year-quarter-calendar-head .next-btn {
-	width: 14%;
+	width: 15%;
 	line-height: 25px;
 	border-left: 1px solid #50767F;
 }
@@ -364,9 +364,10 @@
 /* --- customize jquery datepicker --- */
 .ui-widget-header {
 	background: #528E9B;
-	color: #222222;
+	color: #FFF;
 	font-weight: bold;
 	width: 375px;
+	border: 0px;
 	border-bottom: 1px solid #FFF;
 	font-size: 9pt;
 }
@@ -376,34 +377,65 @@
 	color: #222222;
 	width: 375px;
 }
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
+	border-bottom-right-radius: 0px;
+}
+.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
+	border-bottom-left-radius: 0px;
+}
+.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
+	border-top-left-radius: 0px;
+}
+.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
+	border-top-right-radius: 0px;
+}
 .ui-widget-content{
 	border: 0px;
 }
 .ui-datepicker table{
 	width: 375px;
-	font-size: .9em;
+	font-size: 0.8em;
 	border-collapse: collapse;
 	margin: 0 0 .1em;
 }
 .ui-datepicker th{
-	padding: .7em .3em;
+	padding: 0.5em .3em;
 	text-align: center;
 	border: 0;
 	background-color: #9BCEDA;
 	color: #FFF;
 }
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
-	border-left: 1px solid #FFF;
+	border: 0px;
 	background: #E6E6E6;
 	font-weight: normal;
 	color: #555555;
 	text-align: center;
 	font-size: 9pt;
-	height: 15px;
-	padding-top: 5px;
+	height: 17px;
+	padding-top: 7px;
+}
+.ui-datepicker .ui-datepicker-title {
+	line-height: 1.9em;
 }
 .ui-icon, .ui-widget-content .ui-icon {
-	background-image: none;
+	background-image: url(../images/report/datepicker-sprites.png);
+}
+.ui-icon-circle-triangle-e {
+	background-position: -2px -2px;
+}
+.ui-icon-circle-triangle-w {
+	background-position: -38px -2px;
+}
+.ui-datepicker-next-hover,
+.ui-datepicker-prev-hover {
+	background: #528E9B !important;
+}
+.ui-datepicker-next-hover.ui-state-hover span {
+	background-position: -56px -2px;
+}
+.ui-datepicker-prev.ui-state-hover span {
+	background-position: -20px -2px;
 }
 .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
 	border: 0px;
@@ -424,34 +456,46 @@
 }
 /* --- ########################### --- */
 
-.choose-unit-section>span {
+.unit-container {
+	height: 210px;
+	background-color: #F0EEE8;
+}
+.unit-container>span {
 	display: inline-block;
 	width: 62px;
 	height: 62px;
 	margin-top: 38px;
 	margin-left: 10px;
+	border-radius: 8px;
 }
-.choose-unit-section>span:nth-of-type(1) {
+.unit-container>span:nth-of-type(1) {
 	margin-left: 0px;
 	background: url(../images/unit/kwh.png) no-repeat;
 }
-.choose-unit-section>span:nth-of-type(1):hover,
-.choose-unit-section>span:nth-of-type(1).selected-unit {
+.unit-container>span:nth-of-type(1):hover,
+.unit-container>span:nth-of-type(1).selected-unit {
 	background: url(../images/unit/kwh-hover.png) no-repeat;
 }
-.choose-unit-section>span:nth-of-type(2) {
+.unit-container>span:nth-of-type(2) {
 	background: url(../images/unit/money.png) no-repeat;
 }
-.choose-unit-section>span:nth-of-type(2):hover,
-.choose-unit-section>span:nth-of-type(2).selected-unit {
+.unit-container>span:nth-of-type(2):hover,
+.unit-container>span:nth-of-type(2).selected-unit {
 	background: url(../images/unit/money-hover.png) no-repeat;
 }
-.choose-unit-section>span:nth-of-type(3) {
+.unit-container>span:nth-of-type(3) {
 	background: url(../images/unit/co2.png) no-repeat;
 }
-.choose-unit-section>span:nth-of-type(3):hover,
-.choose-unit-section>span:nth-of-type(3).selected-unit {
+.unit-container>span:nth-of-type(3):hover,
+.unit-container>span:nth-of-type(3).selected-unit {
 	background: url(../images/unit/co2-hover.png) no-repeat;
+}
+.unit-container>span:nth-of-type(4) {
+	background: url(../images/unit/all.png) no-repeat;
+}
+.unit-container>span:nth-of-type(4):hover,
+.unit-container>span:nth-of-type(4).selected-unit {
+	background: url(../images/unit/all-hover.png) no-repeat;
 }
 
 #download-raw-data {
@@ -459,7 +503,24 @@
 	width: 100%;
 }
 .dl-data-title{
-	font-size: 9pt;
+	font-size: 10pt;
+	padding-left: 240px;
+	vertical-align: middle;
+	padding-top: 7px;
+	color: #354960;
+	background-color: #F2F0EB;
+}
+.dl-data-title:first-child{
+	padding-top: 14px;
+}
+.dl-data-title:nth-child(2){
+	padding-bottom: 14px;
+}
+.dl-choose-date-section {
+	background-color: #F2F0EB;
+}
+#download-raw-data .report-datepicker-container>div:nth-child(1) {
+	margin-top: 10px;
 }
 
 .report-component {
