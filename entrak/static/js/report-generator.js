@@ -456,9 +456,9 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 			co2PercentSum += dataInfo.co2Percent;
 			moneyPercentSum += dataInfo.moneyPercent;
 		} else {
-			dataInfo.energyPercent = (100-energyPercentSum);
-			dataInfo.co2Percent = (100-co2PercentSum);
-			dataInfo.moneyPercent = (100-moneyPercentSum);
+			dataInfo.energyPercent = parseFloat((100-energyPercentSum).toFixed(1));
+			dataInfo.co2Percent = parseFloat((100-co2PercentSum).toFixed(1));
+			dataInfo.moneyPercent = parseFloat((100-moneyPercentSum).toFixed(1));
 		}
 		transformedDatas.push(dataInfo);
 	});
