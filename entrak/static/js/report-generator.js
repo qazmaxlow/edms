@@ -449,9 +449,9 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 			totalMoney: info.currentTotalMoney};
 		dataInfo.name = (info.systemCode === reportGenThis.systemTree.data.code) ? info.sourceName : info.system.data.name;
 		if (infoIdx < reportGenThis.groupedSourceInfos.length-1) {
-			dataInfo.energyPercent = parseFloat(Utils.fixed1DecIfLessThan10((info.currentTotalEnergy/totalEnergyUsage)*100));
-			dataInfo.co2Percent = parseFloat(Utils.fixed1DecIfLessThan10((info.currentTotalCo2/totalCo2Usage)*100));
-			dataInfo.moneyPercent = parseFloat(Utils.fixed1DecIfLessThan10((info.currentTotalMoney/totalMoneyUsage)*100));
+			dataInfo.energyPercent = parseFloat(((info.currentTotalEnergy/totalEnergyUsage)*100).toFixed(1));
+			dataInfo.co2Percent = parseFloat(((info.currentTotalCo2/totalCo2Usage)*100).toFixed(1));
+			dataInfo.moneyPercent = parseFloat(((info.currentTotalMoney/totalMoneyUsage)*100).toFixed(1));
 			energyPercentSum += dataInfo.energyPercent;
 			co2PercentSum += dataInfo.co2Percent;
 			moneyPercentSum += dataInfo.moneyPercent;
