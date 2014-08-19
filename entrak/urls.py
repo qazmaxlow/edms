@@ -26,6 +26,8 @@ urlpatterns = patterns('',
 		url(r'^generate_report_pdf/(?P<report_type>[\w\-]+)/(?P<start_timestamp>\d+)/(?P<end_timestamp>\d+)/$',
 			'entrak.report_views.generate_report_pdf_view', name='generate_report_pdf'),
 		url(r'^export_data/$', 'entrak.export_data_views.export_data_view', name='export_data'),
+		url(r'^login/$', 'entrak.auth_views.login_view', name='login'),
+		url(r'^logout/$', 'entrak.auth_views.logout_view', name='logout'),
 	))),
 )
 

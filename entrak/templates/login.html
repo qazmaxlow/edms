@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block extra_head %}
+{{block.super}}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+{% endblock %}
+
+{% block extra_script %}
+{% endblock %}
+
+{% block content %}
+<div class="system-info-container">
+	<div class="system-title">{{system.name}}</div>
+	<div class="system-logo">
+		<div class="logo-circle-bound" style="background-image: url('{{MEDIA_URL}}{{system.logo.url}}');"></div>
+		<img src="{% static 'images/user-logo-bg.png' %}">
+	</div>
+</div>
+<div class="desc-header">Welcome to our energy monitoring and awareness system!</div>
+<div class="desc-content">
+	This system tracks our energy usage in real-time, helping us to better<br>
+	control and reduce our costs and environmental impact, as well as to<br>
+	increase awareness of energy saving in our organization.
+</div>
+<div class="login-panel">
+	<div>To use the En-trak monitor platform, please sign in</div>
+	<hr>
+	<form method="POST">{% csrf_token %}
+		<div>
+			<img src="">
+			<input type="text" name="username" placeholder="Username">
+		</div>
+		<div>
+			<img src="">
+			<input type="password" name="password" placeholder="Password">
+		</div>
+		<input type="submit" value="login">
+	</form>
+	<div class="warning-msg">{{warning_msg}}</div>
+</div>
+
+<footer class="site-footer">
+	<p style="clear: both;"></p>
+	<p id="copyright">Copyright © En-trak Pte Ltd 2014. All rights reserved.</p>
+	<a href="#"><img id="entrak-logo" src="{% static 'images/entrakLogo.png' %}"></a>
+	<p id="disclaimer_main"><a class="disclaimer" href="#">Print </a>
+	<a class="disclaimer" href="#"> |  Contact & Support</a>
+	<a href="#" class="disclaimer"> |  Legal </a>
+	<a class="disclaimer" href="#"> |  Download</a></p>				
+	<p style="clear: both;"></p>
+</footer>
+
+{% endblock %}

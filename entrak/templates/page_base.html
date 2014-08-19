@@ -128,7 +128,7 @@ $(function() {
 					<a href="#"><img width="23" height="22" src="{% static 'images/settings-icon.png' %}"><span>Settings</span></a>
 				</li>
 				<li id="menu-link-logout">
-					<a href="#"><img width="23" height="24" src="{% static 'images/logout-icon.png' %}"><span>Logout</span></a>
+					<a href="{% url 'logout' system_code=systems.0.code %}"><img width="23" height="24" src="{% static 'images/logout-icon.png' %}"><span>Logout</span></a>
 				</li>
 			</ul>
 		</nav>
