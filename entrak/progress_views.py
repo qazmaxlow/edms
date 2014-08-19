@@ -95,7 +95,7 @@ def progress_view(request, system_code=None):
 
 	grouped_baselines = BaselineUsage.get_baselines_for_systems([system.id for system in need_calculate_systems.keys()])
 
-	current_dt = pytz.utc.localize(datetime.datetime.now())
+	current_dt = pytz.utc.localize(datetime.datetime.utcnow())
 
 	monthly_source_readings = SourceReadingMonth.objects(source_id__in=[str(source.id) for source in sources])
 	grouped_monthly_readings = SourceManager.group_readings_with_source_id(monthly_source_readings)

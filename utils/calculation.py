@@ -12,7 +12,8 @@ def transform_reading(unit_rate_code, timestamp, val, unit_rates):
 	if match_units:
 		target_unit_rate = sorted(match_units, key=lambda unit_rate: unit_rate.effective_date, reverse=True)[0]
 	else:
-		target_unit_rate = sorted(unit_rates, key=lambda unit_rate: unit_rate.effective_date)[0]
+		match_units = [unit_rate for unit_rate in unit_rates if (unit_rate.code == unit_rate_code)]
+		target_unit_rate = sorted(match_units, key=lambda unit_rate: unit_rate.effective_date)[0]
 
 	return val*target_unit_rate.rate
 
