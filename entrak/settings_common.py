@@ -47,7 +47,6 @@ INSTALLED_APPS = (
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
 	'django.contrib.humanize',
-	'mongoengine.django.mongo_auth',
 	'egauge',
 	'system',
 	'user',
