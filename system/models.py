@@ -81,7 +81,7 @@ class System(models.Model):
 		return result
 
 	def __unicode__(self):
-		return self.name
+		return "code: %s, name: %s"%(self.code, self.name)
 
 	def get_all_holidays(self, timestamp_info):
 		system_timezone = pytz.timezone(self.timezone)
