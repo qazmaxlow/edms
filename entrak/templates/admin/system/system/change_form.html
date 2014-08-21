@@ -1,0 +1,63 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls %}
+{% load static %}
+
+{% block extrahead %}
+{{ block.super }}
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="{% static 'js/jquery.bpopup.min.js' %}"></script>
+
+<script type="text/javascript">
+theBPopup = null;
+
+$(function() {
+	$("#edit-sources-btn").click(function(e) {
+		e.preventDefault();
+
+		theBPopup = $("#edit-sources-container").css({
+			'width': '800px',
+			'height': '400px',
+		}).bPopup({
+			content: 'iframe',
+			contentContainer: '.edit-sources-content',
+			loadUrl: "{% url 'edit_sources' system_code=original.code %}",
+			iframeAttr: {
+				'scrolling': 'yes',
+			}
+		});
+	});
+
+	// Create IE + others compatible event handler
+	var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+	var eventer = window[eventMethod];
+	var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+
+	// Listen to message from child window
+	eventer(messageEvent,function(e) {
+		if (e.data === 'closeBPopup') {
+			theBPopup.close();
+		}
+	}, false);
+});
+</script>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static "css/system-admin.css" %}" />
+{% endblock %}
+
+
+{% block object-tools-items %}
+	<li>
+		<a id="edit-sources-btn" href="#">Edit Sources</a>
+	</li>
+	{{ block.super }}
+{% endblock %}
+
+{% block after_field_sets %}
+{{ block.super }}
+<div id="edit-sources-container">
+	<div class="edit-sources-content"></div>
+</div>
+{% endblock %}

@@ -10,6 +10,8 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from django.conf import global_settings
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -27,8 +29,9 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'entrak', 'static')
-STATICFILES_DIRS = (
-	os.path.join(BASE_DIR, 'entrak', 'static_media'),
+STATICFILES_FINDERS = (
+	'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+	'django.contrib.staticfiles.finders.FileSystemFinder',
 )
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'entrak', 'media')
@@ -36,32 +39,35 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'entrak', 'media')
 # Application definition
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django.contrib.humanize',
-    'mongoengine.django.mongo_auth',
-    'egauge',
-    'system',
-    'user',
-    'baseline',
-    'holiday',
-    'unit',
-    'entrak',
+	'grappelli',
+	'django.contrib.admin',
+	'django.contrib.auth',
+	'django.contrib.contenttypes',
+	'django.contrib.sessions',
+	'django.contrib.messages',
+	'django.contrib.staticfiles',
+	'django.contrib.humanize',
+	'mongoengine.django.mongo_auth',
+	'egauge',
+	'system',
+	'user',
+	'baseline',
+	'holiday',
+	'unit',
+	'entrak',
 )
 
 MIDDLEWARE_CLASSES = (
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'entrak.middleware.timezone_middleware.TimezoneMiddleware',
+	'django.contrib.sessions.middleware.SessionMiddleware',
+	'django.middleware.common.CommonMiddleware',
+	'django.middleware.csrf.CsrfViewMiddleware',
+	'django.contrib.auth.middleware.AuthenticationMiddleware',
+	'django.contrib.messages.middleware.MessageMiddleware',
+	'django.middleware.clickjacking.XFrameOptionsMiddleware',
+	'entrak.middleware.timezone_middleware.TimezoneMiddleware',
 )
+
+global_settings.TEMPLATE_CONTEXT_PROCESSORS += ('django.core.context_processors.request',)
 
 ROOT_URLCONF = 'entrak.urls'
 
@@ -81,27 +87,27 @@ USE_L10N = True
 USE_TZ = True
 
 LOGGING = {
-    'version': 1,
-    'formatters': {
-        'normal': {
-            'format': '%(asctime)s %(message)s'
-        },
-    },
-    'handlers': {
-        'timed_rotating_handler': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.TimedRotatingFileHandler',
-            'when': 'D',
-            'formatter': 'normal',
-        },
-    },
-    'loggers': {
-        'django.entrak_error': {
-            'handlers': ['timed_rotating_handler'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-    },
+	'version': 1,
+	'formatters': {
+		'normal': {
+			'format': '%(asctime)s %(message)s'
+		},
+	},
+	'handlers': {
+		'timed_rotating_handler': {
+			'level': 'DEBUG',
+			'class': 'logging.handlers.TimedRotatingFileHandler',
+			'when': 'D',
+			'formatter': 'normal',
+		},
+	},
+	'loggers': {
+		'django.entrak_error': {
+			'handlers': ['timed_rotating_handler'],
+			'level': 'DEBUG',
+			'propagate': True,
+		},
+	},
 }
 
 # Static files (CSS, JavaScript, Images)
@@ -110,3 +116,6 @@ LOGGING = {
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'user.EntrakUser'
+
+# Grappelli
+GRAPPELLI_ADMIN_TITLE = 'En-trak CMS'

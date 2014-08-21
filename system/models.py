@@ -80,6 +80,9 @@ class System(models.Model):
 
 		return result
 
+	def __unicode__(self):
+		return self.name
+
 	def get_all_holidays(self, timestamp_info):
 		system_timezone = pytz.timezone(self.timezone)
 		transformed_dt_ranges = []

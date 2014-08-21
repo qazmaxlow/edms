@@ -11,7 +11,10 @@ urlpatterns = patterns('',
 	# url(r'^$', 'entrak.views.home', name='home'),
 	# url(r'^blog/', include('blog.urls')),
 
+	url(r'^grappelli/', include('grappelli.urls')),
 	url(r'^admin/', include(admin.site.urls)),
+	url(r'^edit_sources/(?P<system_code>[\w\-]+)/$', 'entrak.admin_customize_views.edit_sources_view', name='edit_sources'),
+
 	url(r'^(?P<system_code>[\w\-]+)/', include(patterns('',
 		url(r'^graph/$', 'entrak.graph_views.graph_view', name='graph'),
 		url(r'^source_readings/$', 'entrak.graph_views.source_readings_view'),

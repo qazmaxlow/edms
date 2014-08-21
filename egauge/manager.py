@@ -14,7 +14,7 @@ from utils.utils import Utils
 
 class SourceManager:
 
-	DEFAULT_USERNAME = 'owner'
+	DEFAULT_USERNAME = 'entrak'
 	DEFAULT_PASSWORD = 'jianshu1906'
 
 	class GetEgaugeDataError(Exception):
