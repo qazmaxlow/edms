@@ -4,6 +4,8 @@
 
 {% block extrahead %}
 {{ block.super }}
+
+{% if change %}
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="{% static 'js/jquery.bpopup.min.js' %}"></script>
 
@@ -40,24 +42,36 @@ $(function() {
 	}, false);
 });
 </script>
+{% endif %}
+
 {% endblock %}
 
 {% block extrastyle %}
 {{ block.super }}
+
+{% if change %}
 <link rel="stylesheet" type="text/css" href="{% static "css/system-admin.css" %}" />
+{% endif %}
+
 {% endblock %}
 
-
 {% block object-tools-items %}
+	{% if change %}
 	<li>
 		<a id="edit-sources-btn" href="#">Edit Sources</a>
 	</li>
+	{% endif %}
+	
 	{{ block.super }}
 {% endblock %}
 
 {% block after_field_sets %}
 {{ block.super }}
+
+{% if change %}
 <div id="edit-sources-container">
 	<div class="edit-sources-content"></div>
 </div>
+{% endif %}
+
 {% endblock %}
