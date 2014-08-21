@@ -21,6 +21,11 @@
 		<img src="{% static 'images/user-logo-bg.png' %}">
 	</div>
 </div>
+
+<div class="bg-container">
+	<img src="{% static 'images/login/bg.png' %}">
+</div>
+
 <div class="desc-header">Welcome to our energy monitoring and awareness system!</div>
 <div class="desc-content">
 	This system tracks our energy usage in real-time, helping us to better<br>
@@ -32,22 +37,24 @@
 	<hr>
 	<form method="POST">{% csrf_token %}
 		<div>
-			<img src="">
+			<img src="{% static 'images/login/username-icon.png' %}">
 			<input type="text" name="username" placeholder="Username">
 		</div>
 		<div>
-			<img src="">
+			<img src="{% static 'images/login/password-icon.png' %}">
 			<input type="password" name="password" placeholder="Password">
 		</div>
 		<input type="submit" value="login">
 	</form>
+	{% if warning_msg %}
 	<div class="warning-msg">{{warning_msg}}</div>
+	{% endif %}
 </div>
 
 <footer class="site-footer">
 	<p style="clear: both;"></p>
 	<p id="copyright">Copyright © En-trak Pte Ltd 2014. All rights reserved.</p>
-	<a href="#"><img id="entrak-logo" src="{% static 'images/entrakLogo.png' %}"></a>
+	<a href="#"><img id="entrak-logo" src="{% static 'images/powered-by-logo.png' %}"></a>
 	<p id="disclaimer_main"><a class="disclaimer" href="#">Print </a>
 	<a class="disclaimer" href="#"> |  Contact & Support</a>
 	<a href="#" class="disclaimer"> |  Legal </a>
