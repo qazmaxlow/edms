@@ -165,15 +165,15 @@ function resetGraphNPanel() {
 		compareBetweenText = 'days';
 		compareTargetText = graph.graphChart.currentDt.format('dddd');
 	} else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_NIGHT) {
-		compareBetweenText = compareTargetText = 'nights';
+		compareBetweenText = compareTargetText = 'night';
 	} else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_WEEK) {
-		compareBetweenText = compareTargetText = 'weeks';
+		compareBetweenText = compareTargetText = 'week';
 	} else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_MONTH) {
-		compareBetweenText = compareTargetText = 'months';
+		compareBetweenText = compareTargetText = 'month';
 	} else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_YEAR) {
-		compareBetweenText = compareTargetText = 'years';
+		compareBetweenText = compareTargetText = 'year';
 	} else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_HOUR) {
-		compareBetweenText = compareTargetText = 'hours';
+		compareBetweenText = compareTargetText = 'hour';
 	}
 	$("#compare-between").text(compareBetweenText);
 	$(".compare-target-text").text(compareTargetText);
@@ -184,10 +184,10 @@ function retrieveReadingFinished() {
 }
 
 function retrieveSummaryFinished() {
-	$("#last-consumption-val").text(graph.graphChart.lastConsumption.toFixed(0));
-	$("#this-consumption-val").text(graph.graphChart.realtimeConsumption.toFixed(0));
+	$("#last-consumption-val").text(Utils.formatWithCommas(graph.graphChart.lastConsumption.toFixed(0)));
+	$("#this-consumption-val").text(Utils.formatWithCommas(graph.graphChart.realtimeConsumption.toFixed(0)));
 
-	var diffPercentage = ((Math.abs(graph.graphChart.realtimeConsumption - graph.graphChart.lastConsumption)/graph.graphChart.lastConsumption)*100).toFixed(1);
+	var diffPercentage = Utils.fixed1DecIfLessThan10((Math.abs(graph.graphChart.realtimeConsumption - graph.graphChart.lastConsumption)/graph.graphChart.lastConsumption)*100);
 	$("#summary-percentage-number").text(diffPercentage);
 
 	var summaryBgImg = null;
@@ -405,7 +405,7 @@ $(function() {
 				return {label: seriesData.label, value: percentage, orgValue: seriesData.value};
 			});
 			transformedData.sort(function (a, b) {
-				return b.orgValue - a.orgValue;
+				return b.label - a.label;
 			});
 
 			if (total === 0) {
@@ -714,13 +714,13 @@ $(function() {
 		<div id="last-summary">
 			<p class="summary-text">By this time last week you had used </p>
 			<img class="electricity-icon" src="{% static 'images/red-electricity.png' %}">
-			<span id="last-consumption-val" class="consumption-val"></span><span class="consumption-unit">kwh</span>
+			<span id="last-consumption-val" class="consumption-val"></span><span class="consumption-unit">kWh</span>
 		</div>
 
 		<div id="this-summary">
 			<p class="summary-text">So far today you have used </p>
 			<img class="electricity-icon" src="{% static 'images/green-electricity.png' %}">
-			<span id="this-consumption-val" class="consumption-val"></span><span class="consumption-unit">kwh</span>
+			<span id="this-consumption-val" class="consumption-val"></span><span class="consumption-unit">kWh</span>
 		</div>
 
 		<div id="summary-percentage">

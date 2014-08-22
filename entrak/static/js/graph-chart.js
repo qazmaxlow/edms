@@ -23,6 +23,7 @@ function GraphChart(graphEleSel, yAxisSliderEleSel, xAxisSliderEleSel, retrieveR
 	this.currentDt = null;
 	this.lastStartEndDt = null;
 	this.currentSelectedSourceIdx = [];
+	this.selectedSourceColorMap = {};
 	this.currentXaxisOptions = {};
 	this.currentUnit = null;
 	this.xAxisSliderCallback = null;
@@ -267,21 +268,15 @@ GraphChart.prototype.transformReadingToSeries = function (readingInfo, targetNam
 	this[targetName] = series;
 }
 
-GraphChart.prototype.setSeriesLineColor = function (sourceSeries) {
-	var graphThis = this;
-	$.each(sourceSeries, function (idx, series) {
-		series.color = graphThis.SERIES_LINE_COLORS[idx];
-	});
-}
-
 GraphChart.prototype.plotGraphChart = function () {
 	var graphChartThis = this;
 
 	var willPlotSeries = [];
 	$.each(this.currentSelectedSourceIdx, function(idx, seriesIdx) {
-		willPlotSeries.push(graphChartThis.sourceSeries[seriesIdx]);
+		var series = graphChartThis.sourceSeries[seriesIdx];
+		series.color = graphChartThis.selectedSourceColorMap[seriesIdx];
+		willPlotSeries.push(series);
 	});
-	this.setSeriesLineColor(willPlotSeries);
 
 	willPlotSeries.splice(0, 0, this.totalSeries);
 
@@ -382,11 +377,29 @@ GraphChart.prototype.updateSourceChoice = function (selectedSeriesIdxs) {
 	var graphChartThis = this;
 	this.currentSelectedSourceIdx = selectedSeriesIdxs;
 
+	var newColorMap = {};
+	var availableColors = graphChartThis.SERIES_LINE_COLORS.slice(0);
+	$.each(this.currentSelectedSourceIdx, function(idx, value) {
+		if (value in graphChartThis.selectedSourceColorMap) {
+			newColorMap[value] = graphChartThis.selectedSourceColorMap[value];
+			availableColors.splice($.inArray(graphChartThis.selectedSourceColorMap[value], availableColors), 1);
+		} else {
+			newColorMap[value] = null;
+		}
+	});
+	$.each(newColorMap, function(key, value) {
+		if (value === null) {
+			newColorMap[key] = availableColors.shift();
+		}
+	});
+	this.selectedSourceColorMap = newColorMap;
+	
 	var willPlotSeries = [];
 	$.each(this.currentSelectedSourceIdx, function(idx, seriesIdx) {
-		willPlotSeries.push(graphChartThis.sourceSeries[seriesIdx]);
+		var series = graphChartThis.sourceSeries[seriesIdx];
+		series.color = graphChartThis.selectedSourceColorMap[seriesIdx];
+		willPlotSeries.push(series);
 	});
-	this.setSeriesLineColor(willPlotSeries);
 
 	willPlotSeries.splice(0, 0, this.totalSeries);
 
