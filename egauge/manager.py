@@ -377,9 +377,7 @@ class SourceManager:
 				dt_lower_bound = dt_lower_bound.replace(year=(dt_lower_bound.year+1), month=1, day=1)
 			match_condition["datetime"] = {'$gte': dt_lower_bound, '$lt': dt_upper_bound}
 
-		mapped_info = range_type_mapping[range_type]
-		current_db_conn = connection.get_db()
-		result = current_db_conn[mapped_info['compare_collection']].aggregate([
+		aggregate_pipeline = [
 			{"$match": match_condition},
 			{
 				"$group": {
@@ -388,10 +386,22 @@ class SourceManager:
 				}
 			},
 			{"$sort": {"total": sort_order}},
-			{"$limit": 1}
-		])
+		]
+		if range_type != Utils.RANGE_TYPE_DAY:
+			aggregate_pipeline.append({"$limit": 1})
+
+		mapped_info = range_type_mapping[range_type]
+		current_db_conn = connection.get_db()
+		result = current_db_conn[mapped_info['compare_collection']].aggregate(aggregate_pipeline)
 
 		info = {}
+
+		if range_type == Utils.RANGE_TYPE_DAY:
+			for result_data in result["result"]:
+				result_data_dt = result_data["_id"].astimezone(system_timezone)
+				if result_data_dt.weekday() == dt_upper_bound.weekday():
+					result['result'] = [result_data]
+					break
 
 		if result["result"]:
 			start_dt = result["result"][0]["_id"].astimezone(pytz.utc)

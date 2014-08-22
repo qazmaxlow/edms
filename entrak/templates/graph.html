@@ -91,7 +91,12 @@ function formatDtStr(dt, rangeType) {
 		formatStr = 'YYYY';
 	}
 
-	return dt.format(formatStr);
+	var result = dt.format(formatStr);
+	if (rangeType === Utils.RANGE_TYPE_WEEK) {
+		result = 'Week starting ' + result;
+	}
+
+	return result
 }
 
 function formatCompareDtStr(dt, rangeType) {
