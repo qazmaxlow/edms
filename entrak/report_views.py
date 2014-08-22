@@ -182,7 +182,7 @@ def __get_sum_up_usage_within_periods(source_ids, period_dts, target_period_num)
 
 	if len(period_dts) != target_period_num:
 		missing_period_num = target_period_num-len(period_dts)
-		results = ([0]*missing_period_num) + results
+		results += ([0]*missing_period_num)
 
 	return results
 
