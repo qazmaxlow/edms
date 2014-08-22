@@ -67,7 +67,7 @@ def init_unit_category():
 	unit_cats.append(UnitCategory(code='co2', name='kg CO2', short_desc='kg CO2', order=2,
 		img_off='co2.png', img_on='co2-hover.png', bg_img='burger-bg.png', city='all',
 		has_detail_rate=True))
-	unit_cats.append(UnitCategory(code='burger', name='bugers', short_desc='bugers', order=3,
+	unit_cats.append(UnitCategory(code='burger', name='burgers', short_desc='burgers', order=3,
 		img_off='burger.png', img_on='burger-hover.png', bg_img='burger-bg.png', city='all',
 		global_rate=2.15))
 	unit_cats.append(UnitCategory(code='noodle', name='bowls of noodle',
@@ -77,22 +77,22 @@ def init_unit_category():
 		img_off='bun.png', img_on='bun-hover.png', bg_img='burger-bg.png', city='all', global_rate=3.3))
 	unit_cats.append(UnitCategory(code='icecream', name='ice cream cones', short_desc='ice cream cones', order=6,
 		img_off='icecream.png', img_on='icecream-hover.png', bg_img='burger-bg.png', city='all', global_rate=0.2))
-	unit_cats.append(UnitCategory(code='taxitrip', name='taxi trips btwn HK Airport and Times Square',
+	unit_cats.append(UnitCategory(code='taxitrip', name='taxi trips between HK Airport and Times Square',
 		short_desc='taxi trips', order=7, img_off='taxi.png', img_on='taxi-hover.png',
 		bg_img='burger-bg.png', city='hk', global_rate=0.0325))
-	unit_cats.append(UnitCategory(code='taxitrip', name='taxi trips btwn Changi Airport and Marina Bay Sands',
+	unit_cats.append(UnitCategory(code='taxitrip', name='taxi trips between Changi Airport and Marina Bay Sands',
 		short_desc='taxi trips', order=7, img_off='taxi.png', img_on='taxi-hover.png',
 		bg_img='burger-bg.png', city='sg', global_rate=0.065))
-	unit_cats.append(UnitCategory(code='biketrip', name='bike trips btwn HK Airport and Times Square',
+	unit_cats.append(UnitCategory(code='biketrip', name='bike trips between HK Airport and Times Square',
 		short_desc='bike trips', order=8, img_off='bike.png', img_on='bike-hover.png',
 		bg_img='burger-bg.png', city='hk', global_rate=1.87))
-	unit_cats.append(UnitCategory(code='biketrip', name='bike trips btwn Changi Airport and Marina Bay Sands',
+	unit_cats.append(UnitCategory(code='biketrip', name='bike trips between Changi Airport and Marina Bay Sands',
 		short_desc='bike trips', order=8, img_off='bike.png', img_on='bike-hover.png',
 		bg_img='burger-bg.png', city='sg', global_rate=3.74))
-	unit_cats.append(UnitCategory(code='walkingtrip', name='walking trips btwn HK Airport and Times Square',
+	unit_cats.append(UnitCategory(code='walkingtrip', name='walking trips between HK Airport and Times Square',
 		short_desc='walking trips', order=9, img_off='walking.png', img_on='walking-hover.png',
 		bg_img='burger-bg.png', city='hk', global_rate=0.357))
-	unit_cats.append(UnitCategory(code='walkingtrip', name='walking trips btwn Changi Airport and Marina Bay Sands',
+	unit_cats.append(UnitCategory(code='walkingtrip', name='walking trips between Changi Airport and Marina Bay Sands',
 		short_desc='walking trips', order=9, img_off='walking.png', img_on='walking-hover.png',
 		bg_img='burger-bg.png', city='sg', global_rate=0.714))
 	UnitCategory.objects.bulk_create(unit_cats)

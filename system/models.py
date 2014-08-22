@@ -18,6 +18,8 @@ class System(models.Model):
 	code = models.CharField(max_length=100, unique=True)
 	name = models.CharField(max_length=200)
 	name_tc = models.CharField(max_length=200, blank=True)
+	full_name = models.CharField(max_length=200, blank=True)
+	full_name_tc = models.CharField(max_length=200, blank=True)
 	intro = models.CharField(max_length=2000, blank=True)
 	intro_tc = models.CharField(max_length=2000, blank=True)
 	path = models.CharField(max_length=2000, blank=True)

@@ -9,7 +9,7 @@ class UnitCategory(models.Model):
 	name = models.CharField(max_length=300)
 	name_tc = models.CharField(max_length=300, blank=True)
 	short_desc = models.CharField(max_length=200)
-	short_desc_tc = models.CharField(max_length=200)
+	short_desc_tc = models.CharField(max_length=200, blank=True)
 	order = models.PositiveSmallIntegerField(default=1)
 	img_off = models.CharField(max_length=200)
 	img_on = models.CharField(max_length=200)
