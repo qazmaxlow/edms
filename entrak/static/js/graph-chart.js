@@ -26,6 +26,7 @@ function GraphChart(graphEleSel, yAxisSliderEleSel, xAxisSliderEleSel, retrieveR
 	this.currentXaxisOptions = {};
 	this.currentUnit = null;
 	this.xAxisSliderCallback = null;
+	this.needResetXSlider = true;
 }
 
 GraphChart.prototype.TOTAL_SERIES_BASE_OPTIONS = {
@@ -337,7 +338,12 @@ GraphChart.prototype.plotGraphChart = function () {
 	this.plot.setupGrid();
 	this.plot.draw();
 
-	this.refreshXAxisSlider();
+	if (this.needResetXSlider) {
+		this.needResetXSlider = false;
+		this.resetXAxisSlider();
+	} else {
+		this.refreshXAxisSlider();
+	}
 
 	$(this.graphEleSel).off('plotclick').on('plotclick', function(event, pos, item) {
 		if (item && graphThis.currentRangeType !== Utils.RANGE_TYPE_HOUR) {
@@ -435,31 +441,46 @@ GraphChart.prototype.refreshYAxisSlider = function () {
 	});
 }
 
-GraphChart.prototype.refreshXAxisSlider = function () {
-	var graphThis = this;
-	var startEndDt = this.genCurrentStartEndDt();
+GraphChart.prototype.resetXAxisSlider = function () {
 	var xAxisSlider = $(this.xAxisSliderEleSel);
 	xAxisSlider.slider("option", "min", this.currentXaxisOptions.min+1);
 	xAxisSlider.slider("option", "max", this.currentXaxisOptions.max);
 	xAxisSlider.slider("option", "values", [0, 0]);
-	xAxisSlider.off('slide').on('slide', function(event, ui) {
-		var startIdx = ui.values[0];
-		var endIdx = ui.values[1];
-		graphThis.plot.setSelection({
-			xaxis: {
-				from: ui.values[0]-0.5,
-				to: ui.values[1]-0.5,
-			}
-		});
 
-		var result = graphThis.sumUpSeriesValueInRange(startIdx, endIdx);
-		graphThis.xAxisSliderCallback(
-			ui.values,
-			graphThis.transformXToDt(startEndDt.startDt, startIdx),
-			graphThis.transformXToDt(startEndDt.startDt, endIdx),
-			result
-		);
+	this.refreshXAxisSlider();
+}
+
+GraphChart.prototype.refreshXAxisSlider = function () {
+	var graphChartThis = this;
+	$(this.xAxisSliderEleSel).off('slide').on('slide', function(event, ui) {
+		graphChartThis.setHighlightRegion(ui.values);
 	});
+
+	var uiValues = $(this.xAxisSliderEleSel).slider("values");
+	if (uiValues[0] !== uiValues[1]) {
+		graphChartThis.setHighlightRegion(uiValues);
+	}
+}
+
+GraphChart.prototype.setHighlightRegion = function (uiValues) {
+	var startEndDt = this.genCurrentStartEndDt();
+
+	var startIdx = uiValues[0];
+	var endIdx = uiValues[1];
+	this.plot.setSelection({
+		xaxis: {
+			from: startIdx-0.5,
+			to: endIdx-0.5,
+		}
+	});
+
+	var result = this.sumUpSeriesValueInRange(startIdx, endIdx);
+	this.xAxisSliderCallback(
+		uiValues,
+		this.transformXToDt(startEndDt.startDt, startIdx),
+		this.transformXToDt(startEndDt.startDt, endIdx),
+		result
+	);
 }
 
 GraphChart.prototype.transformXToDt = function (startDt, xVal) {
@@ -557,6 +578,7 @@ GraphChart.prototype.updateCompareDt = function (newDt) {
 
 GraphChart.prototype.updateCurrentRangeType = function (newRangeType) {
 	this.currentRangeType = newRangeType;
+	this.needResetXSlider = true;
 	this.getSourceReadings();
 }
 

@@ -172,22 +172,6 @@ function resetGraphNPanel() {
 	}
 	$("#compare-between").text(compareBetweenText);
 	$(".compare-target-text").text(compareTargetText);
-
-	$("#x-axis-slider").slider("values", [0, 0]);
-
-	var selectionSummary = $("#selection-summary");
-	if (selectionSummary.css('display') !== 'none') {
-		selectionSummary.fadeOut();
-	}
-
-	if (graph.graphChart.plot !== null) {
-		graph.graphChart.plot.setSelection({
-			xaxis: {
-				from: 0,
-				to: 0,
-			}
-		});
-	}
 }
 
 function retrieveReadingFinished() {
@@ -414,7 +398,16 @@ $(function() {
 			transformedData.sort(function (a, b) {
 				return b.orgValue - a.orgValue;
 			});
-			updateDonutChart(transformedData);
+
+			if (total === 0) {
+				$("#selection-summary-chart").empty();
+				$("#selection-summary-value").text('');
+				$("#selection-summary-source").text('');
+				$("#selection-summary-unit-prefix").html('');
+				$("#selection-summary-unit-suffix").html('');
+			} else {
+				updateDonutChart(transformedData);
+			}
 		}
 	};
 
@@ -463,6 +456,23 @@ $(function() {
 		if (graph.graphChart.currentRangeType !== newRangeType) {
 			graph.graphChart.currentDt = Utils.genStartEndDt(Utils.getNowMoment('hour'), newRangeType).startDt;
 			graph.graphChart.updateCurrentRangeType(newRangeType);
+
+			$("#x-axis-slider").slider("values", [0, 0]);
+
+			var selectionSummary = $("#selection-summary");
+			if (selectionSummary.css('display') !== 'none') {
+				selectionSummary.fadeOut();
+			}
+
+			if (graph.graphChart.plot !== null) {
+				graph.graphChart.plot.setSelection({
+					xaxis: {
+						from: 0,
+						to: 0,
+					}
+				});
+			}
+
 			resetGraphNPanel();
 		}
 	});
