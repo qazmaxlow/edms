@@ -137,10 +137,12 @@ function updateCurrentDtText() {
 	$("#current-dt").text(' ' + formatDtStr(graph.graphChart.currentDt, graph.graphChart.currentRangeType) + ' ');
 }
 
-function resetGraphNPanel() {
+function clearSourceChoice() {
 	$("#source-choice-container input").prop("checked", false);
 	graph.graphChart.currentSelectedSourceIdx = [];
+}
 
+function resetGraphNPanel() {
 	updateCurrentDtText();
 
 	clearCompareChoice();
@@ -273,6 +275,7 @@ function setupComparePanel() {
 		if ($(this).prop("checked")) {
 			graph.graphChart.showLast = true;
 			graph.graphChart.getLastSourceReadings();
+			clearSourceChoice();
 		} else {
 			graph.graphChart.showLast = false;
 			graph.graphChart.updateCompareChoice();
@@ -289,6 +292,7 @@ function setupComparePanel() {
 					);
 				}
 			});
+			clearSourceChoice();
 		} else {
 			graph.graphChart.showHighest = false;
 			graph.graphChart.updateCompareChoice();
@@ -306,6 +310,7 @@ function setupComparePanel() {
 					);
 			}
 			});
+			clearSourceChoice();
 		} else {
 			graph.graphChart.showLowest = false;
 			graph.graphChart.updateCompareChoice();
@@ -319,6 +324,7 @@ function setupComparePanel() {
 			if (graph.graphChart.customDt !== null) {
 				graph.graphChart.getCustomSourceReadings();
 			}
+			clearSourceChoice();
 		} else {
 			graph.graphChart.showCustom = false;
 			graph.graphChart.updateCompareChoice();

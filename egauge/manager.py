@@ -340,7 +340,7 @@ class SourceManager:
 		return grouped_readings
 
 	@staticmethod
-	def get_most_readings(source_ids, range_type, tz_offset, sort_order, system):
+	def get_most_readings(source_ids, range_type, tz_offset, sort_order, system, start_dt):
 		range_type_mapping = {
 			Utils.RANGE_TYPE_HOUR: {'compare_collection': 'source_reading_hour'},
 			Utils.RANGE_TYPE_DAY: {'compare_collection': 'source_reading_day'},
@@ -397,9 +397,10 @@ class SourceManager:
 		info = {}
 
 		if range_type == Utils.RANGE_TYPE_DAY:
+			target_weekday = start_dt.astimezone(system_timezone).weekday()
 			for result_data in result["result"]:
 				result_data_dt = result_data["_id"].astimezone(system_timezone)
-				if result_data_dt.weekday() == dt_upper_bound.weekday():
+				if result_data_dt.weekday() == target_weekday:
 					result['result'] = [result_data]
 					break
 

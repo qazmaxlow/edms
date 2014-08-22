@@ -114,12 +114,14 @@ GraphChart.prototype.getCustomSourceReadings = function() {
 
 GraphChart.prototype.getHighestSourceReadings = function(doneCallback) {
 	var graphChartThis = this;
+	var startEndDt = this.genCurrentStartEndDt();
 	var sourceInfos = {name: 'Highest', source_ids: graphChartThis.entrakSystem.getAllSourceIds()};
 
 	$.ajax({
 		type: "POST",
 		url: "../highest_lowest_source_readings/",
 		data: {
+			start_dt: startEndDt.startDt.unix(),
 			source_infos: JSON.stringify(sourceInfos),
 			range_type: Utils.API_RANGE_TYPES[graphChartThis.currentRangeType],
 			unit_category_code: graphChartThis.currentUnit.code,
@@ -147,12 +149,14 @@ GraphChart.prototype.getHighestSourceReadings = function(doneCallback) {
 
 GraphChart.prototype.getLowestSourceReadings = function(doneCallback) {
 	var graphChartThis = this;
+	var startEndDt = this.genCurrentStartEndDt();
 	var sourceInfos = {name: 'Lowest', source_ids: graphChartThis.entrakSystem.getAllSourceIds()};
 
 	$.ajax({
 		type: "POST",
 		url: "../highest_lowest_source_readings/",
 		data: {
+			start_dt: startEndDt.startDt.unix(),
 			source_infos: JSON.stringify(sourceInfos),
 			range_type: Utils.API_RANGE_TYPES[graphChartThis.currentRangeType],
 			unit_category_code: graphChartThis.currentUnit.code,
@@ -271,8 +275,17 @@ GraphChart.prototype.setSeriesLineColor = function (sourceSeries) {
 }
 
 GraphChart.prototype.plotGraphChart = function () {
-	var graphThis = this;
-	this.plot = $(this.graphEleSel).plot([this.totalSeries], {
+	var graphChartThis = this;
+
+	var willPlotSeries = [];
+	$.each(this.currentSelectedSourceIdx, function(idx, seriesIdx) {
+		willPlotSeries.push(graphChartThis.sourceSeries[seriesIdx]);
+	});
+	this.setSeriesLineColor(willPlotSeries);
+
+	willPlotSeries.splice(0, 0, this.totalSeries);
+
+	this.plot = $(this.graphEleSel).plot(willPlotSeries, {
 		series: {
 			grow: {
 				active: true,
@@ -331,7 +344,7 @@ GraphChart.prototype.plotGraphChart = function () {
 		}
 	}).data("plot");
 	$(this.graphEleSel).on('growFinished', function() {
-		graphThis.plot.getOptions().series.grow.active = false;
+		graphChartThis.plot.getOptions().series.grow.active = false;
 		$(this.graphEleSel).off('growFinished');
 	});
 	this.refreshYAxisSlider();
@@ -346,21 +359,21 @@ GraphChart.prototype.plotGraphChart = function () {
 	}
 
 	$(this.graphEleSel).off('plotclick').on('plotclick', function(event, pos, item) {
-		if (item && graphThis.currentRangeType !== Utils.RANGE_TYPE_HOUR) {
-			var startEndDt = graphThis.genCurrentStartEndDt();
-			graphThis.currentDt = graphThis.transformXToDt(startEndDt.startDt, item.datapoint[0]);
+		if (item && graphChartThis.currentRangeType !== Utils.RANGE_TYPE_HOUR) {
+			var startEndDt = graphChartThis.genCurrentStartEndDt();
+			graphChartThis.currentDt = graphChartThis.transformXToDt(startEndDt.startDt, item.datapoint[0]);
 
-			if (graphThis.currentRangeType === Utils.RANGE_TYPE_DAY
-				|| graphThis.currentRangeType === Utils.RANGE_TYPE_NIGHT) {
-				graphThis.currentRangeType = Utils.RANGE_TYPE_HOUR;
-			} else if (graphThis.currentRangeType === Utils.RANGE_TYPE_WEEK
-				|| graphThis.currentRangeType === Utils.RANGE_TYPE_MONTH) {
-				graphThis.currentRangeType = Utils.RANGE_TYPE_DAY;
-			} else if (graphThis.currentRangeType === Utils.RANGE_TYPE_YEAR) {
-				graphThis.currentRangeType = Utils.RANGE_TYPE_MONTH;
+			if (graphChartThis.currentRangeType === Utils.RANGE_TYPE_DAY
+				|| graphChartThis.currentRangeType === Utils.RANGE_TYPE_NIGHT) {
+				graphChartThis.currentRangeType = Utils.RANGE_TYPE_HOUR;
+			} else if (graphChartThis.currentRangeType === Utils.RANGE_TYPE_WEEK
+				|| graphChartThis.currentRangeType === Utils.RANGE_TYPE_MONTH) {
+				graphChartThis.currentRangeType = Utils.RANGE_TYPE_DAY;
+			} else if (graphChartThis.currentRangeType === Utils.RANGE_TYPE_YEAR) {
+				graphChartThis.currentRangeType = Utils.RANGE_TYPE_MONTH;
 			}
 			
-			graphThis.getSourceReadings();
+			graphChartThis.getSourceReadings();
 		}
 	});
 }

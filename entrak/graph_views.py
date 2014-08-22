@@ -67,6 +67,7 @@ def source_readings_view(request, system_code):
 	return Utils.json_response(grouped_readings)
 
 def highest_lowest_source_readings_view(request, system_code):
+	start_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('start_dt')))
 	source_infos = json.loads(request.POST.get('source_infos'))
 	range_type = request.POST.get('range_type')
 	unit_category_code = request.POST.get('unit_category_code')
@@ -79,7 +80,7 @@ def highest_lowest_source_readings_view(request, system_code):
 	current_system = systems[0]
 
 	source_readings_info = SourceManager.get_most_readings(source_infos['source_ids'],
-		range_type, tz_offset,sort_order, current_system)
+		range_type, tz_offset,sort_order, current_system, start_dt)
 	source_readings_info['name'] = source_infos['name']
 
 	if unit_category_code != KWH_CATEGORY_CODE:
