@@ -50,29 +50,20 @@ function updateDonutChart(data, total) {
 		$("#selection-summary-value").text(row.orgValue.toFixed(0));
 		$("#selection-summary-source").text(row.label);
 		$("#selection-summary-source").css("color", donutChart.options.colors[i]);
-
-		if (graph.graphChart.currentUnit.isSuffix) {
-			$("#selection-summary-unit-prefix").html('');
-			$("#selection-summary-unit-suffix").html(graph.graphChart.currentUnit.shortDesc);
-		} else {
-			$("#selection-summary-unit-prefix").html(graph.graphChart.currentUnit.shortDesc);
-			$("#selection-summary-unit-suffix").html('');
-		}
-		
 	});
 	donutChart.on('deselect', function(i, row) {
 		$("#selection-summary-value").text(total.toFixed(0));
 		$("#selection-summary-source").text('');
-
-		if (graph.graphChart.currentUnit.isSuffix) {
-			$("#selection-summary-unit-prefix").html('');
-			$("#selection-summary-unit-suffix").html(graph.graphChart.currentUnit.shortDesc);
-		} else {
-			$("#selection-summary-unit-prefix").html(graph.graphChart.currentUnit.shortDesc);
-			$("#selection-summary-unit-suffix").html('');
-		}
 	});
-	donutChart.fire("select", 0, data[0]);
+
+	$("#selection-summary-value").text(total.toFixed(0));
+	if (graph.graphChart.currentUnit.isSuffix) {
+		$("#selection-summary-unit-prefix").html('');
+		$("#selection-summary-unit-suffix").html(graph.graphChart.currentUnit.shortDesc);
+	} else {
+		$("#selection-summary-unit-prefix").html(graph.graphChart.currentUnit.shortDesc);
+		$("#selection-summary-unit-suffix").html('');
+	}
 }
 
 function formatDtAtStr(dt, rangeType) {
