@@ -1522,7 +1522,7 @@
 
     function Donut(options) {
       this.select = __bind(this.select, this);
-
+      this.deselect = __bind(this.deselect, this);
       this.click = __bind(this.click, this);
 
       var row;
@@ -1581,6 +1581,7 @@
         seg.render();
         this.segments.push(seg);
         seg.on('hover', this.select);
+        seg.on('hoverout', this.deselect);
         seg.on('click', this.click);
         last = next;
         idx += 1;
@@ -1604,7 +1605,8 @@
       for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
         value = _ref2[_k];
         if (value === max_value) {
-          this.select(idx);
+          // DO NOT PRESELECT
+          // this.select(idx);
           break;
         }
         _results.push(idx += 1);
@@ -1630,6 +1632,19 @@
       row = this.data[idx];
       var lbColor = this.options.labelColors[idx % this.options.labelColors.length];
       return this.setLabels(row.label, this.options.formatter(row.value, row), lbColor);
+    };
+
+    Donut.prototype.deselect = function(idx) {
+      this.fire('deselect');
+
+      var row, s, segment, _i, _len, _ref;
+      _ref = this.segments;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        s = _ref[_i];
+        s.deselect();
+      }
+      var lbColor = "#FFFFFF";
+      return this.setLabels('', '', lbColor);
     };
 
     Donut.prototype.setLabels = function(label1, label2, lbColor) {
@@ -1726,6 +1741,8 @@
       return this.seg = this.drawDonutSegment(this.path, this.color, this.backgroundColor, function() {
         return _this.fire('hover', _this.index);
       }, function() {
+        return _this.fire('hoverout', _this.index);
+      }, function() {
         return _this.fire('click', _this.index);
       });
     };
@@ -1738,12 +1755,12 @@
       });
     };
 
-    DonutSegment.prototype.drawDonutSegment = function(path, fillColor, strokeColor, hoverFunction, clickFunction) {
+    DonutSegment.prototype.drawDonutSegment = function(path, fillColor, strokeColor, hoverFunction, hoverOutFunction, clickFunction) {
       return this.raphael.path(path).attr({
         fill: fillColor,
         stroke: strokeColor,
         'stroke-width': 3
-      }).hover(hoverFunction).click(clickFunction);
+      }).hover(hoverFunction, hoverOutFunction).click(clickFunction);
     };
 
     DonutSegment.prototype.select = function() {
