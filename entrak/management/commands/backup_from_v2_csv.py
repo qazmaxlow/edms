@@ -81,10 +81,12 @@ DATA_MAPPING = {
 class Command(BaseCommand):
 
 	def handle(self, *args, **options):
+		self.stdout.write('start')
 		client = connection.get_db()
 
 		hk_tz = pytz.timezone('Asia/Hong_Kong')
 		target_dir = args[0]
+		self.stdout.write('target root dir: '+target_dir)
 		file_loop_generator = (dir_name for dir_name in os.listdir(target_dir) if os.path.isdir(os.path.join(target_dir, dir_name)))
 		for dir_name in file_loop_generator:
 			self.stdout.write('processing dir: '+dir_name)
@@ -93,7 +95,7 @@ class Command(BaseCommand):
 				for source_info in SOURCE_MAPPING[dir_name]:
 					xml_url = source_info['xml_url']
 					name = source_info['name']
-					source_id = client.entrak.source.find_one({'xml_url': xml_url, 'name': name})['_id']
+					source_id = client.source.find_one({'xml_url': xml_url, 'name': name})['_id']
 					source_ids.append(source_id)
 
 			dir_path = os.path.join(target_dir, dir_name)
@@ -107,7 +109,7 @@ class Command(BaseCommand):
 						if DATA_MAPPING[data_type]['verify_func'](datetime_obj):
 							source_values = row[1:3]
 							try:
-								client.entrak[DATA_MAPPING[data_type]['collection']].insert([{
+								client[DATA_MAPPING[data_type]['collection']].insert([{
 									'source_id': source_id,
 									'datetime': datetime_obj,
 									'value': float(source_values[idx])
@@ -115,3 +117,6 @@ class Command(BaseCommand):
 							except pymongo.errors.DuplicateKeyError, e:
 								# do nothing
 								pass
+
+		self.stdout.write('finish')
+
