@@ -32,7 +32,7 @@
 		<div class="separate-line"></div>
 
 		<div id="target-block">
-			<div>
+			<div {% ifequal archived_level 0 %}style="visibility: hidden;"{% endifequal %}>
 				<img src="{% static 'images/progress/award.png' %}">
 				<div id="archived_percentage">{{archived_level}}%</div>
 			</div>
