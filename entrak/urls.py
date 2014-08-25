@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
 from django.contrib.staticfiles import views
+from django.views.generic.base import RedirectView
 from entrak import settings
 
 from django.contrib import admin
@@ -16,6 +17,7 @@ urlpatterns = patterns('',
 	url(r'^edit_sources/(?P<system_code>[\w\-]+)/$', 'entrak.admin_customize_views.edit_sources_view', name='edit_sources'),
 
 	url(r'^(?P<system_code>[\w\-]+)/', include(patterns('',
+		url(r'^$', RedirectView.as_view(pattern_name='graph'), name='redirect-to-graph'),
 		url(r'^graph/$', 'entrak.graph_views.graph_view', name='graph'),
 		url(r'^source_readings/$', 'entrak.graph_views.source_readings_view'),
 		url(r'^highest_lowest_source_readings/$', 'entrak.graph_views.highest_lowest_source_readings_view'),

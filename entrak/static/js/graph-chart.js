@@ -81,7 +81,7 @@ GraphChart.prototype._retrieveSourceReadings = function(groupedSourceInfos, star
 }
 
 GraphChart.prototype.needUpdatePeriodically = function() {
-	var realtimeBoundStartEndDt = Utils.genStartEndDt(moment().startOf('hour'), this.currentRangeType);
+	var realtimeBoundStartEndDt = Utils.genStartEndDt(moment(), this.currentRangeType);
 	return ((this.currentDt.isSame(realtimeBoundStartEndDt.startDt)
 		|| this.currentDt.isAfter(realtimeBoundStartEndDt.startDt))
 		&& this.currentDt.isBefore(realtimeBoundStartEndDt.endDt));

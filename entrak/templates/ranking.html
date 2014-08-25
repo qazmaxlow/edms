@@ -84,8 +84,6 @@ function getRankingData() {
 	var startEndDt = Utils.genStartEndDt(ranking.currentDt, ranking.currentRangeType);
 	if (ranking.currentRangeType === Utils.RANGE_TYPE_NIGHT) {
 		var endDt = startEndDt.endDt;
-	} else if (ranking.currentRangeType === Utils.RANGE_TYPE_HOUR) {
-		var endDt = moment(ranking.currentDt).minute(Utils.getNowMoment().minute());
 	} else {
 		var endDt = moment(ranking.currentDt);
 	}
@@ -264,7 +262,7 @@ $(function() {
 	ranking.timezone = '{{systems.0.timezone}}';
 	ranking.firstRecord = moment.unix(ranking.entrakSystem.systemTree.data.firstRecord).tz(ranking.timezone);
 
-	ranking.currentDt = Utils.getNowMoment('hour');
+	ranking.currentDt = Utils.getNowMoment('minute');
 	ranking.currentRangeType = Utils.RANGE_TYPE_DAY;
 	ranking.currentRankingType = RANKING_TYPE_TOTAL;
 	ranking.currentSortBy = RANKING_SORT_BY_VAL_DESC;
@@ -340,7 +338,7 @@ $(function() {
 		maxDate: 0,
 		onSelectDate: function(input) {
 			var nowMoment = Utils.getNowMoment();
-			ranking.currentDt = moment(input).startOf('hour');
+			ranking.currentDt = moment(input).startOf('minute');
 			ranking.currentDt.hour(nowMoment.hour());
 			$("#current-dt").text(formatFromToDt(ranking.currentDt, ranking.currentRangeType));
 			getRankingData();
