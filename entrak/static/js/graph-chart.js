@@ -81,7 +81,10 @@ GraphChart.prototype._retrieveSourceReadings = function(groupedSourceInfos, star
 }
 
 GraphChart.prototype.needUpdatePeriodically = function() {
-	return this.currentDt.isSame(moment().startOf('hour'));
+	var realtimeBoundStartEndDt = Utils.genStartEndDt(moment().startOf('hour'), this.currentRangeType);
+	return ((this.currentDt.isSame(realtimeBoundStartEndDt.startDt)
+		|| this.currentDt.isAfter(realtimeBoundStartEndDt.startDt))
+		&& this.currentDt.isBefore(realtimeBoundStartEndDt.endDt));
 }
 
 GraphChart.prototype.getSourceReadings = function () {
@@ -93,11 +96,10 @@ GraphChart.prototype.getSourceReadings = function () {
 	this.getSourceDataAjaxId = requestingAjaxId;
 
 	if (graphChartThis.needUpdatePeriodically()) {
+		clearTimeout(this.getSourceDataTimeoutId);
 		graphChartThis.getSourceDataTimeoutId = setTimeout(function() {
 			graphChartThis.getSourceReadings();
 		}, GraphChart.DATA_UPDATE_INTERVAL);
-	} else {
-		clearTimeout(graphChartThis.getSourceDataTimeoutId);
 	}
 
 	this._retrieveSourceReadings(groupedSourceInfos, startEndDt.startDt, startEndDt.endDt, function(data) {
