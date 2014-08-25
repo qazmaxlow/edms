@@ -11,8 +11,8 @@ SOURCE_TZ_HK = u'Asia/Hong_Kong'
 UNIT_IMG_DIR = os.path.join(BASE_DIR, 'entrak', 'static', 'images', 'unit')
 CITY_ALL = 'all'
 
-DEFAULT_NIGHT_TIME_START = 20
-DEFAULT_NIGHT_TIME_END = 6
+DEFAULT_NIGHT_TIME_START = datetime.time(22)
+DEFAULT_NIGHT_TIME_END = datetime.time(7)
 
 class System(models.Model):
 	code = models.CharField(max_length=100, unique=True)
@@ -31,8 +31,8 @@ class System(models.Model):
 	timezone = models.CharField(max_length=50, default=SOURCE_TZ_HK)
 	population = models.PositiveIntegerField(default=1)
 	first_record = models.DateTimeField()
-	night_time_start = models.TimeField(default=datetime.time(DEFAULT_NIGHT_TIME_START))
-	night_time_end = models.TimeField(default=datetime.time(DEFAULT_NIGHT_TIME_END))
+	night_time_start = models.TimeField(default=DEFAULT_NIGHT_TIME_START)
+	night_time_end = models.TimeField(default=DEFAULT_NIGHT_TIME_END)
 
 	unit_info = models.TextField(default='{}')
 

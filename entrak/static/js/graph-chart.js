@@ -28,7 +28,11 @@ function GraphChart(graphEleSel, yAxisSliderEleSel, xAxisSliderEleSel, retrieveR
 	this.currentUnit = null;
 	this.xAxisSliderCallback = null;
 	this.needResetXSlider = true;
+	this.getSourceDataAjaxId = null;
+	this.getSourceDataTimeoutId = null;
 }
+
+GraphChart.DATA_UPDATE_INTERVAL = 60000
 
 GraphChart.prototype.TOTAL_SERIES_BASE_OPTIONS = {
 	color: '#81D51D',
@@ -76,18 +80,35 @@ GraphChart.prototype._retrieveSourceReadings = function(groupedSourceInfos, star
 	});
 }
 
+GraphChart.prototype.needUpdatePeriodically = function() {
+	return this.currentDt.isSame(moment().startOf('hour'));
+}
+
 GraphChart.prototype.getSourceReadings = function () {
 	var graphChartThis = this;
 	var startEndDt = this.genCurrentStartEndDt();
 	this.lastStartEndDt = Utils.genLastStartEndDt(startEndDt.startDt, this.currentRangeType);
 	var groupedSourceInfos = this.entrakSystem.getGroupedSourceInfos();
+	var requestingAjaxId = moment().toDate().getTime();
+	this.getSourceDataAjaxId = requestingAjaxId;
+
+	if (graphChartThis.needUpdatePeriodically()) {
+		graphChartThis.getSourceDataTimeoutId = setTimeout(function() {
+			graphChartThis.getSourceReadings();
+		}, GraphChart.DATA_UPDATE_INTERVAL);
+	} else {
+		clearTimeout(graphChartThis.getSourceDataTimeoutId);
+	}
 
 	this._retrieveSourceReadings(groupedSourceInfos, startEndDt.startDt, startEndDt.endDt, function(data) {
-		graphChartThis.updateXAxisOptions(startEndDt.startDt);
-		graphChartThis.transformReadingToChartDatasets(data);
-		graphChartThis.plotGraphChart();
+		// ensure it is the latest requsting one
+		if (requestingAjaxId === graphChartThis.getSourceDataAjaxId) {
+			graphChartThis.updateXAxisOptions(startEndDt.startDt);
+			graphChartThis.transformReadingToChartDatasets(data);
+			graphChartThis.plotGraphChart();
 
-		graphChartThis.retrieveReadingCallback();
+			graphChartThis.retrieveReadingCallback();
+		}
 	});
 }
 
@@ -451,7 +472,7 @@ GraphChart.prototype.refreshYAxisSlider = function () {
 
 	currentYMax = roundMax(currentYMax);
 	graphThis.plot.getAxes().yaxis.options.max = currentYMax;
-	var yMin = currentYMax*0.25;
+	var yMin = currentYMax*0.05;
 	var yMax = currentYMax*1.75;
 	var step = (yMax-yMin)/500;
 	$(this.yAxisSliderEleSel).slider("option", {
@@ -469,8 +490,6 @@ GraphChart.prototype.refreshYAxisSlider = function () {
 
 GraphChart.prototype.resetXAxisSlider = function () {
 	var xAxisSlider = $(this.xAxisSliderEleSel);
-	xAxisSlider.slider("option", "min", this.currentXaxisOptions.min+1);
-	xAxisSlider.slider("option", "max", this.currentXaxisOptions.max);
 	xAxisSlider.slider("option", "values", [0, 0]);
 
 	this.refreshXAxisSlider();
@@ -478,6 +497,10 @@ GraphChart.prototype.resetXAxisSlider = function () {
 
 GraphChart.prototype.refreshXAxisSlider = function () {
 	var graphChartThis = this;
+	var xAxisSlider = $(this.xAxisSliderEleSel);
+	xAxisSlider.slider("option", "min", this.currentXaxisOptions.min+1);
+	xAxisSlider.slider("option", "max", this.currentXaxisOptions.max);
+
 	$(this.xAxisSliderEleSel).off('slide').on('slide', function(event, ui) {
 		graphChartThis.setHighlightRegion(ui.values);
 	});
@@ -577,7 +600,7 @@ GraphChart.prototype.updateXAxisOptions = function (startDt) {
 	} else if (this.currentRangeType === Utils.RANGE_TYPE_MONTH) {
 		var dayOfEndOfMonth = moment(startDt).endOf('month').date();
 		min = -1;
-		max = dayOfEndOfMonth+1;
+		max = dayOfEndOfMonth;
 		for (var i = 0; i < dayOfEndOfMonth; i++) {
 			ticks.push([i, i+1]);
 		};
