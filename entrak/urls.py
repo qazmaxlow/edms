@@ -33,6 +33,7 @@ urlpatterns = patterns('',
 		url(r'^export_data/$', 'entrak.export_data_views.export_data_view', name='export_data'),
 		url(r'^login/$', 'entrak.auth_views.login_view', name='login'),
 		url(r'^logout/$', 'entrak.auth_views.logout_view', name='logout'),
+		url(r'^display/$', 'entrak.display_views.display_view', name='display'),
 	))),
 )
 

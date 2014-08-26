@@ -84,8 +84,9 @@ function formatDtAtStr(dt, rangeType) {
 
 function formatDtStr(dt, rangeType) {
 	var formatStr = null;
-	if (rangeType === Utils.RANGE_TYPE_HOUR
-		|| rangeType === Utils.RANGE_TYPE_DAY
+	if (rangeType === Utils.RANGE_TYPE_HOUR) {
+		formatStr = 'h a, D MMM YYYY, ddd';
+	} else if (rangeType === Utils.RANGE_TYPE_DAY
 		|| rangeType === Utils.RANGE_TYPE_NIGHT
 		|| rangeType === Utils.RANGE_TYPE_WEEK) {
 		formatStr = 'D MMM YYYY, ddd';
@@ -98,6 +99,8 @@ function formatDtStr(dt, rangeType) {
 	var result = dt.format(formatStr);
 	if (rangeType === Utils.RANGE_TYPE_WEEK) {
 		result = 'Week starting ' + result;
+	} else if (rangeType === Utils.RANGE_TYPE_NIGHT) {
+		result = 'Night of ' + result;
 	}
 
 	return result
@@ -599,7 +602,7 @@ $(function() {
 	<div class="drop-down-panel-content">
 		<ul id="unit-choice"></ul>
 		<ul id="time-choice">
-			<div id="select-dt-section">
+			<div id="select-dt-section" style="display: none;">
 				<div id="custom-select-title">CUSTOM SELECT</div>
 				<div id="custom-calendar-icon"></div>
 				<input type="text" id="current-dt-picker">
@@ -634,7 +637,7 @@ $(function() {
 						{# <span id="compare-prev-date"></span> #}
 					</div>
 				</div>
-				<div class="compare-choice-block" style="left: 190px;">
+				<div class="compare-choice-block" style="left: 197px;">
 					<div class="compare-highest-lowest-container">
 						<div class='circle-checkbox'>
 							<input type='checkbox' id="compare-highest-checkbox"></input>
@@ -646,7 +649,7 @@ $(function() {
 						<span id="compare-highest-date"></span>
 					</div>
 				</div>
-				<div class="compare-choice-block" style="left: 367px;">
+				<div class="compare-choice-block" style="left: 380px;">
 					<div class="compare-highest-lowest-container">
 						<div class='circle-checkbox'>
 							<input type='checkbox' id="compare-lowest-checkbox"></input>
@@ -658,7 +661,7 @@ $(function() {
 						<span id="compare-lowest-date"></span>
 					</div>
 				</div>
-				<div class="compare-choice-block" style="left: 545px;">
+				<div class="compare-choice-block" style="left: 564px;">
 					<div>
 						<div class='circle-checkbox'>
 							<input type='checkbox' id="compare-custom-checkbox"></input>

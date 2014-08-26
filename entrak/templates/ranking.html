@@ -177,7 +177,7 @@ function finishReceiveRankData(data) {
 				valueText = '<span>'+ranking.currentUnit.shortDesc+'</span>'+' '+valueText;
 			}
 			if (ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
-				valueText += '/person';
+				valueText += '<span>/person</span>';
 			}
 
 			var meterWidth = item.value/barBoundValue*100;
