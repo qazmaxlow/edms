@@ -95,9 +95,9 @@ GraphChart.prototype.getSourceReadings = function () {
 	var requestingAjaxId = moment().toDate().getTime();
 	this.getSourceDataAjaxId = requestingAjaxId;
 
+	clearTimeout(this.getSourceDataTimeoutId);
 	if (graphChartThis.needUpdatePeriodically()) {
-		clearTimeout(this.getSourceDataTimeoutId);
-		graphChartThis.getSourceDataTimeoutId = setTimeout(function() {
+		this.getSourceDataTimeoutId = setTimeout(function() {
 			graphChartThis.getSourceReadings();
 		}, GraphChart.DATA_UPDATE_INTERVAL);
 	}
@@ -333,6 +333,7 @@ GraphChart.prototype.plotGraphChart = function () {
 		legend: {
 			show: true,
 			noColumns: 6,
+			container: $('.chart-legend-container'),
 		},
 		grid: {
 			clickable: true,

@@ -10,6 +10,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/graph.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'js/datetimepicker-master/jquery.datetimepicker.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/daneden-animate.css' %}">
 <script src="{% static 'js/flot/jquery.flot.min.js' %}"></script>
 <script src="{% static 'js/growraf/jquery.flot.growraf.js' %}"></script>
 <script src="{% static 'js/tooltip/jquery.flot.tooltip.min.js' %}"></script>
@@ -141,8 +142,12 @@ function updateCurrentDtText() {
 }
 
 function clearSourceChoice() {
-	$("#source-choice-container input").prop("checked", false);
-	graph.graphChart.currentSelectedSourceIdx = [];
+	var choiceContainer = $("#source-choice-container");
+	if (choiceContainer.find('input:checked').length != 0) {
+		choiceContainer.find("input").prop('disabled', false).prop('checked', false);
+		choiceContainer.find('.disabled-source-choice').removeClass('disabled-source-choice');
+		graph.graphChart.updateSourceChoice([]);
+	}
 }
 
 function resetGraphNPanel() {
@@ -233,12 +238,20 @@ function setupSourceChoice() {
 	});
 
 	choiceContainer.find("input").click(function () {
+		clearCompareChoice();
+		graph.graphChart.updateCompareChoice();
+
 		if (choiceContainer.find("input:checked").length >= 5) {
 			choiceContainer.find("input:not(:checked)").prop('disabled', true);
-			choiceContainer.find("input:not(:checked)").parent().parent().find(".source-label").addClass('source-label-disabled');
+			choiceContainer.find("input:not(:checked)").parent().parent().addClass('disabled-source-choice');
+
+			var maxSourceLimitLabel = $('#source-choice .choice-header>span:eq(0)');
+			maxSourceLimitLabel.addClass('tada animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+				$(this).removeClass();
+			});
 		} else {
 			choiceContainer.find("input").prop('disabled', false);
-			choiceContainer.find(".source-label").removeClass('source-label-disabled');
+			choiceContainer.find(".disabled-source-choice").removeClass('disabled-source-choice');
 		}
 
 		var selectedSeriesIdxs = [];
@@ -252,9 +265,7 @@ function setupSourceChoice() {
 	});
 
 	$("#source-choice-clear").click(function() {
-		choiceContainer.find("input").prop('disabled', false).prop('checked', false);
-		choiceContainer.find(".source-label").removeClass('source-label-disabled');
-		graph.graphChart.updateSourceChoice([]);
+		clearSourceChoice();
 	});
 }
 
@@ -335,9 +346,29 @@ function setupComparePanel() {
 	});
 
 	$("#compare-choice-clear").click(function() {
-		clearCompareChoice();
-		graph.graphChart.updateCompareChoice();
+		if ($('#day-choice .choice-panel input:checked').length != 0) {
+			clearCompareChoice();
+			graph.graphChart.updateCompareChoice();
+		}
 	});
+}
+
+function resetXSliderNSummaryNHightlight() {
+	$("#x-axis-slider").slider("values", [0, 0]);
+
+	var selectionSummary = $("#selection-summary");
+	if (selectionSummary.css('display') !== 'none') {
+		selectionSummary.fadeOut();
+	}
+
+	if (graph.graphChart.plot !== null) {
+		graph.graphChart.plot.setSelection({
+			xaxis: {
+				from: 0,
+				to: 0,
+			}
+		});
+	}
 }
 
 $(function() {
@@ -466,22 +497,7 @@ $(function() {
 			graph.graphChart.currentDt = Utils.genStartEndDt(Utils.getNowMoment('hour'), newRangeType).startDt;
 			graph.graphChart.updateCurrentRangeType(newRangeType);
 
-			$("#x-axis-slider").slider("values", [0, 0]);
-
-			var selectionSummary = $("#selection-summary");
-			if (selectionSummary.css('display') !== 'none') {
-				selectionSummary.fadeOut();
-			}
-
-			if (graph.graphChart.plot !== null) {
-				graph.graphChart.plot.setSelection({
-					xaxis: {
-						from: 0,
-						to: 0,
-					}
-				});
-			}
-
+			resetXSliderNSummaryNHightlight();
 			resetGraphNPanel();
 		}
 	});
@@ -548,6 +564,8 @@ $(function() {
 	});
 
 	$("#clear-graph").click(function () {
+		clearSourceChoice();
+		resetXSliderNSummaryNHightlight();
 		resetGraphNPanel();
 	});
 
@@ -575,15 +593,6 @@ $(function() {
 				End-use</h3><h3 id="sub-menu-days">Compare</h3>
 			<img class="expand-drop-down-panel-btn" src="{% static 'images/expandable_button.png' %}">
 		</div>
-
-		<!-- Date -->
-		<div id="dt-panel">
-			<div id="dt-next-icon"></div>
-			<div id="dt-now-icon"></div>
-			<div id="dt-prev-icon"></div>
-			<span id="current-dt"></span>
-			<span style='clear: both;'></span>
-		</div>
 	</div>
 
 	<!-- Sub Menu Item Links -->
@@ -599,7 +608,7 @@ $(function() {
 		<ul id="source-choice">
 			<div class="choice-panel">
 				<div class="choice-header">Compare between End-use types 
-					<span style="font-weight: lighter; font-size: 12px;">(Max 5)</span>
+					<span>(Max 5)</span>
 					<span id="source-choice-clear" class="choice-clear">Clear all</span>
 				</div>
 				<hr>
@@ -619,48 +628,43 @@ $(function() {
 							<input type='checkbox' id="compare-prev-checkbox"></input>
 							<label for="compare-prev-checkbox"></label>
 						</div>
-						<label for="compare-prev-checkbox" style="color: #F7AF25;">Previous <span class="compare-target-text"></span></label>
+						<label for="compare-prev-checkbox" style="color: #354960;">Previous <span class="compare-target-text"></span></label>
 					</div>
 					<div>
-						<img src="{% static 'images/compare-previous.png' %}">
-						<span id="compare-prev-date"></span>
+						{# <span id="compare-prev-date"></span> #}
 					</div>
 				</div>
-				<div class="compare-choice-block" style="left: 200px;">
+				<div class="compare-choice-block" style="left: 190px;">
 					<div class="compare-highest-lowest-container">
 						<div class='circle-checkbox'>
 							<input type='checkbox' id="compare-highest-checkbox"></input>
 							<label for="compare-highest-checkbox"></label>
 						</div>
-						<label for="compare-highest-checkbox" style="color: #ED6D43;">Highest <span class="compare-target-text"></span></label>
+						<label for="compare-highest-checkbox" style="color: #354960;">Highest <span class="compare-target-text"></span></label>
 					</div>
 					<div>
-						<img src="{% static 'images/compare-highest.png' %}">
 						<span id="compare-highest-date"></span>
 					</div>
 				</div>
-				<div class="compare-choice-block" style="left: 400px;">
+				<div class="compare-choice-block" style="left: 367px;">
 					<div class="compare-highest-lowest-container">
 						<div class='circle-checkbox'>
 							<input type='checkbox' id="compare-lowest-checkbox"></input>
 							<label for="compare-lowest-checkbox"></label>
 						</div>
-						<label for="compare-lowest-checkbox" style="color: #35BC99;">Lowest <span class="compare-target-text"></span></label>
+						<label for="compare-lowest-checkbox" style="color: #354960;">Lowest <span class="compare-target-text"></span></label>
 					</div>
 					<div>
-						<img src="{% static 'images/compre-lowest.png' %}">
 						<span id="compare-lowest-date"></span>
 					</div>
 				</div>
-				<div class="compare-choice-block" style="left: 600px;">
+				<div class="compare-choice-block" style="left: 545px;">
 					<div>
 						<div class='circle-checkbox'>
 							<input type='checkbox' id="compare-custom-checkbox"></input>
 							<label for="compare-custom-checkbox"></label>
 						</div>
-						<label for="compare-custom-checkbox" style="color: #587EFF;">Custom date selection</label>
-					</div>
-					<div>
+						<label for="compare-custom-checkbox" style="color: #354960;">Custom date selection</label>
 						<img id="compare-calendar-icon" src="{% static 'images/compare-calendar.png' %}">
 						<input type="text" id="compare-dt-picker">
 						<span id="compare-custom-date"></span>
@@ -673,11 +677,23 @@ $(function() {
 
 	<!-- Simple bar for decoration -->
 	<div class="panel-separator"></div>
+	<div id="dt-panel">
+		<div id="unit-label"></div>
+		<div id="clear-graph">Clear Graph</div>
+		<div class="dt-navigate-panel">
+			<div id="dt-prev-icon"></div>
+			{# <div id="dt-now-icon"></div> #}
+			<span id="current-dt"></span>
+			<div id="dt-next-icon"></div>
+		</div>
+	</div>
+	<hr>
 </div>
 
 <!-- Main Graph -->
 <div id="graph-panel" class="panel-component">
 	<img id="unit-bg">
+	<div class="chart-legend-container"></div>
 	<div id="chart"></div>
 	<div id="y-axis-slider"></div>
 	<div id="x-axis-slider"></div>
@@ -701,8 +717,6 @@ $(function() {
 		</div>
 		<p style="clear: both;"></p>
 	</div>
-
-	<div id="unit-label"></div>
 </div>
 <!-- Main Graph Ends -->
 
