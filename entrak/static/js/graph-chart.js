@@ -367,7 +367,7 @@ GraphChart.prototype.plotGraphChart = function () {
 
 	var willPlotSeries = [];
 	$.each(this.currentSelectedSourceIdx, function(idx, seriesIdx) {
-		var series = graphChartThis.sourceSeries[seriesIdx];
+		var series = $.extend(true, {}, graphChartThis.sourceSeries[seriesIdx]);
 		series.color = graphChartThis.selectedSourceColorMap[seriesIdx];
 		willPlotSeries.push(series);
 	});
@@ -491,7 +491,7 @@ GraphChart.prototype.updateSourceChoice = function (selectedSeriesIdxs) {
 	
 	var willPlotSeries = [];
 	$.each(this.currentSelectedSourceIdx, function(idx, seriesIdx) {
-		var series = graphChartThis.sourceSeries[seriesIdx];
+		var series = $.extend(true, {}, graphChartThis.sourceSeries[seriesIdx]);
 		series.color = graphChartThis.selectedSourceColorMap[seriesIdx];
 		willPlotSeries.push(series);
 	});
