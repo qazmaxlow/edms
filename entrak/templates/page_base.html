@@ -84,7 +84,6 @@ $(function() {
 {% endblock %}
 
 {% block content %}
-
 <div id="page-container">
 
 	<!-- Left Sidebar Main -->
@@ -92,7 +91,7 @@ $(function() {
 
 		<!-- User's Company Logo -->			
 		<div id="user-logo">
-			<div class="logo-circle-bound" style="background-image: url('{{MEDIA_URL}}{{systems.0.logo.url}}');">
+			<div class="logo-circle-bound" style="background-image: url('{{systems.0.logo.url}}');">
 			</div>
 			<img src="{% static 'images/user-logo-bg.png' %}">
 		</div>
@@ -116,7 +115,7 @@ $(function() {
 					<a href="{% url 'report' system_code=systems.0.code %}"><img width="26" height="24" src="{% static 'images/reports-icon.png' %}"><span>Reports</span></a>
 				</li>
 				<li id="menu-link-display">
-					<a href="{% url 'display' system_code=systems.0.code %}"><img width="26" height="22" src="{% static 'images/display-icon.png' %}"><span>Display</span></a>
+					<a href="{% url 'display' system_code=systems.0.code %}" target="_blank"><img width="26" height="22" src="{% static 'images/display-icon.png' %}"><span>Display</span></a>
 				</li>
 				<li id="menu-link-pro-v">
 					<a href="#"><img width="31" height="21" src="{% static 'images/prov-icon.png' %}"><span>Pro V</span></a>

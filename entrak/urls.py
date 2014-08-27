@@ -34,6 +34,7 @@ urlpatterns = patterns('',
 		url(r'^login/$', 'entrak.auth_views.login_view', name='login'),
 		url(r'^logout/$', 'entrak.auth_views.logout_view', name='logout'),
 		url(r'^display/$', 'entrak.display_views.display_view', name='display'),
+		url(r'^display_energy_readings/$', 'entrak.display_views.display_energy_readings_view', name='display_energy_readings'),
 	))),
 )
 

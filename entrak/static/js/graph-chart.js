@@ -204,6 +204,77 @@ GraphChart.prototype.getLowestSourceReadings = function(doneCallback) {
 	});
 }
 
+GraphChart.prototype.getDisplayEnergyReadings = function() {
+	var graphChartThis = this;
+	$.ajax({
+		type: "POST",
+		url: "../display_energy_readings/",
+		data: {
+		},
+	}).done(function(data) {
+		graphChartThis.updateXAxisOptions(moment().startOf('day'));
+
+		var seriesData = {};
+		$.each(data, function(key, readings) {
+			seriesData[key] = [];
+			$.each(readings, function(timestamp, value) {
+				var transformedX = graphChartThis.transformXCoordinate(timestamp);
+				seriesData[key].push([transformedX, value]);
+			})
+
+			seriesData[key].sort(function (a, b) {
+				return a[0]-b[0];
+			});
+		})
+
+		var series = [
+			$.extend(true, {data: seriesData['current']}, graphChartThis.TOTAL_SERIES_BASE_OPTIONS),
+			$.extend(true, {color: "#F16D4E", data: seriesData['last']}, graphChartThis.SERIES_BASE_OPTIONS),
+		];
+
+		graphChartThis.plot = $(graphChartThis.graphEleSel).plot(series, {
+			xaxis: {
+				tickLength: 0,
+				min: graphChartThis.currentXaxisOptions.min,
+				max: graphChartThis.currentXaxisOptions.max,
+				ticks: graphChartThis.currentXaxisOptions.ticks,
+				font: {
+					size: 14,
+					weight: "bold",
+					family: "sans-serif",
+					color: "#2E3E52"
+				},
+			},
+			yaxis: {
+				font: {
+					size: 14,
+					weight: "bold",
+					family: "sans-serif",
+					color: "#2E3E52"
+				},
+			},
+			legend: {
+				show: false,
+			},
+			grid: {
+				borderWidth: {
+					'top': 0,
+					'right': 0,
+					'bottom': 1.2,
+					'left': 1.2,
+				},
+				borderColor: {
+					'bottom': "#9BCEDA",
+					'left': "#9BCEDA",
+				},
+			},
+		}).data("plot");
+		
+	}).fail(function(jqXHR, textStatus) {
+		console.log(jqXHR.responseText);
+	});
+}
+
 GraphChart.prototype.transformXCoordinate = function (value) {
 	value_dt = moment.unix(value);
 	if (this.currentRangeType === Utils.RANGE_TYPE_HOUR) {
@@ -647,29 +718,4 @@ GraphChart.prototype.goPrev = function () {
 
 GraphChart.prototype.goNext = function () {
 	this.goPrevOrNext('next');
-}
-
-GraphChart.prototype.getSummary = function(getSummaryCallback) {
-	var graphChartThis = this;
-	var uptilMoment = Utils.getNowMoment();
-	var startDt = moment(uptilMoment).startOf('day');
-	var lastStartDt = moment(startDt).subtract('w', 1);
-	var lastEndDt = moment(uptilMoment).subtract('w', 1);
-
-	var sourceIds = this.entrakSystem.getAllSourceIds();
-	$.ajax({
-		type: "POST",
-		url: "../summary/",
-		data: {
-			source_ids: JSON.stringify(sourceIds),
-			start_dt: startDt.unix(),
-			end_dt: uptilMoment.unix(),
-			last_start_dt: lastStartDt.unix(),
-			last_end_dt: lastEndDt.unix(),
-		},
-	}).done(function(data) {
-		graphChartThis.realtimeConsumption = data.realtime;
-		graphChartThis.lastConsumption = data.last;
-		getSummaryCallback();
-	});
 }

@@ -1,0 +1,415 @@
+1.0.1:
+Change in script: Fixed crossfade for IE6 + IE7 (didn't accept position:absolute, unless there's a top:0 and left:0 with it).
+1.0.2:
+Change in docs: Fixed some links that were wrong in index.html.
+1.0.3:
+Change in script: Fixed last slide not loading if using ajax and continuous. 
+Change in Javascript: when CustomLinks fade away, their children doesn't anymore. 
+Change in docs: now using Jquery Address 1.2.2 in demo instead of 1.1 (no change of code. ).
+1.0.4:
+Change in script: Fixed beforeAniFunc not executing on a "continuous clone". 
+Change in docs: Added captions demo. 
+Added feature: Made the script change "position" to "relative" if fade is enabled (and the position is it's default value ("static")). 
+Change in Javascript: The html of the previous button is now positioned before the html of the next button.
+1.0.5:
+Change in docs: Added link to http://plugins.jquery.com/project/SudoSlider in the "Docs" tap in index.html, that's now the official way to report a bug. 
+Change in script: Added a "destroy" action.
+1.0.6:
+Change in script: Fixed customLinks and first/last buttons fading out when continuous:true. 
+Change in script: The 'destroy' action now also removes all click bindings on the customLinks.
+1.0.7:
+Change in CSS: Fixed content visible (that shouldn't be it) in IE6 and IE7. (Bug introduced in 1.0.4)
+1.0.8:
+Change in script: Fixed preloadAjax breaking the script. 
+Change in docs: Added an automatic thumbnail generation demo. 
+Change in script: Controls are now generated before ajax-documents are loaded. Fixing potential problems with imgAjaxFunction and docAjaxFunction (if they were to manipulate the controls). 
+Change in script: Changed the image detection, to fix a bug.
+1.0.9:
+Change in CSS: Continous would make the slider show "white-space" when sliding to the left of the first slide. Fixed it by removing an "overflow:hidden" (introduced in 1.0.1). 
+Change in script: Changed the image detection again, because IE (i hate IE) didn't like the previous version.
+1.0.10:
+Change in script: Customlinks didn't work in Firefox. Now, after running: $("#slider").sudoSlider('[action]'); the slider will no longer return the jQuery object.
+1.0.11:
+Change in docs: Added a "Fancy navigation" demo.
+1.0.12:
+Change in docs: Upgraded to jQuery Address 1.3, no change in the Sudo Slider script. 
+Change in docs: Upgraded to jQuery 1.4.4, no change in the Sudo Slider script. 
+Change in script: The slider doesn't perform an animation (with afterAniFunc, beforeAniFunc etc.) if the slider doesn't actually move. 
+Change in script: Fixed non-crossfade animation in IE.
+
+2.0.0
+Change in docs: Remade the whole site, and called this version 2.0 because it sounds better than 1.1.0. 
+Change in script: Now the autoheight function wait's for the slider to be "ready" ( obj.ready(function() {/* autoheight function */}); ), before actually doing anything, fixing some problems with Autoheight getting the wrong height. 
+Change in script: Cleartype is "fixed" after the end of every fade animation (IE fix). 
+Change in script: Fixed width == 0 px bug when ajax-loading an image. 
+Change in script: Fixed <li> having the wrong height after ajax-loading an image. 
+Change in script: Merged imgAjaxFunc and docAjaxFunc to ajaxLoadFunction.
+Change in script: Deleted the old "actions". Now there are new "methods" instead. (Also added 2 demos demonstrating the use of methods). 
+Change in script: You can no longer "destroy" the slider using customLinks (use "methods" instead).
+Change in script: Rewrote a lot of it (to make things like methods work), no change in how it behaves (except for the things metioned here in the changelog). 
+Change in script: Fixed a bug with vertical, where the script got the height all wrong. (Bug introduced somewhere between 1.0.9 and 2.0.0)
+Change in script: Removed the options controlsBefore and controlsAfter.
+Change in script: Changed the way "loadingtext" works. Now 'Loading Content...' is default instead of a random funny text, but you can still change it to what you want. 
+
+2.0.1
+Change in docs: Added a "Methods 3" demo. Showing the "insertSlide" and "removeSlide" methods. 
+Change in docs: The stylesheet is now loaded before the javascript in every demo, fixing a rare "to wide content" problem. 
+Change in script: Now using outerHeight and outerWidth to determine the width and height of the slides. Meaning that border, margin and padding of the slides (<li> elements) can now be != 0.
+Change in script: Now supports different heigths of slides when scrolling vertical (autoheight), and different widths when scrolling horizontally (new feature: autowidth). (autoheight and autowidth both works when sliding horizontally or vertically.)
+Change in script: Removed the method "setHeight". Instead there's the adjust method, that should work better. 
+
+2.0.2
+Change in script: Fixed autoheight not working when using fade animations. 
+
+2.0.3
+Change in script: Fixed 2 IE problems. First problem was that IE didn't get the correct position after an animation, and the second was continuous and fading acting weird. 
+Change in docs: Added a navigation inside slider demo. 
+Change in script: Fixed fade not crossfade "lag" in the first and last slide when continuous was enabled. 
+Change in script: Fixed crossfade not animating to the correct slide. 
+Change in script: Fixed some controls not fading out when they should.
+Change in author mindset: Find and remove bugs before releasing a new major version. 
+
+2.0.4
+Change in script: Fixed crossfade not working with continuous.
+Change in script: Fixed vertical/horizontal animations skipping when using Ajax. 
+Change in script: Now content is loaded into the slider before any fade animation begins. Fixing a problem with crossfade. 
+Change in script: Fixed a bug, that caused the slider to end up the wrong place if using continuous and the slides were of different sizes. 
+Change in script: Fixed a error in Firefox (that's a first), where the slider ended 1-2 pixels off. 
+
+2.0.5
+Change in script: Added the "slideCount" option. (Thanks to 'Alexey' )
+Change in script: Fixed skipping to slide when using ajax. 
+Change in docs: Added a creative navigation 2 demo. 
+
+2.0.6
+Change in script: Addition to the new slideCount, now it also makes "multiple slides pr. page" work with continous. But you cant use ajax, slideCount and continuous at the same time.
+Change in script: Fixed beforeAniFunc and afterAniFunc not executing on a "continuous clone". 
+Change in docs: Added a multiple slides pr. page with continuous. 
+Change in script: Fixed ajax-loaded images not getting scaled down correctly, if using slideCount. 
+Change in download package: Added 29 test documents, to test all possible combinations of ajax, vertical, slideCount, fade, crossFade and continuous. They are located in the new "tests" folder.
+Change in script: Fixed a problem when vertical, ajax and continuous was enabled. 
+Change in script: Fixed a problem when ajax, fade (not crossfade) and continuous was enabled. The problem broke the script. 
+Change in script: If there are five slides, and slideCount == 2, the script only makes numeric-buttons 1 to 4..
+
+2.0.7
+Change in script: Fixed that afterAniFunc and beforeAniFunc rarely ran on the correct "continuous-clone".
+Change in script: Fixed that auto had a to long pause, if fade == true. 
+Change in script: Fixed a potential inifinite loop when loading slides during a sliding animation across more than 10 unloaded slides. Also removed the limitation of only loading up to 10 slides when sliding across many unloaded slides. 
+Change in script: Now all slides before the slide being animated to (if it's not a fade animation) is loaded before the actual animation is started. This removes a bug where the slider didn't animate to the correct slide (but got to the correct slide in 0 ms after the animation was done). 
+Change in script: Fixed that an fade animation to the last slide didn't work correctly, if continuous is enabled. 
+Change in script: Before, if there were five slides, and slideCount == 2, the script would only make numeric-buttons 1 to 4, even if continuous is true. Now that isn't the case if continuous is true. 
+Change in docs: Added 2 new demos: Nested sliders and multiple sliders. 
+Change in script: Added support for slideCount, ajax and continuous at the same time. Basicly the script just loads everything before initializing the full script. 
+Change in script: Fixed an issue, where the numeric controls wouldn't be set correctly, if continuous is true and slideCount != 1.
+Change in script: Fixed a bug, that made the slider unable to animate anywhere in some cases, if slidecound & continuous & ajax is used. 
+Change in script: Fixed that if slideCount > number of slides, beforeAniFunc would not run on all continuous clones.
+Change in script: Various internal improvements.
+
+2.0.8
+Change in script: Fixed a small bug that could throw an error if destroying a slider that have controlsShow: false
+Change in docs: Updated to jQuery version 1.5.0, that improves performance and fixes the 'slider ul width' < 10000 px bug. No changes in the sudoSlider script as a result of this upgrade. 
+
+2.0.9
+Change in script: Added the resumePause option. So now you can make the slider resume an stopped automatic animation, if the slider has been inactive for X miliseconds. 
+Change in script: Fixed a bug where auto would never stop, if you were using fade. 
+Change in script: Made the script work in IE6. Somewhere betwen 2.0.1 and 2.0.6 it stopped working in IE6. (See http://stackoverflow.com/questions/5053031/weird-javascript-ie6-bug-it-think-it-needs-an-extra-bracket for more info on this bug).
+
+2.0.10
+Change in script: Fixed a bug that auto and fade didn't work.
+Change in script: Sometimes when using slideCount > 1, the slider would sometimes slide way more than necessary. This is fixed for animations that goes just 1 slide (also when going from the first to the last slide (and the other way)). 
+Change in script: Fixed a small bug that made the slider slide across way to much when sliding from slide 4 to 3 when there are 5 slides and slideCount = 2 and using vertical. (This is not related to the above change in script).
+Change in script: Fixed continuous in IE6. (Bug introduced/created in 2.0.[unknown] )
+Change in docs: Updated jQuery to version 1.5.1, fixing support for IE9. 
+
+2.0.11
+Change in script: Small internal size/speed improvements. 
+Change in script: When starting a slideshow, continuous gets enabled if it wasn't.
+Change in script: Fixed that resumePause would re-enable the auto slideshow after some time if it was stopped, if you tried to stop the slideshow and resumePuase is enabled. 
+Change in script: Fixed that an image with a width of 0px would make the slider hang in an inifinite recursive function call. 
+Change in docs/script: Made it posible to fix the "all slides are shown before the javascript kicks in" bug, by adding some CSS and a bit of javascript. Uncomment the commented CSS to apply the fix. 
+Change in docs: Added a "modal" demo, demonstrating how you can link to an enlarged picture in a lightbox. 
+
+2.0.12
+Change in docs: Upgraded to jQuery version 1.5.2.
+Change in script: If continuous is on, ajaxLoadFunction was run 2 times, first on the normal element, then the "continuous-clone". And the content was also loaded twice. Now it's only loaded once, and after ajaxLoadFunction has run on the normal slide, it's cloned and placed as a "continuous-clone".
+Change in script: If for slideCount, ajax and continuous is used at the same time, all content is no longer loaded before init, now it loads after init (but all content is still being loaded). 
+Change in script: Optimized fade & continuous. Now the "continuous-clones" aren't created if fade is on. 
+Change in script: Fixed that the height wouldn't be adjusted correct on first load in some situations when using ajax. 
+Change in script: The getValue method has a new value, "autoAnimation". It tells if an automatic slideshow is currently running. 
+Change in docs: Added a mousePause demo, demonstrating how you can pause a slideshow on mouseover. 
+Change in script: When enabeling auto, continuous is no-longer automaticly enabled.
+Change in script: You can now force the slider to move from last to first slide (and the other way) by using sudoSlider.goToSlide('next'); and sudoSlider.goToSlide('prev'); when continuous is disabled. This wasn't possible before, but is still not recommended. (I only added it because auto can use it when continuous is disabled.)
+Change in script: Fixed that the slider wouldn't stay on the same slide in all situations, when inserting a new slide. (Using sudoSlider.insertSlide());
+Change in script: Fixed that it was possible to insert an completely empty slide. (Using sudoSlider.insertSlide());
+
+2.1.0
+Change in script: Made Various improvements to the code (lots of 'em), reducing the file size of the minified version by 3.5KB (About 30% size reduction, from 12.41KB to 8.91KB). (That includes the new features and improvements listed below). 
+Change in minified version: Now using Google's Closure Compiler instead of YUI compressor to minify the script.
+Change in script: Made sure that every parseInt(num) instead is parseInt(num,10)
+Change in script: Fixed that afterAniFunc and beforeAniFunc would sometimes not run on the second "continuous-clone". 
+Change in script: To detect changes in the URL, SudoSlider now supports jQuery.bbq, and jQuery.hashchange. The last is recommended, since it's the smallest, and it works the best. jQuery.address still works like before. 
+Change in script: Rewrote the ajax-loading of images. Now, the loadingtext isn't replaced before the image has been loaded. 
+Change in script: Fixed that sudoSlider sometimes introduced the global variable "a".
+Change in script: Fixed that the slider wouldn't stay at the correct slide, if the slider is destroyed and continuous is enabled. 
+Change in script: Now all the methods returns the jQuery object. Unless they are meant to return another value. 
+Change in script: Fixed that slideCount could be bigger than the number of slides. 
+Change in script: Added a new "pages" mode for numeric. (Activate by setting the option numeric to "pages"). It allows you to create "pages" with multiple slides within them, see the "mutiple slides pr. slide" demo for clarification .
+Change in script: Added a moveCount option, for setting how many slides the slider should slide, if you tell it to slide to the "next" or "prev". 
+Change in script: Fixed that the speed: 0 wasn't accepted by the script. Before the slider would instead use the default speed 400 miliseconds, now the speed will actually be 0 miliseconds.
+Change in script: Now the shortest possible route betwen 2 slides is allways chosen, when animating betwen them. (When continuous is enabled, there can be mutible ways to animate to one slide). 
+Change in CSS: Now using display:block on both the <li> and the <ul> tags in the slider, along with the below change in script, it fixes some positioning problems (mostly in Fx).
+Change in script: Changed the way the position of the slides are calculated, fixing some positioning problems (mostly in Fx).
+Change in script: Completely rewrote the ajax-loading part of the script.
+Change in script: When loading an image, it is no longer automaticly shrunk if it's to wide to fit the slide. You can still do it manually by using ajaxLoadFunction.
+Change in script: The ajaxLoadFunction is now only run when all the content is ready. 
+Change in script: Changed how preloadAjax works, it now has a new default behaviour. See the documentation for details. 
+Change in script: beforeAniFunc dont run before all content on the target slide has loaded. 
+
+2.1.1
+Change in script: Fixed 2 very wierd bugs, that i could only recreate on this site: www.offtheboatgreetings.com. First bug was in the function setCurrentElement, and the second was with non-crossfade fade animations. 
+Change in script: Very small optimizations (i keep finding them). The minified script size is now down to 8.85KB. 
+
+2.1.2
+Change in scirpt and CSS: overflow is set to hidden in the CSS, instead of in the javascript. Be sure to update your CSS if you upgrade to this version or newer. 
+Change in script: Fixed that the slider could crash, if the fadeControls was set to false, and moveCount > 1. 
+Change in docs: Upgraded to jQuery version 1.6.2.
+Change in script: Now the minified script size is down to 8.83KB
+Change in docs: Added the flashlike demo. 
+
+2.1.3
+Change in script: Fixed fade animations not working in IE. 
+Change in docs: Fixed that the basic example did not show the correct CSS. 
+Change in script: Fixed that the history functions could crash jQuery if used on an empty slider. 
+Change in script: Fixed that the slider didn't "focus" any numeric button at init if history is used. 
+Change in script: Rewrote a part of the script thats used all the time, and if used incorrectly it would crash the whole thing. Now it never crashes. 
+Change in scritp: Rewrote the part of the script that translates a direction to a slide. Simplifying it and fixing a small bug. 
+
+2.1.4
+Change in script: Did one to many optimazation in 2.1.3, partially breaking continuous. Fixed now. 
+
+2.1.5
+Change in script: Fixed that IE9 (and maybe other versions of IE) didn't allways initialize like it should. 
+Change in script: The beforeAniFunc does now also run on the clone, that is created to make the fade Animation work. If continuous is enabled it is therefore possible that beforeAniFunc runs on up to 4 times, on different copies of the same slide. 
+Change in docs: Upgraded to jQuery version 1.6.4.
+
+2.1.6
+Change in script: Added a ekstra parameter to the goToSlide; speed. By setting this, you can set the speed of the animation you ask for. This will not change the option speed. 
+Change in docs: Added a touch demo, that demonstrates some nice stuff you can do with touch based devices and SudoSlider. (Only confirmed to work on WebKit based browsers). Thansk to sutublog, for giving me the idea (http://sutublog.com/tools/slider-jquery-compatible-ipad-iphone-android-et-autres-mobiles-141)
+Change in script: Fixed my some internal workings of the script, so that it now allways initiates when it is supposed to. Basicly developed my new plugin ProperLoad, and copied it into SudoSlider. 
+Change in script: Fixed that the non-crossfade fade animation didn't allways begin immediately. And now the fade animations use the easing option. 
+Change in script: Rewrote some parts of the script, now it supports an unlimited amount of continuous clones.
+Change in script: The sliders does now animate to whereever the next slide is, in a 2d space. Setting the option vertical only affects how the slides are positioned if you havn't changed the style. 
+Change in script: Fixed that setting any setting with the method setoption didn't work, if the value was false. 
+
+2.1.7
+Change in script: The script to determine when all the images are loaded didn't work like it should, most likely because i made a mistake while copying the script. (That part of the code is copy paste from ProperLoad). Fixed. 
+Change in docs: When trying to utilize the browsers back/forward button, the recommended 3. party script to use is now Jquery BBQ. 
+Change in script: Fixed most of the cases where IE8 would get the position of the slides wrong by a pixel. Not fixed when using absolute positioning to manually position the slides. 
+
+2.1.8
+Change in script: When calculating how long to wait between the automatic animations, the script would never take into account if the slider is using a fade animation.
+Change in demos: Updated some scripts in the flashlike demo, it should work perfectly now.
+Change in script: When using moveCount and slideCount, the slider will no longer slide so far that the right part of the slider is empty (As an example, see the multiple slides pr. slide demo). This does not work well if you use numeric:true
+Change in script: Instead of calling beforeAniFunc and afterAniFunc more than once, the script just calls with all the continuous clones inside a single "this" variable. 
+Change in docs: Upgraded jQuery to version 1.7.2
+
+2.2.0 (16-08-2012)
+Change in script: Readded the adjust method (forgot it in the docs). The method now adjustets every position aspect of the slider, so if you call it after resizing anything, the slider will look pretty. Removed the time parameter the method took, it now only does it in 0 ms. 
+Change in script: Added the responsive option, use this to make the slider adjust to the container its in. See the responsive demo for details. 
+Change in docs: Added the responsive demo, demonstrating how you can use SudoSlider in a dynamic layout. 
+Change in script: All options can now be written in lowercase, uppercase or any mix of those, doesn't matter. 
+Change in script: When initiating multiple sliders using one selector (one .sudoSlider()) call, the methods now run on all the sliders instead of just the last. When a method returns someting, an array of the values is returned. The methods never return undefined, when undefined is supposed to be returned, the jQuery object is returned instead. 
+Change in docs: Upgraded jQuery to version 1.8.0
+Change in script: Changed some internal parts of the script, so that jQuery 1.7+ is now a requirement for the script to work at all. (And jQuery 1.8 fixes a position bug in IE, so use that!). 
+Change in script: Removed the clickableani option, since it does not work well anymore. 
+Change in docs: SudoSlider is now on github (https://github.com/webbiesdk/SudoSlider), and on that occasion i decided to bump up the version to 2.2.0. The best way to file a bug, is to make an issue on github. 
+
+2.2.1 (18-08-2012)
+Change in script: Fixed an issue where the ajaxcontent would try to load twice, resulting in it trying to load the image "false". Bug was introduced by upgrading to 1.8.0, but it was a bug in the SudoSlider code. Also fixed another potential (never observed) bug with ajax-loading. 
+
+2.2.2 (16-09-2012)
+Change in script: Fixed the setOption method not working for non-lowercase options. 
+
+2.2.3 (19-09-2012)
+Change in docs: Updated jQuery to version 1.8.1
+Change in script: You can know initialize SudoSlider on an empty container, even if you are not using AJAX. Thanks to clime from github.
+
+2.2.4 (24-10-2012)
+Change in docs: Updated jQuery to version 1.8.2
+Change in script: Added the getSlide method, see the docs for details. 
+Change in script: Fixed ajaxloadfunction and continuous not working well together. 
+
+2.2.5 (06-11-2012)
+Change in docs: Changed the "urls" in the history demo to remove any spaces in them. 
+Change in script: Fixed that calling some methods when using continuous would bug if slideCount > [number of slides]
+Change in docs: Added the keyboard demo, showcasing basic keyboard navigation by using the methods. 
+Change in script: Fixed "flickering" of the controls in some very rare cases. 
+Change in script: Fixed that the ajaxLoadFunction ran to early. 
+Change in script: Added an argument to the insertSlide method, so you now can specify where the slider should be after inserting the slide. 
+
+2.2.6 (15-11-2012)
+Change in script: Fixed onCurrentFunc and onUncurrentFunc being fired twice with updatebefore = true and ajax = true. 
+Change in docs: Added a videos demo, showcasing how you can have videos that pause when you slide. 
+Change in docs: Fixed that the example CSS in the docs didn't reflect the CSS actually used. 
+Change in script: It wasn't possible to have extremely small pauses when using auto before. It is now. 
+Change in docs: Updated jQuery to version 1.8.3
+Change in docs: Updated TouchSwipe to 1.5.0
+
+2.2.7 (29-12-2012)
+Change in script: Fixed that continuous crashed the script if initialized on an empty slider. 
+Change in docs: Added 3 new demos, fancy stuff 1 + 2 and ticker mode. 
+Change in script: Potentially fixed an unconfirmed bug in Firefox on OSX where the width was 1px off.
+Change in docs: Updated the responsive demo, so it know adjust the number of slides being shown depending on window width.
+Change in docs: Updated the touch demo, it now behaves much more nicely after you let go of the finger. 
+Change in script: Fixed fade animation when using slidecount > 1 and vertical. Added the vertical fade demo to reflect this. 
+Change in script: When having slideCount > 1, autoheight and autowidth now scales the slider so that a [slidecount] number of slides is visible. It also makes sure that the biggest of the visible slides is always completely visible. 
+Change in script: AutoHeight and AutoWidth now always complete their animation at the same time as the slide (or fade) animation, even if the height of the slide changes during a slide (happens when an image is done loading during the animation). 
+
+2.2.8 (14-01-2013)
+Change in script: Fixed some situations where IE wouldn't accept the existance of the SudoSlider object in the callback functions.
+Change in script: Fixed that Chrome 24 got the position wrong by a pixel.
+Change in docs: Made the nested sliders demo work with this version if SudoSlider.
+Change in script: Fixed an issue where clicking the controls, while the slider is "unclickable", made the callbacks not fire.
+
+2.2.9 (10-03-2013)
+Change in docs: Upgraded to jQuery 1.9.1
+Change in script: Using outerHeight and outerWidth to calculate where slides should be positioned. Thereby supporting slides with margins and paddings.
+
+3.0.0 (17-04-2013)
+Change in script: Added the effect option. Read about it in the docs. To control it there also is the "slices", "boxcols" and "boxrows" options.
+Change in script: Added lots of effects that can be used with effect, also added an "explorer effects" demo to showcase them.
+Change in script: beforeAniFunc and afterAniFunc no longer runs on initialization. Instead there's an initCallback, that runs when the slider is ready and the shown slide is loaded.
+Change in script: If you set the attribute "data-effect" on a slides <li>, it will now force that animation to run when animating to that slide.
+Change in script: If you set the attribute "data-speed", it will override the default speed setting on the animation to that slide.
+Change in script: Changed the default loadingText to an empty string.
+Change in script: Removed the build in "first" and "last" buttons. You can still make equivalent buttons using customLink
+Change in script: Removed all options related to fade. You can still use the "fade" or "fadeOutIn" animations.
+Change in script: Lowered the default wait between slide loads to 100ms. (Only relevant when using Ajax)
+Change in script: Removed the speedHistory option. Since it no longer worked with the new effects functionality.
+Change in script: Renamed a bunch of options. (ajaxloadfunction -> ajaxload, beforeanifunc -> beforeanimation, afteranifunc -> afteranimation
+Change in script: Removed the uncurrentfunc and oncurrent func. Since you can emulate them using afterAnimation and beforeAnimation
+Change in script: If the slider gets a command to slide somewhere, while an animation is active. It will "save" the command, and do it after the ongoing animation has finished.
+Change in script: Fixed that stopAuto() didn't stop first auto animation.
+Change in script: The script now inserts all the necessary CSS for the slider to run, no CSS needed.
+Change in script: When creating multiple sliders using the same selector, you can no longer expect methods to work.
+Change in script: Made it possible to interrupt animations. And responsive use this to cancel animations when resizing. Also added the "stopAnimation" method.
+Change in docs: Removed the modal demo, and updated the videos demo.
+Change in docs: Added a "explorer effects" demo, to showcase every single effect build into SudoSlider (58 as of now).
+Change in docs: Added a "frontpage demo", it is basically the slider on the frontpage standalone.
+Change in docs: Added a "css effects" demo, that showcases how you can use CSS3 effects with SudoSlider.
+Change in docs: Added the "different effects" demo, to showcase that you can specify the effect pr. slide.
+
+3.0.1  (18-04-2013)
+Change in script: The empty string is now an acceptable numericText.
+Change in script: Fixed that "sudoSlider.getValue('autoAnimation');" always returned undefined
+
+3.0.2 (29-04-2013)
+Change in script: You can use any tag as slide containers, instead of before where you needed a ul tag with child tag (the old way still works). See the basic example to see how this new behaviour works.
+
+3.0.3 (09-05-2013)
+Change in script: Fixed that the slide specified by "startSlide" wasn't loaded first.
+Change in script: Fixed some flickering that sometimes occurred when ajaxLoading slides ahead of the current.
+Change in script: Fixed some potential flickering at the end of an animation. (Only happened on iPad).
+Change in script: All ajax loads are now finished at the first available time when no animation is running.
+
+3.0.4 (20-05-2013)
+Change in script: Fixed that the last box in a box animation didn't fade in at all in jQuery <= 1.9. In case of fade animations, the last box was the only box.
+Change in docs: Added the "fadein slider on load" demo.
+
+3.0.5 (03-06-2013)
+Change in script: Added the animationZIndex option. So you can change the z-index that the "animation" boxes have (This effects every effect except slide).
+
+3.1.0 (18-07-2013)
+Change in script: Added a goToNext() method when making your own effects. By calling this the slider will instantly go to the next slide, and you can continue the effect afterwards.
+Change in script: Removed the boxes and boxesGrow effects.
+Change in script: Changed the remaining box effects, so that when they grow (in/out) the movement originates from the center.
+Change in script: Added a whole bunch of new effect. And renamed some of the existing effects. (Now there is 105 effects).
+Change in docs: Changed the explorer effects, to show the effects in a nicer way. The old explorer effects is now "all effects".
+Change in script: If you specify the attribute "data-effectout" on a slide, that will specify the effect when leaving that slide. The data-effectout takes precedence over data-effect.
+Change in script: Added interruptible option, by setting it to true, the current animation will be interrupted if the slider is told to go to another slide. (This is a reintroduction of the option that was previously called clickableAni).
+Change in script: If you set an effect like "box" it will result in a random effect that chooses between all effects starting with "box". This work for all strings that doesn't hit a specific effect.
+Change in script: Fixed that the slider sometimes tried to animate to the next slide, before it had finished the first one. (If you clicked while the slider was animating).
+Change in script: Fixed that the slider would flicker in some browsers when using startSlide > 1 and AJAX.
+Change in script: All effects now take exactly the amount of time specified in the options to complete.
+Change in script: Changed the default speed to 1500.
+Change in script: Fixed that Ajax loaded images in some browsers where forced to have the images original resolution (overwriting any CSS rules).
+Change in script: Added a speed argument to the goToSlide method.
+Change in script: Fixed that the autoHeight/width animation didn't take the amount of time specified in the attribute data-speed.
+Change in script: Using all CSS animations pr default, with JavaScript animations as a fallback. This means that the easing option (if used) should be adjusted to work with CSS transformations (or disable the CSS transformations). The default "swing" ease is automaticly converted to a "cubic-bezier"
+Change in script: Added the useCSS option, which can be used to turn off CSS animations.
+Change in script: When the next/prev controls are hidden, it is done using visibility:hidden instead of display:none.
+Change in script: Added the loadStart and loadFinish options. They are callbacks that run when the sliders waits with an animation because a slide (or more) isn't loaded. (Note: Not at init).
+Change in script: If history is enabled, the update of URL will now be performed in the beginning of the animation, instead of the end.
+Change in docs: Upgraded to jQuery 1.10.2
+Change in docs: Removed the "keep slider focused demo".
+
+3.1.1 (13-08-2013)
+Change in script: Fixed an theoretical infinite loop.
+Change in script: There can now be spaces between effects when effects are specified in a comma-separated array.
+Change in docs: Added demo to showcase random effects.
+Change in script: Changed the default value of useCSS to false
+
+3.1.2 (07-09-2013)
+Change in script: Fixed that the script crashed in IE6, IE7 and IE8
+
+3.1.3 (11-10-2013)
+Change in demos: The responsive demo is now always 100% width, and the new responsive maxwidth demo is limited to 1200px.
+Change in script: useCSS is enabled by default again, but deactivated if the jQuery version is > 1.8.0.
+Change in script: Fixed that AJAX loading of non-image things didn't work all the time.
+
+3.1.4 (22-10-2013)
+Change in demos: The touch demo now fades when a button is pressed, and slides when swiped.
+Change in script: Fixed that the wrong slide was sometimes shown on init.
+
+3.1.5 (18-11-2013)
+Change in script: When sliding to the next or previous, the slider will no longer go the other way, even if that path is shorter. (Thanks sjaakmans https://github.com/webbiesdk/SudoSlider/issues/4 )
+Change in script: exposed runWhenNotAnimating as a public method.
+
+3.1.6 (29-11-2013)
+Change in script: You can now specify the pause between slides pr. slide. Just set the "data-pause" attribute on the slide. See the auto.html demo.
+Change in script: Fixed that the insertSlide didn't work well when the slide container wasn't an "<ul>".
+
+3.1.7 (17-12-2013)
+Change in script: Fixed that <li> tags were always used to fill in the non-existing slides if ajax is on. In some sliders we want <div>'s.
+Change in script: Fixed weird Firefox bug. (If you have a responsive slider, the slider might "push" the rest of the content down while initializing, it is moved back into place before anything is renders, but Firefox still goes crazy)
+Change in script: Decreased the time it takes to initialize a responsive slider in some browsers.
+Change in script: Fixed that a responsive slider sometimes adjusted as if there were a scrollbar, while there isn't a scrollbar.
+Change in demos: Added the responsive height/width demo, that shrinks in both width and height.
+
+3.2.0 (08-02-2014)
+Change in script: Before when using continuous, i would clone some of the slides, to make sure that even if you scrolled further than the last slide, then there were still something to show.
+                  Now i instead reorder the slides before an animation.
+Change in demos: Removed the "responsive fixed width slides" demo.
+Change in script: When using customLinks, the script now looks after a "data-target" to see what the customLink is supposed to do. "rel" attribute still works for backwards comparability.
+Change in script: Fixed that when using ticker mode (auto with pause 0 and continuous), the slider would sometimes start by animating frot the last to the first slide, then jump to the second.
+Change in script: Renamed the push effects to pushOut. And introduced the pushIn and stack effects. Now there's 118 effects.
+And other small fixes
+
+3.2.1 (08-02-2014)
+Change in script: Fixed flicker in some effects in 3.2.0
+
+3.2.2 (10-02-2014)
+Change in script: Made the dirty fix in 3.2.1 into a clean one.
+Change in script: Fixed that ajaxLoaded slides were wrapped in an <li> when they should be wrapped in a <div> (and the other way).
+Change in script: Numeric controls now also use data-target instead of rel attribute.
+Change in docs: The explorer effects demo shows, when you select a prefix, what effects that prefix hits.
+
+3.3.0
+Change in script: Fixed that an empty slider didn't work, and that ajaxloaded images would load wrong in some situations.
+Change in script: Added a new option: "touch". When enabled you can swipe the slider back and forwards using mouse of touch input.
+Change in script: Changed the touch demo from using touchSwipe to using the new option. Also removed touchSwipe script from the js/lib/ folder.
+Change in script: Added the touchHandle option. So you can specify what the user can drag. Even something that isn't within the slider.
+Change in docs: Added touchHandle demo.
+Change in docs: Added touchHandle outside slider demo.
+Change in docs: Added fullscreen demo.
+Change in script: Fixed that continuous with ajax content bugged.
+Change in script: InsertSlide now accepts negative number for positions. -1 equals inserting a slide in the far right of the slider, -2 one left of that etc.
+Change in script: The setOption method now also accepts an object, that represents option names and option values to be changed.
+Change in docs: Removed the "Responsive height/width", "flashlike" and "fade not crossfade" demo.
+Change in script: The controls container now has class="controls" instead of id="controls". And the container for the numeric controls has class="numericControls" instead of class="controls". These are just new default option values, they can easily be changed through options.
+Change in script: The container that has the slide now has class="slidesContainer" and each slide has class="slide"
+Change in script: Added a destroyCallback option. It is called after the slider has been destroyed (that includes when options are changed).
+Change in script: New effects, added optional suffix "Rounded" to all grow effects. Try it out in the all effects demo. Now 132 effects.
+Change in script: Fixed that when preloadAjax was false, nothing except the first slide was ever loaded. And other problems related to Ajax.
+Change in script: The auto animation pauses when responsive is on and the window is resized.
+Change in script: Remove the animationZIndex option. Now the z-index of the overlaying animation is found more intelligently.

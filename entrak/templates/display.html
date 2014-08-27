@@ -1,15 +1,156 @@
 {% extends "base.html" %}
 
 {% load static %}
+{% load entrak_extras %}
 
 {% block extra_head %}
 {{block.super}}
+<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/display.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/bottom-energy-summary.css' %}">
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="{% static 'js/mustache.js-master/mustache.js' %}"></script>
+<script src="{% static 'js/sudo-slider/js/jquery.sudo-slider.min.js' %}"></script>
+<script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
+<script src="{% static 'js/csrf_ajax.js' %}"></script>
+<script src="{% static 'js/moment.min.js' %}"></script>
+<script src="{% static 'js/flot/jquery.flot.min.js' %}"></script>
+<script src="{% static 'js/entrak-utils.js' %}"></script>
+<script src="{% static 'js/graph-chart.js' %}"></script>
+<script src="{% static 'js/energy-summary.js' %}"></script>
 {% endblock %}
 
 {% block extra_script %}
 {{block.super}}
+
+<script id="tips-template" type="x-tmpl-mustache">
+<div class="tips" style="background-image: url({% templatetag openvariable %}bgImg{% templatetag closevariable %});">
+	<div class="tips-block" style="top: {% templatetag openvariable %}posTop{% templatetag closevariable %}px; left: {% templatetag openvariable %}posLeft{% templatetag closevariable %}px;">
+		<img src="{% static 'images/display/plug-icon.png' %}">
+		<div class='tips-title'>{% templatetag openvariable %}title{% templatetag closevariable %}</div>
+		<div class='tips-desc'>{% templatetag openvariable %}desc{% templatetag closevariable %}</div>
+	</div>
+</div>
+</script>
+
+<script type="text/javascript">
+SLIDER_PAUSE_M_SECOND = 10000;
+SCHEDULE_TASK_INTERVAL = 60000;
+
+display = {};
+
+function updateGraphText() {
+	$('.graph-dt-text').text(moment().format('D MMM YYYY, ddd'));
+
+	var lastText = moment().format('dddd')
+	$(".legend-last-text").text('Last '+lastText);
+}
+
+function scheduledTask() {
+	display.graphChart.getDisplayEnergyReadings();
+	updateGraphText();
+	display.energySummary.getSummaryWithSourceIds(display.sourceIds, function() {
+		display.energySummary.assignSummaryToHtml(
+		"#last-consumption-val", "#this-consumption-val", "#summary-percentage-number",
+		"#summary-image", '{{STATIC_URL}}');
+	});
+}
+
+$(function() {
+	display.sourceIds = JSON.parse('{{source_ids}}');
+
+	var tipInfos = [
+		{bgImg: "{% static 'images/tips/ac-ribbon.jpg' %}", title: "Remove a Tube", desc: 'If you have more light than you need in the area, you can remove one light tube from a fixture and save energy', posTop: 200, posLeft: 200, insertBefore: '.graph-info'},
+		{bgImg: "{% static 'images/tips/plugs.jpg' %}", title: "Label Your Plugs & Switch", desc: 'Label the plugs of electtrical device...', posTop: 400, posLeft: 400, insertAfter: '.graph-info'},
+	]
+
+
+	var tipsTemplate = $("#tips-template").html();
+	Mustache.parse(tipsTemplate);
+	var sliderContainer = $('.slider-container');
+	$.each(tipInfos, function(idx, tipInfo) {
+		var tipsHtml = Mustache.render(tipsTemplate, tipInfo);
+		if ('insertBefore' in tipInfo) {
+			sliderContainer.find(tipInfo.insertBefore).before(tipsHtml);
+		} else if ('insertAfter' in tipInfo) {
+			sliderContainer.find(tipInfo.insertAfter).after(tipsHtml);
+		} else {
+			sliderContainer.append(tipsHtml);
+		}
+	});
+
+
+	var viewportWidth = $(window).width();
+	var viewportHeight = $(window).height();
+	$('.slider-container>div').css({
+		'width': viewportWidth+"px",
+		'height': viewportHeight+"px",
+	});
+
+	setupAjaxForCsrf($.cookie('csrftoken'));
+	display.graphChart = new GraphChart(".graph-info .chart", null, null, null);
+	display.graphChart.currentRangeType = Utils.RANGE_TYPE_DAY;
+
+	display.sudoSlider = $('.slider-container').sudoSlider({
+		effect: 'sliceFadeLeft',
+		continuous: true,
+		controlsShow: false,
+		pause: SLIDER_PAUSE_M_SECOND,
+		auto: true,
+		beforeAnimation: function() {
+		},
+		afterAnimation: function() {
+		},
+	});
+
+	display.energySummary = new EnergySummary();
+
+	scheduledTask();
+	setInterval(function() {
+		scheduledTask();
+	}, SCHEDULE_TASK_INTERVAL);
+
+});
+</script>
 {% endblock %}
 
 {% block content %}
-YOYO
+<div class="system-info-container">
+	<div class="system-title">{{system.name}}</div>
+	<div>REAL TIME ENERGY MONITORING SYSTEM</div>
+	<div class="system-logo">
+		<div class="logo-circle-bound" style="background-image: url('{{system.logo.url}}');"></div>
+		<img src="{% static 'images/user-logo-bg.png' %}">
+	</div>
+</div>
+
+<div class="display-container">
+	<div class="slider-container">
+		<div class="graph-info">
+			<div class="header-empty-block"></div>
+			<div class="graph-title">Our energy consumption today: <span class="graph-dt-text"></span></div>
+			<hr>
+			<div class="graph-header">
+				<div class="graph-unit">kWh</div>
+				<div class="graph-legend">
+					<span></span>
+					<span>Total</span>
+				</div>
+				<div class="graph-legend">
+					<span></span>
+					<span class="legend-last-text"></span>
+				</div>
+			</div>
+			<div class="chart"></div>
+			<div>hour</div>
+			<hr>
+
+			{% include "display_bottom_energy_summary.html" %}
+
+		</div>
+	</div>
+</div>
+
+<img class="powered-by-img" src="{% static 'images/powered-by-logo.png' %}">
+
 {% endblock %}

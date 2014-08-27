@@ -1,0 +1,28 @@
+{% load static %}
+
+<div id="summary">
+	<div id="summary-header"><img src="{% static 'images/summary.png' %}"></div>
+
+	<div id="summary-image">
+		<div id="last-summary">
+			<p class="summary-text">By this time last week you had used </p>
+			<img class="electricity-icon" src="{% static 'images/red-electricity.png' %}">
+			<span id="last-consumption-val" class="consumption-val"></span><span class="consumption-unit">kWh</span>
+		</div>
+
+		<div id="this-summary">
+			<p class="summary-text">So far today you have used </p>
+			<img class="electricity-icon" src="{% static 'images/green-electricity.png' %}">
+			<span id="this-consumption-val" class="consumption-val"></span><span class="consumption-unit">kWh</span>
+		</div>
+
+		<div id="summary-percentage">
+			<span id="summary-percentage-number"></span>
+			<span id="summary-percentage-symbol">%</span>
+		</div>
+	</div>
+
+	{% block see_detail %}
+	<a href="{% url 'progress' system_code=systems.0.code %}">See Details &#9654;</a>
+	{% endblock %}
+</div>

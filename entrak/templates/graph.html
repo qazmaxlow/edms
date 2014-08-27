@@ -9,6 +9,7 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/graph.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/bottom-energy-summary.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'js/datetimepicker-master/jquery.datetimepicker.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/daneden-animate.css' %}">
 <script src="{% static 'js/flot/jquery.flot.min.js' %}"></script>
@@ -24,6 +25,7 @@
 <script src="{% static 'js/entrak-system.js' %}"></script>
 <script src="{% static 'js/entrak-utils.js' %}"></script>
 <script src="{% static 'js/graph-chart.js' %}"></script>
+<script src="{% static 'js/energy-summary.js' %}"></script>
 {% endblock %}
 
 {% block selected-menu-link-id %}menu-link-graph{% endblock %}
@@ -192,24 +194,12 @@ function retrieveReadingFinished() {
 }
 
 function retrieveSummaryFinished() {
-	$("#last-consumption-val").text(Utils.formatWithCommas(graph.graphChart.lastConsumption.toFixed(0)));
-	$("#this-consumption-val").text(Utils.formatWithCommas(graph.graphChart.realtimeConsumption.toFixed(0)));
-
-	var diffPercentage = Utils.fixed1DecIfLessThan10((Math.abs(graph.graphChart.realtimeConsumption - graph.graphChart.lastConsumption)/graph.graphChart.lastConsumption)*100);
-	$("#summary-percentage-number").text(diffPercentage);
-
-	var summaryBgImg = null;
-	if (graph.graphChart.lastConsumption > graph.graphChart.realtimeConsumption) {
-		summaryBgImg = "{% static 'images/summary-lower.png' %}";
-	} else if (graph.graphChart.lastConsumption < graph.graphChart.realtimeConsumption) {
-		summaryBgImg = "{% static 'images/summary-higher.png' %}";
-	} else {
-		summaryBgImg = "{% static 'images/summary-neutral.png' %}";
-	}
-	$("#summary-image").css("background-image", 'url(' + summaryBgImg + ')');
+	graph.energySummary.assignSummaryToHtml(
+		"#last-consumption-val", "#this-consumption-val", "#summary-percentage-number",
+		"#summary-image", '{{STATIC_URL}}');
 
 	setTimeout(function() {
-		graph.graphChart.getSummary(retrieveSummaryFinished);
+		graph.energySummary.getSummaryWithSystem(graph.graphChart.entrakSystem, retrieveSummaryFinished);
 	}, 60000);
 }
 
@@ -574,7 +564,8 @@ $(function() {
 
 	resetGraphNPanel();
 
-	graph.graphChart.getSummary(retrieveSummaryFinished);
+	graph.energySummary = new EnergySummary();
+	graph.energySummary.getSummaryWithSystem(graph.graphChart.entrakSystem, retrieveSummaryFinished);
 });
 
 </script>
@@ -723,29 +714,6 @@ $(function() {
 </div>
 <!-- Main Graph Ends -->
 
-<!-- Summary -->
-<div id="summary">
-	<div id="summary-header"><img src="{% static 'images/summary.png' %}"></div>
+{% include "bottom_energy_summary.html" %}
 
-	<div id="summary-image">
-		<div id="last-summary">
-			<p class="summary-text">By this time last week you had used </p>
-			<img class="electricity-icon" src="{% static 'images/red-electricity.png' %}">
-			<span id="last-consumption-val" class="consumption-val"></span><span class="consumption-unit">kWh</span>
-		</div>
-
-		<div id="this-summary">
-			<p class="summary-text">So far today you have used </p>
-			<img class="electricity-icon" src="{% static 'images/green-electricity.png' %}">
-			<span id="this-consumption-val" class="consumption-val"></span><span class="consumption-unit">kWh</span>
-		</div>
-
-		<div id="summary-percentage">
-			<span id="summary-percentage-number"></span>
-			<span id="summary-percentage-symbol">%</span>
-		</div>
-	</div>
-
-	<a href="{% url 'progress' system_code=systems.0.code %}">See Details &#9654;</a>
-</div>
 {% endblock %}

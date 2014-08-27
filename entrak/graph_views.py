@@ -7,6 +7,7 @@ from django.shortcuts import render_to_response
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.db.models import Q
+from settings import STATIC_URL
 from system.models import System, CITY_ALL
 from unit.models import UnitCategory, UnitRate, KWH_CATEGORY_CODE
 from egauge.manager import SourceManager
@@ -26,6 +27,7 @@ def graph_view(request, system_code=None):
 	unit_categorys = list(UnitCategory.objects.filter(Q(city=CITY_ALL) | Q(city=systems_info["systems"][0].city)).order_by('order'))
 
 	m = systems_info
+	m['STATIC_URL'] = STATIC_URL
 	m.update({'sources': sources, 'unit_categorys': unit_categorys})
 	m.update(csrf(request))
 
