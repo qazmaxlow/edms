@@ -12,6 +12,7 @@ from utils.utils import Utils
 from egauge.manager import SourceManager
 from egauge.models import SourceReadingMonth
 from utils import calculation
+from utils.utils import Utils
 
 REDUCTION_LEVELS = [0, 5, 10, 15, 20, 25, 30, 40]
 HK_TAXI_TRIP = {'multiplicand': 0.157, 'from': 'Hong Kong Airport', 'to': 'Times Square'}
@@ -85,13 +86,10 @@ def calulcate_accumulated_saving(co2_unit_code, money_unit_code, co2_unit_rates,
 
 	return {'co2': total_co2_saving, 'money': total_money_saving}
 
-@permission_required
-def progress_view(request, system_code=None):
-	systems_info = System.get_systems_info(system_code, request.user.system.code)
-
-	current_system = systems_info['systems'][0]
+def __calculate_progress_data(systems):
+	current_system = systems[0]
 	sources = SourceManager.get_sources(current_system)
-	need_calculate_systems = System.assign_source_under_system(systems_info['systems'], sources)
+	need_calculate_systems = System.assign_source_under_system(systems, sources)
 
 	grouped_baselines = BaselineUsage.get_baselines_for_systems([system.id for system in need_calculate_systems.keys()])
 
@@ -147,21 +145,33 @@ def progress_view(request, system_code=None):
 			first_day_tz = system.timezone
 	first_day_record = first_day_record.astimezone(pytz.timezone(first_day_tz))
 
-	m = systems_info
-	m['percengate_change'] = (total_baseline_co2_consumption-last_12_months_co2_consumption)/total_baseline_co2_consumption*100.0
-	m['total_co2_saving'] = int(total_co2_saving/1000)
-	m['total_money_saving'] = total_money_saving
-	m['first_day_record'] = first_day_record
+	result = {}
+	result['last_12_months_co2_consumption_accurate'] = last_12_months_co2_consumption
+	result['percengate_change'] = (total_baseline_co2_consumption-last_12_months_co2_consumption)/total_baseline_co2_consumption*100.0
+	result['total_co2_saving'] = int(total_co2_saving/1000)
+	result['total_money_saving'] = total_money_saving
+	result['first_day_record'] = first_day_record
 
 	archived_level = REDUCTION_LEVELS[0]
 	target_level = REDUCTION_LEVELS[1]
 	for level_idx, level in enumerate(REDUCTION_LEVELS):
-		if m['percengate_change'] >= level:
+		if result['percengate_change'] >= level:
 			archived_level = level
 			target_level = REDUCTION_LEVELS[min(level_idx+1, len(REDUCTION_LEVELS)-1)]
-	m['archived_level'] = archived_level
-	m['target_level'] = target_level
+	result['archived_level'] = archived_level
+	result['target_level'] = target_level
 
+	return result
+
+@permission_required
+def progress_view(request, system_code=None):
+	systems_info = System.get_systems_info(system_code, request.user.system.code)
+	result = __calculate_progress_data(systems_info['systems'])
+	current_system = systems_info['systems'][0]
+	last_12_months_co2_consumption = result['last_12_months_co2_consumption_accurate']
+
+	m = systems_info
+	m.update(result)
 	m['last_12_months_co2_consumption'] = int(last_12_months_co2_consumption/1000)
 	m['elephant_num'] = int(round(last_12_months_co2_consumption*0.0033))
 	m['tennis_court_num'] = int(round(last_12_months_co2_consumption*0.0000246))
@@ -173,3 +183,11 @@ def progress_view(request, system_code=None):
 	}
 
 	return render_to_response('progress.html', m)
+
+@permission_required
+def progress_data_view(request, system_code=None):
+	systems = System.get_systems_within_root(system_code)
+	result = __calculate_progress_data(systems)
+	del result['first_day_record']
+
+	return Utils.json_response(result)

@@ -155,6 +155,6 @@ Utils.formatWithCommas = function (val) {
 }
 
 Utils.fixed1DecIfLessThan10 = function(val) {
-	var numOfDec = (val < 10) ? 1 : 0;
+	var numOfDec = (Math.abs(val) < 10) ? 1 : 0;
 	return val.toFixed(numOfDec);
 }
