@@ -1084,12 +1084,12 @@ ReportGenerator.prototype.generateCalendarReport = function(targetSel, combinedR
 	this._fillInComparePercent(targetSel+" .compare-last-same-period", lastSamePeriodUsage, averageUsage, "same period last year");
 
 	if (lowestDt !== null) {
-		targetContainer.find(".lowest-usage-val").text(Utils.formatWithCommas(lowestUsage.toFixed(0))+" kWh");
+		targetContainer.find(".lowest-usage-val").text(Utils.formatWithCommas(lowestUsage.toFixed(0)));
 		targetContainer.find(".lowest-usage-date").text(lowestDt.format('D MMM YYYY'));
 	}
 	
 	if (highestDt !== null) {
-		targetContainer.find(".highest-usage-val").text(Utils.formatWithCommas(highestUsage.toFixed(0))+" kWh");
+		targetContainer.find(".highest-usage-val").text(Utils.formatWithCommas(highestUsage.toFixed(0)));
 		targetContainer.find(".highest-usage-date").text(highestDt.format('D MMM YYYY'));
 	}
 
