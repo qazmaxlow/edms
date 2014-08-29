@@ -70,7 +70,6 @@ $(function() {
 			url: "",
 			data: {'source_infos': JSON.stringify(sourceInfos)},
 		}).done(function(data) {
-			console.log(data);
 			if (data.success) {
 				parent.postMessage("closeBPopup", "*");
 			}

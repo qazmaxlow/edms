@@ -1,10 +1,13 @@
 import json
+import pytz
+import datetime
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import ensure_csrf_cookie
 from system.models import System
 from egauge.manager import SourceManager
 from egauge.models import Source
+from baseline.models import BaselineUsage
 from utils.utils import Utils
 
 CAN_UPDATE_SOURCE_FIELDS = ['name', 'xml_url', 'system_code', 'system_path', 'd_name', 'd_name_tc', 'order']
@@ -74,3 +77,30 @@ def edit_sources_view(request, system_code=None):
 		Source.objects.insert(will_insert_sources)
 
 		return Utils.json_response({'success': True})
+
+@user_passes_test(lambda user: user.is_superuser, login_url='/admin/')
+def add_multi_baseline_view(request):
+	system_id = request.POST.get('system_id')
+	system = System.objects.get(id=system_id)
+	system_timezone = pytz.timezone(system.timezone)
+	will_insert_baselines = []
+	for input_idx in xrange(1,13):
+		if input_idx == 12:
+			start_dt = system_timezone.localize(
+				datetime.datetime.strptime(request.POST.get('start_dt_12'), '%m/%d/%Y'))
+			end_dt = system_timezone.localize(
+				datetime.datetime.strptime(request.POST.get('end_dt_12'), '%m/%d/%Y'))
+		else:
+			start_dt = system_timezone.localize(
+				datetime.datetime.strptime(request.POST.get('start_dt_%d'%input_idx), '%m/%d/%Y'))
+			end_dt = system_timezone.localize(
+				datetime.datetime.strptime(request.POST.get('start_dt_%d'%(input_idx+1)), '%m/%d/%Y'))
+			end_dt -= datetime.timedelta(days=1)
+
+		usage = float(request.POST.get('usage_%d'%input_idx))
+		baseline_usage = BaselineUsage(system_id=system_id, start_dt=start_dt, end_dt=end_dt, usage=usage)
+		will_insert_baselines.append(baseline_usage)
+
+	BaselineUsage.objects.bulk_create(will_insert_baselines)
+
+	return Utils.json_response({'success': True})
