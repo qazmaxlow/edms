@@ -19,74 +19,62 @@
 
 {% block page_content %}
 
-<div class="saving-header"><h2>Over the past 12 months you have emitted<span class="{% if percengate_change >= 0 %}positive-saving{% else %}negative-saving{% endif %}"> {{percengate_change|abs_float|round_if_larger_than_10}}<span>%</span> {% if percengate_change >= 0 %}LESS{% else %}MORE{% endif %} </span>than your baseline</h2></div>
-<hr>
-
-<div id="saving-container" style="background-image:url('{% static 'images/progress/factory-bg.png' %}');">
-	<div id="saving-block">
-		<div id="co2-saving-info" class="saving-info {% if total_co2_saving >= 0 %}positive-saving{% else %}negative-saving{% endif %}">
-			<img src="{% static 'images/progress/co2.png' %}">
-			<div>Which is equivalent to<br><span>{{total_co2_saving|abs_int|intcomma}} tons</span> of CO<sub>2</sub><br>emissions {% if total_co2_saving >= 0 %}reduced{% else %}increase{% endif %},<br>since {{first_day_record|date:"jS M Y"}}</div>
+<div class="main-saving-container">
+	<div class="saving-header">
+		<div class="saving-consumption">
+			<h2>Over the past 12 months</h2>
+			<div class="{% if percengate_change >= 0 %}positive-saving{% else %}negative-saving{% endif %}"> {{percengate_change|abs_float|round_if_larger_than_10}}<span class="saving-percent-symbol">%</span> {% if percengate_change >= 0 %}Energy Reduction{% else %}More Energy{% endif %}</div>
 		</div>
-
-		<div class="separate-line"></div>
 
 		<div id="target-block">
-			<div {% ifequal archived_level 0 %}style="visibility: hidden;"{% endifequal %}>
-				<img src="{% static 'images/progress/award.png' %}">
-				<div id="archived_percentage">{{archived_level}}%</div>
+			{% ifequal archived_level 0 %}
+			<div class="medal-block work-harder-medal">
+				<img src="{% static 'images/progress/empty-medal.png' %}">
+				<div id="archived_percentage">{{archived_level}}<span class="saving-percent-symbol">%</span></div>
+				<div class="medal-text">Reduction<br>achieved</div>
 			</div>
-			<div class="next-target-text">Next target would be</div>
-			<div class="next-target-percent">{{target_level}}% REDUCTION</div>
+			{% else %}
+			<div class="medal-block">
+				<img src="{% static 'images/progress/medal.png' %}">
+				<div id="archived_percentage">{{archived_level}}<span class="saving-percent-symbol">%</span></div>
+				<div class="medal-text">Reduction<br>achieved</div>
+			</div>
+			{% endifequal %}
+			<div class="target-text-container">
+				<div class="next-target-text">Next target</div>
+				<div class="next-target-percent">{{target_level}}<span class="saving-percent-symbol">%</span> REDUCTION</div>
+			</div>
 		</div>
-
-		<div class="separate-line"></div>
-
-		<div id="money-saving-info" class="saving-info {% if total_money_saving >= 0 %}positive-saving{% else %}negative-saving{% endif %}">
-			<img src="{% static 'images/progress/money.png' %}">
-			<div>{% if total_money_saving >= 0 %}Saving up to{% else %}Extra spending up to{% endif %}<br><span>${{total_money_saving|abs_int|intcomma}}</span></div>
-		</div>
-
 	</div>
-</div>
 
-<div id="carbon-footprint-container">
-	<div id="carbon-footprint-bar">
-		<img src="{% static 'images/progress/carbon-footprint-bar.png' %}">
-		<div>Total carbon Footprint</div>
+	<div>
+		<img src="{% static 'images/progress/factory-bg-top.png' %}">
 	</div>
-	<div id="carbon-footprint-desc"><p><span>{{last_12_months_co2_consumption}} tons</span> of CO<sub>2</sub> were emitted over the last 12 months</p></div>
 
-	<div id="carbon-footprint-block">
-		<div id="tennis-courts-info" class="footprint-info">
-			<div><img src="{% static 'images/progress/arrow-down.png' %}"></div>
-			<div><img src="{% static 'images/progress/tennis.png' %}"></div>
-			<div>
-				<span>{{tennis_court_num}} tennis courts</span><br>filled with solar panels would<br>be needed to cancel out<br>
-				this carbon footparint
+	<div class="cumulative-saving-container {% if total_co2_saving >= 0 %}positive-saving{% else %}negative-saving{% endif %}">
+		<div class="cumulative-saving-title">Cumulative savings</div>
+		<div class="cumulative-saving-info">
+			<div class="cumulative-saving-block">
+				<img src="{% static 'images/progress/co2.png' %}">
+				<div class="cumulative-text"><span class="cumulative-val">{{total_co2_saving|abs_int|intcomma}}</span> tons of CO<sub>2</sub></div>
+			</div>
+			<img class="equal-symbol" src="">
+			<div class="cumulative-saving-block">
+				<img src="{% static 'images/progress/elephant.png' %}">
+				<div class="cumulative-text"><span class="cumulative-val">{{elephant_num|intcomma}}</span> elephants</div>
+			</div>
+			<div class="cumulative-separator"></div>
+			<div class="cumulative-saving-block">
+				<img src="{% static 'images/progress/money.png' %}">
+				<div class="cumulative-text"><span class="cumulative-val">${{total_money_saving|abs_int|intcomma}}</span></div>
+			</div>
+			<img class="equal-symbol" src="">
+			<div class="cumulative-saving-block">
+				<img src="{% static 'images/progress/taxi.png' %}">
+				<div class="cumulative-text"><span class="cumulative-val">{{taxi_trip.count|intcomma}}</span> taxi trips</div>
+				<div class="taxi-desc">from {{taxi_trip.from}} to {{taxi_trip.to}}</div>
 			</div>
 		</div>
-
-		<div class="separate-line"></div>
-
-		<div id="elephants-info" class="footprint-info">
-			<div><img src="{% static 'images/progress/arrow-down.png' %}"></div>
-			<div><img src="{% static 'images/progress/elephant.png' %}"></div>
-			<div>The weight of<br><span>{{elephant_num}} elephants</span></div>
-		</div>
-
-		<div class="separate-line"></div>
-
-		<div id="taxi-info" class="footprint-info">
-			<div><img src="{% static 'images/progress/arrow-down.png' %}"></div>
-			<div><img src="{% static 'images/progress/taxi.png' %}"></div>
-			<div>
-				The emissions of<br><span>{{taxi_trip.count}} taxi trips</span><br>
-				from {{taxi_trip.from}}<br>
-				to {{taxi_trip.to}}
-			</div>
-		</div>
-
 	</div>
 </div>
 

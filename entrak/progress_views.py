@@ -174,7 +174,6 @@ def progress_view(request, system_code=None):
 	m.update(result)
 	m['last_12_months_co2_consumption'] = int(last_12_months_co2_consumption/1000)
 	m['elephant_num'] = int(round(last_12_months_co2_consumption*0.0033))
-	m['tennis_court_num'] = int(round(last_12_months_co2_consumption*0.0000246))
 	taxi_trip_info = TAXI_TRIP_INFO.get(current_system.city, HK_TAXI_TRIP)
 	m['taxi_trip'] = {
 		'count': int(round(last_12_months_co2_consumption*taxi_trip_info['multiplicand'])),
