@@ -56,45 +56,45 @@ def init_test_system():
 def init_unit_category():
 	unit_cats = []
 	unit_cats.append(UnitCategory(code='kwh', name='kWh', order=0,
-		short_desc='kWh', img_off='kwh.png', img_on='kwh-hover.png', bg_img='burger-bg.png',
+		short_desc='kWh', img_off='kwh.png', img_on='kwh-hover.png', bg_img='kwh-bg.png',
 		city='all'))
 	unit_cats.append(UnitCategory(code='money', name='HK$', short_desc='HK$', order=1,
-		img_off='money.png', img_on='money-hover.png', bg_img='burger-bg.png', city='hk',
+		img_off='money.png', img_on='money-hover.png', bg_img='money-bg.png', city='hk',
 		has_detail_rate=True, is_suffix=False))
 	unit_cats.append(UnitCategory(code='money', name='SG$', short_desc='SG$', order=1,
-		img_off='money.png', img_on='money-hover.png', bg_img='burger-bg.png', city='sg',
+		img_off='money.png', img_on='money-hover.png', bg_img='money-bg.png', city='sg',
 		has_detail_rate=True, is_suffix=False))
 	unit_cats.append(UnitCategory(code='co2', name='kg CO2', short_desc='kg CO2', order=2,
-		img_off='co2.png', img_on='co2-hover.png', bg_img='burger-bg.png', city='all',
+		img_off='co2.png', img_on='co2-hover.png', bg_img='co2-bg.png', city='all',
 		has_detail_rate=True))
 	unit_cats.append(UnitCategory(code='burger', name='burgers', short_desc='burgers', order=3,
 		img_off='burger.png', img_on='burger-hover.png', bg_img='burger-bg.png', city='all',
 		global_rate=2.15))
 	unit_cats.append(UnitCategory(code='noodle', name='bowls of noodle',
 		short_desc='bowls of noodle', order=4, img_off='ramen.png', img_on='ramen-hover.png',
-		bg_img='burger-bg.png', city='all', global_rate=0.52))
+		bg_img='ramen-bg.png', city='all', global_rate=0.52))
 	unit_cats.append(UnitCategory(code='pineapplebuns', name='pineapple buns', short_desc='pineapple buns', order=5,
-		img_off='bun.png', img_on='bun-hover.png', bg_img='burger-bg.png', city='all', global_rate=3.3))
+		img_off='bun.png', img_on='bun-hover.png', bg_img='bun-bg.png', city='all', global_rate=3.3))
 	unit_cats.append(UnitCategory(code='icecream', name='ice cream cones', short_desc='ice cream cones', order=6,
-		img_off='icecream.png', img_on='icecream-hover.png', bg_img='burger-bg.png', city='all', global_rate=0.2))
+		img_off='icecream.png', img_on='icecream-hover.png', bg_img='icecream-bg.png', city='all', global_rate=0.2))
 	unit_cats.append(UnitCategory(code='taxitrip', name='taxi trips between HK Airport and Times Square',
 		short_desc='taxi trips', order=7, img_off='taxi.png', img_on='taxi-hover.png',
-		bg_img='burger-bg.png', city='hk', global_rate=0.0325))
+		bg_img='taxi-bg.png', city='hk', global_rate=0.0325))
 	unit_cats.append(UnitCategory(code='taxitrip', name='taxi trips between Changi Airport and Marina Bay Sands',
 		short_desc='taxi trips', order=7, img_off='taxi.png', img_on='taxi-hover.png',
-		bg_img='burger-bg.png', city='sg', global_rate=0.065))
+		bg_img='taxi-bg.png', city='sg', global_rate=0.065))
 	unit_cats.append(UnitCategory(code='biketrip', name='bike trips between HK Airport and Times Square',
 		short_desc='bike trips', order=8, img_off='bike.png', img_on='bike-hover.png',
-		bg_img='burger-bg.png', city='hk', global_rate=1.87))
+		bg_img='bike-bg.png', city='hk', global_rate=1.87))
 	unit_cats.append(UnitCategory(code='biketrip', name='bike trips between Changi Airport and Marina Bay Sands',
 		short_desc='bike trips', order=8, img_off='bike.png', img_on='bike-hover.png',
-		bg_img='burger-bg.png', city='sg', global_rate=3.74))
+		bg_img='bike-bg.png', city='sg', global_rate=3.74))
 	unit_cats.append(UnitCategory(code='walkingtrip', name='walking trips between HK Airport and Times Square',
 		short_desc='walking trips', order=9, img_off='walking.png', img_on='walking-hover.png',
-		bg_img='burger-bg.png', city='hk', global_rate=0.357))
+		bg_img='walking-bg.png', city='hk', global_rate=0.357))
 	unit_cats.append(UnitCategory(code='walkingtrip', name='walking trips between Changi Airport and Marina Bay Sands',
 		short_desc='walking trips', order=9, img_off='walking.png', img_on='walking-hover.png',
-		bg_img='burger-bg.png', city='sg', global_rate=0.714))
+		bg_img='walking-bg.png', city='sg', global_rate=0.714))
 	UnitCategory.objects.bulk_create(unit_cats)
 
 def init_test_unit_rates():

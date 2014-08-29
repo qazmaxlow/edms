@@ -27,7 +27,7 @@ class System(models.Model):
 	last_update = models.DateTimeField(auto_now=True, blank=True, null=True)
 	lat = models.FloatField(default=0)
 	lng = models.FloatField(default=0)
-	city = models.CharField(max_length=200)
+	city = models.CharField(max_length=200, default='hk')
 	timezone = models.CharField(max_length=50, default=SOURCE_TZ_HK)
 	population = models.PositiveIntegerField(default=1)
 	first_record = models.DateTimeField()

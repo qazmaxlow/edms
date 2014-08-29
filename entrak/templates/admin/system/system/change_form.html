@@ -5,8 +5,43 @@
 {% block extrahead %}
 {{ block.super }}
 
-{% if change %}
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+
+<script type="text/javascript">
+$(function() {
+	var pathInputEle = $('input[name="path"]');
+	pathInputEle.prop('readonly', true);
+	var selectEle = $('<select class="path-select-picker"><option>None</option></select>');
+	{% for system in can_append_to_systems %}
+	selectEle.append('<option code="{{system.code}}" path="{{system.path}}">{{system.full_name}}</option>');
+	{% endfor %}
+	pathInputEle.after(selectEle);
+	selectEle.change(function () {
+		var selectedOption = $(this).find('option:selected');
+		var parentCode = selectedOption.attr('code');
+		if (parentCode === undefined) {
+			pathInputEle.val('');
+		} else {
+			var parentPath = selectedOption.attr('path');
+			var generatedPath;
+			if (parentPath == "") {
+				generatedPath = ',' + parentCode + ',';
+			} else {
+				generatedPath = parentPath + parentCode + ',';
+			}
+			pathInputEle.val(generatedPath);
+		}
+	});
+
+	{% if original.path %}
+	var defaultPath = "{{original.path}}".split(',').filter(function(value){return value!==''});
+	var selectedParentCode = defaultPath.pop();
+	selectEle.find('option[code="' + selectedParentCode + '"]').prop('selected', true);
+	{% endif %}
+});
+</script>
+
+{% if change %}
 <script src="{% static 'js/jquery.bpopup.min.js' %}"></script>
 
 <script type="text/javascript">
@@ -49,10 +84,7 @@ $(function() {
 {% block extrastyle %}
 {{ block.super }}
 
-{% if change %}
 <link rel="stylesheet" type="text/css" href="{% static "css/system-admin.css" %}" />
-{% endif %}
-
 {% endblock %}
 
 {% block object-tools-items %}
