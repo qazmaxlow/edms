@@ -16,6 +16,7 @@
 <script src="{% static 'js/jquery.bpopup.min.js' %}"></script>
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
+<script src="{% static 'js/moment.min.js' %}"></script>
 
 <script type="text/javascript">
 $(function() {
@@ -26,7 +27,14 @@ $(function() {
 		shortcutPopup = $('.shortcut-form-container').bPopup();
 	});
 
-	$( ".shortcut-form .dt-input" ).datepicker();
+	$(".shortcut-form .dt-input").datepicker({defaultDate: "-1y"});
+	$(".shortcut-form .dt-input:eq(0)").datepicker('option', 'onSelect', function() {
+		var firstRowDt = moment($(this).datepicker('getDate'));
+		for (var i=1; i<13; i++) {
+			var defaultDt = moment(firstRowDt).add('M', i);
+			$(".shortcut-form .dt-input:eq("+i+")").datepicker('option', 'defaultDate', defaultDt.toDate());
+		}
+	});
 
 	$('.shortcut-form-save-btn').click(function() {
 		var postData = {};
@@ -34,8 +42,6 @@ $(function() {
 		$('.shortcut-form input[type="text"], .shortcut-form input[type="number"]').each(function() {
 			postData[$(this).attr('name')] = $(this).val();
 		});
-
-		console.log(postData);
 
 		$.ajax({
 			type: "POST",
