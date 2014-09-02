@@ -33,6 +33,7 @@ $(function() {
 
 	report.reportGenerator = new ReportGenerator(report.entrakSystem.systemTree, report.timezone,
 		report.currentReportType);
+	report.reportGenerator.isPdf = true;
 	report.reportGenerator.updateDtInfo(report.currentDt, report.customMonthEndDt);
 
 	$(".report-name").text(report.reportGenerator.genReportName());

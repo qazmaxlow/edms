@@ -126,7 +126,9 @@
 				<div class="donut-center-text">kWh</div>
 			</div>
 			<div class="key-stat-percent-separator"></div>
-			<div class="donut-legend-container"></div>
+			{% block donut_legend_container %}
+			<div class="donut-legend-container donut-legend-container-center"></div>
+			{% endblock %}
 		</div>
 	</div>
 </div>

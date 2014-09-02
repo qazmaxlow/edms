@@ -8,6 +8,7 @@ function ReportGenerator(systemTree, timezone, reportType) {
 	this.sumUpUsages = null;
 	this.currentDt = null;
 	this.currentEndDt = null;
+	this.isPdf = false;
 
 	var firstRecordDt = moment.unix(this.systemTree.data.firstRecord).tz(this.timezone);
 	if (firstRecordDt.date() === 1) {
@@ -503,7 +504,12 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 
 	var keySubInfoTemplate = $("#key-percent-sub-info-template").html();
 	Mustache.parse(keySubInfoTemplate);
-	var legendContainer = $('.donut-legend-container');
+	var legendContainer;
+	if (this.isPdf) {
+		legendContainer = $('.donut-legend-container-left');
+	} else {
+		legendContainer = $('.donut-legend-container-center');
+	}
 	legendContainer.empty();
 	var alreadyInsertOther = false;
 	$.each(transformedDatas, function(dataIdx, dataInfo) {
@@ -532,6 +538,11 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 
 			templateInfo.color = ReportGenerator.OTHER_INFO_COLOR;
 			templateInfo.extraClass = 'other-sub-info';
+		}
+
+		if (reportGenThis.isPdf
+			&& ($('.donut-legend-container-left .key-percent-sub-info').length >= 10) ) {
+			legendContainer = $('.donut-legend-container-right');
 		}
 
 		var subInfoHtml = Mustache.render(keySubInfoTemplate, templateInfo);
