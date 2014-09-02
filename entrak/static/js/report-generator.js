@@ -23,8 +23,10 @@ ReportGenerator.REPORT_TYPE_QUARTER = 'quarter';
 ReportGenerator.REPORT_TYPE_CUSTOM_MONTH = 'custom-month';
 ReportGenerator.REPORT_TYPE_WEEK = 'week';
 
-ReportGenerator.MAX_PERCENTAGE_PIECE = 5;
-ReportGenerator.DONUT_COLORS = ['#5DB9CF', '#814864', '#CF498D', '#807647', '#CFB948'];
+ReportGenerator.MAX_PERCENTAGE_VALUE = 5;
+ReportGenerator.DONUT_COLORS = ['#68C0D4', '#8C526F', '#D5C050', '#8B8250', '#5759A7', '#6EC395',
+	'#EE9646', '#EE5351', '#178943', '#BA1E6A', '#045A6F', '#0298BB'];
+ReportGenerator.OTHER_PERCENT_COLOR = '#D55398'
 ReportGenerator.OTHER_INFO_COLOR = '#000000';
 ReportGenerator.FIRST_SPLIT_PIE_COLOR = '#7ACB39';
 ReportGenerator.SECOND_SPLIT_PIE_COLOR = '#3F952C';
@@ -90,7 +92,6 @@ ReportGenerator.SUB_INFO_PLOT_OPTIONS = {
 		backgroundColor: "#F4F3F4",
 	},
 	yaxis: {
-		tickLength: 0,
 		font: {
 			size: 10,
 			weight: "bold",
@@ -356,21 +357,21 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 	$("#current-money-usage").text(Utils.formatWithCommas("$ " + totalMoneyUsage.toFixed(0)));
 
 	var savedEnergyPercentSuffix, savedCo2SubText, savedMoneySubText,
-		carImpactSubText, forestImpactSubText, elephantImpactSubText;
+		carImpactSubText, forestImpactSubText, pandaImpactSubText;
 	if (reportGenThis.savingInfo.energy >= 0) {
 		savedEnergyPercentSuffix = "less";
 		savedCo2SubText = "of CO<sub>2</sub> reduced";
 		savedMoneySubText = "in savings";
 		carImpactSubText = "taken off the road for a ";
 		forestImpactSubText = "of tropical rainforest protected";
-		elephantImpactSubText = "Reduced CO<sub>2</sub> emissions equal to the weight of";
+		pandaImpactSubText = "Reduced CO<sub>2</sub> emissions equal to the weight of";
 	} else {
 		savedEnergyPercentSuffix = "more";
 		savedCo2SubText = "of CO<sub>2</sub> increased";
 		savedMoneySubText = "extra spending";
 		carImpactSubText = "more on the road for a ";
 		forestImpactSubText = "of tropical rainforest cut down";
-		elephantImpactSubText = "Extra CO<sub>2</sub> emissions equal to the weight of";
+		pandaImpactSubText = "Extra CO<sub>2</sub> emissions equal to the weight of";
 	}
 	var savedEnergyText = Utils.formatWithCommas(Math.abs(Utils.fixed1DecIfLessThan10(reportGenThis.savingInfo.energy))) + "% ";
 	savedEnergyText += savedEnergyPercentSuffix;
@@ -400,183 +401,141 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 	var co2InForest = Utils.formatWithCommas(Math.abs((reportGenThis.savingInfo.co2*0.016).toFixed(0)));
 	$("#forest-impact").text(co2InForest + " m²");
 	$("#forest-impact-subtext").text(forestImpactSubText);
-	var co2InElephant = Utils.formatWithCommas(Math.abs((reportGenThis.savingInfo.co2*0.00033).toFixed(0)));
-	$("#elephant-impact").text(co2InElephant + " elephants");
-	$("#elephant-impact-subtext").html(elephantImpactSubText);
+	var co2InElephant = Utils.formatWithCommas(Math.abs((reportGenThis.savingInfo.co2*0.00667).toFixed(0)));
+	$("#panda-impact").text(co2InElephant + " pandas");
+	$("#panda-impact-subtext").html(pandaImpactSubText);
+
+	var transformedDatas = [];
+	var energyPercentSum = 0;
+	$.each(reportGenThis.groupedSourceInfos, function(infoIdx, info) {
+		var dataInfo = {
+			totalEnergy: info.currentTotalEnergy,
+			co2Val: info.currentTotalCo2,
+			moneyVal: info.currentTotalMoney
+		};
+		dataInfo.name = (info.systemCode === reportGenThis.systemTree.data.code) ? info.sourceName : info.system.data.name;
+		if (infoIdx < reportGenThis.groupedSourceInfos.length-1) {
+			dataInfo.energyPercent = parseFloat(((info.currentTotalEnergy/totalEnergyUsage)*100).toFixed(1));
+			energyPercentSum += dataInfo.energyPercent;
+		} else {
+			dataInfo.energyPercent = parseFloat((100-energyPercentSum).toFixed(1));
+		}
+		transformedDatas.push(dataInfo);
+	});
+
+	transformedDatas.sort(function(a, b) {
+		return b.totalEnergy-a.totalEnergy;
+	});
 
 	var keyRowTemplate = $("#key-statistics-row-template").html();
 	Mustache.parse(keyRowTemplate);
 
 	var keyStatSubDataContainer = $("#key-statistic-sub-data");
 	keyStatSubDataContainer.empty();
-	$.each(reportGenThis.groupedSourceInfos, function(idx, info) {
+	$.each(transformedDatas, function(dataIdx, dataInfo) {
 		var templateInfo = {
-			energyVal: info.currentTotalEnergy,
-			co2Val: info.currentTotalCo2,
-			moneyVal: info.currentTotalMoney
+			energyVal: dataInfo.totalEnergy,
+			co2Val: dataInfo.co2Val,
+			moneyVal: dataInfo.moneyVal
 		};
 		$.each(templateInfo, function(key, value) {
 			templateInfo[key] = Utils.formatWithCommas(value.toFixed(0));
 		});
 
-		if (info.systemCode === reportGenThis.systemTree.data.code) {
-			templateInfo.usageTypeName = info.sourceName;
-			templateInfo.order = info.sourceOrder;
-		} else {
-			templateInfo.usageTypeName = info.system.data.name;
-			templateInfo.order = -1;
+		templateInfo.usageTypeName = dataInfo.name;
+
+		if (dataInfo.energyPercent < ReportGenerator.MAX_PERCENTAGE_VALUE) {
+			templateInfo.extraClass = 'other-key-statistics-row';
 		}
 
 		var rowHtml = Mustache.render(keyRowTemplate, templateInfo);
 		keyStatSubDataContainer.append(rowHtml);
 	});
 
-	keyStatSubDataContainer.find(">div").tsort(
-		'span.usage-type-name', {attr: 'order'},
-		'span.usage-type-name', {order:'asc'});
+	var plotData = [];
+	var otherPercent = 0;
+	$.each(transformedDatas, function(dataIdx, dataInfo) {
+		if (dataInfo.energyPercent >= ReportGenerator.MAX_PERCENTAGE_VALUE) {
+			var matchColor = ReportGenerator.DONUT_COLORS[dataIdx%ReportGenerator.DONUT_COLORS.length];
+			plotData.push({
+				label: dataInfo.energyPercent,
+				data: dataInfo.energyPercent,
+				color: matchColor,
+			});
+		} else {
+			otherPercent += dataInfo.energyPercent;
+		}
+	});
+	var otherPercentIdx = null;
+	if (otherPercent !== 0) {
+		otherPercentIdx = plotData.length;
+		plotData.push({
+			label: otherPercent,
+			data: otherPercent,
+			color: ReportGenerator.OTHER_PERCENT_COLOR,
+		});
+	}
+
+	$.plot("#energy-donut", plotData, {
+		series: {
+			pie: {
+				show: true,
+				radius: 0.6,
+				innerRadius: 0.3,
+				stroke: {
+					width: 0
+				},
+				label: {
+					radius: 0.85,
+					formatter: function(label, series) {
+						return '<span>' + label + '</span><span class="pie-text-percent">%</span>';
+					}
+				}
+			}
+		},
+		legend: {
+			show: false,
+		}
+	});
+	if (otherPercentIdx !== null) {
+		$('.pieLabel:eq('+otherPercentIdx+')').css('color', ReportGenerator.OTHER_PERCENT_COLOR);
+	}
 
 	var keySubInfoTemplate = $("#key-percent-sub-info-template").html();
 	Mustache.parse(keySubInfoTemplate);
-
-	var transformedDatas = [];
-	var energyPercentSum = 0;
-	var co2PercentSum = 0;
-	var moneyPercentSum = 0;
-	$.each(reportGenThis.groupedSourceInfos, function(infoIdx, info) {
-		var dataInfo = {
-			totalEnergy: info.currentTotalEnergy,
-			totalCo2: info.currentTotalCo2,
-			totalMoney: info.currentTotalMoney};
-		dataInfo.name = (info.systemCode === reportGenThis.systemTree.data.code) ? info.sourceName : info.system.data.name;
-		if (infoIdx < reportGenThis.groupedSourceInfos.length-1) {
-			dataInfo.energyPercent = parseFloat(((info.currentTotalEnergy/totalEnergyUsage)*100).toFixed(1));
-			dataInfo.co2Percent = parseFloat(((info.currentTotalCo2/totalCo2Usage)*100).toFixed(1));
-			dataInfo.moneyPercent = parseFloat(((info.currentTotalMoney/totalMoneyUsage)*100).toFixed(1));
-			energyPercentSum += dataInfo.energyPercent;
-			co2PercentSum += dataInfo.co2Percent;
-			moneyPercentSum += dataInfo.moneyPercent;
+	var legendContainer = $('.donut-legend-container');
+	legendContainer.empty();
+	var alreadyInsertOther = false;
+	$.each(transformedDatas, function(dataIdx, dataInfo) {
+		var templateInfo = {
+			name: dataInfo.name,
+			percentVal: dataInfo.energyPercent,
+		};
+		if (dataInfo.totalEnergy >= ReportGenerator.MAX_PERCENTAGE_VALUE) {
+			var matchColor = ReportGenerator.DONUT_COLORS[dataIdx%ReportGenerator.DONUT_COLORS.length];
+			templateInfo.color = matchColor;
+			templateInfo.namePrefix = '• ';
 		} else {
-			dataInfo.energyPercent = parseFloat((100-energyPercentSum).toFixed(1));
-			dataInfo.co2Percent = parseFloat((100-co2PercentSum).toFixed(1));
-			dataInfo.moneyPercent = parseFloat((100-moneyPercentSum).toFixed(1));
-		}
-		transformedDatas.push(dataInfo);
-	});
+			if (!alreadyInsertOther) {
+				var otherTemplateInfo = {
+					color: ReportGenerator.OTHER_PERCENT_COLOR,
+					namePrefix: '• ',
+					name: 'Other',
+					percentVal: otherPercent,
+				};
 
-	var needPlotDonuts = [
-		{
-			donutSel: '#energy-donut',
-			sortVal: "totalEnergy",
-			targetKey: "energyPercent",
-			subInfoContainerSel: '#energy-percent-sub-info',
-			otherInfoContainerSel: '#energy-percent-other-info'
-		},
-		{
-			donutSel: '#co2-donut',
-			sortVal: "totalCo2",
-			targetKey: "co2Percent",
-			subInfoContainerSel: '#co2-percent-sub-info',
-			otherInfoContainerSel: '#co2-percent-other-info'
-		},
-		{
-			donutSel: '#money-donut',
-			sortVal: "totalMoney",
-			targetKey: "moneyPercent",
-			subInfoContainerSel: '#money-percent-sub-info',
-			otherInfoContainerSel: '#money-percent-other-info'
-		},
-	];
-	$.each(needPlotDonuts, function(donutIdx, donutInfo) {
-		var donutSel = donutInfo.donutSel;
-		var targetKey = donutInfo.targetKey;
-		var subInfoContainer = $(donutInfo.subInfoContainerSel);
-		var otherInfoContainer = $(donutInfo.otherInfoContainerSel);
+				var otherInfoHtml = Mustache.render(keySubInfoTemplate, otherTemplateInfo);
+				legendContainer.append(otherInfoHtml);
 
-		subInfoContainer.empty();
-		otherInfoContainer.empty();
-
-		transformedDatas.sort(function(a, b) {
-			return b[donutInfo.sortVal]-a[donutInfo.sortVal];
-		});
-		var plotData = [];
-		if (transformedDatas.length <= ReportGenerator.MAX_PERCENTAGE_PIECE) {
-			$.each(transformedDatas, function(dataIdx, dataInfo) {
-				var matchColor = ReportGenerator.DONUT_COLORS[dataIdx];
-				plotData.push({
-					label: dataInfo[targetKey],
-					data: dataInfo[targetKey],
-					color: matchColor
-				});
-
-				reportGenThis.insertSubInfo(
-					subInfoContainer,
-					keySubInfoTemplate,
-					'•',
-					matchColor,
-					dataInfo.name,
-					dataInfo[targetKey]);
-			})
-
-			otherInfoContainer.parent().hide();
-		} else {
-			var donutSumPercent = 0;
-			for (var i=0; i<ReportGenerator.MAX_PERCENTAGE_PIECE-1; i++) {
-				var matchColor = ReportGenerator.DONUT_COLORS[i];
-				plotData.push({
-					label: transformedDatas[i][targetKey],
-					data: transformedDatas[i][targetKey],
-					color: matchColor
-				});
-				donutSumPercent += transformedDatas[i][targetKey];
-
-				reportGenThis.insertSubInfo(
-					subInfoContainer,
-					keySubInfoTemplate,
-					'•',
-					matchColor,
-					transformedDatas[i].name,
-					transformedDatas[i][targetKey]);
-			}
-			plotData.push({
-				label: parseFloat((100-donutSumPercent).toFixed(1)),
-				data: (100-donutSumPercent),
-				color: ReportGenerator.DONUT_COLORS[ReportGenerator.MAX_PERCENTAGE_PIECE-1]
-			});
-
-			for (var i=(ReportGenerator.MAX_PERCENTAGE_PIECE-1); i<transformedDatas.length; i++) {
-				reportGenThis.insertSubInfo(
-					otherInfoContainer,
-					keySubInfoTemplate,
-					'',
-					ReportGenerator.OTHER_INFO_COLOR,
-					transformedDatas[i].name,
-					transformedDatas[i][targetKey]);
+				alreadyInsertOther = true;
 			}
 
-			otherInfoContainer.parent().show();
+			templateInfo.color = ReportGenerator.OTHER_INFO_COLOR;
+			templateInfo.extraClass = 'other-sub-info';
 		}
 
-		$.plot(donutSel, plotData, {
-			series: {
-				pie: {
-					show: true,
-					innerRadius: 0.38,
-					stroke: {
-						width: 0
-					},
-					label: {
-						radius: 0.92,
-						formatter: function(label, series) {
-							return '<span>' + label + '</span><span class="pie-text-percent">%</span>';
-						}
-					}
-				}
-			},
-			legend: {
-				show: false,
-			}
-		});
-		
+		var subInfoHtml = Mustache.render(keySubInfoTemplate, templateInfo);
+		legendContainer.append(subInfoHtml);
 	});
 }
 
@@ -787,9 +746,9 @@ ReportGenerator.prototype.generateComparePast = function() {
 			$(this).find(".compare-past-bar").css("height", eleHeight*0.9+"%");
 			$(this).find(".compare-past-bar-val").css("bottom", eleHeight*0.9+"%")
 			.text(Utils.formatWithCommas(usageVal.toFixed(0)));
-			$(this).show();
 		} else {
-			$(this).hide();
+			$(this).find(".compare-past-bar").css("height", "0%");
+			$(this).find(".compare-past-bar-val").css("bottom", "0%").text('N/A');
 		}
 	});
 
@@ -963,8 +922,16 @@ ReportGenerator.prototype._insertCalendarSubInfo = function(eleSel, classIdPrefi
 
 	detailContainer.empty();
 
+	var transformedDatas = [];
 	$.each(this.groupedSourceInfos, function(groupIdx, info) {
-		var classIdentifier = classIdPrefix+groupIdx;
+		transformedDatas.push(info);
+	});
+	transformedDatas.sort(function(a, b) {
+		return b[currentUsageKey].average-a[currentUsageKey].average;
+	});
+
+	$.each(transformedDatas, function(dataIdx, info) {
+		var classIdentifier = classIdPrefix+dataIdx;
 		var averageUsage = info[currentUsageKey].average;
 		var compareBeginningInfo = reportGenThis._genSubComparePercentInfo(
 			info[beginningUsageKey].average, averageUsage, beginningDateText);
@@ -998,10 +965,13 @@ ReportGenerator.prototype._insertCalendarSubInfo = function(eleSel, classIdPrefi
 			firstSplitPercent = tempSplitPercent;
 		}
 
+		var name = ('sourceName' in info) ? info.sourceName.toUpperCase() : info.system.data.name.toUpperCase();
+		name = (dataIdx+1) + '. ' + name;
+
 		var templateInfo = {
 			classIdentifier: classIdentifier,
 			typeName: calendarTypeName,
-			name: ('sourceName' in info) ? info.sourceName.toUpperCase() : info.system.data.name.toUpperCase(),
+			name: name,
 			averageUsage: Utils.formatWithCommas(averageUsage.toFixed(0)),
 			compareBeginningClass: compareBeginningInfo.savingClass,
 			compareBeginningPercent: compareBeginningInfo.percentText,

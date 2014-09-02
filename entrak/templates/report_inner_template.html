@@ -1,8 +1,8 @@
 {% load static %}
 
 <script id="key-statistics-row-template" type="x-tmpl-mustache">
-<div class="key-statistics-row">
-	<span class="usage-type-name" order="{% templatetag openvariable %}order{% templatetag closevariable %}">
+<div class="key-statistics-row {% templatetag openvariable %}extraClass{% templatetag closevariable %}">
+	<span class="usage-type-name">
 		{% templatetag openvariable %}usageTypeName{% templatetag closevariable %}</span><span>
 		{% templatetag openvariable %}energyVal{% templatetag closevariable %}</span><span>
 		{% templatetag openvariable %}co2Val{% templatetag closevariable %}</span><span>
@@ -11,9 +11,9 @@
 </script>
 
 <script id="key-percent-sub-info-template" type="x-tmpl-mustache">
-<div class="key-percent-sub-info" style="color: {% templatetag openvariable %}color{% templatetag closevariable %};">
-	<span>{% templatetag openvariable %}bullet{% templatetag closevariable %}</span><span class="sub-info-name">{% templatetag openvariable %}name{% templatetag closevariable %}</span><br>
-	<span class="sub-info-percent">{% templatetag openvariable %}percentVal{% templatetag closevariable %}</span>
+<div class="key-percent-sub-info {% templatetag openvariable %}extraClass{% templatetag closevariable %}" style="color: {% templatetag openvariable %}color{% templatetag closevariable %};">
+	<span class="sub-info-name">{% templatetag openvariable %}namePrefix{% templatetag closevariable %}{% templatetag openvariable %}name{% templatetag closevariable %}</span><br>
+	<span class="sub-info-percent">{% templatetag openvariable %}percentVal{% templatetag closevariable %}%</span>
 </div>
 </script>
 
