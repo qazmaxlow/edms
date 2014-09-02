@@ -14,27 +14,31 @@
 }
 .saving-header>div {
 	display: inline-block;
-	width: 50%;
+	width: 49.9%;
 	height: 120px;
 	vertical-align: top;
 }
 .saving-consumption {
-	background-color: rgba(242, 249, 251, 0.8);
+	background-color: rgba(242, 249, 251, 0.95);
+	border-bottom: 1px solid rgba(156, 207, 218, 0.95);
+	border-right: 1px solid rgba(224,239,242, 0.95);
 }
 .saving-consumption>h2 {
-	padding-left: 30px;
-	padding-top: 55px;
+	padding-top: 40px;
 	font-size: 16pt;
 	color: #354960;
-	font-weight: lighter;
+	font-weight: bold;
+	text-align: center;
 }
 .saving-consumption>div {
-	font-size: 30pt;
+	font-size: 23pt;
 	font-weight: bold;
+	margin-top: 10px;
+	text-align: center;
 }
 
 .saving-percent-symbol {
-	font-size: 20pt;
+	font-size: 16pt;
 }
 
 .saving-consumption .positive-saving {
@@ -46,7 +50,9 @@
 
 #target-block {
 	position: relative;
-	background-color: rgba(212, 111, 192, 0.8);
+	background-color: rgba(249, 244, 240, 0.95);
+	border-bottom: 1px solid rgba(199, 176,155, 0.95);
+	border-right: 1px solid rgba(243,241,233, 0.95);
 }
 #target-block > div {
 	display: inline-block;
@@ -64,9 +70,9 @@
 #archived_percentage {
 	position: absolute;
 	width: 100%;
-	top: 25px;
+	top: 37px;
 	text-align: center;
-	font-size: 42px;
+	font-size: 23px;
 	color: #81D51D;
 	font-weight: bold;
 }
@@ -78,31 +84,42 @@
 	width: 100%;
 	top: 70px;
 	color: #81D51D;
-	font-size: 13pt;
+	font-size: 11pt;
 	text-align: center;
+	line-height: 1.2em;
 }
 .target-text-container {
 	margin-left: 200px;
 	margin-top: 30px;
+	font-weight: bold;
 }
 .next-target-text{
-	font-weight: bold;
 	font-size: 16pt;
 	color: #354960;
+	padding-top: 9px;
+	text-align: center;
 }
 .next-target-percent{
-	padding-top: 8px;
-	font-weight: bold;
-	font-size:20pt;
-	color: #81d51d;
-	width: 230px;
-	margin-left: -5px;
+	padding-top: 10px;
+	font-size: 23pt;
+	color: #81D51D;
+	width: 250px;
+	margin-left: 15px;
 }
 
 .cumulative-saving-container {
 	width: 100%;
 	height: 346px;
 	background-image: url(../images/progress/factory-bg-bottom.png);
+	background-color: rgba(242, 249, 251, 0.95);
+}
+.cumulative-saving-container hr{
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+	border: none;
+	height: 1px;
+	background-color: rgba(212, 229, 233, 0.9);
 }
 .cumulative-saving-info {
 	font-size: 0pt;
@@ -114,21 +131,28 @@
 	text-align: center;
 	margin-left: auto;
 	margin-right: auto;
-	border-bottom: 3px solid #FF0000;
+	border-bottom: 1px solid #e9f2f3;
+	height: 36px;
+	font-size: 16pt;
+	font-weight: bold;
+	padding-top: 10px;
+	color: #354960;
 }
 .cumulative-saving-block {
 	display: inline-block;
 	width: 206px;
 	text-align: center;
 	vertical-align: top;
+	margin-top: 26px;
 }
 .cumulative-text {
 	font-weight: bold;
 	font-size: 16pt;
 	line-height: 1.3em;
+	margin-top: 10px;
 }
 .cumulative-val {
-	font-size: 21pt;
+	font-size: 23pt;
 }
 
 .positive-saving .cumulative-text {
@@ -139,24 +163,28 @@
 }
 
 .equal-symbol {
-	width: 20px;
-	height: 20px;
+	width: 25px;
+	height: 13px;
 	vertical-align: top;
-	margin-top: 50px;
+	margin-top: 90px;
 }
 
 .cumulative-separator {
 	display: inline-block;
 	vertical-align: top;
-	width: 2px;
-	height: 120px;
-	background-color: #FFFF00;
+	width: 1px;
+	height: 210px;
+	background-color: #E0EFF2;
 	margin-top: 30px;
+	border-right: 1px solid #E9F2F3;
 }
 
 .taxi-desc {
-	width: 300px;
-	font-size: 10pt;
+	width: 200px;
+	font-size: 12pt;
 	color: #354960;
-	margin-left: -25%;
+	text-align: center;
+	font-weight: bold;
+	line-height: 1.3em; 
+	margin-top: 2px;
 }

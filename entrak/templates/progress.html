@@ -31,7 +31,7 @@
 			<div class="medal-block work-harder-medal">
 				<img src="{% static 'images/progress/empty-medal.png' %}">
 				<div id="archived_percentage">{{archived_level}}<span class="saving-percent-symbol">%</span></div>
-				<div class="medal-text">Reduction<br>achieved</div>
+				<div class="medal-text">Keep<br>Saving!</div>
 			</div>
 			{% else %}
 			<div class="medal-block">
@@ -53,12 +53,13 @@
 
 	<div class="cumulative-saving-container {% if total_co2_saving >= 0 %}positive-saving{% else %}negative-saving{% endif %}">
 		<div class="cumulative-saving-title">Cumulative savings</div>
+		<hr>
 		<div class="cumulative-saving-info">
 			<div class="cumulative-saving-block">
 				<img src="{% static 'images/progress/co2.png' %}">
 				<div class="cumulative-text"><span class="cumulative-val">{{total_co2_saving|abs_int|intcomma}}</span> tons of CO<sub>2</sub></div>
 			</div>
-			<img class="equal-symbol" src="">
+			<img class="equal-symbol" src="{% static 'images/progress/equal-symbol.png' %}">
 			<div class="cumulative-saving-block">
 				<img src="{% static 'images/progress/elephant.png' %}">
 				<div class="cumulative-text"><span class="cumulative-val">{{elephant_num|intcomma}}</span> elephants</div>
@@ -68,11 +69,13 @@
 				<img src="{% static 'images/progress/money.png' %}">
 				<div class="cumulative-text"><span class="cumulative-val">${{total_money_saving|abs_int|intcomma}}</span></div>
 			</div>
-			<img class="equal-symbol" src="">
+			<img class="equal-symbol" src="{% static 'images/progress/equal-symbol.png' %}">
 			<div class="cumulative-saving-block">
 				<img src="{% static 'images/progress/taxi.png' %}">
-				<div class="cumulative-text"><span class="cumulative-val">{{taxi_trip.count|intcomma}}</span> taxi trips</div>
-				<div class="taxi-desc">from {{taxi_trip.from}} to {{taxi_trip.to}}</div>
+				<div class="cumulative-text">
+					<span class="cumulative-val">{{taxi_trip.count|intcomma}}</span> taxi trips
+					<div class="taxi-desc">from {{taxi_trip.from}} to {{taxi_trip.to}} (cost)</div>
+				</div>
 			</div>
 		</div>
 	</div>
