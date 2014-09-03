@@ -34,8 +34,10 @@
 </script>
 
 <script type="text/javascript">
-SLIDER_PAUSE_M_SECOND = 10000;
+SLIDER_PAUSE_M_SECOND = 7000;
 SCHEDULE_TASK_INTERVAL = 60000;
+SLIDE_TYPE_TIPS = 'tips';
+SLIDE_TYPE_DYNAMIC = 'dynamic';
 
 display = {};
 
@@ -52,6 +54,7 @@ function getProgressData() {
 		url: "../progress_data/",
 		data: {},
 	}).done(function(data) {
+		console.log(data);
 		$('.last-12-month-percent-val').text(Math.abs(Utils.fixed1DecIfLessThan10(data.percengate_change)));
 		var percentText, moneySavingText;
 		if (data.percengate_change >= 0) {
@@ -68,6 +71,16 @@ function getProgressData() {
 			$('.progress-info').removeClass('progress-positive-saving');
 		}
 		$('.last-12-month-percent-text').text(percentText);
+
+		if (data.archived_level === 0) {
+			$('.empty-medal').show();
+			$('.saving-medal').hide();
+		} else {
+			$('.saving-medal').show();
+			$('.empty-medal').hide();
+		}
+		// $('.saving-medal').show();
+		// $('.empty-medal').hide();
 
 		$('.progress-co2-val').text(Utils.formatWithCommas(Math.abs(data.total_co2_saving.toFixed(0))) + ' tons');
 		$('.achieved-percent-val').text(data.archived_level);
@@ -89,27 +102,57 @@ function scheduledTask() {
 	getProgressData();
 }
 
+function changeSlide() {
+	var futureSlideIdx, futureSlideType;
+	var targetArrayKey, targetUsedArrayKey;
+	if (display.currentSlideType === SLIDE_TYPE_DYNAMIC) {
+		targetArrayKey = 'tipsSlideIdxs';
+		targetUsedArrayKey = 'usedTipsSlideIdxs';
+		futureSlideType = SLIDE_TYPE_TIPS;
+	} else {
+		targetArrayKey = 'dynamicSlideIdxs';
+		targetUsedArrayKey = 'usedDynamicSlideIdxs';
+		futureSlideType = SLIDE_TYPE_DYNAMIC;
+	}
+	if (display[targetArrayKey].length === 0) {
+		display[targetArrayKey] = display[targetUsedArrayKey].slice();
+		display[targetUsedArrayKey].length = 0;
+	}
+
+	display[targetArrayKey].sort(function() { return 0.5 - Math.random() });
+	futureSlideIdx = display[targetArrayKey].pop();
+	display[targetUsedArrayKey].push(futureSlideIdx);
+	display.currentSlideType = futureSlideType;
+
+	display.sudoSlider.goToSlide(futureSlideIdx, 1500);
+}
+
 $(function() {
 	display.sourceIds = JSON.parse('{{source_ids}}');
 
 	var tipInfos = [
-		{bgImg: "{% static 'images/tips/ac-ribbon.jpg' %}", title: "Remove a Tube", desc: 'If you have more light than you need in the area, you can remove one light tube from a fixture and save energy', posTop: 200, posLeft: 200, insertBefore: '.graph-info'},
-		{bgImg: "{% static 'images/tips/plugs.jpg' %}", title: "Label Your Plugs & Switch", desc: 'Label the plugs of electtrical device...', posTop: 400, posLeft: 400, insertAfter: '.graph-info'},
+		{bgImg: "{% static 'images/tips/light-tube.jpg' %}", title: "Remove a tube", desc: 'If you have more light than you need in an area, you can remove one light tube from a fixture and save energy!', posTop: 180, posLeft: 360},
+		{bgImg: "{% static 'images/tips/ac-temperature.jpg' %}", title: "Re-assess Air Conditioning’s Temperature", desc: 'After 30 minutes of turning on the AirCon, you should assess whether the temperature is too cold, if so you should adjust the temperature to minimize energy wastage.', posTop: 250, posLeft: 950},
+		{bgImg: "{% static 'images/tips/ac-ribbon.jpg' %}", title: "Put a Ribbon on it", desc: 'Tie a small colored ribbon to the vent of each aircon unit - this makes it easier to tell whether the aircon is on or off, so you don\'t accidentally leave aircon on!', posTop: 250, posLeft: 950},
+		{bgImg: "{% static 'images/tips/light-switch.jpg' %}", title: "Label Your Plugs & Switch", desc: 'Label the plugs of electrical devices - sometime it\'s hard to tell what is what, so this helps you to safely unplug or turn off appliances without worrying about turning off important things!', posTop: 250, posLeft: 170},
+		{bgImg: "{% static 'images/tips/plugs.jpg' %}", title: "Turn off the switch", desc: 'Even if an appliance turned off it still consume 5-10% of energy, if its being plug into the socket. Therefore remember to turn off the socket switch as well!', posTop: 250, posLeft: 170},
 	]
 
+
+	display.dynamicSlideIdxs = [2];
+	display.usedDynamicSlideIdxs = [1];
+	display.tipsSlideIdxs = [];
+	display.usedTipsSlideIdxs = [];
+	display.currentSlideType = SLIDE_TYPE_DYNAMIC;
 
 	var tipsTemplate = $("#tips-template").html();
 	Mustache.parse(tipsTemplate);
 	var sliderContainer = $('.slider-container');
+	var tipStartIdx = display.dynamicSlideIdxs.length + display.usedDynamicSlideIdxs.length + 1;
 	$.each(tipInfos, function(idx, tipInfo) {
+		display.tipsSlideIdxs.push(tipStartIdx+idx);
 		var tipsHtml = Mustache.render(tipsTemplate, tipInfo);
-		if ('insertBefore' in tipInfo) {
-			sliderContainer.find(tipInfo.insertBefore).before(tipsHtml);
-		} else if ('insertAfter' in tipInfo) {
-			sliderContainer.find(tipInfo.insertAfter).after(tipsHtml);
-		} else {
-			sliderContainer.append(tipsHtml);
-		}
+		sliderContainer.append(tipsHtml);
 	});
 
 
@@ -129,12 +172,15 @@ $(function() {
 		continuous: true,
 		controlsShow: false,
 		pause: SLIDER_PAUSE_M_SECOND,
-		auto: true,
+		auto: false,
 		beforeAnimation: function() {
 		},
 		afterAnimation: function() {
 		},
 	});
+	setInterval(function() {
+		changeSlide();
+	}, SLIDER_PAUSE_M_SECOND);
 
 	display.energySummary = new EnergySummary();
 
@@ -150,7 +196,7 @@ $(function() {
 {% block content %}
 <div class="system-info-container">
 	<div class="system-title">{{system.name}}</div>
-	<div>REAL TIME ENERGY MONITORING SYSTEM</div>
+	<div class="system-sub-text">REAL TIME ENERGY MONITORING SYSTEM</div>
 	<div class="system-logo">
 		<div class="logo-circle-bound" style="background-image: url('{{system.logo.url}}');"></div>
 		<img src="{% static 'images/user-logo-bg.png' %}">
@@ -163,21 +209,23 @@ $(function() {
 		<div class="graph-info">
 			<div class="header-empty-block"></div>
 			<div class="graph-title">Our energy consumption today: <span class="graph-dt-text"></span></div>
-			<hr>
 			<div class="graph-header">
 				<div class="graph-unit">kWh</div>
-				<div class="graph-legend">
-					<span></span>
-					<span>Total</span>
+				<div class="graph-legend-container">
+					<div class="graph-legend">
+						<span></span>
+						<span>Total</span>
+					</div>
+					<div class="graph-legend">
+						<span></span>
+						<span class="legend-last-text"></span>
+					</div>
 				</div>
-				<div class="graph-legend">
-					<span></span>
-					<span class="legend-last-text"></span>
-				</div>
+				<hr>
 			</div>
 			<div class="chart"></div>
-			<div>hour</div>
-			<hr>
+			<div class="chart-hour">hour</div>
+			<hr class="graph-divider">
 
 			{% include "display_bottom_energy_summary.html" %}
 
@@ -186,11 +234,14 @@ $(function() {
 		<div class="progress-info">
 			<div class="header-empty-block"></div>
 			<div class="factory-background">
-				<div class="last-12-month-block">
-					<div>Over the past 12 months</div>
-					<div class="last-12-month-percent-change">
-						<span class="last-12-month-percent-val"></span><span class="last-12-month-percent-symbol">%</span>
-						<span class="last-12-month-percent-text"></span>
+				<img src="{% static 'images/display/factory.png' %}">
+				<div>
+					<div class="last-12-month-block">
+						<div class="last-12-month-block-title">Over the past 12 months</div>
+						<div class="last-12-month-percent-change">
+							<span class="last-12-month-percent-val"></span><span class="last-12-month-percent-symbol">%</span>
+							<span class="last-12-month-percent-text"></span>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -198,16 +249,23 @@ $(function() {
 				<div class="progress-detail">
 					<img src="{% static 'images/progress/co2.png' %}">
 					<div>Which is equivalent to</div>
-					<div><span class="progress-co2-val"></span> of CO<sub>2</sub></div>
+					<div class="progress-detail-text"><span class="progress-co2-val"></span> of CO<sub>2</sub></div>
 				</div>
+				<div class="progress-detail-separator"></div>
 				<div class="progress-detail progress-target-detail">
-					<div class="progress-medal">
-						<img src="{% static 'images/progress/award.png' %}">
-						<div><span class="achieved-percent-val"></span>%</div>
+					<div class="progress-medal empty-medal">
+						<img src="{% static 'images/display/empty-medal.png' %}">
+						<div class="medal-text">Keep<br>Saving!</div>
+					</div>
+					<div class="progress-medal saving-medal">
+						<img src="{% static 'images/display/medal.png' %}">
+						<div><span class="achieved-percent-val"></span><span class="percent-symbol">%</span></div>
+						<div class="medal-text">Reduction<br>achieved</div>
 					</div>
 					<div class="next-target-text">Next target would be</div>
 					<div class="next-target-percent"><span class="target-percent-val"></span>% REDUCTION</div>
 				</div>
+				<div class="progress-detail-separator"></div>
 				<div class="progress-detail">
 					<img src="{% static 'images/progress/money.png' %}">
 					<div class="money-saving-text"></div>

@@ -339,7 +339,7 @@
 	right: 8px;
 	font-weight: lighter;
 	padding-right: 10px;
-	font-size: 11px;
+	font-size: 10pt;
 	margin-top: 3px;
 }
 .choice-panel hr{
@@ -451,6 +451,15 @@
 	margin-top: 4px;
 	position: absolute;
 }
+.compare-choice-block #compare-prev-date,
+.compare-choice-block #compare-highest-date,
+.compare-choice-block #compare-lowest-date,
+.compare-choice-block #compare-custom-date {
+	display: inline-block;
+	margin-left: 26px;
+	margin-top: 15px;
+	font-weight: lighter;
+}
 .choice-panel .compare-choice-block:nth-child(6) > div > label  {
 	width: 150px;
 }
@@ -481,10 +490,12 @@
 #compare-calendar-icon {
 	position: absolute;
 	margin-left: 155px;
-	margin-top: -1px;
+	margin-top: -2px;
+	width: 22px;
+	height: 24px;
 }
 #compare-choice-clear{
-	font-size: 11pt;
+	font-size: 10pt;
 }
 
 #unit-label {

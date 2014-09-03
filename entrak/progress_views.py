@@ -148,7 +148,8 @@ def __calculate_progress_data(systems):
 	result = {}
 	result['last_12_months_co2_consumption_accurate'] = last_12_months_co2_consumption
 	result['percengate_change'] = (total_baseline_co2_consumption-last_12_months_co2_consumption)/total_baseline_co2_consumption*100.0
-	result['total_co2_saving'] = total_co2_saving
+	result['total_co2_saving_in_kg'] = total_co2_saving
+	result['total_co2_saving'] = int(total_co2_saving/1000)
 	result['total_money_saving'] = total_money_saving
 	result['first_day_record'] = first_day_record
 
@@ -168,12 +169,11 @@ def progress_view(request, system_code=None):
 	systems_info = System.get_systems_info(system_code, request.user.system.code)
 	result = __calculate_progress_data(systems_info['systems'])
 	current_system = systems_info['systems'][0]
-	total_co2_saving = result['total_co2_saving']
+	total_co2_saving = result['total_co2_saving_in_kg']
 	total_money_saving = result['total_money_saving']
 
 	m = systems_info
 	m.update(result)
-	m['total_co2_saving'] = int(total_co2_saving/1000)
 	m['elephant_num'] = int(round(total_co2_saving*0.00033))
 	taxi_trip_info = TAXI_TRIP_INFO.get(current_system.city, HK_TAXI_TRIP)
 	m['taxi_trip'] = {
