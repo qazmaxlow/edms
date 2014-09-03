@@ -25,7 +25,7 @@
 
 <script id="tips-template" type="x-tmpl-mustache">
 <div class="tips" style="background-image: url({% templatetag openvariable %}bgImg{% templatetag closevariable %});">
-	<div class="tips-block" style="top: {% templatetag openvariable %}posTop{% templatetag closevariable %}px; left: {% templatetag openvariable %}posLeft{% templatetag closevariable %}px;">
+	<div class="tips-block" style="{% templatetag openvariable %}posStyle{% templatetag closevariable %}">
 		<img src="{% static 'images/display/plug-icon.png' %}">
 		<div class='tips-title'>{% templatetag openvariable %}title{% templatetag closevariable %}</div>
 		<div class='tips-desc'>{% templatetag openvariable %}desc{% templatetag closevariable %}</div>
@@ -79,8 +79,6 @@ function getProgressData() {
 			$('.saving-medal').show();
 			$('.empty-medal').hide();
 		}
-		// $('.saving-medal').show();
-		// $('.empty-medal').hide();
 
 		$('.progress-co2-val').text(Utils.formatWithCommas(Math.abs(data.total_co2_saving.toFixed(0))) + ' tons');
 		$('.achieved-percent-val').text(data.archived_level);
@@ -131,11 +129,11 @@ $(function() {
 	display.sourceIds = JSON.parse('{{source_ids}}');
 
 	var tipInfos = [
-		{bgImg: "{% static 'images/tips/light-tube.jpg' %}", title: "Remove a tube", desc: 'If you have more light than you need in an area, you can remove one light tube from a fixture and save energy!', posTop: 180, posLeft: 360},
-		{bgImg: "{% static 'images/tips/ac-temperature.jpg' %}", title: "Re-assess Air Conditioning’s Temperature", desc: 'After 30 minutes of turning on the AirCon, you should assess whether the temperature is too cold, if so you should adjust the temperature to minimize energy wastage.', posTop: 250, posLeft: 950},
-		{bgImg: "{% static 'images/tips/ac-ribbon.jpg' %}", title: "Put a Ribbon on it", desc: 'Tie a small colored ribbon to the vent of each aircon unit - this makes it easier to tell whether the aircon is on or off, so you don\'t accidentally leave aircon on!', posTop: 250, posLeft: 950},
-		{bgImg: "{% static 'images/tips/light-switch.jpg' %}", title: "Label Your Plugs & Switch", desc: 'Label the plugs of electrical devices - sometime it\'s hard to tell what is what, so this helps you to safely unplug or turn off appliances without worrying about turning off important things!', posTop: 250, posLeft: 170},
-		{bgImg: "{% static 'images/tips/plugs.jpg' %}", title: "Turn off the switch", desc: 'Even if an appliance turned off it still consume 5-10% of energy, if its being plug into the socket. Therefore remember to turn off the socket switch as well!', posTop: 250, posLeft: 170},
+		{bgImg: "{% static 'images/tips/light-tube.jpg' %}", title: "Remove a tube", desc: 'If you have more light than you need in an area, you can remove one light tube from a fixture and save energy!', posStyle: 'top: 180px; left: 360px;'},
+		{bgImg: "{% static 'images/tips/ac-temperature.jpg' %}", title: "Re-assess Air Conditioning’s Temperature", desc: 'After 30 minutes of turning on the AirCon, you should assess whether the temperature is too cold, if so you should adjust the temperature to minimize energy wastage.', posStyle: 'top: 250px; right: 50px;'},
+		{bgImg: "{% static 'images/tips/ac-ribbon.jpg' %}", title: "Put a Ribbon on it", desc: 'Tie a small colored ribbon to the vent of each aircon unit - this makes it easier to tell whether the aircon is on or off, so you don\'t accidentally leave aircon on!', posStyle: 'top: 250px; right: 50px;'},
+		{bgImg: "{% static 'images/tips/light-switch.jpg' %}", title: "Label Your Plugs & Switch", desc: 'Label the plugs of electrical devices - sometime it\'s hard to tell what is what, so this helps you to safely unplug or turn off appliances without worrying about turning off important things!', posStyle: 'top: 250px; left: 170px;'},
+		{bgImg: "{% static 'images/tips/plugs.jpg' %}", title: "Turn off the switch", desc: 'Even if an appliance turned off it still consume 5-10% of energy, if its being plug into the socket. Therefore remember to turn off the socket switch as well!', posStyle: 'top: 250px; left: 170px;'},
 	]
 
 
