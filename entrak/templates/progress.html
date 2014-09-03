@@ -62,7 +62,7 @@
 			<img class="equal-symbol" src="{% static 'images/progress/equal-symbol.png' %}">
 			<div class="cumulative-saving-block">
 				<img src="{% static 'images/progress/elephant.png' %}">
-				<div class="cumulative-text"><span class="cumulative-val">{{elephant_num|intcomma}}</span> elephants</div>
+				<div class="cumulative-text"><span class="cumulative-val">{{elephant_num|abs_int|intcomma}}</span> elephants</div>
 			</div>
 			<div class="cumulative-separator"></div>
 			<div class="cumulative-saving-block">
@@ -73,7 +73,7 @@
 			<div class="cumulative-saving-block">
 				<img src="{% static 'images/progress/taxi.png' %}">
 				<div class="cumulative-text">
-					<span class="cumulative-val">{{taxi_trip.count|intcomma}}</span> taxi trips
+					<span class="cumulative-val">{{taxi_trip.count|abs_int|intcomma}}</span> taxi trips
 					<div class="taxi-desc">from {{taxi_trip.from}} to {{taxi_trip.to}} (cost)</div>
 				</div>
 			</div>

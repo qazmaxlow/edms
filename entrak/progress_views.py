@@ -15,7 +15,7 @@ from utils import calculation
 from utils.utils import Utils
 
 REDUCTION_LEVELS = [0, 5, 10, 15, 20, 25, 30, 40]
-HK_TAXI_TRIP = {'multiplicand': 0.157, 'from': 'Hong Kong Airport', 'to': 'Times Square'}
+HK_TAXI_TRIP = {'multiplicand': 0.0035, 'from': 'Hong Kong Airport', 'to': 'Times Square'}
 TAXI_TRIP_INFO = {
 	'hk': HK_TAXI_TRIP,
 	'sg': {'multiplicand': 0.253, 'from': 'Singapore Airport', 'to': 'Marina Bay Sands'},
@@ -148,7 +148,7 @@ def __calculate_progress_data(systems):
 	result = {}
 	result['last_12_months_co2_consumption_accurate'] = last_12_months_co2_consumption
 	result['percengate_change'] = (total_baseline_co2_consumption-last_12_months_co2_consumption)/total_baseline_co2_consumption*100.0
-	result['total_co2_saving'] = int(total_co2_saving/1000)
+	result['total_co2_saving'] = total_co2_saving
 	result['total_money_saving'] = total_money_saving
 	result['first_day_record'] = first_day_record
 
@@ -168,15 +168,16 @@ def progress_view(request, system_code=None):
 	systems_info = System.get_systems_info(system_code, request.user.system.code)
 	result = __calculate_progress_data(systems_info['systems'])
 	current_system = systems_info['systems'][0]
-	last_12_months_co2_consumption = result['last_12_months_co2_consumption_accurate']
+	total_co2_saving = result['total_co2_saving']
+	total_money_saving = result['total_money_saving']
 
 	m = systems_info
 	m.update(result)
-	m['last_12_months_co2_consumption'] = int(last_12_months_co2_consumption/1000)
-	m['elephant_num'] = int(round(last_12_months_co2_consumption*0.0033))
+	m['total_co2_saving'] = int(total_co2_saving/1000)
+	m['elephant_num'] = int(round(total_co2_saving*0.00033))
 	taxi_trip_info = TAXI_TRIP_INFO.get(current_system.city, HK_TAXI_TRIP)
 	m['taxi_trip'] = {
-		'count': int(round(last_12_months_co2_consumption*taxi_trip_info['multiplicand'])),
+		'count': int(round(total_money_saving*taxi_trip_info['multiplicand'])),
 		'from': taxi_trip_info['from'],
 		'to': taxi_trip_info['to']
 	}
