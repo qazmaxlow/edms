@@ -53,7 +53,7 @@ INSTALLED_APPS = (
 	'baseline',
 	'holiday',
 	'unit',
-	# 'alert',
+	'alert',
 	'entrak',
 )
 

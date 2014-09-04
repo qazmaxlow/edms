@@ -415,3 +415,26 @@ class SourceManager:
 			info['readings'] = {}
 
 		return info
+
+	@staticmethod
+	def get_readings_sum_info(source_ids, start_dt, end_dt):
+		current_db_conn = connection.get_db()
+		result = current_db_conn['source_reading_min'].aggregate([
+			{"$match": {
+				"source_id": {"$in": [ObjectId(source_id) for source_id in source_ids]},
+				"datetime": {"$gte": start_dt, "$lt": end_dt}
+			}},
+			{ "$project": {"source_id": 1, "value": 1}},
+			{
+				"$group": {
+					"_id": "$source_id",
+					"total": {"$sum": "$value"}
+				}
+			},
+		])
+
+		sum_info = {}
+		for info in result["result"]:
+			sum_info[str(info['_id'])] = info['total']
+
+		return sum_info
