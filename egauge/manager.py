@@ -417,7 +417,7 @@ class SourceManager:
 		return info
 
 	@staticmethod
-	def get_readings_sum_info(source_ids, start_dt, end_dt):
+	def get_readings_sum(source_ids, start_dt, end_dt):
 		current_db_conn = connection.get_db()
 		result = current_db_conn['source_reading_min'].aggregate([
 			{"$match": {
@@ -427,14 +427,11 @@ class SourceManager:
 			{ "$project": {"source_id": 1, "value": 1}},
 			{
 				"$group": {
-					"_id": "$source_id",
+					"_id": "null",
 					"total": {"$sum": "$value"}
 				}
 			},
 		])
 
-		sum_info = {}
-		for info in result["result"]:
-			sum_info[str(info['_id'])] = info['total']
-
-		return sum_info
+		total = result['result'][0]['total']
+		return total

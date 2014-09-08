@@ -1,20 +1,16 @@
 from django.contrib import admin
-from .models import Alert, AlertHistory, AlertContact, AlertEmail
+from .models import Alert, AlertHistory, AlertEmail
 
 class AlertAdmin(admin.ModelAdmin):
-	list_display = ('system', 'name', 'type', 'check_weekdays',
-		'start_time', 'end_time')
+	list_display = ('system', 'type', 'check_weekdays',
+		'start_time', 'end_time', 'created')
 
 class AlertHistoryAdmin(admin.ModelAdmin):
-	list_display = ('alert', 'created', 'resolved')
-
-class AlertContactAdmin(admin.ModelAdmin):
-	list_display = ('name', 'email', 'mobile')
+	list_display = ('alert', 'created', 'resolved', 'diff_percent')
 
 class AlertEmailAdmin(admin.ModelAdmin):
-	list_display = ('to_address', 'title')
+	list_display = ('created', 'recipient', 'title', 'error')
 
 admin.site.register(Alert, AlertAdmin)
 admin.site.register(AlertHistory, AlertHistoryAdmin)
-admin.site.register(AlertContact, AlertContactAdmin)
 admin.site.register(AlertEmail, AlertEmailAdmin)

@@ -53,6 +53,7 @@ INSTALLED_APPS = (
 	'baseline',
 	'holiday',
 	'unit',
+	'contact',
 	'alert',
 	'entrak',
 )
@@ -109,6 +110,12 @@ LOGGING = {
 		},
 	},
 }
+
+EMAIL_HOST = 'en-trak.com'
+EMAIL_HOST_USER = 'alert@en-trak.com'
+EMAIL_HOST_PASSWORD = 'entrak8888'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
