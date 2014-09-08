@@ -14,7 +14,7 @@ from egauge.manager import SourceManager
 from utils.utils import Utils
 from utils.auth import permission_required
 
-@permission_required
+@permission_required()
 @ensure_csrf_cookie
 def display_view(request, system_code=None):
 	system = System.objects.get(code=system_code)

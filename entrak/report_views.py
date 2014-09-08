@@ -35,7 +35,7 @@ REPORT_TYPE_WEEK = 'week'
 
 CONSECUTIVE_LASTS_COUNT = 4
 
-@permission_required
+@permission_required()
 @ensure_csrf_cookie
 def report_view(request, system_code=None):
 	systems_info = System.get_systems_info(system_code, request.user.system.code)
@@ -427,7 +427,7 @@ def __generate_report_data(systems, report_type, start_timestamp, end_timestamp)
 
 	return result
 
-@permission_required
+@permission_required()
 def report_data_view(request, system_code=None):
 	report_type = request.POST.get('report_type')
 	start_timestamp = int(request.POST.get('start_timestamp'))
@@ -439,7 +439,7 @@ def report_data_view(request, system_code=None):
 
 	return Utils.json_response(result)
 
-@permission_required
+@permission_required()
 def report_pdf_view(request, system_code=None):
 	start_timestamp = request.POST.get("start_timestamp")
 	end_timestamp = request.POST.get("end_timestamp", 0)

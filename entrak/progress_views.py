@@ -164,7 +164,7 @@ def __calculate_progress_data(systems):
 
 	return result
 
-@permission_required
+@permission_required()
 def progress_view(request, system_code=None):
 	systems_info = System.get_systems_info(system_code, request.user.system.code)
 	result = __calculate_progress_data(systems_info['systems'])
@@ -184,7 +184,7 @@ def progress_view(request, system_code=None):
 
 	return render_to_response('progress.html', m)
 
-@permission_required
+@permission_required()
 def progress_data_view(request, system_code=None):
 	systems = System.get_systems_within_root(system_code)
 	result = __calculate_progress_data(systems)

@@ -40,6 +40,7 @@ urlpatterns = patterns('',
 
 		url(r'^settings/$', 'entrak.settings_views.settings_view', name='settings'),
 		url(r'^settings/(?P<settings_type>\w+)/$', 'entrak.settings_views.settings_view', name='settings'),
+		url(r'^set_alert/$', 'entrak.settings_views.set_alert_view', name='set_alert'),
 	))),
 )
 

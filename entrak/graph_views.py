@@ -17,7 +17,7 @@ from user.models import EntrakUser
 from utils.auth import permission_required
 from utils import calculation
 
-@permission_required
+@permission_required()
 @ensure_csrf_cookie
 def graph_view(request, system_code=None):
 	systems_info = System.get_systems_info(system_code, request.user.system.code)

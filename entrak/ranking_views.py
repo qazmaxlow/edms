@@ -15,7 +15,7 @@ RANKING_TYPE_TOTAL = 'total'
 RANKING_TYPE_PER_PERSON = 'per_person'
 RANKING_TYPE_PERCENT = 'percent'
 
-@permission_required
+@permission_required()
 @ensure_csrf_cookie
 def ranking_view(request, system_code=None):
 	systems_info = System.get_systems_info(system_code, request.user.system.code)

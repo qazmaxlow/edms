@@ -1,1 +1,101 @@
 {% extends "page_base.html" %}
+
+{% load static %}
+{% load entrak_extras %}
+
+{% block extra_head %}
+{{block.super}}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/settings.css' %}">
+<script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
+<script src="{% static 'js/csrf_ajax.js' %}"></script>
+<script src="{% static 'js/entrak-system.js' %}"></script>
+{% endblock %}
+
+{% block selected-menu-link-id %}menu-link-settings{% endblock %}
+{% block system_menu_target_view %}settings{% endblock %}
+{% block breadcrumb_target_view %}settings{% endblock %}
+
+{% block page_title %}THE SETTINGS PAGE{% endblock %}
+{% block page_subtitle %}Find out what you can set here at{% endblock %}
+
+{% block extra_script %}
+{{block.super}}
+
+<script type="text/javascript">
+var settings = {};
+
+function genSystemOptionInfo(systemTree) {
+	var name = systemTree.data.name;
+	var sourceIds = [];
+	systemTree.traverseDown(function (node) {
+		for (var sourceId in node.data.sources) {
+			sourceIds.push(sourceId);
+		}
+	});
+
+	return {'name': name, 'source_ids': sourceIds};
+}
+
+$(function() {
+	setupAjaxForCsrf($.cookie('csrftoken'));
+
+	settings.entrakSystem = new EntrakSystem();
+	settings.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
+	settings.entrakSystem.addSourceToSystem('{{sources|jsonifySources}}');
+
+	var optionContainer = $('.alert-source-select');
+	var systemOptionInfos = [];
+	var sourceOptionInfos = [];
+	settings.entrakSystem.systemTree.traverseDown(function (node) {
+		systemOptionInfos.push(genSystemOptionInfo(node));
+		$.each(node.data.sources, function(sourceId, source) {
+			sourceOptionInfos.push({'name': source.name, 'source_id': source.id});
+		})
+	});
+
+	systemOptionInfos.sort(function(a, b) {
+		return (b.source_ids).length - (a.source_ids).length;
+	});
+	$.each(systemOptionInfos, function(infoIdx, info) {
+		var selectHtml = '<option value=\'' + JSON.stringify(info) + '\'>' + info.name + '</option>';
+		optionContainer.append(selectHtml);
+	});
+	$.each(sourceOptionInfos, function(infoIdx, info) {
+		var selectHtml = '<option value=\'' + JSON.stringify(info) + '\'>' + info.name + '</option>';
+		optionContainer.append(selectHtml);
+	});
+
+	$('.create-btn').click(function() {
+		var postData = {
+			alert_id: null,
+			source_info: $('.alert-source-select').val(),
+			alert_type: $('.alert-type-select').val(),
+			compare_percent: $('.compare-percent').val(),
+			peak_threshold: $('.peak-threshold').val(),
+		};
+		$.ajax({
+			type: "POST",
+			url: "{% url 'set_alert' system_code=systems.0.code %}",
+			data: postData,
+		}).done(function(data) {
+		}).fail(function(jqXHR, textStatus) {
+			console.log(jqXHR.responseText);
+		});
+	});
+});
+</script>
+
+{% endblock %}
+
+{% block page_content %}
+<select name="alert-source" class="alert-source-select"></select>
+<select name="alert-type" class="alert-type-select">
+	<option value="still_on">Still on</option>
+	<option value="summary">Summary</option>
+	<option value="peak">Peak</option>
+</select>
+<input type="number" name="compare-percent">
+<input type="number" name="peak-threshold">
+<button class="create-btn">Create</button>
+{% endblock %}
