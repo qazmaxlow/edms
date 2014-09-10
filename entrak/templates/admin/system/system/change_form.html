@@ -42,12 +42,18 @@ $(function() {
 </script>
 
 {% if change %}
+<script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
+<script src="{% static 'js/csrf_ajax.js' %}"></script>
 <script src="{% static 'js/jquery.bpopup.min.js' %}"></script>
+<script src="{% static 'js/datetimepicker-master/jquery.datetimepicker-customized.js' %}"></script>
 
 <script type="text/javascript">
 theBPopup = null;
+recapBPopup = null;
 
 $(function() {
+	setupAjaxForCsrf($.cookie('csrftoken'));
+
 	$("#edit-sources-btn").click(function(e) {
 		e.preventDefault();
 
@@ -75,6 +81,29 @@ $(function() {
 			theBPopup.close();
 		}
 	}, false);
+
+	$('.recap-form-container input[type="text"]').datetimepicker();
+	$('#recap-data-btn').click(function() {
+		recapBPopup = $('.recap-form-container').bPopup();
+	});
+	$('.recap-form-container button').click(function() {
+		var postData = {};
+		$('.recap-form-container input').each(function() {
+			postData[$(this).attr('name')] = $(this).val();
+		});
+
+		$.ajax({
+			type: "POST",
+			url: "{% url 'recap_data' %}",
+			data: postData,
+		}).done(function(data) {
+			if (data.success) {
+				recapBPopup.close();
+			}
+		}).fail(function(jqXHR, textStatus) {
+			console.log(jqXHR.responseText);
+		});
+	});
 });
 </script>
 {% endif %}
@@ -85,10 +114,14 @@ $(function() {
 {{ block.super }}
 
 <link rel="stylesheet" type="text/css" href="{% static "css/system-admin.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'js/datetimepicker-master/jquery.datetimepicker.css' %}">
 {% endblock %}
 
 {% block object-tools-items %}
 	{% if change %}
+	<li>
+		<a id="recap-data-btn" href="#">Recap Data</a>
+	</li>
 	<li>
 		<a id="edit-sources-btn" href="#">Edit Sources</a>
 	</li>
@@ -103,6 +136,14 @@ $(function() {
 {% if change %}
 <div id="edit-sources-container">
 	<div class="edit-sources-content"></div>
+</div>
+<div class="recap-form-container">
+	<form action="hk.yahoo.com">
+		<input type="hidden" name="system_code" value="{{original.code}}">
+		<input type="text" name="start_dt">
+		<input type="text" name="end_dt">
+		<button class="submit-recap-btn">recap</button>
+	</form>
 </div>
 {% endif %}
 

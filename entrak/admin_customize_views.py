@@ -1,6 +1,7 @@
 import json
 import pytz
 import datetime
+import thread
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -102,5 +103,19 @@ def add_multi_baseline_view(request):
 		will_insert_baselines.append(baseline_usage)
 
 	BaselineUsage.objects.bulk_create(will_insert_baselines)
+
+	return Utils.json_response({'success': True})
+
+@user_passes_test(lambda user: user.is_superuser, login_url='/admin/')
+def recap_data_view(request):
+	hk_tz = pytz.timezone("Asia/Hong_Kong")
+	start_dt = hk_tz.localize(datetime.datetime.strptime(request.POST.get('start_dt'), '%Y/%m/%d %H:%M'))
+	end_dt = hk_tz.localize(datetime.datetime.strptime(request.POST.get('end_dt'), '%Y/%m/%d %H:%M'))
+
+	system_code = request.POST.get('system_code')
+	systems = System.get_systems_within_root(system_code)
+	system_codes = [system.code for system in systems]
+
+	thread.start_new_thread(SourceManager.force_retrieve_reading, (start_dt, end_dt, system_codes))
 
 	return Utils.json_response({'success': True})

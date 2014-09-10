@@ -101,10 +101,21 @@ LOGGING = {
 			'when': 'D',
 			'formatter': 'normal',
 		},
+		'recap_timed_rotating_handler': {
+			'level': 'DEBUG',
+			'class': 'logging.handlers.TimedRotatingFileHandler',
+			'when': 'D',
+			'formatter': 'normal',
+		},
 	},
 	'loggers': {
 		'django.entrak_error': {
 			'handlers': ['timed_rotating_handler'],
+			'level': 'DEBUG',
+			'propagate': True,
+		},
+		'django.recap_data_log': {
+			'handlers': ['recap_timed_rotating_handler'],
 			'level': 'DEBUG',
 			'propagate': True,
 		},

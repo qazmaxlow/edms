@@ -15,5 +15,6 @@ connect('entrak', tz_aware=True)
 
 MEDIA_URL = '/media/'
 LOGGING['handlers']['timed_rotating_handler']['filename'] = os.path.join(os.path.dirname(BASE_DIR), 'logs', 'entrak', 'error_log')
+LOGGING['handlers']['recap_timed_rotating_handler']['filename'] = os.path.join(os.path.dirname(BASE_DIR), 'logs', 'entrak', 'recap_log')
 
 SITE_LINK_FORMAT = 'http://192.168.1.103:8001'

@@ -3,6 +3,7 @@ import pytz
 import calendar
 import time
 import datetime
+import logging
 from bson.code import Code
 from bson.objectid import ObjectId
 from mongoengine import connection, Q, NotUniqueError
@@ -206,6 +207,8 @@ class SourceManager:
 		end_dt = end_dt.replace(minute=0, second=0, microsecond=0) + datetime.timedelta(hours=1)
 		total_hour = int((end_dt - start_dt).total_seconds()/3600)
 
+		logger = logging.getLogger('django.recap_data_log')
+
 		for hour_idx in xrange(total_hour):
 			start_time = start_dt + datetime.timedelta(hours=hour_idx)
 			end_time = start_time + datetime.timedelta(minutes=59)
@@ -213,10 +216,12 @@ class SourceManager:
 			reading_datetimes = [(end_time - datetime.timedelta(minutes=minute)) for minute in xrange(60)]
 
 			print 'processing: ', start_time
+			logger.info('processing: %s'%start_time.strftime('%Y-%m-%d %H:%M'))
 			for grouped_sources in all_grouped_sources:
 				xml_url = grouped_sources['_id']
 				sources = grouped_sources['sources']
 				print 'processing: ', xml_url
+				logger.info('processing: %s'%xml_url)
 
 				SourceReadingMin.objects(
 					source_id__in=[source['_id'] for source in sources],

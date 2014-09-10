@@ -18,5 +18,6 @@ connect('entrak', username="entrak", password="entrak8888", tz_aware=True)
 
 MEDIA_URL = '/media/'
 LOGGING['handlers']['timed_rotating_handler']['filename'] = os.path.join('/mnt', 'logs', 'entrak', 'django_error.log')
+LOGGING['handlers']['recap_timed_rotating_handler']['filename'] = os.path.join('/mnt', 'logs', 'entrak', 'django_recap.log')
 
 SITE_LINK_FORMAT = 'https://%s.en-trak.com'
