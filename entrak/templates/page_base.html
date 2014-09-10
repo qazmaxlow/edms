@@ -142,7 +142,10 @@ $(function() {
 		<div id="header">
 
 			<!-- Image Carousel - Illustrations -->
-			<div id="image-carousel"></div>
+			<video class="image-carousel" width="486px" height="132px" autoplay loop>
+				<source src="{% static 'images/illustration.webm' %}" type="video/webm">
+				<source src="{% static 'images/illustration.mp4' %}" type="video/mp4">
+			</video>
 			
 			<!-- Header Wording -->
 			<div id="heading"><h1>{% block page_title %}{% endblock %}</h1></div>

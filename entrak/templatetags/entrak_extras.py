@@ -27,6 +27,7 @@ def jsonifySystems(systems):
 	systems_info = []
 	for system in systems:
 		info = {
+			'id': system.id,
 			'code': system.code,
 			'name': system.name, 'nameTc': system.name_tc,
 			'intro': system.intro, 'introTc': system.intro_tc,

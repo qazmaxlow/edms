@@ -68,11 +68,12 @@ $(function() {
 
 	$('.create-btn').click(function() {
 		var postData = {
+			system_id: settings.entrakSystem.systemTree.data.id,
 			alert_id: null,
 			source_info: $('.alert-source-select').val(),
 			alert_type: $('.alert-type-select').val(),
-			compare_percent: $('.compare-percent').val(),
-			peak_threshold: $('.peak-threshold').val(),
+			compare_percent: $('.compare-percent-select').val(),
+			peak_threshold: $('.peak-threshold-select').val(),
 		};
 		$.ajax({
 			type: "POST",
@@ -95,7 +96,7 @@ $(function() {
 	<option value="summary">Summary</option>
 	<option value="peak">Peak</option>
 </select>
-<input type="number" name="compare-percent">
-<input type="number" name="peak-threshold">
+<input type="number" name="compare-percent" class="compare-percent-select">
+<input type="number" name="peak-threshold" class="peak-threshold-select">
 <button class="create-btn">Create</button>
 {% endblock %}

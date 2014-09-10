@@ -301,12 +301,10 @@ html, body {
 }
 
 /* -- Where the illustrations is --*/
-#image-carousel{
-	float: right;
-	margin-right: 50px;
-	width: 486px;
-	height: 132px;
-	background-image: url(../images/illustration.png);
+.image-carousel{
+	position: absolute;
+	top: 3px;
+	right: 50px;
 }
 
 /*-- Sub heading --*/
