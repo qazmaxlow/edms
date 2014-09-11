@@ -68,3 +68,7 @@ def jsonifyUnitCategorys(unit_categorys):
 		unit_categorys_info.append(info)
 
 	return escapejs(json.dumps(unit_categorys_info))
+
+@register.filter
+def jsonifyPrimitiveObj(targetObj):
+	return escapejs(json.dumps(targetObj))

@@ -6,9 +6,14 @@
 {% block extra_head %}
 {{block.super}}
 
+<link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/settings.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'js/sumoselect/sumoselect.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'js/tag-it-master/css/jquery.tagit.css' %}">
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
+<script src="{% static 'js/sumoselect/jquery.sumoselect.min.js' %}"></script>
+<script src="{% static 'js/tag-it-master/js/tag-it.min.js' %}"></script>
 <script src="{% static 'js/entrak-system.js' %}"></script>
 {% endblock %}
 
@@ -37,14 +42,60 @@ function genSystemOptionInfo(systemTree) {
 	return {'name': name, 'source_ids': sourceIds};
 }
 
+function transformToPythonWeekday(momentWeekday) {
+	var pythonWeekday = momentWeekday-1;
+	pythonWeekday = (pythonWeekday < 0 ) ? 6 : pythonWeekday;
+	return pythonWeekday;
+}
+
+function requestSetAlert(alertData) {
+	$.ajax({
+		type: "POST",
+		url: "{% url 'set_alert' system_code=systems.0.code %}",
+		data: alertData,
+	}).done(function(data) {
+		if (data.success) {
+			var contactEmails = JSON.parse(alertData['contact_emails']);
+			$.unique($.merge(settings.contactEmails, contactEmails));
+		}
+	}).fail(function(jqXHR, textStatus) {
+		console.log(jqXHR.responseText);
+	});
+}
+
 $(function() {
 	setupAjaxForCsrf($.cookie('csrftoken'));
+
+	var subMenuPanel = $(".main-content-container>div");;
+	$(".panel-header-left-menu h3").each(function (eleIdx) {
+		$(this).click({connectedPanel: subMenuPanel[eleIdx]}, function (event) {
+			$(".panel-header-left-menu h3").removeClass('selected-tab');
+			$(this).addClass('selected-tab');
+			
+			var connectedPanel = $(event.data.connectedPanel);
+			if (!(connectedPanel.hasClass('selected-submenu'))) {
+				subMenuPanel.filter(".selected-submenu").removeClass('selected-submenu').hide();
+				connectedPanel.addClass('selected-submenu').fadeIn();
+			}
+		});
+	});
+	$('.sub-menu-create-alert').addClass('selected-tab');
+	$(".create-alert-container").addClass('selected-submenu').show();
+
+	$(".info-btn").click(function () {
+		$(this).parent().find('.info-tooltip').show();
+		$(this).parent().find('.info-tooltip .info-tooltip-close-btn').click(function () {
+			$(this).parent().hide();
+		});
+	});
 
 	settings.entrakSystem = new EntrakSystem();
 	settings.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
 	settings.entrakSystem.addSourceToSystem('{{sources|jsonifySources}}');
+	settings.contactEmails = JSON.parse('{{contact_emails|jsonifyPrimitiveObj}}');
 
-	var optionContainer = $('.alert-source-select');
+	var optionContainer = $('.source-select');
+	settings.sourceInfoMap = {};
 	var systemOptionInfos = [];
 	var sourceOptionInfos = [];
 	settings.entrakSystem.systemTree.traverseDown(function (node) {
@@ -58,31 +109,73 @@ $(function() {
 		return (b.source_ids).length - (a.source_ids).length;
 	});
 	$.each(systemOptionInfos, function(infoIdx, info) {
-		var selectHtml = '<option value=\'' + JSON.stringify(info) + '\'>' + info.name + '</option>';
+		var mapKey = infoIdx + '|' + info.name;
+		settings.sourceInfoMap[mapKey] = JSON.stringify(info);
+		var selectHtml = '<option value=\'' + mapKey + '\'>' + info.name + '</option>';
 		optionContainer.append(selectHtml);
 	});
 	$.each(sourceOptionInfos, function(infoIdx, info) {
-		var selectHtml = '<option value=\'' + JSON.stringify(info) + '\'>' + info.name + '</option>';
+		var mapKey = infoIdx + '|' + info.name;
+		settings.sourceInfoMap[mapKey] = JSON.stringify(info);
+		var selectHtml = '<option value=\'' + mapKey + '\'>' + info.name + '</option>';
 		optionContainer.append(selectHtml);
 	});
+	optionContainer.SumoSelect();
 
-	$('.create-btn').click(function() {
+	$('.time-select').each(function() {
+		var selectContainer = $(this);
+		var optionDt = moment().startOf('day');
+		var endDt = moment(optionDt).add('d', 1);
+		for (; optionDt.isBefore(endDt); optionDt.add('m', 30)) {
+			selectContainer.append('<option value="' + optionDt.format('HH:mm') + '">' + optionDt.format('HH:mm') + '</option>');
+		};
+	});
+
+	$('.weekday-select').each(function() {
+		var selectContainer = $(this);
+
+		selectContainer.append('<option value="[0, 1, 2, 3, 4, 5, 6]">All</option>');
+		selectContainer.append('<option value="[1, 2, 3, 4, 5]">Weekdays</option>');
+		selectContainer.append('<option value="[0, 6]">Weekends</option>');
+
+		var optionDt = moment().startOf('week');
+		var endDt = moment(optionDt).add('w', 1);
+		for (; optionDt.isBefore(endDt); optionDt.add('d', 1)) {
+			selectContainer.append('<option value="[' + transformToPythonWeekday(optionDt.day()) + ']">' + optionDt.format('dddd') + '</option>');
+		};
+	});
+
+	$('.compare-percent-select').each(function() {
+		var selectContainer = $(this);
+		for (var i = 5; i <= 100; i += 5) {
+			selectContainer.append('<option value="' + i + '">' + i + '</option>');
+		};
+	});
+
+	$('.email-input').tagit({
+		availableTags: settings.contactEmails,
+		tagLimit: 5,
+	});
+
+	$('.conversational-confirm-btn').click(function() {
+		var conversationalBlockContainer = $(this).parent().parent();
+		var alertType = conversationalBlockContainer.attr('alert_type');
 		var postData = {
 			system_id: settings.entrakSystem.systemTree.data.id,
 			alert_id: null,
-			source_info: $('.alert-source-select').val(),
-			alert_type: $('.alert-type-select').val(),
-			compare_percent: $('.compare-percent-select').val(),
-			peak_threshold: $('.peak-threshold-select').val(),
+			source_info: settings.sourceInfoMap[conversationalBlockContainer.find('.source-select').val()],
+			alert_type: alertType,
+			compare_percent: conversationalBlockContainer.find('.compare-percent-select').val(),
+			contact_emails: JSON.stringify(conversationalBlockContainer.find('.email-input').tagit("assignedTags")),
 		};
-		$.ajax({
-			type: "POST",
-			url: "{% url 'set_alert' system_code=systems.0.code %}",
-			data: postData,
-		}).done(function(data) {
-		}).fail(function(jqXHR, textStatus) {
-			console.log(jqXHR.responseText);
-		});
+		if (alertType === 'peak') {
+			postData.peak_threshold = conversationalBlockContainer.find('.peak-threshold-input').val();
+		} else if (alertType === 'summary' || alertType === 'still_on') {
+			postData.start_time = conversationalBlockContainer.find('.start-time-select').val();
+			postData.end_time = conversationalBlockContainer.find('.end-time-select').val();
+			postData.check_weekdays = conversationalBlockContainer.find('.weekday-select').val();
+		}
+		requestSetAlert(postData);
 	});
 });
 </script>
@@ -90,13 +183,155 @@ $(function() {
 {% endblock %}
 
 {% block page_content %}
-<select name="alert-source" class="alert-source-select"></select>
-<select name="alert-type" class="alert-type-select">
-	<option value="still_on">Still on</option>
-	<option value="summary">Summary</option>
-	<option value="peak">Peak</option>
-</select>
-<input type="number" name="compare-percent" class="compare-percent-select">
-<input type="number" name="peak-threshold" class="peak-threshold-select">
-<button class="create-btn">Create</button>
+
+<div class="panel-header-left-menu">
+	<h3 id="sub-menu-alert-history">
+		Alert History</h3><h3 class="sub-menu-create-alert">
+		Create Alert</h3>
+	<hr>
+</div>
+
+<div class="main-content-container">
+
+	<div class="alert-history-container">
+	</div>
+
+	<div class="create-alert-container">
+		<div class="choose-alert-title">Choose Alert Type:</div>
+		<div class="choose-alert-container">
+			<div class="choose-alert-block">
+				<div class="choose-alert-info-block">
+					<img src="">
+					<img class="info-btn" src="">
+					<div class="info-tooltip">
+						<div class="info-tooltip-content">Some hahalskdf ksdfl</div>
+						<div class="info-tooltip-close-btn">Close</div>
+					</div>
+				</div>
+				<div class="choose-alert-btn">Create Peak Demand</div>
+			</div>
+			<div class="choose-alert-block">
+				<div class="choose-alert-info-block">
+					<img src="">
+					<img class="info-btn" src="">
+				</div>
+				<div class="choose-alert-btn">Create Summary Alert</div>
+			</div>
+			<div class="choose-alert-block">
+				<div class="choose-alert-info-block">
+					<img src="">
+					<img class="info-btn" src="">
+				</div>
+				<div class="choose-alert-btn">Create Instance Alert</div>
+			</div>
+		</div>
+
+		<div class="peak-demand alert-container">
+			<div class="alert-header">
+				<img class="alert-header-img" src="">
+				<div class="alert-header-title">Create Peak Demand Alert</div>
+				<img class="alert-header-info-btn" src="">
+			</div>
+
+			<div class="alert-content">
+				<div class="conversational-block" alert_type="peak">
+					<div>Let me know if <select class="source-select" size="4" placeholder="Please select"></select>energy</div>
+					<div>reaches <select class="compare-percent-select"></select>% of my previous peak demand of <input class="peak-threshold-input" type="number">kWA.</div>
+					<div>Send alert to: <ul class="email-input"></ul></div>
+					<div class="email-notes">You may use max 5 emails, use semi-colon to separate emails<br>e.g user@email.com; user@email.com</div>
+					<div>
+						<div class="conversational-confirm-btn">Confirm</div>
+						<div class="conversational-cancel-btn">Cancel</div>
+					</div>
+				</div>
+				<hr>
+				<div class="content-table">
+					<div class="table-header">
+						<div><img src="">
+						</div><div>End-Use
+						</div><div>Time from
+						</div><div>Time to
+						</div><div>Send to
+						</div><div>Date Created
+						</div><div>Action</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="summary-alert alert-container">
+			<div class="alert-header">
+				<img class="alert-header-img" src="">
+				<div class="alert-header-title">Create Summary Alert</div>
+				<img class="alert-header-info-btn" src="">
+			</div>
+
+			<div class="alert-content">
+				<div class="conversational-block" alert_type="summary">
+					<div>Let me know if <select class="source-select" size="4" placeholder="Please select"></select>energy use</div>
+					<div>is <select class="compare-percent-select"></select>% higher than my recent average between <select class="start-time-select time-select"></select> to <select class="end-time-select time-select"></select> on <select class="weekday-select"></select></div>
+					<div>Send alert to: <ul class="email-input"></ul></div>
+					<div class="email-notes">You may use max 5 emails, use semi-colon to separate emails<br>e.g user@email.com; user@email.com</div>
+					<div>
+						<div class="conversational-confirm-btn">Confirm</div>
+						<div class="conversational-cancel-btn">Cancel</div>
+					</div>
+				</div>
+				<hr>
+				<div class="content-table">
+					<div class="table-header">
+						<div><img src="">
+						</div><div>End-Use
+						</div><div>Time from
+						</div><div>Time to
+						</div><div>Send to
+						</div><div>Date Created
+						</div><div>Action</div>
+					</div>
+					<div class="table-row">
+						<div></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="still-on-alert alert-container">
+			<div class="alert-header">
+				<img class="alert-header-img" src="">
+				<div class="alert-header-title">Create Instance Alert</div>
+				<img class="alert-header-info-btn" src="">
+			</div>
+
+			<div class="alert-content">
+				<div class="conversational-block" alert_type="still_on">
+					<div>Let me know if <select class="source-select" size="4" placeholder="Please select"></select>energy use</div>
+					<div>is <select class="compare-percent-select"></select>% higher than my recent average between <select class="start-time-select time-select"></select> to <select class="end-time-select time-select"></select> on <select class="weekday-select"></select></div>
+					<div>Send alert to: <ul class="email-input"></ul></div>
+					<div class="email-notes">You may use max 5 emails, use semi-colon to separate emails<br>e.g user@email.com; user@email.com</div>
+					<div>
+						<div class="conversational-confirm-btn">Confirm</div>
+						<div class="conversational-cancel-btn">Cancel</div>
+					</div>
+				</div>
+				<hr>
+				<div class="content-table">
+					<div class="table-header">
+						<div><img src="">
+						</div><div>End-Use
+						</div><div>Time from
+						</div><div>Time to
+						</div><div>Send to
+						</div><div>Date Created
+						</div><div>Action</div>
+					</div>
+					<div class="table-row">
+						<div></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
 {% endblock %}

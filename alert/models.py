@@ -92,7 +92,7 @@ class Alert(models.Model):
 		pass_verify = True
 		diff_percent = None
 		if self.type == ALERT_TYPE_PEAK:
-			if value > self.peak_threshold*PEAK_THRESHOLD_FACTOR:
+			if value > self.peak_threshold*(self.compare_percent/100.0):
 				pass_verify = False
 			diff_percent = int((float(value)/self.peak_threshold)*100)
 

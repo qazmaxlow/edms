@@ -18,9 +18,11 @@ SETTINGS_TYPE_ALERT = 'alert'
 def settings_view(request, system_code=None, settings_type=SETTINGS_TYPE_ALERT):
 	systems_info = System.get_systems_info(system_code, request.user.system.code)
 	sources = SourceManager.get_sources(systems_info["systems"][0])
+	contact_emails = Contact.objects.filter(system__code=system_code).values_list('email', flat=True)
 
 	m = systems_info
 	m['sources'] = sources
+	m['contact_emails'] = [email.encode('utf8') for email in contact_emails]
 	m.update(csrf(request))
 
 	return render_to_response('settings.html', m)
@@ -32,20 +34,20 @@ def set_alert_view(request, system_code=None):
 	alert_type = request.POST.get('alert_type')
 	source_info = json.loads(request.POST.get('source_info'))
 	compare_percent = request.POST.get('compare_percent')
-	peak_threshold = request.POST.get('peak_threshold')
+	contact_emails = json.loads(request.POST.get('contact_emails'))
 
-	# fake data as frontend not ready
-	start_time = datetime.datetime.strptime('14:00', '%H:%M').time()
-	end_time = datetime.datetime.strptime('16:00', '%H:%M').time()
-	check_weekdays = json.loads('[0, 1, 2]')
-	contact_info = json.loads('[{"name": "tester", "email": "tak@en-trak.com"}]')
+	if alert_type == ALERT_TYPE_PEAK:
+		peak_threshold = request.POST.get('peak_threshold')
+	elif alert_type == ALERT_TYPE_SUMMARY or alert_type == ALERT_TYPE_STILL_ON:
+		start_time = datetime.datetime.strptime(request.POST.get('start_time'), '%H:%M').time()
+		end_time = datetime.datetime.strptime(request.POST.get('end_time'), '%H:%M').time()
+		check_weekdays = json.loads(request.POST.get('check_weekdays'))
 
-	contact_emails = [info['email'] for info in contact_info]
 	exist_contact_emails = Contact.objects.filter(system_id=system_id, email__in=contact_emails).values_list('email', flat=True)
 	need_add_contacts = []
-	for info in contact_info:
-		if info['email'] not in exist_contact_emails:
-			need_add_contacts.append(Contact(system_id=system_id, name=info['name'], email=info['email']))
+	for email in contact_emails:
+		if email not in exist_contact_emails:
+			need_add_contacts.append(Contact(system_id=system_id, email=email))
 	Contact.objects.bulk_create(need_add_contacts)
 	contact_ids = Contact.objects.filter(system_id=system_id, email__in=contact_emails)
 
@@ -58,17 +60,13 @@ def set_alert_view(request, system_code=None):
 	alert.type = alert_type
 	alert.source_info = source_info
 	alert.compare_method = ALERT_COMPARE_METHOD_ABOVE
+	alert.compare_percent = compare_percent
 	if alert_type == ALERT_TYPE_STILL_ON or alert_type == ALERT_TYPE_SUMMARY:
-		alert.compare_percent = compare_percent
-		alert.peak_threshold = None
 		alert.start_time = start_time
 		alert.end_time = end_time
 		alert.check_weekdays = check_weekdays
 	elif alert_type == ALERT_TYPE_PEAK:
 		alert.peak_threshold = peak_threshold
-		alert.compare_percent = None
-		alert.start_time = None
-		alert.end_time = None
 		alert.check_weekdays = []
 	alert.save()
 	alert.contacts.clear()
