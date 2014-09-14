@@ -15,7 +15,7 @@ SETTINGS_TYPE_ALERT = 'alert'
 
 @permission_required(USER_ROLE_ADMIN_LEVEL)
 @ensure_csrf_cookie
-def settings_view(request, system_code=None, settings_type=SETTINGS_TYPE_ALERT):
+def alert_settings_view(request, system_code=None):
 	systems_info = System.get_systems_info(system_code, request.user.system.code)
 	sources = SourceManager.get_sources(systems_info["systems"][0])
 	contact_emails = Contact.objects.filter(system__code=system_code).values_list('email', flat=True)
@@ -27,7 +27,7 @@ def settings_view(request, system_code=None, settings_type=SETTINGS_TYPE_ALERT):
 	m['alerts'] = alerts
 	m.update(csrf(request))
 
-	return render_to_response('settings.html', m)
+	return render_to_response('alert_settings.html', m)
 
 @permission_required(USER_ROLE_ADMIN_LEVEL)
 def set_alert_view(request, system_code=None):

@@ -7,7 +7,7 @@
 {{block.super}}
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/settings.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/alert-settings.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'js/sumoselect/sumoselect.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'js/tag-it-master/css/jquery.tagit.css' %}">
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
@@ -19,11 +19,11 @@
 <script src="{% static 'js/entrak-system.js' %}"></script>
 {% endblock %}
 
-{% block selected-menu-link-id %}menu-link-settings{% endblock %}
-{% block system_menu_target_view %}settings{% endblock %}
-{% block breadcrumb_target_view %}settings{% endblock %}
+{% block selected-menu-link-id %}menu-link-alert{% endblock %}
+{% block system_menu_target_view %}alert_settings{% endblock %}
+{% block breadcrumb_target_view %}alert_settings{% endblock %}
 
-{% block page_title %}THE SETTINGS PAGE{% endblock %}
+{% block page_title %}THE ALERT PAGE{% endblock %}
 {% block page_subtitle %}Find out what you can set here at{% endblock %}
 
 {% block extra_script %}
@@ -412,8 +412,8 @@ $(function() {
 		<div class="choose-alert-container">
 			<div class="choose-alert-block">
 				<div class="choose-alert-info-block">
-					<img src="">
-					<img class="info-btn" src="">
+					<img class="alert-img" src="{% static 'images/alert/create-peak-demand.png' %}">
+					<img class="info-btn" src="{% static 'images/alert/info-icon.png' %}">
 					<div class="info-tooltip">
 						<div class="info-tooltip-content">Some hahalskdf ksdfl</div>
 						<div class="info-tooltip-close-btn">Close</div>
@@ -423,15 +423,15 @@ $(function() {
 			</div>
 			<div class="choose-alert-block">
 				<div class="choose-alert-info-block">
-					<img src="">
-					<img class="info-btn" src="">
+					<img class="alert-img" src="{% static 'images/alert/create-summary-alert.png' %}">
+					<img class="info-btn" src="{% static 'images/alert/info-icon.png' %}">
 				</div>
 				<div class="choose-alert-btn">Create Summary Alert</div>
 			</div>
 			<div class="choose-alert-block">
 				<div class="choose-alert-info-block">
-					<img src="">
-					<img class="info-btn" src="">
+					<img class="alert-img" src="{% static 'images/alert/create-instance-alert.png' %}">
+					<img class="info-btn" src="{% static 'images/alert/info-icon.png' %}">
 				</div>
 				<div class="choose-alert-btn">Create Instance Alert</div>
 			</div>
@@ -439,32 +439,32 @@ $(function() {
 
 		<div class="peak-demand alert-container">
 			<div class="alert-header">
-				<img class="alert-header-img" src="">
+				<img class="alert-header-img" src="{% static 'images/alert/peak-demand-icon-small.png' %}">
 				<div class="alert-header-title">Create Peak Demand Alert</div>
-				<img class="alert-header-info-btn" src="">
+				<img class="alert-header-info-btn" src="{% static 'images/alert/info-icon-small.png' %}">
 			</div>
 
 			<div class="alert-content">
 				<div class="conversational-block" alert_type="peak">
 					<div>Let me know if <select class="source-select" size="4" placeholder="Please select"></select>energy</div>
 					<div>reaches <select class="compare-percent-select"></select>% of my previous peak demand of <input class="peak-threshold-input" type="number">kWA.</div>
-					<div>Send alert to: <ul class="email-input"></ul></div>
+					<div class="send-alert-to">Send alert to: <ul class="email-input"></ul></div>
 					<div class="email-notes">You may use max 5 emails, use semi-colon to separate emails<br>e.g user@email.com; user@email.com</div>
-					<div>
-						<div class="conversational-confirm-btn">Confirm</div>
-						<div class="conversational-cancel-btn">Cancel</div>
+					<div class="btn-container">
+						<div class="conversational-btn conversational-cancel-btn">Cancel</div>
+						<div class="conversational-btn conversational-confirm-btn">Confirm</div>
 					</div>
 				</div>
 				<hr>
 				<div class="content-table">
 					<div class="table-header">
-						<div><img src="">
-						</div><div>End-Use
-						</div><div>Time from
-						</div><div>Time to
-						</div><div>Send to
-						</div><div>Date Created
-						</div><div>Action</div>
+						<div><img class="info-btn" src="{% static 'images/alert/info-icon-small.png' %}">
+						</div><div class="table-header-end-use">End-Use
+						</div><div class="table-header-time-from">Time from
+						</div><div class="table-header-time-to">Time to
+						</div><div class="table-header-send-to">Send to
+						</div><div class="table-header-created">Date Created
+						</div><div class="table-header-action">Action</div>
 					</div>
 					<div class="alert-row add-content-row">
 						<div class="end-use-col">
@@ -483,9 +483,9 @@ $(function() {
 
 		<div class="summary-alert alert-container">
 			<div class="alert-header">
-				<img class="alert-header-img" src="">
+				<img class="alert-header-img" src="{% static 'images/alert/summary-alert-icon-small.png' %}">
 				<div class="alert-header-title">Create Summary Alert</div>
-				<img class="alert-header-info-btn" src="">
+				<img class="alert-header-info-btn" src="{% static 'images/alert/info-icon-small.png' %}">
 			</div>
 
 			<div class="alert-content">
@@ -494,21 +494,21 @@ $(function() {
 					<div>is <select class="compare-percent-select"></select>% higher than my recent average between <select class="start-time-select time-select"></select> to <select class="end-time-select time-select"></select> on <select class="weekday-select"></select></div>
 					<div>Send alert to: <ul class="email-input"></ul></div>
 					<div class="email-notes">You may use max 5 emails, use semi-colon to separate emails<br>e.g user@email.com; user@email.com</div>
-					<div>
-						<div class="conversational-confirm-btn">Confirm</div>
-						<div class="conversational-cancel-btn">Cancel</div>
+					<div class="btn-container">
+						<div class="conversational-btn conversational-confirm-btn">Confirm</div>
+						<div class="conversational-btn conversational-cancel-btn">Cancel</div>
 					</div>
 				</div>
 				<hr>
 				<div class="content-table">
 					<div class="table-header">
-						<div><img src="">
-						</div><div>End-Use
-						</div><div>Time from
-						</div><div>Time to
-						</div><div>Send to
-						</div><div>Date Created
-						</div><div>Action</div>
+						<div><img class="info-btn" src="{% static 'images/alert/info-icon-small.png' %}">
+						</div><div class="table-header-end-use">End-Use
+						</div><div class="table-header-time-from">Time from
+						</div><div class="table-header-time-to">Time to
+						</div><div class="table-header-send-to">Send to
+						</div><div class="table-header-created">Date Created
+						</div><div class="table-header-action">Action</div>
 					</div>
 					<div class="alert-row add-content-row">
 						<div class="end-use-col">
@@ -527,9 +527,9 @@ $(function() {
 
 		<div class="still-on-alert alert-container">
 			<div class="alert-header">
-				<img class="alert-header-img" src="">
+				<img class="alert-header-img" src="{% static 'images/alert/instance-alert-icon-small.png' %}">
 				<div class="alert-header-title">Create Instance Alert</div>
-				<img class="alert-header-info-btn" src="">
+				<img class="alert-header-info-btn" src="{% static 'images/alert/info-icon-small.png' %}">
 			</div>
 
 			<div class="alert-content">
@@ -538,21 +538,21 @@ $(function() {
 					<div>is <select class="compare-percent-select"></select>% higher than my recent average between <select class="start-time-select time-select"></select> to <select class="end-time-select time-select"></select> on <select class="weekday-select"></select></div>
 					<div>Send alert to: <ul class="email-input"></ul></div>
 					<div class="email-notes">You may use max 5 emails, use semi-colon to separate emails<br>e.g user@email.com; user@email.com</div>
-					<div>
-						<div class="conversational-confirm-btn">Confirm</div>
-						<div class="conversational-cancel-btn">Cancel</div>
+					<div class="btn-container">
+						<div class="conversational-btn conversational-confirm-btn">Confirm</div>
+						<div class="conversational-btn conversational-cancel-btn">Cancel</div>
 					</div>
 				</div>
 				<hr>
 				<div class="content-table">
 					<div class="table-header">
-						<div><img src="">
-						</div><div>End-Use
-						</div><div>Time from
-						</div><div>Time to
-						</div><div>Send to
-						</div><div>Date Created
-						</div><div>Action</div>
+						<div><img class="info-btn" src="{% static 'images/alert/info-icon-small.png' %}">
+						</div><div class="table-header-end-use">End-Use
+						</div><div class="table-header-time-from">Time from
+						</div><div class="table-header-time-to">Time to
+						</div><div class="table-header-send-to">Send to
+						</div><div class="table-header-created">Date Created
+						</div><div class="table-header-action">Action</div>
 					</div>
 					<div class="alert-row add-content-row">
 						<div class="end-use-col">
