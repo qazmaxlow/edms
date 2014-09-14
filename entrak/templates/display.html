@@ -71,6 +71,7 @@ function getProgressData() {
 		var factoryAniFileName = 'progress-animation-' + aniLevel;
 		$('.factory-animation source:eq(0)').attr('src', data.static_url + 'images/progress/' + factoryAniFileName+'.webm');
 		$('.factory-animation source:eq(1)').attr('src', data.static_url + 'images/progress/' + factoryAniFileName+'.mp4');
+		$('.factory-animation').load();
 
 		$('.last-12-month-percent-val').text(Math.abs(Utils.fixed1DecIfLessThan10(data.percengate_change)));
 		var percentText, moneySavingText;
@@ -134,10 +135,15 @@ function changeSlide() {
 		display[targetUsedArrayKey].length = 0;
 	}
 
-	display[targetArrayKey].sort(function() { return 0.5 - Math.random() });
-	futureSlideIdx = display[targetArrayKey].pop();
-	display[targetUsedArrayKey].push(futureSlideIdx);
 	display.currentSlideType = futureSlideType;
+	if (futureSlideType === SLIDE_TYPE_DYNAMIC) {
+		futureSlideIdx = display[targetArrayKey].shift();
+	} else {
+		display[targetArrayKey].sort(function() { return 0.5 - Math.random() });
+		futureSlideIdx = display[targetArrayKey].pop();
+	}
+	display[targetUsedArrayKey].push(futureSlideIdx);
+	display.nextSlide = futureSlideIdx;
 
 	display.sudoSlider.goToSlide(futureSlideIdx, 1500);
 }
@@ -189,8 +195,14 @@ $(function() {
 		pause: SLIDER_PAUSE_M_SECOND,
 		auto: false,
 		beforeAnimation: function() {
+			if (display.nextSlide === 2) {
+				$('.factory-animation')[0].pause();
+			}
 		},
 		afterAnimation: function() {
+			if (display.sudoSlider.getValue('currentSlide') === 2) {
+				$('.factory-animation')[0].play();
+			}
 		},
 	});
 	setInterval(function() {
