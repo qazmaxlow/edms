@@ -169,6 +169,7 @@ class AlertHistory(models.Model):
 	alert = models.ForeignKey(Alert)
 	created = models.DateTimeField()
 	resolved = models.BooleanField()
+	resolved_datetime = models.DateTimeField(blank=True, null=True)
 	diff_percent = models.SmallIntegerField()
 
 class AlertEmail(models.Model):

@@ -12,6 +12,8 @@
 <link rel="stylesheet" type="text/css" href="{% static 'js/tag-it-master/css/jquery.tagit.css' %}">
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
+<script src="{% static 'js/jquery.md5.js' %}"></script>
+<script src="{% static 'js/mustache.js-master/mustache.js' %}"></script>
 <script src="{% static 'js/sumoselect/jquery.sumoselect.min.js' %}"></script>
 <script src="{% static 'js/tag-it-master/js/tag-it.min.js' %}"></script>
 <script src="{% static 'js/entrak-system.js' %}"></script>
@@ -27,11 +29,60 @@
 {% block extra_script %}
 {{block.super}}
 
+<script id="peak-alert-row-template" type="x-tmpl-mustache">
+<div class="alert-row" alert_idx="{% templatetag openvariable %}alertIdx{% templatetag closevariable %}" source_info='{% templatetag openvariable %}sourceInfo{% templatetag closevariable %}'>
+	<div class="end-use-col">
+		<div class="end-use-text">{% templatetag openvariable %}endUse{% templatetag closevariable %}</div>
+		<select class="end-use-select"></select>
+	</div><div class="percent-col">
+		<div class="percent-text">{% templatetag openvariable %}percent{% templatetag closevariable %}</div>
+		<select class="compare-percent-select"></select>
+	</div><div class="peak-threshold-col">
+		<div class="peak-threshold-text">{% templatetag openvariable %}peakThreshold{% templatetag closevariable %}</div>
+		<input class="peak-threshold-input" type="number"></input>
+	</div><div class="receiver-col">
+		<div class="receiver-text">{% templatetag openvariable %}receiver{% templatetag closevariable %}</div>
+		<select multiple="multiple" class="receiver-select"></select>
+	</div><div class="created-col">{% templatetag openvariable %}created{% templatetag closevariable %}
+	</div><div class="action-col">
+		<div class="normal-action-block"><img class="row-edit-btn" src="{% static 'images/alert/edit-icon.png' %}"><img class="row-copy-btn" src="{% static 'images/alert/duplicate-icon.png' %}"><img class="row-delete-btn" src="{% static 'images/alert/delete-icon.png' %}"></div>
+		<div class="confirm-action-block"><img class="row-confirm-btn" src="{% static 'images/alert/confirm-icon.png' %}"><img class="row-cancel-btn" src="{% static 'images/alert/cancel-icon.png' %}"></div>
+	</div>
+</div>
+</script>
+
+<script id="summary-still-on-alert-row-template" type="x-tmpl-mustache">
+<div class="alert-row" alert_idx="{% templatetag openvariable %}alertIdx{% templatetag closevariable %}">
+	<div class="end-use-col">
+		<div class="end-use-text">{% templatetag openvariable %}endUse{% templatetag closevariable %}</div>
+		<select class="end-use-select"></select>
+	</div><div class="percent-col">
+		<div class="percent-text">{% templatetag openvariable %}percent{% templatetag closevariable %}</div>
+		<select class="compare-percent-select"></select>
+	</div><div class="time-from-col">
+		<div class="time-from-text">{% templatetag openvariable %}timeFrom{% templatetag closevariable %}</div>
+		<select class="time-from-select time-select"></select>
+	</div><div class="time-to-col">
+		<div class="time-to-text">{% templatetag openvariable %}timeTo{% templatetag closevariable %}</div>
+		<select class="time-to-select time-select"></select>
+	</div><div class="weekday-col">
+		<div class="weekday-text">{% templatetag openvariable %}weekday{% templatetag closevariable %}</div>
+		<select class="weekday-select"></select>
+	</div><div class="receiver-col">
+		<div class="receiver-text">{% templatetag openvariable %}numOfreceiver{% templatetag closevariable %}</div>
+		<select multiple="multiple" class="receiver-select"></select>
+	</div><div class="created-col">{% templatetag openvariable %}created{% templatetag closevariable %}
+	</div><div class="action-col">
+		<div class="normal-action-block"><img class="row-edit-btn" src="{% static 'images/alert/edit-icon.png' %}"><img class="row-copy-btn" src="{% static 'images/alert/duplicate-icon.png' %}"><img class="row-delete-btn" src="{% static 'images/alert/delete-icon.png' %}"></div>
+		<div class="confirm-action-block"><img class="row-confirm-btn" src="{% static 'images/alert/confirm-icon.png' %}"><img class="row-cancel-btn" src="{% static 'images/alert/cancel-icon.png' %}"></div>
+	</div>
+</div>
+</script>
+
 <script type="text/javascript">
 var settings = {};
 
 function genSystemOptionInfo(systemTree) {
-	var name = systemTree.data.name;
 	var sourceIds = [];
 	systemTree.traverseDown(function (node) {
 		for (var sourceId in node.data.sources) {
@@ -39,13 +90,67 @@ function genSystemOptionInfo(systemTree) {
 		}
 	});
 
-	return {'name': name, 'source_ids': sourceIds};
+	return {'name': systemTree.data.name, 'source_ids': sourceIds};
 }
 
 function transformToPythonWeekday(momentWeekday) {
 	var pythonWeekday = momentWeekday-1;
 	pythonWeekday = (pythonWeekday < 0 ) ? 6 : pythonWeekday;
 	return pythonWeekday;
+}
+
+function transformToSourceMapKey(info) {
+	var name = info['name'];
+	var secondPart = ('source_ids' in info) ? 'source_ids'+JSON.stringify(info['source_ids']) : 'source_id'+JSON.stringify(info['source_id']);
+	return $.md5(name+secondPart);
+}
+
+function findValueIdxInSelect(selectEle, value) {
+	var optionIdx;
+	selectEle.find('option').each(function(idx) {
+		if ($(this).attr('value') === value) {
+			optionIdx = idx;
+			return false;
+		}
+	});
+
+	return optionIdx;
+}
+
+function setSumoSelectedItem(selEle, value) {
+	if (selEle.length > 0) {
+		selEle[0].sumo.selectItem(findValueIdxInSelect(selEle, value));
+	}
+}
+
+function setupSourceSelect(targetEle) {
+	$.each(settings.sourceInfoList, function(infoIdx, info) {
+		var mapKey = transformToSourceMapKey(info);
+		var selectHtml = '<option value=\'' + mapKey + '\'>' + info.name + '</option>';
+		targetEle.append(selectHtml);
+	});
+}
+
+function updateReceiverSelect(emailInputEle) {
+	if (settings.skipSignalEvent) {
+		return;
+	}
+	
+	var emails = emailInputEle.tagit("assignedTags");
+	var receiverSelect = emailInputEle.parent().parent().parent().find('.on-edit .receiver-select');
+	if (receiverSelect.length > 0) {
+		receiverSelect.find('option').each(function(optionIdx) {
+			receiverSelect[0].sumo.unSelectItem(optionIdx);
+		});
+	}
+	$.each(emails, function(emailIdx, email) {
+		if (receiverSelect.find('option[value="' + email + '"]').length > 0) {
+			setSumoSelectedItem(receiverSelect, email);
+		} else {
+			receiverSelect[0].sumo.add(email);
+			setSumoSelectedItem(receiverSelect, email);
+		}
+	});
 }
 
 function requestSetAlert(alertData) {
@@ -93,68 +198,40 @@ $(function() {
 	settings.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
 	settings.entrakSystem.addSourceToSystem('{{sources|jsonifySources}}');
 	settings.contactEmails = JSON.parse('{{contact_emails|jsonifyPrimitiveObj}}');
+	settings.alerts = JSON.parse('{{alerts|jsonifyAlerts}}');
+	settings.skipSignalEvent = false;
 
-	var optionContainer = $('.source-select');
 	settings.sourceInfoMap = {};
-	var systemOptionInfos = [];
-	var sourceOptionInfos = [];
+	settings.sourceInfoList = [];
 	settings.entrakSystem.systemTree.traverseDown(function (node) {
-		systemOptionInfos.push(genSystemOptionInfo(node));
+		var systemOptionInfo = genSystemOptionInfo(node);
+		var mapKey = transformToSourceMapKey(systemOptionInfo);
+		settings.sourceInfoMap[mapKey] = JSON.stringify(systemOptionInfo);
+		settings.sourceInfoList.push(systemOptionInfo);
 		$.each(node.data.sources, function(sourceId, source) {
-			sourceOptionInfos.push({'name': source.name, 'source_id': source.id});
+			sourceOptionInfo = {'name': source.name, 'source_id': source.id};
+			var mapKey = transformToSourceMapKey(sourceOptionInfo);
+			settings.sourceInfoMap[mapKey] = JSON.stringify(sourceOptionInfo);
+			settings.sourceInfoList.push(sourceOptionInfo);
 		})
 	});
-
-	systemOptionInfos.sort(function(a, b) {
-		return (b.source_ids).length - (a.source_ids).length;
-	});
-	$.each(systemOptionInfos, function(infoIdx, info) {
-		var mapKey = infoIdx + '|' + info.name;
-		settings.sourceInfoMap[mapKey] = JSON.stringify(info);
-		var selectHtml = '<option value=\'' + mapKey + '\'>' + info.name + '</option>';
-		optionContainer.append(selectHtml);
-	});
-	$.each(sourceOptionInfos, function(infoIdx, info) {
-		var mapKey = infoIdx + '|' + info.name;
-		settings.sourceInfoMap[mapKey] = JSON.stringify(info);
-		var selectHtml = '<option value=\'' + mapKey + '\'>' + info.name + '</option>';
-		optionContainer.append(selectHtml);
-	});
-	optionContainer.SumoSelect();
-
-	$('.time-select').each(function() {
-		var selectContainer = $(this);
-		var optionDt = moment().startOf('day');
-		var endDt = moment(optionDt).add('d', 1);
-		for (; optionDt.isBefore(endDt); optionDt.add('m', 30)) {
-			selectContainer.append('<option value="' + optionDt.format('HH:mm') + '">' + optionDt.format('HH:mm') + '</option>');
-		};
+	settings.sourceInfoList.sort(function(a, b) {
+		var bOrder = ('source_ids' in b) ? b['source_ids'].length : 0;
+		var aOrder = ('source_ids' in a) ? a['source_ids'].length : 0;
+		return bOrder - aOrder;
 	});
 
-	$('.weekday-select').each(function() {
-		var selectContainer = $(this);
-
-		selectContainer.append('<option value="[0, 1, 2, 3, 4, 5, 6]">All</option>');
-		selectContainer.append('<option value="[1, 2, 3, 4, 5]">Weekdays</option>');
-		selectContainer.append('<option value="[0, 6]">Weekends</option>');
-
-		var optionDt = moment().startOf('week');
-		var endDt = moment(optionDt).add('w', 1);
-		for (; optionDt.isBefore(endDt); optionDt.add('d', 1)) {
-			selectContainer.append('<option value="[' + transformToPythonWeekday(optionDt.day()) + ']">' + optionDt.format('dddd') + '</option>');
-		};
-	});
-
-	$('.compare-percent-select').each(function() {
-		var selectContainer = $(this);
-		for (var i = 5; i <= 100; i += 5) {
-			selectContainer.append('<option value="' + i + '">' + i + '</option>');
-		};
-	});
+	setupSourceSelect($('.source-select'));
 
 	$('.email-input').tagit({
 		availableTags: settings.contactEmails,
 		tagLimit: 5,
+		afterTagAdded: function(event, ui) {
+			updateReceiverSelect($(this));
+		},
+		afterTagRemoved: function(event, ui) {
+			updateReceiverSelect($(this));
+		},
 	});
 
 	$('.conversational-confirm-btn').click(function() {
@@ -176,6 +253,140 @@ $(function() {
 			postData.check_weekdays = conversationalBlockContainer.find('.weekday-select').val();
 		}
 		requestSetAlert(postData);
+	});
+
+	var peakRowTemplate = $('#peak-alert-row-template').html();
+	Mustache.parse(peakRowTemplate);
+	var summaryStillOnRowTemplate = $('#summary-still-on-alert-row-template').html();
+	Mustache.parse(summaryStillOnRowTemplate);
+	$.each(settings.alerts, function(alertIdx, alert) {
+		var info = {
+			alertIdx: alertIdx,
+			endUse: alert.sourceInfo.name,
+			percent: alert.comparePercent,
+			created: alert.created,
+		};
+		var target, targetTemplate;
+		if (alert.type === 'summary' || alert.type === 'peak') {
+			targetTemplate = summaryStillOnRowTemplate;
+			target = (alert.type === 'summary') ? '.summary-alert .add-content-row' : '.still-on-alert .add-content-row';
+
+			info.timeFrom = alert.startTime;
+			info.timeTo = alert.endTime;
+		} else {
+			targetTemplate = peakRowTemplate;
+			target = '.peak-demand .add-content-row';
+
+			info.peakThreshold = alert.peakThreshold;
+		}
+
+		var eleHtml = Mustache.render(targetTemplate, info);
+		$(eleHtml).insertBefore(target);
+	});
+	setupSourceSelect($('.end-use-select'));
+	$('.receiver-select').each(function() {
+		var selectContainer = $(this);
+		$.each(settings.contactEmails, function(emailIdx, email) {
+			selectContainer.append('<option value="' + email + '">' + email + '</option>');
+		});
+	});
+
+	$('.time-select').each(function() {
+		var selectContainer = $(this);
+		var optionDt = moment().startOf('day');
+		var endDt = moment(optionDt).add('d', 1);
+		for (; optionDt.isBefore(endDt); optionDt.add('m', 30)) {
+			selectContainer.append('<option value="' + optionDt.format('HH:mm') + '">' + optionDt.format('HH:mm') + '</option>');
+		};
+	});
+
+	$('.weekday-select').each(function() {
+		var selectContainer = $(this);
+
+		selectContainer.append('<option value="[0,1,2,3,4,5,6]">All</option>');
+		selectContainer.append('<option value="[0,1,2,3,4]">Weekdays</option>');
+		selectContainer.append('<option value="[5,6]">Weekends</option>');
+
+		var optionDt = moment().startOf('week');
+		var endDt = moment(optionDt).add('w', 1);
+		for (; optionDt.isBefore(endDt); optionDt.add('d', 1)) {
+			selectContainer.append('<option value="[' + transformToPythonWeekday(optionDt.day()) + ']">' + optionDt.format('dddd') + '</option>');
+		};
+	});
+
+	$('.compare-percent-select').each(function() {
+		var selectContainer = $(this);
+		for (var i = 5; i <= 100; i += 5) {
+			selectContainer.append('<option value="' + i + '">' + i + '</option>');
+		};
+	});
+
+	$('.conversational-block select').SumoSelect();
+
+	var cBlockToRowSelectClassMap = {
+		'.source-select': '.end-use-select',
+		'.compare-percent-select': '.compare-percent-select',
+		'.start-time-select': '.time-from-select',
+		'.end-time-select': '.time-to-select',
+		'.weekday-select': '.weekday-select'
+	};
+	$('.conversational-block').each(function() {
+		var cBlockEle = $(this);
+		var blockContainer = cBlockEle.parent();
+		$.each(cBlockToRowSelectClassMap, function(cBlockClass, affectClass) {
+			cBlockEle.find(cBlockClass).change(function() {
+				setSumoSelectedItem(blockContainer.find('.alert-row.on-edit '+affectClass), $(this).val());
+			});
+		});
+	});
+
+	var rowToCBlockselectClassMap = {
+		'.end-use-select': '.source-select',
+		'.compare-percent-select': '.compare-percent-select',
+		'.time-from-select': '.start-time-select',
+		'.time-to-select': '.end-time-select',
+		'.weekday-select': '.weekday-select',
+	};
+	$('.row-edit-btn').click(function() {
+		var tableRow = $(this).parent().parent().parent();
+		var blockContainer = tableRow.parent().parent();
+		blockContainer.find('.alert-row').removeClass('on-edit');
+		tableRow.addClass('on-edit');
+		var alert = settings.alerts[tableRow.attr('alert_idx')];
+
+		tableRow.find('select').SumoSelect();
+
+		setSumoSelectedItem(tableRow.find('.end-use-select'), transformToSourceMapKey(alert.sourceInfo));
+		setSumoSelectedItem(tableRow.find('.compare-percent-select'), alert.comparePercent.toString());
+		$.each(alert.contactEmails, function(emailIdx, email) {
+			setSumoSelectedItem(tableRow.find('.receiver-select'), email);
+		});
+
+		if (alert.type === 'summary' || alert.type === 'still_on') {
+			setSumoSelectedItem(tableRow.find('.time-from-select'), alert.startTime);
+			setSumoSelectedItem(tableRow.find('.time-to-select'), alert.endTime);
+			setSumoSelectedItem(tableRow.find('.weekday-select'), JSON.stringify(alert.checkWeekdays));
+		} else if (alert.type === 'peak') {
+			//
+		}
+
+		tableRow.parent().find('select').off('change');
+		$.each(rowToCBlockselectClassMap, function(rowClass, affectClass) {
+			tableRow.find(rowClass).change(function() {
+				setSumoSelectedItem(blockContainer.find('.conversational-block '+affectClass), $(this).val());
+			}).change();
+		});
+		tableRow.find('.receiver-select').change(function() {
+			var emailInput = blockContainer.find('.conversational-block .email-input');
+			settings.skipSignalEvent = true;
+			emailInput.tagit("removeAll");
+			if ($(this).val() !== null) {
+				$.each($(this).val(), function(emailIdx, email) {
+					emailInput.tagit("createTag", email);
+				});
+			}
+			settings.skipSignalEvent = false;
+		}).change();
 	});
 });
 </script>
@@ -255,6 +466,17 @@ $(function() {
 						</div><div>Date Created
 						</div><div>Action</div>
 					</div>
+					<div class="alert-row add-content-row">
+						<div class="end-use-col">
+						</div><div class="percent-col">
+						</div><div class="time-from-col">
+						</div><div class="time-to-col">
+						</div><div class="receiver-col">
+						</div><div class="created-col">
+						</div><div class="action-col">
+							<div class="add-action-block"><img class="row-add-btn" src=""></div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -288,8 +510,16 @@ $(function() {
 						</div><div>Date Created
 						</div><div>Action</div>
 					</div>
-					<div class="table-row">
-						<div></div>
+					<div class="alert-row add-content-row">
+						<div class="end-use-col">
+						</div><div class="percent-col">
+						</div><div class="time-from-col">
+						</div><div class="time-to-col">
+						</div><div class="receiver-col">
+						</div><div class="created-col">
+						</div><div class="action-col">
+							<div class="add-action-block"><img class="row-add-btn" src=""></div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -324,8 +554,16 @@ $(function() {
 						</div><div>Date Created
 						</div><div>Action</div>
 					</div>
-					<div class="table-row">
-						<div></div>
+					<div class="alert-row add-content-row">
+						<div class="end-use-col">
+						</div><div class="percent-col">
+						</div><div class="time-from-col">
+						</div><div class="time-to-col">
+						</div><div class="receiver-col">
+						</div><div class="created-col">
+						</div><div class="action-col">
+							<div class="add-action-block"><img class="row-add-btn" src=""></div>
+						</div>
 					</div>
 				</div>
 			</div>

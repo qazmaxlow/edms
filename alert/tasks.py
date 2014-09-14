@@ -46,6 +46,7 @@ def __valid_alert_filter_f(utc_now):
 @shared_task(ignore_result=True)
 def check_all_alerts():
 	utc_now = pytz.utc.localize(datetime.datetime.utcnow()).replace(second=0, microsecond=0)
+	# utc_now = pytz.timezone("Asia/Hong_Kong").localize(datetime.datetime(2014, 6, 3, 20))
 	alerts = Alert.objects.select_related('system__code', 'system__city', 'system__timezone').all()
 	need_check_alerts = filter(__valid_alert_filter_f(utc_now), alerts)
 
@@ -60,6 +61,7 @@ def check_all_alerts():
 
 		need_alert = not (verify_result['pass_verify'])
 		alert_history = None
+		need_send_email = False
 		prev_historys = AlertHistory.objects.filter(alert_id=alert.id).order_by('-created')
 
 		if need_alert \
@@ -69,17 +71,21 @@ def check_all_alerts():
 				created=utc_now,
 				resolved=False,
 				diff_percent=verify_result['diff_percent'])
+
+			need_send_email = True
 		elif (not need_alert) \
 			and (prev_historys and (not prev_historys[0].resolved)):
-			alert_history = AlertHistory(
-				alert_id=alert.id,
-				created=utc_now,
-				resolved=True,
-				diff_percent=verify_result['diff_percent'])
+			prev_history = prev_historys[0]
+			prev_history.resolved = True
+			prev_history.resolved_datetime = utc_now
+			prev_history.save()
+
+			need_send_email = True
 
 		if alert_history is not None:
 			will_insert_historys.append(alert_history)
 
+		if need_send_email:
 			recipients = alert.contacts.values_list('email', flat=True)
 			for recipient_email in recipients:
 				email_key = "%s|%s|%s"%(alert.system.code, alert.type, recipient_email)

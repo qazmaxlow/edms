@@ -6,7 +6,7 @@ class AlertAdmin(admin.ModelAdmin):
 		'start_time', 'end_time', 'created')
 
 class AlertHistoryAdmin(admin.ModelAdmin):
-	list_display = ('alert', 'created', 'resolved', 'diff_percent')
+	list_display = ('alert', 'created', 'diff_percent', 'resolved', 'resolved_datetime')
 
 class AlertEmailAdmin(admin.ModelAdmin):
 	list_display = ('created', 'recipient', 'title', 'error')

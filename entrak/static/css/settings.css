@@ -1,5 +1,6 @@
 .conversational-confirm-btn, .conversational-cancel-btn,
-.info-btn, .info-tooltip-close-btn{
+.info-btn, .info-tooltip-close-btn, .normal-action-block>img,
+.confirm-action-block>img{
 	cursor: pointer;
 	cursor: hand;
 }
@@ -73,4 +74,10 @@
 .table-header>div {
 	display: inline-block;
 	font-size: 9pt;
+}
+.alert-row>div {
+	display: inline-block;
+}
+.confirm-action-block {
+	display: none;
 }

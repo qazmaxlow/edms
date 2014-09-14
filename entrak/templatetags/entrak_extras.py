@@ -1,5 +1,6 @@
 import json
 import calendar
+import pytz
 from django import template
 from django.utils.safestring import mark_safe
 from django.utils.html import escapejs
@@ -68,6 +69,24 @@ def jsonifyUnitCategorys(unit_categorys):
 		unit_categorys_info.append(info)
 
 	return escapejs(json.dumps(unit_categorys_info))
+
+@register.filter
+def jsonifyAlerts(alerts):
+	alert_infos = []
+	for alert in alerts:
+		alert_infos.append({
+			'id': alert.id,
+			'type': alert.type,
+			'comparePercent': alert.compare_percent,
+			'peakThreshold': alert.peak_threshold,
+			'startTime': alert.start_time.strftime('%H:%M'),
+			'endTime': alert.end_time.strftime('%H:%M'),
+			'checkWeekdays': alert.check_weekdays,
+			'contactEmails': [email.encode('utf8') for email in alert.contacts.values_list('email', flat=True)],
+			'sourceInfo': alert.source_info,
+			'created': alert.created.astimezone(pytz.timezone(alert.system.timezone)).strftime("%Y-%m-%d %H:%M:%S")
+		})
+	return escapejs(json.dumps(alert_infos))
 
 @register.filter
 def jsonifyPrimitiveObj(targetObj):

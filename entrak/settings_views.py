@@ -19,10 +19,12 @@ def settings_view(request, system_code=None, settings_type=SETTINGS_TYPE_ALERT):
 	systems_info = System.get_systems_info(system_code, request.user.system.code)
 	sources = SourceManager.get_sources(systems_info["systems"][0])
 	contact_emails = Contact.objects.filter(system__code=system_code).values_list('email', flat=True)
+	alerts = Alert.objects.filter(system_id__in=[system.id for system in systems_info["systems"]]).prefetch_related('contacts')
 
 	m = systems_info
 	m['sources'] = sources
 	m['contact_emails'] = [email.encode('utf8') for email in contact_emails]
+	m['alerts'] = alerts
 	m.update(csrf(request))
 
 	return render_to_response('settings.html', m)
