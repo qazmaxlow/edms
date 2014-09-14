@@ -4,6 +4,7 @@ import calendar
 import json
 from django.shortcuts import render_to_response
 from django.db.models import Q
+from settings import STATIC_URL
 from system.models import System
 from unit.models import UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
 from baseline.models import BaselineUsage
@@ -146,6 +147,7 @@ def __calculate_progress_data(systems):
 	first_day_record = first_day_record.astimezone(pytz.timezone(first_day_tz))
 
 	result = {}
+	result['static_url'] = STATIC_URL
 	result['last_12_months_co2_consumption_accurate'] = last_12_months_co2_consumption
 	result['percengate_change'] = (total_baseline_co2_consumption-last_12_months_co2_consumption)/total_baseline_co2_consumption*100.0
 	result['total_co2_saving_in_kg'] = total_co2_saving

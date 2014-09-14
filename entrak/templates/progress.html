@@ -8,6 +8,28 @@
 {{block.super}}
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/progress.css' %}">
+
+<script type="text/javascript">
+$(function() {
+	var archivedLevel = {{archived_level}};
+	var aniLevel;
+
+	if (archivedLevel <= 0) {
+		aniLevel = 1;
+	} else if (archivedLevel <= 5) {
+		aniLevel = 2;
+	} else if (archivedLevel <= 15) {
+		aniLevel = 3;
+	} else if (archivedLevel <= 25) {
+		aniLevel = 4;
+	} else {
+		aniLevel = 5;
+	}
+	var factoryAniFileName = 'progress-animation-' + aniLevel;
+	$('.factory-animation source:eq(0)').attr('src', '{{static_url}}images/progress/' + factoryAniFileName+'.webm');
+	$('.factory-animation source:eq(1)').attr('src', '{{static_url}}images/progress/' + factoryAniFileName+'.mp4');
+});
+</script>
 {% endblock %}
 
 {% block selected-menu-link-id %}menu-link-progress{% endblock %}
@@ -48,7 +70,10 @@
 	</div>
 
 	<div>
-		<img src="{% static 'images/progress/factory-bg-top.png' %}">
+		<video class="factory-animation" width="1058px" height="433px" autoplay loop>
+			<source type="video/webm">
+			<source type="video/mp4">
+		</video>
 	</div>
 
 	<div class="cumulative-saving-container {% if total_co2_saving >= 0 %}positive-saving{% else %}negative-saving{% endif %}">

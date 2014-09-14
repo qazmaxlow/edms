@@ -54,7 +54,24 @@ function getProgressData() {
 		url: "../progress_data/",
 		data: {},
 	}).done(function(data) {
-		console.log(data);
+		var archivedLevel = data.archived_level;
+		var aniLevel;
+
+		if (archivedLevel <= 0) {
+			aniLevel = 1;
+		} else if (archivedLevel <= 5) {
+			aniLevel = 2;
+		} else if (archivedLevel <= 15) {
+			aniLevel = 3;
+		} else if (archivedLevel <= 25) {
+			aniLevel = 4;
+		} else {
+			aniLevel = 5;
+		}
+		var factoryAniFileName = 'progress-animation-' + aniLevel;
+		$('.factory-animation source:eq(0)').attr('src', data.static_url + 'images/progress/' + factoryAniFileName+'.webm');
+		$('.factory-animation source:eq(1)').attr('src', data.static_url + 'images/progress/' + factoryAniFileName+'.mp4');
+
 		$('.last-12-month-percent-val').text(Math.abs(Utils.fixed1DecIfLessThan10(data.percengate_change)));
 		var percentText, moneySavingText;
 		if (data.percengate_change >= 0) {
@@ -232,7 +249,10 @@ $(function() {
 		<div class="progress-info">
 			<div class="header-empty-block"></div>
 			<div class="factory-background">
-				<img src="{% static 'images/display/factory.png' %}">
+				<video class="factory-animation" width="1058px" height="433px" autoplay loop>
+					<source type="video/webm">
+					<source type="video/mp4">
+				</video>
 				<div>
 					<div class="last-12-month-block">
 						<div class="last-12-month-block-title">Over the past 12 months</div>
