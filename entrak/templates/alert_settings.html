@@ -419,25 +419,25 @@ $(function() {
 						<div class="info-tooltip-close-btn">Close</div>
 					</div>
 				</div>
-				<div class="choose-alert-btn">Create Peak Demand</div>
+				<a class="choose-alert-link" href="#peak-demand-section"><div class="choose-alert-btn">Create Peak Demand</div></a>
 			</div>
 			<div class="choose-alert-block">
 				<div class="choose-alert-info-block">
 					<img class="alert-img" src="{% static 'images/alert/create-summary-alert.png' %}">
 					<img class="info-btn" src="{% static 'images/alert/info-icon.png' %}">
 				</div>
-				<div class="choose-alert-btn">Create Summary Alert</div>
+				<a class="choose-alert-link" href="#summary-alert-section"><div class="choose-alert-btn">Create Summary Alert</div></a>
 			</div>
 			<div class="choose-alert-block">
 				<div class="choose-alert-info-block">
 					<img class="alert-img" src="{% static 'images/alert/create-instance-alert.png' %}">
 					<img class="info-btn" src="{% static 'images/alert/info-icon.png' %}">
 				</div>
-				<div class="choose-alert-btn">Create Instance Alert</div>
+				<a class="choose-alert-link" href="#still-on-alert-section"><div class="choose-alert-btn">Create Instance Alert</div></a>
 			</div>
 		</div>
 
-		<div class="peak-demand alert-container">
+		<div id="peak-demand-section" class="peak-demand alert-container">
 			<div class="alert-header">
 				<img class="alert-header-img" src="{% static 'images/alert/peak-demand-icon-small.png' %}">
 				<div class="alert-header-title">Create Peak Demand Alert</div>
@@ -460,8 +460,8 @@ $(function() {
 					<div class="table-header">
 						<div><img class="info-btn" src="{% static 'images/alert/info-icon-small.png' %}">
 						</div><div class="table-header-end-use">End-Use
-						</div><div class="table-header-time-from">Time from
-						</div><div class="table-header-time-to">Time to
+						</div><div class="table-header-percentage">Percentage
+						</div><div class="table-header-threshold">Threshold
 						</div><div class="table-header-send-to">Send to
 						</div><div class="table-header-created">Date Created
 						</div><div class="table-header-action">Action</div>
@@ -481,7 +481,7 @@ $(function() {
 			</div>
 		</div>
 
-		<div class="summary-alert alert-container">
+		<div id="summary-alert-section" class="summary-alert alert-container">
 			<div class="alert-header">
 				<img class="alert-header-img" src="{% static 'images/alert/summary-alert-icon-small.png' %}">
 				<div class="alert-header-title">Create Summary Alert</div>
@@ -504,8 +504,10 @@ $(function() {
 					<div class="table-header">
 						<div><img class="info-btn" src="{% static 'images/alert/info-icon-small.png' %}">
 						</div><div class="table-header-end-use">End-Use
+						</div><div class="table-header-percentage">Percentage
 						</div><div class="table-header-time-from">Time from
 						</div><div class="table-header-time-to">Time to
+						</div><div class="table-header-weekdays">Weekdays
 						</div><div class="table-header-send-to">Send to
 						</div><div class="table-header-created">Date Created
 						</div><div class="table-header-action">Action</div>
@@ -525,7 +527,7 @@ $(function() {
 			</div>
 		</div>
 
-		<div class="still-on-alert alert-container">
+		<div id="still-on-alert-section" class="still-on-alert alert-container">
 			<div class="alert-header">
 				<img class="alert-header-img" src="{% static 'images/alert/instance-alert-icon-small.png' %}">
 				<div class="alert-header-title">Create Instance Alert</div>
@@ -548,8 +550,10 @@ $(function() {
 					<div class="table-header">
 						<div><img class="info-btn" src="{% static 'images/alert/info-icon-small.png' %}">
 						</div><div class="table-header-end-use">End-Use
+						</div><div class="table-header-percentage">Percentage
 						</div><div class="table-header-time-from">Time from
 						</div><div class="table-header-time-to">Time to
+						</div><div class="table-header-weekdays">Weekdays
 						</div><div class="table-header-send-to">Send to
 						</div><div class="table-header-created">Date Created
 						</div><div class="table-header-action">Action</div>

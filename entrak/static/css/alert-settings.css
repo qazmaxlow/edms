@@ -146,6 +146,9 @@
 	bottom: 10px;
 	color: #393939;
 }
+.choose-alert-link {
+	text-decoration: none;
+}
 .choose-alert-btn {
 	width: 185px;
 	height: 23px;
@@ -332,7 +335,7 @@
 	margin-right: 5px;
 }
 .table-header>div:not(:first-child){
-	position: absolute;
+	position: relative;
 	text-align: center;
 	border-left: 1px solid #dbdbdb;
 	font-weight: bold;
@@ -341,28 +344,32 @@
 	color: #35485f;
 }
 .table-header-end-use{
-	width: 208px;
+	width: 206px;
+}
+.table-header-percentage{
+	width: 98px;
+}
+.table-header-threshold{
+	width: 98px;
 }
 .table-header-time-from{
-	width: 100px;
-	right: 480px;
+	width: 98px;
 }
 .table-header-time-to{
-	width: 100px;
-	right: 380px;
+	width: 98px;
+}
+.table-header-weekdays{
+	width: 98px;
 }
 .table-header-send-to{
-	right: 250px;
-	width: 140px;
+	width: 136px;
 }
 .table-header-created{
-	right: 150px;
-	width: 100px;
+	width: 98px;
 	font-weight: lighter !important;
 }
 .table-header-action{
-	right: 30px;
-	width: 120px;
+	width: 116px;
 }
 
 .alert-row>div {
