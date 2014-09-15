@@ -32,16 +32,16 @@
 <script id="peak-alert-row-template" type="x-tmpl-mustache">
 <div class="alert-row" alert_idx="{% templatetag openvariable %}alertIdx{% templatetag closevariable %}" source_info='{% templatetag openvariable %}sourceInfo{% templatetag closevariable %}'>
 	<div class="end-use-col">
-		<div class="end-use-text">{% templatetag openvariable %}endUse{% templatetag closevariable %}</div>
+		<div class="display-text end-use-text">{% templatetag openvariable %}endUse{% templatetag closevariable %}</div>
 		<select class="end-use-select"></select>
 	</div><div class="percent-col">
-		<div class="percent-text">{% templatetag openvariable %}percent{% templatetag closevariable %}</div>
+		<div class="display-text percent-text">{% templatetag openvariable %}percent{% templatetag closevariable %}</div>
 		<select class="compare-percent-select"></select>
 	</div><div class="peak-threshold-col">
-		<div class="peak-threshold-text">{% templatetag openvariable %}peakThreshold{% templatetag closevariable %}</div>
+		<div class="display-text peak-threshold-text">{% templatetag openvariable %}peakThreshold{% templatetag closevariable %}</div>
 		<input class="peak-threshold-input" type="number"></input>
 	</div><div class="receiver-col">
-		<div class="receiver-text">{% templatetag openvariable %}receiver{% templatetag closevariable %}</div>
+		<div class="display-text receiver-text">{% templatetag openvariable %}numOfreceiver{% templatetag closevariable %}</div>
 		<select multiple="multiple" class="receiver-select"></select>
 	</div><div class="created-col">{% templatetag openvariable %}created{% templatetag closevariable %}
 	</div><div class="action-col">
@@ -54,22 +54,22 @@
 <script id="summary-still-on-alert-row-template" type="x-tmpl-mustache">
 <div class="alert-row" alert_idx="{% templatetag openvariable %}alertIdx{% templatetag closevariable %}">
 	<div class="end-use-col">
-		<div class="end-use-text">{% templatetag openvariable %}endUse{% templatetag closevariable %}</div>
+		<div class="display-text end-use-text">{% templatetag openvariable %}endUse{% templatetag closevariable %}</div>
 		<select class="end-use-select"></select>
 	</div><div class="percent-col">
-		<div class="percent-text">{% templatetag openvariable %}percent{% templatetag closevariable %}</div>
+		<div class="display-text percent-text">{% templatetag openvariable %}percent{% templatetag closevariable %}</div>
 		<select class="compare-percent-select"></select>
 	</div><div class="time-from-col">
-		<div class="time-from-text">{% templatetag openvariable %}timeFrom{% templatetag closevariable %}</div>
+		<div class="display-text time-from-text">{% templatetag openvariable %}timeFrom{% templatetag closevariable %}</div>
 		<select class="time-from-select time-select"></select>
 	</div><div class="time-to-col">
-		<div class="time-to-text">{% templatetag openvariable %}timeTo{% templatetag closevariable %}</div>
+		<div class="display-text time-to-text">{% templatetag openvariable %}timeTo{% templatetag closevariable %}</div>
 		<select class="time-to-select time-select"></select>
 	</div><div class="weekday-col">
-		<div class="weekday-text">{% templatetag openvariable %}weekday{% templatetag closevariable %}</div>
+		<div class="display-text weekday-text">{% templatetag openvariable %}weekday{% templatetag closevariable %}</div>
 		<select class="weekday-select"></select>
 	</div><div class="receiver-col">
-		<div class="receiver-text">{% templatetag openvariable %}numOfreceiver{% templatetag closevariable %}</div>
+		<div class="display-text receiver-text">{% templatetag openvariable %}numOfreceiver{% templatetag closevariable %}</div>
 		<select multiple="multiple" class="receiver-select"></select>
 	</div><div class="created-col">{% templatetag openvariable %}created{% templatetag closevariable %}
 	</div><div class="action-col">
@@ -123,6 +123,12 @@ function setSumoSelectedItem(selEle, value) {
 	}
 }
 
+function unSelectSumoItem(selEle) {
+	if (selEle.length > 0 && selEle.val() !== null) {
+		selEle[0].sumo.unSelectItem(findValueIdxInSelect(selEle, selEle.val()))
+	}
+}
+
 function setupSourceSelect(targetEle) {
 	$.each(settings.sourceInfoList, function(infoIdx, info) {
 		var mapKey = transformToSourceMapKey(info);
@@ -142,15 +148,16 @@ function updateReceiverSelect(emailInputEle) {
 		receiverSelect.find('option').each(function(optionIdx) {
 			receiverSelect[0].sumo.unSelectItem(optionIdx);
 		});
+
+		$.each(emails, function(emailIdx, email) {
+			if (receiverSelect.find('option[value="' + email + '"]').length > 0) {
+				setSumoSelectedItem(receiverSelect, email);
+			} else {
+				receiverSelect[0].sumo.add(email);
+				setSumoSelectedItem(receiverSelect, email);
+			}
+		});
 	}
-	$.each(emails, function(emailIdx, email) {
-		if (receiverSelect.find('option[value="' + email + '"]').length > 0) {
-			setSumoSelectedItem(receiverSelect, email);
-		} else {
-			receiverSelect[0].sumo.add(email);
-			setSumoSelectedItem(receiverSelect, email);
-		}
-	});
 }
 
 function requestSetAlert(alertData) {
@@ -166,6 +173,87 @@ function requestSetAlert(alertData) {
 	}).fail(function(jqXHR, textStatus) {
 		console.log(jqXHR.responseText);
 	});
+}
+
+function turnOnEditMode(tableRow) {
+	var rowToCBlockselectClassMap = {
+		'.end-use-select': '.source-select',
+		'.compare-percent-select': '.compare-percent-select',
+		'.time-from-select': '.start-time-select',
+		'.time-to-select': '.end-time-select',
+		'.weekday-select': '.weekday-select',
+	};
+
+	var blockContainer = tableRow.parent().parent();
+	blockContainer.find('.alert-row').removeClass('on-edit');
+	tableRow.addClass('on-edit');
+	var alert = settings.alerts[tableRow.attr('alert_idx')];
+
+	tableRow.find('.display-text').hide();
+	tableRow.find('select').show().SumoSelect();
+
+	setSumoSelectedItem(tableRow.find('.end-use-select'), transformToSourceMapKey(alert.sourceInfo));
+	setSumoSelectedItem(tableRow.find('.compare-percent-select'), alert.comparePercent.toString());
+	$.each(alert.contactEmails, function(emailIdx, email) {
+		setSumoSelectedItem(tableRow.find('.receiver-select'), email);
+	});
+
+	if (alert.type === 'summary' || alert.type === 'still_on') {
+		setSumoSelectedItem(tableRow.find('.time-from-select'), alert.startTime);
+		setSumoSelectedItem(tableRow.find('.time-to-select'), alert.endTime);
+		setSumoSelectedItem(tableRow.find('.weekday-select'), JSON.stringify(alert.checkWeekdays));
+	} else if (alert.type === 'peak') {
+		//
+	}
+
+	tableRow.parent().find('select').off('change');
+	$.each(rowToCBlockselectClassMap, function(rowClass, affectClass) {
+		tableRow.find(rowClass).change(function() {
+			setSumoSelectedItem(blockContainer.find('.conversational-block '+affectClass), $(this).val());
+		}).change();
+	});
+	tableRow.find('.receiver-select').change(function() {
+		var emailInput = blockContainer.find('.conversational-block .email-input');
+		settings.skipSignalEvent = true;
+		emailInput.tagit("removeAll");
+		if ($(this).val() !== null) {
+			$.each($(this).val(), function(emailIdx, email) {
+				emailInput.tagit("createTag", email);
+			});
+		}
+		settings.skipSignalEvent = false;
+	}).change();
+}
+
+function restoreConversationBlock(conversationBlockEle) {
+	var tableRow = conversationBlockEle.parent().find('.alert-row.on-edit');
+	tableRow.find('select').each(function() {
+		$(this).val('');
+		$(this)[0].sumo.unload();
+	});
+	turnOnEditMode(tableRow);
+}
+
+function clearConversationBlock(conversationBlockEle) {
+	unSelectSumoItem(conversationBlockEle.find('.source-select'));
+	conversationBlockEle.find('select:not(.source-select)').each(function() {
+		$(this)[0].sumo.selectItem(0);
+	});
+	conversationBlockEle.find('.email-input').tagit("removeAll");
+}
+
+function cancelEditMode(tableRow) {
+	tableRow.removeClass('on-edit');
+	var blockContainer = tableRow.parent().parent();
+
+	clearConversationBlock(blockContainer.find('.conversational-block'));
+
+	tableRow.find('select').off('change');
+
+	tableRow.find('.display-text').show();
+	tableRow.find('select').each(function() {
+		$(this)[0].sumo.unload();
+	}).hide();
 }
 
 $(function() {
@@ -340,53 +428,23 @@ $(function() {
 		});
 	});
 
-	var rowToCBlockselectClassMap = {
-		'.end-use-select': '.source-select',
-		'.compare-percent-select': '.compare-percent-select',
-		'.time-from-select': '.start-time-select',
-		'.time-to-select': '.end-time-select',
-		'.weekday-select': '.weekday-select',
-	};
+	$('.conversational-cancel-btn').click(function() {
+		var conversationalBlock = $(this).parent().parent();
+		if (conversationalBlock.parent().find('.alert-row.on-edit').length > 0) {
+			restoreConversationBlock(conversationalBlock);
+		} else {
+			clearConversationBlock(conversationalBlock);
+		}
+	});
+
 	$('.row-edit-btn').click(function() {
 		var tableRow = $(this).parent().parent().parent();
-		var blockContainer = tableRow.parent().parent();
-		blockContainer.find('.alert-row').removeClass('on-edit');
-		tableRow.addClass('on-edit');
-		var alert = settings.alerts[tableRow.attr('alert_idx')];
+		turnOnEditMode(tableRow);
+	});
 
-		tableRow.find('select').SumoSelect();
-
-		setSumoSelectedItem(tableRow.find('.end-use-select'), transformToSourceMapKey(alert.sourceInfo));
-		setSumoSelectedItem(tableRow.find('.compare-percent-select'), alert.comparePercent.toString());
-		$.each(alert.contactEmails, function(emailIdx, email) {
-			setSumoSelectedItem(tableRow.find('.receiver-select'), email);
-		});
-
-		if (alert.type === 'summary' || alert.type === 'still_on') {
-			setSumoSelectedItem(tableRow.find('.time-from-select'), alert.startTime);
-			setSumoSelectedItem(tableRow.find('.time-to-select'), alert.endTime);
-			setSumoSelectedItem(tableRow.find('.weekday-select'), JSON.stringify(alert.checkWeekdays));
-		} else if (alert.type === 'peak') {
-			//
-		}
-
-		tableRow.parent().find('select').off('change');
-		$.each(rowToCBlockselectClassMap, function(rowClass, affectClass) {
-			tableRow.find(rowClass).change(function() {
-				setSumoSelectedItem(blockContainer.find('.conversational-block '+affectClass), $(this).val());
-			}).change();
-		});
-		tableRow.find('.receiver-select').change(function() {
-			var emailInput = blockContainer.find('.conversational-block .email-input');
-			settings.skipSignalEvent = true;
-			emailInput.tagit("removeAll");
-			if ($(this).val() !== null) {
-				$.each($(this).val(), function(emailIdx, email) {
-					emailInput.tagit("createTag", email);
-				});
-			}
-			settings.skipSignalEvent = false;
-		}).change();
+	$('.row-cancel-btn').click(function() {
+		var tableRow = $(this).parent().parent().parent();
+		cancelEditMode(tableRow);
 	});
 });
 </script>

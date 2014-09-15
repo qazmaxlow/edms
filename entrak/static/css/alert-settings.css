@@ -375,6 +375,18 @@
 .alert-row>div {
 	display: inline-block;
 }
+.alert-row select {
+	display: none;
+}
+.normal-action-block {
+	display: block;
+}
+.on-edit .normal-action-block {
+	display: none;
+}
 .confirm-action-block {
 	display: none;
+}
+.on-edit .confirm-action-block {
+	display: block;
 }
