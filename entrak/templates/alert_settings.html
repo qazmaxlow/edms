@@ -29,6 +29,26 @@
 {% block extra_script %}
 {{block.super}}
 
+<script id="history-row-template" type="x-tmpl-mustache">
+<div class="history-row {% templatetag openvariable %}resolvedColClass{% templatetag closevariable %}" history_id="{% templatetag openvariable %}historyId{% templatetag closevariable %}">
+	<div class="date-col">
+		<div class="created-date">{% templatetag openvariable %}createdDate{% templatetag closevariable %}</div>
+		<div class="created-time">{% templatetag openvariable %}createdTime{% templatetag closevariable %}</div>
+	</div><div class="source-col">{% templatetag openvariable %}sourceName{% templatetag closevariable %}
+	</div><div class="issue-col">
+		<div class="issue-line-1">{% templatetag openvariable %}issueLine1{% templatetag closevariable %}</div>
+		<div class="issue-line-2">{% templatetag openvariable %}issueLine2{% templatetag closevariable %}</div>
+		<div class="issue-line-3">{% templatetag openvariable %}issueLine3{% templatetag closevariable %}</div>
+	</div><div class="resolved-col">
+		<div class="resolved-dot"></div>
+		<div class="resolved-dt-container">
+			<div class="resolved-text">Resolved at</div>
+			<div class="resolved-dt">{% templatetag openvariable %}resolvedDt{% templatetag closevariable %}</div>
+		</div>
+	</div>
+</div>
+</script>
+
 <script id="peak-alert-row-template" type="x-tmpl-mustache">
 <div class="alert-row" alert_idx="{% templatetag openvariable %}alertIdx{% templatetag closevariable %}" source_info='{% templatetag openvariable %}sourceInfo{% templatetag closevariable %}'>
 	<div class="end-use-col">
@@ -272,8 +292,13 @@ $(function() {
 			}
 		});
 	});
+	{% if alert_history_infos %}
+	$('.sub-menu-alert-history').addClass('selected-tab');
+	$(".alert-history-container").addClass('selected-submenu').show();
+	{% else %}
 	$('.sub-menu-create-alert').addClass('selected-tab');
 	$(".create-alert-container").addClass('selected-submenu').show();
+	{% endif %}
 
 	$(".info-btn").click(function () {
 		$(this).parent().find('.info-tooltip').show();
@@ -287,7 +312,50 @@ $(function() {
 	settings.entrakSystem.addSourceToSystem('{{sources|jsonifySources}}');
 	settings.contactEmails = JSON.parse('{{contact_emails|jsonifyPrimitiveObj}}');
 	settings.alerts = JSON.parse('{{alerts|jsonifyAlerts}}');
+	settings.alertHistorys = JSON.parse('{{alert_history_infos}}');
 	settings.skipSignalEvent = false;
+
+	var historyContentContainer = $('.history-content');
+	var historyRowTemplate = $('#history-row-template').html();
+	Mustache.parse(historyRowTemplate);
+	$.each(settings.alertHistorys, function(historyIdx, alertHistory) {
+		var createdDt = moment.unix(alertHistory.created);
+		var info = {
+			createdDate: createdDt.format('DD MMM YYYY, ddd'),
+			createdTime: createdDt.format('hh:mma'),
+			sourceName: alertHistory.name,
+		};
+
+		if (alertHistory.alert_type === 'peak') {
+			info.issueLine1 = alertHistory.name + ' reached';
+			info.issueLine2 = alertHistory.diff_percent + '% MORE than my peak demand';
+		} else  if (alertHistory.alert_type === 'summary' || alertHistory.alert_type === 'still_on') {
+			info.issueLine1 = alertHistory.name + ' used';
+			info.issueLine2 = alertHistory.diff_percent + '% MORE than recent ' + createdDt.format('dddd') + ' average';
+		}
+
+		info.issueLine3 = 'on ';
+		if (alertHistory.alert_type === 'summary') {
+			var startTimeDt = moment().hour(alertHistory.start_time_h).minute(alertHistory.start_time_m);
+			var endTimeDt = moment().hour(alertHistory.end_time_h).minute(alertHistory.end_time_m);
+			info.issueLine3 += startTimeDt.format('hh:mmA') + ' - ' + endTimeDt.format('hh:mmA');
+		} else if(alertHistory.alert_type === 'peak' || alertHistory.alert_type === 'still_on') {
+			info.issueLine3 += moment(createdDt).subtract('m', 5).format('hh:mmA')
+				+ ' - '
+				+ createdDt.format('hh:mmA');
+		}
+		info.issueLine3 += createdDt.format(' | DD MMM YYYY, ddd');
+
+		if (alertHistory.resolved) {
+			info.resolvedColClass = 'resolved-history';
+			info.resolvedDt = moment.unix(alertHistory.resolved_datetime).format('hh:mmA DD MMM YYYY,ddd');
+		} else {
+			info.resolvedColClass = 'unresolve-history';
+		}
+
+		var eleHtml = Mustache.render(historyRowTemplate, info);
+		historyContentContainer.append(eleHtml);
+	});
 
 	settings.sourceInfoMap = {};
 	settings.sourceInfoList = [];
@@ -463,6 +531,16 @@ $(function() {
 <div class="main-content-container">
 
 	<div class="alert-history-container">
+		<div class="history-table-header">
+			<div class="history-th-date">Date
+			</div><div class="history-th-source">End-Source
+			</div><div class="history-th-issue">Alert Issue
+			</div><div class="history-th-status">
+				<div>Alert Status</div><div><span>Unresolved</span><span>/</span><span>Resolved</span></div>
+			</div>
+		</div>
+		<div class="history-content">
+		</div>
 	</div>
 
 	<div class="create-alert-container">

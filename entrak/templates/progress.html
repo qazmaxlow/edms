@@ -28,6 +28,7 @@ $(function() {
 	var factoryAniFileName = 'progress-animation-' + aniLevel;
 	$('.factory-animation source:eq(0)').attr('src', '{{static_url}}images/progress/' + factoryAniFileName+'.webm');
 	$('.factory-animation source:eq(1)').attr('src', '{{static_url}}images/progress/' + factoryAniFileName+'.mp4');
+	$('.factory-animation').load();
 });
 </script>
 {% endblock %}

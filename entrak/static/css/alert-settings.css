@@ -49,6 +49,7 @@
 }
 
 .create-alert-container {
+	display: none;
 }
 
 .choose-alert-title {
@@ -389,4 +390,39 @@
 }
 .on-edit .confirm-action-block {
 	display: block;
+}
+
+.alert-history-container {
+	display: none;
+}
+
+.history-table-header {
+}
+.history-table-header>div {
+	display: inline-block;
+	text-align: center;
+}
+
+.history-row>div{
+	display: inline-block;
+}
+.history-row.resolved-history .resolved-text{
+	display: block;
+}
+.history-row.unresolve-history .resolved-text{
+	display: none;
+}
+.resolved-dot {
+	display: inline-block;
+	width: 5px;
+	height: 5px;
+}
+.history-row.resolved-history .resolved-dot{
+	background-color: green;
+}
+.history-row.unresolve-history .resolved-dot{
+	background-color: red;
+}
+.resolved-dt-container {
+	display: inline-block;
 }
