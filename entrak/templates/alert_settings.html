@@ -61,7 +61,7 @@
 		<div class="display-text peak-threshold-text">{% templatetag openvariable %}peakThreshold{% templatetag closevariable %}</div>
 		<input class="peak-threshold-input" type="number"></input>
 	</div><div class="receiver-col">
-		<div class="display-text receiver-text">{% templatetag openvariable %}numOfreceiver{% templatetag closevariable %}</div>
+		<div class="display-text receiver-text">{% templatetag openvariable %}numOfreceiver{% templatetag closevariable %} Receiver</div>
 		<select multiple="multiple" class="receiver-select"></select>
 	</div><div class="created-col">{% templatetag openvariable %}created{% templatetag closevariable %}
 	</div><div class="action-col">
@@ -89,7 +89,7 @@
 		<div class="display-text weekday-text">{% templatetag openvariable %}weekday{% templatetag closevariable %}</div>
 		<select class="weekday-select"></select>
 	</div><div class="receiver-col">
-		<div class="display-text receiver-text">{% templatetag openvariable %}numOfreceiver{% templatetag closevariable %}</div>
+		<div class="display-text receiver-text">{% templatetag openvariable %}numOfreceiver{% templatetag closevariable %} Receiver</div>
 		<select multiple="multiple" class="receiver-select"></select>
 	</div><div class="created-col">{% templatetag openvariable %}created{% templatetag closevariable %}
 	</div><div class="action-col">
@@ -117,6 +117,30 @@ function transformToPythonWeekday(momentWeekday) {
 	var pythonWeekday = momentWeekday-1;
 	pythonWeekday = (pythonWeekday < 0 ) ? 6 : pythonWeekday;
 	return pythonWeekday;
+}
+
+function transformToMomentWeekday(pythonWeekday) {
+	var momentWeekday = pythonWeekday+1;
+	momentWeekday = momentWeekday%7;
+	return momentWeekday;
+}
+
+function transformPythonWeekdaysToName(weekdays) {
+	var allWeekdays = [0,1,2,3,4,5,6];
+	var weekdayWeekdays = [0,1,2,3,4];
+	var weekendWeekdays = [5,6];
+	var weekdayName;
+	if (weekdays.length === allWeekdays.length) {
+		weekdayName = 'All';
+	} else if (weekdays.length === weekdayWeekdays.length) {
+		weekdayName = 'Weekdays';
+	} else if (weekdays.length === weekendWeekdays.length) {
+		weekdayName = 'Weekends';
+	} else if (weekdays.length === 1) {
+		weekdayName = moment().day(transformToMomentWeekday(weekdays[0])).format('dddd');
+	}
+
+	return weekdayName;
 }
 
 function transformToSourceMapKey(info) {
@@ -210,6 +234,7 @@ function turnOnEditMode(tableRow) {
 	var alert = settings.alerts[tableRow.attr('alert_idx')];
 
 	tableRow.find('.display-text').hide();
+	tableRow.find('input').show();
 	tableRow.find('select').show().SumoSelect();
 
 	setSumoSelectedItem(tableRow.find('.end-use-select'), transformToSourceMapKey(alert.sourceInfo));
@@ -223,26 +248,33 @@ function turnOnEditMode(tableRow) {
 		setSumoSelectedItem(tableRow.find('.time-to-select'), alert.endTime);
 		setSumoSelectedItem(tableRow.find('.weekday-select'), JSON.stringify(alert.checkWeekdays));
 	} else if (alert.type === 'peak') {
-		//
+		tableRow.find('.peak-threshold-input').val(alert.peakThreshold);
 	}
 
-	tableRow.parent().find('select').off('change');
-	$.each(rowToCBlockselectClassMap, function(rowClass, affectClass) {
-		tableRow.find(rowClass).change(function() {
-			setSumoSelectedItem(blockContainer.find('.conversational-block '+affectClass), $(this).val());
+	if (alert.type === 'summary' || alert.type === 'still_on') {
+		tableRow.parent().find('select').off('change');
+		$.each(rowToCBlockselectClassMap, function(rowClass, affectClass) {
+			tableRow.find(rowClass).change(function() {
+				setSumoSelectedItem(blockContainer.find('.conversational-block '+affectClass), $(this).val());
+			}).change();
+		});
+		tableRow.find('.receiver-select').change(function() {
+			var emailInput = blockContainer.find('.conversational-block .email-input');
+			settings.skipSignalEvent = true;
+			emailInput.tagit("removeAll");
+			if ($(this).val() !== null) {
+				$.each($(this).val(), function(emailIdx, email) {
+					emailInput.tagit("createTag", email);
+				});
+			}
+			settings.skipSignalEvent = false;
 		}).change();
-	});
-	tableRow.find('.receiver-select').change(function() {
-		var emailInput = blockContainer.find('.conversational-block .email-input');
-		settings.skipSignalEvent = true;
-		emailInput.tagit("removeAll");
-		if ($(this).val() !== null) {
-			$.each($(this).val(), function(emailIdx, email) {
-				emailInput.tagit("createTag", email);
-			});
-		}
-		settings.skipSignalEvent = false;
-	}).change();
+	} else if (alert.type === 'peak') {
+		tableRow.parent().find('.peak-threshold-input').off('change');
+		tableRow.find('.peak-threshold-input').change(function() {
+			blockContainer.find('.conversational-block .peak-threshold-input').val($(this).val());
+		}).change();
+	}
 }
 
 function restoreConversationBlock(conversationBlockEle) {
@@ -256,6 +288,7 @@ function restoreConversationBlock(conversationBlockEle) {
 
 function clearConversationBlock(conversationBlockEle) {
 	unSelectSumoItem(conversationBlockEle.find('.source-select'));
+	conversationBlockEle.find('input').val('');
 	conversationBlockEle.find('select:not(.source-select)').each(function() {
 		$(this)[0].sumo.selectItem(0);
 	});
@@ -271,6 +304,7 @@ function cancelEditMode(tableRow) {
 	tableRow.find('select').off('change');
 
 	tableRow.find('.display-text').show();
+	tableRow.find('input').hide();
 	tableRow.find('select').each(function() {
 		$(this)[0].sumo.unload();
 	}).hide();
@@ -421,14 +455,16 @@ $(function() {
 			endUse: alert.sourceInfo.name,
 			percent: alert.comparePercent,
 			created: alert.created,
+			numOfreceiver: alert.contactEmails.length,
 		};
 		var target, targetTemplate;
-		if (alert.type === 'summary' || alert.type === 'peak') {
+		if (alert.type === 'summary' || alert.type === 'still_on') {
 			targetTemplate = summaryStillOnRowTemplate;
 			target = (alert.type === 'summary') ? '.summary-alert .add-content-row' : '.still-on-alert .add-content-row';
 
 			info.timeFrom = alert.startTime;
 			info.timeTo = alert.endTime;
+			info.weekday = transformPythonWeekdaysToName(alert.checkWeekdays);
 		} else {
 			targetTemplate = peakRowTemplate;
 			target = '.peak-demand .add-content-row';
@@ -493,6 +529,10 @@ $(function() {
 			cBlockEle.find(cBlockClass).change(function() {
 				setSumoSelectedItem(blockContainer.find('.alert-row.on-edit '+affectClass), $(this).val());
 			});
+		});
+
+		cBlockEle.find('.peak-threshold-input').change(function() {
+			blockContainer.find('.alert-row.on-edit .peak-threshold-input').val($(this).val());
 		});
 	});
 
@@ -596,7 +636,7 @@ $(function() {
 					<div class="table-header">
 						<div><img class="info-btn" src="{% static 'images/alert/info-icon-small.png' %}">
 						</div><div class="table-header-end-use">End-Use
-						</div><div class="table-header-percentage">Percentage
+						</div><div class="table-header-percentage">%
 						</div><div class="table-header-threshold">Threshold
 						</div><div class="table-header-send-to">Send to
 						</div><div class="table-header-created">Date Created
@@ -628,7 +668,7 @@ $(function() {
 				<div class="conversational-block" alert_type="summary">
 					<div>Let me know if <select class="source-select" size="4" placeholder="Please select"></select>energy use</div>
 					<div>is <select class="compare-percent-select"></select>% higher than my recent average between <select class="start-time-select time-select"></select> to <select class="end-time-select time-select"></select> on <select class="weekday-select"></select></div>
-					<div>Send alert to: <ul class="email-input"></ul></div>
+					<div class="send-alert-to">Send alert to: <ul class="email-input"></ul></div>
 					<div class="email-notes">You may use max 5 emails, use semi-colon to separate emails<br>e.g user@email.com; user@email.com</div>
 					<div class="btn-container">
 						<div class="conversational-btn conversational-confirm-btn">Confirm</div>
@@ -640,7 +680,7 @@ $(function() {
 					<div class="table-header">
 						<div><img class="info-btn" src="{% static 'images/alert/info-icon-small.png' %}">
 						</div><div class="table-header-end-use">End-Use
-						</div><div class="table-header-percentage">Percentage
+						</div><div class="table-header-percentage">%
 						</div><div class="table-header-time-from">Time from
 						</div><div class="table-header-time-to">Time to
 						</div><div class="table-header-weekdays">Weekdays
@@ -653,6 +693,7 @@ $(function() {
 						</div><div class="percent-col">
 						</div><div class="time-from-col">
 						</div><div class="time-to-col">
+						</div><div class="weekday-col">
 						</div><div class="receiver-col">
 						</div><div class="created-col">
 						</div><div class="action-col">
@@ -674,7 +715,7 @@ $(function() {
 				<div class="conversational-block" alert_type="still_on">
 					<div>Let me know if <select class="source-select" size="4" placeholder="Please select"></select>energy use</div>
 					<div>is <select class="compare-percent-select"></select>% higher than my recent average between <select class="start-time-select time-select"></select> to <select class="end-time-select time-select"></select> on <select class="weekday-select"></select></div>
-					<div>Send alert to: <ul class="email-input"></ul></div>
+					<div class="send-alert-to">Send alert to: <ul class="email-input"></ul></div>
 					<div class="email-notes">You may use max 5 emails, use semi-colon to separate emails<br>e.g user@email.com; user@email.com</div>
 					<div class="btn-container">
 						<div class="conversational-btn conversational-confirm-btn">Confirm</div>
@@ -686,7 +727,7 @@ $(function() {
 					<div class="table-header">
 						<div><img class="info-btn" src="{% static 'images/alert/info-icon-small.png' %}">
 						</div><div class="table-header-end-use">End-Use
-						</div><div class="table-header-percentage">Percentage
+						</div><div class="table-header-percentage">%
 						</div><div class="table-header-time-from">Time from
 						</div><div class="table-header-time-to">Time to
 						</div><div class="table-header-weekdays">Weekdays
@@ -699,6 +740,7 @@ $(function() {
 						</div><div class="percent-col">
 						</div><div class="time-from-col">
 						</div><div class="time-to-col">
+						</div><div class="weekday-col">
 						</div><div class="receiver-col">
 						</div><div class="created-col">
 						</div><div class="action-col">
