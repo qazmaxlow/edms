@@ -101,13 +101,14 @@ class Alert(models.Model):
 			recent_end_dt = end_dt - datetime.timedelta(days=7)
 			recent_value = SourceManager.get_readings_sum(all_source_ids, recent_start_dt, recent_end_dt)
 
-			if self.compare_method == ALERT_COMPARE_METHOD_ABOVE:
-				if value > recent_value*(1+(self.compare_percent/100.0)):
-					pass_verify = False
-			elif self.compare_method == ALERT_COMPARE_METHOD_BELOW:
-				if value < recent_value*(1-(self.compare_percent/100.0)):
-					pass_verify = False
-			diff_percent = int(((float(value)/recent_value)-1)*100)
+			if recent_value != 0:
+				if self.compare_method == ALERT_COMPARE_METHOD_ABOVE:
+					if value > recent_value*(1+(self.compare_percent/100.0)):
+						pass_verify = False
+				elif self.compare_method == ALERT_COMPARE_METHOD_BELOW:
+					if value < recent_value*(1-(self.compare_percent/100.0)):
+						pass_verify = False
+				diff_percent = int(((float(value)/recent_value)-1)*100)
 
 		verify_result = {
 			'start_dt': start_dt,
