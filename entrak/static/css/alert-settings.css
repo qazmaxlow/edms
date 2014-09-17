@@ -48,6 +48,11 @@
 .main-content-container .SumoSelect:hover > .CaptionCont > label {
 	background-color: #E0D8D8;
 }
+.content-table .SumoSelect > .optWrapper.open {
+	left: -10px;
+	width: 199px;
+	padding-left: 8px;
+}
 
 .create-alert-container {
 	display: none;
@@ -336,18 +341,10 @@
 	height: 35px;
 	vertical-align: top;
 }
-.table-header .info-btn{
-	width: 20px;
-	height: 20px;
-	vertical-align: middle;
-	margin-top: 7px;
-	right: 0px;
-	border-radius: 50%;
-	border: 1px solid #acacac;
-	margin-left: 5px;
-	margin-right: 5px;
+.table-header>div:first-child {
+	border-left: 0px;
 }
-.table-header>div:not(:first-child){
+.table-header>div{
 	position: relative;
 	text-align: center;
 	border-left: 1px solid #dbdbdb;
@@ -420,14 +417,42 @@
 	width: 105px;
 }
 
+.peak-demand .end-use-col {
+	width: 238px;
+	background-color: #35BC99;
+	margin-left: 29px;
+	border-left: 1px solid #DBDBDB;
+	border-right: 1px solid #DBDBDB;
+	height: 35px;
+}
 .summary-alert .end-use-col,
 .still-on-alert .end-use-col {
 	margin-left: 11px;
-	width: 198px;
+	width: 199px;
 	border-left: 1px solid #DBDBDB;
 	border-right: 1px solid #DBDBDB;
-	text-align: center;
-	background-color: #6F70B1;
+	text-align: left;
+	font-size: 10pt;
+	font-weight: bold;
+}
+.summary-alert .end-use-col {
+	background-color: #4F50A1;
+}
+.still-on-alert .end-use-col {
+	background-color: #EB9524;
+}
+.peadk-demand .end-use-col .SumoSelect{
+	margin-left: auto;
+	margin-right: auto;
+}
+.peak-demand .end-use-col .SumoSelect .CaptionCont {
+	background-color: #35BC99;
+	font-size: 9pt;
+	font-weight: bold;
+	padding-top: 13px;
+	height: 12px;
+	color: #fff;
+	width: 205px;
 }
 .summary-alert .end-use-col .SumoSelect .CaptionCont,
 .still-on-alert .end-use-col .SumoSelect .CaptionCont {
@@ -436,9 +461,19 @@
 	margin-top: 5px;
 	background-color: #6F70B1;
 }
+.peak-demand .end-use-col .SumoSelect .CaptionCont label {
+	background-color: #35BC99;
+	right: -15px;
+	width: 15px;
+}
 .summary-alert .end-use-col .SumoSelect .CaptionCont label,
 .still-on-alert .end-use-col .SumoSelect .CaptionCont label {
 	background-color: #6F70B1;
+}
+.peak-demand .end-use-col .SumoSelect .SlectBox label > i {
+	height: 12px;
+	width: 12px;
+	background-size: 12px;
 }
 .summary-alert .end-use-col .SumoSelect .CaptionCont label > i,
 .still-on-alert .end-use-col .SumoSelect .CaptionCont label > i {
@@ -454,16 +489,30 @@
 	color: #FFF;
 }
 
+.peak-demand .percent-col{
+	width: 99px;
+	text-align: center;
+	border-right: 1px solid #DBDBDB;
+}
 .summary-alert .percent-col,
 .still-on-alert .percent-col {
 	width: 45px;
 	border-right: 1px solid #DBDBDB;
 	text-align: center;
+	font-size: 10pt;
 }
+.peak-demand .percent-col .SumoSelect,
 .summary-alert .percent-col .SumoSelect,
 .still-on-alert .percent-col .SumoSelect {
 	margin-left: auto;
 	margin-right: auto;
+}
+.peak-demand .percent-col .SumoSelect .CaptionCont{
+	width: 83px;
+	height: 10px;
+	font-size: 9pt;
+	margin-top: 5px;
+	border: 1px solid #35BC99;
 }
 .summary-alert .percent-col .SumoSelect .CaptionCont,
 .still-on-alert .percent-col .SumoSelect .CaptionCont {
@@ -472,16 +521,19 @@
 	margin-top: 5px;
 	border: 1px solid #6F70B1;
 }
+.peak-demand .percent-col .SumoSelect .CaptionCont label > i,
 .summary-alert .percent-col .SumoSelect .CaptionCont label > i,
 .still-on-alert .percent-col .SumoSelect .CaptionCont label > i {
 	width: 10px;
 	height: 9px;
 	background-size: 10px;
 }
+.peak-demand  .percent-col .SumoSelect .CaptionCont label,
 .summary-alert .percent-col .SumoSelect .CaptionCont label,
 .still-on-alert .percent-col .SumoSelect .CaptionCont label {
 	width: 13px;
 }
+.peak-demand .percent-col .SumoSelect .CaptionCont span,
 .summary-alert .percent-col .SumoSelect .CaptionCont span,
 .still-on-alert .percent-col .SumoSelect .CaptionCont span {
 	font-size: 9pt;
@@ -495,6 +547,7 @@
 	width: 77px;
 	text-align: center;
 	border-right: 1px solid #DBDBDB;
+	font-size: 10pt;
 }
 .summary-alert .time-from-col .SumoSelect,
 .summary-alert .time-to-col .SumoSelect,
@@ -536,9 +589,10 @@
 
 .summary-alert .weekday-col,
 .still-on-alert .weekday-col {
-	width: 100px;
-	text-align: center;
+	width: 95px;
+	text-align: left;
 	border-right: 1px solid #DBDBDB;
+	font-size: 10pt;
 }
 .summary-alert .weekday-col .SumoSelect,
 .still-on-alert .weekday-col .SumoSelect {
@@ -547,7 +601,7 @@
 }
 .summary-alert .weekday-col .SumoSelect .CaptionCont,
 .still-on-alert .weekday-col .SumoSelect .CaptionCont {
-	width: 85px;
+	width: 80px;
 	height: 10px;
 	margin-top: 5px;
 	border: 1px solid #6F70B1;
@@ -568,17 +622,31 @@
 	padding-top: 2px;
 }
 
-.summary-alert .receiver-col,
-.still-on-alert .receiver-col {
-	width: 120px;
+.peak-demand .receiver-col {
+	width: 137px;
 	text-align: center;
 	border-right: 1px solid #DBDBDB;
 }
+.summary-alert .receiver-col,
+.still-on-alert .receiver-col {
+	width: 120px;
+	text-align: left;
+	border-right: 1px solid #DBDBDB;
+	font-size: 10pt;
+}
+.peak-demand .receiver-col .SumoSelect,
 .summary-alert .receiver-col .SumoSelect,
 .still-on-alert .receiver-col .SumoSelect{
 	margin-left: auto;
 	margin-right: auto;
 
+}
+.peak-demand .receiver-col .SumoSelect .CaptionCont{
+	width: 122px;
+	height: 10px;
+	font-size: 9pt;
+	margin-top: 5px;
+	border: 1px solid #35BC99;
 }
 .summary-alert .receiver-col .SumoSelect .CaptionCont,
 .still-on-alert .receiver-col .SumoSelect .CaptionCont{
@@ -587,22 +655,51 @@
 	margin-top: 5px;
 	border: 1px solid #6F70B1;
 }
+.peak-demand .receiver-col .SumoSelect .CaptionCont label > i,
 .summary-alert .receiver-col .SumoSelect .CaptionCont label > i,
 .still-on-alert .receiver-col .SumoSelect .CaptionCont label > i{
 	width: 10px;
 	height: 9px;
 	background-size: 10px;
 }
+.peak-demand .receiver-col .SumoSelect .CaptionCont label,
 .summary-alert .receiver-col .SumoSelect .CaptionCont label,
 .still-on-alert .receiver-col .SumoSelect .CaptionCont label{
 	width: 13px;
 }
+.peak-demand .receiver-col .SumoSelect .CaptionCont span,
 .summary-alert .receiver-col .SumoSelect .CaptionCont span,
 .still-on-alert .receiver-col .SumoSelect .CaptionCont span{
 	font-size: 9pt;
 	padding-top: 2px;
 }
 
+.peak-demand .peak-threshold-col {
+	width: 97px;
+	text-align: center;
+	border-right: 1px solid #dbdbdb;
+	margin-left: auto;
+	margin-right: auto;
+}
+.peak-demand .peak-threshold-input {
+	width: 76px;
+	border: 2px solid #35BC99;
+	height: 14px;
+	font-size: 9pt;
+}
+
+.peak-demand .created-col {
+	width: 98px;
+	text-align: center;
+	border-right: 1px solid #DBDBDB;
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 9pt;
+	vertical-align: top;
+	height: 32px;
+	padding-top: 5px;
+	line-height: 1.1em; 
+}
 .summary-alert .created-col,
 .still-on-alert .created-col {
 	width: 95px;
@@ -611,15 +708,51 @@
 	margin-left: auto;
 	margin-right: auto;
 	font-size: 9pt;
-	vertical-align: middle;
+	vertical-align: top;
 	height: 32px;
 	padding-top: 5px;
 	line-height: 1.1em;
 }
 
+.display-text{
+	height: 23px;
+	padding-top: 12px;
+	font-size: 9pt;
+	text-align: center;
+	color: #354960;
+}
+.display-text.end-use-text {
+	height: 23px;
+	padding-top: 12px;
+	font-size: 9pt;
+	font-weight: bold;
+	color: #fff;
+	text-align: left;
+	padding-left: 10px;
+}
+.peak-demand .display-text.percent-text {
+	width: 98px;
+	border-right: 1px solid #dbdbdb;
+}
+
+.normal-action-block>img {
+	margin-left: 15px;
+}
+.row-edit-btn {
+	width: 19px;
+	height: 18px;
+}
+.row-copy-btn {
+	width: 18px;
+	height: 18px;
+}
+.row-delete-btn {
+	width: 14px;
+	height: 18px;
+}
 .row-confirm-btn,
 .row-cancel-btn {
-	margin-left: 20px;
+	margin-left: 25px;
 	width: 19px;
 	height: 17px;
 }
@@ -632,6 +765,16 @@
 }
 .alert-row input {
 	display: none;
+}
+.peak-demand .alert-row{
+	width: 93%;
+	margin-left: auto;
+	margin-right: auto;
+	border-left: 1px solid #DBDBDB;
+	border-right: 1px solid #DBDBDB;
+}
+.peak-demand .alert-row > div {
+	vertical-align: middle;
 }
 .normal-action-block {
 	display: block;

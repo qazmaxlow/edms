@@ -90,8 +90,10 @@ def set_alert_view(request, system_code=None):
 
 	if alert_id:
 		alert = Alert.objects.get(id=alert_id)
+		is_edit = True
 	else:
 		alert = Alert()
+		is_edit = False
 
 	alert.system_id = system_id
 	alert.type = alert_type
@@ -109,7 +111,7 @@ def set_alert_view(request, system_code=None):
 	alert.contacts.clear()
 	alert.contacts.add(*contact_ids)
 
-	return Utils.json_response({'success': True, 'alert': alert.to_info()})
+	return Utils.json_response({'success': True, 'alert': alert.to_info(), 'is_edit': is_edit})
 
 @permission_required(USER_ROLE_ADMIN_LEVEL)
 def remove_alert_view(request, system_code=None):
@@ -118,5 +120,5 @@ def remove_alert_view(request, system_code=None):
 	with transaction.atomic():
 		AlertHistory.objects.filter(alert_id=alert_id).delete()
 		Alert.objects.filter(id=alert_id).delete()
-		
+
 	return Utils.json_response({'success': True})
