@@ -39,9 +39,12 @@ a) restart uWsgi
 b) complete restart uWsgi in Emperor mode
 	1. sudo service uwsgi restart
 
-b) restart celery (REMEMBER to restart celery as it always use old version of code)
-	1. /etc/init.d/celeryd restart
+c) restart celery (REMEMBER to restart celery as it always use old version of code)
+	1. sudo /etc/init.d/celeryd restart
+	2. sudo /etc/init.d/celerybeat restart
 
+d) restart nginx
+	1. sudo service nginx restart
 
 DEPLOY:
 

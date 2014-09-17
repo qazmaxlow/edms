@@ -438,5 +438,8 @@ class SourceManager:
 			},
 		])
 
-		total = result['result'][0]['total']
+		if result['result']:
+			total = result['result'][0]['total']
+		else:
+			total = 0
 		return total
