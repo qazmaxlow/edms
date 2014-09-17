@@ -179,7 +179,7 @@ class Alert(models.Model):
 		else:
 			link_prefix = SITE_LINK_FORMAT
 		email_content +=  '\n\n' + link_prefix \
-			+ reverse('settings', kwargs={'system_code': info['system_code'], 'settings_type': 'alert'})
+			+ reverse('alert_settings', kwargs={'system_code': info['system_code']})
 
 		return email_content
 
