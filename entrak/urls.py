@@ -41,6 +41,7 @@ urlpatterns = patterns('',
 
 		url(r'^alert_settings/$', 'entrak.settings_views.alert_settings_view', name='alert_settings'),
 		url(r'^set_alert/$', 'entrak.settings_views.set_alert_view', name='set_alert'),
+		url(r'^remove_alert/$', 'entrak.settings_views.remove_alert_view', name='remove_alert'),
 	))),
 )
 

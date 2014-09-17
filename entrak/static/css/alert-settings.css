@@ -1,6 +1,7 @@
 .conversational-confirm-btn, .conversational-cancel-btn,
 .info-btn, .info-tooltip-close-btn, .normal-action-block>img,
-.confirm-action-block>img, .choose-alert-btn{
+.confirm-action-block>img, .choose-alert-btn,
+.dialog-cancel-btn, .dialog-confirm-btn{
 	cursor: pointer;
 	cursor: hand;
 }
@@ -179,7 +180,6 @@
 }
 
 .alert-container {
-	height: 500px;
 	background-color: #FCFCFC;
 	box-shadow: -6px 6px 10px 0px #e8e8e8;
 	margin-top: 60px;
@@ -679,4 +679,11 @@
 }
 .resolved-dt-container {
 	display: inline-block;
+}
+
+.remove-dialog {
+	display: none;
+	background-color: #FFF;
+	width: 300px;
+	height: 200px;
 }

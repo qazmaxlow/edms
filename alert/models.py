@@ -148,6 +148,23 @@ class Alert(models.Model):
 
 		return sub_msg
 
+	def to_info(self):
+		info = {
+			'id': self.id,
+			'type': self.type,
+			'comparePercent': self.compare_percent,
+			'peakThreshold': self.peak_threshold,
+			'checkWeekdays': self.check_weekdays,
+			'contactEmails': [email.encode('utf8') for email in self.contacts.values_list('email', flat=True)],
+			'sourceInfo': self.source_info,
+			'created': self.created.astimezone(pytz.timezone(self.system.timezone)).strftime("%Y-%m-%d %H:%M:%S")
+		}
+		if self.type == ALERT_TYPE_STILL_ON or self.type == ALERT_TYPE_SUMMARY:
+			info['startTime'] = self.start_time.strftime('%H:%M')
+			info['endTime'] = self.end_time.strftime('%H:%M')
+
+		return info
+
 	@staticmethod
 	def gen_email_content(info):
 		email_content = ""

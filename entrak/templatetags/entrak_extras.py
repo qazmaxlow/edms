@@ -1,11 +1,9 @@
 import json
 import calendar
-import pytz
 from django import template
 from django.utils.safestring import mark_safe
 from django.utils.html import escapejs
 from entrak.settings import MEDIA_URL
-from alert.models import ALERT_TYPE_STILL_ON, ALERT_TYPE_SUMMARY
 register = template.Library()
 
 @register.filter
@@ -75,21 +73,7 @@ def jsonifyUnitCategorys(unit_categorys):
 def jsonifyAlerts(alerts):
 	alert_infos = []
 	for alert in alerts:
-		info = {
-			'id': alert.id,
-			'type': alert.type,
-			'comparePercent': alert.compare_percent,
-			'peakThreshold': alert.peak_threshold,
-			'checkWeekdays': alert.check_weekdays,
-			'contactEmails': [email.encode('utf8') for email in alert.contacts.values_list('email', flat=True)],
-			'sourceInfo': alert.source_info,
-			'created': alert.created.astimezone(pytz.timezone(alert.system.timezone)).strftime("%Y-%m-%d %H:%M:%S")
-		}
-		if alert.type == ALERT_TYPE_STILL_ON or alert.type == ALERT_TYPE_SUMMARY:
-			info['startTime'] = alert.start_time.strftime('%H:%M')
-			info['endTime'] = alert.end_time.strftime('%H:%M')
-
-		alert_infos.append(info)
+		alert_infos.append(alert.to_info())
 	return escapejs(json.dumps(alert_infos))
 
 @register.filter

@@ -13,6 +13,7 @@
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
 <script src="{% static 'js/jquery.md5.js' %}"></script>
+<script src="{% static 'js/jquery.bpopup.min.js' %}"></script>
 <script src="{% static 'js/mustache.js-master/mustache.js' %}"></script>
 <script src="{% static 'js/sumoselect/jquery.sumoselect.min.js' %}"></script>
 <script src="{% static 'js/tag-it-master/js/tag-it.min.js' %}"></script>
@@ -50,7 +51,7 @@
 </script>
 
 <script id="peak-alert-row-template" type="x-tmpl-mustache">
-<div class="alert-row" alert_idx="{% templatetag openvariable %}alertIdx{% templatetag closevariable %}" source_info='{% templatetag openvariable %}sourceInfo{% templatetag closevariable %}'>
+<div class="alert-row" alert_id="{% templatetag openvariable %}alertId{% templatetag closevariable %}" source_info='{% templatetag openvariable %}sourceInfo{% templatetag closevariable %}'>
 	<div class="end-use-col">
 		<div class="display-text end-use-text">{% templatetag openvariable %}endUse{% templatetag closevariable %}</div>
 		<select class="end-use-select"></select>
@@ -72,7 +73,7 @@
 </script>
 
 <script id="summary-still-on-alert-row-template" type="x-tmpl-mustache">
-<div class="alert-row" alert_idx="{% templatetag openvariable %}alertIdx{% templatetag closevariable %}">
+<div class="alert-row" alert_id="{% templatetag openvariable %}alertId{% templatetag closevariable %}">
 	<div class="end-use-col">
 		<div class="display-text end-use-text">{% templatetag openvariable %}endUse{% templatetag closevariable %}</div>
 		<select class="end-use-select"></select>
@@ -161,6 +162,18 @@ function findValueIdxInSelect(selectEle, value) {
 	return optionIdx;
 }
 
+function findAlertById(alertId) {
+	var matchAlert = null;
+	$.each(settings.alerts, function(alertIdx, alert) {
+		if (alert.id === alertId) {
+			matchAlert = alert;
+			return false;
+		}
+	});
+
+	return matchAlert;
+}
+
 function setSumoSelectedItem(selEle, value) {
 	if (selEle.length > 0) {
 		selEle[0].sumo.selectItem(findValueIdxInSelect(selEle, value));
@@ -178,6 +191,51 @@ function setupSourceSelect(targetEle) {
 		var mapKey = transformToSourceMapKey(info);
 		var selectHtml = '<option value=\'' + mapKey + '\'>' + info.name + '</option>';
 		targetEle.append(selectHtml);
+	});
+}
+
+function setupReceiverSelect(targetEle) {
+	targetEle.each(function() {
+		var selectContainer = $(this);
+		$.each(settings.contactEmails, function(emailIdx, email) {
+			selectContainer.append('<option value="' + email + '">' + email + '</option>');
+		});
+	});
+}
+
+function setupTimeSelect(targetEle) {
+	targetEle.each(function() {
+		var selectContainer = $(this);
+		var optionDt = moment().startOf('day');
+		var endDt = moment(optionDt).add('d', 1);
+		for (; optionDt.isBefore(endDt); optionDt.add('m', 30)) {
+			selectContainer.append('<option value="' + optionDt.format('HH:mm') + '">' + optionDt.format('HH:mm') + '</option>');
+		};
+	});
+}
+
+function setupWeekdaySelect(targetEle) {
+	targetEle.each(function() {
+		var selectContainer = $(this);
+
+		selectContainer.append('<option value="[0,1,2,3,4,5,6]">All</option>');
+		selectContainer.append('<option value="[0,1,2,3,4]">Weekdays</option>');
+		selectContainer.append('<option value="[5,6]">Weekends</option>');
+
+		var optionDt = moment().startOf('week');
+		var endDt = moment(optionDt).add('w', 1);
+		for (; optionDt.isBefore(endDt); optionDt.add('d', 1)) {
+			selectContainer.append('<option value="[' + transformToPythonWeekday(optionDt.day()) + ']">' + optionDt.format('dddd') + '</option>');
+		};
+	});
+}
+
+function setupComparePercentSelect(targetEle) {
+	targetEle.each(function() {
+		var selectContainer = $(this);
+		for (var i = 5; i <= 100; i += 5) {
+			selectContainer.append('<option value="' + i + '">' + i + '</option>');
+		};
 	});
 }
 
@@ -211,8 +269,77 @@ function requestSetAlert(alertData) {
 		data: alertData,
 	}).done(function(data) {
 		if (data.success) {
-			var contactEmails = JSON.parse(alertData['contact_emails']);
-			$.unique($.merge(settings.contactEmails, contactEmails));
+			var settedAlert = data.alert;
+			$.unique($.merge(settings.contactEmails, settedAlert.contactEmails));
+
+			settings.alerts.push(settedAlert);
+
+			var peakRowTemplate = $('#peak-alert-row-template').html();
+			Mustache.parse(peakRowTemplate);
+			var summaryStillOnRowTemplate = $('#summary-still-on-alert-row-template').html();
+			Mustache.parse(summaryStillOnRowTemplate);
+			var tableRow = insertAlertToTable(settedAlert, settings.alerts.length-1, peakRowTemplate, summaryStillOnRowTemplate);
+
+			setupSourceSelect(tableRow.find('.end-use-select'));
+			setupReceiverSelect(tableRow.find('.receiver-select'));
+			setupTimeSelect(tableRow.find('.time-select'));
+			setupWeekdaySelect(tableRow.find('.weekday-select'));
+			setupComparePercentSelect(tableRow.find('.compare-percent-select'));
+
+			tableRow.find('.row-edit-btn').click(function() {
+				turnOnEditMode(tableRow);
+			});
+
+			tableRow.find('.row-cancel-btn').click(function() {
+				cancelEditMode(tableRow);
+			});
+		}
+	}).fail(function(jqXHR, textStatus) {
+		console.log(jqXHR.responseText);
+	});
+}
+
+function insertAlertToTable(alert, peakRowTemplate, summaryStillOnRowTemplate) {
+	var info = {
+		alertId: alert.id,
+		endUse: alert.sourceInfo.name,
+		percent: alert.comparePercent,
+		created: alert.created,
+		numOfreceiver: alert.contactEmails.length,
+	};
+	var target, targetTemplate;
+	if (alert.type === 'summary' || alert.type === 'still_on') {
+		targetTemplate = summaryStillOnRowTemplate;
+		target = (alert.type === 'summary') ? '.summary-alert .add-content-row' : '.still-on-alert .add-content-row';
+
+		info.timeFrom = alert.startTime;
+		info.timeTo = alert.endTime;
+		info.weekday = transformPythonWeekdaysToName(alert.checkWeekdays);
+	} else {
+		targetTemplate = peakRowTemplate;
+		target = '.peak-demand .add-content-row';
+
+		info.peakThreshold = alert.peakThreshold;
+	}
+
+	var eleHtml = Mustache.render(targetTemplate, info);
+	$(eleHtml).insertBefore(target);
+
+	return $(target).parent().find('.alert-row[alert_id="' + alert.id + '"]');
+}
+
+function requestRemoveAlert(alertId) {
+	$.ajax({
+		type: "POST",
+		url: "{% url 'remove_alert' system_code=systems.0.code %}",
+		data: {
+			alert_id: alertId
+		},
+	}).done(function(data) {
+		if (data.success) {
+			$('.alert-row[alert_id="' + alertId + '"]').slideUp(400, function() {
+				$(this).remove();
+			});
 		}
 	}).fail(function(jqXHR, textStatus) {
 		console.log(jqXHR.responseText);
@@ -229,9 +356,13 @@ function turnOnEditMode(tableRow) {
 	};
 
 	var blockContainer = tableRow.parent().parent();
-	blockContainer.find('.alert-row').removeClass('on-edit');
+	var prevEditRow = blockContainer.find('.alert-row.on-edit');
+	if (prevEditRow.length > 0 && prevEditRow.attr('alert_id') !== tableRow.attr('alert_id')) {
+		cancelEditMode(prevEditRow);
+	}
+
 	tableRow.addClass('on-edit');
-	var alert = settings.alerts[tableRow.attr('alert_idx')];
+	var alert = findAlertById(parseInt(tableRow.attr('alert_id'), 10));
 
 	tableRow.find('.display-text').hide();
 	tableRow.find('input').show();
@@ -251,25 +382,25 @@ function turnOnEditMode(tableRow) {
 		tableRow.find('.peak-threshold-input').val(alert.peakThreshold);
 	}
 
-	if (alert.type === 'summary' || alert.type === 'still_on') {
-		tableRow.parent().find('select').off('change');
-		$.each(rowToCBlockselectClassMap, function(rowClass, affectClass) {
-			tableRow.find(rowClass).change(function() {
-				setSumoSelectedItem(blockContainer.find('.conversational-block '+affectClass), $(this).val());
-			}).change();
-		});
-		tableRow.find('.receiver-select').change(function() {
-			var emailInput = blockContainer.find('.conversational-block .email-input');
-			settings.skipSignalEvent = true;
-			emailInput.tagit("removeAll");
-			if ($(this).val() !== null) {
-				$.each($(this).val(), function(emailIdx, email) {
-					emailInput.tagit("createTag", email);
-				});
-			}
-			settings.skipSignalEvent = false;
+	tableRow.parent().find('select').off('change');
+	$.each(rowToCBlockselectClassMap, function(rowClass, affectClass) {
+		tableRow.find(rowClass).change(function() {
+			setSumoSelectedItem(blockContainer.find('.conversational-block '+affectClass), $(this).val());
 		}).change();
-	} else if (alert.type === 'peak') {
+	});
+	tableRow.find('.receiver-select').change(function() {
+		var emailInput = blockContainer.find('.conversational-block .email-input');
+		settings.skipSignalEvent = true;
+		emailInput.tagit("removeAll");
+		if ($(this).val() !== null) {
+			$.each($(this).val(), function(emailIdx, email) {
+				emailInput.tagit("createTag", email);
+			});
+		}
+		settings.skipSignalEvent = false;
+	}).change();
+
+	if (alert.type === 'peak') {
 		tableRow.parent().find('.peak-threshold-input').off('change');
 		tableRow.find('.peak-threshold-input').change(function() {
 			blockContainer.find('.conversational-block .peak-threshold-input').val($(this).val());
@@ -310,6 +441,17 @@ function cancelEditMode(tableRow) {
 	}).hide();
 }
 
+function popupRemoveDialog(confirmCallback) {
+	var removeDialog = $('.remove-dialog').bPopup();
+	$('.remove-dialog .dialog-cancel-btn').off('click').click(function() {
+		removeDialog.close();
+	});
+	$('.remove-dialog .dialog-confirm-btn').off('click').click(function() {
+		confirmCallback();
+		removeDialog.close();
+	});
+}
+
 $(function() {
 	setupAjaxForCsrf($.cookie('csrftoken'));
 
@@ -326,13 +468,6 @@ $(function() {
 			}
 		});
 	});
-	{% if alert_history_infos %}
-	$('.sub-menu-alert-history').addClass('selected-tab');
-	$(".alert-history-container").addClass('selected-submenu').show();
-	{% else %}
-	$('.sub-menu-create-alert').addClass('selected-tab');
-	$(".create-alert-container").addClass('selected-submenu').show();
-	{% endif %}
 
 	$(".info-btn").click(function () {
 		$(this).parent().find('.info-tooltip').show();
@@ -348,6 +483,14 @@ $(function() {
 	settings.alerts = JSON.parse('{{alerts|jsonifyAlerts}}');
 	settings.alertHistorys = JSON.parse('{{alert_history_infos}}');
 	settings.skipSignalEvent = false;
+
+	if (settings.alertHistorys.length > 0) {
+		$('.sub-menu-alert-history').addClass('selected-tab');
+		$(".alert-history-container").addClass('selected-submenu').show();
+	} else {
+		$('.sub-menu-create-alert').addClass('selected-tab');
+		$(".create-alert-container").addClass('selected-submenu').show();
+	}
 
 	var historyContentContainer = $('.history-content');
 	var historyRowTemplate = $('#history-row-template').html();
@@ -450,68 +593,14 @@ $(function() {
 	var summaryStillOnRowTemplate = $('#summary-still-on-alert-row-template').html();
 	Mustache.parse(summaryStillOnRowTemplate);
 	$.each(settings.alerts, function(alertIdx, alert) {
-		var info = {
-			alertIdx: alertIdx,
-			endUse: alert.sourceInfo.name,
-			percent: alert.comparePercent,
-			created: alert.created,
-			numOfreceiver: alert.contactEmails.length,
-		};
-		var target, targetTemplate;
-		if (alert.type === 'summary' || alert.type === 'still_on') {
-			targetTemplate = summaryStillOnRowTemplate;
-			target = (alert.type === 'summary') ? '.summary-alert .add-content-row' : '.still-on-alert .add-content-row';
-
-			info.timeFrom = alert.startTime;
-			info.timeTo = alert.endTime;
-			info.weekday = transformPythonWeekdaysToName(alert.checkWeekdays);
-		} else {
-			targetTemplate = peakRowTemplate;
-			target = '.peak-demand .add-content-row';
-
-			info.peakThreshold = alert.peakThreshold;
-		}
-
-		var eleHtml = Mustache.render(targetTemplate, info);
-		$(eleHtml).insertBefore(target);
+		insertAlertToTable(alert, peakRowTemplate, summaryStillOnRowTemplate);
 	});
+
 	setupSourceSelect($('.end-use-select'));
-	$('.receiver-select').each(function() {
-		var selectContainer = $(this);
-		$.each(settings.contactEmails, function(emailIdx, email) {
-			selectContainer.append('<option value="' + email + '">' + email + '</option>');
-		});
-	});
-
-	$('.time-select').each(function() {
-		var selectContainer = $(this);
-		var optionDt = moment().startOf('day');
-		var endDt = moment(optionDt).add('d', 1);
-		for (; optionDt.isBefore(endDt); optionDt.add('m', 30)) {
-			selectContainer.append('<option value="' + optionDt.format('HH:mm') + '">' + optionDt.format('HH:mm') + '</option>');
-		};
-	});
-
-	$('.weekday-select').each(function() {
-		var selectContainer = $(this);
-
-		selectContainer.append('<option value="[0,1,2,3,4,5,6]">All</option>');
-		selectContainer.append('<option value="[0,1,2,3,4]">Weekdays</option>');
-		selectContainer.append('<option value="[5,6]">Weekends</option>');
-
-		var optionDt = moment().startOf('week');
-		var endDt = moment(optionDt).add('w', 1);
-		for (; optionDt.isBefore(endDt); optionDt.add('d', 1)) {
-			selectContainer.append('<option value="[' + transformToPythonWeekday(optionDt.day()) + ']">' + optionDt.format('dddd') + '</option>');
-		};
-	});
-
-	$('.compare-percent-select').each(function() {
-		var selectContainer = $(this);
-		for (var i = 5; i <= 100; i += 5) {
-			selectContainer.append('<option value="' + i + '">' + i + '</option>');
-		};
-	});
+	setupReceiverSelect($('.receiver-select'));
+	setupTimeSelect($('.time-select'));
+	setupWeekdaySelect($('.weekday-select'));
+	setupComparePercentSelect($('.compare-percent-select'));
 
 	$('.conversational-block select').SumoSelect();
 
@@ -553,6 +642,14 @@ $(function() {
 	$('.row-cancel-btn').click(function() {
 		var tableRow = $(this).parent().parent().parent();
 		cancelEditMode(tableRow);
+	});
+
+	$('.row-delete-btn').click(function() {
+		var tableRow = $(this).parent().parent().parent();
+		popupRemoveDialog(function() {
+			var alertId = tableRow.attr('alert_id');
+			requestRemoveAlert(alertId);
+		});
 	});
 });
 </script>
@@ -752,6 +849,14 @@ $(function() {
 		</div>
 	</div>
 
+</div>
+
+<div class="remove-dialog">
+	<div class="dialog-title">Are you sure you want to remove?</div>
+	<div class="dialog-btn-container">
+		<div class="dialog-confirm-btn">confirm</div>
+		<div class="dialog-cancel-btn">canel</div>
+	</div>
 </div>
 
 {% endblock %}

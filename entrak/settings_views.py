@@ -7,6 +7,7 @@ from django.core.context_processors import csrf
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.html import escapejs
 from django.db.models import Q
+from django.db import transaction
 from system.models import System
 from egauge.manager import SourceManager
 from alert.models import Alert, AlertHistory, ALERT_TYPE_STILL_ON, ALERT_TYPE_SUMMARY, ALERT_TYPE_PEAK, ALERT_COMPARE_METHOD_ABOVE
@@ -108,4 +109,14 @@ def set_alert_view(request, system_code=None):
 	alert.contacts.clear()
 	alert.contacts.add(*contact_ids)
 
+	return Utils.json_response({'success': True, 'alert': alert.to_info()})
+
+@permission_required(USER_ROLE_ADMIN_LEVEL)
+def remove_alert_view(request, system_code=None):
+	alert_id = request.POST.get('alert_id')
+
+	with transaction.atomic():
+		AlertHistory.objects.filter(alert_id=alert_id).delete()
+		Alert.objects.filter(id=alert_id).delete()
+		
 	return Utils.json_response({'success': True})
