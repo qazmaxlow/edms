@@ -46,6 +46,8 @@ def __valid_alert_filter_f(utc_now):
 @shared_task(ignore_result=True)
 def check_all_alerts():
 	utc_now = pytz.utc.localize(datetime.datetime.utcnow()).replace(second=0, microsecond=0)
+	# delay 5 minutes to ensure data is ready
+	utc_now -= datetime.timedelta(minutes=5)
 	alerts = Alert.objects.select_related('system__code', 'system__city', 'system__timezone').all()
 	need_check_alerts = filter(__valid_alert_filter_f(utc_now), alerts)
 
