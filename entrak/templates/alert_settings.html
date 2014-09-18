@@ -16,7 +16,7 @@
 <script src="{% static 'js/jquery.bpopup.min.js' %}"></script>
 <script src="{% static 'js/mustache.js-master/mustache.js' %}"></script>
 <script src="{% static 'js/sumoselect/jquery.sumoselect.min.js' %}"></script>
-<script src="{% static 'js/tag-it-master/js/tag-it.min.js' %}"></script>
+<script src="{% static 'js/tag-it-master/js/tag-it-customized.js' %}"></script>
 <script src="{% static 'js/entrak-system.js' %}"></script>
 {% endblock %}
 
@@ -29,6 +29,32 @@
 
 {% block extra_script %}
 {{block.super}}
+
+<script id="peak-conversation-template" type="x-tmpl-mustache">
+<div class="conversational-block" alert_type="peak">
+	<div>Let me know if <select class="source-select" size="4" placeholder="Please select"></select>energy</div>
+	<div>reaches <select class="compare-percent-select"></select>% of my previous peak demand of <input class="peak-threshold-input" type="number">kWA.</div>
+	<div class="send-alert-to">Send alert to: <ul class="email-input"></ul></div>
+	<div class="email-notes">You may use max 5 emails, use semi-colon to separate emails<br>e.g user@email.com; user@email.com</div>
+	<div class="btn-container">
+		<div class="conversational-btn conversational-cancel-btn">Cancel</div>
+		<div class="conversational-btn conversational-confirm-btn">Confirm</div>
+	</div>
+</div>
+</script>
+
+<script id="summary-still-on-conversation-template" type="x-tmpl-mustache">
+<div class="conversational-block" alert_type="{% templatetag openvariable %}alertType{% templatetag closevariable %}">
+	<div>Let me know if <select class="source-select" size="4" placeholder="Please select"></select>energy use</div>
+	<div>is <select class="compare-percent-select"></select>% higher than my recent average between <select class="start-time-select time-select"></select> to <select class="end-time-select time-select"></select> on <select class="weekday-select"></select></div>
+	<div class="send-alert-to">Send alert to: <ul class="email-input"></ul></div>
+	<div class="email-notes">You may use max 5 emails, use semi-colon to separate emails<br>e.g user@email.com; user@email.com</div>
+	<div class="btn-container">
+		<div class="conversational-btn conversational-cancel-btn">Cancel</div>
+		<div class="conversational-btn conversational-confirm-btn">Confirm</div>
+	</div>
+</div>
+</script>
 
 <script id="history-row-template" type="x-tmpl-mustache">
 <div class="history-row {% templatetag openvariable %}resolvedColClass{% templatetag closevariable %}" history_id="{% templatetag openvariable %}historyId{% templatetag closevariable %}">
@@ -269,6 +295,10 @@ function updateReceiverSelect(emailInputEle) {
 }
 
 function requestSetAlert(alertData) {
+	if ('peak_threshold' in alertData) {
+		alertData.peak_threshold = Math.round(alertData.peak_threshold);
+	}
+
 	$.ajax({
 		type: "POST",
 		url: "{% url 'set_alert' system_code=systems.0.code %}",
@@ -512,8 +542,114 @@ function setupRowConfirmBtn(targetEle) {
 	});
 }
 
+function setupConversationConfirmBtn(targetEle) {
+	targetEle.click(function() {
+		var conversationalBlockContainer = $(this).parent().parent();
+		var onEditRow = conversationalBlockContainer.parent().find('.alert-row.on-edit');
+		var alertType = conversationalBlockContainer.attr('alert_type');
+		var postData = {
+			system_id: settings.entrakSystem.systemTree.data.id,
+			alert_id: (onEditRow.length !== 1) ? null : onEditRow.attr('alert_id'),
+			source_info: settings.sourceInfoMap[conversationalBlockContainer.find('.source-select').val()],
+			alert_type: alertType,
+			compare_percent: conversationalBlockContainer.find('.compare-percent-select').val(),
+			contact_emails: JSON.stringify(conversationalBlockContainer.find('.email-input').tagit("assignedTags")),
+		};
+		if (alertType === 'peak') {
+			postData.peak_threshold = conversationalBlockContainer.find('.peak-threshold-input').val();
+		} else if (alertType === 'summary' || alertType === 'still_on') {
+			postData.start_time = conversationalBlockContainer.find('.start-time-select').val();
+			postData.end_time = conversationalBlockContainer.find('.end-time-select').val();
+			postData.check_weekdays = conversationalBlockContainer.find('.weekday-select').val();
+		}
+		requestSetAlert(postData);
+	});
+}
+
+function setupDuplicateBtn(targetEle) {
+	targetEle.click(function() {
+		$('.duplicate-container').empty();
+		var tableRow = $(this).parent().parent().parent();
+		var alert = findAlertById(parseInt(tableRow.attr('alert_id'), 10));
+		var eleHtml;
+		if (alert.type === 'peak') {
+			var peakConversationTemplate = $('#peak-conversation-template').html();
+			Mustache.parse(peakConversationTemplate);
+			eleHtml = Mustache.render(peakConversationTemplate, {});
+		} else if (alert.type === 'summary' || alert.type === 'still_on') {
+			var summaryStillOnConversationTemplate = $('#summary-still-on-conversation-template').html();
+			Mustache.parse(summaryStillOnConversationTemplate);
+
+			if (alert.type === 'summary') {
+				var eleHtml = Mustache.render(summaryStillOnConversationTemplate, {
+					alertType: 'summary',
+				});
+			} else {
+				var eleHtml = Mustache.render(summaryStillOnConversationTemplate, {
+					alertType: 'still_on',
+				});
+			}
+		}
+		$('.duplicate-container').append(eleHtml);
+		setupSourceSelect($('.duplicate-container .source-select'));
+		setupReceiverSelect($('.duplicate-container .receiver-select'));
+		setupTimeSelect($('.duplicate-container .time-select'));
+		setupWeekdaySelect($('.duplicate-container .weekday-select'));
+		setupComparePercentSelect($('.duplicate-container .compare-percent-select'));
+
+		var duplicateContainer = $('.duplicate-container');
+		duplicateContainer.find('select').SumoSelect();
+
+		duplicateContainer.find('.email-input').tagit({
+			availableTags: settings.contactEmails,
+			tagLimit: 5,
+		}).tagit('autoCompleteInstance').addClass('duplicate-container-autocomplete');
+
+		setSumoSelectedItem(duplicateContainer.find('.source-select'), transformToSourceMapKey(alert.sourceInfo));
+		setSumoSelectedItem(duplicateContainer.find('.compare-percent-select'), alert.comparePercent.toString());
+		var emailInput = duplicateContainer.find('.email-input');
+		$.each(alert.contactEmails, function(emailIdx, email) {
+			emailInput.tagit("createTag", email);
+		});
+
+		if (alert.type === 'summary' || alert.type === 'still_on') {
+			setSumoSelectedItem(duplicateContainer.find('.start-time-select'), alert.startTime);
+			setSumoSelectedItem(duplicateContainer.find('.end-time-select'), alert.endTime);
+			setSumoSelectedItem(duplicateContainer.find('.weekday-select'), JSON.stringify(alert.checkWeekdays));
+		} else if (alert.type === 'peak') {
+			duplicateContainer.find('.peak-threshold-input').val(alert.peakThreshold);
+		}
+
+		var duplicateDialog = $('.duplicate-popup').bPopup();
+
+		duplicateContainer.find('.conversational-cancel-btn').click(function() {
+			duplicateDialog.close();
+		});
+		setupConversationConfirmBtn(duplicateContainer.find('.conversational-confirm-btn'));
+		duplicateContainer.find('.conversational-confirm-btn').click(function() {
+			duplicateDialog.close();
+		});
+	});
+}
+
 $(function() {
 	setupAjaxForCsrf($.cookie('csrftoken'));
+	
+	var peakConversationTemplate = $('#peak-conversation-template').html();
+	Mustache.parse(peakConversationTemplate);
+	var peakConversationHtml = Mustache.render(peakConversationTemplate, {});
+	$(peakConversationHtml).insertBefore($('.peak-demand .alert-content>*:eq(0)'));
+
+	var summaryStillOnConversationTemplate = $('#summary-still-on-conversation-template').html();
+	Mustache.parse(summaryStillOnConversationTemplate);
+	var summaryConversationHtml = Mustache.render(summaryStillOnConversationTemplate, {
+		alertType: 'summary',
+	});
+	$(summaryConversationHtml).insertBefore($('.summary-alert .alert-content>*:eq(0)'));
+	var stillOnConversationHtml = Mustache.render(summaryStillOnConversationTemplate, {
+		alertType: 'still_on',
+	});
+	$(stillOnConversationHtml).insertBefore($('.still-on-alert .alert-content>*:eq(0)'));
 
 	var subMenuPanel = $(".main-content-container>div");;
 	$(".panel-header-left-menu h3").each(function (eleIdx) {
@@ -564,8 +700,8 @@ $(function() {
 		};
 
 		if (alertHistory.alert_type === 'peak') {
-			info.issueLine1 = alertHistory.name + ' reached';
-			info.issueLine2 = alertHistory.diff_percent + '% MORE than my peak demand';
+			info.issueLine1 = alertHistory.name + ' energy use reached';
+			info.issueLine2 = alertHistory.diff_percent + '% of previous peak demand';
 		} else  if (alertHistory.alert_type === 'summary' || alertHistory.alert_type === 'still_on') {
 			info.issueLine1 = alertHistory.name + ' used';
 			info.issueLine2 = alertHistory.diff_percent + '% MORE than recent ' + createdDt.format('dddd') + ' average';
@@ -627,27 +763,7 @@ $(function() {
 		},
 	});
 
-	$('.conversational-confirm-btn').click(function() {
-		var conversationalBlockContainer = $(this).parent().parent();
-		var onEditRow = conversationalBlockContainer.parent().find('.alert-row.on-edit');
-		var alertType = conversationalBlockContainer.attr('alert_type');
-		var postData = {
-			system_id: settings.entrakSystem.systemTree.data.id,
-			alert_id: (onEditRow.length !== 1) ? null : onEditRow.attr('alert_id'),
-			source_info: settings.sourceInfoMap[conversationalBlockContainer.find('.source-select').val()],
-			alert_type: alertType,
-			compare_percent: conversationalBlockContainer.find('.compare-percent-select').val(),
-			contact_emails: JSON.stringify(conversationalBlockContainer.find('.email-input').tagit("assignedTags")),
-		};
-		if (alertType === 'peak') {
-			postData.peak_threshold = conversationalBlockContainer.find('.peak-threshold-input').val();
-		} else if (alertType === 'summary' || alertType === 'still_on') {
-			postData.start_time = conversationalBlockContainer.find('.start-time-select').val();
-			postData.end_time = conversationalBlockContainer.find('.end-time-select').val();
-			postData.check_weekdays = conversationalBlockContainer.find('.weekday-select').val();
-		}
-		requestSetAlert(postData);
-	});
+	setupConversationConfirmBtn($('.conversational-confirm-btn'));
 
 	var peakRowTemplate = $('#peak-alert-row-template').html();
 	Mustache.parse(peakRowTemplate);
@@ -699,6 +815,7 @@ $(function() {
 	setupRowCancelBtn($('.row-cancel-btn'));
 	setupRowDeleteBtn($('.row-delete-btn'));
 	setupRowConfirmBtn($('.row-confirm-btn'));
+	setupDuplicateBtn($('.row-copy-btn'));
 });
 </script>
 
@@ -766,16 +883,6 @@ $(function() {
 			</div>
 
 			<div class="alert-content">
-				<div class="conversational-block" alert_type="peak">
-					<div>Let me know if <select class="source-select" size="4" placeholder="Please select"></select>energy</div>
-					<div>reaches <select class="compare-percent-select"></select>% of my previous peak demand of <input class="peak-threshold-input" type="number">kWA.</div>
-					<div class="send-alert-to">Send alert to: <ul class="email-input"></ul></div>
-					<div class="email-notes">You may use max 5 emails, use semi-colon to separate emails<br>e.g user@email.com; user@email.com</div>
-					<div class="btn-container">
-						<div class="conversational-btn conversational-cancel-btn">Cancel</div>
-						<div class="conversational-btn conversational-confirm-btn">Confirm</div>
-					</div>
-				</div>
 				<hr>
 				<div class="content-table">
 					<div class="table-header">
@@ -809,16 +916,6 @@ $(function() {
 			</div>
 
 			<div class="alert-content">
-				<div class="conversational-block" alert_type="summary">
-					<div>Let me know if <select class="source-select" size="4" placeholder="Please select"></select>energy use</div>
-					<div>is <select class="compare-percent-select"></select>% higher than my recent average between <select class="start-time-select time-select"></select> to <select class="end-time-select time-select"></select> on <select class="weekday-select"></select></div>
-					<div class="send-alert-to">Send alert to: <ul class="email-input"></ul></div>
-					<div class="email-notes">You may use max 5 emails, use semi-colon to separate emails<br>e.g user@email.com; user@email.com</div>
-					<div class="btn-container">
-						<div class="conversational-btn conversational-confirm-btn">Confirm</div>
-						<div class="conversational-btn conversational-cancel-btn">Cancel</div>
-					</div>
-				</div>
 				<hr>
 				<div class="content-table">
 					<div class="table-header">
@@ -855,16 +952,6 @@ $(function() {
 			</div>
 
 			<div class="alert-content">
-				<div class="conversational-block" alert_type="still_on">
-					<div>Let me know if <select class="source-select" size="4" placeholder="Please select"></select>energy use</div>
-					<div>is <select class="compare-percent-select"></select>% higher than my recent average between <select class="start-time-select time-select"></select> to <select class="end-time-select time-select"></select> on <select class="weekday-select"></select></div>
-					<div class="send-alert-to">Send alert to: <ul class="email-input"></ul></div>
-					<div class="email-notes">You may use max 5 emails, use semi-colon to separate emails<br>e.g user@email.com; user@email.com</div>
-					<div class="btn-container">
-						<div class="conversational-btn conversational-confirm-btn">Confirm</div>
-						<div class="conversational-btn conversational-cancel-btn">Cancel</div>
-					</div>
-				</div>
 				<hr>
 				<div class="content-table">
 					<div class="table-header">
@@ -902,6 +989,10 @@ $(function() {
 		<div class="dialog-confirm-btn">confirm</div>
 		<div class="dialog-cancel-btn">canel</div>
 	</div>
+</div>
+
+<div class="duplicate-popup">
+	<div class="duplicate-container"></div>
 </div>
 
 {% endblock %}
