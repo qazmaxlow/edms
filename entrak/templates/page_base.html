@@ -185,7 +185,7 @@ $(function() {
 	<a href="#"><img id="entrak-logo" src="{% static 'images/powered-by-logo.png' %}"></a>
 	<p id="disclaimer_main"><a class="disclaimer" href="#">Print </a>
 	<a class="disclaimer" href="#"> |  Contact & Support</a>
-	<a class="disclaimer" href="#"> |  Settings</a>
+	<a class="disclaimer" href="{% url 'general_settings' system_code=systems.0.code %}"> |  Settings</a>
 	<a href="#" class="disclaimer"> |  Legal </a>
 	<a class="disclaimer" href="#"> |  Download</a></p>				
 	<p style="clear: both;"></p>

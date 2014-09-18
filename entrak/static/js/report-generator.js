@@ -374,9 +374,10 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 		forestImpactSubText = "of tropical rainforest cut down";
 		pandaImpactSubText = "Extra CO<sub>2</sub> emissions equal to the weight of";
 	}
-	var savedEnergyText = Utils.formatWithCommas(Math.abs(Utils.fixed1DecIfLessThan10(reportGenThis.savingInfo.energy))) + "% ";
+	var savedEnergyText = Utils.formatWithCommas(Math.abs(Utils.fixed1DecIfLessThan10(reportGenThis.savingInfo.energy)))
+		+ "<span class='basic-info-percent-symbol'>%</span> ";
 	savedEnergyText += savedEnergyPercentSuffix;
-	$("#save-energy-usage").text(savedEnergyText);
+	$("#save-energy-usage").html(savedEnergyText);
 
 	// baseline should be just before first record
 	var firstRecordMonth = moment.unix(this.systemTree.data.firstRecord).tz(this.timezone).startOf('M');

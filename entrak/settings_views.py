@@ -12,7 +12,7 @@ from system.models import System
 from egauge.manager import SourceManager
 from alert.models import Alert, AlertHistory, ALERT_TYPE_STILL_ON, ALERT_TYPE_SUMMARY, ALERT_TYPE_PEAK, ALERT_COMPARE_METHOD_ABOVE
 from contact.models import Contact
-from user.models import USER_ROLE_ADMIN_LEVEL
+from user.models import EntrakUser, USER_ROLE_ADMIN_LEVEL
 from utils.auth import permission_required
 from utils.utils import Utils
 
@@ -122,3 +122,12 @@ def remove_alert_view(request, system_code=None):
 		Alert.objects.filter(id=alert_id).delete()
 
 	return Utils.json_response({'success': True})
+
+@permission_required(USER_ROLE_ADMIN_LEVEL)
+@ensure_csrf_cookie
+def general_settings_view(request, system_code=None):
+	systems_info = System.get_systems_info(system_code, request.user.system.code)
+	users = EntrakUser.objects.filter(system_id__in=[system.id for system in systems_info["systems"]])
+	m = systems_info
+
+	return render_to_response('general_settings.html', m)
