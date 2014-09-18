@@ -1,0 +1,43 @@
+{% extends "page_base.html" %}
+
+{% load static %}
+{% load entrak_extras %}
+
+{% block extra_head %}
+{{block.super}}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/general-settings.css' %}">
+<script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
+<script src="{% static 'js/csrf_ajax.js' %}"></script>
+<script src="{% static 'js/mustache.js-master/mustache.js' %}"></script>
+{% endblock %}
+
+{% block page_title %}THE SETTINGS PAGE{% endblock %}
+{% block page_subtitle %}Find out what you can set here at{% endblock %}
+
+{% block extra_script %}
+{{block.super}}
+
+{% endblock %}
+
+{% block page_content %}
+
+<div class="account-section settings-section">
+	<div class="section-header">Manage Accounts</div>
+	<div class="section-desc">You can change your username and password or create new account.</div>
+	<div class="add-account-btn-container">
+		<div class="add-account-btn">Add New Account</div>
+	</div>
+	<div class="add-account-block"></div>
+	<div class="account-table">
+		<div class="account-th">
+			<div class="account-th-system">Office/Building
+			</div><div class="account-th-name">Username
+			</div><div class="account-th-pwd">Password
+			</div><div class="account-th-type">User Type
+			</div><div class="account-th-actions">Actions</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

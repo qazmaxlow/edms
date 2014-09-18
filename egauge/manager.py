@@ -179,8 +179,8 @@ class SourceManager:
 					need_update_source_ids.append(source['source_id'])
 					will_remove_invalid_reading.append(source['_id'])
 				else:
-					# do nothing
-					pass
+					will_remove_invalid_reading.append(source['_id'])
+					Utils.log_error("non-exist cname for source at recover! source: %s, cname: %s"%(xml_url, source['name']))
 		except SourceManager.GetEgaugeDataError, e:
 			# do nothing
 			pass
