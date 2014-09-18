@@ -1,13 +1,13 @@
 import json
 import pytz
 import datetime
-import thread
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import ensure_csrf_cookie
 from system.models import System
 from egauge.manager import SourceManager
 from egauge.models import Source
+from egauge.tasks import force_retrieve_reading
 from baseline.models import BaselineUsage
 from utils.utils import Utils
 
@@ -116,6 +116,6 @@ def recap_data_view(request):
 	systems = System.get_systems_within_root(system_code)
 	system_codes = [system.code for system in systems]
 
-	thread.start_new_thread(SourceManager.force_retrieve_reading, (start_dt, end_dt, system_codes))
+	force_retrieve_reading.delay(start_dt, end_dt, system_codes)
 
 	return Utils.json_response({'success': True})
