@@ -23,7 +23,7 @@ ALERT_COMPARE_METHOD_CHOICES = (
 )
 
 CONTINUOUS_INTERVAL_MIN = 5
-PEAK_THRESHOLD_FACTOR = 0.9
+KVA_TO_KWH_FACTOR = 0.95
 
 ALERT_EMAIL_TITLE = u'En-trak Alert: %s'
 ALERT_EMAIL_CONTENT_UNRESOLVED = u'''
@@ -92,9 +92,10 @@ class Alert(models.Model):
 		pass_verify = True
 		diff_percent = None
 		if self.type == ALERT_TYPE_PEAK:
-			if value > self.peak_threshold*(self.compare_percent/100.0):
+			transformed_peak_threshold = self.peak_threshold*KVA_TO_KWH_FACTOR*(CONTINUOUS_INTERVAL_MIN/60.0)
+			if value > transformed_peak_threshold*(self.compare_percent/100.0):
 				pass_verify = False
-			diff_percent = int((float(value)/self.peak_threshold)*100)
+			diff_percent = int((float(value)/transformed_peak_threshold)*100)
 
 		elif self.type == ALERT_TYPE_STILL_ON or self.type == ALERT_TYPE_SUMMARY:
 			recent_start_dt = start_dt - datetime.timedelta(days=7)
