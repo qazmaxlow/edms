@@ -198,7 +198,69 @@ class SourceManager:
 			SourceReadingMinInvalid.objects(id__in=will_remove_invalid_reading).delete()
 
 	@staticmethod
-	def force_retrieve_reading(start_dt, end_dt, system_codes):
+	def force_retrieve_hour_reading(all_grouped_sources, start_dt, hour_idx):
+		logger = logging.getLogger('django.recap_data_log')
+
+		start_time = start_dt + datetime.timedelta(hours=hour_idx)
+		end_time = start_time + datetime.timedelta(minutes=59)
+		end_timestamp = calendar.timegm(end_time.utctimetuple())
+		reading_datetimes = [(end_time - datetime.timedelta(minutes=minute)) for minute in xrange(60)]
+
+		logger.info('processing: %s'%start_time.strftime('%Y-%m-%d %H:%M'))
+		for grouped_sources in all_grouped_sources:
+			xml_url = grouped_sources['_id']
+			sources = grouped_sources['sources']
+			logger.info('processing: %s'%xml_url)
+
+			SourceReadingMin.objects(
+				source_id__in=[source['_id'] for source in sources],
+				datetime__gte=start_time,
+				datetime__lte=end_time
+			).delete()
+
+			source_reading_mins = []
+			source_reading_mins_invalid = []
+			need_update_source_ids = []
+			try:
+				readings = SourceManager.__get_egauge_data(xml_url, end_timestamp, 60)
+				for source in sources:
+					if source['name'] in readings:
+						source_reading_mins += [SourceReadingMin(
+							datetime=reading_datetime,
+							source_id=source['_id'],
+							value=readings[source['name']][idx]
+						) for (idx, reading_datetime) in enumerate(reading_datetimes)]
+						need_update_source_ids.append(source['_id'])
+					else:
+						Utils.log_error("no matching cname for source! source: %s, cname: %s"%(xml_url, source['name']))
+						source_reading_mins_invalid += [SourceReadingMinInvalid(
+							datetime=reading_datetime,
+							source_id=source['_id'],
+							xml_url=xml_url,
+							name=source['name'],
+							tz=source['tz']
+						) for (idx, reading_datetime) in enumerate(reading_datetimes)]
+			except SourceManager.GetEgaugeDataError, e:
+				for source in sources:
+					source_reading_mins_invalid += [SourceReadingMinInvalid(
+						datetime=reading_datetime,
+						source_id=source['_id'],
+						xml_url=xml_url,
+						name=source['name'],
+						tz=source['tz']
+					) for (idx, reading_datetime) in enumerate(reading_datetimes)]
+
+			if source_reading_mins:
+				SourceReadingMin.objects.insert(source_reading_mins)
+			if source_reading_mins_invalid:
+				SourceReadingMinInvalid.objects.insert(source_reading_mins_invalid)
+
+			if need_update_source_ids:
+				source_tz = sources[0]['tz']
+				SourceManager.update_sum(start_time, source_tz, need_update_source_ids)
+
+	@staticmethod
+	def force_retrieve_reading(start_dt, end_dt, system_codes, celery_task=None):
 		'''
 		The start_dt and end_dt should be timezone aware
 		'''
@@ -207,69 +269,11 @@ class SourceManager:
 		end_dt = end_dt.replace(minute=0, second=0, microsecond=0) + datetime.timedelta(hours=1)
 		total_hour = int((end_dt - start_dt).total_seconds()/3600)
 
-		logger = logging.getLogger('django.recap_data_log')
-
 		for hour_idx in xrange(total_hour):
-			start_time = start_dt + datetime.timedelta(hours=hour_idx)
-			end_time = start_time + datetime.timedelta(minutes=59)
-			end_timestamp = calendar.timegm(end_time.utctimetuple())
-			reading_datetimes = [(end_time - datetime.timedelta(minutes=minute)) for minute in xrange(60)]
-
-			print 'processing: ', start_time
-			logger.info('processing: %s'%start_time.strftime('%Y-%m-%d %H:%M'))
-			for grouped_sources in all_grouped_sources:
-				xml_url = grouped_sources['_id']
-				sources = grouped_sources['sources']
-				print 'processing: ', xml_url
-				logger.info('processing: %s'%xml_url)
-
-				SourceReadingMin.objects(
-					source_id__in=[source['_id'] for source in sources],
-					datetime__gte=start_time,
-					datetime__lte=end_time
-				).delete()
-
-				source_reading_mins = []
-				source_reading_mins_invalid = []
-				need_update_source_ids = []
-				try:
-					readings = SourceManager.__get_egauge_data(xml_url, end_timestamp, 60)
-					for source in sources:
-						if source['name'] in readings:
-							source_reading_mins += [SourceReadingMin(
-								datetime=reading_datetime,
-								source_id=source['_id'],
-								value=readings[source['name']][idx]
-							) for (idx, reading_datetime) in enumerate(reading_datetimes)]
-							need_update_source_ids.append(source['_id'])
-						else:
-							Utils.log_error("no matching cname for source! source: %s, cname: %s"%(xml_url, source['name']))
-							source_reading_mins_invalid += [SourceReadingMinInvalid(
-								datetime=reading_datetime,
-								source_id=source['_id'],
-								xml_url=xml_url,
-								name=source['name'],
-								tz=source['tz']
-							) for (idx, reading_datetime) in enumerate(reading_datetimes)]
-				except SourceManager.GetEgaugeDataError, e:
-					for source in sources:
-						source_reading_mins_invalid += [SourceReadingMinInvalid(
-							datetime=reading_datetime,
-							source_id=source['_id'],
-							xml_url=xml_url,
-							name=source['name'],
-							tz=source['tz']
-						) for (idx, reading_datetime) in enumerate(reading_datetimes)]
-
-				if source_reading_mins:
-					SourceReadingMin.objects.insert(source_reading_mins)
-				if source_reading_mins_invalid:
-					SourceReadingMinInvalid.objects.insert(source_reading_mins_invalid)
-
-				if need_update_source_ids:
-					source_tz = sources[0]['tz']
-					SourceManager.update_sum(start_time, source_tz, need_update_source_ids)
-
+			if celery_task is None:
+				SourceManager.force_retrieve_hour_reading(all_grouped_sources, start_dt, hour_idx)
+			else:
+				celery_task.delay(all_grouped_sources, start_dt, hour_idx)
 	@staticmethod
 	def force_retrieve_all_reading(start_dt, end_dt):
 		SourceManager.force_retrieve_reading(start_dt, end_dt, None)

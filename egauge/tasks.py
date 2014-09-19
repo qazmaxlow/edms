@@ -24,4 +24,8 @@ def recover_all_invalid_reading():
 
 @shared_task(ignore_result=True)
 def force_retrieve_reading(start_dt, end_dt, system_codes):
-	SourceManager.force_retrieve_reading(start_dt, end_dt, system_codes)
+	SourceManager.force_retrieve_reading(start_dt, end_dt, system_codes, force_retrieve_hour_reading)
+
+@shared_task(ignore_result=True)
+def force_retrieve_hour_reading(all_grouped_sources, start_dt, hour_idx):
+	SourceManager.force_retrieve_hour_reading(all_grouped_sources, start_dt, hour_idx)
