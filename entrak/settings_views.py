@@ -127,7 +127,13 @@ def remove_alert_view(request, system_code=None):
 @ensure_csrf_cookie
 def general_settings_view(request, system_code=None):
 	systems_info = System.get_systems_info(system_code, request.user.system.code)
-	users = EntrakUser.objects.filter(system_id__in=[system.id for system in systems_info["systems"]])
+	users = EntrakUser.objects.filter(system_id__in=[system.id for system in systems_info["systems"]]).select_related('system_name')
+
 	m = systems_info
+	m['user_info'] = [{
+		'id': user.id,
+		'userName': user.username,
+		'systemName': user.system.name,
+		'roleLevel': user.role_level} for user in users]
 
 	return render_to_response('general_settings.html', m)

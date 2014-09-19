@@ -18,6 +18,101 @@
 {% block extra_script %}
 {{block.super}}
 
+<script id="accrount-row-template" type="x-tmpl-mustache">
+<div class="account-row">
+	<div class="ar-system-name">
+	</div><div class="ar-user-col"><input type="text" name="username">
+	</div><div class="ar-pwd-col"><input type="password" name="pwd">
+	</div><div class="ar-type-col">
+		<select class="ar-type-sel">
+			<option value="standard">Standard</option>
+			<option value="admin">Admin</option>
+		</select>
+	</div><div class="ar-action-col">
+		<div class="ar-apply-btn">Apply</div>
+		<div class="ar-cancel-btn">Cancel</div>
+	</div>
+</div>
+</script>
+
+<script type="text/javascript">
+
+USER_ROLE_ADMIN_LEVEL	= 100
+USER_ROLE_VIEWER_LEVEL	= 1
+USER_TYPE_STANDARD = 'standard'
+USER_TYPE_ADMIN = 'admin'
+
+settings = {};
+
+function userTypeToRoleLevel(userType) {
+	var roleLevel;
+	if (userType === USER_TYPE_STANDARD) {
+		roleLevel = USER_ROLE_VIEWER_LEVEL;
+	} else if (userType === USER_TYPE_ADMIN) {
+		roleLevel = USER_ROLE_ADMIN_LEVEL;
+	}
+
+	return roleLevel;
+}
+
+function roleLevelToUserType(roleLevel) {
+	var userType;
+	if (roleLevel === USER_ROLE_ADMIN_LEVEL) {
+		userType = USER_TYPE_ADMIN;
+	} else if (roleLevel === USER_ROLE_VIEWER_LEVEL) {
+		userType = USER_TYPE_STANDARD;
+	}
+
+	return userType;
+}
+
+function getUserById(userId) {
+	var matchUser = null;
+	$.each(settings.users, function(userIdx, userItem) {
+		if (userId === userItem.id) {
+			matchUser = userItem;
+			return false;
+		}
+	});
+
+	return matchUser;
+}
+
+function setupAccountRowCancelBtn(targetEle) {
+	targetEle.click(function() {
+		var accountRow = targetEle.parent().parent();
+		var user = getUserById(parseInt(accountRow.attr('user_id'), 10));
+
+		accountRow.find('.ar-user-col input').val(user.userName);
+		accountRow.find('.ar-pwd-col input').val('');
+		accountRow.find('.ar-type-sel').val(roleLevelToUserType(user.roleLevel));
+	});
+}
+
+function insertAccountRow(user, accountTemplate) {
+	var eleHtml = $(Mustache.render(accountTemplate, {}));
+	eleHtml.attr('user_id', user.id);
+	eleHtml.find('.ar-system-name').text(user.systemName);
+	eleHtml.find('.ar-user-col input').val(user.userName);
+	eleHtml.find('.ar-type-sel').val(roleLevelToUserType(user.roleLevel));
+
+	$('.account-table').append(eleHtml);
+}
+
+$(function() {
+	settings.users = JSON.parse('{{user_info|jsonifyPrimitiveObj}}');
+
+	var accountRowTemplate = $('#accrount-row-template').html();
+	Mustache.parse(accountRowTemplate);
+	$.each(settings.users, function(userIdx, userItem) {
+		insertAccountRow(userItem, accountRowTemplate);
+	});
+
+	setupAccountRowCancelBtn($('.ar-cancel-btn'));
+});
+
+</script>
+
 {% endblock %}
 
 {% block page_content %}

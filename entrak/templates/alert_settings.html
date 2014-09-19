@@ -336,6 +336,7 @@ function requestSetAlert(alertData) {
 				setupRowCancelBtn(tableRow.find('.row-cancel-btn'));
 				setupRowDeleteBtn(tableRow.find('.row-delete-btn'));
 				setupRowConfirmBtn(tableRow.find('.row-confirm-btn'));
+				setupDuplicateBtn(tableRow.find('.row-copy-btn'));
 			}
 		}
 	}).fail(function(jqXHR, textStatus) {
@@ -354,22 +355,22 @@ function insertAlertToTable(alert, peakRowTemplate, summaryStillOnRowTemplate) {
 	var target, targetTemplate;
 	if (alert.type === 'summary' || alert.type === 'still_on') {
 		targetTemplate = summaryStillOnRowTemplate;
-		target = (alert.type === 'summary') ? '.summary-alert .add-content-row' : '.still-on-alert .add-content-row';
+		target = (alert.type === 'summary') ? '.summary-alert .content-table' : '.still-on-alert .content-table';
 
 		info.timeFrom = alert.startTime;
 		info.timeTo = alert.endTime;
 		info.weekday = transformPythonWeekdaysToName(alert.checkWeekdays);
 	} else {
 		targetTemplate = peakRowTemplate;
-		target = '.peak-demand .add-content-row';
+		target = '.peak-demand .content-table';
 
 		info.peakThreshold = alert.peakThreshold;
 	}
 
 	var eleHtml = Mustache.render(targetTemplate, info);
-	$(eleHtml).insertBefore(target);
+	$(target).append(eleHtml);
 
-	return $(target).parent().find('.alert-row[alert_id="' + alert.id + '"]');
+	return $(target).find('.alert-row[alert_id="' + alert.id + '"]');
 }
 
 function requestRemoveAlert(alertId) {
@@ -893,17 +894,6 @@ $(function() {
 						</div><div class="table-header-created">Date Created
 						</div><div class="table-header-action">Action</div>
 					</div>
-					<div class="alert-row add-content-row">
-						<div class="end-use-col">
-						</div><div class="percent-col">
-						</div><div class="time-from-col">
-						</div><div class="time-to-col">
-						</div><div class="receiver-col">
-						</div><div class="created-col">
-						</div><div class="action-col">
-							<div class="add-action-block"><img class="row-add-btn" src=""></div>
-						</div>
-					</div>
 				</div>
 			</div>
 		</div>
@@ -928,18 +918,6 @@ $(function() {
 						</div><div class="table-header-created">Date Created
 						</div><div class="table-header-action">Action</div>
 					</div>
-					<div class="alert-row add-content-row">
-						<div class="end-use-col">
-						</div><div class="percent-col">
-						</div><div class="time-from-col">
-						</div><div class="time-to-col">
-						</div><div class="weekday-col">
-						</div><div class="receiver-col">
-						</div><div class="created-col">
-						</div><div class="action-col">
-							<div class="add-action-block"><img class="row-add-btn" src=""></div>
-						</div>
-					</div>
 				</div>
 			</div>
 		</div>
@@ -963,18 +941,6 @@ $(function() {
 						</div><div class="table-header-send-to">Send to
 						</div><div class="table-header-created">Date Created
 						</div><div class="table-header-action">Action</div>
-					</div>
-					<div class="alert-row add-content-row">
-						<div class="end-use-col">
-						</div><div class="percent-col">
-						</div><div class="time-from-col">
-						</div><div class="time-to-col">
-						</div><div class="weekday-col">
-						</div><div class="receiver-col">
-						</div><div class="created-col">
-						</div><div class="action-col">
-							<div class="add-action-block"><img class="row-add-btn" src=""></div>
-						</div>
 					</div>
 				</div>
 			</div>
