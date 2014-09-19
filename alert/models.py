@@ -87,29 +87,34 @@ class Alert(models.Model):
 		now = utc_now.astimezone(pytz.timezone(self.system.timezone))
 		all_source_ids = self.get_all_source_ids()
 		start_dt, end_dt = self.gen_start_end_dt(now)
-		value = SourceManager.get_readings_sum(all_source_ids, start_dt, end_dt)
+		value, num_of_reading = SourceManager.get_readings_sum(all_source_ids, start_dt, end_dt)
 
 		pass_verify = True
 		diff_percent = None
-		if self.type == ALERT_TYPE_PEAK:
-			transformed_peak_threshold = self.peak_threshold*KVA_TO_KWH_FACTOR*(CONTINUOUS_INTERVAL_MIN/60.0)
-			if value > transformed_peak_threshold*(self.compare_percent/100.0):
-				pass_verify = False
-			diff_percent = int((float(value)/transformed_peak_threshold)*100)
 
-		elif self.type == ALERT_TYPE_STILL_ON or self.type == ALERT_TYPE_SUMMARY:
-			recent_start_dt = start_dt - datetime.timedelta(days=7)
-			recent_end_dt = end_dt - datetime.timedelta(days=7)
-			recent_value = SourceManager.get_readings_sum(all_source_ids, recent_start_dt, recent_end_dt)
+		# need to make sure summary and still on alert don't have missing data
+		if self.type == ALERT_TYPE_SUMMARY \
+			or (num_of_reading == len(all_source_ids)*CONTINUOUS_INTERVAL_MIN):
 
-			if recent_value != 0:
-				if self.compare_method == ALERT_COMPARE_METHOD_ABOVE:
-					if value > recent_value*(1+(self.compare_percent/100.0)):
-						pass_verify = False
-				elif self.compare_method == ALERT_COMPARE_METHOD_BELOW:
-					if value < recent_value*(1-(self.compare_percent/100.0)):
-						pass_verify = False
-				diff_percent = int(((float(value)/recent_value)-1)*100)
+			if self.type == ALERT_TYPE_PEAK:
+				transformed_peak_threshold = self.peak_threshold*KVA_TO_KWH_FACTOR*(CONTINUOUS_INTERVAL_MIN/60.0)
+				if value > transformed_peak_threshold*(self.compare_percent/100.0):
+					pass_verify = False
+				diff_percent = int((float(value)/transformed_peak_threshold)*100)
+
+			elif self.type == ALERT_TYPE_STILL_ON or self.type == ALERT_TYPE_SUMMARY:
+				recent_start_dt = start_dt - datetime.timedelta(days=7)
+				recent_end_dt = end_dt - datetime.timedelta(days=7)
+				recent_value, recent_num_of_reading = SourceManager.get_readings_sum(all_source_ids, recent_start_dt, recent_end_dt)
+
+				if recent_value != 0:
+					if self.compare_method == ALERT_COMPARE_METHOD_ABOVE:
+						if value > recent_value*(1+(self.compare_percent/100.0)):
+							pass_verify = False
+					elif self.compare_method == ALERT_COMPARE_METHOD_BELOW:
+						if value < recent_value*(1-(self.compare_percent/100.0)):
+							pass_verify = False
+					diff_percent = int(((float(value)/recent_value)-1)*100)
 
 		verify_result = {
 			'start_dt': start_dt,

@@ -427,23 +427,12 @@ class SourceManager:
 
 	@staticmethod
 	def get_readings_sum(source_ids, start_dt, end_dt):
-		current_db_conn = connection.get_db()
-		result = current_db_conn['source_reading_min'].aggregate([
-			{"$match": {
-				"source_id": {"$in": [ObjectId(source_id) for source_id in source_ids]},
-				"datetime": {"$gte": start_dt, "$lt": end_dt}
-			}},
-			{ "$project": {"source_id": 1, "value": 1}},
-			{
-				"$group": {
-					"_id": "null",
-					"total": {"$sum": "$value"}
-				}
-			},
-		])
+		source_readings = SourceReadingMin.objects(
+			source_id__in=(ObjectId(source_id) for source_id in source_ids),
+			datetime__gte=start_dt,
+			datetime__lt=end_dt)
+		
+		num_of_min_interval = len(source_readings)
+		total = sum((source_reading.value for source_reading in source_readings))
 
-		if result['result']:
-			total = result['result'][0]['total']
-		else:
-			total = 0
-		return total
+		return (total, num_of_min_interval)
