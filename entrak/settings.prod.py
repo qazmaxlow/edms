@@ -21,3 +21,5 @@ LOGGING['handlers']['timed_rotating_handler']['filename'] = os.path.join('/mnt',
 LOGGING['handlers']['recap_timed_rotating_handler']['filename'] = os.path.join('/mnt', 'logs', 'entrak', 'django_recap.log')
 
 SITE_LINK_FORMAT = 'https://%s.en-trak.com'
+
+PYTHON_BIN = '/app/ENV/entrak/bin/python'

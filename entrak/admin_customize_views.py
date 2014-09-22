@@ -11,6 +11,7 @@ from egauge.manager import SourceManager
 from egauge.models import Source
 from baseline.models import BaselineUsage
 from utils.utils import Utils
+from settings import PYTHON_BIN
 
 CAN_UPDATE_SOURCE_FIELDS = ['name', 'xml_url', 'system_code', 'system_path', 'd_name', 'd_name_tc', 'order']
 
@@ -121,7 +122,7 @@ def recap_data_view(request):
 	# may be there are some max http connections per process?
 	# force_retrieve_reading.delay(start_dt, end_dt, system_codes)
 	subprocess.Popen([
-		'python',
+		PYTHON_BIN,
 		'manage.py',
 		'recap_data_for_systems',
 		','.join(system_codes),
