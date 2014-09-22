@@ -8,7 +8,7 @@
 
 .panel-header-left-menu {
 	position: relative;
-	width: 804px;
+	width: 850px;
 	margin-top: 20px;
 	margin-left: 20px;
 	margin-right: 20px;
@@ -40,10 +40,12 @@
 .main-content-container .SumoSelect {
 	margin-right: 10px;
 	margin-left: 10px; 
-	margin-bottom: 5px
+	margin-bottom: 5px;
+	margin-left: 5px;
 }
 .main-content-container .SumoSelect > .CaptionCont > label {
 	background-color: #F3F3F3;
+	width: 25px;
 }
 .main-content-container .SumoSelect:hover > .CaptionCont > label {
 	background-color: #E0D8D8;
@@ -52,6 +54,81 @@
 	left: -10px;
 	width: 199px;
 	padding-left: 8px;
+}
+.main-content-container .conversational-block > div:first-child .SumoSelect span {
+	font-size: 14pt;
+	margin-top: 4px;
+}
+.main-content-container .conversational-block > div:first-child .SumoSelect .SumoSelect{
+	width: 245px;
+	text-align:center;
+}
+.main-content-container .conversational-block > div:first-child .SumoSelect label{
+	text-align:left;
+}
+.main-content-container .conversational-block > div:first-child .SumoSelect .SlectBox{
+	width: 245px;
+}
+.summary-alert .alert-content .conversational-block>div:nth-child(2) .SumoSelect,
+.still-on-alert .alert-content .conversational-block>div:nth-child(2) .SumoSelect { 
+	margin-top: 0px;
+}
+.summary-alert .alert-content .conversational-block>div:nth-child(2) .SumoSelect:nth-child(2) .CaptionCont,
+.summary-alert .alert-content .conversational-block>div:nth-child(2) .SumoSelect:nth-child(3) .CaptionCont,
+.still-on-alert .alert-content .conversational-block>div:nth-child(2) .SumoSelect:nth-child(2) .CaptionCont,
+.still-on-alert .alert-content .conversational-block>div:nth-child(2) .SumoSelect:nth-child(3) .CaptionCont{
+	font-size: 14pt;
+	width: 90px;
+}
+.summary-alert .alert-content .conversational-block>div:nth-child(2) .SumoSelect:nth-child(2) .CaptionCont span,
+.summary-alert .alert-content .conversational-block>div:nth-child(2) .SumoSelect:nth-child(3) .CaptionCont span,
+.still-on-alert .alert-content .conversational-block>div:nth-child(2) .SumoSelect:nth-child(2) .CaptionCont span,
+.still-on-alert .alert-content .conversational-block>div:nth-child(2) .SumoSelect:nth-child(3) .CaptionCont span{
+	margin-top: 4px;
+}
+.summary-alert .alert-content .conversational-block div:nth-child(1) .SumoSelect span,
+.still-on-alert .alert-content .conversational-block div:nth-child(1) .SumoSelect span {
+	display: block;
+	padding-right: 30px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden; 
+	font-size: 14pt;
+	margin-top: 4px; 
+}
+.summary-alert .alert-content .conversational-block div:nth-child(2) .SumoSelect:nth-child(4) span,
+.still-on-alert .alert-content .conversational-block div:nth-child(2) .SumoSelect:nth-child(4) span {
+	display: block;
+	padding-right: 30px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden; 
+	font-size: 14pt;
+	margin-top: 4px; 
+}
+.summary-alert .alert-content .conversational-block div:nth-child(2) .SumoSelect:nth-child(4) .CaptionCont,
+.still-on-alert .alert-content .conversational-block div:nth-child(2) .SumoSelect:nth-child(4) .CaptionCont{
+	margin-top: 8px;
+}
+.summary-alert .alert-content .conversational-block .send-alert-to ul{
+	border: 1px solid #4f50a1;
+}
+.still-on-alert .alert-content .conversational-block .send-alert-to ul{
+	border: 1px solid #EB9524;
+}
+.summary-alert .conversational-confirm-btn,
+.still-on-alert .conversational-confirm-btn {
+	border: 1px solid #4f50a1;
+	color: #4f50a1;
+}
+.summary-alert .conversational-cancel-btn,
+.still-on-alert .conversational-cancel-btn{
+	border: 1px solid #4f50a1;
+	color: #4f50a1;
+}
+.summary-alert .table-header-end-use, .still-on-alert .table-header-end-use,
+.still-on-alert .table-header-end-use, .still-on-alert .table-header-end-use {
+	width: 190px;
 }
 
 .create-alert-container {
@@ -62,7 +139,7 @@
 	font-size: 11pt;
 	font-weight: bold;
 	color: #354960;
-	padding-left: 20px;
+	padding-left: 60px;
 	padding-top: 35px; 
 	padding-bottom: 25px;
 	background-color: #F8F7ED;
@@ -185,9 +262,8 @@
 }
 
 .alert-container {
-	background-color: #FCFCFC;
-	box-shadow: -6px 6px 10px 0px #e8e8e8;
-	margin-top: 60px;
+	background-color: #F9F9F9;
+	margin-top: 80px;
 }
 
 .alert-header {
@@ -205,6 +281,7 @@
 	font-weight: bold;
 	padding-top: 20px;
 	padding-bottom: 15px;
+	letter-spacing: 0.02em;
 }
 .peak-demand .alert-header-title {
 	color: #35BC99;
@@ -226,8 +303,14 @@
 .summary-alert .alert-header-title {
 	color: #4F50A1;
 }
+.still-on-alert .alert-header-title {
+	color: #EB9524;
+}
 .summary-alert .alert-header{
     border-bottom: 2px solid #4F50A1;
+}
+.still-on-alert .alert-header{
+	border-bottom: 2px solid #eb9524;
 }
 
 .conversational-block {
@@ -238,14 +321,25 @@
 	width: 720px;
 	margin-left: auto;
 	margin-right: auto;
+	margin-top: 20px;
+	margin-bottom: 20px;
 	color: #35485F;
 	padding-left: 15px;
 	padding-right: 15px;
-	margin-bottom: 20px;
-	padding-bottom: 15px
+	padding-bottom: 15px;
+	padding-top: 15px;
+	background-color: #fff;
+	box-shadow: 0px 0px 2px #c2c2c2;
 }
 .conversational-block div{
 	vertical-align: bottom;
+}
+.conversational-block > div:nth-child(2) {
+	margin-top: 10px;
+}
+.summary-alert .conversational-block,
+.still-on-alert .conversational-block{
+	width: 94%;
 }
 
 .compare-percent-select + .SlectBox {
@@ -278,12 +372,16 @@
 .email-input .ui-state-default,
 .email-input .ui-widget-content .ui-state-default,
 .email-input .ui-widget-header .ui-state-default {
-	border: 1px solid #A3A3A3;
+	border: 1px solid #35BC99;
+	color: #35485f;
 	background: #D6D6D6;
 	border-radius: 8px;
 }
+.send-alert-to ul.tagit li.tagit-choice-editable {
+	padding: .14em 18px .14em .5em;
+}
 .send-alert-to{
-	margin-top: 10px;
+	margin-top: 16px;
 }
 .email-notes{
 	font-size: 8pt;
@@ -307,6 +405,10 @@
 	border: 1px solid #35bc99;
 	border-radius: 8px;
 	margin-right: 10px;
+}
+.still-on-alert .conversational-btn{
+	color: #EB9524;
+	border: 1px solid #eb9524;
 }
 
 .alert-content>hr {
@@ -356,11 +458,14 @@
 .table-header-end-use{
 	width: 206px;
 }
+.peak-demand .table-header-end-use {
+	width: 239px;
+}
 .table-header-percentage{
-	width: 98px;
+	width: 80px;
 }
 .table-header-threshold{
-	width: 98px;
+	width: 130px;
 }
 .table-header-time-from{
 	width: 98px;
@@ -372,7 +477,7 @@
 	width: 98px;
 }
 .table-header-send-to{
-	width: 136px;
+	width: 110px;
 }
 .table-header-created{
 	width: 98px;
@@ -398,7 +503,7 @@
 }
 .summary-alert .table-header-weekdays,
 .still-on-alert .table-header-weekdays {
-	width: 95px;
+	width: 105px;
 }
 .summary-alert .table-header-send-to,
 .still-on-alert .table-header-send-to {
@@ -417,19 +522,22 @@
 	width: 105px;
 }
 
+.summary-alert .alert-row {
+	width: 97%;
+	margin-left: auto;
+	margin-right: auto;
+	border-bottom: 1px solid #dbdbdb;
+	border-left: 1px solid #dbdbdb;
+	border-right: 1px solid #dbdbdb;   
+}
 .peak-demand .end-use-col {
 	width: 238px;
 	background-color: #35BC99;
-	margin-left: 29px;
-	border-left: 1px solid #DBDBDB;
 	border-right: 1px solid #DBDBDB;
-	height: 35px;
 }
 .summary-alert .end-use-col,
 .still-on-alert .end-use-col {
-	margin-left: 11px;
-	width: 199px;
-	border-left: 1px solid #DBDBDB;
+	width: 190px;
 	border-right: 1px solid #DBDBDB;
 	text-align: left;
 	font-size: 10pt;
@@ -456,10 +564,10 @@
 }
 .summary-alert .end-use-col .SumoSelect .CaptionCont,
 .still-on-alert .end-use-col .SumoSelect .CaptionCont {
-	width: 183px;
+	width: 175px;
 	height: 10px;
 	margin-top: 5px;
-	background-color: #6F70B1;
+	background-color: #4F50A1;
 }
 .peak-demand .end-use-col .SumoSelect .CaptionCont label {
 	background-color: #35BC99;
@@ -468,7 +576,7 @@
 }
 .summary-alert .end-use-col .SumoSelect .CaptionCont label,
 .still-on-alert .end-use-col .SumoSelect .CaptionCont label {
-	background-color: #6F70B1;
+	background-color: #4f50a1;
 }
 .peak-demand .end-use-col .SumoSelect .SlectBox label > i {
 	height: 12px;
@@ -490,7 +598,7 @@
 }
 
 .peak-demand .percent-col{
-	width: 99px;
+	width: 81px;
 	text-align: center;
 	border-right: 1px solid #DBDBDB;
 }
@@ -508,7 +616,7 @@
 	margin-right: auto;
 }
 .peak-demand .percent-col .SumoSelect .CaptionCont{
-	width: 83px;
+	width: 65px;
 	height: 10px;
 	font-size: 9pt;
 	margin-top: 5px;
@@ -589,8 +697,8 @@
 
 .summary-alert .weekday-col,
 .still-on-alert .weekday-col {
-	width: 95px;
-	text-align: left;
+	width: 105px;
+	text-align: center;
 	border-right: 1px solid #DBDBDB;
 	font-size: 10pt;
 }
@@ -601,10 +709,10 @@
 }
 .summary-alert .weekday-col .SumoSelect .CaptionCont,
 .still-on-alert .weekday-col .SumoSelect .CaptionCont {
-	width: 80px;
-	height: 10px;
+	width: 90px;
 	margin-top: 5px;
 	border: 1px solid #6F70B1;
+	height: 10px;
 }
 .summary-alert .weekday-col .SumoSelect .CaptionCont label > i,
 .still-on-alert .weekday-col .SumoSelect .CaptionCont label > i {
@@ -623,14 +731,14 @@
 }
 
 .peak-demand .receiver-col {
-	width: 137px;
+	width: 110px;
 	text-align: center;
 	border-right: 1px solid #DBDBDB;
 }
 .summary-alert .receiver-col,
 .still-on-alert .receiver-col {
 	width: 120px;
-	text-align: left;
+	text-align: center;
 	border-right: 1px solid #DBDBDB;
 	font-size: 10pt;
 }
@@ -642,7 +750,7 @@
 
 }
 .peak-demand .receiver-col .SumoSelect .CaptionCont{
-	width: 122px;
+	width: 95px;
 	height: 10px;
 	font-size: 9pt;
 	margin-top: 5px;
@@ -675,19 +783,35 @@
 }
 
 .peak-demand .peak-threshold-col {
-	width: 97px;
+	width: 130px;
 	text-align: center;
 	border-right: 1px solid #dbdbdb;
 	margin-left: auto;
 	margin-right: auto;
+	height: 37px;
 }
 .peak-demand .peak-threshold-input {
-	width: 76px;
-	border: 2px solid #35BC99;
-	height: 14px;
+	width: 110px;
+	border: 1px solid #35BC99;
+	height: 20px;
 	font-size: 9pt;
+	padding-top: 4px;
+	margin-top: 5px;
+}
+.alert-content .conversational-block .peak-threshold-input{
+	width: 120px;
+	border: 1px solid #35BC99;
+	height: 20px;
+	font-size: 14pt;
+	margin-right: 6px;
+	margin-left: 3px;
+	background-color: #f3f3f3; 
 }
 
+.created-col {
+	height: 32px;
+	padding-top: 5px;
+}
 .peak-demand .created-col {
 	width: 98px;
 	text-align: center;
@@ -696,8 +820,6 @@
 	margin-right: auto;
 	font-size: 9pt;
 	vertical-align: top;
-	height: 32px;
-	padding-top: 5px;
 	line-height: 1.1em; 
 }
 .summary-alert .created-col,
@@ -708,10 +830,13 @@
 	margin-left: auto;
 	margin-right: auto;
 	font-size: 9pt;
-	vertical-align: top;
-	height: 32px;
-	padding-top: 5px;
+	vertical-align: middle;
 	line-height: 1.1em;
+}
+
+.summary-alert .action-col,
+.still-on-alert .action-col {
+	vertical-align: middle;
 }
 
 .display-text{
@@ -731,16 +856,20 @@
 	padding-left: 10px;
 }
 .peak-demand .display-text.percent-text {
-	width: 98px;
+	width: 81px;
 	border-right: 1px solid #dbdbdb;
 }
 
 .normal-action-block>img {
-	margin-left: 15px;
+	margin-left: 18px;
 }
 .row-edit-btn {
 	width: 19px;
 	height: 18px;
+}
+.summary-alert .row-edit-btn,
+.still-on-alert .row-edit-btn{
+	margin-left: 8px;
 }
 .row-copy-btn {
 	width: 18px;
@@ -795,7 +924,7 @@
 
 .history-table-header {
 	font-family: "helvetica neue light", sans-serif;
-	width: 802px;
+	width: 803px;
 	background-color: #F8F7ED;
 	height: 37px;
 	font-size: 11pt;
@@ -851,6 +980,7 @@
 
 .history-content{
 	border-bottom: 1px solid #dbdbdb;
+	border-right: 1px solid #dbdbdb;
 	width: 804px;
 }
 
@@ -866,7 +996,6 @@
 }
 .history-row>div{
 	display: inline-block;
-	border-right: 1px solid #DBDBDB;
 	font-size: 10pt;
 	vertical-align: middle;
 }
@@ -902,6 +1031,8 @@
 .resolved-col{
 	width: 184px;
 	height: 63px;
+	border-left: 1px solid #DBDBDB;
+	margin-left: 2px;
 }
 .resolved-text{
 	font-weight: bold;
@@ -944,7 +1075,37 @@
 	display: none;
 	background-color: #FFF;
 	width: 300px;
-	height: 200px;
+	height: 180px;
+	border-radius: 10px;
+	box-shadow: 0px 0px 4px #fff; 
+	border: 1px solid #989898;
+}
+.dialog-title{
+	text-align: center;
+	margin-top: 30px;
+	font-size: 13pt;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+	width: 170px;
+	line-height: 1.5em;
+	font-weight: bold;
+	color: #4b4b4b;
+	margin-left: auto;
+	margin-right: auto;
+}
+.dialog-btn-container>div {
+	display: inline-block;
+	font-size: 11pt;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+	width: 100px;
+	text-align: center;
+	height: 21px;
+	padding-top: 4px;
+	border-radius: 8px;
+	border: 2px solid #989898;
+	margin-left: 30px;
+	margin-top: 40px;
+	background-color: #f7f7f7;
+	color: #545454;
 }
 
 .duplicate-popup {
