@@ -24,8 +24,13 @@ def permission_required(required_level=USER_ROLE_VIEWER_LEVEL):
 		@wraps(view_func)
 		def wrapper(request, *args, **kwargs):
 			system_code = kwargs['system_code']
+			system = System.objects.get(code=system_code)
+
+			if not system.login_required and required_level == USER_ROLE_VIEWER_LEVEL:
+				request.user.system = system
+				return view_func(request, *args, **kwargs)
+
 			if request.user.is_authenticated():
-				system = System.objects.get(code=system_code)
 				if request.user.role_level >= required_level and has_permission(request, request.user, system):
 					return view_func(request, *args, **kwargs)
 				else:

@@ -33,6 +33,7 @@ class System(models.Model):
 	first_record = models.DateTimeField()
 	night_time_start = models.TimeField(default=DEFAULT_NIGHT_TIME_START)
 	night_time_end = models.TimeField(default=DEFAULT_NIGHT_TIME_END)
+	login_required = models.BooleanField(default=True)
 
 	unit_info = models.TextField(default='{}')
 
