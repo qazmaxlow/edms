@@ -24,7 +24,7 @@ ReportGenerator.REPORT_TYPE_QUARTER = 'quarter';
 ReportGenerator.REPORT_TYPE_CUSTOM_MONTH = 'custom-month';
 ReportGenerator.REPORT_TYPE_WEEK = 'week';
 
-ReportGenerator.MAX_PERCENTAGE_VALUE = 15;
+ReportGenerator.MAX_PERCENTAGE_VALUE = 5;
 ReportGenerator.DONUT_COLORS = ['#68C0D4', '#8C526F', '#D5C050', '#8B8250', '#5759A7', '#6EC395',
 	'#EE9646', '#EE5351', '#178943', '#BA1E6A', '#045A6F', '#0298BB'];
 ReportGenerator.OTHER_PERCENT_COLOR = '#D55398'
