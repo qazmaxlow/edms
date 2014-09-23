@@ -44,6 +44,9 @@ urlpatterns = patterns('',
 		url(r'^set_alert/$', 'entrak.settings_views.set_alert_view', name='set_alert'),
 		url(r'^remove_alert/$', 'entrak.settings_views.remove_alert_view', name='remove_alert'),
 		url(r'^general_settings/$', 'entrak.settings_views.general_settings_view', name='general_settings'),
+
+		url(r'^faq/$', 'entrak.static_page_views.faq_view', name='faq'),
+		url(r'^disclaimer/$', 'entrak.static_page_views.disclaimer_view', name='disclaimer'),
 	))),
 )
 
