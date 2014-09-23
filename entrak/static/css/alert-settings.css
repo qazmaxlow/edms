@@ -58,6 +58,7 @@
 .main-content-container .conversational-block > div:first-child .SumoSelect span {
 	font-size: 14pt;
 	margin-top: 4px;
+	text-align: center;
 }
 .main-content-container .conversational-block > div:first-child .SumoSelect .SumoSelect{
 	width: 245px;
@@ -110,11 +111,24 @@
 .still-on-alert .alert-content .conversational-block div:nth-child(2) .SumoSelect:nth-child(4) .CaptionCont{
 	margin-top: 8px;
 }
+.peak-demand .conversational-block .SumoSelect{
+	color: #35BC99;
+}
+.summary-alert .conversational-block .SumoSelect {
+	color: #4F50A1;
+}
+.still-on-alert .conversational-block .SumoSelect {
+	color: #eb9524;
+}
+
 .summary-alert .alert-content .conversational-block .send-alert-to ul{
 	border: 1px solid #4f50a1;
 }
 .still-on-alert .alert-content .conversational-block .send-alert-to ul{
 	border: 1px solid #EB9524;
+}
+.conversational-confirm-btn {
+	border-width: 2px !important;
 }
 .summary-alert .conversational-confirm-btn,
 .still-on-alert .conversational-confirm-btn {
@@ -125,10 +139,6 @@
 .still-on-alert .conversational-cancel-btn{
 	border: 1px solid #4f50a1;
 	color: #4f50a1;
-}
-.summary-alert .table-header-end-use, .still-on-alert .table-header-end-use,
-.still-on-alert .table-header-end-use, .still-on-alert .table-header-end-use {
-	width: 190px;
 }
 
 .create-alert-container {
@@ -263,7 +273,8 @@
 
 .alert-container {
 	background-color: #F9F9F9;
-	margin-top: 80px;
+	margin-top: 50px;
+	margin-bottom: 40px;
 }
 
 .alert-header {
@@ -284,10 +295,11 @@
 	letter-spacing: 0.02em;
 }
 .peak-demand .alert-header-title {
-	color: #35BC99;
+	color: #FFF;
 }
 .peak-demand .alert-header{
-	border-bottom: 2px solid #35BC99;
+	background-color: #35BC99;
+	box-shadow: 0px 1px 3px #AEAEAE;
 }
 .alert-header-info-btn {
 	position: absolute;
@@ -301,16 +313,18 @@
 }
 
 .summary-alert .alert-header-title {
-	color: #4F50A1;
+	color: #FFF;
 }
 .still-on-alert .alert-header-title {
-	color: #EB9524;
+	color: #FFF;
 }
 .summary-alert .alert-header{
-    border-bottom: 2px solid #4F50A1;
+	background-color: #4F50A1;
+	box-shadow: 0px 1px 3px #AEAEAE;
 }
 .still-on-alert .alert-header{
-	border-bottom: 2px solid #eb9524;
+	background-color: #EB9524;
+	box-shadow: 0px 1px 3px #AEAEAE;
 }
 
 .conversational-block {
@@ -372,7 +386,6 @@
 .email-input .ui-state-default,
 .email-input .ui-widget-content .ui-state-default,
 .email-input .ui-widget-header .ui-state-default {
-	border: 1px solid #35BC99;
 	color: #35485f;
 	background: #D6D6D6;
 	border-radius: 8px;
@@ -425,6 +438,7 @@
 
 .content-table {
 	width: 100%;
+	padding-bottom: 20px;
 }
 
 .table-header{
@@ -515,14 +529,15 @@
 }
 .summary-alert .table-header-end-use,
 .still-on-alert .table-header-end-use {
-	width: 165px;
+	width: 190px;
 }
 .summary-alert .table-header-action,
 .still-on-alert .table-header-action {
 	width: 105px;
 }
 
-.summary-alert .alert-row {
+.summary-alert .alert-row,
+.still-on-alert .alert-row {
 	width: 97%;
 	margin-left: auto;
 	margin-right: auto;
@@ -549,7 +564,7 @@
 .still-on-alert .end-use-col {
 	background-color: #EB9524;
 }
-.peadk-demand .end-use-col .SumoSelect{
+.peak-demand .end-use-col .SumoSelect{
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -806,6 +821,7 @@
 	margin-right: 6px;
 	margin-left: 3px;
 	background-color: #f3f3f3; 
+	color: #35BC99;
 }
 
 .created-col {
@@ -901,6 +917,7 @@
 	margin-right: auto;
 	border-left: 1px solid #DBDBDB;
 	border-right: 1px solid #DBDBDB;
+	border-bottom: 1px solid #DBDBDB;
 }
 .peak-demand .alert-row > div {
 	vertical-align: middle;
@@ -920,6 +937,7 @@
 
 .alert-history-container {
 	display: none;
+	margin-bottom: 60px;
 }
 
 .history-table-header {
@@ -979,9 +997,9 @@
 }
 
 .history-content{
-	border-bottom: 1px solid #dbdbdb;
-	border-right: 1px solid #dbdbdb;
 	width: 804px;
+	height: 800px;
+	overflow: scroll;
 }
 
 .history-row{
@@ -990,6 +1008,7 @@
 	height: 63px;
 	border-bottom: 1px solid #DBDBDB;
 	color: #384A61;
+	border-right: 1px solid #DBDBDB;
 }
 .history-row:nth-child(even){
 	background-color: #EFEFEF;
@@ -1043,9 +1062,9 @@
 	color: #76c812; 
 }
 .resolved-dt-container{
-	padding-top: 24px;
 	line-height: 1.3em;
 	margin-left: 25px;
+	margin-top: -13px;
 }
 .history-row.resolved-history .resolved-text{
 	display: block;
@@ -1056,7 +1075,6 @@
 	display: none;
 }
 .resolved-dot {
-	position: absolute;
 	width: 10px;
 	height: 10px;
 	margin-right: 3px;
@@ -1078,7 +1096,6 @@
 	height: 180px;
 	border-radius: 10px;
 	box-shadow: 0px 0px 4px #fff; 
-	border: 1px solid #989898;
 }
 .dialog-title{
 	text-align: center;

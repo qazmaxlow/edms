@@ -570,10 +570,15 @@ function setupConversationConfirmBtn(targetEle) {
 function setupDuplicateBtn(targetEle) {
 	targetEle.click(function() {
 		$('.duplicate-container').empty();
+		$('.duplicate-container').removeClass('peak-demand');
+		$('.duplicate-container').removeClass('summary-alert');
+		$('.duplicate-container').removeClass('still-on-alert');
+
 		var tableRow = $(this).parent().parent().parent();
 		var alert = findAlertById(parseInt(tableRow.attr('alert_id'), 10));
-		var eleHtml;
+		var eleHtml, containerClass;
 		if (alert.type === 'peak') {
+			containerClass = 'peak-demand';
 			var peakConversationTemplate = $('#peak-conversation-template').html();
 			Mustache.parse(peakConversationTemplate);
 			eleHtml = Mustache.render(peakConversationTemplate, {});
@@ -582,15 +587,18 @@ function setupDuplicateBtn(targetEle) {
 			Mustache.parse(summaryStillOnConversationTemplate);
 
 			if (alert.type === 'summary') {
-				var eleHtml = Mustache.render(summaryStillOnConversationTemplate, {
+				containerClass = 'summary-alert';
+				eleHtml = Mustache.render(summaryStillOnConversationTemplate, {
 					alertType: 'summary',
 				});
 			} else {
-				var eleHtml = Mustache.render(summaryStillOnConversationTemplate, {
+				containerClass = 'still-on-alert';
+				eleHtml = Mustache.render(summaryStillOnConversationTemplate, {
 					alertType: 'still_on',
 				});
 			}
 		}
+		$('.duplicate-container').addClass(containerClass);
 		$('.duplicate-container').append(eleHtml);
 		setupSourceSelect($('.duplicate-container .source-select'));
 		setupReceiverSelect($('.duplicate-container .receiver-select'));
@@ -952,8 +960,8 @@ $(function() {
 <div class="remove-dialog">
 	<div class="dialog-title">Are you sure you want to remove?</div>
 	<div class="dialog-btn-container">
-		<div class="dialog-confirm-btn">confirm</div>
-		<div class="dialog-cancel-btn">canel</div>
+		<div class="dialog-cancel-btn">Canel</div>
+		<div class="dialog-confirm-btn">Confirm</div>
 	</div>
 </div>
 
