@@ -16,10 +16,10 @@ from utils import calculation
 from utils.utils import Utils
 
 REDUCTION_LEVELS = [0, 5, 10, 15, 20, 25, 30, 40]
-HK_TAXI_TRIP = {'multiplicand': 0.0035, 'from': 'Hong Kong Airport', 'to': 'Times Square'}
+HK_TAXI_TRIP = {'multiplicand': 0.0033, 'from': 'Hong Kong Airport', 'to': 'Times Square'}
 TAXI_TRIP_INFO = {
 	'hk': HK_TAXI_TRIP,
-	'sg': {'multiplicand': 0.253, 'from': 'Singapore Airport', 'to': 'Marina Bay Sands'},
+	'sg': {'multiplicand': 0.04, 'from': 'Singapore Airport', 'to': 'Marina Bay Sands'},
 }
 
 def get_last_12_month_co2_consumption(unit_code, unit_rates, baselines, system, readings, current_dt):
