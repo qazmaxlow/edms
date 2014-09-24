@@ -9,7 +9,7 @@ from django.conf import settings
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'entrak.settings')
 
 app = Celery('entrak',
-			 broker='amqp://localhost')
+			 broker='amqp://guest:entrak8888@localhost')
 
 app.config_from_object('django.conf:settings')
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
@@ -37,7 +37,13 @@ app.conf.update(
 			'task': 'alert.tasks.send_alert_email',
 			'schedule': crontab(minute='*/5'),
 		},
-	}
+	},
+
+	CELERY_ROUTES = {
+		'egauge.tasks.recover_all_invalid_reading': {'queue': 'recover'},
+		'egauge.tasks.force_retrieve_reading': {'queue': 'recap'},
+		'egauge.tasks.force_retrieve_hour_reading': {'queue': 'recap'},
+	},
 )
 
 if __name__ == '__main__':
