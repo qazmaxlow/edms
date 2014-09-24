@@ -177,10 +177,9 @@ class SourceManager:
 					)
 					source_reading_mins.append(source_reading_min)
 					need_update_source_ids.append(source['source_id'])
-					will_remove_invalid_reading.append(source['_id'])
 				else:
-					will_remove_invalid_reading.append(source['_id'])
 					Utils.log_error("non-exist cname for source at recover! source: %s, cname: %s"%(xml_url, source['name']))
+				will_remove_invalid_reading.append(source['_id'])
 		except SourceManager.GetEgaugeDataError, e:
 			# do nothing
 			pass
@@ -206,11 +205,11 @@ class SourceManager:
 		end_timestamp = calendar.timegm(end_time.utctimetuple())
 		reading_datetimes = [(end_time - datetime.timedelta(minutes=minute)) for minute in xrange(60)]
 
-		logger.info('processing: %s'%start_time.strftime('%Y-%m-%d %H:%M'))
+		logger.info('force retrieve: %s'%start_time.strftime('%Y-%m-%d %H:%M'))
 		for grouped_sources in all_grouped_sources:
 			xml_url = grouped_sources['_id']
 			sources = grouped_sources['sources']
-			logger.info('processing: %s'%xml_url)
+			logger.info('force retrieve: %s'%xml_url)
 
 			SourceReadingMin.objects(
 				source_id__in=[source['_id'] for source in sources],

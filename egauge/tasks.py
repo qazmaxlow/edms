@@ -20,7 +20,13 @@ def retrieve_min_reading(xml_url, sources, retrieve_time):
 
 @shared_task(ignore_result=True)
 def recover_all_invalid_reading():
-	SourceManager.recover_all_invalid_reading()
+	grouped_invalid_readings = SourceManager.get_grouped_invalid_readings()
+	for grouped_invalid_reading in grouped_invalid_readings:
+		recover_min_reading.delay(grouped_invalid_reading)
+
+@shared_task(ignore_result=True)
+def recover_min_reading(grouped_invalid_reading):
+	SourceManager.recover_min_reading(grouped_invalid_reading)
 
 @shared_task(ignore_result=True)
 def force_retrieve_reading(start_dt, end_dt, system_codes):
