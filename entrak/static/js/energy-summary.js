@@ -33,7 +33,7 @@ EnergySummary.prototype.assignSummaryToHtml = function(lastValSel, currentValSel
 	$(lastValSel).text(Utils.formatWithCommas(this.lastConsumption.toFixed(0)));
 	$(currentValSel).text(Utils.formatWithCommas(this.realtimeConsumption.toFixed(0)));
 
-	var diffPercentage = Utils.fixed1DecIfLessThan10((Math.abs(this.realtimeConsumption - this.lastConsumption)/this.lastConsumption)*100);
+	var diffPercentage = Utils.fixedDecBaseOnVal((Math.abs(this.realtimeConsumption - this.lastConsumption)/this.lastConsumption)*100);
 	$(percentNumSel).text(diffPercentage);
 
 	var summaryBgImg = null;

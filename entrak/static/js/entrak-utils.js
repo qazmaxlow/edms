@@ -154,7 +154,15 @@ Utils.formatWithCommas = function (val) {
     return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-Utils.fixed1DecIfLessThan10 = function(val) {
-	var numOfDec = (Math.abs(val) < 10) ? 1 : 0;
+Utils.fixedDecBaseOnVal = function(val) {
+	var numOfDec;
+	var absVal = Math.abs(val);
+	if (absVal < 1) {
+		numOfDec = 2;
+	} else if (absVal < 10) {
+		numOfDec = 1;
+	} else {
+		numOfDec = 0;
+	}
 	return val.toFixed(numOfDec);
 }

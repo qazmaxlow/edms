@@ -73,7 +73,7 @@ function getProgressData() {
 		$('.factory-animation source:eq(1)').attr('src', data.static_url + 'images/progress/' + factoryAniFileName+'.mp4');
 		$('.factory-animation').load();
 
-		$('.last-12-month-percent-val').text(Math.abs(Utils.fixed1DecIfLessThan10(data.percengate_change)));
+		$('.last-12-month-percent-val').text(Math.abs(Utils.fixedDecBaseOnVal(data.percengate_change)));
 		var percentText, moneySavingText;
 		if (data.percengate_change >= 0) {
 			percentText = 'Energy Reduction';

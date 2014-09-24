@@ -185,11 +185,11 @@ function finishReceiveRankData(data) {
 		} else if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
 			if (item.value >= 0) {
 				var meterContainerClass = "rank-positive";
-				var valueText = "+"+Utils.fixed1DecIfLessThan10(item.value)+"%";
+				var valueText = "+"+Utils.fixedDecBaseOnVal(item.value)+"%";
 				var indicatorLeft = METER_MID_POS + (METER_WIDTH*item.value/barBoundValue/2) + INDICATOR_POSITIVE_OFFSET;
 			} else {
 				var meterContainerClass = "rank-negative";
-				var valueText = Utils.fixed1DecIfLessThan10(item.value)+"%";
+				var valueText = Utils.fixedDecBaseOnVal(item.value)+"%";
 				var indicatorLeft = METER_MID_POS + (METER_WIDTH*item.value/barBoundValue/2) + INDICATOR_NEGATIVE_OFFSET;
 			}
 			var meterWidth = Math.abs(item.value/barBoundValue*100/2);

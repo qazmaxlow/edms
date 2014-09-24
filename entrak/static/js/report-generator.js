@@ -374,7 +374,7 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 		forestImpactSubText = "of tropical rainforest cut down";
 		pandaImpactSubText = "Extra CO<sub>2</sub> emissions equal to the weight of";
 	}
-	var savedEnergyText = Utils.formatWithCommas(Math.abs(Utils.fixed1DecIfLessThan10(reportGenThis.savingInfo.energy)))
+	var savedEnergyText = Utils.formatWithCommas(Math.abs(Utils.fixedDecBaseOnVal(reportGenThis.savingInfo.energy)))
 		+ "<span class='basic-info-percent-symbol'>%</span> ";
 	savedEnergyText += savedEnergyPercentSuffix;
 	$("#save-energy-usage").html(savedEnergyText);
@@ -417,10 +417,10 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 		};
 		dataInfo.name = (info.systemCode === reportGenThis.systemTree.data.code) ? info.sourceName : info.system.data.name;
 		if (infoIdx < reportGenThis.groupedSourceInfos.length-1) {
-			dataInfo.energyPercent = parseFloat(((info.currentTotalEnergy/totalEnergyUsage)*100).toFixed(1));
+			dataInfo.energyPercent = parseFloat(Utils.fixedDecBaseOnVal((info.currentTotalEnergy/totalEnergyUsage)*100));
 			energyPercentSum += dataInfo.energyPercent;
 		} else {
-			dataInfo.energyPercent = parseFloat((100-energyPercentSum).toFixed(1));
+			dataInfo.energyPercent = parseFloat(Utils.fixedDecBaseOnVal(100-energyPercentSum));
 		}
 		transformedDatas.push(dataInfo);
 	});
@@ -696,7 +696,7 @@ ReportGenerator.prototype.insertComparePastSubInfo = function(template, info, cl
 	} else {
 		titleText = "Overall: ";
 		var pastDiffPercent = (info.currentTotalEnergy-info.lastTotalEnergy)/info.lastTotalEnergy*100;
-		titleText += parseFloat(Utils.fixed1DecIfLessThan10(Math.abs(pastDiffPercent)));
+		titleText += parseFloat(Utils.fixedDecBaseOnVal(Math.abs(pastDiffPercent)));
 		if (pastDiffPercent >= 0) {
 			infoClass = "negative-saving";
 			titleText += "% more";
@@ -735,7 +735,7 @@ ReportGenerator.prototype.generateComparePast = function() {
 		$(".compare-past-desc").removeClass('negative-saving');
 	} else {
 		var pastDiffPercent = (currentTotalUsage-lastTotalUsage)/lastTotalUsage*100;
-		pastDiffPercentText = parseFloat(Utils.fixed1DecIfLessThan10(Math.abs(pastDiffPercent)));
+		pastDiffPercentText = parseFloat(Utils.fixedDecBaseOnVal(Math.abs(pastDiffPercent)));
 		if (pastDiffPercent >= 0) {
 			pastDiffPercentSuffix = "more";
 			$(".compare-past-desc").addClass("negative-saving");
@@ -843,7 +843,7 @@ ReportGenerator.prototype._fillInComparePercent = function(eleSel, oldUsage, new
 			comparePercentEle.removeClass("positive-saving");
 			lessMoreText = "more";
 		}
-		comparePercentEle.find(".compare-percent").text(Utils.fixed1DecIfLessThan10(Math.abs(usagePercent)));
+		comparePercentEle.find(".compare-percent").text(Utils.fixedDecBaseOnVal(Math.abs(usagePercent)));
 	}
 
 	var comparedSubtext;
@@ -904,7 +904,7 @@ ReportGenerator.prototype._fillCalendar = function(eleSel, readings, averageUsag
 			} else {
 				diffPercent = 0;
 			}
-			diffPercent = parseFloat(diffPercent.toFixed(0));
+			diffPercent = parseFloat(Utils.fixedDecBaseOnVal(diffPercent));
 			
 			var diffPercentText;
 			if (diffPercent >= 0) {
