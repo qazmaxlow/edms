@@ -33,7 +33,7 @@
 <script id="peak-conversation-template" type="x-tmpl-mustache">
 <div class="conversational-block" alert_type="peak">
 	<div>Let me know if <select class="source-select" size="4" placeholder="Please select"></select>energy</div>
-	<div>reaches <select class="compare-percent-select"></select>% of my previous peak demand of <input class="peak-threshold-input" type="number">kWA.</div>
+	<div>reaches <select class="compare-percent-select"></select>% of my previous peak demand of <input class="peak-threshold-input" type="number">kVA.</div>
 	<div class="send-alert-to">Send alert to: <ul class="email-input"></ul></div>
 	<div class="email-notes">You may use max 5 emails, use semi-colon to separate emails<br>e.g user@email.com; user@email.com</div>
 	<div class="btn-container">
@@ -862,16 +862,20 @@ $(function() {
 					<img class="alert-img" src="{% static 'images/alert/create-peak-demand.png' %}">
 					<img class="info-btn" src="{% static 'images/alert/info-icon.png' %}">
 					<div class="info-tooltip">
-						<div class="info-tooltip-content">Some hahalskdf ksdfl</div>
+						<div class="info-tooltip-content">Peak Demand Alert will notify you immediately when your energy consumption (in kVA) is about to reach your peak level (see your utility bill for this peak level). This can help you avoid peak demand surcharge.</div>
 						<div class="info-tooltip-close-btn">Close</div>
 					</div>
 				</div>
-				<a class="choose-alert-link" href="#peak-demand-section"><div class="choose-alert-btn">Create Peak Demand</div></a>
+				<a class="choose-alert-link" href="#peak-demand-section"><div class="choose-alert-btn">Create Peak Demand Alert</div></a>
 			</div>
 			<div class="choose-alert-block">
 				<div class="choose-alert-info-block">
 					<img class="alert-img" src="{% static 'images/alert/create-summary-alert.png' %}">
 					<img class="info-btn" src="{% static 'images/alert/info-icon.png' %}">
+					<div class="info-tooltip">
+						<div class="info-tooltip-content">Summary Alert will notify you when your total energy consumption over your selected time period(s) is higher than average (calculated over the last four weeks). This can help you identify abnormal energy consumption e.g. during lunch or after-work periods. A summary email will be sent to you at the end of the selected time period(s).</div>
+						<div class="info-tooltip-close-btn">Close</div>
+					</div>
 				</div>
 				<a class="choose-alert-link" href="#summary-alert-section"><div class="choose-alert-btn">Create Summary Alert</div></a>
 			</div>
@@ -879,6 +883,10 @@ $(function() {
 				<div class="choose-alert-info-block">
 					<img class="alert-img" src="{% static 'images/alert/create-instance-alert.png' %}">
 					<img class="info-btn" src="{% static 'images/alert/info-icon.png' %}">
+					<div class="info-tooltip">
+						<div class="info-tooltip-content">Instance Alert will notify you immediately when your energy consumption (every 5 minutes intervals) over your selected time period(s) is higher than average (calculated over the last four weeks). This can help you to monitor and respond to energy abnormalities for critical equipment/ areas.</div>
+						<div class="info-tooltip-close-btn">Close</div>
+					</div>
 				</div>
 				<a class="choose-alert-link" href="#still-on-alert-section"><div class="choose-alert-btn">Create Instance Alert</div></a>
 			</div>
@@ -904,6 +912,9 @@ $(function() {
 					</div>
 				</div>
 			</div>
+			<div class="back-to-top">
+				<a href="#">Back to Top<img src="{% static 'images/alert/back-to-top.png' %}"></a>
+			</div>
 		</div>
 
 		<div id="summary-alert-section" class="summary-alert alert-container">
@@ -927,6 +938,9 @@ $(function() {
 						</div><div class="table-header-action">Action</div>
 					</div>
 				</div>
+			</div>
+			<div class="back-to-top">
+				<a href="#">Back to Top<img src="{% static 'images/alert/back-to-top.png' %}"></a>
 			</div>
 		</div>
 
@@ -952,8 +966,13 @@ $(function() {
 					</div>
 				</div>
 			</div>
+			<div class="back-to-top">
+				<a href="#">Back to Top<img src="{% static 'images/alert/back-to-top.png' %}"></a>
+			</div>
 		</div>
 	</div>
+
+	<div class="bottom-empty-space"></div>
 
 </div>
 
