@@ -12,7 +12,7 @@ from system.models import System
 from egauge.manager import SourceManager
 from alert.models import Alert, AlertHistory, ALERT_TYPE_STILL_ON, ALERT_TYPE_SUMMARY, ALERT_TYPE_PEAK, ALERT_COMPARE_METHOD_ABOVE
 from contact.models import Contact
-from user.models import EntrakUser, USER_ROLE_ADMIN_LEVEL
+from user.models import EntrakUser, USER_ROLE_ADMIN_LEVEL, USER_ROLE_VIEWER_LEVEL
 from utils.auth import permission_required
 from utils.utils import Utils
 
@@ -140,7 +140,9 @@ def general_settings_view(request, system_code=None):
 			'id': user.id,
 			'userName': user.username,
 			'systemName': user.system.name,
-			'roleLevel': user.role_level
+			'roleLevel': user.role_level,
+			'email': user.email,
+			'label': user.label
 		}
 		if user.role_level == USER_ROLE_ADMIN_LEVEL:
 			m['admin_user_info'].append(info)
@@ -148,3 +150,64 @@ def general_settings_view(request, system_code=None):
 			m['general_user_info'].append(info)
 
 	return render_to_response('general_settings.html', m)
+
+@permission_required()
+def set_user_info_view(request, system_code=None):
+	user_id = request.POST.get('id')
+	label = request.POST.get('label')
+	username = request.POST.get('username')
+	email = request.POST.get('email')
+	old_pwd = request.POST.get('old_pwd')
+	new_pwd = request.POST.get('new_pwd')
+
+	if label == '' or username == '' or email == '':
+		is_success = False
+	else:
+		is_success = True
+
+	result = {}
+	if is_success:
+		if user_id:
+			user = EntrakUser.objects.get(id=user_id)
+			user.label = label
+			user.email = email
+
+			if user.role_level != USER_ROLE_ADMIN_LEVEL:
+				user.username = username
+
+			if old_pwd != '' and new_pwd != '':
+				if user.check_password(old_pwd):
+					user.set_password(new_pwd)
+
+			user.save()
+
+		else:
+			user = EntrakUser.objects.create_user(username, email, new_pwd)
+			user.label = label
+			user.role_level = USER_ROLE_VIEWER_LEVEL
+			user.system = System.objects.get(code=system_code)
+			user.save()
+			result['created'] = True
+
+		result['user'] = {
+			'id': user.id,
+			'userName': user.username,
+			'systemName': user.system.name,
+			'roleLevel': user.role_level,
+			'email': user.email,
+			'label': user.label
+		}
+
+	result['success'] = is_success
+
+	return Utils.json_response(result)
+
+@permission_required(USER_ROLE_ADMIN_LEVEL)
+def delete_user_view(request, system_code=None):
+	user = EntrakUser.objects.get(id=request.POST.get('id'))
+	system = System.objects.get(code=system_code)
+	if (user.system.code == system.code or (',%s,'%user.system.code in system.path)) \
+		and user.role_level != USER_ROLE_ADMIN_LEVEL and (not user.is_staff) and (not user.is_superuser):
+		user.delete()
+
+	return Utils.json_response({'success': True})

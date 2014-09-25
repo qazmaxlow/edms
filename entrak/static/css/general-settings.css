@@ -1,4 +1,7 @@
-.add-account-btn, .ar-apply-btn, .ar-cancel-btn{
+.add-account-btn, .ar-apply-btn, .ar-cancel-btn,
+.change-pwd-btn, .pwd-apply-btn, .pwd-cancel-btn,
+.set-pwd-btn, .warning-btn, .ar-delete-btn,
+.delete-cancel-btn, .delete-confirm-btn{
 	cursor: pointer;
 	cursor: hand;
 }
@@ -21,4 +24,17 @@
 
 .ar-action-col > div {
 	display: inline-block;
+}
+
+.pwd-dialog {
+	display: none;
+}
+
+.warning-dialog {
+	display: none;
+	z-index: 99999;
+}
+
+.delete-dialog {
+	display: none;
 }

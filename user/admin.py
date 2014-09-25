@@ -20,8 +20,8 @@ class EntrakUserCreationForm(UserCreationForm):
 		model = EntrakUser
 
 class EntrakUserAdmin(UserAdmin):
-	UserAdmin.list_display += ('system', 'role_level')
-	list_editable = ('system', 'role_level')
+	UserAdmin.list_display += ('label', 'system', 'role_level')
+	list_editable = ('label', 'system', 'role_level')
 
 	add_form = EntrakUserCreationForm
 

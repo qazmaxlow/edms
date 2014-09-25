@@ -143,7 +143,9 @@ class Alert(models.Model):
 		sub_msg += info['start_dt'].strftime('%d %b %Y, %I:%M%p')
 		sub_msg += info['end_dt'].strftime('-%I:%M%p')
 		sub_msg += '   %s'%(self.source_info['name'])
-		sub_msg += '   %d%%'%abs(info['diff_percent'])
+		if info['diff_percent'] is not None:
+			sub_msg += '   %d%%'%abs(info['diff_percent'])
+			
 		if self.type == ALERT_TYPE_PEAK:
 			sub_msg += '  of previous peak of %d kVA'%self.peak_threshold
 		else:

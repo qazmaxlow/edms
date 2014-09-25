@@ -11,3 +11,4 @@ USER_ROLE_CHOICES = (
 class EntrakUser(AbstractUser):
 	system = models.ForeignKey('system.System', blank=True, null=True)
 	role_level = models.PositiveSmallIntegerField(max_length=20, choices=USER_ROLE_CHOICES, default=USER_ROLE_VIEWER_LEVEL)
+	label = models.CharField(max_length=300, blank=True)
