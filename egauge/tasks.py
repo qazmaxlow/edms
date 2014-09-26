@@ -3,6 +3,7 @@ from __future__ import absolute_import
 import pytz
 import datetime
 from celery import shared_task
+from .models import SourceReadingMinInvalid
 from .manager import SourceManager
 
 @shared_task(ignore_result=True)
@@ -20,13 +21,12 @@ def retrieve_min_reading(xml_url, sources, retrieve_time):
 
 @shared_task(ignore_result=True)
 def recover_all_invalid_reading():
-	grouped_invalid_readings = SourceManager.get_grouped_invalid_readings()
-	for grouped_invalid_reading in grouped_invalid_readings:
-		recover_min_reading.delay(grouped_invalid_reading)
+	for xml_url in SourceReadingMinInvalid.objects.distinct('xml_url'):
+		recover_min_reading_for_xml_url.delay(xml_url)
 
 @shared_task(ignore_result=True)
-def recover_min_reading(grouped_invalid_reading):
-	SourceManager.recover_min_reading(grouped_invalid_reading)
+def recover_min_reading_for_xml_url(xml_url):
+	SourceManager.recover_min_reading_for_xml_url(xml_url)
 
 @shared_task(ignore_result=True)
 def force_retrieve_reading(start_dt, end_dt, system_codes):

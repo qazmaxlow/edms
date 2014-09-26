@@ -41,7 +41,7 @@ app.conf.update(
 
 	CELERY_ROUTES = {
 		'egauge.tasks.recover_all_invalid_reading': {'queue': 'recover'},
-		'egauge.tasks.recover_min_reading': {'queue': 'recover'},
+		'egauge.tasks.recover_min_reading_for_xml_url': {'queue': 'recover'},
 		'egauge.tasks.force_retrieve_reading': {'queue': 'recap'},
 		'egauge.tasks.force_retrieve_hour_reading': {'queue': 'recap'},
 	},

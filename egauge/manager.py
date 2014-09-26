@@ -17,6 +17,7 @@ class SourceManager:
 
 	DEFAULT_USERNAME = 'entrak'
 	DEFAULT_PASSWORD = 'jianshu1906'
+	INVALID_RECOVER_LIMIT = 2000
 
 	class GetEgaugeDataError(Exception):
 		pass
@@ -137,53 +138,57 @@ class SourceManager:
 				).update_one(set__value=info['value'], upsert=True)
 
 	@staticmethod
-	def get_grouped_invalid_readings():
+	def get_grouped_invalid_readings(xml_url):
 		current_db_conn = connection.get_db()
 		result = current_db_conn['source_reading_min_invalid'].aggregate([
+			{ "$match": {"xml_url": xml_url} },
 			{
 				"$group": {
-					"_id": {"xml_url": "$xml_url", "datetime": "$datetime"},
+					"_id": "$datetime",
 					"sources": {"$push": {"_id": "$_id", "source_id": "$source_id", "name": "$name", "tz":"$tz"}}
 				},
 			},
-			{"$limit": 2000}
+			{"$limit": SourceManager.INVALID_RECOVER_LIMIT}
 		], allowDiskUse=True)
 
 		return result['result']
 
 	@staticmethod
 	def recover_all_invalid_reading():
-		grouped_invalid_readings = SourceManager.get_grouped_invalid_readings()
-		for grouped_invalid_reading in grouped_invalid_readings:
-			SourceManager.recover_min_reading(grouped_invalid_reading)
+		for xml_url in SourceReadingMinInvalid.objects.distinct('xml_url'):
+			SourceManager.recover_min_reading_for_xml_url(xml_url)
 
 	@staticmethod
-	def recover_min_reading(grouped_invalid_reading):
-		xml_url = grouped_invalid_reading['_id']['xml_url']
-		retrieve_time = (grouped_invalid_reading['_id']['datetime']).astimezone(pytz.utc)
+	def recover_min_reading_for_xml_url(xml_url):
+		grouped_invalid_readings = SourceManager.get_grouped_invalid_readings(xml_url)
+		for grouped_invalid_reading in grouped_invalid_readings:
+			try:
+				SourceManager.recover_min_reading(xml_url, grouped_invalid_reading)
+			except SourceManager.GetEgaugeDataError, e:
+				break
+
+	@staticmethod
+	def recover_min_reading(xml_url, grouped_invalid_reading):
+		retrieve_time = (grouped_invalid_reading['_id']).astimezone(pytz.utc)
 		sources = grouped_invalid_reading['sources']
 
 		start_timestamp = calendar.timegm(retrieve_time.utctimetuple())
-		try:
-			source_reading_mins = []
-			need_update_source_ids = []
-			will_remove_invalid_reading = []
-			readings = SourceManager.__get_egauge_data(xml_url, start_timestamp, 1)
-			for source in sources:
-				if source['name'] in readings:
-					source_reading_min = SourceReadingMin(
-						datetime=retrieve_time,
-						source_id=source['source_id'],
-						value=readings[source['name']][0]
-					)
-					source_reading_mins.append(source_reading_min)
-					need_update_source_ids.append(source['source_id'])
-				else:
-					Utils.log_error("non-exist cname for source at recover! source: %s, cname: %s"%(xml_url, source['name']))
-				will_remove_invalid_reading.append(source['_id'])
-		except SourceManager.GetEgaugeDataError, e:
-			# do nothing
-			pass
+		source_reading_mins = []
+		need_update_source_ids = []
+		will_remove_invalid_reading = []
+		readings = SourceManager.__get_egauge_data(xml_url, start_timestamp, 1)
+		for source in sources:
+			if source['name'] in readings:
+				source_reading_min = SourceReadingMin(
+					datetime=retrieve_time,
+					source_id=source['source_id'],
+					value=readings[source['name']][0]
+				)
+				source_reading_mins.append(source_reading_min)
+				need_update_source_ids.append(source['source_id'])
+			else:
+				Utils.log_error("non-exist cname for source at recover! source: %s, cname: %s"%(xml_url, source['name']))
+			will_remove_invalid_reading.append(source['_id'])
 
 		if source_reading_mins:
 			try:
