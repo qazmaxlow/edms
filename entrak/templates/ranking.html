@@ -81,6 +81,34 @@ METER_MID_SEPARATOR_PADDING = 3;
 INDICATOR_POSITIVE_OFFSET = -45;
 INDICATOR_NEGATIVE_OFFSET = 16;
 
+COLOR_THEME_GREENEST = 'greenest';
+COLOR_THEME_GREENER = 'greener';
+COLOR_THEME_RED = 'red';
+COLOR_THEME_ORANGE = 'orange';
+COLOR_THEME_MIDDLE = 'middle';
+
+COLOR_THEME_INFO = {};
+COLOR_THEME_INFO[COLOR_THEME_GREENEST] = {
+	'barBg': 'linear-gradient(to left, #01A65A , #6CA68B)',
+	'coverImg': '{% static "images/ranking/rank-cover-greenest.png" %}'
+};
+COLOR_THEME_INFO[COLOR_THEME_GREENER] = {
+	'barBg': 'linear-gradient(to left, #38CA3C , #83C985)',
+	'coverImg': '{% static "images/ranking/rank-cover-greener.png" %}'
+};
+COLOR_THEME_INFO[COLOR_THEME_RED] = {
+	'barBg': 'linear-gradient(to left, #ED6D4A , #F3AE9B)',
+	'coverImg': '{% static "images/ranking/rank-cover-red.png" %}'
+};
+COLOR_THEME_INFO[COLOR_THEME_ORANGE] = {
+	'barBg': 'linear-gradient(to left, #EDB24A , #EDCF9A)',
+	'coverImg': '{% static "images/ranking/rank-cover-orange.png" %}'
+};
+COLOR_THEME_INFO[COLOR_THEME_MIDDLE] = {
+	'barBg': 'linear-gradient(to left, #8AC754 , #A2C781)',
+	'coverImg': '{% static "images/ranking/rank-cover-middle.png" %}'
+};
+
 var ranking = {};
 
 function getRankingData() {
@@ -116,6 +144,12 @@ function getRankingData() {
 	}).fail(function(jqXHR, textStatus) {
 		console.log(jqXHR.responseText);
 	});
+}
+
+function setRankingColorThemeForVal(targetVal, colorTheme) {
+	var targetRow = $('.ranking-item[value="' + targetVal + '"]');
+	targetRow.find('.rank-meter-bar-inner').css('background', COLOR_THEME_INFO[colorTheme].barBg);
+	targetRow.find('.rank-cover-img').attr('src', COLOR_THEME_INFO[colorTheme].coverImg);
 }
 
 function finishReceiveRankData(data) {
@@ -225,6 +259,25 @@ function finishReceiveRankData(data) {
 		var rankingEleHtml = Mustache.render(template, info);
 		itemContainer.append(rankingEleHtml);
 	});
+
+	if (ranking.currentRankingType === RANKING_TYPE_TOTAL
+		|| ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
+		var dataVals = [];
+		$.each(data, function(idx, item){
+			dataVals.push(item.value);
+		});
+		$.unique(dataVals);
+		dataVals.sort(function(a, b) {
+			return a - b;
+		});
+		setRankingColorThemeForVal(dataVals.shift(), COLOR_THEME_GREENEST);
+		setRankingColorThemeForVal(dataVals.pop(), COLOR_THEME_RED);
+		setRankingColorThemeForVal(dataVals.shift(), COLOR_THEME_GREENER);
+		setRankingColorThemeForVal(dataVals.pop(), COLOR_THEME_ORANGE);
+		$.each(dataVals, function(idx, dataVal){
+			setRankingColorThemeForVal(dataVal, COLOR_THEME_MIDDLE);
+		});
+	}
 }
 
 function formatFromToDt(targetDt, rangeType) {
