@@ -144,9 +144,10 @@ class SourceManager:
 				"$group": {
 					"_id": {"xml_url": "$xml_url", "datetime": "$datetime"},
 					"sources": {"$push": {"_id": "$_id", "source_id": "$source_id", "name": "$name", "tz":"$tz"}}
-				}
-			}
-		])
+				},
+			},
+			{"$limit": 2000}
+		], allowDiskUse=True)
 
 		return result['result']
 
@@ -283,7 +284,7 @@ class SourceManager:
 		digest_auth = requests.auth.HTTPDigestAuth(SourceManager.DEFAULT_USERNAME, SourceManager.DEFAULT_PASSWORD)
 		try:
 			response = requests.get(full_url, auth=digest_auth)
-		except requests.ConnectionError, e:
+		except (requests.ConnectionError, requests.exceptions.ChunkedEncodingError) as e:
 			raise SourceManager.GetEgaugeDataError(str(e))
 
 		if response.status_code != 200:
