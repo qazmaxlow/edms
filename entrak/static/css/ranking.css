@@ -93,42 +93,49 @@
 }
 .ranking-item {
 	position: absolute;
-	height: 122px;
+	height: 120px;
 	width: 100%;
-	border-bottom: 2px solid #f7f7f7;
-	background-color: #fcfcfc;
+	border-bottom: 3px solid #F7F7F7;
+	background-color: #F5F5F5;
 }
 .rank-name{
 	position: absolute;
 	font-size: 10pt;
-	width: 180px;
+	width: 300px;
 	height: 11px;
-	margin-left: 100px;
+	margin-left: 105px;
 	margin-top: 30px;
 	padding-left: 30px;
 	padding-top: 4px;
 	padding-bottom: 5px;
-	background-color: #699eab;
 	border-top-right-radius: 10px;
 	border-bottom-right-radius: 10px;
-	color: #fff;
+	color: #354960;
 	font-weight: bold;
 }
 .ranking-total-or-person .rank-separate-line {
 	position: absolute;
-	top: 97px;
+	top: 94px;
 	left: 80px;
-	width: 892px;
-	height: 2px;
-	background-color: #fbac1c;
+	width: 875px;
+	height: 1px;
+	background-color: #D5D5D5;
+}
+.ranking-total-or-person .rank-separate-line-top {
+	position: absolute;
+	top: 57px;
+	left: 80px;
+	width: 875px;
+	height: 1px;
+	background-color: #D5D5D5;
 }
 .ranking-percent .rank-separate-line {
 	position: absolute;
-	top: 59px;
+	top: 52px;
 	left: 80px;
-	width: 229px;
+	width: 248px;
 	height: 2px;
-	background-color: #fbac1c;
+	background-color: #DEDEDE;
 }
 .rank-img {
 	position: absolute;
@@ -161,46 +168,49 @@
 .rank-detail-value {
 	position: absolute;
 	right: 0px;
-	width: 204px;
-	height: 32px;
-	margin-top: 50px;
-	background-color: #699eab;
-	color: #fff;
-	padding-top: 13px;
-	padding-left: 54px;
+	width: 200px;
+	height: 29px;
+	margin-top: 57px;
+	padding-top: 8px;
+	padding-right: 18px;
 	font-size: 16pt;
 	font-weight: bolder;
 	letter-spacing: 0.02em;
+	color: #354960;
+	text-align: right;
 }
 .rank-detail-value>span {
-	font-size: 11pt;
+	font-size: 10pt;
 }
 .ranking-total-or-person .rank-meter-bar {
 	position: absolute;
-	top: 68px;
+	top: 62px;
 	height: 27px;
 	width: 580px;
 	left: 100px;
 	background-image: url(../images/ranking/rank-meter-bar-bg.png);
+	border-right: 3px solid #C7C7C7;
 }
 .ranking-total-or-person .rank-meter-bar-inner {
 	height: 100%;
-	background-color: #04B73A;
-	opacity: 0.6;
+	background: linear-gradient(to right, #7dd790 , #01a65a);
+	opacity: 0.7;
+	border-top-right-radius: 15px; 
+	border-bottom-right-radius: 15px;
+	box-shadow: 1px 1px 1px #888888;
 }
 .ranking-percent .rank-meter-bar-container {
 	position: absolute;
-	top: 26px;
-	right: 45px;
-	width: 575px;
-	height: 80px;
+	top: 65px;
+	right: 35px;
+	width: 620px;
+	height: 34px;
 }
 .ranking-percent .rank-meter-bar {
 	position: absolute;
-	width: 573px;
-	height: 35px;
-	left: 1px;
-	background-color: #f8f8f8;
+	width: 620px;
+	height: 34px;
+	background-color: #F8F8F8;
 	box-shadow: inset 0px 0px 1px 1px rgba(0,0,0,0.1);
 }
 .ranking-percent .rank-meter-bar>div {
@@ -209,48 +219,49 @@
 	margin-left: auto;
 	margin-right: auto;
 	background-image: url(../images/ranking/rank-meter-bar-bg.png);
-	width: 565px;
-	height: 27px;
+	width: 610px;
+	height: 26px;
 }
 .ranking-percent .rank-meter-bar-inner {
 	position: absolute;
 	height: 100%;
-	opacity: 0.6;
+	opacity: 0.8;
+	box-shadow: 1px 1px 1px #888888;
 }
 .ranking-percent .rank-positive .rank-meter-bar-inner {
-	background-color: #C00000;
-	left: 286px;
+	background: linear-gradient(to right, #F3AE9B , #ED6D4A);
+	border-top-right-radius: 15px;
+	border-bottom-right-radius: 15px;
 }
 .ranking-percent .rank-negative .rank-meter-bar-inner {
 	background-color: #04B73A;
-	right: 287px;
+	border-top-left-radius: 15px;
+	border-bottom-left-radius: 15px;
 }
 .meter-indicator {
 	font-size: 8pt;
 	position: absolute;
 	width: 48px;
 	height: 32px;
-	top: 40px;
+	top: 0px;
 }
 .meter-indicator>div{
-	font-size: 10pt;
+	font-size: 12pt;
 	font-weight: bold;
-	color: #fff;
-	margin-top: 14px;
+	color: #FFF;
+	margin-top: 9px;
 	margin-left: 2px;
-	margin-right: 2px;
+	margin-right: 25px;
 	text-align: center;
+	text-shadow: 0px 0px 4px #000000;
 }
 .ranking-percent .rank-positive .meter-indicator {
-	background-image: url(../images/ranking/meter-indicator-red.png);
 }
 .ranking-percent .rank-negative .meter-indicator {
-	background-image: url(../images/ranking/meter-indicator-green.png);
 }
 .rank-meter-bar-middle {
 	position: absolute;
 	top: 0px;
-	left: 281px;
 	width: 2px;
 	height: 27px;
 	background-color: #bdbdbd;
