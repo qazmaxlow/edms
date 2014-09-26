@@ -26,9 +26,9 @@
 	</div><div class="ar-email-col"><input type="email" name="email" placeholder="Recovering Email">
 	</div><div class="ar-pwd-col"><div class="change-pwd-btn">Change Password</div><div class="set-pwd-btn">Set Password</div>
 	</div><div class="ar-action-col">
-		<div class="ar-apply-btn">Apply</div>
 		<div class="ar-cancel-btn">Cancel</div>
 		<div class="ar-delete-btn">Delete</div>
+		<div class="ar-apply-btn">Apply</div>
 	</div>
 	<input type="hidden" name="old_pwd">
 	<input type="hidden" name="new_pwd">
@@ -84,9 +84,9 @@ function setupChangePwdBtn(targetEle) {
 			var confirmPwd = dialogContainer.find('.confirm-pwd-input').val();
 
 			if (confirmPwd === "") {
-				popupWarning('password cannot be empty');
+				popupWarning('Password cannot be blank');
 			} else if (confirmPwd !== newPwd) {
-				popupWarning('confirm password not match');
+				popupWarning('Confirm Password does not match');
 			} else {
 				event.data.accountRow.find('input[name="old_pwd"]').val(oldPwd);
 				event.data.accountRow.find('input[name="new_pwd"]').val(newPwd);
@@ -98,13 +98,13 @@ function setupChangePwdBtn(targetEle) {
 
 function setUserInfo(info) {
 	if (info.username === '' || info.email === '' || info.label === '') {
-		popupWarning('all fields are required');
+		popupWarning('All fields are required');
 		return;
 	}
 
 	if (!('id' in info)) {
 		if (info.new_pwd === '') {
-			popupWarning('please set password first');
+			popupWarning('Please set password first');
 			return;
 		}
 	}
@@ -121,7 +121,7 @@ function setUserInfo(info) {
 				var user = data.user;
 				var accountRowTemplate = $('#accrount-row-template').html();
 				Mustache.parse(accountRowTemplate);
-				insertAccountRow(user, accountRowTemplate, $('.general-acconut-table'), USER_TYPE_STANDARD);
+				insertAccountRow(user, accountRowTemplate, $('.general-account-table'), USER_TYPE_STANDARD);
 			}
 		}
 	}).fail(function(jqXHR, textStatus) {
@@ -136,7 +136,7 @@ function deleteUser(userId) {
 		data: {'id': userId},
 	}).done(function(data) {
 		if (data.success) {
-			$('.general-acconut-table .account-row').each(function() {
+			$('.general-account-table .account-row').each(function() {
 				var user = $(this).data('user');
 				if (user !== undefined && user.id === userId) {
 					$(this).remove();
@@ -246,10 +246,10 @@ $(function() {
 	var accountRowTemplate = $('#accrount-row-template').html();
 	Mustache.parse(accountRowTemplate);
 	$.each(settings.adminUsers, function(userIdx, userItem) {
-		insertAccountRow(userItem, accountRowTemplate, $('.admin-acconut-table'), USER_TYPE_ADMIN);
+		insertAccountRow(userItem, accountRowTemplate, $('.admin-account-table'), USER_TYPE_ADMIN);
 	});
 	$.each(settings.generalUsers, function(userIdx, userItem) {
-		insertAccountRow(userItem, accountRowTemplate, $('.general-acconut-table'), USER_TYPE_STANDARD);
+		insertAccountRow(userItem, accountRowTemplate, $('.general-account-table'), USER_TYPE_STANDARD);
 	});
 
 	$('.add-account-btn').click(function() {
@@ -285,7 +285,7 @@ $(function() {
 					}
 				});
 			});
-			$('.general-acconut-table').append(eleHtml);
+			$('.general-account-table').append(eleHtml);
 		}
 	});
 });
@@ -300,7 +300,7 @@ $(function() {
 	<div class="section-header">Manage Accounts</div>
 	<div class="section-desc">Use the form below to manage or create new user accounts</div>
 	<div class="admin-account-title">Admin Account</div>
-	<div class="account-table admin-acconut-table">
+	<div class="account-table admin-account-table">
 		<div class="account-th">
 			<div class="account-th-label">Label
 			</div><div class="account-th-name">Username
@@ -319,7 +319,7 @@ $(function() {
 		</div>
 	</div>
 	
-	<div class="account-table general-acconut-table">
+	<div class="account-table general-account-table">
 		<div class="account-th">
 			<div class="account-th-label">Label
 			</div><div class="account-th-name">Username
