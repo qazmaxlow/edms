@@ -35,6 +35,9 @@ body {
 .report-component {
 	page-break-after: always;
 }
+#overnight-info.report-component {
+	page-break-after: auto;
+}
 .key-statistics-row, .key-statistics-percentage, .compare-past-basic-info,
 .compare-past-line-chart, .compare-past-sub-info, .sub-calendar-info-block{
 	page-break-inside: avoid;

@@ -1,7 +1,7 @@
 {% load static %}
 
 <div class="report-component">
-	<div class="report-component-header">WHAT ARE OUR KEY STATISTICS FOR THIS <span class="report-type-name"></span></div>
+	<div class="report-component-header">WHAT ARE OUR KEY STATISTICS FOR THIS <span class="report-type-name"></span>?</div>
 	<hr class="report-component-separator">
 	<div class="basic-info-container">
 		<div id="current-usage-col" class="basic-info-col">
@@ -70,7 +70,7 @@
 		</div>
 
 		<div id="impact-col" class="basic-info-col">
-			<div>WHAT WAS OUR<br>ENVIRONMENTAL IMPACT?</div>
+			<div>HOW DID OUR<br>CARBON FOOTPRINT CHANGE?</div>
 			<hr class="current-usage-separator-dark-grey">
 			<hr class="current-usage-separator-light-grey">
 			<div>
@@ -134,7 +134,7 @@
 </div>
 
 <div id="compare-past" class="report-component">
-	<div class="report-component-header">HOW MUCH MORE / LESS DID WE USE COMPARED TO LAST <span class="report-type-name"></span></div>
+	<div class="report-component-header">HOW MUCH MORE / LESS DID WE USE COMPARED TO LAST <span class="report-type-name"></span>?</div>
 	<hr class="report-component-separator">
 	<div class="compare-past-basic-info">
 		<div class="compare-past-desc">Your energy consumption this<br><span class="report-type-name-lower"></span> was 
@@ -143,7 +143,7 @@
 				<span class="percent-symbol">%</span>
 				<span class="compare-past-percent-suffix"></span>
 			</span> 
-			than<br> it was last <span class="report-type-name-lower"></span>. <span class="footnote-sybmol">**</span>
+			than<br> it was last <span class="report-type-name-lower"></span>. <span class="footnote-sybmol">*</span>
 		</div>
 		<div class="compare-past-chart-info">
 			<div class="compare-past-chart-title">Total energy consumption for the last 6 <span class="report-type-name-lower-plural"></span></div>
@@ -186,7 +186,7 @@
 			<span class="compare-past-bar-name"></span>
 			<span class="compare-past-bar-name"></span>
 		</div>
-		<div>** Total energy consumption for the last 6 <span class="report-type-name-lower-plural"></span></div>
+		<div class="asterisk-text single-asterisk-text">* Data not available or incomplete for this period</div>
 	</div>
 	{% block hide_detail_bar_2 %}
 	<div class="report-component-footer">
@@ -195,7 +195,7 @@
 	{% endblock %}
 
 	<div class="detail-container">
-		<div class="detail-split-title">WHEN DID WE ARCHIEVE OUR SAVINGS?</div>
+		<div class="detail-split-title">WHEN DID WE ACHIEVE OUR SAVINGS?</div>
 		<hr>
 		<div class="line-chart-title-container">
 			<span class="line-chart-title">Total consumption by days</span>
@@ -326,6 +326,7 @@
 			</div>
 		</div>
 	</div>
+	<div class="not-available-footnote">* Data not available or incomplete for this period</div>
 	<div class="calendar-footnote">** The first month you started using En-trak</div>
 	{% block hide_detail_bar_3 %}
 	<div class="report-component-footer">
@@ -338,7 +339,7 @@
 </div>
 
 <div id="weekend-info" class="report-component calendar-component">
-	<div class="report-component-header">HOW MUCH ENERGY DID WE USE ON <span>WEEKENDS?</span></div>
+	<div class="report-component-header">HOW MUCH ENERGY DID WE USE ON <span>WEEKENDS AND HOLIDAYS?</span></div>
 	<hr class="report-component-separator">
 	<div>
 		<div class="calendar-left-info">
@@ -454,6 +455,7 @@
 			</div>
 		</div>
 	</div>
+	<div class="not-available-footnote">* Data not available or incomplete for this period</div>
 	<div class="calendar-footnote">** The first month you started using En-trak</div>
 	{% block hide_detail_bar_4 %}
 	<div class="report-component-footer">
@@ -466,7 +468,7 @@
 </div>
 
 <div id="overnight-info" class="report-component calendar-component">
-	<div class="report-component-header">HOW MUCH ENERGY DID WE USE <span>OVERNIGHT?</span></div>
+	<div class="report-component-header">HOW MUCH ENERGY DID WE USE <span>OVERNIGHT***?</span></div>
 	<hr class="report-component-separator">
 	<div>
 		<div class="calendar-left-info">
@@ -582,7 +584,9 @@
 			</div>
 		</div>
 	</div>
+	<div class="not-available-footnote">* Data not available or incomplete for this period</div>
 	<div class="calendar-footnote">** The first month you started using En-trak</div>
+	<div class="overnight-footnote"></div>
 	{% block hide_detail_bar_5 %}
 	<div class="report-component-footer">
 		<div class="hide-details-btn btn-down">HIDE DETAILS</div>

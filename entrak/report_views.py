@@ -418,6 +418,10 @@ def __generate_report_data(systems, report_type, start_timestamp, end_timestamp)
 	result['savingInfo'] = saving_info
 	result['holidays'] = [holiday.strftime("%Y-%m-%d") for holiday in all_holidays]
 	result['sumUpUsages'] = sum_up_usages
+	result['overnightStartHr'] = current_system.night_time_start.hour
+	result['overnightStartMin'] = current_system.night_time_start.minute
+	result['overnightEndHr'] = current_system.night_time_end.hour
+	result['overnightEndMin'] = current_system.night_time_end.minute
 
 	for info in grouped_source_infos:
 		for will_remove_data in ['beginningReadings', 'lastSamePeriodReadings',

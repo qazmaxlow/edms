@@ -400,6 +400,16 @@ function updateDlRawBtnStatus() {
 	}
 }
 
+function setDetailShow(isShow) {
+	if (isShow) {
+		$(".hide-details-btn").removeClass('btn-down');
+		$(".detail-container").show();
+	} else {
+		$(".hide-details-btn").addClass('btn-down');
+		$(".detail-container").hide();
+	}
+}
+
 $(function() {
 	setupAjaxForCsrf($.cookie('csrftoken'));
 
@@ -423,7 +433,9 @@ $(function() {
 
 		report.reportGenerator.getReportData(function(data) {
 			report.reportGenerator.assignData(data);
+			setDetailShow(true);
 			report.reportGenerator.generateFullReport();
+			setDetailShow(false);
 			$(".report-component").fadeTo(600, 1.0);
 		});
 	}
@@ -483,7 +495,9 @@ $(function() {
 		report.reportGenerator.updateDtInfo(report.currentDt, null);
 		report.reportGenerator.getReportData(function(data) {
 			report.reportGenerator.assignData(data);
+			setDetailShow(true);
 			report.reportGenerator.generateFullReport();
+			setDetailShow(false);
 			$(".report-component").fadeTo(600, 1.0);
 		});
 		updateReportName();
@@ -492,7 +506,7 @@ $(function() {
 	$(".hide-details-btn").click(function() {
 		$(this).toggleClass('btn-down');
 		$(this).parent().parent().find(".detail-container").slideToggle();
-	})
+	});
 
 	$(".pdf-icon, .pdf-text").click(function() {
 		var targetTimestamp = $(this).parent().find('.summary-date-col').attr('dt_timestamp');
@@ -530,7 +544,9 @@ $(function() {
 		updateReportName();
 		report.reportGenerator.getReportData(function(data) {
 			report.reportGenerator.assignData(data);
+			setDetailShow(true);
 			report.reportGenerator.generateFullReport();
+			setDetailShow(false);
 			$(".report-component").fadeTo(600, 1.0);
 		});
 	});

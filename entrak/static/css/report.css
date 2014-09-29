@@ -984,12 +984,9 @@
 .detail-container .key-statistics-row:nth-child(even){
 	background-color: #FDFDFD;
 	border-right: 1px solid #FDFDFD;
-	padding-top: 2px;
-	padding-bottom: 3px;
 }
 .detail-container .key-statistics-row:nth-child(odd){
 	border-right-color: #F5F5F5 !important;
-	padding-bottom: 3px;
 }
 
 .usage-type-name{
@@ -1012,6 +1009,7 @@
 
 .key-statistics-percentage{
 	background-color: #F5F5F5;
+	padding-bottom: 15px;
 }
 .key-stat-donut-container {
 	width: 450px;
@@ -1089,6 +1087,9 @@
 	margin-right: auto;
 	line-height: 1.3em;
 }
+.key-percent-sub-info:nth-child(1) {
+	margin-top: 4px;
+}
 .key-percent-sub-info .sub-info-name {
 	position: relative;
 	left: 3px;
@@ -1119,7 +1120,6 @@
 
 .compare-past-basic-info {
 	width: 100%;
-	height: 376px;
 	position: relative;
 	background-color: #F4F3F4;
 }
@@ -1164,7 +1164,7 @@
 }
 .compare-past-chart-subtitle {
 	font-size: 9pt;
-	font-weight: bold;
+	font-weight: lighter;
 	color: #B7B7B7;
 	padding-bottom: 5px;
 	padding-top: 5px;
@@ -1259,11 +1259,12 @@
 	right: 118px;
 }
 
-.compare-past-bar-name-container + div {
+.compare-past-basic-info .asterisk-text {
 	font-size: 8pt;
 	margin-top: 25px;
 	margin-left: 80px;
-	color: #a7a7a7;
+	padding-bottom: 20px;
+	color: #A7A7A7;
 }
 
 #compare-past .legendColorBox>div {
@@ -1291,11 +1292,10 @@
 .line-chart-title {
 	position: absolute;
 	font-size: 10pt;
-	border-bottom: 1px solid;
 	color: #909090;
-	font-weight: bold;
 	padding-top: 14px;
 	left: 20px;
+	margin-left: 18px;
 }
 .line-chart-title-container .line-chart-title{
 	padding-top: 30px;
@@ -1353,9 +1353,9 @@
 	font-size: 10pt;
 	height: 18px;
 	padding-left: 20px;
-	padding-top: 4px;
+	padding-top: 6px;
 	font-weight: bold;
-	color: #FFF;
+	color: #354960;
 }
 .compare-past-sub-info .compare-past-line-chart {
 	width: 450px;
@@ -1375,7 +1375,7 @@
 }
 .compare-past-sub-info .x-axis-title {
 	margin-top: 42px;
-	margin-bottom: 15px;
+	margin-bottom: 20px;
 }
 .compare-past-sub-info.empty-block .empty-top-bar {
 	height: 22px;
@@ -1527,7 +1527,7 @@
 	top: 0px;
 	left: 0px;
 	font-size: 9pt;
-	color: #727272;
+	color: #505050;
 	font-weight: lighter;
 	padding-left: 3px;
 	padding-top: 3px;
@@ -1551,6 +1551,9 @@
 	font-size: 11pt;
 	padding-bottom: 3px;
 	padding-right: 3px;
+}
+.calendar-day-percent-symbol {
+	font-size: 9pt;
 }
 .calendar-day-better {
 	background-color: #85C92D;
@@ -1601,6 +1604,7 @@
 .calendar-vertical-info .calendar-title {
 	height: 20px;
 	padding-top: 10px;
+	font-weight: lighter;
 }
 .calendar-vertical-info>div {
 	margin-left: 20px;
@@ -1679,9 +1683,9 @@
 	width: 910px;
 	margin-left: auto;
 	margin-right: auto;
-	background-color: #E6E6E6;
-	border-radius: 12px;
 	height: 100px;
+	border-bottom: 1px solid #C9C9C9;
+	padding-bottom: 15px;
 }
 .calendar-bottom-info>div {
 	display: inline-block;
@@ -1694,7 +1698,7 @@
 	color: #354960;
 	font-weight: bold;
 	font-size: 12pt;
-	border-right: 2px solid #f1f1f1;
+	border-right: 2px solid #E0E0E0;
 }
 .calendar-bottom-info .usage-info-lowest-val-container,
 .calendar-bottom-info .usage-info-highest-val-container {
@@ -1718,7 +1722,7 @@
 	color: #354960;
 	font-weight: bold;
 	font-size: 12pt;
-	border-right: 2px solid #f1f1f1;
+	border-right: 2px solid #E0E0E0;
 }
 .highest-usage-date{
 	color: #CA6445;
@@ -1763,10 +1767,27 @@
 	margin-top: 8px;
 }
 
+.not-available-footnote {
+	font-size: 8pt;
+	margin-left: 35px;
+	margin-top: 15px;
+	height: 18px;
+}
 .calendar-footnote {
 	font-size: 8pt;
 	margin-left: 35px;
 	margin-top: 15px;
+	height: 25px;
+}
+.showed-not-available-footnote + .calendar-footnote {
+	margin-top: 0px;
+}
+#overnight-info .calendar-footnote {
+	height: 18px;
+}
+.overnight-footnote {
+	font-size: 8pt;
+	margin-left: 35px;
 	height: 25px;
 }
 
@@ -1935,4 +1956,12 @@
 
 .download-pdf-form, .download-raw-data-form {
 	display: none;
+}
+
+.not-accurate-note {
+	font-size: 9pt;
+	margin-left: 45px;
+	margin-top: 25px;
+	width: 550px;
+	line-height: 1.6em;
 }

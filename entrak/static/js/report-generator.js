@@ -28,7 +28,7 @@ ReportGenerator.MAX_PERCENTAGE_VALUE = 5;
 ReportGenerator.DONUT_COLORS = ['#68C0D4', '#8C526F', '#D5C050', '#8B8250', '#5759A7', '#6EC395',
 	'#EE9646', '#EE5351', '#178943', '#BA1E6A', '#045A6F', '#0298BB'];
 ReportGenerator.OTHER_PERCENT_COLOR = '#D55398'
-ReportGenerator.OTHER_INFO_COLOR = '#000000';
+ReportGenerator.OTHER_INFO_COLOR = '#5E5E5E';
 ReportGenerator.FIRST_SPLIT_PIE_COLOR = '#7ACB39';
 ReportGenerator.SECOND_SPLIT_PIE_COLOR = '#3F952C';
 
@@ -254,6 +254,8 @@ ReportGenerator.prototype.assignData = function(data) {
 	this.savingInfo = data.savingInfo;
 	this.holidays = data.holidays;
 	this.sumUpUsages = data.sumUpUsages;
+	this.overnightStartDt = moment().hour(data.overnightStartHr).minute(data.overnightStartMin);
+	this.overnightEndDt = moment().hour(data.overnightEndHr).minute(data.overnightEndMin);
 }
 
 ReportGenerator.prototype.insertSubInfo = function(target, template, bullet, color, name, percentVal) {
@@ -386,7 +388,12 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 		compareToDt.subtract('y', 1);
 	}
 
-	var saveEnergySubText = this.genDtText(compareToDt);
+	var saveEnergySubText;
+	if (this.reportType === ReportGenerator.REPORT_TYPE_WEEK) {
+		saveEnergySubText = 'the same week last year';
+	} else {
+		saveEnergySubText = this.genDtText(compareToDt);
+	}
 	$("#save-energy-subtext").text("than " + saveEnergySubText);
 	var savedCo2Text = Utils.formatWithCommas((Math.abs(reportGenThis.savingInfo.co2)/1000).toFixed(0));
 	savedCo2Text += " tons";
@@ -819,6 +826,14 @@ ReportGenerator.prototype.generateComparePast = function() {
 	if (this.groupedSourceInfos.length%2 !== 0) {
 		this.insertEmptyBlock(".compare-past-sub-info-container", 'compare-past-sub-info');
 	}
+
+	if (lastTotalUsage === 0) {
+		$(".footnote-sybmol").show();
+		$(".single-asterisk-text").css('visibility', 'block');
+	} else {
+		$(".footnote-sybmol").hide();
+		$(".single-asterisk-text").css('visibility', 'hidden');
+	}
 }
 
 ReportGenerator.prototype._fillInComparePercent = function(eleSel, oldUsage, newUsage, compareToDateText) {
@@ -848,7 +863,7 @@ ReportGenerator.prototype._fillInComparePercent = function(eleSel, oldUsage, new
 
 	var comparedSubtext;
 	if (oldUsage === 0) {
-		comparedSubtext = "compared<br>to "+compareToDateText+" ***";
+		comparedSubtext = "compared<br>to "+compareToDateText+" *";
 	} else {
 		comparedSubtext = lessMoreText+" compared<br>to "+compareToDateText;
 	}
@@ -859,7 +874,7 @@ ReportGenerator.prototype._genSubComparePercentInfo = function(oldUsage, newUsag
 	var result = {};
 	if (oldUsage === 0) {
 		result.percentText = "-";
-		result.subText = "compared<br>to "+compareToDateText+" ***";
+		result.subText = "compared<br>to "+compareToDateText+" *";
 		result.savingClass = "invalid-saving";
 	} else {
 		var percent = (newUsage-oldUsage)/oldUsage*100;
@@ -1103,6 +1118,12 @@ ReportGenerator.prototype.generateCalendarReport = function(targetSel, combinedR
 	this._insertCalendarSubInfo(targetSel+" .detail-container", classIdPrefix, calendarTypeName,
 		currentUsageKey, beginningUsageKey, lastUsageKey, lastSamePeriodUsageKey,
 		beginningDateText, firstSplitText, secondSplitText, swapSplitPercent);
+
+	if($(targetSel).find('.invalid-saving').length > 0) {
+		$(targetSel).find('.not-available-footnote').addClass('showed-not-available-footnote').show();
+	} else {
+		$(targetSel).find('.not-available-footnote').removeClass('showed-not-available-footnote').hide();
+	}
 }
 
 ReportGenerator.prototype.generateWeekdayReport = function(combinedReadings) {
@@ -1206,4 +1227,9 @@ ReportGenerator.prototype.generateOvernightReport = function(combinedReadings) {
 		'currentOvernightInfo', 'beginningOvernightInfo',
 		'lastOvernightInfo', 'lastSamePeriodOvernightInfo', lowestUsage, lowestDt, highestUsage, highestDt,
 		true, isNotConcernFunc, 'overnight-sub-calendar', 'Overnight', 'Daytime', 'Overnight');
+
+	$('.overnight-footnote').text('*** '
+		+ this.overnightStartDt.format('hh:mmA')
+		+ ' - '
+		+ this.overnightEndDt.format('hh:mmA'));
 }
