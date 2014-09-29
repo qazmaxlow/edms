@@ -75,7 +75,8 @@ def edit_sources_view(request, system_code=None):
 					__assign_source_info(original_source, info)
 					original_source.save()
 
-		Source.objects.insert(will_insert_sources)
+		if will_insert_sources:
+			Source.objects.insert(will_insert_sources)
 
 		return Utils.json_response({'success': True})
 

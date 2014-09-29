@@ -22,6 +22,9 @@ class SourceManager:
 	class GetEgaugeDataError(Exception):
 		pass
 
+	class TimeDeltaNotMatchError(Exception):
+		pass
+
 	@staticmethod
 	def get_grouped_sources(system_codes=None):
 		current_db_conn = connection.get_db()
@@ -254,6 +257,19 @@ class SourceManager:
 						name=source['name'],
 						tz=source['tz']
 					) for (idx, reading_datetime) in enumerate(reading_datetimes)]
+			except SourceManager.TimeDeltaNotMatchError, e:
+				# recover cannot handle compressed data at this stage
+				readings = SourceManager.__get_egauge_compressed_data(xml_url, end_timestamp)
+				for source in sources:
+					if source['name'] in readings:
+						source_reading_mins += [SourceReadingMin(
+							datetime=reading_datetime,
+							source_id=source['_id'],
+							value=(readings[source['name']][0]/60.0)
+						) for (idx, reading_datetime) in enumerate(reading_datetimes)]
+						need_update_source_ids.append(source['_id'])
+					else:
+						Utils.log_error("no matching cname for source! source: %s, cname: %s"%(xml_url, source['name']))
 
 			if source_reading_mins:
 				SourceReadingMin.objects.insert(source_reading_mins)
@@ -297,12 +313,39 @@ class SourceManager:
 		xml_content = response.content
 
 		root = etree.XML(xml_content)
+		time_delta = int(root.find('data').get('time_delta'))
+		if time_delta != 60:
+			raise SourceManager.TimeDeltaNotMatchError("time_delta not match: %s"%full_url)
+
 		cnames = [cname.text.strip() for cname in root.getiterator('cname')]
 		result = {}
 		for idx, cname in enumerate(cnames):
 			values = root.xpath("//r[position()>1]/c[%d]/text()"%(idx+1))
 			if len(values) != row:
 				raise SourceManager.GetEgaugeDataError("cname or row number not much! source: %s, cname: %s, row_num: %d"%(full_url, cname, row))
+			result[cname] = [abs(float(value))/3600000 for value in values]
+		return result
+
+	@staticmethod
+	def __get_egauge_compressed_data(xml_url, start_timestamp):
+		full_url = 'http://%s/cgi-bin/egauge-show/?h&n=2&a&C&f=%d' % (xml_url, start_timestamp)
+		digest_auth = requests.auth.HTTPDigestAuth(SourceManager.DEFAULT_USERNAME, SourceManager.DEFAULT_PASSWORD)
+		try:
+			response = requests.get(full_url, auth=digest_auth)
+		except (requests.ConnectionError, requests.exceptions.ChunkedEncodingError) as e:
+			raise SourceManager.GetEgaugeDataError(str(e))
+
+		if response.status_code != 200:
+			raise SourceManager.GetEgaugeDataError("Response status code: %d"%response.status_code)
+		xml_content = response.content
+
+		root = etree.XML(xml_content)
+		cnames = [cname.text.strip() for cname in root.getiterator('cname')]
+		result = {}
+		for idx, cname in enumerate(cnames):
+			values = root.xpath("//r[position()>1]/c[%d]/text()"%(idx+1))
+			if len(values) != 1:
+				raise SourceManager.GetEgaugeDataError("cname or row number not much! source: %s, cname: %s, row_num: %d"%(full_url, cname, 2))
 			result[cname] = [abs(float(value))/3600000 for value in values]
 		return result
 
