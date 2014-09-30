@@ -183,6 +183,15 @@ function updateSelectedQuarter() {
 	$(".year-quarter-calendar-content>div").removeClass('selected-quarter');
 	var quarterIdx = report.currentDt.month()/3;
 	$($(".year-quarter-calendar-content>div")[quarterIdx]).addClass('selected-quarter');
+
+	$(".year-quarter-calendar-content>div").each(function(btnIdx) {
+		var btnDt = moment(report.currentDt).month(btnIdx*3);
+		if (isTargetDtValid(btnDt)) {
+			$(this).removeClass('invalid-quarter');
+		} else {
+			$(this).addClass('invalid-quarter');
+		}
+	});
 }
 
 function timeRangeQuarterSelected() {

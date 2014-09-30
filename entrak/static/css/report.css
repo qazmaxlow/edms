@@ -225,6 +225,16 @@
 	color: #C8C8C8;
 	background-color: #E2E2E2;
 }
+.year-quarter-calendar-content>div.invalid-quarter:hover .quarter-idx,
+.year-quarter-calendar-content .invalid-quarter .quarter-idx
+{
+	color: #C8C8C8;
+}
+.year-quarter-calendar-content>div.invalid-quarter:hover .quarter-month,
+.year-quarter-calendar-content .invalid-quarter .quarter-month{
+	color: #C8C8C8;
+	background-color: #E2E2E2;
+}
 
 .report-datepicker {
 	width: 375px;
