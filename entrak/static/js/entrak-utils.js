@@ -37,26 +37,26 @@ Utils.genStartEndDt = function (targetDt, rangeType) {
 
 	if (rangeType === Utils.RANGE_TYPE_HOUR) {
 		startDt = dtClone;
-		endDt = moment(startDt).add('h', 1);
+		endDt = moment(startDt).add(1, 'h');
 	} else if (rangeType === Utils.RANGE_TYPE_DAY) {
 		startDt = dtClone.startOf('day');
-		endDt = moment(startDt).add('d', 1);
+		endDt = moment(startDt).add(1, 'd');
 	} else if (rangeType == Utils.RANGE_TYPE_NIGHT) {
 		if (dtClone.hour() >= 8) {
-			startDt = dtClone.subtract('d', 1).hour(20);
+			startDt = dtClone.subtract(1, 'd').hour(20);
 		} else {
-			startDt = dtClone.subtract('d', 2).hour(20);
+			startDt = dtClone.subtract(2, 'd').hour(20);
 		}
-		endDt = moment(startDt).add('h', 12);
+		endDt = moment(startDt).add(12, 'h');
 	} else if (rangeType == Utils.RANGE_TYPE_WEEK) {
 		startDt = dtClone.startOf('week');
-		endDt = moment(startDt).add('d', 7);
+		endDt = moment(startDt).add(7, 'd');
 	} else if (rangeType == Utils.RANGE_TYPE_MONTH) {
 		startDt = dtClone.startOf('month');
-		endDt = moment(startDt).add('M', 1);
+		endDt = moment(startDt).add(1, 'M');
 	} else if (rangeType == Utils.RANGE_TYPE_YEAR) {
 		startDt = dtClone.startOf('year');
-		endDt = moment(startDt).add('y', 1);
+		endDt = moment(startDt).add(1, 'y');
 	}
 
 	return {startDt: startDt, endDt: endDt};
@@ -97,8 +97,8 @@ Utils.genLastDtDeltaUnit = function (rangeType) {
 
 Utils.genLastStartEndDt = function (targetDt, rangeType) {
 	var deltaUnit = Utils.genLastDtDeltaUnit(rangeType);
-	var lastStartDt = moment(targetDt).subtract(deltaUnit, 1);
-	var lastEndDt = moment(lastStartDt).add(Utils.getDtDetlaUnit(rangeType), 1);
+	var lastStartDt = moment(targetDt).subtract(1, deltaUnit);
+	var lastEndDt = moment(lastStartDt).add(1, Utils.getDtDetlaUnit(rangeType));
 
 	return {startDt: lastStartDt, endDt: lastEndDt};
 }
@@ -165,4 +165,10 @@ Utils.fixedDecBaseOnVal = function(val) {
 		numOfDec = 0;
 	}
 	return val.toFixed(numOfDec);
+}
+
+Utils.setLangText = function(targetClass, textInfo) {
+	$.each(textInfo, function(textKey, textVal) {
+		targetClass[textKey] = textVal;
+	});
 }

@@ -9,8 +9,8 @@ EnergySummary.prototype.getSummaryWithSourceIds = function(sourceIds, getSummary
 	var energySummaryThis = this;
 	var uptilMoment = Utils.getNowMoment();
 	var startDt = moment(uptilMoment).startOf('day');
-	var lastStartDt = moment(startDt).subtract('w', 1);
-	var lastEndDt = moment(uptilMoment).subtract('w', 1);
+	var lastStartDt = moment(startDt).subtract(1, 'w');
+	var lastEndDt = moment(uptilMoment).subtract(1, 'w');
 
 	$.ajax({
 		type: "POST",

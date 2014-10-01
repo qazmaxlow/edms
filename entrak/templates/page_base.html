@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+{% load i18n %}
 {% load static %}
 
 {% block extra_head %}
@@ -103,28 +104,30 @@ $(function() {
 		<nav>
 			<ul id="menu-links">
 				<li id="menu-link-graph">
-					<a href="{% url 'graph' system_code=systems.0.code %}"><img width="26" height="22" src="{% static 'images/graph-icon.png' %}"><span>Graph</span></a>
+					<a href="{% url 'graph' system_code=systems.0.code %}"><img width="26" height="22" src="{% static 'images/graph-icon.png' %}"><span>{% trans "Graph" %}</span></a>
 				</li>
 				<li id="menu-link-ranking">
-					<a href="{% url 'ranking' system_code=systems.0.code %}"><img width="26" height="23" src="{% static 'images/ranking-icon.png' %}"><span>Ranking</span></a>
+					<a href="{% url 'ranking' system_code=systems.0.code %}"><img width="26" height="23" src="{% static 'images/ranking-icon.png' %}"><span>{% trans "Ranking" %}</span></a>
 				</li>
 				<li id="menu-link-progress">
-					<a href="{% url 'progress' system_code=systems.0.code %}"><img width="26" height="23" src="{% static 'images/progress-icon.png' %}"><span>Progress</span></a>
+					<a href="{% url 'progress' system_code=systems.0.code %}"><img width="26" height="23" src="{% static 'images/progress-icon.png' %}"><span>{% trans "Progress" %}</span></a>
 				</li>
 				<li id="menu-link-report">
-					<a href="{% url 'report' system_code=systems.0.code %}"><img width="26" height="24" src="{% static 'images/reports-icon.png' %}"><span>Reports</span></a>
+					<a href="{% url 'report' system_code=systems.0.code %}"><img width="26" height="24" src="{% static 'images/reports-icon.png' %}"><span>{% trans "Reports" %}</span></a>
 				</li>
 				<li id="menu-link-display">
-					<a href="{% url 'display' system_code=systems.0.code %}" target="_blank"><img width="26" height="22" src="{% static 'images/display-icon.png' %}"><span>Display</span></a>
+					<a href="{% url 'display' system_code=systems.0.code %}" target="_blank"><img width="26" height="22" src="{% static 'images/display-icon.png' %}"><span>{% trans "Display" %}</span></a>
 				</li>
+				{% comment %}
 				<li id="menu-link-pro-v">
 					<a href="#"><img width="31" height="21" src="{% static 'images/prov-icon.png' %}"><span>Pro V</span></a>
 				</li>
+				{% endcomment %}
 				<li id="menu-link-alert">
-					<a href="{% url 'alert_settings' system_code=systems.0.code %}"><img width="23" height="22" src="{% static 'images/settings-icon.png' %}"><span>Alert</span></a>
+					<a href="{% url 'alert_settings' system_code=systems.0.code %}"><img width="23" height="22" src="{% static 'images/settings-icon.png' %}"><span>{% trans "Alert" %}</span></a>
 				</li>
 				<li id="menu-link-logout">
-					<a href="{% url 'logout' system_code=systems.0.code %}"><img width="23" height="24" src="{% static 'images/logout-icon.png' %}"><span>Logout</span></a>
+					<a href="{% url 'logout' system_code=systems.0.code %}"><img width="23" height="24" src="{% static 'images/logout-icon.png' %}"><span>{% trans "Logout" %}</span></a>
 				</li>
 			</ul>
 		</nav>
@@ -162,7 +165,7 @@ $(function() {
 				</li>
 			</ul>
 
-			<span><h3>You are viewing:</h3></span>
+			<span><h3>{% trans "You are viewing:" %}</h3></span>
 			<span id="breadcrumbs-path">
 				{% for info in system_path_components %}
 				<a href="/{{info.code}}/{% block breadcrumb_target_view %}{% endblock %}/">{{info.name}}</a>

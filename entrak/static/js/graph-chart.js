@@ -1,4 +1,4 @@
-function GraphChart(graphEleSel, yAxisSliderEleSel, xAxisSliderEleSel, retrieveReadingCallback) {
+function GraphChart(graphEleSel, yAxisSliderEleSel, xAxisSliderEleSel, retrieveReadingCallback, multiLangTexts) {
 	this.graphEleSel = graphEleSel;
 	this.yAxisSliderEleSel = yAxisSliderEleSel;
 	this.xAxisSliderEleSel = xAxisSliderEleSel;
@@ -30,19 +30,25 @@ function GraphChart(graphEleSel, yAxisSliderEleSel, xAxisSliderEleSel, retrieveR
 	this.needResetXSlider = true;
 	this.getSourceDataAjaxId = null;
 	this.getSourceDataTimeoutId = null;
+
+	Utils.setLangText(GraphChart, multiLangTexts);
 }
 
 GraphChart.DATA_UPDATE_INTERVAL = 60000
 
-GraphChart.prototype.TOTAL_SERIES_BASE_OPTIONS = {
-	color: '#81D51D',
-	label: 'Total',
-	bars: {
-		barWidth: 0.4,
-		align: "center",
-		show: true,
-		fill: 1,
-	},
+GraphChart.prototype.getTotalSeriesBaseOptions = function() {
+	var optionInfos = {
+		color: '#81D51D',
+		label: GraphChart.Total,
+		bars: {
+			barWidth: 0.4,
+			align: "center",
+			show: true,
+			fill: 1,
+		},
+	};
+
+	return optionInfos;
 };
 
 GraphChart.prototype.SERIES_LINE_COLORS = ['#FFAE20', '#EF7C56', '#35BC99', '#C94CD7', '#587EFF'];
@@ -228,7 +234,7 @@ GraphChart.prototype.getDisplayEnergyReadings = function() {
 		})
 
 		var series = [
-			$.extend(true, {data: seriesData['current']}, graphChartThis.TOTAL_SERIES_BASE_OPTIONS),
+			$.extend(true, {data: seriesData['current']}, graphChartThis.getTotalSeriesBaseOptions()),
 			$.extend(true, {color: "#F16D4E", data: seriesData['last']}, graphChartThis.SERIES_BASE_OPTIONS),
 		];
 
@@ -335,7 +341,7 @@ GraphChart.prototype.transformReadingToChartDatasets = function (groupedReadings
 		graphChartThis.sourceSeries.push(series);
 	});
 
-	this.totalSeries = $.extend(true, {data: []}, this.TOTAL_SERIES_BASE_OPTIONS);
+	this.totalSeries = $.extend(true, {data: []}, this.getTotalSeriesBaseOptions());
 	$.each(totalReadings, function(readingTimestamp, readingVal) {
 		graphChartThis.totalSeries.data.push([readingTimestamp, readingVal]);
 	});
@@ -618,7 +624,7 @@ GraphChart.prototype.transformXToDt = function (startDt, xVal) {
 		dtUnit = 'M';
 	}
 
-	return moment(startDt).add(dtUnit, xVal);
+	return moment(startDt).add(xVal, dtUnit);
 }
 
 GraphChart.prototype.sumUpSeriesValueInRange = function (startIdx, endIdx) {
@@ -645,7 +651,7 @@ GraphChart.prototype.updateXAxisOptions = function (startDt) {
 		min = -1;
 		max = 60;
 		for (var i = 0; i < 12; i++) {
-			var tickLabel = moment(startDt).add('m', i*5).format('h:mma');
+			var tickLabel = moment(startDt).add(i*5, 'm').locale('en').format('h:mma');
 			ticks.push([i*5, tickLabel]);
 		};
 	} else if (this.currentRangeType === Utils.RANGE_TYPE_DAY) {
@@ -653,7 +659,7 @@ GraphChart.prototype.updateXAxisOptions = function (startDt) {
 		max = 24;
 		
 		for (var i = 0; i < 12; i++) {
-			var tickLabel = moment(startDt).add('h', i*2).format('ha');
+			var tickLabel = moment(startDt).add(i*2, 'h').locale('en').format('ha');
 			ticks.push([i*2, tickLabel]);
 		};
 	} else if (this.currentRangeType === Utils.RANGE_TYPE_NIGHT) {
@@ -661,13 +667,13 @@ GraphChart.prototype.updateXAxisOptions = function (startDt) {
 		max = 12;
 
 		for (var i = 0; i < 6; i++) {
-			var tickLabel = moment(startDt).add('h', i*2).format('ha');
+			var tickLabel = moment(startDt).add(i*2, 'h').locale('en').format('ha');
 			ticks.push([i*2, tickLabel]);
 		};
 	} else if (this.currentRangeType === Utils.RANGE_TYPE_WEEK) {
 		min = -1;
 		max = 7;
-		var tickLabels = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+		var tickLabels = moment.weekdays();
 		for (var i = 0; i < tickLabels.length; i++) {
 			ticks.push([i, tickLabels[i]]);
 		};
@@ -682,7 +688,7 @@ GraphChart.prototype.updateXAxisOptions = function (startDt) {
 		min = -1;
 		max = 12;
 		for (var i = 0; i < max; i++) {
-			var tickLabel = moment(startDt).add('M', i).format('MMM');
+			var tickLabel = moment(startDt).add(i, 'M').format('MMM');
 			ticks.push([i, tickLabel]);
 		}
 	}
@@ -708,7 +714,7 @@ GraphChart.prototype.updateCurrentRangeType = function (newRangeType) {
 GraphChart.prototype.goPrevOrNext = function (direction) {
 	var delta = (direction === 'prev') ? -1 : 1;
 	var deltaUnit = Utils.getDtDetlaUnit(this.currentRangeType);
-	this.currentDt.add(deltaUnit, delta);
+	this.currentDt.add(delta, deltaUnit);
 	this.getSourceReadings();
 }
 

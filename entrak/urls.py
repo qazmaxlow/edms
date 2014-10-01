@@ -1,3 +1,4 @@
+from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
 from django.contrib.staticfiles import views
@@ -19,7 +20,9 @@ urlpatterns = patterns('',
 	url(r'^recap_data/$', 'entrak.admin_customize_views.recap_data_view', name='recap_data'),
 	url(r'^printer/', include('printer.urls')),
 	url(r'^login/$', 'entrak.auth_views.centeral_login_view', name='centeral_login'),
+)
 
+urlpatterns += i18n_patterns('',
 	url(r'^(?P<system_code>[\w\-]+)/', include(patterns('',
 		url(r'^$', RedirectView.as_view(pattern_name='graph'), name='redirect-to-graph'),
 		url(r'^graph/$', 'entrak.graph_views.graph_view', name='graph'),
