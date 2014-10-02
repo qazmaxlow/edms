@@ -39,7 +39,7 @@ GraphChart.DATA_UPDATE_INTERVAL = 60000
 GraphChart.prototype.getTotalSeriesBaseOptions = function() {
 	var optionInfos = {
 		color: '#81D51D',
-		label: GraphChart.Total,
+		label: GraphChart.TOTAL_TEXT,
 		bars: {
 			barWidth: 0.4,
 			align: "center",
@@ -123,7 +123,7 @@ GraphChart.prototype.getSourceReadings = function () {
 GraphChart.prototype.getLastSourceReadings = function() {
 	var graphChartThis = this;
 	var startEndDt = this.lastStartEndDt;
-	var groupedSourceInfos = [{name: 'Previous', source_ids: graphChartThis.entrakSystem.getAllSourceIds()}];
+	var groupedSourceInfos = [{name: GraphChart.PREVIOUS_TEXT, source_ids: graphChartThis.entrakSystem.getAllSourceIds()}];
 	this._retrieveSourceReadings(groupedSourceInfos, startEndDt.startDt, startEndDt.endDt, function(data) {
 		graphChartThis.transformReadingToSeries(data[0], 'lastSeries');
 		graphChartThis.lastSeries.color = "#F7AF25";
@@ -134,7 +134,7 @@ GraphChart.prototype.getLastSourceReadings = function() {
 GraphChart.prototype.getCustomSourceReadings = function() {
 	var graphChartThis = this;
 	var startEndDt = this.customDt;
-	var groupedSourceInfos = [{name: 'Custom', source_ids: graphChartThis.entrakSystem.getAllSourceIds()}];
+	var groupedSourceInfos = [{name: GraphChart.CUSTOM_TEXT, source_ids: graphChartThis.entrakSystem.getAllSourceIds()}];
 	this._retrieveSourceReadings(groupedSourceInfos, startEndDt.startDt, startEndDt.endDt, function(data) {
 		graphChartThis.transformReadingToSeries(data[0], 'customSeries');
 		graphChartThis.customSeries.color = "#587EFF";
@@ -145,7 +145,7 @@ GraphChart.prototype.getCustomSourceReadings = function() {
 GraphChart.prototype.getHighestSourceReadings = function(doneCallback) {
 	var graphChartThis = this;
 	var startEndDt = this.genCurrentStartEndDt();
-	var sourceInfos = {name: 'Highest', source_ids: graphChartThis.entrakSystem.getAllSourceIds()};
+	var sourceInfos = {name: GraphChart.HIGHEST_TEXT, source_ids: graphChartThis.entrakSystem.getAllSourceIds()};
 
 	$.ajax({
 		type: "POST",
@@ -180,7 +180,7 @@ GraphChart.prototype.getHighestSourceReadings = function(doneCallback) {
 GraphChart.prototype.getLowestSourceReadings = function(doneCallback) {
 	var graphChartThis = this;
 	var startEndDt = this.genCurrentStartEndDt();
-	var sourceInfos = {name: 'Lowest', source_ids: graphChartThis.entrakSystem.getAllSourceIds()};
+	var sourceInfos = {name: GraphChart.LOWEST_TEXT, source_ids: graphChartThis.entrakSystem.getAllSourceIds()};
 
 	$.ajax({
 		type: "POST",

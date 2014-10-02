@@ -38,6 +38,7 @@
 {{block.super}}
 
 <script type="text/javascript">
+{% get_current_language as LANGUAGE_CODE %}
 
 var graph = {};
 graph.sourceChoiceContainerHeight = 0;
@@ -210,10 +211,10 @@ function setupSourceChoice() {
 
 	var sourceNames = [];
 	$.each(graph.graphChart.entrakSystem.systemTree.children, function(idx, subSystem) {
-		sourceNames.push(subSystem.data.name);
+		sourceNames.push(subSystem.data.nameInfo[graph.langCode]);
 	});
 	$.each(graph.graphChart.entrakSystem.systemTree.data.sources, function(sourceIdx, source) {
-		sourceNames.push(source.name);
+		sourceNames.push(source.nameInfo[graph.langCode]);
 	});
 
 	graph.sourceChoiceContainerHeight = Math.ceil(sourceNames.length/4.0)*22 + 100;
@@ -367,11 +368,15 @@ function resetXSliderNSummaryNHightlight() {
 
 $(function() {
 	setupAjaxForCsrf($.cookie('csrftoken'));
-	{% get_current_language as LANGUAGE_CODE %}
-	moment.locale('{{LANGUAGE_CODE}}');
+	graph.langCode = '{{LANGUAGE_CODE}}';
+	moment.locale(graph.langCode);
 
 	var graphChartMultiLangTexts = {
-		'Total': '{% trans "Total" %}',
+		'TOTAL_TEXT': '{% trans "Total" %}',
+		'PREVIOUS_TEXT': '{% trans "Previous" %}',
+		'HIGHEST_TEXT': '{% trans "Highest" %}',
+		'LOWEST_TEXT': '{% trans "Lowest" %}',
+		'CUSTOM_TEXT': '{% trans "Custom" %}',
 	};
 
 	graph.graphChart = new GraphChart(
@@ -384,6 +389,7 @@ $(function() {
 	graph.graphChart.currentDt = Utils.getNowMoment('hour');
 
 	graph.graphChart.entrakSystem = new EntrakSystem();
+	graph.graphChart.entrakSystem.langCode = graph.langCode;
 	graph.graphChart.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
 	graph.graphChart.currentSelectedSystem = graph.graphChart.entrakSystem.systemTree;
 

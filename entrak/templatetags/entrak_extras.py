@@ -3,7 +3,7 @@ import calendar
 from django import template
 from django.utils.safestring import mark_safe
 from django.utils.html import escapejs
-from entrak.settings import MEDIA_URL
+from entrak.settings import MEDIA_URL, LANG_CODE_EN, LANG_CODE_TC
 register = template.Library()
 
 @register.filter
@@ -23,14 +23,33 @@ def abs_float(val):
 	return abs(float(val))
 
 @register.filter
+def get_value_with_key(info, key):
+	return info[key]
+
+@register.filter
+def get_system_name(system, lang_code):
+	if lang_code == LANG_CODE_TC:
+		system_name = system.name_tc
+	else:
+		system_name = system.name
+	return system_name
+
+@register.filter
+def get_system_full_name(system, lang_code):
+	if lang_code == LANG_CODE_TC:
+		system_full_name = system.full_name_tc
+	else:
+		system_full_name = system.full_name
+	return system_full_name
+
+@register.filter
 def jsonifySystems(systems):
 	systems_info = []
 	for system in systems:
 		info = {
 			'id': system.id,
 			'code': system.code,
-			'name': system.name, 'nameTc': system.name_tc,
-			'intro': system.intro, 'introTc': system.intro_tc,
+			'nameInfo': {LANG_CODE_EN: system.name, LANG_CODE_TC: system.name_tc},
 			'path': system.path, 'firstRecord': calendar.timegm(system.first_record.utctimetuple())}
 		if system.logo:
 			info['logo'] = system.logo.url
@@ -45,7 +64,7 @@ def jsonifySources(sources):
 		info = {
 			'id': str(source.id),
 			'systemCode': source.system_code,
-			'name': source.d_name, 'nameTc': source.d_name_tc,
+			'nameInfo': {LANG_CODE_EN: source.d_name, LANG_CODE_TC: source.d_name_tc},
 			'order': source.order
 		}
 		sources_info.append(info)

@@ -1,5 +1,6 @@
 function EntrakSystem() {
 	this.systemTree = null;
+	this.langCode = 'en';
 }
 
 EntrakSystem.prototype.assignSystemTree = function(jsonStr) {
@@ -47,11 +48,11 @@ EntrakSystem.prototype.getGroupedSourceInfos = function() {
 			}
 		});
 
-		groupedSourceIds.push({name: subSystem.data.name, code: subSystem.data.code, source_ids:sourceIds});
+		groupedSourceIds.push({name: subSystem.data.nameInfo[entrakSysThis.langCode], code: subSystem.data.code, source_ids:sourceIds});
 	})
 
 	$.each(entrakSysThis.systemTree.data.sources, function(sourceId, source){
-		groupedSourceIds.push({name: source.name, source_ids:[sourceId]});
+		groupedSourceIds.push({name: source.nameInfo[entrakSysThis.langCode], source_ids:[sourceId]});
 	});
 
 	return groupedSourceIds;

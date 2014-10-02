@@ -3,7 +3,7 @@ import datetime
 import pytz
 import operator
 from django.db import models
-from entrak.settings import BASE_DIR
+from entrak.settings import BASE_DIR, LANG_CODE_EN, LANG_CODE_TC
 from django.db.models import Q
 from holiday.models import CityHoliday, Holiday
 
@@ -58,8 +58,10 @@ class System(models.Model):
 		for code in system_path_components[start_idx:]:
 			result.append({
 				'code': code,
-				'name': code_name_map[code]['name'],
-				'name_tc': code_name_map[code]['name_tc']
+				'nameInfo': {
+					LANG_CODE_EN: code_name_map[code]['name'],
+					LANG_CODE_TC: code_name_map[code]['name_tc'],
+				},
 			})
 
 		return result

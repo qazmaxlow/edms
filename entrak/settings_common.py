@@ -90,9 +90,11 @@ USE_L10N = True
 
 USE_TZ = True
 
+LANG_CODE_EN = 'en'
+LANG_CODE_TC = 'zh-tw'
 LANGUAGES = (
-	('en', _('English')),
-	('zh-tw', _('Traditional Chinese')),
+	(LANG_CODE_EN, _('English')),
+	(LANG_CODE_TC, _('Traditional Chinese')),
 )
 LOCALE_PATHS = (
 	os.path.join(BASE_DIR, 'locale'),

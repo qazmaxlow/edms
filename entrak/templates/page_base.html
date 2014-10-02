@@ -2,6 +2,7 @@
 
 {% load i18n %}
 {% load static %}
+{% load entrak_extras %}
 
 {% block extra_head %}
 {{block.super}}
@@ -20,6 +21,7 @@
 {% block extra_script %}
 
 <script type="text/javascript">
+{% get_current_language as LANGUAGE_CODE %}
 
 var page = {};
 
@@ -27,7 +29,7 @@ $(function() {
 	{% for system in user_systems %}
 		var system = {};
 		system.code = '{{system.code}}';
-		system.name = '{{system.name}}';
+		system.name = '{{system|get_system_name:LANGUAGE_CODE}}';
 		system.path = '{{system.path}}';
 		system.sources = {};
 
@@ -50,7 +52,7 @@ $(function() {
 		var aDom = $('<a href="#" onclick="return false;">' + node.data.name +'</a>');
 		aDom.click({node: node}, function(event) {
 			if (page.userSystemTree.data.node !== event.data.node) {
-				window.location.href = "/" + event.data.node.data.code + "/{% block system_menu_target_view %}{% endblock %}/";
+				window.location.href = "/{{LANGUAGE_CODE}}/" + event.data.node.data.code + "/{% block system_menu_target_view %}{% endblock %}/";
 			}
 		});
 		var appendDom = $('<li system_code="' + node.data.code + '">');
@@ -85,6 +87,7 @@ $(function() {
 {% endblock %}
 
 {% block content %}
+{% get_current_language as LANGUAGE_CODE %}
 <div id="page-container">
 
 	<!-- Left Sidebar Main -->
@@ -98,7 +101,7 @@ $(function() {
 		</div>
 				
 		<!-- User's Company Name -->
-		<h2 id="company">{{systems.0.full_name|upper}}</h2>
+		<h2 id="company">{{systems.0|get_system_full_name:LANGUAGE_CODE|upper}}</h2>
 
 		<!-- Main Sidebar Links -->
 		<nav>
@@ -167,8 +170,9 @@ $(function() {
 
 			<span><h3>{% trans "You are viewing:" %}</h3></span>
 			<span id="breadcrumbs-path">
+
 				{% for info in system_path_components %}
-				<a href="/{{info.code}}/{% block breadcrumb_target_view %}{% endblock %}/">{{info.name}}</a>
+				<a href="/{{LANGUAGE_CODE}}/{{info.code}}/{% block breadcrumb_target_view %}{% endblock %}/">{{info.nameInfo|get_value_with_key:LANGUAGE_CODE}}</a>
 					{% if not forloop.last %}
 					<span>-</span>
 					{% endif %}

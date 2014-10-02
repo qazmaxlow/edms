@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-01 16:47+0000\n"
+"POT-Creation-Date: 2014-10-02 04:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: entrak/settings_common.py:94
+#: entrak/settings_common.py:96
 msgid "English"
 msgstr "英文"
 
-#: entrak/settings_common.py:95
+#: entrak/settings_common.py:97
 msgid "Traditional Chinese"
 msgstr "繁體中文"
 
@@ -37,142 +37,158 @@ msgstr "今天到目前目止，你消秏了電力共"
 msgid "See Details"
 msgstr "詳情"
 
-#: entrak/templates/graph.html:92
+#: entrak/templates/graph.html:93
 msgid "h a, D MMM YYYY, ddd"
 msgstr "YYYY年MMMD日, a h時, dddd"
 
-#: entrak/templates/graph.html:95 entrak/templates/graph.html.py:119
+#: entrak/templates/graph.html:96 entrak/templates/graph.html.py:120
 msgid "D MMM YYYY, ddd"
 msgstr "YYYY年MMMD日, dddd"
 
-#: entrak/templates/graph.html:97
+#: entrak/templates/graph.html:98
 msgid "Night of D MMM YYYY, ddd"
 msgstr "YYYY年MMMD日, 夜間, dddd"
 
-#: entrak/templates/graph.html:99 entrak/templates/graph.html.py:121
+#: entrak/templates/graph.html:100 entrak/templates/graph.html.py:122
 msgid "MMM YYYY"
 msgstr "YYYY年MMM"
 
-#: entrak/templates/graph.html:101 entrak/templates/graph.html.py:123
+#: entrak/templates/graph.html:102 entrak/templates/graph.html.py:124
 msgid "YYYY"
 msgstr "YYYY年"
 
-#: entrak/templates/graph.html:115
+#: entrak/templates/graph.html:116
 msgid "HH:mm D MMM YYYY, ddd"
 msgstr "YYYY年MMMD日, HH:mm, dddd"
 
-#: entrak/templates/graph.html:179
+#: entrak/templates/graph.html:180
 msgid "compare_between_night"
 msgstr "一夜"
 
-#: entrak/templates/graph.html:181
+#: entrak/templates/graph.html:182
 msgid "compare_between_week"
 msgstr "一週"
 
-#: entrak/templates/graph.html:183
+#: entrak/templates/graph.html:184
 msgid "compare_between_month"
 msgstr "一月"
 
-#: entrak/templates/graph.html:185
+#: entrak/templates/graph.html:186
 msgid "compare_between_year"
 msgstr "一年"
 
-#: entrak/templates/graph.html:187
+#: entrak/templates/graph.html:188
 msgid "compare_between_hour"
 msgstr "一小時"
 
-#: entrak/templates/graph.html:374
+#: entrak/templates/graph.html:375
 msgid "Total"
 msgstr "總數"
 
-#: entrak/templates/graph.html:582
+#: entrak/templates/graph.html:376
+msgid "Previous"
+msgstr "以前"
+
+#: entrak/templates/graph.html:377
+msgid "Highest"
+msgstr "最高"
+
+#: entrak/templates/graph.html:378
+msgid "Lowest"
+msgstr "最低"
+
+#: entrak/templates/graph.html:379
+msgid "Custom"
+msgstr "自訂"
+
+#: entrak/templates/graph.html:588
 msgid "THE GRAPH SECTION"
 msgstr "圖表"
 
-#: entrak/templates/graph.html:583
+#: entrak/templates/graph.html:589
 msgid "Check this out!"
 msgstr "要知道現在用電情況，請看看"
 
-#: entrak/templates/graph.html:593
+#: entrak/templates/graph.html:599
 msgid "Unit"
 msgstr "單位"
 
-#: entrak/templates/graph.html:594
+#: entrak/templates/graph.html:600
 msgid "Time"
 msgstr "時間"
 
-#: entrak/templates/graph.html:595
+#: entrak/templates/graph.html:601
 msgid "End-use"
 msgstr "最終用途"
 
-#: entrak/templates/graph.html:595
+#: entrak/templates/graph.html:601
 msgid "Compare"
 msgstr "比較"
 
-#: entrak/templates/graph.html:612
+#: entrak/templates/graph.html:618
 msgid "Compare between End-use types"
 msgstr "跟個別用電組成比較"
 
-#: entrak/templates/graph.html:613
+#: entrak/templates/graph.html:619
 msgid "(Max 5)"
 msgstr "(最多選擇5項)"
 
-#: entrak/templates/graph.html:614 entrak/templates/graph.html.py:624
+#: entrak/templates/graph.html:620 entrak/templates/graph.html.py:630
 msgid "Clear all"
 msgstr "全部清除"
 
-#: entrak/templates/graph.html:623
+#: entrak/templates/graph.html:629
 msgid "Compare between <span id='compare-between'>days</span>"
 msgstr "跟過往數據相比"
 
-#: entrak/templates/graph.html:633
+#: entrak/templates/graph.html:639
 msgid "Previous "
 msgstr "上"
 
-#: entrak/templates/graph.html:645
+#: entrak/templates/graph.html:651
 msgid "Highest "
 msgstr "最高用量的"
 
-#: entrak/templates/graph.html:657
+#: entrak/templates/graph.html:663
 msgid "Lowest "
 msgstr "最低用量的"
 
-#: entrak/templates/graph.html:669
+#: entrak/templates/graph.html:675
 msgid "Custom date selection"
 msgstr "自訂定較日期"
 
-#: entrak/templates/graph.html:686
+#: entrak/templates/graph.html:692
 msgid "Clear Graph"
 msgstr "清空圖表"
 
-#: entrak/templates/page_base.html:107
+#: entrak/templates/page_base.html:110
 msgid "Graph"
 msgstr "圖表"
 
-#: entrak/templates/page_base.html:110
+#: entrak/templates/page_base.html:113
 msgid "Ranking"
 msgstr "用電量排行榜"
 
-#: entrak/templates/page_base.html:113
+#: entrak/templates/page_base.html:116
 msgid "Progress"
 msgstr "進度"
 
-#: entrak/templates/page_base.html:116
+#: entrak/templates/page_base.html:119
 msgid "Reports"
 msgstr "能源使用報告"
 
-#: entrak/templates/page_base.html:119
+#: entrak/templates/page_base.html:122
 msgid "Display"
 msgstr "顯示模式"
 
-#: entrak/templates/page_base.html:128
+#: entrak/templates/page_base.html:131
 msgid "Alert"
 msgstr "提示"
 
-#: entrak/templates/page_base.html:131
+#: entrak/templates/page_base.html:134
 msgid "Logout"
 msgstr "登出"
 
-#: entrak/templates/page_base.html:169
+#: entrak/templates/page_base.html:172
 msgid "You are viewing:"
 msgstr "你正在檢視:"
