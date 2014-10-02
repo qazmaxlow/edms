@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-02 04:07+0000\n"
+"POT-Creation-Date: 2014-10-02 04:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,6 +42,7 @@ msgid "h a, D MMM YYYY, ddd"
 msgstr "YYYY年MMMD日, a h時, dddd"
 
 #: entrak/templates/graph.html:96 entrak/templates/graph.html.py:120
+#: entrak/templates/ranking.html:300
 msgid "D MMM YYYY, ddd"
 msgstr "YYYY年MMMD日, dddd"
 
@@ -50,10 +51,12 @@ msgid "Night of D MMM YYYY, ddd"
 msgstr "YYYY年MMMD日, 夜間, dddd"
 
 #: entrak/templates/graph.html:100 entrak/templates/graph.html.py:122
+#: entrak/templates/ranking.html:303
 msgid "MMM YYYY"
 msgstr "YYYY年MMM"
 
 #: entrak/templates/graph.html:102 entrak/templates/graph.html.py:124
+#: entrak/templates/ranking.html:305
 msgid "YYYY"
 msgstr "YYYY年"
 
@@ -81,7 +84,7 @@ msgstr "一年"
 msgid "compare_between_hour"
 msgstr "一小時"
 
-#: entrak/templates/graph.html:375
+#: entrak/templates/graph.html:375 entrak/templates/ranking.html:488
 msgid "Total"
 msgstr "總數"
 
@@ -109,11 +112,11 @@ msgstr "圖表"
 msgid "Check this out!"
 msgstr "要知道現在用電情況，請看看"
 
-#: entrak/templates/graph.html:599
+#: entrak/templates/graph.html:599 entrak/templates/ranking.html:478
 msgid "Unit"
 msgstr "單位"
 
-#: entrak/templates/graph.html:600
+#: entrak/templates/graph.html:600 entrak/templates/ranking.html:479
 msgid "Time"
 msgstr "時間"
 
@@ -155,7 +158,7 @@ msgstr "最低用量的"
 
 #: entrak/templates/graph.html:675
 msgid "Custom date selection"
-msgstr "自訂定較日期"
+msgstr "自訂比較日期"
 
 #: entrak/templates/graph.html:692
 msgid "Clear Graph"
@@ -192,3 +195,64 @@ msgstr "登出"
 #: entrak/templates/page_base.html:172
 msgid "You are viewing:"
 msgstr "你正在檢視:"
+
+#: entrak/templates/ranking.html:28
+msgid "THE RANKING PAGE"
+msgstr "用電量排行榜"
+
+#: entrak/templates/ranking.html:29
+msgid "Find out where you stand at the"
+msgstr "想知道你的慳電成績， 請看看"
+
+#: entrak/templates/ranking.html:292 entrak/templates/ranking.html.py:297
+msgid "D MMM YYYY, ddd hA"
+msgstr "YYYY年MMMD日, dddd, Ah"
+
+#: entrak/templates/ranking.html:293
+msgid " - hA"
+msgstr " - Ah"
+
+#: entrak/templates/ranking.html:295
+msgid " D MMM YYYY, ddd"
+msgstr "YYYY年MMMD日, dddd"
+
+#: entrak/templates/ranking.html:298
+msgid " - D MMM YYYY, ddd hA"
+msgstr " - YYYY年MMMD日, Ah, dddd"
+
+#: entrak/templates/ranking.html:301
+msgid " - D MMM YYYY, ddd"
+msgstr " - YYYY年MMMD日, dddd"
+
+#: entrak/templates/ranking.html:411
+msgid "D MMM YYYY, dddd"
+msgstr "YYYY年MMMD日, dddd"
+
+#: entrak/templates/ranking.html:486
+#, python-format
+msgid "%% Change"
+msgstr "百份比變化"
+
+#: entrak/templates/ranking.html:487
+msgid "Per person"
+msgstr "人均"
+
+#: entrak/templates/ranking.html:489
+msgid "Sort by"
+msgstr "排序"
+
+#: entrak/templates/ranking.html:493
+msgid "Descending"
+msgstr "降序"
+
+#: entrak/templates/ranking.html:494
+msgid "Ascending"
+msgstr "升序"
+
+#: entrak/templates/ranking.html:495
+msgid "Alphabetical"
+msgstr "字母"
+
+#: entrak/templates/ranking.html:504
+msgid "CUSTOM SELECT"
+msgstr "自訂日期"

@@ -1,5 +1,6 @@
 {% extends "page_base.html" %}
 
+{% load i18n %}
 {% load static %}
 {% load entrak_extras %}
 
@@ -14,6 +15,7 @@
 <script src="{% static 'js/datetimepicker-master/jquery.datetimepicker-customized.js' %}"></script>
 <script src="{% static 'js/mustache.js-master/mustache.js' %}"></script>
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
+<script src="{% static 'js/moment-with-locales.js' %}"></script>
 <script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
 <script src="{% static 'js/entrak-system.js' %}"></script>
 <script src="{% static 'js/entrak-utils.js' %}"></script>
@@ -23,11 +25,13 @@
 {% block system_menu_target_view %}ranking{% endblock %}
 {% block breadcrumb_target_view %}ranking{% endblock %}
 
-{% block page_title %}THE RANKING PAGE{% endblock %}
-{% block page_subtitle %}Find out where you stand at the{% endblock %}
+{% block page_title %}{% trans "THE RANKING PAGE" %}{% endblock %}
+{% block page_subtitle %}{% trans "Find out where you stand at the" %}{% endblock %}
 
 {% block extra_script %}
 {{block.super}}
+
+{% get_current_language as LANGUAGE_CODE %}
 
 <script id="total-rank-template" type="x-tmpl-mustache">
 <div style="top: {% templatetag openvariable %}topPos{% templatetag closevariable %}px;" value="{% templatetag openvariable %}value{% templatetag closevariable %}" class="ranking-item ranking-total-or-person">
@@ -285,20 +289,20 @@ function formatFromToDt(targetDt, rangeType) {
 
 	var resultText = '';
 	if (rangeType === Utils.RANGE_TYPE_HOUR) {
-		resultText = startEndDt.startDt.format('D MMM YYYY, ddd hA');
-		resultText += startEndDt.endDt.format(' - hA');
+		resultText = startEndDt.startDt.format('{% trans "D MMM YYYY, ddd hA" %}');
+		resultText += startEndDt.endDt.format('{% trans " - hA" %}');
 	} else if (rangeType === Utils.RANGE_TYPE_DAY) {
-		resultText = startEndDt.startDt.format('D MMM YYYY, ddd');
+		resultText = startEndDt.startDt.format('{% trans " D MMM YYYY, ddd" %}');
 	} else if (rangeType === Utils.RANGE_TYPE_NIGHT) {
-		resultText = startEndDt.startDt.format('D MMM YYYY, ddd hA');
-		resultText += startEndDt.endDt.format(' - D MMM YYYY, ddd hA');
+		resultText = startEndDt.startDt.format('{% trans "D MMM YYYY, ddd hA" %}');
+		resultText += startEndDt.endDt.format('{% trans " - D MMM YYYY, ddd hA" %}');
 	} else if (rangeType === Utils.RANGE_TYPE_WEEK) {
-		resultText = startEndDt.startDt.format('D MMM YYYY, ddd');
-		resultText += startEndDt.endDt.format(' - D MMM YYYY, ddd');
+		resultText = startEndDt.startDt.format('{% trans "D MMM YYYY, ddd" %}');
+		resultText += startEndDt.endDt.format('{% trans " - D MMM YYYY, ddd" %}');
 	} else if (rangeType === Utils.RANGE_TYPE_MONTH) {
-		resultText = startEndDt.startDt.format('MMM YYYY');
+		resultText = startEndDt.startDt.format('{% trans "MMM YYYY" %}');
 	} else if (rangeType === Utils.RANGE_TYPE_YEAR) {
-		resultText = startEndDt.startDt.format('YYYY');
+		resultText = startEndDt.startDt.format('{% trans "YYYY" %}');
 	}
 
 	return resultText;
@@ -328,8 +332,11 @@ function sortRankingItem(sortType) {
 
 $(function() {
 	setupAjaxForCsrf($.cookie('csrftoken'));
+	ranking.langCode = '{{LANGUAGE_CODE}}';
+	moment.locale(ranking.langCode);
 
 	ranking.entrakSystem = new EntrakSystem();
+	ranking.entrakSystem.langCode = ranking.langCode;
 	ranking.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
 	ranking.entrakSystem.addSourceToSystem('{{sources|jsonifySources}}');
 
@@ -401,7 +408,7 @@ $(function() {
 		return moment(this).format(format);
 	};
 
-	var dtPickerFormat = "D MMM YYYY, dddd";
+	var dtPickerFormat = '{% trans "D MMM YYYY, dddd" %}';
 	$("#current-dt-picker").datetimepicker({
 		format: dtPickerFormat,
 		formatTime: "h:mm a",
@@ -468,24 +475,24 @@ $(function() {
 			<!-- write this way to remove space between inline-blocks -->
 			<!-- http://css-tricks.com/fighting-the-space-between-inline-block-elements/ -->
 			<h3 id="sub-menu-unit">
-				Unit</h3><h3 id="sub-menu-time">
-				Time</h3>
+				{% trans "Unit" %}</h3><h3 id="sub-menu-time">
+				{% trans "Time" %}</h3>
 			<img class="expand-drop-down-panel-btn" src="{% static 'images/expandable_button.png' %}">
 
 			<span id="current-dt"></span>
 		</div>
 
 		<div class="panel-header-right-menu">
-			<h3 ranking-type='percent'>% Change</h3>
-			<h3 ranking-type='per_person'>Per person</h3>
-			<h3 ranking-type='total'>Total</h3>
-			<h3 class='sort-by-btn'><span id="sort-by-text">Sort by</span> &nbsp;&nbsp; &#9662;</h3>
+			<h3 ranking-type='percent'>{% trans "%% Change" %}</h3>
+			<h3 ranking-type='per_person'>{% trans "Per person" %}</h3>
+			<h3 ranking-type='total'>{% trans "Total" %}</h3>
+			<h3 class='sort-by-btn'><span id="sort-by-text">{% trans "Sort by" %}</span> &nbsp;&nbsp; &#9662;</h3>
 			<span style='clear: both;'></span>
 
 			<ul class="sort-menu">
-				<li>Descending</li>
-				<li>Ascending</li>
-				<li>Alphabetical</li>
+				<li>{% trans "Descending" %}</li>
+				<li>{% trans "Ascending" %}</li>
+				<li>{% trans "Alphabetical" %}</li>
 			</ul>
 		</div>
 	</div>
@@ -494,7 +501,7 @@ $(function() {
 		<ul id="unit-choice"></ul>
 		<ul id="time-choice">
 			<div id="select-dt-section">
-				<div id="custom-select-title">CUSTOM SELECT</div>
+				<div id="custom-select-title">{% trans "CUSTOM SELECT" %}</div>
 				<div id="custom-calendar-icon"></div>
 				<input type="text" id="current-dt-picker">
 			</div>

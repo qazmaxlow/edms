@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-02 04:07+0000\n"
+"POT-Creation-Date: 2014-10-02 04:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,6 +42,7 @@ msgid "h a, D MMM YYYY, ddd"
 msgstr ""
 
 #: entrak/templates/graph.html:96 entrak/templates/graph.html.py:120
+#: entrak/templates/ranking.html:300
 msgid "D MMM YYYY, ddd"
 msgstr ""
 
@@ -50,10 +51,12 @@ msgid "Night of D MMM YYYY, ddd"
 msgstr ""
 
 #: entrak/templates/graph.html:100 entrak/templates/graph.html.py:122
+#: entrak/templates/ranking.html:303
 msgid "MMM YYYY"
 msgstr ""
 
 #: entrak/templates/graph.html:102 entrak/templates/graph.html.py:124
+#: entrak/templates/ranking.html:305
 msgid "YYYY"
 msgstr ""
 
@@ -81,7 +84,7 @@ msgstr "year"
 msgid "compare_between_hour"
 msgstr "hour"
 
-#: entrak/templates/graph.html:375
+#: entrak/templates/graph.html:375 entrak/templates/ranking.html:488
 msgid "Total"
 msgstr ""
 
@@ -109,11 +112,11 @@ msgstr ""
 msgid "Check this out!"
 msgstr ""
 
-#: entrak/templates/graph.html:599
+#: entrak/templates/graph.html:599 entrak/templates/ranking.html:478
 msgid "Unit"
 msgstr ""
 
-#: entrak/templates/graph.html:600
+#: entrak/templates/graph.html:600 entrak/templates/ranking.html:479
 msgid "Time"
 msgstr ""
 
@@ -191,4 +194,65 @@ msgstr ""
 
 #: entrak/templates/page_base.html:172
 msgid "You are viewing:"
+msgstr ""
+
+#: entrak/templates/ranking.html:28
+msgid "THE RANKING PAGE"
+msgstr ""
+
+#: entrak/templates/ranking.html:29
+msgid "Find out where you stand at the"
+msgstr ""
+
+#: entrak/templates/ranking.html:292 entrak/templates/ranking.html.py:297
+msgid "D MMM YYYY, ddd hA"
+msgstr ""
+
+#: entrak/templates/ranking.html:293
+msgid " - hA"
+msgstr ""
+
+#: entrak/templates/ranking.html:295
+msgid " D MMM YYYY, ddd"
+msgstr ""
+
+#: entrak/templates/ranking.html:298
+msgid " - D MMM YYYY, ddd hA"
+msgstr ""
+
+#: entrak/templates/ranking.html:301
+msgid " - D MMM YYYY, ddd"
+msgstr ""
+
+#: entrak/templates/ranking.html:411
+msgid "D MMM YYYY, dddd"
+msgstr ""
+
+#: entrak/templates/ranking.html:486
+#, python-format
+msgid "%% Change"
+msgstr ""
+
+#: entrak/templates/ranking.html:487
+msgid "Per person"
+msgstr ""
+
+#: entrak/templates/ranking.html:489
+msgid "Sort by"
+msgstr ""
+
+#: entrak/templates/ranking.html:493
+msgid "Descending"
+msgstr ""
+
+#: entrak/templates/ranking.html:494
+msgid "Ascending"
+msgstr ""
+
+#: entrak/templates/ranking.html:495
+msgid "Alphabetical"
+msgstr ""
+
+#: entrak/templates/ranking.html:504
+msgid "CUSTOM SELECT"
 msgstr ""
