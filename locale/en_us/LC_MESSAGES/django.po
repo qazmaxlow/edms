@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-02 04:45+0000\n"
+"POT-Creation-Date: 2014-10-02 05:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,22 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: entrak/progress_views.py:20
+msgid "Hong Kong Airport"
+msgstr ""
+
+#: entrak/progress_views.py:20
+msgid "Times Square"
+msgstr ""
+
+#: entrak/progress_views.py:23
+msgid "Singapore Airport"
+msgstr ""
+
+#: entrak/progress_views.py:23
+msgid "Marina Bay Sands"
+msgstr ""
 
 #: entrak/settings_common.py:96
 msgid "English"
@@ -194,6 +210,56 @@ msgstr ""
 
 #: entrak/templates/page_base.html:172
 msgid "You are viewing:"
+msgstr ""
+
+#: entrak/templates/progress.html:41
+msgid "THE PROGRESS PAGE"
+msgstr ""
+
+#: entrak/templates/progress.html:42
+msgid "Find out how you're doing here at the"
+msgstr ""
+
+#: entrak/templates/progress.html:64
+msgid "Keep<br>Saving!"
+msgstr ""
+
+#: entrak/templates/progress.html:70
+msgid "Reduction<br>achieved"
+msgstr ""
+
+#: entrak/templates/progress.html:74
+msgid "Next target"
+msgstr ""
+
+#: entrak/templates/progress.html:75
+#, python-format
+msgid ""
+"%(target_level)s<span class=\"saving-percent-symbol\">%%</span> REDUCTION"
+msgstr ""
+
+#: entrak/templates/progress.html:88
+msgid "Cumulative savings"
+msgstr ""
+
+#: entrak/templates/progress.html:93
+msgid " tons of CO<sub>2</sub>"
+msgstr ""
+
+#: entrak/templates/progress.html:98
+msgid " elephants"
+msgstr ""
+
+#: entrak/templates/progress.html:109
+msgid " taxi trips"
+msgstr ""
+
+#: entrak/templates/progress.html:110
+msgid "from "
+msgstr ""
+
+#: entrak/templates/progress.html:110
+msgid " to "
 msgstr ""
 
 #: entrak/templates/ranking.html:28

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-02 04:45+0000\n"
+"POT-Creation-Date: 2014-10-02 05:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,22 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: entrak/progress_views.py:20
+msgid "Hong Kong Airport"
+msgstr "香港機場"
+
+#: entrak/progress_views.py:20
+msgid "Times Square"
+msgstr "銅鑼灣時代廣場"
+
+#: entrak/progress_views.py:23
+msgid "Singapore Airport"
+msgstr "新加坡機場"
+
+#: entrak/progress_views.py:23
+msgid "Marina Bay Sands"
+msgstr "濱海灣金沙"
 
 #: entrak/settings_common.py:96
 msgid "English"
@@ -196,13 +212,63 @@ msgstr "登出"
 msgid "You are viewing:"
 msgstr "你正在檢視:"
 
+#: entrak/templates/progress.html:41
+msgid "THE PROGRESS PAGE"
+msgstr "我的進度"
+
+#: entrak/templates/progress.html:42
+msgid "Find out how you're doing here at the"
+msgstr "想知道你的累積表現如何，請看看"
+
+#: entrak/templates/progress.html:64
+msgid "Keep<br>Saving!"
+msgstr "繼續努力"
+
+#: entrak/templates/progress.html:70
+msgid "Reduction<br>achieved"
+msgstr "已逹減省"
+
+#: entrak/templates/progress.html:74
+msgid "Next target"
+msgstr "下個目標"
+
+#: entrak/templates/progress.html:75
+#, python-format
+msgid ""
+"%(target_level)s<span class=\"saving-percent-symbol\">%%</span> REDUCTION"
+msgstr "節省 %(target_level)s<span class=\"saving-percent-symbol\">%%</span>"
+
+#: entrak/templates/progress.html:88
+msgid "Cumulative savings"
+msgstr "累積能源節省 (相等於)"
+
+#: entrak/templates/progress.html:93
+msgid " tons of CO<sub>2</sub>"
+msgstr "噸二氧化碳"
+
+#: entrak/templates/progress.html:98
+msgid " elephants"
+msgstr "頭大象"
+
+#: entrak/templates/progress.html:109
+msgid " taxi trips"
+msgstr "的士車資"
+
+#: entrak/templates/progress.html:110
+msgid "from "
+msgstr "從"
+
+#: entrak/templates/progress.html:110
+msgid " to "
+msgstr "到"
+
 #: entrak/templates/ranking.html:28
 msgid "THE RANKING PAGE"
 msgstr "用電量排行榜"
 
 #: entrak/templates/ranking.html:29
 msgid "Find out where you stand at the"
-msgstr "想知道你的慳電成績， 請看看"
+msgstr "想知道你的慳電成績，請看看"
 
 #: entrak/templates/ranking.html:292 entrak/templates/ranking.html.py:297
 msgid "D MMM YYYY, ddd hA"
