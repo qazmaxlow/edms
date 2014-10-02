@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
+{% load i18n %}
 {% load static %}
+{% load entrak_extras %}
 
 {% block extra_head %}
 {{block.super}}
@@ -14,9 +16,10 @@
 {% endblock %}
 
 {% block content %}
+{% get_current_language as LANGUAGE_CODE %}
 <div class="system-info-container">
 	{% block system_info_container %}
-	<div class="system-title">{{system.name}}</div>
+	<div class="system-title">{{system|get_system_full_name:LANGUAGE_CODE}}</div>
 	<div class="system-logo">
 		<div class="logo-circle-bound" style="background-image: url('{{system.logo.url}}');"></div>
 		<img src="{% static 'images/user-logo-bg.png' %}">
@@ -28,25 +31,25 @@
 	<img src="{% static 'images/login/bg.png' %}">
 </div>
 
-<div class="desc-header">Welcome to our energy monitoring and awareness system!</div>
+<div class="desc-header">{% trans "Welcome to En-trak,<br>your interactive energy monitoring system!" %}</div>
 <div class="desc-content">
 	This system tracks our energy usage in real-time, helping us to better<br>
 	control and reduce our costs and environmental impact, as well as to<br>
 	increase awareness of energy saving in our organization.
 </div>
 <div class="login-panel">
-	<div>To use the En-trak monitor platform, please sign in</div>
+	<div>{% trans "To use the En-trak monitor platform, please sign in" %}</div>
 	<hr>
 	<form method="POST">{% csrf_token %}
 		<div>
 			<img src="{% static 'images/login/username-icon.png' %}">
-			<input type="text" name="username" placeholder="Username">
+			<input type="text" name="username" placeholder='{% trans "Username" %}'>
 		</div>
 		<div>
 			<img src="{% static 'images/login/password-icon.png' %}">
-			<input type="password" name="password" placeholder="Password">
+			<input type="password" name="password" placeholder='{% trans "Password" %}'>
 		</div>
-		<input type="submit" value="login">
+		<input type="submit" value='{% trans "login" %}'>
 	</form>
 	{% if warning_msg %}
 	<div class="warning-msg">{{warning_msg}}</div>

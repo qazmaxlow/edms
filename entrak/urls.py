@@ -19,7 +19,8 @@ urlpatterns = patterns('',
 	url(r'^add_multi_baseline/$', 'entrak.admin_customize_views.add_multi_baseline_view', name='add_multi_baseline'),
 	url(r'^recap_data/$', 'entrak.admin_customize_views.recap_data_view', name='recap_data'),
 	url(r'^printer/', include('printer.urls')),
-	url(r'^login/$', 'entrak.auth_views.centeral_login_view', name='centeral_login'),
+	url(r'^en/login/$', 'entrak.auth_views.centeral_login_view', name='centeral_login'),
+	url(r'^zh-tw/login/$', 'entrak.auth_views.centeral_login_view', name='centeral_login'),
 )
 
 urlpatterns += i18n_patterns('',
