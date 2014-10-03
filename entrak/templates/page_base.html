@@ -81,6 +81,11 @@ $(function() {
 	});
 
 	$("#{% block selected-menu-link-id %}menu-link-home{% endblock %}").addClass('menu-links-selected');
+
+	$(".change-lang-link").click(function(event) {
+		event.preventDefault();
+		$('.change-lang-form').submit();
+	});
 });
 </script>
 
@@ -186,14 +191,23 @@ $(function() {
 </div>
 
 {% block footer %}
+{% get_current_language as LANGUAGE_CODE %}
 <footer class="site-footer">
 	<p style="clear: both;"></p>
 	<p id="copyright">Copyright © En-trak Pte Ltd 2014. All rights reserved.</p>
 	<a href="#"><img id="entrak-logo" src="{% static 'images/powered-by-logo.png' %}"></a>
 	<p class="footer-main"><a class="footer-link" href="{% url 'faq' system_code=systems.0.code %}">FAQ </a>
 	<a class="footer-link" href="{% url 'general_settings' system_code=systems.0.code %}"> |  Settings</a>
-	<a class="footer-link" href="{% url 'disclaimer' system_code=systems.0.code %}"> |  Legal </a></p>				
+	<a class="footer-link" href="{% url 'disclaimer' system_code=systems.0.code %}"> |  Legal </a>
+	<a class="footer-link change-lang-link" href="#"> | {% ifequal LANGUAGE_CODE 'zh-tw' %}ENG{% else %}繁體中文{% endifequal %} </a></p>
 	<p style="clear: both;"></p>
+
+	<div style="display:none;">
+		<form class="change-lang-form" action="{% url 'set_language' %}" method="post">
+			{% csrf_token %}
+			<input name="language" type="hidden" value="{% ifequal LANGUAGE_CODE "zh-tw" %}en-us{% else %}zh-tw{% endifequal %}" />
+		</form>
+	</div>
 </footer>
 {% endblock %}
 

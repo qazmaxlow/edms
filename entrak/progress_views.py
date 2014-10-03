@@ -5,6 +5,8 @@ import json
 from django.shortcuts import render_to_response
 from django.db.models import Q
 from django.utils.translation import ugettext as _
+from django.core.context_processors import csrf
+from django.views.decorators.csrf import ensure_csrf_cookie
 from settings import STATIC_URL
 from system.models import System
 from unit.models import UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
@@ -168,6 +170,7 @@ def __calculate_progress_data(systems):
 	return result
 
 @permission_required()
+@ensure_csrf_cookie
 def progress_view(request, system_code=None):
 	systems_info = System.get_systems_info(system_code, request.user.system.code)
 	result = __calculate_progress_data(systems_info['systems'])
@@ -184,6 +187,7 @@ def progress_view(request, system_code=None):
 		'from': taxi_trip_info['from'],
 		'to': taxi_trip_info['to']
 	}
+	m.update(csrf(request))
 
 	return render_to_response('progress.html', m)
 
