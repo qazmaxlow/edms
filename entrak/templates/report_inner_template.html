@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load static %}
 
 <script id="key-statistics-row-template" type="x-tmpl-mustache">
@@ -22,7 +23,11 @@
 	<div class="sub-calendar-title">{% templatetag openvariable %}name{% templatetag closevariable %}</div>
 	<div class="calendar-left-info">
 		<div class="calendar-average-cell">
+			{% ifequal LANGUAGE_CODE 'zh-tw' %}
+			<div>{% templatetag openvariable %}typeName{% templatetag closevariable %}<br>電力消耗<br>平均值:</div>
+			{% else %}
 			<div>Average<br>{% templatetag openvariable %}typeName{% templatetag closevariable %}<br>Energy Use:</div>
+			{% endifequal %}
 			<div>
 				<div class="average-usage">{% templatetag openvariable %}averageUsage{% templatetag closevariable %}</div>
 				<div class="average-usage-unit">kWh</div>
@@ -55,7 +60,7 @@
 		</div>
 	</div>
 	<div class="calendar-right-info">
-		<div class="energy-split-text">Energy Split by:</div>
+		<div class="energy-split-text">{% trans "Energy Split by:" %}</div>
 		<div class="energy-split-pie"></div>
 		<div class="energy-split-legend">
 			<div>
@@ -66,9 +71,9 @@
 			</div>
 		</div>
 		<hr>
-		<div class="sub-calendar-info-low-hight-title">Lowest {% templatetag openvariable %}typeName{% templatetag closevariable %} Energy Use</div>
+		<div class="sub-calendar-info-low-hight-title">{% ifequal LANGUAGE_CODE 'zh-tw' %}{% templatetag openvariable %}typeName{% templatetag closevariable %}最低用電量{% else %}Lowest {% templatetag openvariable %}typeName{% templatetag closevariable %} Energy Use{% endifequal %}</div>
 		<div class="sub-calendar-info-lowest">{% templatetag openvariable %}lowestText{% templatetag closevariable %}</div>
-		<div class="sub-calendar-info-low-hight-title">Highest {% templatetag openvariable %}typeName{% templatetag closevariable %} Energy Use</div>
+		<div class="sub-calendar-info-low-hight-title">{% ifequal LANGUAGE_CODE 'zh-tw' %}{% templatetag openvariable %}typeName{% templatetag closevariable %}最高用電量{% else %}Highest {% templatetag openvariable %}typeName{% templatetag closevariable %} Energy Use{% endifequal %}</div>
 		<div class="sub-calendar-info-lowest">{% templatetag openvariable %}highestText{% templatetag closevariable %}</div>
 	</div>
 </div>
@@ -80,7 +85,7 @@
 	<div class="line-chart-title">{% templatetag openvariable %}lineChartTitle{% templatetag closevariable %}</div>
 	<div class="compare-past-line-chart"></div>
 	<span class="y-axis-title">kWh</span>
-	<div class="x-axis-title">Day of the {% templatetag openvariable %}dayOfThe{% templatetag closevariable %}</div>
+	<div class="x-axis-title">{% ifequal LANGUAGE_CODE 'zh-tw' %}第幾天{% else %}Day of the {% templatetag openvariable %}dayOfThe{% templatetag closevariable %}{% endifequal %}</div>
 </div>
 </script>
 

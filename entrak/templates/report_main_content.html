@@ -1,11 +1,12 @@
+{% load i18n %}
 {% load static %}
 
 <div class="report-component">
-	<div class="report-component-header">WHAT ARE OUR KEY STATISTICS FOR THIS <span class="report-type-name"></span>?</div>
+	<div class="report-component-header">{% trans 'WHAT ARE OUR KEY STATISTICS FOR THIS <span class="report-type-name"></span>?' %}</div>
 	<hr class="report-component-separator">
 	<div class="basic-info-container">
 		<div id="current-usage-col" class="basic-info-col">
-			<div>HOW MUCH ENERGY<br>DID WE USE?</div>
+			<div>{% trans "HOW MUCH ENERGY<br>DID WE USE?" %}</div>
 			<hr class="current-usage-separator-dark-grey">
 			<hr class="current-usage-separator-light-grey">
 			<div>
@@ -13,7 +14,7 @@
 				<div class="basic-info-text-container">
 					<span id="current-energy-usage"></span><span class="basic-info-col-unit"> kWh</span>
 					<br>
-					<span class="basic-info-col-subtext">of electricty</span>
+					<span class="basic-info-col-subtext">{% trans "of electricty" %}</span>
 				</div>
 			</div>
 			<hr class="current-usage-separator-dark-grey">
@@ -21,9 +22,9 @@
 			<div>
 				<img src="{% static 'images/report/factory-co2.png' %}">
 				<div class="basic-info-text-container">
-					<span id="current-co2-usage"></span><span class="basic-info-col-unit"> CO<sub>2</sub></span>
+					<span id="current-co2-usage"></span>{% blocktrans %}<span class="basic-info-col-unit"> CO<sub>2</sub></span>
 					<br>
-					<span class="basic-info-col-subtext">emitted</span>
+					<span class="basic-info-col-subtext">emitted</span>{% endblocktrans %}
 				</div>
 			</div>
 			<hr class="current-usage-separator-dark-grey">
@@ -33,20 +34,19 @@
 				<div class="basic-info-text-container">
 					<span id="current-money-usage"></span>
 					<br>
-					<span class="basic-info-col-subtext">in energy costs</span>
+					<span class="basic-info-col-subtext">{% trans "in energy costs" %}</span>
 				</div>
 			</div>
 		</div>
 
 		<div id="save-usage-col" class="basic-info-col">
-			<div>HOW MUCH ENERGY<br>DID WE SAVE?</div>
+			<div>{% trans "HOW MUCH ENERGY<br>DID WE SAVE?" %}</div>
 			<hr class="current-usage-separator-dark-grey">
 			<hr class="current-usage-separator-light-grey">
 			<div>
 				<img src="{% static 'images/report/lightning-energy.png' %}">
 				<div class="basic-info-text-container">
-					<span id="save-energy-usage"></span><br>
-					<span id="save-energy-subtext" class="basic-info-col-subtext"></span>
+					<span id="save-energy-usage"></span>
 				</div>
 			</div>
 			<hr class="current-usage-separator-dark-grey">
@@ -54,8 +54,7 @@
 			<div>
 				<img src="{% static 'images/report/factory-co2.png' %}">
 				<div class="basic-info-text-container">
-					<span id="save-co2-usage"></span><br>
-					<span id="save-co2-subtext" class="basic-info-col-subtext"></span>
+					<span id="save-co2-usage"></span>
 				</div>
 			</div>
 			<hr class="current-usage-separator-dark-grey">
@@ -63,14 +62,13 @@
 			<div>
 				<img src="{% static 'images/report/piggy.png' %}">
 				<div class="basic-info-text-container">
-					<span id="save-money-usage"></span><br>
-					<span id="save-money-subtext" class="basic-info-col-subtext"></span>
+					<span id="save-money-usage"></span>
 				</div>
 			</div>
 		</div>
 
 		<div id="impact-col" class="basic-info-col">
-			<div>HOW DID OUR<br>CARBON FOOTPRINT CHANGE?</div>
+			<div>{% trans "HOW DID OUR<br>CARBON FOOTPRINT CHANGE?" %}</div>
 			<hr class="current-usage-separator-dark-grey">
 			<hr class="current-usage-separator-light-grey">
 			<div>
@@ -85,8 +83,13 @@
 			<div>
 				<img src="{% static 'images/report/trees.png' %}">
 				<div class="basic-info-text-container">
+					{% ifequal LANGUAGE_CODE 'zh-tw' %}
+					<span id="forest-impact-subtext" class="basic-info-col-subtext"></span><br>
+					<span id="forest-impact"></span>
+					{% else %}
 					<span id="forest-impact"></span><br>
 					<span id="forest-impact-subtext" class="basic-info-col-subtext"></span>
+					{% endifequal %}
 				</div>
 			</div>
 			<hr class="current-usage-separator-dark-grey">
@@ -102,22 +105,22 @@
 	</div>
 	{% block hide_detail_bar_1 %}
 	<div class="report-component-footer">
-		<div class="hide-details-btn btn-down">HIDE DETAILS</div>
+		<div class="hide-details-btn btn-down">{% trans "HIDE DETAILS" %}</div>
 	</div>
 	{% endblock %}
 
 	<div class="detail-container">
 		<div class="detail-title">
 			<span>
-				Usage Type</span><span>
-				Total Energy Consumed (kWh)</span><span>
-				Total CO<sub>2</sub> Emissions (kg)</span><span>
-				Total Money Spent ($)</span>
+				{% trans "Usage Type" %}</span><span>
+				{% trans "Total Energy Consumed (kWh)" %}</span><span>
+				{% trans "Total CO<sub>2</sub> Emissions (kg)" %}</span><span>
+				{% trans "Total Money Spent ($)" %}</span>
 		</div>
 		<hr class="detail-container-separator-dark-grey">
 		<hr class="detail-container-separator-light-grey">
 		<div id="key-statistic-sub-data"></div>
-		<div class="detail-split-title">HOW DOES THAT SPLIT BY PERCENTAGE?</div>
+		<div class="detail-split-title">{% trans "HOW DOES THAT SPLIT BY PERCENTAGE?" %}</div>
 		<hr class="detail-container-separator-dark-grey">
 		<hr class="detail-container-separator-light-grey">
 		<div class="key-statistics-percentage">
@@ -134,9 +137,10 @@
 </div>
 
 <div id="compare-past" class="report-component">
-	<div class="report-component-header">HOW MUCH MORE / LESS DID WE USE COMPARED TO LAST <span class="report-type-name"></span>?</div>
+	<div class="report-component-header">{% trans 'HOW MUCH MORE / LESS DID WE USE COMPARED TO LAST <span class="report-type-name"></span>?' %}</div>
 	<hr class="report-component-separator">
 	<div class="compare-past-basic-info">
+		{% blocktrans %}
 		<div class="compare-past-desc">Your energy consumption this<br><span class="report-type-name-lower"></span> was 
 			<span>
 				<span class="compare-past-percent"></span>
@@ -145,8 +149,9 @@
 			</span> 
 			than<br> it was last <span class="report-type-name-lower"></span>. <span class="footnote-sybmol">*</span>
 		</div>
+		{% endblocktrans %}
 		<div class="compare-past-chart-info">
-			<div class="compare-past-chart-title">Total energy consumption for the last 6 <span class="report-type-name-lower-plural"></span></div>
+			<div class="compare-past-chart-title">{% trans 'Total energy consumption for the last 6 <span class="report-type-name-lower-plural"></span>' %}</div>
 			<hr>
 			<div class="compare-past-chart-subtitle">(kWh)</div>
 			<hr>
@@ -190,19 +195,19 @@
 	</div>
 	{% block hide_detail_bar_2 %}
 	<div class="report-component-footer">
-		<div class="hide-details-btn btn-down">HIDE DETAILS</div>
+		<div class="hide-details-btn btn-down">{% trans "HIDE DETAILS" %}</div>
 	</div>
 	{% endblock %}
 
 	<div class="detail-container">
-		<div class="detail-split-title">WHEN DID WE ACHIEVE OUR SAVINGS?</div>
+		<div class="detail-split-title">{% trans "WHEN DID WE ACHIEVE OUR SAVINGS?" %}</div>
 		<hr>
 		<div class="line-chart-title-container">
-			<span class="line-chart-title">Total consumption by days</span>
+			<span class="line-chart-title">{% trans "Total consumption by days" %}</span>
 		</div>
 		<div class="compare-past-line-chart"></div>
 		<span class="y-axis-title">kWh</span>
-		<div class="x-axis-title">Day of the <span class="report-type-name-lower"></span></div>
+		<div class="x-axis-title">{% trans 'Day of the <span class="report-type-name-lower"></span>' %}</div>
 		<hr>
 		<div class="compare-past-sub-info-container"></div>
 		<div style="clear: both;"></div>
@@ -210,12 +215,12 @@
 </div>
 
 <div id="weekday-info" class="report-component calendar-component">
-	<div class="report-component-header">HOW MUCH ENERGY DID WE USE ON <span>WEEKDAYS?</span></div>
+	<div class="report-component-header">{% trans "HOW MUCH ENERGY DID WE USE ON <span>WEEKDAYS?</span>" %}</div>
 	<hr class="report-component-separator">
 	<div>
 		<div class="calendar-left-info">
 			<div class="calendar-average-cell">
-				<div>Average<br>Weekday<br>Energy Use:</div>
+				<div>{% trans "Average<br>Weekday<br>Energy Use:" %}</div>
 				<div>
 					<div class="average-usage"></div>
 					<div class="average-usage-unit">kWh</div>
@@ -251,23 +256,23 @@
 			<div class="calendar-title"></div>
 			<hr>
 			<div class='calendar-weekday-header'>
-				<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
+				{% trans "<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>" %}
 			</div>
 			<div class="calendar-day-container"></div>
 			<div></div>
 			<div class="calendar-legend-container">
 				<div class="legend-color-block legend-color-block-better"></div>
-				<div class="legend-label">Better than<br>average weekday</div>
+				<div class="legend-label">{% trans "Better than<br>average weekday" %}</div>
 				<div class="legend-color-block legend-color-block-worse"></div>
-				<div class="legend-label">Worse than<br>average weekday</div>
+				<div class="legend-label">{% trans "Worse than<br>average weekday" %}</div>
 				<div class="legend-color-block legend-color-block-average"></div>
-				<div class="legend-label">Average weekday</div>
+				<div class="legend-label">{% trans "Average weekday" %}</div>
 			</div>
 		</div>
 		<div class="calendar-vertical-info">
 			<div class="calendar-title"></div>
 			<hr>
-			<div class="calendar-info-subtitle">Lowest Weekend Energy Use:</div>
+			<div class="calendar-info-subtitle">{% trans "Lowest Weekend Energy Use:" %}</div>
 			<div>
 				<div class="usage-info-lowest-val-container">
 					<span class="lowest-usage-val"></span><span class="usage-info-unit"> kWh</span>
@@ -275,7 +280,7 @@
 				<div class="lowest-usage-date"></div>
 			</div>
 			<hr>
-			<div class="calendar-info-subtitle">Highest Weekend Energy Use:</div>
+			<div class="calendar-info-subtitle">{% trans "Highest Weekend Energy Use:" %}</div>
 			<div>
 				<div class="usage-info-highest-val-container">
 					<span class="highest-usage-val"></span><span class="usage-info-unit"> kWh</span>
@@ -284,14 +289,14 @@
 			</div>
 			<hr>
 			<div>
-				<div class="energy-split-by-text">Energy Split by:</div>
+				<div class="energy-split-by-text">{% trans "Energy Split by:" %}</div>
 				<div class="energy-split-pie"></div>
 				<div class="energy-split-by-info">
 					<div>
-						<span class="first-split-text">Weekdays: </span><span class="first-split-val"></span>
+						<span class="first-split-text">{% trans "Weekdays: " %}</span><span class="first-split-val"></span>
 					</div>
 					<div>
-						<span class="second-split-text">Weekends: </span><span class="second-split-val"></span>
+						<span class="second-split-text">{% trans "Weekends: " %}</span><span class="second-split-val"></span>
 					</div>
 				</div>
 			</div>
@@ -300,14 +305,14 @@
 	<hr class="bottom-info-separator">
 	<div class="calendar-bottom-info">
 		<div>
-			<div>Lowest Weekday Energy Use:</div>
+			<div>{% trans "Lowest Weekday Energy Use:" %}</div>
 			<div class="usage-info-lowest-val-container">
 				<span class="lowest-usage-val"></span><span> kWh</span>
 			</div>
 			<div class="lowest-usage-date"></div>
 		</div>
 		<div>
-			<div>Highest Weekday Energy Use:</div>
+			<div>{% trans "Highest Weekday Energy Use:" %}</div>
 			<div class="usage-info-highest-val-container">
 				<span class="highest-usage-val"></span><span> kWh</span>
 			</div>
@@ -316,21 +321,21 @@
 		<div>
 			<div class="energy-split-pie"></div>
 			<div class="energy-split-info">
-				<div>Energy Split by:</div>
+				<div>{% trans "Energy Split by:" %}</div>
 				<div>
-					<span>Weekdays: </span><span class="first-split-val"></span>
+					<span>{% trans "Weekdays: " %}</span><span class="first-split-val"></span>
 				</div>
 				<div>
-					<span>Weekends: </span><span class="second-split-val"></span>
+					<span>{% trans "Weekends: " %}</span><span class="second-split-val"></span>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="not-available-footnote">* Data not available or incomplete for this period</div>
-	<div class="calendar-footnote">** The first month you started using En-trak</div>
+	<div class="calendar-footnote">{% trans "** The first month you started using En-trak" %}</div>
 	{% block hide_detail_bar_3 %}
 	<div class="report-component-footer">
-		<div class="hide-details-btn btn-down">HIDE DETAILS</div>
+		<div class="hide-details-btn btn-down">{% trans "HIDE DETAILS" %}</div>
 	</div>
 	{% endblock %}
 
@@ -339,12 +344,12 @@
 </div>
 
 <div id="weekend-info" class="report-component calendar-component">
-	<div class="report-component-header">HOW MUCH ENERGY DID WE USE ON <span>WEEKENDS AND HOLIDAYS?</span></div>
+	<div class="report-component-header">{% trans "HOW MUCH ENERGY DID WE USE ON <span>WEEKENDS AND HOLIDAYS?</span>" %}</div>
 	<hr class="report-component-separator">
 	<div>
 		<div class="calendar-left-info">
 			<div class="calendar-average-cell">
-				<div>Average<br>Weekend<br>Energy Use:</div>
+				<div>{% trans "Average<br>Weekend<br>Energy Use:" %}</div>
 				<div>
 					<div class="average-usage"></div>
 					<div class="average-usage-unit">kWh</div>
@@ -380,23 +385,23 @@
 			<div class="calendar-title"></div>
 			<hr>
 			<div class='calendar-weekday-header'>
-				<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
+				{% trans "<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>" %}
 			</div>
 			<div class="calendar-day-container"></div>
 			<div></div>
 			<div class="calendar-legend-container">
 				<div class="legend-color-block legend-color-block-better"></div>
-				<div class="legend-label">Better than<br>average weekend</div>
+				<div class="legend-label">{% trans "Better than<br>average weekend" %}</div>
 				<div class="legend-color-block legend-color-block-worse"></div>
-				<div class="legend-label">Worse than<br>average weekend</div>
+				<div class="legend-label">{% trans "Worse than<br>average weekend" %}</div>
 				<div class="legend-color-block legend-color-block-average"></div>
-				<div class="legend-label">Average weekend</div>
+				<div class="legend-label">{% trans "Average weekend" %}</div>
 			</div>
 		</div>
 		<div class="calendar-vertical-info">
 			<div class="calendar-title"></div>
 			<hr>
-			<div class="calendar-info-subtitle">Lowest Weekend Energy Use:</div>
+			<div class="calendar-info-subtitle">{% trans "Lowest Weekend Energy Use:" %}</div>
 			<div>
 				<div class="usage-info-lowest-val-container">
 					<span class="lowest-usage-val"></span><span class="usage-info-unit"> kWh</span>
@@ -404,7 +409,7 @@
 				<div class="lowest-usage-date"></div>
 			</div>
 			<hr>
-			<div class="calendar-info-subtitle">Highest Weekend Energy Use:</div>
+			<div class="calendar-info-subtitle">{% trans "Highest Weekend Energy Use:" %}</div>
 			<div>
 				<div class="usage-info-highest-val-container">
 					<span class="highest-usage-val"></span><span class="usage-info-unit"> kWh</span>
@@ -413,14 +418,14 @@
 			</div>
 			<hr>
 			<div>
-				<div class="energy-split-by-text">Energy Split by:</div>
+				<div class="energy-split-by-text">{% trans "Energy Split by:" %}</div>
 				<div class="energy-split-pie"></div>
 				<div class="energy-split-by-info">
 					<div>
-						<span class="first-split-text">Weekdays: </span><span class="first-split-val"></span>
+						<span class="first-split-text">{% trans "Weekdays: " %}</span><span class="first-split-val"></span>
 					</div>
 					<div>
-						<span class="second-split-text">Weekends: </span><span class="second-split-val"></span>
+						<span class="second-split-text">{% trans "Weekends: " %}</span><span class="second-split-val"></span>
 					</div>
 				</div>
 			</div>
@@ -429,14 +434,14 @@
 	<hr class="bottom-info-separator">
 	<div class="calendar-bottom-info">
 		<div>
-			<div>Lowest Weekend Energy Use:</div>
+			<div>{% trans "Lowest Weekend Energy Use:" %}</div>
 			<div class="usage-info-lowest-val-container">
 				<span class="lowest-usage-val"></span><span> kWh</span>
 			</div>
 			<div class="lowest-usage-date"></div>
 		</div>
 		<div>
-			<div>Highest Weekend Energy Use:</div>
+			<div>{% trans "Highest Weekend Energy Use:" %}</div>
 			<div class="usage-info-highest-val-container">
 				<span class="highest-usage-val"></span><span> kWh</span>
 			</div>
@@ -445,21 +450,21 @@
 		<div>
 			<div class="energy-split-pie"></div>
 			<div class="energy-split-info">
-				<div>Energy Split by:</div>
+				<div>{% trans "Energy Split by:" %}</div>
 				<div>
-					<span>Weekdays: </span><span class="first-split-val"></span>
+					<span>{% trans "Weekdays: " %}</span><span class="first-split-val"></span>
 				</div>
 				<div>
-					<span>Weekends: </span><span class="second-split-val"></span>
+					<span>{% trans "Weekends: " %}</span><span class="second-split-val"></span>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="not-available-footnote">* Data not available or incomplete for this period</div>
-	<div class="calendar-footnote">** The first month you started using En-trak</div>
+	<div class="calendar-footnote">{% trans "** The first month you started using En-trak" %}</div>
 	{% block hide_detail_bar_4 %}
 	<div class="report-component-footer">
-		<div class="hide-details-btn btn-down">HIDE DETAILS</div>
+		<div class="hide-details-btn btn-down">{% trans "HIDE DETAILS" %}</div>
 	</div>
 	{% endblock %}
 
@@ -468,12 +473,12 @@
 </div>
 
 <div id="overnight-info" class="report-component calendar-component">
-	<div class="report-component-header">HOW MUCH ENERGY DID WE USE <span>OVERNIGHT***?</span></div>
+	<div class="report-component-header">{% trans "HOW MUCH ENERGY DID WE USE <span>OVERNIGHT***?</span>" %}</div>
 	<hr class="report-component-separator">
 	<div>
 		<div class="calendar-left-info">
 			<div class="calendar-average-cell">
-				<div>Average<br>Overnight<br>Energy Use:</div>
+				<div>{% trans "Average<br>Overnight<br>Energy Use:" %}</div>
 				<div>
 					<div class="average-usage"></div>
 					<div class="average-usage-unit">kWh</div>
@@ -509,23 +514,23 @@
 			<div class="calendar-title"></div>
 			<hr>
 			<div class='calendar-weekday-header'>
-				<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
+				{% trans "<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>" %}
 			</div>
 			<div class="calendar-day-container"></div>
 			<div></div>
 			<div class="calendar-legend-container">
 				<div class="legend-color-block legend-color-block-better"></div>
-				<div class="legend-label">Better than<br>average overnight</div>
+				<div class="legend-label">{% trans "Better than<br>average overnight" %}</div>
 				<div class="legend-color-block legend-color-block-worse"></div>
-				<div class="legend-label">Worse than<br>average overnight</div>
+				<div class="legend-label">{% trans "Worse than<br>average overnight" %}</div>
 				<div class="legend-color-block legend-color-block-average"></div>
-				<div class="legend-label">Average overnight</div>
+				<div class="legend-label">{% trans "Average overnight" %}</div>
 			</div>
 		</div>
 		<div class="calendar-vertical-info">
 			<div class="calendar-title"></div>
 			<hr>
-			<div class="calendar-info-subtitle">Lowest Weekend Energy Use:</div>
+			<div class="calendar-info-subtitle">{% trans "Lowest Weekend Energy Use:" %}</div>
 			<div>
 				<div class="usage-info-lowest-val-container">
 					<span class="lowest-usage-val"></span><span class="usage-info-unit"> kWh</span>
@@ -533,7 +538,7 @@
 				<div class="lowest-usage-date"></div>
 			</div>
 			<hr>
-			<div class="calendar-info-subtitle">Highest Weekend Energy Use:</div>
+			<div class="calendar-info-subtitle">{% trans "Highest Weekend Energy Use:" %}</div>
 			<div>
 				<div class="usage-info-highest-val-container">
 					<span class="highest-usage-val"></span><span class="usage-info-unit"> kWh</span>
@@ -542,14 +547,14 @@
 			</div>
 			<hr>
 			<div>
-				<div class="energy-split-by-text">Energy Split by:</div>
+				<div class="energy-split-by-text">{% trans "Energy Split by:" %}</div>
 				<div class="energy-split-pie"></div>
 				<div class="energy-split-by-info">
 					<div>
-						<span class="first-split-text">Weekdays: </span><span class="first-split-val"></span>
+						<span class="first-split-text">{% trans "Weekdays: " %}</span><span class="first-split-val"></span>
 					</div>
 					<div>
-						<span class="second-split-text">Weekends: </span><span class="second-split-val"></span>
+						<span class="second-split-text">{% trans "Weekends: " %}</span><span class="second-split-val"></span>
 					</div>
 				</div>
 			</div>
@@ -558,14 +563,14 @@
 	<hr class="bottom-info-separator">
 	<div class="calendar-bottom-info">
 		<div>
-			<div>Lowest Overnight Energy Use:</div>
+			<div>{% trans "Lowest Overnight Energy Use:" %}</div>
 			<div class="usage-info-lowest-val-container">
 				<span class="lowest-usage-val"></span><span> kWh</span>
 			</div>
 			<div class="lowest-usage-date"></div>
 		</div>
 		<div>
-			<div>Highest Overnight Energy Use:</div>
+			<div>{% trans "Highest Overnight Energy Use:" %}</div>
 			<div class="usage-info-highest-val-container">
 				<span class="highest-usage-val"></span><span> kWh</span>
 			</div>
@@ -574,22 +579,22 @@
 		<div>
 			<div class="energy-split-pie"></div>
 			<div class="energy-split-info">
-				<div>Energy Split by:</div>
+				<div>{% trans "Energy Split by:" %}</div>
 				<div>
-					<span>Daytime: </span><span class="first-split-val"></span>
+					<span>{% trans "Daytime: " %}</span><span class="first-split-val"></span>
 				</div>
 				<div>
-					<span>Overnight: </span><span class="second-split-val"></span>
+					<span>{% trans "Overnight: " %}</span><span class="second-split-val"></span>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="not-available-footnote">* Data not available or incomplete for this period</div>
-	<div class="calendar-footnote">** The first month you started using En-trak</div>
+	<div class="calendar-footnote">{% trans "** The first month you started using En-trak" %}</div>
 	<div class="overnight-footnote"></div>
 	{% block hide_detail_bar_5 %}
 	<div class="report-component-footer">
-		<div class="hide-details-btn btn-down">HIDE DETAILS</div>
+		<div class="hide-details-btn btn-down">{% trans "HIDE DETAILS" %}</div>
 	</div>
 	{% endblock %}
 
@@ -597,4 +602,4 @@
 	<div style="clear:both;"></div>
 </div>
 
-<div class="not-accurate-note">Cost values are for general reference only and should not be treated as accurate for accounting purposes.</div>
+<div class="not-accurate-note">{% trans "Cost values are for general reference only and should not be treated as accurate for accounting purposes." %}</div>

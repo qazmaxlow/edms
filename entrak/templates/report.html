@@ -1,5 +1,6 @@
 {% extends "page_base.html" %}
 
+{% load i18n %}
 {% load entrak_extras %}
 {% load static %}
 {% load humanize %}
@@ -11,6 +12,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/report.css' %}">
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
+<script src="{% static 'js/moment-with-locales.js' %}"></script>
 <script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
 <script src="{% static 'js/mustache.js-master/mustache.js' %}"></script>
 <script src="{% static 'js/jquery.tinysort.min.js' %}"></script>
@@ -25,11 +27,12 @@
 {% block system_menu_target_view %}report{% endblock %}
 {% block breadcrumb_target_view %}report{% endblock %}
 
-{% block page_title %}THE REPORTS PAGE{% endblock %}
-{% block page_subtitle %}Get all your information here at the{% endblock %}
+{% block page_title %}{% trans "THE REPORTS PAGE" %}{% endblock %}
+{% block page_subtitle %}{% trans "Get all your information here at the" %}{% endblock %}
 
 {% block extra_script %}
 {{block.super}}
+{% get_current_language as LANGUAGE_CODE %}
 
 {% include "report_inner_template.html" %}
 
@@ -320,17 +323,17 @@ function timeRangeWeekSelected() {
 function updateGenReportSection() {
 	var fromText, toText;
 	if (report.currentReportType === ReportGenerator.REPORT_TYPE_YEAR) {
-		fromText = report.currentDt.format('YYYY');
-		toText = report.reportGenerator.genEndDt(report.currentDt, report.currentReportType).format('YYYY');
+		fromText = report.currentDt.format('{% trans "YYYY" %}');
+		toText = report.reportGenerator.genEndDt(report.currentDt, report.currentReportType).format('{% trans "YYYY" %}');
 	} else if (report.currentReportType === ReportGenerator.REPORT_TYPE_QUARTER) {
-		fromText = report.currentDt.format('YYYY MMMM');
-		toText = report.reportGenerator.genEndDt(report.currentDt, report.currentReportType).format('YYYY MMMM');
+		fromText = report.currentDt.format('{% trans "YYYY MMMM" %}');
+		toText = report.reportGenerator.genEndDt(report.currentDt, report.currentReportType).format('{% trans "YYYY MMMM" %}');
 	} else if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-		fromText = moment($("#month-start-datepicker").datepicker("getDate")).format("D MMM YYYY, ddd");
-		toText = moment($("#month-end-datepicker").datepicker("getDate")).format("D MMM YYYY, ddd");
+		fromText = moment($("#month-start-datepicker").datepicker("getDate")).format('{% trans "D MMM YYYY, ddd" %}');
+		toText = moment($("#month-end-datepicker").datepicker("getDate")).format('{% trans "D MMM YYYY, ddd" %}');
 	} else if (report.currentReportType === ReportGenerator.REPORT_TYPE_WEEK) {
-		fromText = report.currentDt.format("D MMM YYYY, ddd");
-		toText = moment(report.currentDt).add('w', 1).format("D MMM YYYY, ddd");
+		fromText = report.currentDt.format('{% trans "D MMM YYYY, ddd" %}');
+		toText = moment(report.currentDt).add('w', 1).format('{% trans "D MMM YYYY, ddd" %}');
 	}
 	$(".datetime-result .from-date").text(fromText);
 	$(".datetime-result .to-date").text(toText);
@@ -373,11 +376,11 @@ function dlRawDataSelected() {
 				&& (selectDt.isSame(report.dlRawDataEndDt)) || selectDt.isAfter(report.dlRawDataEndDt)) {
 				var endDt = moment($("#dl-data-end-datepicker").datepicker('getDate')).tz(report.timezone);
 				report.dlRawDataEndDt = endDt;
-				$(".datetime-result .to-date").text(endDt.format('D MMM YYYY, ddd'));
+				$(".datetime-result .to-date").text(endDt.format('{% trans "D MMM YYYY, ddd" %}'));
 			}
 
 			report.dlRawDataStartDt = selectDt;
-			$(".datetime-result .from-date").text(selectDt.format('D MMM YYYY, ddd'));
+			$(".datetime-result .from-date").text(selectDt.format('{% trans "D MMM YYYY, ddd" %}'));
 
 			updateDlRawBtnStatus();
 		},
@@ -388,7 +391,7 @@ function dlRawDataSelected() {
 		onSelect: function(dateText, inst) {
 			var selectDt = moment($(this).datepicker('getDate')).tz(report.timezone);
 			report.dlRawDataEndDt = selectDt;
-			$(".datetime-result .to-date").text(selectDt.format('D MMM YYYY, ddd'));
+			$(".datetime-result .to-date").text(selectDt.format('{% trans "D MMM YYYY, ddd" %}'));
 
 			updateDlRawBtnStatus();
 		},
@@ -421,8 +424,11 @@ function setDetailShow(isShow) {
 
 $(function() {
 	setupAjaxForCsrf($.cookie('csrftoken'));
+	report.langCode = '{{LANGUAGE_CODE}}';
+	moment.locale(report.langCode);
 
 	report.entrakSystem = new EntrakSystem();
+	report.entrakSystem.langCode = report.langCode;
 	report.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
 
 	report.currentReportType = ReportGenerator.REPORT_TYPE_MONTH;
@@ -434,8 +440,43 @@ $(function() {
 
 	$(".report-component").css("opacity", 0.0);
 
+	var reportGeneratorMultiLangTexts = {
+		'reportTypeMonthDtFormat': '{% trans "MMM YYYY" %}',
+		'reportTypeYearDtFormat': '{% trans "YYYY" %}',
+		'reportTypeCustomMonthDtFormat': '{% trans "D MMM YYYY, ddd" %}',
+		'reportTypeWeekDtFormat': '{% trans "D MMM YYYY, ddd" %}',
+		'genDtTo': '{% trans " to " %}',
+		'tons': '{% trans " tons" %}',
+		'tonsCo2': '{% trans " tons CO<sub>2</sub>" %}',
+		'reportTypeNameMonth': '{% trans "report_type_name_month" %}',
+		'reportTypeNameYear': '{% trans "report_type_name_year" %}',
+		'reportTypeNameQuarter': '{% trans "report_type_name_quarter" %}',
+		'reportTypeNameWeek': '{% trans "report_type_name_week" %}',
+		'more': '{% trans "more" %}',
+		'less': '{% trans "less" %}',
+		'overall': '{% trans "Overall: " %}',
+		'calendarMore': '{% trans "calendar_more" %}',
+		'calendarLess': '{% trans "calendar_less" %}',
+		'comparedTo': '{% trans "compared<br>to " %}',
+		'mSquare': '{% trans " m²" %}',
+		'pandas': '{% trans " pandas" %}',
+		'beginDtFormat': '{% trans "MMMM YYYY" %}',
+		'lastMonth': '{% trans "last month" %}',
+		'samePeriodLastYear': '{% trans "same period last year" %}',
+		'calendarUsageDtFormat': '{% trans "D MMM YYYY" %}',
+		'calendarTypeWeekday': '{% trans "Weekday" %}',
+		'calendarTypeWeekend': '{% trans "Weekend" %}',
+		'calendarTypeOvernight': '{% trans "Overnight" %}',
+		'calendarSplitWeekdays': '{% trans "Weekdays" %}',
+		'calendarSplitWeekends': '{% trans "Weekends" %}',
+		'calendarSplitDaytime': '{% trans "Daytime" %}',
+		'calendarSplitOvernight': '{% trans "Overnight" %}',
+		'overnightFootnoteFormat': '{% trans "hh:mmA" %}',
+	};
+
 	report.reportGenerator = new ReportGenerator(report.entrakSystem.systemTree, report.timezone,
-		ReportGenerator.REPORT_TYPE_MONTH);
+		ReportGenerator.REPORT_TYPE_MONTH, reportGeneratorMultiLangTexts);
+	report.reportGenerator.langCode = '{{LANGUAGE_CODE}}';
 	if ("currentDt" in report) {
 		report.reportGenerator.updateDtInfo(report.currentDt, null);
 		updateReportName();
@@ -610,29 +651,31 @@ $(function() {
 	<div class="drop-down-panel-header">
 		<div class="panel-header-left-menu">
 			<h3 panel="monthly-report">
-				Monthly Report</h3><h3 panel="customize-report">
-				Customize Report</h3><h3 panel="download-data">Download Data</h3>
+				{% trans "Monthly Report" %}</h3><h3 panel="customize-report">
+				{% trans "Customize Report" %}</h3><h3 panel="download-data">{% trans "Download Data" %}</h3>
 		</div>
 	</div>
 
 	<div id="panel-content">
 		<div id="monthly-report">
 			<div id="monthly-report-header">
-				<span>Monthly Reports</span>
-				<span>Energy Consumption (kWh)</span>
-				<span>CO<sub>2</sub> Emissions (kg)</span>
-				<span>Energy Cost ($)</span>
-				<span>Download</span>
+				<span>{% trans "Monthly Reports" %}</span>
+				<span>{% trans "Energy Consumption (kWh)" %}</span>
+				<span>{% trans "CO<sub>2</sub> Emissions (kg)" %}</span>
+				<span>{% trans "Energy Cost ($)" %}</span>
+				<span>{% trans "Download" %}</span>
 			</div>
 			<hr>
 			<hr>
 			<div id="monthly-report-content">
 				{% for summary in monthly_summary %}
 				<div>
-					<span class="summary-date-col" dt_timestamp="{{summary.timestamp}}">{{summary.dt|date:"M Y"}}</span>
+					<span class="summary-date-col" dt_timestamp="{{summary.timestamp}}">{% ifequal LANGUAGE_CODE 'zh-tw' %}{{summary.dt|date:"Y年M"}}{% else %}{{summary.dt|date:"M Y"}}{% endifequal %}</span>
+					{% language 'en' %}
 					<span>{{summary.energy_usage|floatformat:"0"|intcomma}}</span>
 					<span>{{summary.co2_usage|floatformat:"0"|intcomma}}</span>
 					<span>{{summary.money_usage|floatformat:"0"|intcomma}}</span>
+					{% endlanguage %}
 					<img class="pdf-icon" src="{% static 'images/report/pdf-icon.png' %}">
 					<span class="pdf-text">PDF</span>
 				</div>
@@ -641,7 +684,7 @@ $(function() {
 		</div>
 
 		<div id="customize-report">
-			<div class="customize-section-title"><span>1</span>Select your time range</div>
+			<div class="customize-section-title"><span>1</span>{% trans "Select your time range" %}</div>
 			<hr>
 			<div class="time-range-section">
 				<span></span>
@@ -652,7 +695,7 @@ $(function() {
 			<div class="customize-detail-section">
 				<div class="two-column-section">
 					<div>
-						<div class="customize-section-title"><span>2</span>Select your time period</div>
+						<div class="customize-section-title"><span>2</span>{% trans "Select your time period" %}</div>
 						<hr>
 						<div class="customize-calendar-section">
 							<div class="year-quarter-calendar">
@@ -682,50 +725,50 @@ $(function() {
 						</div>
 					</div>
 					<div>
-						<div class="customize-section-title section-three-title"><span>3</span>Create your report</div>
+						<div class="customize-section-title section-three-title"><span>3</span>{% trans "Create your report" %}</div>
 						<hr>
 						<div class="create-report-section">
 							<div class="datetime-result">
-								<div class="datetime-result-title">Energy data - kWh</div>
+								<div class="datetime-result-title">{% trans "Energy data - kWh" %}</div>
 								<div class="datetime-result-from-to">
-									<div><span>From:</span><span class="from-date"></span></div>
-									<div><span>To:</span><span class="to-date"></span></div>
+									<div><span>{% trans "From:" %}</span><span class="from-date"></span></div>
+									<div><span>{% trans "To:" %}</span><span class="to-date"></span></div>
 								</div>
 								<hr>
-								<div class="create-report-btn">Create Report</div>
+								<div class="create-report-btn">{% trans "Create Report" %}</div>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="three-column-section">
-					<div class="customize-section-title"><span>2</span>Select your time period</div>
+					<div class="customize-section-title"><span>2</span>{% trans "Select your time period" %}</div>
 					<hr>
 					<div class="select-time-period-section">
-						<div>Select the start and end date of your monthly electricity bill.</div>
-						<div>If you wish to view a stardard calendar month, click on the Monthly Report tab at the top of the page</div>
+						<div>{% trans "Select the start and end date of your monthly electricity bill." %}</div>
+						<div>{% trans "If you wish to view a stardard calendar month, click on the Monthly Report tab at the top of the page" %}</div>
 						<hr>
 						<div>
 							<div class="report-datepicker-container">
-								<div>Choose your start date</div>
+								<div>{% trans "Choose your start date" %}</div>
 								<div id="month-start-datepicker" class="report-datepicker"></div>
 							</div>
 							<div class="report-datepicker-container">
-								<div>Choose your end date</div>
+								<div>{% trans "Choose your end date" %}</div>
 								<div id="month-end-datepicker" class="report-datepicker"></div>
 							</div>
 						</div>
 					</div>
-					<div class="customize-section-title"><span>3</span>Create your report</div>
+					<div class="customize-section-title"><span>3</span>{% trans "Create your report" %}</div>
 					<hr>
 					<div class="create-report-section">
 						<div class="datetime-result">
-							<div class="datetime-result-title">Energy data - kWh</div>
+							<div class="datetime-result-title">{% trans "Energy data - kWh" %}</div>
 							<div class="datetime-result-from-to">
-								<div><span>From:</span><span class="from-date"></span></div>
-								<div><span>To:</span><span class="to-date"></span></div>
+								<div><span>{% trans "From:" %}</span><span class="from-date"></span></div>
+								<div><span>{% trans "To:" %}</span><span class="to-date"></span></div>
 							</div>
 							<hr>
-							<div class="create-report-btn">Create Report</div>
+							<div class="create-report-btn">{% trans "Create Report" %}</div>
 						</div>
 					</div>
 				</div>
@@ -733,40 +776,40 @@ $(function() {
 		</div>
 
 		<div id="download-raw-data">
-			<div class="dl-data-title">Here you can download your energy use data to files that can be opened in Microsoft Excel (CSV).</div>
-			<div class="dl-data-title">Simply select the start date/time, the end date/time, and the units you'd like to see in your data file.</div>
-			<div class="customize-section-title"><span>1</span>Choose your date</div>
+			<div class="dl-data-title">{% trans "Here you can download your energy use data to files in .csv format." %}</div>
+			<div class="dl-data-title">{% trans "Simply select the start date, end date and the units that you would like obtain from the system." %}</div>
+			<div class="customize-section-title"><span>1</span>{% trans "Choose your date" %}</div>
 			<hr>
 			<div class="dl-choose-date-section">
 				<div class="report-datepicker-container">
-					<div>Choose your start date</div>
+					<div>{% trans "Choose your start date" %}</div>
 					<div id="dl-data-start-datepicker" class="report-datepicker"></div>
 				</div>
 				<div class="report-datepicker-container">
-					<div>Choose your end date</div>
+					<div>{% trans "Choose your end date" %}</div>
 					<div id="dl-data-end-datepicker" class="report-datepicker"></div>
 				</div>
 			</div>
 			<div class="two-column-section">
 				<div class="choose-unit-section">
-					<div class="customize-section-title"><span>2</span>Select your units</div>
+					<div class="customize-section-title"><span>2</span>{% trans "Select your units" %}</div>
 					<hr>
 					<div class="unit-container">
 						<span></span><span></span><span></span><span></span>
 					</div>
 				</div>
 				<div>
-					<div class="customize-section-title"><span>3</span>Download your file</div>
+					<div class="customize-section-title"><span>3</span>{% trans "Download your file" %}</div>
 					<hr>
 					<div class="create-report-section">
 						<div class="datetime-result">
-							<div class="datetime-result-title">Energy data - kWh</div>
+							<div class="datetime-result-title">{% trans "Energy data - kWh" %}</div>
 							<div class="datetime-result-from-to">
-								<div><span>From:</span><span class="from-date"></span></div>
-								<div><span>To:</span><span class="to-date"></span></div>
+								<div><span>{% trans "From:" %}</span><span class="from-date"></span></div>
+								<div><span>{% trans "To:" %}</span><span class="to-date"></span></div>
 							</div>
 							<hr>
-							<div class="create-report-btn">Download File</div>
+							<div class="create-report-btn">{% trans "Download File" %}</div>
 						</div>
 					</div>
 				</div>
@@ -776,16 +819,16 @@ $(function() {
 </div>
 
 <div class="report-head">
-	<div class="system-name">{{systems.0.full_name}}</div>
+	<div class="system-name">{{systems.0|get_system_full_name:LANGUAGE_CODE}}</div>
 	<hr class="title-separator">
 	<div class="report-name"></div>
-	<div class="save-report-btn">Save Report</div>
+	<div class="save-report-btn">{% trans "Save Report" %}</div>
 	<hr class="head-separator">
 </div>
 
 {% include "report_main_content.html" %}
 
-<div class="bottom-save-report-btn">Save Report</div>
+<div class="bottom-save-report-btn">{% trans "Save Report" %}</div>
 <div class="bottom-space"></div>
 
 <form class="download-pdf-form" action="{% url 'report_pdf' system_code=systems.0.code %}" method="POST">{% csrf_token %}

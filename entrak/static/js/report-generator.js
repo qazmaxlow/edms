@@ -1,4 +1,4 @@
-function ReportGenerator(systemTree, timezone, reportType) {
+function ReportGenerator(systemTree, timezone, reportType, multiLangTexts) {
 	this.systemTree = systemTree;
 	this.timezone = timezone;
 	this.reportType = reportType;
@@ -14,8 +14,10 @@ function ReportGenerator(systemTree, timezone, reportType) {
 	if (firstRecordDt.date() === 1) {
 		this.beginningStartDt = moment(firstRecordDt).startOf('M');
 	} else {
-		this.beginningStartDt = moment(firstRecordDt).add('M', 1).startOf('M');
+		this.beginningStartDt = moment(firstRecordDt).add(1, 'M').startOf('M');
 	}
+
+	this.multiLangTexts = multiLangTexts;
 };
 
 ReportGenerator.REPORT_TYPE_MONTH = 'month';
@@ -129,20 +131,22 @@ ReportGenerator.LINE_CHART_LAST_COLOR = "#EDBA3C";
 ReportGenerator.prototype.genDtText = function(targetDt, endDt) {
 	var currentDtName = "";
 	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
-		currentDtName = targetDt.format("MMM YYYY");
+		currentDtName = targetDt.format(this.multiLangTexts.reportTypeMonthDtFormat);
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
-		currentDtName = targetDt.format('YYYY');
+		currentDtName = targetDt.format(this.multiLangTexts.reportTypeYearDtFormat);
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_QUARTER) {
-		currentDtName = targetDt.format('YYYY ')+'Q'+this.getQuarterIdx(this.currentDt);
+		currentDtName = targetDt.format(this.multiLangTexts.reportTypeYearDtFormat)+' Q'+this.getQuarterIdx(this.currentDt);
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
 		if (endDt === undefined || endDt === null) {
-			currentDtName = targetDt.format('D MMM YYYY, ddd');
+			currentDtName = targetDt.format(this.multiLangTexts.reportTypeCustomMonthDtFormat);
 		} else {
-			currentDtName = targetDt.format('D MMM YYYY, ddd')+' to '+endDt.format('D MMM YYYY, ddd');
+			currentDtName = targetDt.format(this.multiLangTexts.reportTypeCustomMonthDtFormat)
+				+this.multiLangTexts.genDtTo
+				+endDt.format(this.multiLangTexts.reportTypeCustomMonthDtFormat);
 		}
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_WEEK) {
-		currentDtName = targetDt.format('D MMM YYYY, ddd');
-		currentDtName += ' to ' + moment(targetDt).add('w', 1).format('D MMM YYYY, ddd');
+		currentDtName = targetDt.format(this.multiLangTexts.reportTypeWeekDtFormat);
+		currentDtName += this.multiLangTexts.genDtTo + moment(targetDt).add(1, 'w').format(this.multiLangTexts.reportTypeWeekDtFormat);
 	}
 
 	return currentDtName;
@@ -150,15 +154,19 @@ ReportGenerator.prototype.genDtText = function(targetDt, endDt) {
 
 ReportGenerator.prototype.genReportName = function() {
 	var reportName = this.genDtText(this.currentDt, this.currentEndDt);
-	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH
-		|| this.reportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-		reportName += " - Monthly Energy Report";
-	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
-		reportName += " - Yearly Energy Report";
-	} else if (this.reportType === ReportGenerator.REPORT_TYPE_QUARTER) {
-		reportName += " - Quarterly Energy Report";
-	} else if (this.reportType === ReportGenerator.REPORT_TYPE_WEEK) {
-		reportName += " - Weekly Energy Report";
+	if (this.langCode === 'zh-tw') {
+		reportName += " 能源使用報告";
+	} else {
+		if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH
+			|| this.reportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+			reportName += " - Monthly Energy Report";
+		} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
+			reportName += " - Yearly Energy Report";
+		} else if (this.reportType === ReportGenerator.REPORT_TYPE_QUARTER) {
+			reportName += " - Quarterly Energy Report";
+		} else if (this.reportType === ReportGenerator.REPORT_TYPE_WEEK) {
+			reportName += " - Weekly Energy Report";
+		}
 	}
 
 	return reportName;
@@ -171,13 +179,13 @@ ReportGenerator.prototype.getQuarterIdx = function(targetDt) {
 ReportGenerator.prototype.genEndDt = function(startDt, targetReportType) {
 	var endDt;
 	if (targetReportType === ReportGenerator.REPORT_TYPE_MONTH) {
-		endDt = moment(startDt).add('M', 1);
+		endDt = moment(startDt).add(1, 'M');
 	} else if (targetReportType === ReportGenerator.REPORT_TYPE_YEAR) {
-		endDt = moment(startDt).add('Y', 1);
+		endDt = moment(startDt).add(1, 'Y');
 	} else if (targetReportType === ReportGenerator.REPORT_TYPE_QUARTER) {
-		endDt = moment(startDt).add('M', 3);
+		endDt = moment(startDt).add(3, 'M');
 	} else if (targetReportType === ReportGenerator.REPORT_TYPE_WEEK) {
-		endDt = moment(startDt).add('w', 1);
+		endDt = moment(startDt).add(1, 'w');
 	}
 
 	return endDt;
@@ -215,15 +223,15 @@ ReportGenerator.prototype.getReportData = function(callbackFunc) {
 ReportGenerator.prototype.genLastDt = function(targetDt, dayDiff) {
 	var result;
 	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH) {
-		result = moment(targetDt).subtract('M', 1);
+		result = moment(targetDt).subtract(1, 'M');
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
-		result = moment(targetDt).subtract('y', 1);
+		result = moment(targetDt).subtract(1, 'y');
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_QUARTER) {
-		result = moment(targetDt).subtract('M', 3);
+		result = moment(targetDt).subtract(3, 'M');
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-		result = moment(targetDt).subtract('d', dayDiff);
+		result = moment(targetDt).subtract(dayDiff, 'd');
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_WEEK) {
-		result = moment(targetDt).subtract('w', 1);
+		result = moment(targetDt).subtract(1, 'w');
 	}
 
 	return result;
@@ -273,13 +281,13 @@ ReportGenerator.prototype.getReportTypeName = function() {
 	var reportTypeName;
 	if (this.reportType === ReportGenerator.REPORT_TYPE_MONTH
 		|| this.reportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-		reportTypeName = 'month';
+		reportTypeName = this.multiLangTexts.reportTypeNameMonth;
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_YEAR) {
-		reportTypeName = 'year';
+		reportTypeName = this.multiLangTexts.reportTypeNameYear;
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_QUARTER) {
-		reportTypeName = 'quarter';
+		reportTypeName = this.multiLangTexts.reportTypeNameQuarter;
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_WEEK) {
-		reportTypeName = 'week';
+		reportTypeName = this.multiLangTexts.reportTypeNameWeek;
 	}
 
 	return reportTypeName;
@@ -290,7 +298,11 @@ ReportGenerator.prototype.updateReportInnerText = function() {
 
 	$(".report-type-name").text(reportTypeName.toUpperCase());
 	$(".report-type-name-lower").text(reportTypeName);
-	$(".report-type-name-lower-plural").text(reportTypeName+'s');
+	if (this.langCode === 'en') {
+		$(".report-type-name-lower-plural").text(reportTypeName+'s');
+	} else {
+		$(".report-type-name-lower-plural").text(reportTypeName);
+	}
 }
 
 ReportGenerator.prototype.generateFullReport = function() {
@@ -356,62 +368,71 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 	});
 
 	$("#current-energy-usage").text(Utils.formatWithCommas(totalEnergyUsage.toFixed(0)));
-	$("#current-co2-usage").html(Utils.formatWithCommas((totalCo2Usage/1000).toFixed(0)) + " tons");
+	$("#current-co2-usage").html(Utils.formatWithCommas((totalCo2Usage/1000).toFixed(0)) + this.multiLangTexts.tons);
 	$("#current-money-usage").text(Utils.formatWithCommas("$ " + totalMoneyUsage.toFixed(0)));
 
-	var savedEnergyPercentSuffix, savedCo2SubText, savedMoneySubText,
-		carImpactSubText, forestImpactSubText, pandaImpactSubText;
+	var positiveOrNegativePrefix, carImpactSuffix, carImpactSubText, forestImpactSubText, pandaImpactSubText;
 	if (reportGenThis.savingInfo.energy >= 0) {
-		savedEnergyPercentSuffix = "less";
-		savedCo2SubText = "of CO<sub>2</sub> reduced";
+		$(".basic-info-container").addClass('positive-saving');
+		positiveOrNegativePrefix = "-";
 		savedMoneySubText = "in savings";
-		carImpactSubText = "taken off the road for a ";
-		forestImpactSubText = "of tropical rainforest protected";
-		pandaImpactSubText = "Reduced CO<sub>2</sub> emissions equal to the weight of";
+		if (this.langCode === 'zh-tw') {
+			carImpactSuffix = '減少';
+			carImpactSubText = "在馬路上不停行走一";
+			forestImpactSubText = "保護了熱帶雨林";
+			pandaImpactSubText = "減少排放二氧化碳的重量，等於";
+		} else {
+			carImpactSubText = "taken off the road for a ";
+			forestImpactSubText = "of tropical rainforest protected";
+			pandaImpactSubText = "Reduced CO<sub>2</sub> emissions equal to the weight of";
+		}
 	} else {
-		savedEnergyPercentSuffix = "more";
-		savedCo2SubText = "of CO<sub>2</sub> increased";
+		$(".basic-info-container").addClass('negative-saving');
+		positiveOrNegativePrefix = "+";
 		savedMoneySubText = "extra spending";
-		carImpactSubText = "more on the road for a ";
-		forestImpactSubText = "of tropical rainforest cut down";
-		pandaImpactSubText = "Extra CO<sub>2</sub> emissions equal to the weight of";
+		if (this.langCode === 'zh-tw') {
+			carImpactSuffix = '增加';
+			carImpactSubText = "在馬路上不停行走一";
+			forestImpactSubText = "砍伐了熱帶雨林";
+			pandaImpactSubText = "額外排放二氧化碳的重量，等於";
+		} else {
+			carImpactSubText = "more on the road for a ";
+			forestImpactSubText = "of tropical rainforest cut down";
+			pandaImpactSubText = "Extra CO<sub>2</sub> emissions equal to the weight of";
+		}
 	}
 	var savedEnergyText = Utils.formatWithCommas(Math.abs(Utils.fixedDecBaseOnVal(reportGenThis.savingInfo.energy)))
 		+ "<span class='basic-info-percent-symbol'>%</span> ";
-	savedEnergyText += savedEnergyPercentSuffix;
+	savedEnergyText = positiveOrNegativePrefix + savedEnergyText;
 	$("#save-energy-usage").html(savedEnergyText);
 
 	// baseline should be just before first record
 	var firstRecordMonth = moment.unix(this.systemTree.data.firstRecord).tz(this.timezone).startOf('M');
 	var compareToDt = moment(this.currentDt).year(firstRecordMonth.year());
 	if (compareToDt >= firstRecordMonth) {
-		compareToDt.subtract('y', 1);
+		compareToDt.subtract(1, 'y');
 	}
 
-	var saveEnergySubText;
-	if (this.reportType === ReportGenerator.REPORT_TYPE_WEEK) {
-		saveEnergySubText = 'the same week last year';
-	} else {
-		saveEnergySubText = this.genDtText(compareToDt);
-	}
-	$("#save-energy-subtext").text("than " + saveEnergySubText);
 	var savedCo2Text = Utils.formatWithCommas((Math.abs(reportGenThis.savingInfo.co2)/1000).toFixed(0));
-	savedCo2Text += " tons";
-	$("#save-co2-usage").text(savedCo2Text);
-	$("#save-co2-subtext").html(savedCo2SubText);
+	savedCo2Text = positiveOrNegativePrefix + savedCo2Text + this.multiLangTexts.tonsCo2;
+	$("#save-co2-usage").html(savedCo2Text);
 	var savedMoneyText = "$ " + Utils.formatWithCommas(Math.abs(reportGenThis.savingInfo.money).toFixed(0));
+	savedMoneyText = positiveOrNegativePrefix + savedMoneyText;
 	$("#save-money-usage").text(savedMoneyText);
-	$("#save-money-subtext").text(savedMoneySubText);
 
 	var co2InCar = Utils.formatWithCommas(Math.abs((reportGenThis.savingInfo.co2*0.003).toFixed(0)));
-	$("#car-impact").text(co2InCar + " cars");
+	if (this.langCode === 'zh-tw') {
+		$("#car-impact").text(carImpactSuffix + co2InCar + "輛車");
+	} else {
+		$("#car-impact").text(co2InCar + " cars");
+	}
 	carImpactSubText += this.getReportTypeName();
 	$("#car-impact-subtext").text(carImpactSubText);
 	var co2InForest = Utils.formatWithCommas(Math.abs((reportGenThis.savingInfo.co2*0.016).toFixed(0)));
-	$("#forest-impact").text(co2InForest + " m²");
+	$("#forest-impact").text(co2InForest + this.multiLangTexts.mSquare);
 	$("#forest-impact-subtext").text(forestImpactSubText);
 	var co2InElephant = Utils.formatWithCommas(Math.abs((reportGenThis.savingInfo.co2*0.00667).toFixed(0)));
-	$("#panda-impact").text(co2InElephant + " pandas");
+	$("#panda-impact").text(co2InElephant + this.multiLangTexts.pandas);
 	$("#panda-impact-subtext").html(pandaImpactSubText);
 
 	var transformedDatas = [];
@@ -422,7 +443,7 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 			co2Val: info.currentTotalCo2,
 			moneyVal: info.currentTotalMoney
 		};
-		dataInfo.name = (info.systemCode === reportGenThis.systemTree.data.code) ? info.sourceName : info.system.data.name;
+		dataInfo.name = (info.systemCode === reportGenThis.systemTree.data.code) ? info.sourceNameInfo[reportGenThis.langCode] : info.system.data.nameInfo[reportGenThis.langCode];
 		if (infoIdx < reportGenThis.groupedSourceInfos.length-1) {
 			dataInfo.energyPercent = parseFloat(Utils.fixedDecBaseOnVal((info.currentTotalEnergy/totalEnergyUsage)*100));
 			energyPercentSum += dataInfo.energyPercent;
@@ -613,7 +634,7 @@ ReportGenerator.prototype.genXAxisOptions = function() {
 		options.min = -1;
 		options.max = dayDiff + 2;
 		for (var i = 0; i < 3; i++) {
-			var tickDt = moment(this.currentDt).add('M', i);
+			var tickDt = moment(this.currentDt).add(i, 'M');
 			var tickDtDayDiff = tickDt.diff(this.currentDt, 'days');
 			options.ticks.push([tickDtDayDiff, tickDt.format('MMM D')]);
 			tickDt.date(15);
@@ -624,7 +645,7 @@ ReportGenerator.prototype.genXAxisOptions = function() {
 		options.min = -1;
 		options.max = dayDiff + 1;
 		for (var i = 0; i < dayDiff; i++) {
-			var tickDt = moment(this.currentDt).add('d', i);
+			var tickDt = moment(this.currentDt).add(i, 'd');
 			if (tickDt.date() === 1 || tickDt.date()%5 === 0 && tickDt.date() !== 30) {
 				options.ticks.push([i, tickDt.format('MMM D')]);
 			}
@@ -701,20 +722,39 @@ ReportGenerator.prototype.insertComparePastSubInfo = function(template, info, cl
 		titleText = "-";
 		infoClass = "invalid-saving";
 	} else {
-		titleText = "Overall: ";
-		var pastDiffPercent = (info.currentTotalEnergy-info.lastTotalEnergy)/info.lastTotalEnergy*100;
-		titleText += parseFloat(Utils.fixedDecBaseOnVal(Math.abs(pastDiffPercent)));
 		if (pastDiffPercent >= 0) {
 			infoClass = "negative-saving";
-			titleText += "% more";
 		} else {
 			infoClass = "positive-saving";
-			titleText += "% less";
 		}
-		titleText += " energy than last "+this.getReportTypeName();
+
+		if (this.langCode === 'zh-tw') {
+			titleText = this.multiLangTexts.overall;
+
+			titleText += "比上"+this.getReportTypeName();
+			if (pastDiffPercent >= 0) {
+				titleText += "多用";
+			} else {
+				titleText += "少用";
+			}
+
+			var pastDiffPercent = (info.currentTotalEnergy-info.lastTotalEnergy)/info.lastTotalEnergy*100;
+			titleText += parseFloat(Utils.fixedDecBaseOnVal(Math.abs(pastDiffPercent))) + '%';
+		} else {
+			titleText = this.multiLangTexts.overall;
+			var pastDiffPercent = (info.currentTotalEnergy-info.lastTotalEnergy)/info.lastTotalEnergy*100;
+			titleText += parseFloat(Utils.fixedDecBaseOnVal(Math.abs(pastDiffPercent)));
+
+			if (pastDiffPercent >= 0) {
+				titleText += "% more";
+			} else {
+				titleText += "% less";
+			}
+			titleText += " energy than last "+this.getReportTypeName();
+		}
 	}
 
-	var name = ("sourceName" in info) ? info.sourceName : info.system.data.name;
+	var name = ("sourceNameInfo" in info) ? info.sourceNameInfo[this.langCode] : info.system.data.nameInfo[this.langCode];
 	name = name.toUpperCase();
 
 	var templateInfo = {
@@ -744,11 +784,11 @@ ReportGenerator.prototype.generateComparePast = function() {
 		var pastDiffPercent = (currentTotalUsage-lastTotalUsage)/lastTotalUsage*100;
 		pastDiffPercentText = parseFloat(Utils.fixedDecBaseOnVal(Math.abs(pastDiffPercent)));
 		if (pastDiffPercent >= 0) {
-			pastDiffPercentSuffix = "more";
+			pastDiffPercentSuffix = this.multiLangTexts.more;
 			$(".compare-past-desc").addClass("negative-saving");
 			$(".compare-past-desc").removeClass("positive-saving");
 		} else {
-			pastDiffPercentSuffix = "less";
+			pastDiffPercentSuffix = this.multiLangTexts.less;
 			$(".compare-past-desc").addClass("positive-saving");
 			$(".compare-past-desc").removeClass("negative-saving");
 		}
@@ -852,20 +892,20 @@ ReportGenerator.prototype._fillInComparePercent = function(eleSel, oldUsage, new
 		if (usagePercent >= 0 ) {
 			comparePercentEle.addClass("positive-saving");
 			comparePercentEle.removeClass("negative-saving");
-			lessMoreText = "less";
+			lessMoreText = this.multiLangTexts.calendarLess;
 		} else {
 			comparePercentEle.addClass("negative-saving");
 			comparePercentEle.removeClass("positive-saving");
-			lessMoreText = "more";
+			lessMoreText = this.multiLangTexts.calendarMore;
 		}
 		comparePercentEle.find(".compare-percent").text(Utils.fixedDecBaseOnVal(Math.abs(usagePercent)));
 	}
 
 	var comparedSubtext;
 	if (oldUsage === 0) {
-		comparedSubtext = "compared<br>to "+compareToDateText+" *";
+		comparedSubtext = this.multiLangTexts.comparedTo+compareToDateText+" *";
 	} else {
-		comparedSubtext = lessMoreText+" compared<br>to "+compareToDateText;
+		comparedSubtext = lessMoreText+' '+this.multiLangTexts.comparedTo+compareToDateText;
 	}
 	comparePercentEle.find(".compare-subtext").html(comparedSubtext);
 }
@@ -874,18 +914,18 @@ ReportGenerator.prototype._genSubComparePercentInfo = function(oldUsage, newUsag
 	var result = {};
 	if (oldUsage === 0) {
 		result.percentText = "-";
-		result.subText = "compared<br>to "+compareToDateText+" *";
+		result.subText = this.multiLangTexts.comparedTo+compareToDateText+" *";
 		result.savingClass = "invalid-saving";
 	} else {
 		var percent = (newUsage-oldUsage)/oldUsage*100;
 		if (percent >= 0) {
-			result.subText = "more";
+			result.subText = this.multiLangTexts.calendarMore;
 			result.savingClass = "negative-saving";
 		} else {
-			result.subText = "less";
+			result.subText = this.multiLangTexts.calendarLess;
 			result.savingClass = "positive-saving";
 		}
-		result.subText += " compared<br>to "+compareToDateText;
+		result.subText += ' '+this.multiLangTexts.comparedTo+compareToDateText;
 		result.percentText = Utils.formatWithCommas(Math.abs(percent).toFixed(0));
 	}
 
@@ -901,8 +941,8 @@ ReportGenerator.prototype._fillCalendar = function(eleSel, readings, averageUsag
 	calendarContainer.empty();
 
 	var calendarStartDt = moment(this.currentDt).startOf('w');
-	var calendarEndDt = moment(this.currentEndDt).subtract('s', 1).endOf('w');
-	for (var calendarNowDt=calendarStartDt; calendarNowDt.isBefore(calendarEndDt); calendarNowDt.add('d', 1)) {
+	var calendarEndDt = moment(this.currentEndDt).subtract(1, 's').endOf('w');
+	for (var calendarNowDt=calendarStartDt; calendarNowDt.isBefore(calendarEndDt); calendarNowDt.add(1, 'd')) {
 		var calendarDayEle = $("<div class='calendar-day'></div>");
 		calendarDayEle.append("<div class='calendar-day-digit'>"+calendarNowDt.date()+"</div>");
 
@@ -965,14 +1005,14 @@ ReportGenerator.prototype._insertCalendarSubInfo = function(eleSel, classIdPrefi
 		var compareBeginningInfo = reportGenThis._genSubComparePercentInfo(
 			info[beginningUsageKey].average, averageUsage, beginningDateText);
 		var compareLastInfo = reportGenThis._genSubComparePercentInfo(
-			info[lastUsageKey].average, averageUsage, "last "+reportGenThis.getReportTypeName());
+			info[lastUsageKey].average, averageUsage, reportGenThis.multiLangTexts.lastMonth);
 		var compareLastSamePeriodInfo = reportGenThis._genSubComparePercentInfo(
-			info[lastSamePeriodUsageKey].average, averageUsage, "same period last year");
+			info[lastSamePeriodUsageKey].average, averageUsage, reportGenThis.multiLangTexts.samePeriodLastYear);
 		var firstSplitPercent = parseFloat((info[currentUsageKey].total/info.currentTotalEnergy*100).toFixed(1));
 		var secondSplitPercent = parseFloat((100-firstSplitPercent).toFixed(1));
 		if (info[currentUsageKey].min.date !== null) {
 			var lowestDt = moment(info[currentUsageKey].min.date, 'YYYY-MM-DD');
-			var lowestText = lowestDt.format('D MMM YYYY')+' - '
+			var lowestText = lowestDt.format(reportGenThis.multiLangTexts.calendarUsageDtFormat)+' - '
 				+Utils.formatWithCommas(info[currentUsageKey].min.val.toFixed(0))
 				+' kWh';
 		} else {
@@ -980,7 +1020,7 @@ ReportGenerator.prototype._insertCalendarSubInfo = function(eleSel, classIdPrefi
 		}
 		if (info[currentUsageKey].max.date !== null) {
 			var highestDt = moment(info[currentUsageKey].max.date, 'YYYY-MM-DD');
-			var highestText = highestDt.format('D MMM YYYY')+' - '
+			var highestText = highestDt.format(reportGenThis.multiLangTexts.calendarUsageDtFormat)+' - '
 				+Utils.formatWithCommas(info[currentUsageKey].max.val.toFixed(0))
 				+' kWh';
 		} else {
@@ -994,7 +1034,7 @@ ReportGenerator.prototype._insertCalendarSubInfo = function(eleSel, classIdPrefi
 			firstSplitPercent = tempSplitPercent;
 		}
 
-		var name = ('sourceName' in info) ? info.sourceName.toUpperCase() : info.system.data.name.toUpperCase();
+		var name = ('sourceNameInfo' in info) ? info.sourceNameInfo[reportGenThis.langCode].toUpperCase() : info.system.data.nameInfo[reportGenThis.langCode].toUpperCase();
 		name = (dataIdx+1) + '. ' + name;
 
 		var templateInfo = {
@@ -1077,19 +1117,19 @@ ReportGenerator.prototype.generateCalendarReport = function(targetSel, combinedR
 
 	var targetContainer = $(targetSel);
 	targetContainer.find(".average-usage").text(Utils.formatWithCommas(averageUsage.toFixed(0)));
-	var beginningDateText = this.beginningStartDt.format("MMMM YYYY") + " **";
+	var beginningDateText = this.beginningStartDt.format(this.multiLangTexts.beginDtFormat) + " **";
 	this._fillInComparePercent(targetSel+" .compare-beginning", beginningUsage, averageUsage, beginningDateText);
-	this._fillInComparePercent(targetSel+" .compare-last", lastUsage, averageUsage, "last month");
-	this._fillInComparePercent(targetSel+" .compare-last-same-period", lastSamePeriodUsage, averageUsage, "same period last year");
+	this._fillInComparePercent(targetSel+" .compare-last", lastUsage, averageUsage, this.multiLangTexts.lastMonth);
+	this._fillInComparePercent(targetSel+" .compare-last-same-period", lastSamePeriodUsage, averageUsage, this.multiLangTexts.samePeriodLastYear);
 
 	if (lowestDt !== null) {
 		targetContainer.find(".lowest-usage-val").text(Utils.formatWithCommas(lowestUsage.toFixed(0)));
-		targetContainer.find(".lowest-usage-date").text(lowestDt.format('D MMM YYYY'));
+		targetContainer.find(".lowest-usage-date").text(lowestDt.format(this.multiLangTexts.calendarUsageDtFormat));
 	}
 	
 	if (highestDt !== null) {
 		targetContainer.find(".highest-usage-val").text(Utils.formatWithCommas(highestUsage.toFixed(0)));
-		targetContainer.find(".highest-usage-date").text(highestDt.format('D MMM YYYY'));
+		targetContainer.find(".highest-usage-date").text(highestDt.format(this.multiLangTexts.calendarUsageDtFormat));
 	}
 
 	var firstSplitPercent = parseFloat((totalUsage/allTotalUsage*100).toFixed(1));
@@ -1159,7 +1199,8 @@ ReportGenerator.prototype.generateWeekdayReport = function(combinedReadings) {
 	this.generateCalendarReport('#weekday-info', combinedReadings,
 		'currentWeekdayInfo', 'beginningWeekdayInfo',
 		'lastWeekdayInfo', 'lastSamePeriodWeekdayInfo', lowestUsage, lowestDt, highestUsage, highestDt,
-		false, isNotConcernFunc, 'weekday-sub-calendar', 'Weekday', 'Weekdays', 'Weekends');
+		false, isNotConcernFunc, 'weekday-sub-calendar', this.multiLangTexts.calendarTypeWeekday,
+		this.multiLangTexts.calendarSplitWeekdays, this.multiLangTexts.calendarSplitWeekends);
 }
 
 ReportGenerator.prototype.generateWeekendReport = function(combinedReadings) {
@@ -1193,7 +1234,8 @@ ReportGenerator.prototype.generateWeekendReport = function(combinedReadings) {
 	this.generateCalendarReport('#weekend-info', combinedReadings,
 		'currentWeekendInfo', 'beginningWeekendInfo',
 		'lastWeekendInfo', 'lastSamePeriodWeekendInfo', lowestUsage, lowestDt, highestUsage, highestDt,
-		true, isNotConcernFunc, 'weekend-sub-calendar', 'Weekend', 'Weekdays', 'Weekends');
+		true, isNotConcernFunc, 'weekend-sub-calendar', this.multiLangTexts.calendarTypeWeekend,
+		this.multiLangTexts.calendarSplitWeekdays, this.multiLangTexts.calendarSplitWeekends);
 }
 
 ReportGenerator.prototype.generateOvernightReport = function(combinedReadings) {
@@ -1226,10 +1268,11 @@ ReportGenerator.prototype.generateOvernightReport = function(combinedReadings) {
 	this.generateCalendarReport('#overnight-info', combinedReadings,
 		'currentOvernightInfo', 'beginningOvernightInfo',
 		'lastOvernightInfo', 'lastSamePeriodOvernightInfo', lowestUsage, lowestDt, highestUsage, highestDt,
-		true, isNotConcernFunc, 'overnight-sub-calendar', 'Overnight', 'Daytime', 'Overnight');
+		true, isNotConcernFunc, 'overnight-sub-calendar', this.multiLangTexts.calendarTypeOvernight,
+		this.multiLangTexts.calendarSplitDaytime, this.multiLangTexts.calendarSplitOvernight);
 
 	$('.overnight-footnote').text('*** '
-		+ this.overnightStartDt.format('hh:mmA')
+		+ this.overnightStartDt.format(reportGenThis.multiLangTexts.overnightFootnoteFormat)
 		+ ' - '
-		+ this.overnightEndDt.format('hh:mmA'));
+		+ this.overnightEndDt.format(reportGenThis.multiLangTexts.overnightFootnoteFormat));
 }

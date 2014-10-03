@@ -16,7 +16,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.db.models import Q
 from django.utils.html import escapejs
 from mongoengine import Q as MongoQ
-from entrak.settings import MEDIA_ROOT
+from entrak.settings import MEDIA_ROOT, LANG_CODE_EN, LANG_CODE_TC
 from system.models import System
 from unit.models import UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
 from baseline.models import BaselineUsage
@@ -285,8 +285,11 @@ def __generate_report_data(systems, report_type, start_timestamp, end_timestamp)
 	grouped_source_infos = []
 	for source in sources:
 		if source.system_code == system_code:
-			grouped_source_infos.append({"systemCode": system_code,
-				"sourceIds": [str(source.id)], "sourceName": source.d_name, "sourceOrder": source.order})
+			grouped_source_infos.append({
+				"systemCode": system_code,
+				"sourceIds": [str(source.id)],
+				"sourceNameInfo": {LANG_CODE_EN:source.d_name, LANG_CODE_TC:source.d_name_tc},
+				"sourceOrder": source.order})
 		else:
 			system_path_components = [code for code in source.system_path.split(',') if code != '']
 			system_path_idx = system_path_components.index(system_code)
