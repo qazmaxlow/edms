@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-03 11:28+0000\n"
+"POT-Creation-Date: 2014-10-03 15:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,6 +40,277 @@ msgstr "英文"
 #: entrak/settings_common.py:97
 msgid "Traditional Chinese"
 msgstr "繁體中文"
+
+#: entrak/templates/alert_settings.html:29
+msgid "THE ALERT PAGE"
+msgstr "耗電情況提示"
+
+#: entrak/templates/alert_settings.html:30
+msgid "Find out what you can set here at"
+msgstr "想知道系統可以提醒你些什麼，請看看"
+
+#: entrak/templates/alert_settings.html:38
+#, python-format
+msgid ""
+"\n"
+"\t<div>Let me know if <select class=\"source-select\" size=\"4\" placeholder="
+"\"Please select\"></select>energy</div>\n"
+"\t<div>reaches <select class=\"compare-percent-select\"></select>%% of my "
+"previous peak demand of <input class=\"peak-threshold-input\" type=\"number"
+"\">kVA.</div>\n"
+"\t"
+msgstr ""
+"\n"
+"\t<div>如果<select class=\"source-select\" size=\"4\" placeholder=\"請選擇"
+"\"></select>的電力需求逹到</div>\n"
+"\t<div>我的電力需求峰值<input class=\"peak-threshold-input\" type=\"number"
+"\">kVA <select class=\"compare-percent-select\"></select>%%，請通知我。</"
+"div>\n"
+"\t"
+
+#: entrak/templates/alert_settings.html:42
+#: entrak/templates/alert_settings.html:57
+msgid "Send alert to: "
+msgstr "請寄電郵至："
+
+#: entrak/templates/alert_settings.html:43
+#: entrak/templates/alert_settings.html:58
+msgid ""
+"You may use max 5 emails, use semi-colon to separate emails<br>e.g "
+"user@email.com; user@email.com"
+msgstr ""
+"你可以填寫最多五個電郵，以分號分開電郵地址<br>如：user@email.com; "
+"user2@email.com"
+
+#: entrak/templates/alert_settings.html:45
+#: entrak/templates/alert_settings.html:60
+msgid "Cancel"
+msgstr "取消"
+
+#: entrak/templates/alert_settings.html:46
+#: entrak/templates/alert_settings.html:61
+#: entrak/templates/alert_settings.html:1001
+msgid "Confirm"
+msgstr "確認"
+
+#: entrak/templates/alert_settings.html:53
+#, python-format
+msgid ""
+"\n"
+"\t<div>Let me know if <select class=\"source-select\" size=\"4\" placeholder="
+"\"Please select\"></select>energy use</div>\n"
+"\t<div>is <select class=\"compare-percent-select\"></select>%% higher than "
+"my recent average between <select class=\"start-time-select time-select\"></"
+"select> to <select class=\"end-time-select time-select\"></select> on "
+"<select class=\"weekday-select\"></select></div>\n"
+"\t"
+msgstr ""
+"\n"
+"<div>在<select class=\"weekday-select\"></select>的<select class=\"start-"
+"time-select time-select\"></select>至<select class=\"end-time-select time-"
+"select\"></select>期間，</div>\n"
+"<div>如果<select class=\"source-select\" size=\"4\" placeholder=\"請選擇\"></"
+"select>的用電量比最近的平均用電量高出 <select class=\"compare-percent-select"
+"\"></select>%%，請通知我。</div>\n"
+"\t"
+
+#: entrak/templates/alert_settings.html:79
+msgid "Resolved at"
+msgstr "已解決"
+
+#: entrak/templates/alert_settings.html:168
+#: entrak/templates/alert_settings.html:260
+msgid "alert_options_all"
+msgstr "每天"
+
+#: entrak/templates/alert_settings.html:170
+#: entrak/templates/alert_settings.html:261
+msgid "alert_options_weekdays"
+msgstr "平日"
+
+#: entrak/templates/alert_settings.html:172
+#: entrak/templates/alert_settings.html:262
+msgid "alert_options_weekends"
+msgstr "週末"
+
+#: entrak/templates/alert_settings.html:716
+#: entrak/templates/alert_settings.html:747
+msgid "DD MMM YYYY, ddd"
+msgstr "YYYY年MMMD日, dddd"
+
+#: entrak/templates/alert_settings.html:717
+msgid "hh:mma"
+msgstr "Ahh:mm"
+
+#: entrak/templates/alert_settings.html:722
+msgid " energy use reached"
+msgstr "的電力需求量"
+
+#: entrak/templates/alert_settings.html:729
+msgid "alert_history_used"
+msgstr "的用電量"
+
+#: entrak/templates/alert_settings.html:737
+msgid "alert_history_on"
+msgstr "從"
+
+#: entrak/templates/alert_settings.html:741
+#: entrak/templates/alert_settings.html:743
+#: entrak/templates/alert_settings.html:745
+#: entrak/templates/generate_report_pdf.html:71
+#: entrak/templates/report.html:478
+msgid "hh:mmA"
+msgstr "Ahh:mm"
+
+#: entrak/templates/alert_settings.html:751
+msgid "hh:mmA DD MMM YYYY,ddd"
+msgstr "YYYY年MMMD日, Ahh:mm, dddd"
+
+#: entrak/templates/alert_settings.html:855
+msgid "Alert History"
+msgstr "過往提示"
+
+#: entrak/templates/alert_settings.html:856
+msgid "Create Alert"
+msgstr "建立提示"
+
+#: entrak/templates/alert_settings.html:863
+msgid "Date"
+msgstr "日期"
+
+#: entrak/templates/alert_settings.html:864
+msgid "End-Source"
+msgstr "使用端"
+
+#: entrak/templates/alert_settings.html:865
+msgid "Alert Issue"
+msgstr "提示內容"
+
+#: entrak/templates/alert_settings.html:867
+msgid "Alert Status"
+msgstr "提示狀態"
+
+#: entrak/templates/alert_settings.html:868
+msgid "Unresolve"
+msgstr "未解決"
+
+#: entrak/templates/alert_settings.html:868
+msgid "Resolved"
+msgstr "已解決"
+
+#: entrak/templates/alert_settings.html:876
+msgid "Choose Alert Type:"
+msgstr "選擇提示類型："
+
+#: entrak/templates/alert_settings.html:883
+msgid ""
+"Peak Demand Alert will notify you immediately when your energy consumption "
+"(in kVA) is about to reach your peak level (see your utility bill for this "
+"peak level). This can help you avoid peak demand surcharge."
+msgstr ""
+"電力需求量高峰提示 – 當您用電需求量(kVA)即將達到峰值（一般記錄在電費單內），"
+"系統會馬上通知您。這樣可以助你避免高峰需求引起的額外收費。"
+
+#: entrak/templates/alert_settings.html:884
+#: entrak/templates/alert_settings.html:895
+#: entrak/templates/alert_settings.html:906
+msgid "Close"
+msgstr "關閉"
+
+#: entrak/templates/alert_settings.html:887
+#: entrak/templates/alert_settings.html:916
+msgid "Create Peak Demand Alert"
+msgstr "建立電力需求量高峰提示"
+
+#: entrak/templates/alert_settings.html:894
+msgid ""
+"Summary Alert will notify you when your total energy consumption over your "
+"selected time period(s) is higher than average (calculated over the last "
+"four weeks). This can help you identify abnormal energy consumption e.g. "
+"during lunch or after-work periods. A summary email will be sent to you at "
+"the end of the selected time period(s)."
+msgstr ""
+"特定時段用電量異常提示 – 當您在指定時段內用電量比“正常”為高（“正常”是指為過去"
+"四週同一時段的平均值），系統會在該時段結束時通知您。此類提示助您找出如午飯或"
+"下班後的用電異常情況。 "
+
+#: entrak/templates/alert_settings.html:898
+#: entrak/templates/alert_settings.html:941
+msgid "Create Summary Alert"
+msgstr "建立特定時段用電量異常提示"
+
+#: entrak/templates/alert_settings.html:905
+msgid ""
+"Instance Alert will notify you immediately when your energy consumption "
+"(every 5 minutes intervals) over your selected time period(s) is higher than "
+"average (calculated over the last four weeks). This can help you to monitor "
+"and respond to energy abnormalities for critical equipment/ areas."
+msgstr ""
+"用電量異常即時提示 ﹣系統會在指定時段內每五分鐘檢查一次你的用電量，如果比“正"
+"常”為高（“正常”是指為過去四週同一時段的平均值），系統會即時通知您。這能助您找"
+"出重要機器或區域的異常用電，讓您立刻採取行動解決問題。"
+
+#: entrak/templates/alert_settings.html:909
+#: entrak/templates/alert_settings.html:968
+msgid "Create Instance Alert"
+msgstr "建立用電量異常即時提示"
+
+#: entrak/templates/alert_settings.html:924
+#: entrak/templates/alert_settings.html:949
+#: entrak/templates/alert_settings.html:976
+msgid "End-Use"
+msgstr "使用端"
+
+#: entrak/templates/alert_settings.html:926
+msgid "Threshold"
+msgstr "峰值"
+
+#: entrak/templates/alert_settings.html:927
+#: entrak/templates/alert_settings.html:954
+#: entrak/templates/alert_settings.html:981
+msgid "Send to"
+msgstr "寄給"
+
+#: entrak/templates/alert_settings.html:928
+#: entrak/templates/alert_settings.html:955
+#: entrak/templates/alert_settings.html:982
+msgid "Date Created"
+msgstr "建立日期"
+
+#: entrak/templates/alert_settings.html:929
+#: entrak/templates/alert_settings.html:956
+#: entrak/templates/alert_settings.html:983
+msgid "Action"
+msgstr "行動"
+
+#: entrak/templates/alert_settings.html:934
+#: entrak/templates/alert_settings.html:961
+#: entrak/templates/alert_settings.html:988
+msgid "Back to Top"
+msgstr "返回頂部"
+
+#: entrak/templates/alert_settings.html:951
+#: entrak/templates/alert_settings.html:978
+msgid "Time from"
+msgstr "從"
+
+#: entrak/templates/alert_settings.html:952
+#: entrak/templates/alert_settings.html:979
+msgid "Time to"
+msgstr "到"
+
+#: entrak/templates/alert_settings.html:953
+#: entrak/templates/alert_settings.html:980
+msgid "alert_weekdays"
+msgstr "哪一天"
+
+#: entrak/templates/alert_settings.html:998
+msgid "Are you sure you want to remove?"
+msgstr "你確認要刪除此項目嗎？"
+
+#: entrak/templates/alert_settings.html:1000
+msgid "Canel"
+msgstr "取消"
 
 #: entrak/templates/bottom_energy_summary.html:9
 msgid "By this time last week you had used"
@@ -227,11 +498,6 @@ msgstr "週末及假日"
 #: entrak/templates/report.html:476
 msgid "Daytime"
 msgstr "白天"
-
-#: entrak/templates/generate_report_pdf.html:71
-#: entrak/templates/report.html:478
-msgid "hh:mmA"
-msgstr "Ahh:mm"
 
 #: entrak/templates/graph.html:97
 msgid "h a, D MMM YYYY, ddd"

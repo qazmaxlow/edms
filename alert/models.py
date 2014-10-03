@@ -4,7 +4,7 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from jsonfield import JSONField
 from egauge.manager import SourceManager
-from entrak.settings import SITE_LINK_FORMAT
+from entrak.settings import SITE_LINK_FORMAT, LANG_CODE_EN
 
 ALERT_TYPE_STILL_ON		= 'still_on'
 ALERT_TYPE_SUMMARY		= 'summary'
@@ -142,7 +142,7 @@ class Alert(models.Model):
 			sub_msg = ''
 		sub_msg += info['start_dt'].strftime('%d %b %Y, %I:%M%p')
 		sub_msg += info['end_dt'].strftime('-%I:%M%p')
-		sub_msg += '   %s'%(self.source_info['name'])
+		sub_msg += '   %s'%(self.source_info['nameInfo'][LANG_CODE_EN])
 		if info['diff_percent'] is not None:
 			sub_msg += '   %d%%'%abs(info['diff_percent'])
 			

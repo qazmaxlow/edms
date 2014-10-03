@@ -1,5 +1,6 @@
 {% extends "page_base.html" %}
 
+{% load i18n %}
 {% load static %}
 {% load entrak_extras %}
 
@@ -18,40 +19,46 @@
 <script src="{% static 'js/sumoselect/jquery.sumoselect.min.js' %}"></script>
 <script src="{% static 'js/tag-it-master/js/tag-it-customized.js' %}"></script>
 <script src="{% static 'js/entrak-system.js' %}"></script>
+<script src="{% static 'js/moment-with-locales.js' %}"></script>
 {% endblock %}
 
 {% block selected-menu-link-id %}menu-link-alert{% endblock %}
 {% block system_menu_target_view %}alert_settings{% endblock %}
 {% block breadcrumb_target_view %}alert_settings{% endblock %}
 
-{% block page_title %}THE ALERT PAGE{% endblock %}
-{% block page_subtitle %}Find out what you can set here at{% endblock %}
+{% block page_title %}{% trans "THE ALERT PAGE" %}{% endblock %}
+{% block page_subtitle %}{% trans "Find out what you can set here at" %}{% endblock %}
 
 {% block extra_script %}
 {{block.super}}
+{% get_current_language as LANGUAGE_CODE %}
 
 <script id="peak-conversation-template" type="x-tmpl-mustache">
 <div class="conversational-block" alert_type="peak">
+	{% blocktrans %}
 	<div>Let me know if <select class="source-select" size="4" placeholder="Please select"></select>energy</div>
 	<div>reaches <select class="compare-percent-select"></select>% of my previous peak demand of <input class="peak-threshold-input" type="number">kVA.</div>
-	<div class="send-alert-to">Send alert to: <ul class="email-input"></ul></div>
-	<div class="email-notes">You may use max 5 emails, use semi-colon to separate emails<br>e.g user@email.com; user@email.com</div>
+	{% endblocktrans %}
+	<div class="send-alert-to">{% trans "Send alert to: " %}<ul class="email-input"></ul></div>
+	<div class="email-notes">{% trans "You may use max 5 emails, use semi-colon to separate emails<br>e.g user@email.com; user@email.com" %}</div>
 	<div class="btn-container">
-		<div class="conversational-btn conversational-cancel-btn">Cancel</div>
-		<div class="conversational-btn conversational-confirm-btn">Confirm</div>
+		<div class="conversational-btn conversational-cancel-btn">{% trans "Cancel" %}</div>
+		<div class="conversational-btn conversational-confirm-btn">{% trans "Confirm" %}</div>
 	</div>
 </div>
 </script>
 
 <script id="summary-still-on-conversation-template" type="x-tmpl-mustache">
 <div class="conversational-block" alert_type="{% templatetag openvariable %}alertType{% templatetag closevariable %}">
+	{% blocktrans %}
 	<div>Let me know if <select class="source-select" size="4" placeholder="Please select"></select>energy use</div>
 	<div>is <select class="compare-percent-select"></select>% higher than my recent average between <select class="start-time-select time-select"></select> to <select class="end-time-select time-select"></select> on <select class="weekday-select"></select></div>
-	<div class="send-alert-to">Send alert to: <ul class="email-input"></ul></div>
-	<div class="email-notes">You may use max 5 emails, use semi-colon to separate emails<br>e.g user@email.com; user@email.com</div>
+	{% endblocktrans %}
+	<div class="send-alert-to">{% trans "Send alert to: " %}<ul class="email-input"></ul></div>
+	<div class="email-notes">{% trans "You may use max 5 emails, use semi-colon to separate emails<br>e.g user@email.com; user@email.com" %}</div>
 	<div class="btn-container">
-		<div class="conversational-btn conversational-cancel-btn">Cancel</div>
-		<div class="conversational-btn conversational-confirm-btn">Confirm</div>
+		<div class="conversational-btn conversational-cancel-btn">{% trans "Cancel" %}</div>
+		<div class="conversational-btn conversational-confirm-btn">{% trans "Confirm" %}</div>
 	</div>
 </div>
 </script>
@@ -69,7 +76,7 @@
 	</div><div class="resolved-col">
 		<div class="resolved-dot"></div>
 		<div class="resolved-dt-container">
-			<div class="resolved-text">Resolved at</div>
+			<div class="resolved-text">{% trans "Resolved at" %}</div>
 			<div class="resolved-dt">{% templatetag openvariable %}resolvedDt{% templatetag closevariable %}</div>
 		</div>
 	</div>
@@ -137,7 +144,7 @@ function genSystemOptionInfo(systemTree) {
 		}
 	});
 
-	return {'name': systemTree.data.name, 'source_ids': sourceIds};
+	return {'nameInfo': systemTree.data.nameInfo, 'source_ids': sourceIds};
 }
 
 function transformToPythonWeekday(momentWeekday) {
@@ -158,11 +165,11 @@ function transformPythonWeekdaysToName(weekdays) {
 	var weekendWeekdays = [5,6];
 	var weekdayName;
 	if (weekdays.length === allWeekdays.length) {
-		weekdayName = 'All';
+		weekdayName = '{% trans "alert_options_all" %}';
 	} else if (weekdays.length === weekdayWeekdays.length) {
-		weekdayName = 'Weekdays';
+		weekdayName = '{% trans "alert_options_weekdays" %}';
 	} else if (weekdays.length === weekendWeekdays.length) {
-		weekdayName = 'Weekends';
+		weekdayName = '{% trans "alert_options_weekends" %}';
 	} else if (weekdays.length === 1) {
 		weekdayName = moment().day(transformToMomentWeekday(weekdays[0])).format('dddd');
 	}
@@ -221,7 +228,7 @@ function unSelectSumoItem(selEle) {
 function setupSourceSelect(targetEle) {
 	$.each(settings.sourceInfoList, function(infoIdx, info) {
 		var mapKey = transformToSourceMapKey(info);
-		var selectHtml = '<option value=\'' + mapKey + '\'>' + info.name + '</option>';
+		var selectHtml = '<option value=\'' + mapKey + '\'>' + info.nameInfo[settings.langCode] + '</option>';
 		targetEle.append(selectHtml);
 	});
 }
@@ -239,8 +246,8 @@ function setupTimeSelect(targetEle) {
 	targetEle.each(function() {
 		var selectContainer = $(this);
 		var optionDt = moment().startOf('day');
-		var endDt = moment(optionDt).add('d', 1);
-		for (; optionDt.isBefore(endDt); optionDt.add('m', 30)) {
+		var endDt = moment(optionDt).add(1, 'd');
+		for (; optionDt.isBefore(endDt); optionDt.add(30, 'm')) {
 			selectContainer.append('<option value="' + optionDt.format('HH:mm') + '">' + optionDt.format('HH:mm') + '</option>');
 		};
 	});
@@ -250,13 +257,13 @@ function setupWeekdaySelect(targetEle) {
 	targetEle.each(function() {
 		var selectContainer = $(this);
 
-		selectContainer.append('<option value="[0,1,2,3,4,5,6]">All</option>');
-		selectContainer.append('<option value="[0,1,2,3,4]">Weekdays</option>');
-		selectContainer.append('<option value="[5,6]">Weekends</option>');
+		selectContainer.append('<option value="[0,1,2,3,4,5,6]">{% trans "alert_options_all" %}</option>');
+		selectContainer.append('<option value="[0,1,2,3,4]">{% trans "alert_options_weekdays" %}</option>');
+		selectContainer.append('<option value="[5,6]">{% trans "alert_options_weekends" %}</option>');
 
 		var optionDt = moment().startOf('week');
-		var endDt = moment(optionDt).add('w', 1);
-		for (; optionDt.isBefore(endDt); optionDt.add('d', 1)) {
+		var endDt = moment(optionDt).add(1, 'w');
+		for (; optionDt.isBefore(endDt); optionDt.add(1, 'd')) {
 			selectContainer.append('<option value="[' + transformToPythonWeekday(optionDt.day()) + ']">' + optionDt.format('dddd') + '</option>');
 		};
 	});
@@ -347,7 +354,7 @@ function requestSetAlert(alertData) {
 function insertAlertToTable(alert, peakRowTemplate, summaryStillOnRowTemplate) {
 	var info = {
 		alertId: alert.id,
-		endUse: alert.sourceInfo.name,
+		endUse: alert.sourceInfo.nameInfo[settings.langCode],
 		percent: alert.comparePercent,
 		created: alert.created,
 		numOfreceiver: alert.contactEmails.length,
@@ -643,6 +650,8 @@ function setupDuplicateBtn(targetEle) {
 
 $(function() {
 	setupAjaxForCsrf($.cookie('csrftoken'));
+	settings.langCode = '{{LANGUAGE_CODE}}';
+	moment.locale(settings.langCode);
 	
 	var peakConversationTemplate = $('#peak-conversation-template').html();
 	Mustache.parse(peakConversationTemplate);
@@ -682,6 +691,7 @@ $(function() {
 	});
 
 	settings.entrakSystem = new EntrakSystem();
+	settings.entrakSystem.langCode = settings.langCode;
 	settings.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
 	settings.entrakSystem.addSourceToSystem('{{sources|jsonifySources}}');
 	settings.contactEmails = JSON.parse('{{contact_emails|jsonifyPrimitiveObj}}');
@@ -703,34 +713,42 @@ $(function() {
 	$.each(settings.alertHistorys, function(historyIdx, alertHistory) {
 		var createdDt = moment.unix(alertHistory.created);
 		var info = {
-			createdDate: createdDt.format('DD MMM YYYY, ddd'),
-			createdTime: createdDt.format('hh:mma'),
-			sourceName: alertHistory.name,
+			createdDate: createdDt.format('{% trans "DD MMM YYYY, ddd" %}'),
+			createdTime: createdDt.format('{% trans "hh:mma" %}'),
+			sourceName: alertHistory.nameInfo[settings.langCode],
 		};
 
 		if (alertHistory.alert_type === 'peak') {
-			info.issueLine1 = alertHistory.name + ' energy use reached';
-			info.issueLine2 = alertHistory.diff_percent + '% of previous peak demand';
+			info.issueLine1 = alertHistory.nameInfo[settings.langCode] + '{% trans " energy use reached" %}';
+			if (settings.langCode === 'zh-tw') {
+				info.issueLine2 = '已達電力需求峰值的' + alertHistory.diff_percent + '%';
+			} else {
+				info.issueLine2 = alertHistory.diff_percent + '% of previous peak demand';
+			}
 		} else  if (alertHistory.alert_type === 'summary' || alertHistory.alert_type === 'still_on') {
-			info.issueLine1 = alertHistory.name + ' used';
-			info.issueLine2 = alertHistory.diff_percent + '% MORE than recent ' + createdDt.format('dddd') + ' average';
+			info.issueLine1 = alertHistory.nameInfo[settings.langCode] + '{% trans "alert_history_used" %}';
+			if (settings.langCode === 'zh-tw') {
+				info.issueLine2 = '已超過近期' + createdDt.format('dddd') + '平均值的' + alertHistory.diff_percent + '%';
+			} else {
+				info.issueLine2 = alertHistory.diff_percent + '% MORE than recent ' + createdDt.format('dddd') + ' average';
+			}
 		}
 
-		info.issueLine3 = 'on ';
+		info.issueLine3 = '{% trans "alert_history_on" %}';
 		if (alertHistory.alert_type === 'summary') {
 			var startTimeDt = moment().hour(alertHistory.start_time_h).minute(alertHistory.start_time_m);
 			var endTimeDt = moment().hour(alertHistory.end_time_h).minute(alertHistory.end_time_m);
-			info.issueLine3 += startTimeDt.format('hh:mmA') + ' - ' + endTimeDt.format('hh:mmA');
+			info.issueLine3 += startTimeDt.format('{% trans "hh:mmA" %}') + ' - ' + endTimeDt.format('{% trans "hh:mmA" %}');
 		} else if(alertHistory.alert_type === 'peak' || alertHistory.alert_type === 'still_on') {
-			info.issueLine3 += moment(createdDt).subtract('m', 5).format('hh:mmA')
+			info.issueLine3 += moment(createdDt).subtract(5, 'm').format('{% trans "hh:mmA" %}')
 				+ ' - '
-				+ createdDt.format('hh:mmA');
+				+ createdDt.format('{% trans "hh:mmA" %}');
 		}
-		info.issueLine3 += createdDt.format(' | DD MMM YYYY, ddd');
+		info.issueLine3 += createdDt.format(' | ' + '{% trans "DD MMM YYYY, ddd" %}');
 
 		if (alertHistory.resolved) {
 			info.resolvedColClass = 'resolved-history';
-			info.resolvedDt = moment.unix(alertHistory.resolved_datetime).format('hh:mmA DD MMM YYYY,ddd');
+			info.resolvedDt = moment.unix(alertHistory.resolved_datetime).format('{% trans "hh:mmA DD MMM YYYY,ddd" %}');
 		} else {
 			info.resolvedColClass = 'unresolve-history';
 		}
@@ -747,7 +765,7 @@ $(function() {
 		settings.sourceInfoMap[mapKey] = JSON.stringify(systemOptionInfo);
 		settings.sourceInfoList.push(systemOptionInfo);
 		$.each(node.data.sources, function(sourceId, source) {
-			sourceOptionInfo = {'name': source.name, 'source_id': source.id};
+			sourceOptionInfo = {'nameInfo': source.nameInfo, 'source_id': source.id};
 			var mapKey = transformToSourceMapKey(sourceOptionInfo);
 			settings.sourceInfoMap[mapKey] = JSON.stringify(sourceOptionInfo);
 			settings.sourceInfoList.push(sourceOptionInfo);
@@ -834,20 +852,20 @@ $(function() {
 
 <div class="panel-header-left-menu">
 	<h3 id="sub-menu-alert-history">
-		Alert History</h3><h3 class="sub-menu-create-alert">
-		Create Alert</h3>
+		{% trans "Alert History" %}</h3><h3 class="sub-menu-create-alert">
+		{% trans "Create Alert" %}</h3>
 </div>
 
 <div class="main-content-container">
 
 	<div class="alert-history-container">
 		<div class="history-table-header">
-			<div class="history-th-date">Date
-			</div><div class="history-th-source">End-Source
-			</div><div class="history-th-issue">Alert Issue
+			<div class="history-th-date">{% trans "Date" %}
+			</div><div class="history-th-source">{% trans "End-Source" %}
+			</div><div class="history-th-issue">{% trans "Alert Issue" %}
 			</div><div class="history-th-status">
-				<div>Alert Status</div>
-				<div><span class="history-th-unresolve">Unresolve</span><span>/</span><span class="history-th-resolved">Resolved</span></div>
+				<div>{% trans "Alert Status" %}</div>
+				<div><span class="history-th-unresolve">{% trans "Unresolve" %}</span><span>/</span><span class="history-th-resolved">{% trans "Resolved" %}</span></div>
 			</div>
 		</div>
 		<div class="history-content">
@@ -855,47 +873,47 @@ $(function() {
 	</div>
 
 	<div class="create-alert-container">
-		<div class="choose-alert-title">Choose Alert Type:</div>
+		<div class="choose-alert-title">{% trans "Choose Alert Type:" %}</div>
 		<div class="choose-alert-container">
 			<div class="choose-alert-block">
 				<div class="choose-alert-info-block">
 					<img class="alert-img" src="{% static 'images/alert/create-peak-demand.png' %}">
 					<img class="info-btn" src="{% static 'images/alert/info-icon.png' %}">
 					<div class="info-tooltip">
-						<div class="info-tooltip-content">Peak Demand Alert will notify you immediately when your energy consumption (in kVA) is about to reach your peak level (see your utility bill for this peak level). This can help you avoid peak demand surcharge.</div>
-						<div class="info-tooltip-close-btn">Close</div>
+						<div class="info-tooltip-content">{% trans "Peak Demand Alert will notify you immediately when your energy consumption (in kVA) is about to reach your peak level (see your utility bill for this peak level). This can help you avoid peak demand surcharge." %}</div>
+						<div class="info-tooltip-close-btn">{% trans "Close" %}</div>
 					</div>
 				</div>
-				<a class="choose-alert-link" href="#peak-demand-section"><div class="choose-alert-btn">Create Peak Demand Alert</div></a>
+				<a class="choose-alert-link" href="#peak-demand-section"><div class="choose-alert-btn">{% trans "Create Peak Demand Alert" %}</div></a>
 			</div>
 			<div class="choose-alert-block">
 				<div class="choose-alert-info-block">
 					<img class="alert-img" src="{% static 'images/alert/create-summary-alert.png' %}">
 					<img class="info-btn" src="{% static 'images/alert/info-icon.png' %}">
 					<div class="info-tooltip">
-						<div class="info-tooltip-content">Summary Alert will notify you when your total energy consumption over your selected time period(s) is higher than average (calculated over the last four weeks). This can help you identify abnormal energy consumption e.g. during lunch or after-work periods. A summary email will be sent to you at the end of the selected time period(s).</div>
-						<div class="info-tooltip-close-btn">Close</div>
+						<div class="info-tooltip-content">{% trans "Summary Alert will notify you when your total energy consumption over your selected time period(s) is higher than average (calculated over the last four weeks). This can help you identify abnormal energy consumption e.g. during lunch or after-work periods. A summary email will be sent to you at the end of the selected time period(s)." %}</div>
+						<div class="info-tooltip-close-btn">{% trans "Close" %}</div>
 					</div>
 				</div>
-				<a class="choose-alert-link" href="#summary-alert-section"><div class="choose-alert-btn">Create Summary Alert</div></a>
+				<a class="choose-alert-link" href="#summary-alert-section"><div class="choose-alert-btn">{% trans "Create Summary Alert" %}</div></a>
 			</div>
 			<div class="choose-alert-block">
 				<div class="choose-alert-info-block">
 					<img class="alert-img" src="{% static 'images/alert/create-instance-alert.png' %}">
 					<img class="info-btn" src="{% static 'images/alert/info-icon.png' %}">
 					<div class="info-tooltip">
-						<div class="info-tooltip-content">Instance Alert will notify you immediately when your energy consumption (every 5 minutes intervals) over your selected time period(s) is higher than average (calculated over the last four weeks). This can help you to monitor and respond to energy abnormalities for critical equipment/ areas.</div>
-						<div class="info-tooltip-close-btn">Close</div>
+						<div class="info-tooltip-content">{% trans "Instance Alert will notify you immediately when your energy consumption (every 5 minutes intervals) over your selected time period(s) is higher than average (calculated over the last four weeks). This can help you to monitor and respond to energy abnormalities for critical equipment/ areas." %}</div>
+						<div class="info-tooltip-close-btn">{% trans "Close" %}</div>
 					</div>
 				</div>
-				<a class="choose-alert-link" href="#still-on-alert-section"><div class="choose-alert-btn">Create Instance Alert</div></a>
+				<a class="choose-alert-link" href="#still-on-alert-section"><div class="choose-alert-btn">{% trans "Create Instance Alert" %}</div></a>
 			</div>
 		</div>
 
 		<div id="peak-demand-section" class="peak-demand alert-container">
 			<div class="alert-header">
 				<img class="alert-header-img" src="{% static 'images/alert/peak-demand-icon-small.png' %}">
-				<div class="alert-header-title">Create Peak Demand Alert</div>
+				<div class="alert-header-title">{% trans "Create Peak Demand Alert" %}</div>
 				<img class="alert-header-info-btn" src="{% static 'images/alert/info-icon-small.png' %}">
 			</div>
 
@@ -903,24 +921,24 @@ $(function() {
 				<hr>
 				<div class="content-table">
 					<div class="table-header">
-						<div class="table-header-end-use">End-Use
+						<div class="table-header-end-use">{% trans "End-Use" %}
 						</div><div class="table-header-percentage">%
-						</div><div class="table-header-threshold">Threshold
-						</div><div class="table-header-send-to">Send to
-						</div><div class="table-header-created">Date Created
-						</div><div class="table-header-action">Action</div>
+						</div><div class="table-header-threshold">{% trans "Threshold" %}
+						</div><div class="table-header-send-to">{% trans "Send to" %}
+						</div><div class="table-header-created">{% trans "Date Created" %}
+						</div><div class="table-header-action">{% trans "Action" %}</div>
 					</div>
 				</div>
 			</div>
 			<div class="back-to-top">
-				<a href="#">Back to Top<img src="{% static 'images/alert/back-to-top.png' %}"></a>
+				<a href="#">{% trans "Back to Top" %}<img src="{% static 'images/alert/back-to-top.png' %}"></a>
 			</div>
 		</div>
 
 		<div id="summary-alert-section" class="summary-alert alert-container">
 			<div class="alert-header">
 				<img class="alert-header-img" src="{% static 'images/alert/summary-alert-icon-small.png' %}">
-				<div class="alert-header-title">Create Summary Alert</div>
+				<div class="alert-header-title">{% trans "Create Summary Alert" %}</div>
 				<img class="alert-header-info-btn" src="{% static 'images/alert/info-icon-small.png' %}">
 			</div>
 
@@ -928,26 +946,26 @@ $(function() {
 				<hr>
 				<div class="content-table">
 					<div class="table-header">
-						<div class="table-header-end-use">End-Use
+						<div class="table-header-end-use">{% trans "End-Use" %}
 						</div><div class="table-header-percentage">%
-						</div><div class="table-header-time-from">Time from
-						</div><div class="table-header-time-to">Time to
-						</div><div class="table-header-weekdays">Weekdays
-						</div><div class="table-header-send-to">Send to
-						</div><div class="table-header-created">Date Created
-						</div><div class="table-header-action">Action</div>
+						</div><div class="table-header-time-from">{% trans "Time from" %}
+						</div><div class="table-header-time-to">{% trans "Time to" %}
+						</div><div class="table-header-weekdays">{% trans "alert_weekdays" %}
+						</div><div class="table-header-send-to">{% trans "Send to" %}
+						</div><div class="table-header-created">{% trans "Date Created" %}
+						</div><div class="table-header-action">{% trans "Action" %}</div>
 					</div>
 				</div>
 			</div>
 			<div class="back-to-top">
-				<a href="#">Back to Top<img src="{% static 'images/alert/back-to-top.png' %}"></a>
+				<a href="#">{% trans "Back to Top" %}<img src="{% static 'images/alert/back-to-top.png' %}"></a>
 			</div>
 		</div>
 
 		<div id="still-on-alert-section" class="still-on-alert alert-container">
 			<div class="alert-header">
 				<img class="alert-header-img" src="{% static 'images/alert/instance-alert-icon-small.png' %}">
-				<div class="alert-header-title">Create Instance Alert</div>
+				<div class="alert-header-title">{% trans "Create Instance Alert" %}</div>
 				<img class="alert-header-info-btn" src="{% static 'images/alert/info-icon-small.png' %}">
 			</div>
 
@@ -955,19 +973,19 @@ $(function() {
 				<hr>
 				<div class="content-table">
 					<div class="table-header">
-						<div class="table-header-end-use">End-Use
+						<div class="table-header-end-use">{% trans "End-Use" %}
 						</div><div class="table-header-percentage">%
-						</div><div class="table-header-time-from">Time from
-						</div><div class="table-header-time-to">Time to
-						</div><div class="table-header-weekdays">Weekdays
-						</div><div class="table-header-send-to">Send to
-						</div><div class="table-header-created">Date Created
-						</div><div class="table-header-action">Action</div>
+						</div><div class="table-header-time-from">{% trans "Time from" %}
+						</div><div class="table-header-time-to">{% trans "Time to" %}
+						</div><div class="table-header-weekdays">{% trans "alert_weekdays" %}
+						</div><div class="table-header-send-to">{% trans "Send to" %}
+						</div><div class="table-header-created">{% trans "Date Created" %}
+						</div><div class="table-header-action">{% trans "Action" %}</div>
 					</div>
 				</div>
 			</div>
 			<div class="back-to-top">
-				<a href="#">Back to Top<img src="{% static 'images/alert/back-to-top.png' %}"></a>
+				<a href="#">{% trans "Back to Top" %}<img src="{% static 'images/alert/back-to-top.png' %}"></a>
 			</div>
 		</div>
 	</div>
@@ -977,10 +995,10 @@ $(function() {
 </div>
 
 <div class="remove-dialog">
-	<div class="dialog-title">Are you sure you want to remove?</div>
+	<div class="dialog-title">{% trans "Are you sure you want to remove?" %}</div>
 	<div class="dialog-btn-container">
-		<div class="dialog-cancel-btn">Canel</div>
-		<div class="dialog-confirm-btn">Confirm</div>
+		<div class="dialog-cancel-btn">{% trans "Canel" %}</div>
+		<div class="dialog-confirm-btn">{% trans "Confirm" %}</div>
 	</div>
 </div>
 
