@@ -231,9 +231,10 @@ $(function() {
 {% endblock %}
 
 {% block content %}
+{% get_current_language as LANGUAGE_CODE %}
 <div class="system-info-container">
-	<div class="system-title">{{system.name}}</div>
-	<div class="system-sub-text">REAL TIME ENERGY MONITORING SYSTEM</div>
+	<div class="system-title">{{system|get_system_full_name:LANGUAGE_CODE}}</div>
+	<div class="system-sub-text">{% trans "REAL TIME ENERGY MONITORING SYSTEM" %}</div>
 	<div class="system-logo">
 		<div class="logo-circle-bound" style="background-image: url('{{system.logo.url}}');"></div>
 		<img src="{% static 'images/user-logo-bg.png' %}">
