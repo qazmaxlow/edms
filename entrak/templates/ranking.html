@@ -6,10 +6,14 @@
 
 {% block extra_head %}
 {{block.super}}
+{% get_current_language as LANGUAGE_CODE %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/ranking.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'js/datetimepicker-master/jquery.datetimepicker.css' %}">
+{% ifequal LANGUAGE_CODE 'zh-tw' %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel-zh-tw.css' %}">
+{% endifequal %}
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
 <script src="{% static 'js/jquery.tinysort.min.js' %}"></script>
 <script src="{% static 'js/datetimepicker-master/jquery.datetimepicker-customized.js' %}"></script>

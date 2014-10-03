@@ -7,9 +7,13 @@
 
 {% block extra_head %}
 {{block.super}}
+{% get_current_language as LANGUAGE_CODE %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/report.css' %}">
+{% ifequal LANGUAGE_CODE 'zh-tw' %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/report-zh-tw.css' %}">
+{% endifequal %}
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
 <script src="{% static 'js/moment-with-locales.js' %}"></script>

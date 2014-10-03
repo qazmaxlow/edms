@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+{% load i18n %}
 {% load static %}
 {% load entrak_extras %}
 
@@ -13,7 +14,7 @@
 <script src="{% static 'js/sudo-slider/js/jquery.sudo-slider.min.js' %}"></script>
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
-<script src="{% static 'js/moment.min.js' %}"></script>
+<script src="{% static 'js/moment-with-locales.js' %}"></script>
 <script src="{% static 'js/flot/jquery.flot.min.js' %}"></script>
 <script src="{% static 'js/entrak-utils.js' %}"></script>
 <script src="{% static 'js/graph-chart.js' %}"></script>
@@ -185,7 +186,16 @@ $(function() {
 	});
 
 	setupAjaxForCsrf($.cookie('csrftoken'));
-	display.graphChart = new GraphChart(".graph-info .chart", null, null, null);
+
+	var graphChartMultiLangTexts = {
+		'TOTAL_TEXT': '{% trans "Total" %}',
+		'PREVIOUS_TEXT': '{% trans "Previous" %}',
+		'HIGHEST_TEXT': '{% trans "Highest" %}',
+		'LOWEST_TEXT': '{% trans "Lowest" %}',
+		'CUSTOM_TEXT': '{% trans "Custom" %}',
+	};
+
+	display.graphChart = new GraphChart(".graph-info .chart", null, null, null, graphChartMultiLangTexts);
 	display.graphChart.currentRangeType = Utils.RANGE_TYPE_DAY;
 
 	display.sudoSlider = $('.slider-container').sudoSlider({
