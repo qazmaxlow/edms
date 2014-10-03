@@ -52,7 +52,7 @@ $(function() {
 		var aDom = $('<a href="#" onclick="return false;">' + node.data.name +'</a>');
 		aDom.click({node: node}, function(event) {
 			if (page.userSystemTree.data.node !== event.data.node) {
-				window.location.href = "/{{LANGUAGE_CODE}}/" + event.data.node.data.code + "/{% block system_menu_target_view %}{% endblock %}/";
+				window.location.href = "/" + event.data.node.data.code + "/{% block system_menu_target_view %}{% endblock %}/";
 			}
 		});
 		var appendDom = $('<li system_code="' + node.data.code + '">');
@@ -177,7 +177,7 @@ $(function() {
 			<span id="breadcrumbs-path">
 
 				{% for info in system_path_components %}
-				<a href="/{{LANGUAGE_CODE}}/{{info.code}}/{% block breadcrumb_target_view %}{% endblock %}/">{{info.nameInfo|get_value_with_key:LANGUAGE_CODE}}</a>
+				<a href="/{{info.code}}/{% block breadcrumb_target_view %}{% endblock %}/">{{info.nameInfo|get_value_with_key:LANGUAGE_CODE}}</a>
 					{% if not forloop.last %}
 					<span>-</span>
 					{% endif %}
