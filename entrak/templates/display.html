@@ -23,6 +23,7 @@
 
 {% block extra_script %}
 {{block.super}}
+{% get_current_language as LANGUAGE_CODE %}
 
 <script id="tips-template" type="x-tmpl-mustache">
 <div class="tips" style="background-image: url({% templatetag openvariable %}bgImg{% templatetag closevariable %});">
@@ -43,10 +44,10 @@ SLIDE_TYPE_DYNAMIC = 'dynamic';
 display = {};
 
 function updateGraphText() {
-	$('.graph-dt-text').text(moment().format('D MMM YYYY, ddd'));
+	$('.graph-dt-text').text(moment().format('{% trans "D MMM YYYY, ddd" %}'));
 
 	var lastText = moment().format('dddd')
-	$(".legend-last-text").text('Last '+lastText);
+	$(".legend-last-text").text('{% trans "Last " %}'+lastText);
 }
 
 function getProgressData() {
@@ -77,19 +78,26 @@ function getProgressData() {
 		$('.last-12-month-percent-val').text(Math.abs(Utils.fixedDecBaseOnVal(data.percengate_change)));
 		var percentText, moneySavingText;
 		if (data.percengate_change >= 0) {
-			percentText = 'Energy Reduction';
-			moneySavingText = 'Saving up to';
+			percentText = '{% trans "Energy Reduction" %}';
+			moneySavingText = '{% trans "Saving up to" %}';
 
 			$('.progress-info').addClass('progress-positive-saving');
 			$('.progress-info').removeClass('progress-negative-saving');
 		} else {
-			percentText = 'More Energy';
-			moneySavingText = 'Extra spending up to';
+			percentText = '{% trans "More Energy" %}';
+			moneySavingText = '{% trans "Extra spending up to" %}';
 
 			$('.progress-info').addClass('progress-negative-saving');
 			$('.progress-info').removeClass('progress-positive-saving');
 		}
 		$('.last-12-month-percent-text').text(percentText);
+
+		if (display.langCode === 'zh-tw') {
+			var titleSuffix = (data.percengate_change >= 0) ? "一共減少消秏": "一共多用了";
+			$('.last-12-month-block-title').text('{% trans "Over the past 12 months" %}' + titleSuffix);
+		} else {
+			$('.last-12-month-block-title').text('{% trans "Over the past 12 months" %}');
+		}
 
 		if (data.archived_level === 0) {
 			$('.empty-medal').show();
@@ -99,7 +107,7 @@ function getProgressData() {
 			$('.empty-medal').hide();
 		}
 
-		$('.progress-co2-val').text(Utils.formatWithCommas(Math.abs(data.total_co2_saving.toFixed(0))) + ' tons');
+		$('.progress-co2-val').text(Utils.formatWithCommas(Math.abs(data.total_co2_saving.toFixed(0))) + '{% trans " tons" %}');
 		$('.achieved-percent-val').text(data.archived_level);
 		$('.target-percent-val').text(data.target_level);
 
@@ -151,13 +159,15 @@ function changeSlide() {
 
 $(function() {
 	display.sourceIds = JSON.parse('{{source_ids}}');
+	display.langCode = '{{LANGUAGE_CODE}}';
+	moment.locale(display.langCode);
 
 	var tipInfos = [
-		{bgImg: "{% static 'images/tips/light-tube.jpg' %}", title: "Remove a tube", desc: 'If you have more light than you need in an area, you can remove one light tube from a fixture and save energy!', posStyle: 'top: 180px; left: 360px;'},
-		{bgImg: "{% static 'images/tips/ac-temperature.jpg' %}", title: "Re-assess Air Conditioning’s Temperature", desc: 'After 30 minutes of turning on the AirCon, you should assess whether the temperature is too cold, if so you should adjust the temperature to minimize energy wastage.', posStyle: 'top: 250px; right: 50px;'},
-		{bgImg: "{% static 'images/tips/ac-ribbon.jpg' %}", title: "Put a Ribbon on it", desc: 'Tie a small colored ribbon to the vent of each aircon unit - this makes it easier to tell whether the aircon is on or off, so you don\'t accidentally leave aircon on!', posStyle: 'top: 250px; right: 50px;'},
-		{bgImg: "{% static 'images/tips/light-switch.jpg' %}", title: "Label Your Plugs & Switch", desc: 'Label the plugs of electrical devices - sometime it\'s hard to tell what is what, so this helps you to safely unplug or turn off appliances without worrying about turning off important things!', posStyle: 'top: 250px; left: 170px;'},
-		{bgImg: "{% static 'images/tips/plugs.jpg' %}", title: "Turn off the switch", desc: 'Even if an appliance turned off it still consume 5-10% of energy, if its being plug into the socket. Therefore remember to turn off the socket switch as well!', posStyle: 'top: 250px; left: 170px;'},
+		{bgImg: "{% static 'images/tips/light-tube.jpg' %}", title: '{% trans "Remove a tube" %}', desc: '{% trans "If you have more light than you need in an area, you can remove one light tube from a fixture and save energy!" %}', posStyle: 'top: 180px; left: 360px;'},
+		{bgImg: "{% static 'images/tips/ac-temperature.jpg' %}", title: '{% trans "Re-assess Air Conditioning’s Temperature" %}', desc: '{% trans "After 30 minutes of turning on the AirCon, you should assess whether the temperature is too cold, if so you should adjust the temperature to minimize energy wastage." %}', posStyle: 'top: 250px; right: 50px;'},
+		{bgImg: "{% static 'images/tips/ac-ribbon.jpg' %}", title: '{% trans "Put a Ribbon on it" %}', desc: '{% blocktrans %}Tie a small colored ribbon to the vent of each aircon unit - this makes it easier to tell whether the aircon is on or off, so you don\'t accidentally leave aircon on!{% endblocktrans %}', posStyle: 'top: 250px; right: 50px;'},
+		{bgImg: "{% static 'images/tips/light-switch.jpg' %}", title: '{% trans "Label Your Plugs & Switch" %}', desc: '{% blocktrans %}Label the plugs of electrical devices - sometime it\'s hard to tell what is what, so this helps you to safely unplug or turn off appliances without worrying about turning off important things!{% endblocktrans %}', posStyle: 'top: 250px; left: 170px;'},
+		{bgImg: "{% static 'images/tips/plugs.jpg' %}", title: '{% trans "Turn off the switch" %}', desc: '{% blocktrans %}Even if an appliance turned off it still consume 5-10% of energy, if its being plug into the socket. Therefore remember to turn off the socket switch as well!{% endblocktrans %}', posStyle: 'top: 250px; left: 170px;'},
 	]
 
 
@@ -246,13 +256,13 @@ $(function() {
 
 		<div class="graph-info">
 			<div class="header-empty-block"></div>
-			<div class="graph-title">Our energy consumption today: <span class="graph-dt-text"></span></div>
+			<div class="graph-title">{% trans "Our energy consumption today: " %}<span class="graph-dt-text"></span></div>
 			<div class="graph-header">
 				<div class="graph-unit">kWh</div>
 				<div class="graph-legend-container">
 					<div class="graph-legend">
 						<span></span>
-						<span>Total</span>
+						<span>{% trans "Today" %}</span>
 					</div>
 					<div class="graph-legend">
 						<span></span>
@@ -262,7 +272,7 @@ $(function() {
 				<hr>
 			</div>
 			<div class="chart"></div>
-			<div class="chart-hour">hour</div>
+			<div class="chart-hour">{% trans "hour" %}</div>
 			<hr class="graph-divider">
 
 			{% include "display_bottom_energy_summary.html" %}
@@ -278,7 +288,7 @@ $(function() {
 				</video>
 				<div>
 					<div class="last-12-month-block">
-						<div class="last-12-month-block-title">Over the past 12 months</div>
+						<div class="last-12-month-block-title"></div>
 						<div class="last-12-month-percent-change">
 							<span class="last-12-month-percent-val"></span><span class="last-12-month-percent-symbol">%</span>
 							<span class="last-12-month-percent-text"></span>
@@ -289,22 +299,22 @@ $(function() {
 			<div class="progress-detail-container">
 				<div class="progress-detail">
 					<img src="{% static 'images/progress/co2.png' %}">
-					<div>Which is equivalent to</div>
-					<div class="progress-detail-text"><span class="progress-co2-val"></span> of CO<sub>2</sub></div>
+					<div>{% trans "Which is equivalent to" %}</div>
+					<div class="progress-detail-text"><span class="progress-co2-val"></span>{% trans " of CO<sub>2</sub>" %}</div>
 				</div>
 				<div class="progress-detail-separator"></div>
 				<div class="progress-detail progress-target-detail">
 					<div class="progress-medal empty-medal">
 						<img src="{% static 'images/display/empty-medal.png' %}">
-						<div class="medal-text">Keep<br>Saving!</div>
+						<div class="medal-text">{% trans "Keep<br>Saving!" %}</div>
 					</div>
 					<div class="progress-medal saving-medal">
 						<img src="{% static 'images/display/medal.png' %}">
 						<div><span class="achieved-percent-val"></span><span class="percent-symbol">%</span></div>
-						<div class="medal-text">Reduction<br>achieved</div>
+						<div class="medal-text">{% trans "Reduction<br>achieved" %}</div>
 					</div>
-					<div class="next-target-text">Next target would be</div>
-					<div class="next-target-percent"><span class="target-percent-val"></span>% REDUCTION</div>
+					<div class="next-target-text">{% trans "Next target would be" %}</div>
+					<div class="next-target-percent">{% ifequal LANGUAGE_CODE 'zh-tw' %}節省<span class="target-percent-val"></span>%{% else %}<span class="target-percent-val"></span>% REDUCTION{% endifequal %}</div>
 				</div>
 				<div class="progress-detail-separator"></div>
 				<div class="progress-detail">

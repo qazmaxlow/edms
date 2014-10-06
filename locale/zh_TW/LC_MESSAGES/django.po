@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-03 15:34+0000\n"
+"POT-Creation-Date: 2014-10-06 10:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,19 +17,19 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: entrak/progress_views.py:20
+#: entrak/progress_views.py:22
 msgid "Hong Kong Airport"
 msgstr "香港機場"
 
-#: entrak/progress_views.py:20
+#: entrak/progress_views.py:22
 msgid "Times Square"
-msgstr "銅鑼灣時代廣場"
+msgstr "時代廣場"
 
-#: entrak/progress_views.py:23
+#: entrak/progress_views.py:25
 msgid "Singapore Airport"
 msgstr "新加坡機場"
 
-#: entrak/progress_views.py:23
+#: entrak/progress_views.py:25
 msgid "Marina Bay Sands"
 msgstr "濱海灣金沙"
 
@@ -138,7 +138,7 @@ msgstr "週末"
 msgid "DD MMM YYYY, ddd"
 msgstr "YYYY年MMMD日, dddd"
 
-#: entrak/templates/alert_settings.html:717
+#: entrak/templates/alert_settings.html:717 entrak/templates/graph.html:139
 msgid "hh:mma"
 msgstr "Ahh:mm"
 
@@ -324,33 +324,172 @@ msgstr "今天到目前目止，你消秏了電力共"
 msgid "See Details"
 msgstr "詳情"
 
-#: entrak/templates/display.html:191 entrak/templates/graph.html:379
+#: entrak/templates/display.html:47
+#: entrak/templates/generate_report_pdf.html:43
+#: entrak/templates/generate_report_pdf.html:44 entrak/templates/graph.html:84
+#: entrak/templates/graph.html.py:100 entrak/templates/graph.html:124
+#: entrak/templates/ranking.html:304 entrak/templates/report.html:336
+#: entrak/templates/report.html.py:337 entrak/templates/report.html:339
+#: entrak/templates/report.html.py:340 entrak/templates/report.html:383
+#: entrak/templates/report.html.py:387 entrak/templates/report.html:398
+#: entrak/templates/report.html.py:450 entrak/templates/report.html:451
+msgid "D MMM YYYY, ddd"
+msgstr "YYYY年MMMD日, dddd"
+
+#: entrak/templates/display.html:50
+msgid "Last "
+msgstr "上"
+
+#: entrak/templates/display.html:81
+msgid "Energy Reduction"
+msgstr "電力能源"
+
+#: entrak/templates/display.html:82
+msgid "Saving up to"
+msgstr "節省了"
+
+#: entrak/templates/display.html:87
+msgid "More Energy"
+msgstr "電力能源"
+
+#: entrak/templates/display.html:88
+msgid "Extra spending up to"
+msgstr "多用了"
+
+#: entrak/templates/display.html:97 entrak/templates/display.html.py:99
+msgid "Over the past 12 months"
+msgstr "過去12個月"
+
+#: entrak/templates/display.html:110
+#: entrak/templates/generate_report_pdf.html:46
+#: entrak/templates/report.html:453
+msgid " tons"
+msgstr "噸"
+
+#: entrak/templates/display.html:166
+msgid "Remove a tube"
+msgstr "移除光管"
+
+#: entrak/templates/display.html:166
+msgid ""
+"If you have more light than you need in an area, you can remove one light "
+"tube from a fixture and save energy!"
+msgstr ""
+"如果你有一個區域的光線比你需要的更多，這樣你可以移除燈具中的其中一條光管達到"
+"節能效果！"
+
+#: entrak/templates/display.html:167
+msgid "Re-assess Air Conditioning’s Temperature"
+msgstr "重新評估冷氣的溫度"
+
+#: entrak/templates/display.html:167
+msgid ""
+"After 30 minutes of turning on the AirCon, you should assess whether the "
+"temperature is too cold, if so you should adjust the temperature to minimize "
+"energy wastage."
+msgstr ""
+"當你開啟了冷氣超過30分鐘，你應該評估溫度是否太冷。如果是你應該調教溫度，減少"
+"能源浪費。"
+
+#: entrak/templates/display.html:168
+msgid "Put a Ribbon on it"
+msgstr "掛上絲帶"
+
+#: entrak/templates/display.html:168
+msgid ""
+"Tie a small colored ribbon to the vent of each aircon unit - this makes it "
+"easier to tell whether the aircon is on or off, so you don\\'t accidentally "
+"leave aircon on!"
+msgstr ""
+"在冷氣通風位掛上一條彩帶 – 容易告訴大家冷氣是否開啟，所以你不會意外地把冷氣開"
+"著！"
+
+#: entrak/templates/display.html:169
+msgid "Label Your Plugs & Switch"
+msgstr "標籤插座及拖板上的電掣"
+
+#: entrak/templates/display.html:169
+msgid ""
+"Label the plugs of electrical devices - sometime it\\'s hard to tell what is "
+"what, so this helps you to safely unplug or turn off appliances without "
+"worrying about turning off important things!"
+msgstr ""
+"標籤電器開關掣 – 有時候你不清楚電源插著的是什麼，所以這可以協助你完全地關上插"
+"座及拖板上的電掣，而不擔心關掉重要的電器！"
+
+#: entrak/templates/display.html:170
+msgid "Turn off the switch"
+msgstr "關閉開關掣"
+
+#: entrak/templates/display.html:170
+#, python-format
+msgid ""
+"Even if an appliance turned off it still consume 5-10%% of energy, if its "
+"being plug into the socket. Therefore remember to turn off the socket switch "
+"as well!"
+msgstr ""
+"就算把電器關掉，但還連接在插座上，這樣仍然會消耗5-10%%的能源。正因如此，請緊"
+"記得也把插座或拖板上的開關掣關掉！"
+
+#: entrak/templates/display.html:201 entrak/templates/graph.html:379
 #: entrak/templates/ranking.html:492
 msgid "Total"
 msgstr "總數"
 
-#: entrak/templates/display.html:192 entrak/templates/graph.html:380
+#: entrak/templates/display.html:202 entrak/templates/graph.html:380
 msgid "Previous"
 msgstr "以前"
 
-#: entrak/templates/display.html:193 entrak/templates/graph.html:381
+#: entrak/templates/display.html:203 entrak/templates/graph.html:381
 msgid "Highest"
 msgstr "最高"
 
-#: entrak/templates/display.html:194 entrak/templates/graph.html:382
+#: entrak/templates/display.html:204 entrak/templates/graph.html:382
 msgid "Lowest"
 msgstr "最低"
 
-#: entrak/templates/display.html:195 entrak/templates/graph.html:383
+#: entrak/templates/display.html:205 entrak/templates/graph.html:383
 msgid "Custom"
 msgstr "自訂"
 
-#: entrak/templates/display.html:237
+#: entrak/templates/display.html:247
 msgid "REAL TIME ENERGY MONITORING SYSTEM"
 msgstr "實時能源監察系統"
 
-#: entrak/templates/generate_report_pdf.html:41
-#: entrak/templates/graph.html:104 entrak/templates/graph.html.py:126
+#: entrak/templates/display.html:259
+msgid "Our energy consumption today: "
+msgstr "我們今天的能源消耗："
+
+#: entrak/templates/display.html:265
+msgid "Today"
+msgstr "今天"
+
+#: entrak/templates/display.html:275
+msgid "hour"
+msgstr "小時"
+
+#: entrak/templates/display.html:302
+msgid "Which is equivalent to"
+msgstr "相等於減少了"
+
+#: entrak/templates/display.html:303
+msgid " of CO<sub>2</sub>"
+msgstr "二氧化碳"
+
+#: entrak/templates/display.html:309 entrak/templates/progress.html:64
+msgid "Keep<br>Saving!"
+msgstr "繼續努力"
+
+#: entrak/templates/display.html:314 entrak/templates/progress.html:70
+msgid "Reduction<br>achieved"
+msgstr "已逹減省"
+
+#: entrak/templates/display.html:316
+msgid "Next target would be"
+msgstr "下個目標"
+
+#: entrak/templates/generate_report_pdf.html:41 entrak/templates/graph.html:88
+#: entrak/templates/graph.html.py:104 entrak/templates/graph.html:126
 #: entrak/templates/ranking.html:307 entrak/templates/report.html:448
 msgid "MMM YYYY"
 msgstr "YYYY年MMM"
@@ -362,26 +501,10 @@ msgstr "YYYY年MMM"
 msgid "YYYY"
 msgstr "YYYY年"
 
-#: entrak/templates/generate_report_pdf.html:43
-#: entrak/templates/generate_report_pdf.html:44
-#: entrak/templates/graph.html:100 entrak/templates/graph.html.py:124
-#: entrak/templates/ranking.html:304 entrak/templates/report.html:336
-#: entrak/templates/report.html.py:337 entrak/templates/report.html:339
-#: entrak/templates/report.html.py:340 entrak/templates/report.html:383
-#: entrak/templates/report.html.py:387 entrak/templates/report.html:398
-#: entrak/templates/report.html.py:450 entrak/templates/report.html:451
-msgid "D MMM YYYY, ddd"
-msgstr "YYYY年MMMD日, dddd"
-
 #: entrak/templates/generate_report_pdf.html:45
 #: entrak/templates/progress.html:110 entrak/templates/report.html:452
 msgid " to "
 msgstr "到"
-
-#: entrak/templates/generate_report_pdf.html:46
-#: entrak/templates/report.html:453
-msgid " tons"
-msgstr "噸"
 
 #: entrak/templates/generate_report_pdf.html:47
 #: entrak/templates/report.html:454
@@ -463,7 +586,7 @@ msgstr "上月"
 msgid "same period last year"
 msgstr "去年同期"
 
-#: entrak/templates/generate_report_pdf.html:63
+#: entrak/templates/generate_report_pdf.html:63 entrak/templates/graph.html:86
 #: entrak/templates/report.html:470
 msgid "D MMM YYYY"
 msgstr "YYYY年MMMD日"
@@ -510,6 +633,18 @@ msgstr "YYYY年MMMD日, 夜間, dddd"
 #: entrak/templates/graph.html:120
 msgid "HH:mm D MMM YYYY, ddd"
 msgstr "YYYY年MMMD日, HH:mm, dddd"
+
+#: entrak/templates/graph.html:141
+msgid "ddd"
+msgstr "dddd"
+
+#: entrak/templates/graph.html:143 entrak/templates/report.html:479
+msgid "MMM D"
+msgstr "MMMD日"
+
+#: entrak/templates/graph.html:145
+msgid "MMM"
+msgstr "MMM"
 
 #: entrak/templates/graph.html:184
 msgid "compare_between_night"
@@ -591,55 +726,67 @@ msgstr "自訂比較日期"
 msgid "Clear Graph"
 msgstr "清空圖表"
 
-#: entrak/templates/login.html:34
+#: entrak/templates/graph.html:717
+msgid "Amount of energy consumed on: "
+msgstr "能源消耗量："
+
+#: entrak/templates/graph.html:718
+msgid "from:"
+msgstr "由："
+
+#: entrak/templates/graph.html:719
+msgid "to:"
+msgstr "至："
+
+#: entrak/templates/login.html:56
 msgid "Welcome to En-trak,<br>your interactive energy monitoring system!"
 msgstr "En-trak - 你的互動能源監察系統<br>歡迎你!"
 
-#: entrak/templates/login.html:41
+#: entrak/templates/login.html:63
 msgid "To use the En-trak monitor platform, please sign in"
 msgstr "要使用 En-trak 能源管理系統，請先登入"
 
-#: entrak/templates/login.html:46
+#: entrak/templates/login.html:68
 msgid "Username"
 msgstr "用戶名稱"
 
-#: entrak/templates/login.html:50
+#: entrak/templates/login.html:72
 msgid "Password"
 msgstr "密碼"
 
-#: entrak/templates/login.html:52
+#: entrak/templates/login.html:74
 msgid "login"
 msgstr "登入"
 
-#: entrak/templates/page_base.html:110
+#: entrak/templates/page_base.html:116
 msgid "Graph"
 msgstr "圖表"
 
-#: entrak/templates/page_base.html:113
+#: entrak/templates/page_base.html:119
 msgid "Ranking"
 msgstr "用電量排行榜"
 
-#: entrak/templates/page_base.html:116
+#: entrak/templates/page_base.html:122
 msgid "Progress"
 msgstr "進度"
 
-#: entrak/templates/page_base.html:119
+#: entrak/templates/page_base.html:125
 msgid "Reports"
 msgstr "能源使用報告"
 
-#: entrak/templates/page_base.html:122
+#: entrak/templates/page_base.html:128
 msgid "Display"
 msgstr "顯示模式"
 
-#: entrak/templates/page_base.html:131
+#: entrak/templates/page_base.html:137
 msgid "Alert"
 msgstr "提示"
 
-#: entrak/templates/page_base.html:134
+#: entrak/templates/page_base.html:140
 msgid "Logout"
 msgstr "登出"
 
-#: entrak/templates/page_base.html:172
+#: entrak/templates/page_base.html:191
 msgid "You are viewing:"
 msgstr "你正在檢視:"
 
@@ -650,14 +797,6 @@ msgstr "我的進度"
 #: entrak/templates/progress.html:42
 msgid "Find out how you're doing here at the"
 msgstr "想知道你的累積表現如何，請看看"
-
-#: entrak/templates/progress.html:64
-msgid "Keep<br>Saving!"
-msgstr "繼續努力"
-
-#: entrak/templates/progress.html:70
-msgid "Reduction<br>achieved"
-msgstr "已逹減省"
 
 #: entrak/templates/progress.html:74
 msgid "Next target"
@@ -696,6 +835,10 @@ msgstr "用電量排行榜"
 #: entrak/templates/ranking.html:33
 msgid "Find out where you stand at the"
 msgstr "想知道你的慳電成績，請看看"
+
+#: entrak/templates/ranking.html:240
+msgid "/person"
+msgstr "/人"
 
 #: entrak/templates/ranking.html:296 entrak/templates/ranking.html.py:301
 msgid "D MMM YYYY, ddd hA"
@@ -762,114 +905,114 @@ msgstr "想知道你在電力消耗方面的詳細分析，請看看"
 msgid "YYYY MMMM"
 msgstr "YYYY年MMM"
 
-#: entrak/templates/report.html:658
+#: entrak/templates/report.html:659
 msgid "Monthly Report"
 msgstr "每月報告"
 
-#: entrak/templates/report.html:659
+#: entrak/templates/report.html:660
 msgid "Customize Report"
 msgstr "自訂報告"
 
-#: entrak/templates/report.html:659
+#: entrak/templates/report.html:660
 msgid "Download Data"
 msgstr "數據下載"
 
-#: entrak/templates/report.html:666
+#: entrak/templates/report.html:667
 msgid "Monthly Reports"
 msgstr "每月報告"
 
-#: entrak/templates/report.html:667
+#: entrak/templates/report.html:668
 msgid "Energy Consumption (kWh)"
 msgstr "電力消秏量 (kWh)"
 
-#: entrak/templates/report.html:668
+#: entrak/templates/report.html:669
 msgid "CO<sub>2</sub> Emissions (kg)"
 msgstr "二氧化碳排放 (kg)"
 
-#: entrak/templates/report.html:669
+#: entrak/templates/report.html:670
 msgid "Energy Cost ($)"
 msgstr "電費 ($)"
 
-#: entrak/templates/report.html:670
+#: entrak/templates/report.html:671
 msgid "Download"
 msgstr "下載"
 
-#: entrak/templates/report.html:691
+#: entrak/templates/report.html:692
 msgid "Select your time range"
 msgstr "選擇你要的報告週期"
 
-#: entrak/templates/report.html:702 entrak/templates/report.html.py:748
+#: entrak/templates/report.html:703 entrak/templates/report.html.py:749
 msgid "Select your time period"
 msgstr "選擇你要的時段"
 
-#: entrak/templates/report.html:732 entrak/templates/report.html.py:765
+#: entrak/templates/report.html:733 entrak/templates/report.html.py:766
 msgid "Create your report"
 msgstr "建立報告"
 
-#: entrak/templates/report.html:736 entrak/templates/report.html.py:769
-#: entrak/templates/report.html:810
+#: entrak/templates/report.html:737 entrak/templates/report.html.py:770
+#: entrak/templates/report.html:811
 msgid "Energy data - kWh"
 msgstr "電力使用數據 - kWh"
 
-#: entrak/templates/report.html:738 entrak/templates/report.html.py:771
-#: entrak/templates/report.html:812
+#: entrak/templates/report.html:739 entrak/templates/report.html.py:772
+#: entrak/templates/report.html:813
 msgid "From:"
 msgstr "由:"
 
-#: entrak/templates/report.html:739 entrak/templates/report.html.py:772
-#: entrak/templates/report.html:813
+#: entrak/templates/report.html:740 entrak/templates/report.html.py:773
+#: entrak/templates/report.html:814
 msgid "To:"
 msgstr "到:"
 
-#: entrak/templates/report.html:742 entrak/templates/report.html.py:775
+#: entrak/templates/report.html:743 entrak/templates/report.html.py:776
 msgid "Create Report"
 msgstr "建立報告"
 
-#: entrak/templates/report.html:751
+#: entrak/templates/report.html:752
 msgid "Select the start and end date of your monthly electricity bill."
 msgstr "輸入你電費賬單上用來計算該次電費的開始和終結日期。"
 
-#: entrak/templates/report.html:752
+#: entrak/templates/report.html:753
 msgid ""
 "If you wish to view a stardard calendar month, click on the Monthly Report "
 "tab at the top of the page"
 msgstr "如果你想檢視一個自然月度的報告，請按本頁左上方的“每月報告”。"
 
-#: entrak/templates/report.html:756 entrak/templates/report.html.py:789
+#: entrak/templates/report.html:757 entrak/templates/report.html.py:790
 msgid "Choose your start date"
 msgstr "選擇報告開始日期"
 
-#: entrak/templates/report.html:760 entrak/templates/report.html.py:793
+#: entrak/templates/report.html:761 entrak/templates/report.html.py:794
 msgid "Choose your end date"
 msgstr "選擇報告終結日期"
 
-#: entrak/templates/report.html:783
+#: entrak/templates/report.html:784
 msgid "Here you can download your energy use data to files in .csv format."
 msgstr "你可以在此下載你的能源使用數據，系統會自動以 .csv 檔案形式儲存。"
 
-#: entrak/templates/report.html:784
+#: entrak/templates/report.html:785
 msgid ""
 "Simply select the start date, end date and the units that you would like "
 "obtain from the system."
 msgstr "請於下面選擇開始日期、終結日期和你想要的數據單位。"
 
-#: entrak/templates/report.html:785
+#: entrak/templates/report.html:786
 msgid "Choose your date"
 msgstr "選擇你要的日期"
 
-#: entrak/templates/report.html:799
+#: entrak/templates/report.html:800
 msgid "Select your units"
 msgstr "選擇你要的單位"
 
-#: entrak/templates/report.html:806
+#: entrak/templates/report.html:807
 msgid "Download your file"
 msgstr "下載檔案"
 
-#: entrak/templates/report.html:816
+#: entrak/templates/report.html:817
 msgid "Download File"
 msgstr "下載檔案"
 
-#: entrak/templates/report.html:829 entrak/templates/report.html.py:835
+#: entrak/templates/report.html:830 entrak/templates/report.html.py:836
 msgid "Save Report"
 msgstr "下載報告"
 
@@ -981,6 +1124,13 @@ msgid ""
 "Total energy consumption for the last 6 <span class=\"report-type-name-lower-"
 "plural\"></span>"
 msgstr "過去6個<span class=\"report-type-name-lower-plural\"></span>的電力消秏"
+
+#: entrak/templates/report_main_content.html:194
+#: entrak/templates/report_main_content.html:334
+#: entrak/templates/report_main_content.html:463
+#: entrak/templates/report_main_content.html:592
+msgid "* Data not available or incomplete for this period"
+msgstr "*在這期間數據是不可用及不完整"
 
 #: entrak/templates/report_main_content.html:203
 msgid "WHEN DID WE ACHIEVE OUR SAVINGS?"

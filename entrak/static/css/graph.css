@@ -145,18 +145,24 @@
 #selection-summary-from{				
 	margin-top: 4px;
 }
-#selection-summary-from span{
+#selection-summary-from span:first-child{
+	display: inline-block;
+	width: 36px;
+}
+#selection-summary-from .summary-content-span {
 	font-size: 16px;
-	font-weight: bold;	
-	padding-left: 13px
+	font-weight: bold;
 }
 #selection-summary-to {
 	margin-top: 8px;
 }
-#selection-summary-to span{
+#selection-summary-to span:first-child{
+	display: inline-block;
+	width: 36px;
+}
+#selection-summary-to .summary-content-span {
 	font-size: 16px;
 	font-weight: bold;
-	padding-left: 29px;
 }
 #selection-summary-line{
 	width: 185px;

@@ -232,12 +232,12 @@ function finishReceiveRankData(data) {
 
 			var valueText = Utils.formatWithCommas(item.value.toFixed(0));
 			if (ranking.currentUnit.isSuffix) {
-				valueText += ' '+'<span>'+ranking.currentUnit.shortDesc+'</span>';
+				valueText += ' '+'<span>'+ranking.currentUnit.shortDescInfo[ranking.langCode]+'</span>';
 			} else {
-				valueText = '<span>'+ranking.currentUnit.shortDesc+'</span>'+' '+valueText;
+				valueText = '<span>'+ranking.currentUnit.shortDescInfo[ranking.langCode]+'</span>'+' '+valueText;
 			}
 			if (ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
-				valueText += '<span>/person</span>';
+				valueText += '<span>{% trans "/person" %}</span>';
 			}
 
 			var meterWidth = item.value/barBoundValue*100;
@@ -390,7 +390,7 @@ $(function() {
 					$('.drop-down-panel-content').append("<p id='trip-unit-desc'></p>");
 				}
 
-				$('#trip-unit-desc').text(unitCategory.name);
+				$('#trip-unit-desc').text(unitCategory.nameInfo[ranking.langCode]);
 			} else {
 				$('.drop-down-panel-content').find('#trip-unit-desc').remove();
 			};
@@ -487,7 +487,7 @@ $(function() {
 		</div>
 
 		<div class="panel-header-right-menu">
-			<h3 ranking-type='percent'>{% trans "%% Change" %}</h3>
+			<h3 ranking-type='percent'>{% blocktrans %}% Change{% endblocktrans %}</h3>
 			<h3 ranking-type='per_person'>{% trans "Per person" %}</h3>
 			<h3 ranking-type='total'>{% trans "Total" %}</h3>
 			<h3 class='sort-by-btn'><span id="sort-by-text">{% trans "Sort by" %}</span> &nbsp;&nbsp; &#9662;</h3>

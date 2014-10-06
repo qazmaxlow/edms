@@ -69,9 +69,9 @@ function updateDonutChart(data, total) {
 	$("#selection-summary-value").text(Utils.formatWithCommas(total.toFixed(0)));
 	if (graph.graphChart.currentUnit.isSuffix) {
 		$("#selection-summary-unit-prefix").html('');
-		$("#selection-summary-unit-suffix").html(graph.graphChart.currentUnit.shortDesc);
+		$("#selection-summary-unit-suffix").html(graph.graphChart.currentUnit.shortDescInfo[graph.langCode]);
 	} else {
-		$("#selection-summary-unit-prefix").html(graph.graphChart.currentUnit.shortDesc);
+		$("#selection-summary-unit-prefix").html(graph.graphChart.currentUnit.shortDescInfo[graph.langCode]);
 		$("#selection-summary-unit-suffix").html('');
 	}
 }
@@ -81,11 +81,11 @@ function formatDtAtStr(dt, rangeType) {
 	if (rangeType === Utils.RANGE_TYPE_HOUR
 		|| rangeType === Utils.RANGE_TYPE_DAY
 		|| rangeType === Utils.RANGE_TYPE_NIGHT) {
-		formatStr = 'D MMM YYYY, ddd';
+		formatStr = '{% trans "D MMM YYYY, ddd" %}';
 	} else if (rangeType === Utils.RANGE_TYPE_WEEK) {
-		formatStr = 'D MMM YYYY';
+		formatStr = '{% trans "D MMM YYYY" %}';
 	} else if (rangeType === Utils.RANGE_TYPE_MONTH) {
-		formatStr = 'MMM YYYY';
+		formatStr = '{% trans "MMM YYYY" %}';
 	}
 
 	return (formatStr !== null) ? dt.format(formatStr) : '';
@@ -108,7 +108,11 @@ function formatDtStr(dt, rangeType) {
 
 	var result = dt.format(formatStr);
 	if (rangeType === Utils.RANGE_TYPE_WEEK) {
-		result = 'Week starting ' + result;
+		if (graph.langCode === 'zh-tw') {
+			result = '從' + result + '開始';
+		} else {
+			result = 'Week starting ' + result;
+		}
 	}
 
 	return result
@@ -136,13 +140,13 @@ function formatDtFromToStr(dt, rangeType) {
 	if (rangeType === Utils.RANGE_TYPE_HOUR
 		|| rangeType === Utils.RANGE_TYPE_DAY
 		|| rangeType === Utils.RANGE_TYPE_NIGHT) {
-		formatStr = 'hh:mma';
+		formatStr = '{% trans "hh:mma" %}';
 	} else if (rangeType === Utils.RANGE_TYPE_WEEK) {
-		formatStr = 'ddd';
+		formatStr = '{% trans "ddd" %}';
 	} else if (rangeType === Utils.RANGE_TYPE_MONTH) {
-		formatStr = 'MMM D';
+		formatStr = '{% trans "MMM D" %}';
 	} else if (rangeType === Utils.RANGE_TYPE_YEAR) {
-		formatStr = 'MMM';
+		formatStr = '{% trans "MMM" %}';
 	}
 
 	return dt.format(formatStr);
@@ -405,7 +409,7 @@ $(function() {
 	graph.timezone = '{{systems.0.timezone}}';
 	graph.firstRecord = moment.unix(graph.graphChart.entrakSystem.systemTree.data.firstRecord).tz(graph.timezone);
 
-	$("#unit-label").html(graph.unitCategorys[0].name);
+	$("#unit-label").html(graph.unitCategorys[0].nameInfo[graph.langCode]);
 	$("#unit-bg").attr("src", "{% get_static_prefix %}images/unit/" + graph.unitCategorys[0].bgImg);
 
 	$("#y-axis-slider").slider({
@@ -436,8 +440,8 @@ $(function() {
 				selectionSummary.fadeIn();
 			}
 			$("#selection-summary-at span").text(formatDtAtStr(graph.graphChart.currentDt, graph.graphChart.currentRangeType));
-			$("#selection-summary-from span").text(formatDtFromToStr(fromDt, graph.graphChart.currentRangeType));
-			$("#selection-summary-to span").text(formatDtFromToStr(toDt, graph.graphChart.currentRangeType));
+			$("#selection-summary-from .summary-content-span").text(formatDtFromToStr(fromDt, graph.graphChart.currentRangeType));
+			$("#selection-summary-to .summary-content-span").text(formatDtFromToStr(toDt, graph.graphChart.currentRangeType));
 
 			var total = data.reduce(function (previousVal, current, index, array) {
 				return previousVal + current.value;
@@ -499,7 +503,7 @@ $(function() {
 
 	Utils.setupUnitChoiceLayout('#unit-choice', graph.unitCategorys, '{% get_static_prefix %}', function(unitCategory) {
 		graph.graphChart.updateUnit(unitCategory);
-		$("#unit-label").html(unitCategory.name);
+		$("#unit-label").html(unitCategory.nameInfo[graph.langCode]);
 		$("#unit-bg").attr("src", "{% get_static_prefix %}images/unit/" + unitCategory.bgImg);
 	});
 
@@ -714,9 +718,9 @@ $(function() {
 
 	<div id="selection-summary">
 		<div id="selection-summary-left">
-			<p id="selection-summary-at">Amount of energy consumed on: <span></span></p>
-			<p id="selection-summary-from">from:<span></span></p>
-			<p id="selection-summary-to">to:<span></span></p>
+			<p id="selection-summary-at">{% trans "Amount of energy consumed on: " %}<span></span></p>
+			<p id="selection-summary-from"><span>{% trans "from:" %}</span><span class="summary-content-span"></span></p>
+			<p id="selection-summary-to"><span>{% trans "to:" %}</span><span class="summary-content-span"></span></p>
 			<p id="selection-summary-line"></p>
 			<!-- <p id="selection-summary-equal">which equates to:</p> -->
 			<p id="selection-summary-value-container">

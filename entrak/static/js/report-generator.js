@@ -673,7 +673,7 @@ ReportGenerator.prototype.genComparePastLabel = function(targetDt) {
 		result = targetDt.format("YYYY ")+'Q'+this.getQuarterIdx(targetDt);
 	} else if (this.reportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH
 		|| this.reportType === ReportGenerator.REPORT_TYPE_WEEK) {
-		result = targetDt.format("MMM D");
+		result = targetDt.format(this.multiLangTexts.comparePastLabelFormat);
 	}
 
 	return result;

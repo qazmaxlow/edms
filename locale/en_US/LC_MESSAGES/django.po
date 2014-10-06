@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-03 15:34+0000\n"
+"POT-Creation-Date: 2014-10-06 10:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,19 +17,19 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: entrak/progress_views.py:20
+#: entrak/progress_views.py:22
 msgid "Hong Kong Airport"
 msgstr ""
 
-#: entrak/progress_views.py:20
+#: entrak/progress_views.py:22
 msgid "Times Square"
 msgstr ""
 
-#: entrak/progress_views.py:23
+#: entrak/progress_views.py:25
 msgid "Singapore Airport"
 msgstr ""
 
-#: entrak/progress_views.py:23
+#: entrak/progress_views.py:25
 msgid "Marina Bay Sands"
 msgstr ""
 
@@ -121,7 +121,7 @@ msgstr "Weekends"
 msgid "DD MMM YYYY, ddd"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:717
+#: entrak/templates/alert_settings.html:717 entrak/templates/graph.html:139
 msgid "hh:mma"
 msgstr ""
 
@@ -299,33 +299,162 @@ msgstr ""
 msgid "See Details"
 msgstr ""
 
-#: entrak/templates/display.html:191 entrak/templates/graph.html:379
+#: entrak/templates/display.html:47
+#: entrak/templates/generate_report_pdf.html:43
+#: entrak/templates/generate_report_pdf.html:44 entrak/templates/graph.html:84
+#: entrak/templates/graph.html.py:100 entrak/templates/graph.html:124
+#: entrak/templates/ranking.html:304 entrak/templates/report.html:336
+#: entrak/templates/report.html.py:337 entrak/templates/report.html:339
+#: entrak/templates/report.html.py:340 entrak/templates/report.html:383
+#: entrak/templates/report.html.py:387 entrak/templates/report.html:398
+#: entrak/templates/report.html.py:450 entrak/templates/report.html:451
+msgid "D MMM YYYY, ddd"
+msgstr ""
+
+#: entrak/templates/display.html:50
+msgid "Last "
+msgstr ""
+
+#: entrak/templates/display.html:81
+msgid "Energy Reduction"
+msgstr ""
+
+#: entrak/templates/display.html:82
+msgid "Saving up to"
+msgstr ""
+
+#: entrak/templates/display.html:87
+msgid "More Energy"
+msgstr ""
+
+#: entrak/templates/display.html:88
+msgid "Extra spending up to"
+msgstr ""
+
+#: entrak/templates/display.html:97 entrak/templates/display.html.py:99
+msgid "Over the past 12 months"
+msgstr ""
+
+#: entrak/templates/display.html:110
+#: entrak/templates/generate_report_pdf.html:46
+#: entrak/templates/report.html:453
+msgid " tons"
+msgstr ""
+
+#: entrak/templates/display.html:166
+msgid "Remove a tube"
+msgstr ""
+
+#: entrak/templates/display.html:166
+msgid ""
+"If you have more light than you need in an area, you can remove one light "
+"tube from a fixture and save energy!"
+msgstr ""
+
+#: entrak/templates/display.html:167
+msgid "Re-assess Air Conditioning’s Temperature"
+msgstr ""
+
+#: entrak/templates/display.html:167
+msgid ""
+"After 30 minutes of turning on the AirCon, you should assess whether the "
+"temperature is too cold, if so you should adjust the temperature to minimize "
+"energy wastage."
+msgstr ""
+
+#: entrak/templates/display.html:168
+msgid "Put a Ribbon on it"
+msgstr ""
+
+#: entrak/templates/display.html:168
+msgid ""
+"Tie a small colored ribbon to the vent of each aircon unit - this makes it "
+"easier to tell whether the aircon is on or off, so you don\\'t accidentally "
+"leave aircon on!"
+msgstr ""
+
+#: entrak/templates/display.html:169
+msgid "Label Your Plugs & Switch"
+msgstr ""
+
+#: entrak/templates/display.html:169
+msgid ""
+"Label the plugs of electrical devices - sometime it\\'s hard to tell what is "
+"what, so this helps you to safely unplug or turn off appliances without "
+"worrying about turning off important things!"
+msgstr ""
+
+#: entrak/templates/display.html:170
+msgid "Turn off the switch"
+msgstr ""
+
+#: entrak/templates/display.html:170
+#, python-format
+msgid ""
+"Even if an appliance turned off it still consume 5-10%% of energy, if its "
+"being plug into the socket. Therefore remember to turn off the socket switch "
+"as well!"
+msgstr ""
+
+#: entrak/templates/display.html:201 entrak/templates/graph.html:379
 #: entrak/templates/ranking.html:492
 msgid "Total"
 msgstr ""
 
-#: entrak/templates/display.html:192 entrak/templates/graph.html:380
+#: entrak/templates/display.html:202 entrak/templates/graph.html:380
 msgid "Previous"
 msgstr ""
 
-#: entrak/templates/display.html:193 entrak/templates/graph.html:381
+#: entrak/templates/display.html:203 entrak/templates/graph.html:381
 msgid "Highest"
 msgstr ""
 
-#: entrak/templates/display.html:194 entrak/templates/graph.html:382
+#: entrak/templates/display.html:204 entrak/templates/graph.html:382
 msgid "Lowest"
 msgstr ""
 
-#: entrak/templates/display.html:195 entrak/templates/graph.html:383
+#: entrak/templates/display.html:205 entrak/templates/graph.html:383
 msgid "Custom"
 msgstr ""
 
-#: entrak/templates/display.html:237
+#: entrak/templates/display.html:247
 msgid "REAL TIME ENERGY MONITORING SYSTEM"
 msgstr ""
 
-#: entrak/templates/generate_report_pdf.html:41
-#: entrak/templates/graph.html:104 entrak/templates/graph.html.py:126
+#: entrak/templates/display.html:259
+msgid "Our energy consumption today: "
+msgstr ""
+
+#: entrak/templates/display.html:265
+msgid "Today"
+msgstr ""
+
+#: entrak/templates/display.html:275
+msgid "hour"
+msgstr ""
+
+#: entrak/templates/display.html:302
+msgid "Which is equivalent to"
+msgstr ""
+
+#: entrak/templates/display.html:303
+msgid " of CO<sub>2</sub>"
+msgstr ""
+
+#: entrak/templates/display.html:309 entrak/templates/progress.html:64
+msgid "Keep<br>Saving!"
+msgstr ""
+
+#: entrak/templates/display.html:314 entrak/templates/progress.html:70
+msgid "Reduction<br>achieved"
+msgstr ""
+
+#: entrak/templates/display.html:316
+msgid "Next target would be"
+msgstr ""
+
+#: entrak/templates/generate_report_pdf.html:41 entrak/templates/graph.html:88
+#: entrak/templates/graph.html.py:104 entrak/templates/graph.html:126
 #: entrak/templates/ranking.html:307 entrak/templates/report.html:448
 msgid "MMM YYYY"
 msgstr ""
@@ -337,25 +466,9 @@ msgstr ""
 msgid "YYYY"
 msgstr ""
 
-#: entrak/templates/generate_report_pdf.html:43
-#: entrak/templates/generate_report_pdf.html:44
-#: entrak/templates/graph.html:100 entrak/templates/graph.html.py:124
-#: entrak/templates/ranking.html:304 entrak/templates/report.html:336
-#: entrak/templates/report.html.py:337 entrak/templates/report.html:339
-#: entrak/templates/report.html.py:340 entrak/templates/report.html:383
-#: entrak/templates/report.html.py:387 entrak/templates/report.html:398
-#: entrak/templates/report.html.py:450 entrak/templates/report.html:451
-msgid "D MMM YYYY, ddd"
-msgstr ""
-
 #: entrak/templates/generate_report_pdf.html:45
 #: entrak/templates/progress.html:110 entrak/templates/report.html:452
 msgid " to "
-msgstr ""
-
-#: entrak/templates/generate_report_pdf.html:46
-#: entrak/templates/report.html:453
-msgid " tons"
 msgstr ""
 
 #: entrak/templates/generate_report_pdf.html:47
@@ -438,7 +551,7 @@ msgstr ""
 msgid "same period last year"
 msgstr ""
 
-#: entrak/templates/generate_report_pdf.html:63
+#: entrak/templates/generate_report_pdf.html:63 entrak/templates/graph.html:86
 #: entrak/templates/report.html:470
 msgid "D MMM YYYY"
 msgstr ""
@@ -484,6 +597,18 @@ msgstr ""
 
 #: entrak/templates/graph.html:120
 msgid "HH:mm D MMM YYYY, ddd"
+msgstr ""
+
+#: entrak/templates/graph.html:141
+msgid "ddd"
+msgstr ""
+
+#: entrak/templates/graph.html:143 entrak/templates/report.html:479
+msgid "MMM D"
+msgstr ""
+
+#: entrak/templates/graph.html:145
+msgid "MMM"
 msgstr ""
 
 #: entrak/templates/graph.html:184
@@ -566,55 +691,67 @@ msgstr ""
 msgid "Clear Graph"
 msgstr ""
 
-#: entrak/templates/login.html:34
+#: entrak/templates/graph.html:717
+msgid "Amount of energy consumed on: "
+msgstr ""
+
+#: entrak/templates/graph.html:718
+msgid "from:"
+msgstr ""
+
+#: entrak/templates/graph.html:719
+msgid "to:"
+msgstr ""
+
+#: entrak/templates/login.html:56
 msgid "Welcome to En-trak,<br>your interactive energy monitoring system!"
 msgstr ""
 
-#: entrak/templates/login.html:41
+#: entrak/templates/login.html:63
 msgid "To use the En-trak monitor platform, please sign in"
 msgstr ""
 
-#: entrak/templates/login.html:46
+#: entrak/templates/login.html:68
 msgid "Username"
 msgstr ""
 
-#: entrak/templates/login.html:50
+#: entrak/templates/login.html:72
 msgid "Password"
 msgstr ""
 
-#: entrak/templates/login.html:52
+#: entrak/templates/login.html:74
 msgid "login"
 msgstr ""
 
-#: entrak/templates/page_base.html:110
+#: entrak/templates/page_base.html:116
 msgid "Graph"
 msgstr ""
 
-#: entrak/templates/page_base.html:113
+#: entrak/templates/page_base.html:119
 msgid "Ranking"
 msgstr ""
 
-#: entrak/templates/page_base.html:116
+#: entrak/templates/page_base.html:122
 msgid "Progress"
 msgstr ""
 
-#: entrak/templates/page_base.html:119
+#: entrak/templates/page_base.html:125
 msgid "Reports"
 msgstr ""
 
-#: entrak/templates/page_base.html:122
+#: entrak/templates/page_base.html:128
 msgid "Display"
 msgstr ""
 
-#: entrak/templates/page_base.html:131
+#: entrak/templates/page_base.html:137
 msgid "Alert"
 msgstr ""
 
-#: entrak/templates/page_base.html:134
+#: entrak/templates/page_base.html:140
 msgid "Logout"
 msgstr ""
 
-#: entrak/templates/page_base.html:172
+#: entrak/templates/page_base.html:191
 msgid "You are viewing:"
 msgstr ""
 
@@ -624,14 +761,6 @@ msgstr ""
 
 #: entrak/templates/progress.html:42
 msgid "Find out how you're doing here at the"
-msgstr ""
-
-#: entrak/templates/progress.html:64
-msgid "Keep<br>Saving!"
-msgstr ""
-
-#: entrak/templates/progress.html:70
-msgid "Reduction<br>achieved"
 msgstr ""
 
 #: entrak/templates/progress.html:74
@@ -670,6 +799,10 @@ msgstr ""
 
 #: entrak/templates/ranking.html:33
 msgid "Find out where you stand at the"
+msgstr ""
+
+#: entrak/templates/ranking.html:240
+msgid "/person"
 msgstr ""
 
 #: entrak/templates/ranking.html:296 entrak/templates/ranking.html.py:301
@@ -737,114 +870,114 @@ msgstr ""
 msgid "YYYY MMMM"
 msgstr ""
 
-#: entrak/templates/report.html:658
+#: entrak/templates/report.html:659
 msgid "Monthly Report"
 msgstr ""
 
-#: entrak/templates/report.html:659
+#: entrak/templates/report.html:660
 msgid "Customize Report"
 msgstr ""
 
-#: entrak/templates/report.html:659
+#: entrak/templates/report.html:660
 msgid "Download Data"
 msgstr ""
 
-#: entrak/templates/report.html:666
+#: entrak/templates/report.html:667
 msgid "Monthly Reports"
 msgstr ""
 
-#: entrak/templates/report.html:667
+#: entrak/templates/report.html:668
 msgid "Energy Consumption (kWh)"
 msgstr ""
 
-#: entrak/templates/report.html:668
+#: entrak/templates/report.html:669
 msgid "CO<sub>2</sub> Emissions (kg)"
 msgstr ""
 
-#: entrak/templates/report.html:669
+#: entrak/templates/report.html:670
 msgid "Energy Cost ($)"
 msgstr ""
 
-#: entrak/templates/report.html:670
+#: entrak/templates/report.html:671
 msgid "Download"
 msgstr ""
 
-#: entrak/templates/report.html:691
+#: entrak/templates/report.html:692
 msgid "Select your time range"
 msgstr ""
 
-#: entrak/templates/report.html:702 entrak/templates/report.html.py:748
+#: entrak/templates/report.html:703 entrak/templates/report.html.py:749
 msgid "Select your time period"
 msgstr ""
 
-#: entrak/templates/report.html:732 entrak/templates/report.html.py:765
+#: entrak/templates/report.html:733 entrak/templates/report.html.py:766
 msgid "Create your report"
 msgstr ""
 
-#: entrak/templates/report.html:736 entrak/templates/report.html.py:769
-#: entrak/templates/report.html:810
+#: entrak/templates/report.html:737 entrak/templates/report.html.py:770
+#: entrak/templates/report.html:811
 msgid "Energy data - kWh"
-msgstr ""
-
-#: entrak/templates/report.html:738 entrak/templates/report.html.py:771
-#: entrak/templates/report.html:812
-msgid "From:"
 msgstr ""
 
 #: entrak/templates/report.html:739 entrak/templates/report.html.py:772
 #: entrak/templates/report.html:813
+msgid "From:"
+msgstr ""
+
+#: entrak/templates/report.html:740 entrak/templates/report.html.py:773
+#: entrak/templates/report.html:814
 msgid "To:"
 msgstr ""
 
-#: entrak/templates/report.html:742 entrak/templates/report.html.py:775
+#: entrak/templates/report.html:743 entrak/templates/report.html.py:776
 msgid "Create Report"
 msgstr ""
 
-#: entrak/templates/report.html:751
+#: entrak/templates/report.html:752
 msgid "Select the start and end date of your monthly electricity bill."
 msgstr ""
 
-#: entrak/templates/report.html:752
+#: entrak/templates/report.html:753
 msgid ""
 "If you wish to view a stardard calendar month, click on the Monthly Report "
 "tab at the top of the page"
 msgstr ""
 
-#: entrak/templates/report.html:756 entrak/templates/report.html.py:789
+#: entrak/templates/report.html:757 entrak/templates/report.html.py:790
 msgid "Choose your start date"
 msgstr ""
 
-#: entrak/templates/report.html:760 entrak/templates/report.html.py:793
+#: entrak/templates/report.html:761 entrak/templates/report.html.py:794
 msgid "Choose your end date"
 msgstr ""
 
-#: entrak/templates/report.html:783
+#: entrak/templates/report.html:784
 msgid "Here you can download your energy use data to files in .csv format."
 msgstr ""
 
-#: entrak/templates/report.html:784
+#: entrak/templates/report.html:785
 msgid ""
 "Simply select the start date, end date and the units that you would like "
 "obtain from the system."
 msgstr ""
 
-#: entrak/templates/report.html:785
+#: entrak/templates/report.html:786
 msgid "Choose your date"
 msgstr ""
 
-#: entrak/templates/report.html:799
+#: entrak/templates/report.html:800
 msgid "Select your units"
 msgstr ""
 
-#: entrak/templates/report.html:806
+#: entrak/templates/report.html:807
 msgid "Download your file"
 msgstr ""
 
-#: entrak/templates/report.html:816
+#: entrak/templates/report.html:817
 msgid "Download File"
 msgstr ""
 
-#: entrak/templates/report.html:829 entrak/templates/report.html.py:835
+#: entrak/templates/report.html:830 entrak/templates/report.html.py:836
 msgid "Save Report"
 msgstr ""
 
@@ -946,6 +1079,13 @@ msgstr ""
 msgid ""
 "Total energy consumption for the last 6 <span class=\"report-type-name-lower-"
 "plural\"></span>"
+msgstr ""
+
+#: entrak/templates/report_main_content.html:194
+#: entrak/templates/report_main_content.html:334
+#: entrak/templates/report_main_content.html:463
+#: entrak/templates/report_main_content.html:592
+msgid "* Data not available or incomplete for this period"
 msgstr ""
 
 #: entrak/templates/report_main_content.html:203

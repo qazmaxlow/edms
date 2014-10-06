@@ -77,8 +77,14 @@ def jsonifyUnitCategorys(unit_categorys):
 	for unit_category in unit_categorys:
 		info = {
 			'code': unit_category.code,
-			'shortDesc': unit_category.short_desc.replace("CO2", "CO<sub>2</sub>"),
-			'name': unit_category.name.replace("CO2", "CO<sub>2</sub>"),
+			'shortDescInfo': {
+				LANG_CODE_EN: unit_category.short_desc.replace("CO2", "CO<sub>2</sub>"),
+				LANG_CODE_TC: unit_category.short_desc_tc.replace("CO2", "CO<sub>2</sub>")
+			},
+			'nameInfo': {
+				LANG_CODE_EN: unit_category.name.replace("CO2", "CO<sub>2</sub>"),
+				LANG_CODE_TC: unit_category.name_tc.replace("CO2", "CO<sub>2</sub>"),
+			},
 			'imgOff': unit_category.img_off, 'imgOn': unit_category.img_on,
 			'bgImg': unit_category.bg_img,
 			'hasDetailRate': unit_category.has_detail_rate,
