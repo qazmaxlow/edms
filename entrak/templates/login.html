@@ -13,6 +13,15 @@
 {% endblock %}
 
 {% block extra_script %}
+<script type="text/javascript">
+$(function() {
+	$(".change-lang-block > a").click(function(event) {
+		event.preventDefault();
+		$('.change-lang-form input[name=language]').val($(this).attr('lang_code'));
+		$('.change-lang-form').submit();
+	});
+});
+</script>
 {% endblock %}
 
 {% block content %}
@@ -25,6 +34,19 @@
 		<img src="{% static 'images/user-logo-bg.png' %}">
 	</div>
 	{% endblock %}
+
+	<div class="change-lang-block">
+		<a lang_code="zh-tw" class="{% ifequal LANGUAGE_CODE 'zh-tw' %}current-lang{% endifequal %}" href="#">繁體中文</a>
+		<span> / </span>
+		<a lang_code="en" class="{% ifequal LANGUAGE_CODE 'en' %}current-lang{% endifequal %}" href="#">ENGLISH</a>
+	</div>
+
+	<div style="display:none;">
+		<form class="change-lang-form" action="{% url 'set_language' %}" method="post">
+			{% csrf_token %}
+			<input name="language" type="hidden" value="" />
+		</form>
+	</div>
 </div>
 
 <div class="bg-container">

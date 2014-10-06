@@ -82,8 +82,9 @@ $(function() {
 
 	$("#{% block selected-menu-link-id %}menu-link-home{% endblock %}").addClass('menu-links-selected');
 
-	$(".change-lang-link").click(function(event) {
+	$(".change-lang-block > a").click(function(event) {
 		event.preventDefault();
+		$('.change-lang-form input[name=language]').val($(this).attr('lang_code'));
 		$('.change-lang-form').submit();
 	});
 });
@@ -132,7 +133,7 @@ $(function() {
 				</li>
 				{% endcomment %}
 				<li id="menu-link-alert">
-					<a href="{% url 'alert_settings' system_code=systems.0.code %}"><img width="23" height="22" src="{% static 'images/settings-icon.png' %}"><span>{% trans "Alert" %}</span></a>
+					<a href="{% url 'alert_settings' system_code=systems.0.code %}"><img width="23" height="22" src="{% static 'images/alert-icon.png' %}"><span>{% trans "Alert" %}</span></a>
 				</li>
 				<li id="menu-link-logout">
 					<a href="{% url 'logout' system_code=systems.0.code %}"><img width="23" height="24" src="{% static 'images/logout-icon.png' %}"><span>{% trans "Logout" %}</span></a>
@@ -157,6 +158,19 @@ $(function() {
 			<!-- Header Wording -->
 			<div id="heading"><h1>{% block page_title %}{% endblock %}</h1></div>
 			<div id="sub-heading"><h2>{% block page_subtitle %}{% endblock %}</h2></div>
+
+			<div class="change-lang-block">
+				<a lang_code="zh-tw" class="{% ifequal LANGUAGE_CODE 'zh-tw' %}current-lang{% endifequal %}" href="#">繁體中文</a>
+				<span> / </span>
+				<a lang_code="en" class="{% ifequal LANGUAGE_CODE 'en' %}current-lang{% endifequal %}" href="#">ENGLISH</a>
+			</div>
+
+			<div style="display:none;">
+				<form class="change-lang-form" action="{% url 'set_language' %}" method="post">
+					{% csrf_token %}
+					<input name="language" type="hidden" value="" />
+				</form>
+			</div>
 
 		</div>
 		<!-- Header End -->
@@ -198,16 +212,8 @@ $(function() {
 	<a href="#"><img id="entrak-logo" src="{% static 'images/powered-by-logo.png' %}"></a>
 	<p class="footer-main"><a class="footer-link" href="{% url 'faq' system_code=systems.0.code %}">FAQ </a>
 	<a class="footer-link" href="{% url 'general_settings' system_code=systems.0.code %}"> |  Settings</a>
-	<a class="footer-link" href="{% url 'disclaimer' system_code=systems.0.code %}"> |  Legal </a>
-	<a class="footer-link change-lang-link" href="#"> | {% ifequal LANGUAGE_CODE 'zh-tw' %}ENG{% else %}繁體中文{% endifequal %} </a></p>
+	<a class="footer-link" href="{% url 'disclaimer' system_code=systems.0.code %}"> |  Legal </a></p>
 	<p style="clear: both;"></p>
-
-	<div style="display:none;">
-		<form class="change-lang-form" action="{% url 'set_language' %}" method="post">
-			{% csrf_token %}
-			<input name="language" type="hidden" value="{% ifequal LANGUAGE_CODE "zh-tw" %}en-us{% else %}zh-tw{% endifequal %}" />
-		</form>
-	</div>
 </footer>
 {% endblock %}
 

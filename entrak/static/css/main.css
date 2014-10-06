@@ -291,6 +291,7 @@ html, body {
 /*-- Header -- */
 
 #header{
+	position: relative;
 	width: 100%;
 	height: 132px;
 	background-color: #6e9faa;
@@ -300,7 +301,6 @@ html, body {
 /* -- Where the illustrations is --*/
 .image-carousel{
 	position: absolute;
-	top: 3px;
 	right: 50px;
 }
 
@@ -323,6 +323,12 @@ html, body {
 	margin-top: 70px;
 	font-family: 'ITCAvantGardeStd-Bold', "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 	letter-spacing: 0.02em;
+}
+
+.change-lang-block {
+	position: absolute;
+	right: 30px;
+	bottom: 10px;
 }
 
 /*-- Main heading Ends --*/
