@@ -8,49 +8,45 @@ from django.core.management.base import BaseCommand, CommandError
 from mongoengine import connection
 
 SOURCE_MAPPING = {
-	# 'school1': [
-	# 	{'xml_url': 'en-trak1015.d.en-trak.com', 'name': 'Classrooms Total'},
-	# 	{'xml_url': 'en-trak1015.d.en-trak.com', 'name': 'Shared Facilities Total'},
-	# ],
-	# 'school2': [
-	# 	{'xml_url': 'en-trak1005.d.en-trak.com', 'name': 'Aircon Total'},
-	# 	{'xml_url': 'en-trak1005.d.en-trak.com', 'name': 'LP Total'},
-	# ],
-	# 'school7': [
-	# 	{'xml_url': 'en-trak1012.d.en-trak.com', 'name': 'Air Conditioning'},
-	# 	{'xml_url': 'en-trak1012.d.en-trak.com', 'name': 'Lights & Plugs'},
-	# ],
-	# 'school22': [
-	# 	{'xml_url': 'egauge4459.egaug.es', 'name': 'Aircon Total'},
-	# 	{'xml_url': 'egauge4459.egaug.es', 'name': 'Lights Plugs Total'},
-	# ],
-	# 'school76': [
-	# 	{'xml_url': 'en-trak1039.d.en-trak.com', 'name': 'showroom Lights'},
-	# 	{'xml_url': 'en-trak1039.d.en-trak.com', 'name': 'Showroom Sockets'},
-	# ],
-	# 'school8': [
-	# 	{'xml_url': 'egauge984.egaug.es', 'name': 'Air Con'},
-	# 	{'xml_url': 'egauge984.egaug.es', 'name': 'Lights & Plugs'},
-	# ],
-	# 'school3': [
-	# 	{'xml_url': 'en-trak1010.d.en-trak.com', 'name': 'Blocks AB'},
-	# 	{'xml_url': 'en-trak1010.d.en-trak.com', 'name': 'Blocks CD'},
-	# ],
-	'school48': [
-		{'xml_url': 'en-trak0016.d.en-trak.com', 'name': 'Lighting Power'},
-		{'xml_url': 'en-trak1029.d.en-trak.com', 'name': 'Lighting'},
+	'school7': [
+		{'xml_url': 'en-trak1012.d.en-trak.com', 'name': 'Air Conditioning'},
+		{'xml_url': 'en-trak1012.d.en-trak.com', 'name': 'Lights & Plugs'},
 	],
-	'school49': [
-		{'xml_url': 'en-trak0016.d.en-trak.com', 'name': 'Sockets Power'},
-		{'xml_url': 'en-trak1029.d.en-trak.com', 'name': 'Sockets'},
+	'school32': [
+		{'xml_url': 'en-trak1023.d.en-trak.com', 'name': 'New Block'},
+		{'xml_url': 'en-trak1023.d.en-trak.com', 'name': 'Old Block'},
 	],
-	'school50': [
-		{'xml_url': 'en-trak0016.d.en-trak.com', 'name': 'Aircon Power'},
-		{'xml_url': 'en-trak1029.d.en-trak.com', 'name': 'Aircon'},
+	'school24': [
+		{'xml_url': 'en-trak1013.d.en-trak.com', 'name': 'Total Air Con'},
+		{'xml_url': 'en-trak1014.d.en-trak.com', 'name': 'Lights & Plugs'},
 	],
-	'school57': [
-		{'xml_url': 'en-trak0016.d.en-trak.com', 'name': 'Computer Room'},
-		{'xml_url': 'en-trak1029.d.en-trak.com', 'name': 'Showroom'},
+	'school18': [
+		{'xml_url': 'egauge3055.egaug.es', 'name': 'Main Block'},
+		{'xml_url': 'egauge3055.egaug.es', 'name': 'New Annex Block'},
+	],
+	'school17': [
+		{'xml_url': 'egauge3053.egaug.es', 'name': 'Air Conditioning'},
+		{'xml_url': 'egauge3053.egaug.es', 'name': 'Lights & Plugs'},
+	],
+	'school20': [
+		{'xml_url': 'egauge3060.egaug.es', 'name': 'Air Conditioning'},
+		{'xml_url': 'egauge3060.egaug.es', 'name': 'Lights & Plugs'},
+	],
+	'school16': [
+		{'xml_url': 'egauge2196.egaug.es', 'name': 'Air Conditioning'},
+		{'xml_url': 'egauge2196.egaug.es', 'name': 'Lights & Plugs'},
+	],
+	'school11': [
+		{'xml_url': 'egauge2194.egaug.es', 'name': 'Aircon & Pool'},
+		{'xml_url': 'egauge2194.egaug.es', 'name': 'Lights & Plugs'},
+	],
+	'school10': [
+		{'xml_url': 'egauge2050.egaug.es', 'name': 'Air Conditioning'},
+		{'xml_url': 'egauge2050.egaug.es', 'name': 'Lights, Plugs & Pool'},
+	],
+	'school8': [
+		{'xml_url': 'egauge984.egaug.es', 'name': 'Air Con'},
+		{'xml_url': 'egauge984.egaug.es', 'name': 'Lights & Plugs'},
 	],
 }
 
