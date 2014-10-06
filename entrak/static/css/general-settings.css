@@ -329,4 +329,39 @@
 
 .delete-dialog {
 	display: none;
+	width: 300px;
+	height: 80px;
+	background-color: #FFF;
+	padding-left: 45px;
+	padding-right: 45px;
+	padding-top: 25px;
+	padding-bottom: 25px;
+	text-align: center;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif;
+	border-radius: 8px;
+	font-size: 12pt;
+}
+.delete-title {
+	margin-bottom: 32px;
+	font-weight: bold;
+	color: #D03E3E;
+}
+.delete-cancel-btn {
+	width: 80px;
+	height: 22px;
+	padding-top: 6px;
+	border: 1px solid #515151;
+	color: #515151;
+	border-radius: 8px;
+	display: inline-block;
+}
+.delete-confirm-btn {
+	width: 80px;
+	height: 22px;
+	padding-top: 6px;
+	border: 1px solid #D03E3E;
+	color: #D03E3E;
+	border-radius: 8px;
+	display: inline-block;
+	margin-left: 20px;
 }

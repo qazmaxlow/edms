@@ -148,6 +148,7 @@ def general_settings_view(request, system_code=None):
 			m['admin_user_info'].append(info)
 		else:
 			m['general_user_info'].append(info)
+	m.update(csrf(request))
 
 	return render_to_response('general_settings.html', m)
 

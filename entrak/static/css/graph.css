@@ -16,6 +16,9 @@
 .chart-legend-container>table {
 	display: inline-block;
 }
+.chart-legend-container .legendColorBox>div {
+	border: 0px !important;
+}
 
 #chart {
 	width:920px;
@@ -354,6 +357,10 @@
 #source-choice > div {
 	width: 900px;
 }
+#source-choice-container {
+	overflow: scroll;
+	height: 82px;
+}
 #source-choice-container > div{
 	float: left;
 	width: 190px;
@@ -374,8 +381,11 @@
 	margin-left: 5px;
 }
 #source-choice-container>div:nth-child(1),
-#source-choice-container>div:nth-child(4n){
+#source-choice-container>div:nth-child(4n+1){
 	margin-left: 0px;
+}
+#source-choice-container > div:nth-child(n+5) {
+	margin-top: 12px;
 }
 .source-label{
 	position: absolute;
@@ -440,7 +450,7 @@
 	border-radius: 8px;
 }
 .compare-choice-block:last-child {
-	width: 330px;
+	width: 220px;
 }
 .compare-choice-block > div:last-child{
 	margin-top: 0px;

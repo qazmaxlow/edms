@@ -90,6 +90,7 @@
 	height: 490px;
 	overflow: scroll;
 	margin-top: 0px !important;
+	margin-bottom: 60px;
 }
 .ranking-item {
 	position: absolute;
@@ -157,8 +158,8 @@
 }
 .rank-digit {
 	position: absolute;
-	top: 29px;
-	left: 18px;
+	top: 32px;
+	left: 19px;
 	width: 24px;
 	font-size: 11pt;
 	color: #fff;
@@ -194,7 +195,7 @@
 .ranking-total-or-person .rank-meter-bar-inner {
 	height: 100%;
 	background: linear-gradient(to right, #7dd790 , #01a65a);
-	opacity: 0.7;
+	opacity: 0.9;
 	border-top-right-radius: 15px; 
 	border-bottom-right-radius: 15px;
 	box-shadow: 1px 1px 1px #888888;
@@ -225,11 +226,11 @@
 .ranking-percent .rank-meter-bar-inner {
 	position: absolute;
 	height: 100%;
-	opacity: 0.8;
+	opacity: 0.9;
 	box-shadow: 1px 1px 1px #888888;
 }
 .ranking-percent .rank-positive .rank-meter-bar-inner {
-	background: linear-gradient(to right, #F3AE9B , #ED6D4A);
+	background: linear-gradient(to right, #F3AE9B , #E65A3C);
 	border-top-right-radius: 15px;
 	border-bottom-right-radius: 15px;
 }

@@ -130,15 +130,21 @@
 .conversational-confirm-btn {
 	border-width: 2px !important;
 }
-.summary-alert .conversational-confirm-btn,
-.still-on-alert .conversational-confirm-btn {
+.peak-demand .conversational-confirm-btn {
+	color: #35BC99;
+	border: 1px solid #35BC99;
+}
+.summary-alert .conversational-confirm-btn {
 	border: 1px solid #4F50A1;
 	color: #4F50A1;
 }
-.summary-alert .conversational-cancel-btn,
-.still-on-alert .conversational-cancel-btn{
-	border: 1px solid #4F50A1;
-	color: #4F50A1;
+.still-on-alert .conversational-confirm-btn{
+	color: #EB9524;
+	border: 1px solid #EB9524;
+}
+.conversational-cancel-btn {
+	border: 1px solid #D6D6D6;
+	color: #D6D6D6;
 }
 .summary-alert .conversational-cancel-btn:hover,
 .summary-alert .conversational-confirm-btn:hover{
@@ -147,7 +153,7 @@
 }
 .peak-demand .conversational-cancel-btn:hover,
 .peak-demand .conversational-confirm-btn:hover{
-	background-color: #35bc99;
+	background-color: #35BC99;
 	color: #fff;
 }
 .still-on-alert  .conversational-cancel-btn:hover,
@@ -238,13 +244,23 @@
 	padding-top:15px;
 	padding-left: 15px;
 	border-radius: 8px;
-	height: 120px;
-	border: 2px solid #35bc99;
+	height: 150px;
 	z-index: 1000;
+}
+.peak-demand-choose-block .info-tooltip {
+	border: 2px solid #35BC99;
+}
+.summary-alert-choose-block .info-tooltip {
+	border: 2px solid #4F50A1;
+}
+.instance-alert-choose-block .info-tooltip {
+	border: 2px solid #EB9524;
 }
 .info-tooltip-content {
 	font-size: 10pt;
 	color: #393939;
+	line-height: 1.3em;
+	padding-right: 15px;
 }
 .info-tooltip-close-btn{
 	position: absolute;
@@ -430,18 +446,12 @@
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 	font-size: 11pt;
 	font-weight:lighter;
-	color: #35bc99;
 	text-align: right;
 	display: inline-block;
 	padding-left: 10px;
 	padding-right: 10px;
-	border: 1px solid #35bc99;
 	border-radius: 8px;
 	margin-right: 10px;
-}
-.still-on-alert .conversational-btn{
-	color: #EB9524;
-	border: 1px solid #eb9524;
 }
 
 .alert-content>hr {
@@ -602,16 +612,23 @@
 	width: 175px;
 	height: 10px;
 	margin-top: 5px;
+}
+.summary-alert .end-use-col .SumoSelect .CaptionCont {
 	background-color: #4F50A1;
+}
+.still-on-alert .end-use-col .SumoSelect .CaptionCont {
+	background-color: #EB9524;
 }
 .peak-demand .end-use-col .SumoSelect .CaptionCont label {
 	background-color: #35BC99;
 	right: -15px;
 	width: 15px;
 }
-.summary-alert .end-use-col .SumoSelect .CaptionCont label,
+.summary-alert .end-use-col .SumoSelect .CaptionCont label {
+	background-color: #4F50A1;
+}
 .still-on-alert .end-use-col .SumoSelect .CaptionCont label {
-	background-color: #4f50a1;
+	background-color: #EB9524;
 }
 .peak-demand .end-use-col .SumoSelect .SlectBox label > i {
 	height: 12px;
@@ -1157,6 +1174,7 @@
 .duplicate-container .conversational-block {
 	box-shadow: none;
 	background-color: transparent;
+	margin-top: 10px;
 }
 .duplicate-container .conversational-block > div:first-child .SumoSelect {
 	width: 245px;
@@ -1176,13 +1194,20 @@
 }
 .duplicate-container .conversational-block > div:nth-child(2) .SumoSelect {
 	width: 80px;
-	margin-right: 20px;
+	margin-right: 27px;
 	margin-left: 5px;
+	margin-top: 5px;
 }
 .duplicate-container .conversational-block > div:nth-child(2) .SumoSelect .CaptionCont {
-	width: 80px;
-	background-color: #f5f5f5;
+	width: 90px;
+	background-color: #F5F5F5;
 	border: none;
+}
+.duplicate-popup .conversational-block div:nth-child(2) .CaptionCont span {
+	font-size: 14pt;
+	margin-top: 4px;
+	text-align: center;
+	height: 25px;
 }
 .duplicate-container .conversational-block input {
 	width: 120px;
