@@ -2,6 +2,7 @@ from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render_to_response
 from django.core.context_processors import csrf
+from django.utils.translation import ugettext as _
 from system.models import System
 
 def login_view(request, system_code=None):
@@ -19,7 +20,7 @@ def login_view(request, system_code=None):
 			login(request, user)
 			return redirect('graph', system_code=system_code)
 		else:
-			warning_msg = "username or password incorrect"
+			warning_msg = _("Username or password incorrect")
 
 	m = {}
 	m.update(csrf(request))
@@ -46,7 +47,7 @@ def centeral_login_view(request):
 			login(request, user)
 			return redirect('graph', system_code=user.system.code)
 		else:
-			warning_msg = "username or password incorrect"
+			warning_msg = _("Username or password incorrect")
 
 	m = {}
 	m.update(csrf(request))

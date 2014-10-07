@@ -55,9 +55,12 @@ $(function() {
 
 <div class="desc-header">{% trans "Welcome to En-trak,<br>your interactive energy monitoring system!" %}</div>
 <div class="desc-content">
-	This system tracks our energy usage in real-time, helping us to better<br>
-	control and reduce our costs and environmental impact, as well as to<br>
-	increase awareness of energy saving in our organization.
+	{% blocktrans %}
+	This system tracks your energy usage in real-time, helping you to better<br>
+	control and reduce your costs and environmental impact, as well as to<br>
+	increase awareness of energy saving in your organization.<br><br>
+	En-trak - Powering Up Energy Efficiency, Turning Data into Actionable Intelligence
+	{% endblocktrans %}
 </div>
 <div class="login-panel">
 	<div>{% trans "To use the En-trak monitor platform, please sign in" %}</div>
@@ -80,7 +83,7 @@ $(function() {
 
 <footer class="site-footer">
 	<p style="clear: both;"></p>
-	<p id="copyright">Copyright © En-trak Pte Ltd 2014. All rights reserved.</p>
+	<p id="copyright">Copyright © En-trak Hong Kong Ltd 2013. All rights reserved.</p>
 	<a href="#"><img id="entrak-logo" src="{% static 'images/powered-by-logo.png' %}"></a>
 	<p class="footer-main"></p>				
 	<p style="clear: both;"></p>

@@ -1,5 +1,6 @@
 from functools import wraps
 from django.shortcuts import redirect
+from django.utils.translation import ugettext as _
 from user.models import EntrakUser, USER_ROLE_ADMIN_LEVEL, USER_ROLE_VIEWER_LEVEL
 from system.models import System
 
@@ -34,9 +35,9 @@ def permission_required(required_level=USER_ROLE_VIEWER_LEVEL):
 				if request.user.role_level >= required_level and has_permission(request, request.user, system):
 					return view_func(request, *args, **kwargs)
 				else:
-					request.session['login_warning_msg'] = "user don't have permission to access this system"
+					request.session['login_warning_msg'] = _("User is not permitted to access the system.")
 			else:
-				request.session['login_warning_msg'] = 'login require! Please login first'
+				request.session['login_warning_msg'] = _('Please enter username and password.')
 
 			return redirect('login', system_code=system_code)
 		return wrapper

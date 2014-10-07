@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-07 02:28+0000\n"
+"POT-Creation-Date: 2014-10-07 09:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: entrak/auth_views.py:23 entrak/auth_views.py:50
+msgid "Username or password incorrect"
+msgstr "用戶名稱或密碼不正確"
 
 #: entrak/progress_views.py:22
 msgid "Hong Kong Airport"
@@ -445,24 +449,24 @@ msgstr ""
 "就算把電器關掉，但還連接在插座上，這樣仍然會消耗5-10%%的能源。正因如此，請緊"
 "記得也把插座或拖板上的開關掣關掉！"
 
-#: entrak/templates/display.html:201 entrak/templates/graph.html:383
+#: entrak/templates/display.html:201 entrak/templates/graph.html:400
 #: entrak/templates/ranking.html:492
 msgid "Total"
 msgstr "總數"
 
-#: entrak/templates/display.html:202 entrak/templates/graph.html:384
+#: entrak/templates/display.html:202 entrak/templates/graph.html:401
 msgid "Previous"
 msgstr "以前"
 
-#: entrak/templates/display.html:203 entrak/templates/graph.html:385
+#: entrak/templates/display.html:203 entrak/templates/graph.html:402
 msgid "Highest"
 msgstr "最高"
 
-#: entrak/templates/display.html:204 entrak/templates/graph.html:386
+#: entrak/templates/display.html:204 entrak/templates/graph.html:403
 msgid "Lowest"
 msgstr "最低"
 
-#: entrak/templates/display.html:205 entrak/templates/graph.html:387
+#: entrak/templates/display.html:205 entrak/templates/graph.html:404
 msgid "Custom"
 msgstr "自訂"
 
@@ -501,6 +505,189 @@ msgstr "已逹減省"
 #: entrak/templates/display.html:316
 msgid "Next target would be"
 msgstr "下個目標"
+
+#: entrak/templates/faq.html:17
+msgid "Frequently Asked Questions"
+msgstr "常見問題"
+
+#: entrak/templates/faq.html:19
+msgid "1. What is En-trak™?"
+msgstr "1. 什麼是En-trak™？"
+
+#: entrak/templates/faq.html:20
+msgid ""
+"En-trak™ is a cloud-based energy management analytics software built to help "
+"organizations to reduce their energy use, through continuous monitoring, "
+"analytics, alarms, reports, awareness and control."
+msgstr ""
+"En-trak™是基於雲計算的能源管理分析系统，通過連續監察、分析、提示、報告、提高"
+"意識和控制，幫助企業降低能源消耗。"
+
+#: entrak/templates/faq.html:22
+msgid "2. What does En-trak™ measure?"
+msgstr "2. En-trak™量度什麼？"
+
+#: entrak/templates/faq.html:23
+msgid ""
+"En-trak™ measures the electricity consumption of your building or office in "
+"real-time (every 60 seconds). In most cases, we will breakdown your total "
+"electricity consumption into different components by sources - e.g. "
+"Lighting, Aircon, Socket; or by areas - e.g. Block A, Block B. The actual "
+"circuits measured at your site depend on your requirements and the actual "
+"electrical layout of your building."
+msgstr ""
+"En-trak™量度你的建築物或辦公室中的實時用電量（每60秒）。在大多數情況下，我們"
+"會將你的總用電量分為不同的來源 - 如照明，冷氣，插座或分地區 - 例如A座，B座。"
+"實際量度的電路取決於你的需求和你的地點的實際的電力線路情況。"
+
+#: entrak/templates/faq.html:25
+msgid "3. Where is our En-trak™ system installed?"
+msgstr "3. En-trak™ 系統安裝在哪？"
+
+#: entrak/templates/faq.html:26
+msgid ""
+"The En-trak™ metering equipment is typically installed in a building’s or "
+"office main switch room where the power comes in from the utility’s power "
+"station and distributes to different parts of the building. In areas "
+"requiring more detailed data points, metering equipment may also be "
+"installed in other sub-metering locations throughout the building."
+msgstr ""
+"En-trak™的智能電錶和硬件一般安裝在大廈或辦公室的電掣房內，此處為電力公司直接"
+"從發電站分配到建築物的不同部分。如果用戶需要更詳細的數據，我們可能需要把智能"
+"電錶和硬件安裝到分電掣箱。"
+
+#: entrak/templates/faq.html:28
+msgid "4. Can we use En-trak™ offline?"
+msgstr "4. 我們可以在離線情況下使用En-trak™嗎？"
+
+#: entrak/templates/faq.html:29
+msgid ""
+"En-trak™ is a web-based software system and cannot be accessed offline. "
+"However, you can easily download and save your energy information into PDF "
+"or Excel for offline viewing and analysis."
+msgstr ""
+"En-trak™是基於雲端伺服器，完全為網頁式操作，所以不能離線訪問。但是，您可以以 "
+"PDF或Excel形式輕鬆地下載並保存能源信息以進行離線查看和分析。"
+
+#: entrak/templates/faq.html:31
+msgid "5. What browsers do En-trak™ supports?"
+msgstr "5. En-trak™支持哪些瀏覽器？"
+
+#: entrak/templates/faq.html:32
+msgid ""
+"En-trak™ works with most common browsers including Google Chrome, Mozilla "
+"Firefox, Safari, and Internet Explorer (IE10+). Older versions of Internet "
+"Explorer may have limited functionality."
+msgstr ""
+"En-trak™適用於大多數常見的瀏覽器，包Google Chrome，Mozilla Firefox，Safari和"
+"IE瀏覽器（IE10+）。較舊版本的Internet Explorer可能只能支持有限功能。"
+
+#: entrak/templates/faq.html:34
+msgid "6. How secure is our information?"
+msgstr "6. 我們在En-trak™系統的能源數據安全嗎？"
+
+#: entrak/templates/faq.html:35
+msgid ""
+"All information is password protected, so you have complete control over all "
+"data. An administrator maintains the ability to change usernames and "
+"passwords to ensure privacy. All data is furthermore stored, backup and "
+"secured by Amazon Web Service."
+msgstr ""
+"所有En-trak™ 系統及能源數據是由安全程度達世界級的亞馬遜網路服務系統託管及保"
+"護。只有授權用戶才可以登入系統，所有用戶只可憑他們獨有的用戶名及密碼登入自己"
+"系統。"
+
+#: entrak/templates/faq.html:37
+msgid ""
+"7. Why is the energy data from En-trak™ reports different from my monthly "
+"bills?"
+msgstr "7. 為什麼從En-trak™ 系統得到的能源數據與我的月結單上的數目不同？"
+
+#: entrak/templates/faq.html:38
+msgid ""
+"To compare the energy data, we need to ensure we are looking at the same "
+"period and time of cut-off. By default, En-trak™ shows your monthly energy "
+"reports based on a full calendar month i.e. from 1 March to 31 March. "
+"However, your electricity bills may have different start/end dates e.g. "
+"March 24 – April 25. En-trak™ energy data for any specified time range are "
+"calculated from midnight (0000hrs) to midnight (0000hrs), whereas utility "
+"companies may check your meters during daytime. This may result in small "
+"discrepancies between the two."
+msgstr ""
+"要比較能源數據，我們需先確保我們在看兩段一模一樣的時期和截數日期 。在默認情況"
+"下，En-trak™ 會給您顯示日曆月的數字，例如從3月1日至3月31日的月度能源報告。但"
+"是，您的電費可以有不同的開始/結束日期如3月24日 - 4月25日。En-trak™ 能源數據的"
+"任何指定的時段是從午夜（0000hrs）至午夜十二時（0000hrs）計算，而電力公司一般"
+"在白天檢查你的電錶。這可能會導致在兩者之間的小差異。"
+
+#: entrak/templates/faq.html:40
+msgid ""
+"8. Where did you obtain the rate of electricity cost and carbon emission as "
+"shown in the En-trak™ system?"
+msgstr ""
+"8. En-trak™系統裡的單位換算，你從哪裡獲得的這些電力成本和碳排放的資料？"
+
+#: entrak/templates/faq.html:41
+msgid ""
+"The utility rates and the carbon emission factors used in the En-trak™ are "
+"public information obtained from your local electricity company."
+msgstr "En-trak™的電費計算率和碳排放係數都從當地電力公司發佈的公開信息獲取。"
+
+#: entrak/templates/faq.html:43
+msgid "9. What is the basis for the food units (burgers, noodles, etc.)?"
+msgstr "9. 食品單位（漢堡包，拉麵等）與耗電量是什麼關係？"
+
+#: entrak/templates/faq.html:44
+msgid ""
+"Food energy is usually measured in calories. Electrical energy is usually "
+"measured in kilowatt-hours. Because both food and electricity are energy "
+"unit and by converting electrical energy use (kWh) into calories of "
+"different types of food, it allows occupants to imagine how many burgers "
+"their building, school, or office would have to eat to consume enough energy "
+"to power all of their appliances. This feature is designed to draw attention "
+"and create higher environmental awareness and engagement."
+msgstr ""
+"食物能量通常以卡路里計算。電能通常以千瓦小時。由於食品和電都是能量單位，我們"
+"通過單位轉換，把電能的使用量（kWh）轉化為不同種類的食物的熱量，轉換後，使用者"
+"可以更容易想像，如果把他們的建築，學校或辦公室比如為一個人，他們每天需要食用"
+"多少食物以提供足夠能量來供應電力給所有的電器。此功能的目的是提醒大家，讓每個"
+"人都更有環保意識和更樂意參與。"
+
+#: entrak/templates/faq.html:46
+msgid "10. Why can’t I view any data bars in our En-trak™ system’s graph?"
+msgstr "10. 為什麼我看不到En-trak™系統的圖表？"
+
+#: entrak/templates/faq.html:47
+msgid ""
+"Please first check your network connection status. If you are using 3G/4G "
+"data communication plan, make sure the hotspot gateway is working (typically "
+"with a green light on). If you are accessing your system via wifi or LAN "
+"cable, please check your routers and switches to make sure they are turned "
+"on. Once you have confirmed the network status to be ok, please turn off the "
+"energy meter(s) - wait for five minutes and re-start the meter. Refresh your "
+"browser as necessary. If problem persists, please kindly contact support@en-"
+"trak.com for assistance."
+msgstr ""
+"請首先檢查您的網絡連接狀態。如果您使用的是3G / 4G數據通訊方案，確保熱點網關正"
+"常運作（通常帶有綠色指示燈亮）。如果您通過WiFi或LAN連接系統，請檢查您的路由器"
+"和交換機，以確保它們操作正常。一旦你已經確定網絡狀態正常，請關掉智能電錶 - 等"
+"待5分鐘，然後重啟。請刷新瀏覽器 。如果問題仍然持續，請聯絡support@en-trak.com"
+"尋求幫助。"
+
+#: entrak/templates/faq.html:49
+msgid ""
+"11. Someone accidently turned off the router in the switch room. Will we "
+"lose our data?"
+msgstr "11. 有人不小心關掉了連接數據的路由器 。我們會失去數據嗎？"
+
+#: entrak/templates/faq.html:50
+msgid ""
+"No worries. Your energy data are carefully stored inside the En-trak™ meter "
+"for up to 3 years. Once the meter is back online, the system will auto-"
+"recapture any missing data."
+msgstr ""
+"請放心 。您的能源數據會在En-trak™電錶內保存長達3年。只要智能電錶重新上線後，"
+"系統會自動傳送中斷時段的數據。"
 
 #: entrak/templates/general_settings.html:17
 msgid "THE SETTINGS PAGE"
@@ -572,12 +759,12 @@ msgid "Admin Account"
 msgstr "管理員賬戶"
 
 #: entrak/templates/general_settings.html:311
-#: entrak/templates/general_settings.html:330 entrak/templates/login.html:68
+#: entrak/templates/general_settings.html:330 entrak/templates/login.html:71
 msgid "Username"
 msgstr "用戶名稱"
 
 #: entrak/templates/general_settings.html:313
-#: entrak/templates/general_settings.html:332 entrak/templates/login.html:72
+#: entrak/templates/general_settings.html:332 entrak/templates/login.html:75
 msgid "Password"
 msgstr "密碼"
 
@@ -774,95 +961,95 @@ msgstr "MMMD日"
 msgid "MMM"
 msgstr "MMM"
 
-#: entrak/templates/graph.html:188
+#: entrak/templates/graph.html:202
 msgid "compare_between_night"
 msgstr "一夜"
 
-#: entrak/templates/graph.html:190
+#: entrak/templates/graph.html:204
 msgid "compare_between_week"
 msgstr "一週"
 
-#: entrak/templates/graph.html:192
+#: entrak/templates/graph.html:206
 msgid "compare_between_month"
 msgstr "一月"
 
-#: entrak/templates/graph.html:194
+#: entrak/templates/graph.html:208
 msgid "compare_between_year"
 msgstr "一年"
 
-#: entrak/templates/graph.html:196
+#: entrak/templates/graph.html:210
 msgid "compare_between_hour"
 msgstr "一小時"
 
-#: entrak/templates/graph.html:596
+#: entrak/templates/graph.html:613
 msgid "THE GRAPH SECTION"
 msgstr "圖表"
 
-#: entrak/templates/graph.html:597
+#: entrak/templates/graph.html:614
 msgid "Check this out!"
 msgstr "要知道現在用電情況，請看看"
 
-#: entrak/templates/graph.html:607 entrak/templates/ranking.html:482
+#: entrak/templates/graph.html:624 entrak/templates/ranking.html:482
 msgid "Unit"
 msgstr "單位"
 
-#: entrak/templates/graph.html:608 entrak/templates/ranking.html:483
+#: entrak/templates/graph.html:625 entrak/templates/ranking.html:483
 msgid "Time"
 msgstr "時間"
 
-#: entrak/templates/graph.html:609
+#: entrak/templates/graph.html:626
 msgid "End-use"
 msgstr "最終用途"
 
-#: entrak/templates/graph.html:609
+#: entrak/templates/graph.html:626
 msgid "Compare"
 msgstr "比較"
 
-#: entrak/templates/graph.html:626
+#: entrak/templates/graph.html:643
 msgid "Compare between End-use types"
 msgstr "跟個別用電組成比較"
 
-#: entrak/templates/graph.html:627
+#: entrak/templates/graph.html:644
 msgid "(Max 5)"
 msgstr "(最多選擇5項)"
 
-#: entrak/templates/graph.html:628 entrak/templates/graph.html.py:638
+#: entrak/templates/graph.html:645 entrak/templates/graph.html.py:655
 msgid "Clear all"
 msgstr "全部清除"
 
-#: entrak/templates/graph.html:637
+#: entrak/templates/graph.html:654
 msgid "Compare between <span id='compare-between'>days</span>"
 msgstr "跟過往數據相比"
 
-#: entrak/templates/graph.html:647
+#: entrak/templates/graph.html:664
 msgid "Previous "
 msgstr "上"
 
-#: entrak/templates/graph.html:659
+#: entrak/templates/graph.html:676
 msgid "Highest "
 msgstr "最高用量的"
 
-#: entrak/templates/graph.html:671
+#: entrak/templates/graph.html:688
 msgid "Lowest "
 msgstr "最低用量的"
 
-#: entrak/templates/graph.html:683
+#: entrak/templates/graph.html:700
 msgid "Custom date selection"
 msgstr "自訂比較日期"
 
-#: entrak/templates/graph.html:700
+#: entrak/templates/graph.html:717
 msgid "Clear Graph"
 msgstr "清空圖表"
 
-#: entrak/templates/graph.html:721
+#: entrak/templates/graph.html:738
 msgid "Amount of energy consumed on: "
 msgstr "能源消耗量："
 
-#: entrak/templates/graph.html:722
+#: entrak/templates/graph.html:739
 msgid "from:"
 msgstr "由："
 
-#: entrak/templates/graph.html:723
+#: entrak/templates/graph.html:740
 msgid "to:"
 msgstr "至："
 
@@ -870,11 +1057,27 @@ msgstr "至："
 msgid "Welcome to En-trak,<br>your interactive energy monitoring system!"
 msgstr "En-trak - 你的互動能源監察系統<br>歡迎你!"
 
-#: entrak/templates/login.html:63
+#: entrak/templates/login.html:58
+msgid ""
+"\n"
+"\tThis system tracks your energy usage in real-time, helping you to "
+"better<br>\n"
+"\tcontrol and reduce your costs and environmental impact, as well as to<br>\n"
+"\tincrease awareness of energy saving in your organization.<br><br>\n"
+"\tEn-trak - Powering Up Energy Efficiency, Turning Data into Actionable "
+"Intelligence\n"
+"\t"
+msgstr ""
+"\n"
+"En-trak™能源監察系統，可以實時追蹤您的能源使用情況，<br>助您輕鬆控制並降低成"
+"本，減低碳排放，以及提升大家的節能意識！<br><br>En-trak 提升能源效益，將數據"
+"轉化為慳電行為。"
+
+#: entrak/templates/login.html:66
 msgid "To use the En-trak monitor platform, please sign in"
 msgstr "要使用 En-trak 能源管理系統，請先登入"
 
-#: entrak/templates/login.html:74
+#: entrak/templates/login.html:77
 msgid "login"
 msgstr "登入"
 
@@ -1404,3 +1607,11 @@ msgid ""
 "accurate for accounting purposes."
 msgstr ""
 "電費成本只供參考，並不能用作電費計算之用。電費計算以電力公司提供的賬單為本。"
+
+#: utils/auth.py:38
+msgid "User is not permitted to access the system."
+msgstr "用戶沒有訪問這部份的權限。"
+
+#: utils/auth.py:40
+msgid "Please enter username and password."
+msgstr "請輸入用戶名稱和密碼"

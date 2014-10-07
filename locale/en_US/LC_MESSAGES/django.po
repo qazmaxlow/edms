@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-07 02:28+0000\n"
+"POT-Creation-Date: 2014-10-07 09:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: entrak/auth_views.py:23 entrak/auth_views.py:50
+msgid "Username or password incorrect"
+msgstr ""
 
 #: entrak/progress_views.py:22
 msgid "Hong Kong Airport"
@@ -410,24 +414,24 @@ msgid ""
 "as well!"
 msgstr ""
 
-#: entrak/templates/display.html:201 entrak/templates/graph.html:383
+#: entrak/templates/display.html:201 entrak/templates/graph.html:400
 #: entrak/templates/ranking.html:492
 msgid "Total"
 msgstr ""
 
-#: entrak/templates/display.html:202 entrak/templates/graph.html:384
+#: entrak/templates/display.html:202 entrak/templates/graph.html:401
 msgid "Previous"
 msgstr ""
 
-#: entrak/templates/display.html:203 entrak/templates/graph.html:385
+#: entrak/templates/display.html:203 entrak/templates/graph.html:402
 msgid "Highest"
 msgstr ""
 
-#: entrak/templates/display.html:204 entrak/templates/graph.html:386
+#: entrak/templates/display.html:204 entrak/templates/graph.html:403
 msgid "Lowest"
 msgstr ""
 
-#: entrak/templates/display.html:205 entrak/templates/graph.html:387
+#: entrak/templates/display.html:205 entrak/templates/graph.html:404
 msgid "Custom"
 msgstr ""
 
@@ -465,6 +469,156 @@ msgstr ""
 
 #: entrak/templates/display.html:316
 msgid "Next target would be"
+msgstr ""
+
+#: entrak/templates/faq.html:17
+msgid "Frequently Asked Questions"
+msgstr ""
+
+#: entrak/templates/faq.html:19
+msgid "1. What is En-trak™?"
+msgstr ""
+
+#: entrak/templates/faq.html:20
+msgid ""
+"En-trak™ is a cloud-based energy management analytics software built to help "
+"organizations to reduce their energy use, through continuous monitoring, "
+"analytics, alarms, reports, awareness and control."
+msgstr ""
+
+#: entrak/templates/faq.html:22
+msgid "2. What does En-trak™ measure?"
+msgstr ""
+
+#: entrak/templates/faq.html:23
+msgid ""
+"En-trak™ measures the electricity consumption of your building or office in "
+"real-time (every 60 seconds). In most cases, we will breakdown your total "
+"electricity consumption into different components by sources - e.g. "
+"Lighting, Aircon, Socket; or by areas - e.g. Block A, Block B. The actual "
+"circuits measured at your site depend on your requirements and the actual "
+"electrical layout of your building."
+msgstr ""
+
+#: entrak/templates/faq.html:25
+msgid "3. Where is our En-trak™ system installed?"
+msgstr ""
+
+#: entrak/templates/faq.html:26
+msgid ""
+"The En-trak™ metering equipment is typically installed in a building’s or "
+"office main switch room where the power comes in from the utility’s power "
+"station and distributes to different parts of the building. In areas "
+"requiring more detailed data points, metering equipment may also be "
+"installed in other sub-metering locations throughout the building."
+msgstr ""
+
+#: entrak/templates/faq.html:28
+msgid "4. Can we use En-trak™ offline?"
+msgstr ""
+
+#: entrak/templates/faq.html:29
+msgid ""
+"En-trak™ is a web-based software system and cannot be accessed offline. "
+"However, you can easily download and save your energy information into PDF "
+"or Excel for offline viewing and analysis."
+msgstr ""
+
+#: entrak/templates/faq.html:31
+msgid "5. What browsers do En-trak™ supports?"
+msgstr ""
+
+#: entrak/templates/faq.html:32
+msgid ""
+"En-trak™ works with most common browsers including Google Chrome, Mozilla "
+"Firefox, Safari, and Internet Explorer (IE10+). Older versions of Internet "
+"Explorer may have limited functionality."
+msgstr ""
+
+#: entrak/templates/faq.html:34
+msgid "6. How secure is our information?"
+msgstr ""
+
+#: entrak/templates/faq.html:35
+msgid ""
+"All information is password protected, so you have complete control over all "
+"data. An administrator maintains the ability to change usernames and "
+"passwords to ensure privacy. All data is furthermore stored, backup and "
+"secured by Amazon Web Service."
+msgstr ""
+
+#: entrak/templates/faq.html:37
+msgid ""
+"7. Why is the energy data from En-trak™ reports different from my monthly "
+"bills?"
+msgstr ""
+
+#: entrak/templates/faq.html:38
+msgid ""
+"To compare the energy data, we need to ensure we are looking at the same "
+"period and time of cut-off. By default, En-trak™ shows your monthly energy "
+"reports based on a full calendar month i.e. from 1 March to 31 March. "
+"However, your electricity bills may have different start/end dates e.g. "
+"March 24 – April 25. En-trak™ energy data for any specified time range are "
+"calculated from midnight (0000hrs) to midnight (0000hrs), whereas utility "
+"companies may check your meters during daytime. This may result in small "
+"discrepancies between the two."
+msgstr ""
+
+#: entrak/templates/faq.html:40
+msgid ""
+"8. Where did you obtain the rate of electricity cost and carbon emission as "
+"shown in the En-trak™ system?"
+msgstr ""
+
+#: entrak/templates/faq.html:41
+msgid ""
+"The utility rates and the carbon emission factors used in the En-trak™ are "
+"public information obtained from your local electricity company."
+msgstr ""
+
+#: entrak/templates/faq.html:43
+msgid "9. What is the basis for the food units (burgers, noodles, etc.)?"
+msgstr ""
+
+#: entrak/templates/faq.html:44
+msgid ""
+"Food energy is usually measured in calories. Electrical energy is usually "
+"measured in kilowatt-hours. Because both food and electricity are energy "
+"unit and by converting electrical energy use (kWh) into calories of "
+"different types of food, it allows occupants to imagine how many burgers "
+"their building, school, or office would have to eat to consume enough energy "
+"to power all of their appliances. This feature is designed to draw attention "
+"and create higher environmental awareness and engagement."
+msgstr ""
+
+#: entrak/templates/faq.html:46
+msgid "10. Why can’t I view any data bars in our En-trak™ system’s graph?"
+msgstr ""
+
+#: entrak/templates/faq.html:47
+msgid ""
+"Please first check your network connection status. If you are using 3G/4G "
+"data communication plan, make sure the hotspot gateway is working (typically "
+"with a green light on). If you are accessing your system via wifi or LAN "
+"cable, please check your routers and switches to make sure they are turned "
+"on. Once you have confirmed the network status to be ok, please turn off the "
+"energy meter(s) - wait for five minutes and re-start the meter. Refresh your "
+"browser as necessary. If problem persists, please kindly contact support@en-"
+"trak.com for assistance."
+msgstr ""
+
+#: entrak/templates/faq.html:49
+msgid ""
+"11. Someone accidently turned off the router in the switch room. Will we "
+"lose our data?"
+msgstr ""
+
+#: entrak/templates/faq.html:50
+msgid ""
+"No worries. Your energy data are carefully stored inside the En-trak™ meter "
+"for up to 3 years. Once the meter is back online, the system will auto-"
+"recapture any missing data."
 msgstr ""
 
 #: entrak/templates/general_settings.html:17
@@ -537,12 +691,12 @@ msgid "Admin Account"
 msgstr ""
 
 #: entrak/templates/general_settings.html:311
-#: entrak/templates/general_settings.html:330 entrak/templates/login.html:68
+#: entrak/templates/general_settings.html:330 entrak/templates/login.html:71
 msgid "Username"
 msgstr ""
 
 #: entrak/templates/general_settings.html:313
-#: entrak/templates/general_settings.html:332 entrak/templates/login.html:72
+#: entrak/templates/general_settings.html:332 entrak/templates/login.html:75
 msgid "Password"
 msgstr ""
 
@@ -739,95 +893,95 @@ msgstr ""
 msgid "MMM"
 msgstr ""
 
-#: entrak/templates/graph.html:188
+#: entrak/templates/graph.html:202
 msgid "compare_between_night"
 msgstr "night"
 
-#: entrak/templates/graph.html:190
+#: entrak/templates/graph.html:204
 msgid "compare_between_week"
 msgstr "week"
 
-#: entrak/templates/graph.html:192
+#: entrak/templates/graph.html:206
 msgid "compare_between_month"
 msgstr "month"
 
-#: entrak/templates/graph.html:194
+#: entrak/templates/graph.html:208
 msgid "compare_between_year"
 msgstr "year"
 
-#: entrak/templates/graph.html:196
+#: entrak/templates/graph.html:210
 msgid "compare_between_hour"
 msgstr "hour"
 
-#: entrak/templates/graph.html:596
+#: entrak/templates/graph.html:613
 msgid "THE GRAPH SECTION"
 msgstr ""
 
-#: entrak/templates/graph.html:597
+#: entrak/templates/graph.html:614
 msgid "Check this out!"
 msgstr ""
 
-#: entrak/templates/graph.html:607 entrak/templates/ranking.html:482
+#: entrak/templates/graph.html:624 entrak/templates/ranking.html:482
 msgid "Unit"
 msgstr ""
 
-#: entrak/templates/graph.html:608 entrak/templates/ranking.html:483
+#: entrak/templates/graph.html:625 entrak/templates/ranking.html:483
 msgid "Time"
 msgstr ""
 
-#: entrak/templates/graph.html:609
+#: entrak/templates/graph.html:626
 msgid "End-use"
 msgstr ""
 
-#: entrak/templates/graph.html:609
+#: entrak/templates/graph.html:626
 msgid "Compare"
 msgstr ""
 
-#: entrak/templates/graph.html:626
+#: entrak/templates/graph.html:643
 msgid "Compare between End-use types"
 msgstr ""
 
-#: entrak/templates/graph.html:627
+#: entrak/templates/graph.html:644
 msgid "(Max 5)"
 msgstr ""
 
-#: entrak/templates/graph.html:628 entrak/templates/graph.html.py:638
+#: entrak/templates/graph.html:645 entrak/templates/graph.html.py:655
 msgid "Clear all"
 msgstr ""
 
-#: entrak/templates/graph.html:637
+#: entrak/templates/graph.html:654
 msgid "Compare between <span id='compare-between'>days</span>"
 msgstr ""
 
-#: entrak/templates/graph.html:647
+#: entrak/templates/graph.html:664
 msgid "Previous "
 msgstr ""
 
-#: entrak/templates/graph.html:659
+#: entrak/templates/graph.html:676
 msgid "Highest "
 msgstr ""
 
-#: entrak/templates/graph.html:671
+#: entrak/templates/graph.html:688
 msgid "Lowest "
 msgstr ""
 
-#: entrak/templates/graph.html:683
+#: entrak/templates/graph.html:700
 msgid "Custom date selection"
 msgstr ""
 
-#: entrak/templates/graph.html:700
+#: entrak/templates/graph.html:717
 msgid "Clear Graph"
 msgstr ""
 
-#: entrak/templates/graph.html:721
+#: entrak/templates/graph.html:738
 msgid "Amount of energy consumed on: "
 msgstr ""
 
-#: entrak/templates/graph.html:722
+#: entrak/templates/graph.html:739
 msgid "from:"
 msgstr ""
 
-#: entrak/templates/graph.html:723
+#: entrak/templates/graph.html:740
 msgid "to:"
 msgstr ""
 
@@ -835,11 +989,23 @@ msgstr ""
 msgid "Welcome to En-trak,<br>your interactive energy monitoring system!"
 msgstr ""
 
-#: entrak/templates/login.html:63
+#: entrak/templates/login.html:58
+msgid ""
+"\n"
+"\tThis system tracks your energy usage in real-time, helping you to "
+"better<br>\n"
+"\tcontrol and reduce your costs and environmental impact, as well as to<br>\n"
+"\tincrease awareness of energy saving in your organization.<br><br>\n"
+"\tEn-trak - Powering Up Energy Efficiency, Turning Data into Actionable "
+"Intelligence\n"
+"\t"
+msgstr ""
+
+#: entrak/templates/login.html:66
 msgid "To use the En-trak monitor platform, please sign in"
 msgstr ""
 
-#: entrak/templates/login.html:74
+#: entrak/templates/login.html:77
 msgid "login"
 msgstr ""
 
@@ -1356,4 +1522,12 @@ msgstr ""
 msgid ""
 "Cost values are for general reference only and should not be treated as "
 "accurate for accounting purposes."
+msgstr ""
+
+#: utils/auth.py:38
+msgid "User is not permitted to access the system."
+msgstr ""
+
+#: utils/auth.py:40
+msgid "Please enter username and password."
 msgstr ""
