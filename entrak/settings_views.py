@@ -5,6 +5,7 @@ import calendar
 from django.shortcuts import render_to_response
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils.translation import ugettext as _
 from django.utils.html import escapejs
 from django.db.models import Q
 from django.db import transaction
@@ -179,6 +180,8 @@ def set_user_info_view(request, system_code=None):
 			if old_pwd != '' and new_pwd != '':
 				if user.check_password(old_pwd):
 					user.set_password(new_pwd)
+				else:
+					result['warning'] = _("Change password failed, old password does not match")
 
 			user.save()
 

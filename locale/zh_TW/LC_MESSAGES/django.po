@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-06 10:02+0000\n"
+"POT-Creation-Date: 2014-10-07 02:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,11 +41,16 @@ msgstr "英文"
 msgid "Traditional Chinese"
 msgstr "繁體中文"
 
+#: entrak/settings_views.py:184
+msgid "Change password failed, old password does not match"
+msgstr "不能更換密碼，舊密碼並不相符"
+
 #: entrak/templates/alert_settings.html:29
 msgid "THE ALERT PAGE"
 msgstr "耗電情況提示"
 
 #: entrak/templates/alert_settings.html:30
+#: entrak/templates/general_settings.html:18
 msgid "Find out what you can set here at"
 msgstr "想知道系統可以提醒你些什麼，請看看"
 
@@ -84,12 +89,17 @@ msgstr ""
 
 #: entrak/templates/alert_settings.html:45
 #: entrak/templates/alert_settings.html:60
+#: entrak/templates/general_settings.html:30
+#: entrak/templates/general_settings.html:351
+#: entrak/templates/general_settings.html:364
+#: entrak/templates/general_settings.html:375
 msgid "Cancel"
 msgstr "取消"
 
 #: entrak/templates/alert_settings.html:46
 #: entrak/templates/alert_settings.html:61
 #: entrak/templates/alert_settings.html:1001
+#: entrak/templates/general_settings.html:376
 msgid "Confirm"
 msgstr "確認"
 
@@ -138,7 +148,7 @@ msgstr "週末"
 msgid "DD MMM YYYY, ddd"
 msgstr "YYYY年MMMD日, dddd"
 
-#: entrak/templates/alert_settings.html:717 entrak/templates/graph.html:139
+#: entrak/templates/alert_settings.html:717 entrak/templates/graph.html:143
 msgid "hh:mma"
 msgstr "Ahh:mm"
 
@@ -327,7 +337,7 @@ msgstr "詳情"
 #: entrak/templates/display.html:47
 #: entrak/templates/generate_report_pdf.html:43
 #: entrak/templates/generate_report_pdf.html:44 entrak/templates/graph.html:84
-#: entrak/templates/graph.html.py:100 entrak/templates/graph.html:124
+#: entrak/templates/graph.html.py:100 entrak/templates/graph.html:128
 #: entrak/templates/ranking.html:304 entrak/templates/report.html:336
 #: entrak/templates/report.html.py:337 entrak/templates/report.html:339
 #: entrak/templates/report.html.py:340 entrak/templates/report.html:383
@@ -431,24 +441,24 @@ msgstr ""
 "就算把電器關掉，但還連接在插座上，這樣仍然會消耗5-10%%的能源。正因如此，請緊"
 "記得也把插座或拖板上的開關掣關掉！"
 
-#: entrak/templates/display.html:201 entrak/templates/graph.html:379
+#: entrak/templates/display.html:201 entrak/templates/graph.html:383
 #: entrak/templates/ranking.html:492
 msgid "Total"
 msgstr "總數"
 
-#: entrak/templates/display.html:202 entrak/templates/graph.html:380
+#: entrak/templates/display.html:202 entrak/templates/graph.html:384
 msgid "Previous"
 msgstr "以前"
 
-#: entrak/templates/display.html:203 entrak/templates/graph.html:381
+#: entrak/templates/display.html:203 entrak/templates/graph.html:385
 msgid "Highest"
 msgstr "最高"
 
-#: entrak/templates/display.html:204 entrak/templates/graph.html:382
+#: entrak/templates/display.html:204 entrak/templates/graph.html:386
 msgid "Lowest"
 msgstr "最低"
 
-#: entrak/templates/display.html:205 entrak/templates/graph.html:383
+#: entrak/templates/display.html:205 entrak/templates/graph.html:387
 msgid "Custom"
 msgstr "自訂"
 
@@ -488,14 +498,128 @@ msgstr "已逹減省"
 msgid "Next target would be"
 msgstr "下個目標"
 
+#: entrak/templates/general_settings.html:17
+msgid "THE SETTINGS PAGE"
+msgstr "系統設置"
+
+#: entrak/templates/general_settings.html:25
+#: entrak/templates/general_settings.html:310
+#: entrak/templates/general_settings.html:329
+msgid "Label"
+msgstr "稱號"
+
+#: entrak/templates/general_settings.html:26
+msgid "Unique Username"
+msgstr "請輸入用戶名稱"
+
+#: entrak/templates/general_settings.html:27
+#: entrak/templates/general_settings.html:312
+#: entrak/templates/general_settings.html:331
+msgid "Recovering Email"
+msgstr "電郵地址"
+
+#: entrak/templates/general_settings.html:28
+msgid "Change Password"
+msgstr "更換密碼"
+
+#: entrak/templates/general_settings.html:28
+msgid "Set Password"
+msgstr "建立密碼"
+
+#: entrak/templates/general_settings.html:31
+msgid "Delete"
+msgstr "移除"
+
+#: entrak/templates/general_settings.html:32
+#: entrak/templates/general_settings.html:350
+#: entrak/templates/general_settings.html:363
+msgid "Apply"
+msgstr "確認"
+
+#: entrak/templates/general_settings.html:88
+#: entrak/templates/general_settings.html:284
+msgid "Password cannot be blank"
+msgstr "密碼不能為空"
+
+#: entrak/templates/general_settings.html:90
+#: entrak/templates/general_settings.html:286
+msgid "Confirm Password does not match"
+msgstr "確認的密碼並不相符"
+
+#: entrak/templates/general_settings.html:102
+#: entrak/templates/general_settings.html:323
+msgid "All fields are required"
+msgstr "必須填寫所有項目"
+
+#: entrak/templates/general_settings.html:108
+msgid "Please set password first"
+msgstr "請先建立密碼"
+
+#: entrak/templates/general_settings.html:305
+msgid "Manage Accounts"
+msgstr "賬戶管理"
+
+#: entrak/templates/general_settings.html:306
+msgid "Use the form below to manage or create new user accounts"
+msgstr "請填寫以下資料以管理現有賬戶或建立新用戶賬戶"
+
+#: entrak/templates/general_settings.html:307
+msgid "Admin Account"
+msgstr "管理員賬戶"
+
+#: entrak/templates/general_settings.html:311
+#: entrak/templates/general_settings.html:330 entrak/templates/login.html:68
+msgid "Username"
+msgstr "用戶名稱"
+
+#: entrak/templates/general_settings.html:313
+#: entrak/templates/general_settings.html:332 entrak/templates/login.html:72
+msgid "Password"
+msgstr "密碼"
+
+#: entrak/templates/general_settings.html:314
+#: entrak/templates/general_settings.html:333
+msgid "Actions"
+msgstr "行動"
+
+#: entrak/templates/general_settings.html:320
+msgid "User Account"
+msgstr "一般用戶賬戶"
+
+#: entrak/templates/general_settings.html:322
+msgid "Add New Account"
+msgstr "建立新賬戶"
+
+#: entrak/templates/general_settings.html:339
+msgid "Old Password"
+msgstr "舊密碼"
+
+#: entrak/templates/general_settings.html:343
+#: entrak/templates/general_settings.html:356
+msgid "New Password"
+msgstr "新密碼"
+
+#: entrak/templates/general_settings.html:347
+#: entrak/templates/general_settings.html:360
+msgid "Confirm Password"
+msgstr "再輸入新密碼以作確認"
+
+#: entrak/templates/general_settings.html:369
+msgid "OK"
+msgstr "確認"
+
+#: entrak/templates/general_settings.html:373
+msgid "Are you sure you want to delete"
+msgstr "你確認要移除此帳戶嗎？"
+
 #: entrak/templates/generate_report_pdf.html:41 entrak/templates/graph.html:88
-#: entrak/templates/graph.html.py:104 entrak/templates/graph.html:126
+#: entrak/templates/graph.html.py:104 entrak/templates/graph.html:130
 #: entrak/templates/ranking.html:307 entrak/templates/report.html:448
 msgid "MMM YYYY"
 msgstr "YYYY年MMM"
 
 #: entrak/templates/generate_report_pdf.html:42
-#: entrak/templates/graph.html:106 entrak/templates/graph.html.py:128
+#: entrak/templates/graph.html:106 entrak/templates/graph.html.py:132
 #: entrak/templates/ranking.html:309 entrak/templates/report.html:330
 #: entrak/templates/report.html.py:331 entrak/templates/report.html:449
 msgid "YYYY"
@@ -630,111 +754,111 @@ msgstr "YYYY年MMMD日, a h時, dddd"
 msgid "Night of D MMM YYYY, ddd"
 msgstr "YYYY年MMMD日, 夜間, dddd"
 
-#: entrak/templates/graph.html:120
+#: entrak/templates/graph.html:124
 msgid "HH:mm D MMM YYYY, ddd"
 msgstr "YYYY年MMMD日, HH:mm, dddd"
 
-#: entrak/templates/graph.html:141
+#: entrak/templates/graph.html:145
 msgid "ddd"
 msgstr "dddd"
 
-#: entrak/templates/graph.html:143 entrak/templates/report.html:479
+#: entrak/templates/graph.html:147 entrak/templates/report.html:479
 msgid "MMM D"
 msgstr "MMMD日"
 
-#: entrak/templates/graph.html:145
+#: entrak/templates/graph.html:149
 msgid "MMM"
 msgstr "MMM"
 
-#: entrak/templates/graph.html:184
+#: entrak/templates/graph.html:188
 msgid "compare_between_night"
 msgstr "一夜"
 
-#: entrak/templates/graph.html:186
+#: entrak/templates/graph.html:190
 msgid "compare_between_week"
 msgstr "一週"
 
-#: entrak/templates/graph.html:188
+#: entrak/templates/graph.html:192
 msgid "compare_between_month"
 msgstr "一月"
 
-#: entrak/templates/graph.html:190
+#: entrak/templates/graph.html:194
 msgid "compare_between_year"
 msgstr "一年"
 
-#: entrak/templates/graph.html:192
+#: entrak/templates/graph.html:196
 msgid "compare_between_hour"
 msgstr "一小時"
 
-#: entrak/templates/graph.html:592
+#: entrak/templates/graph.html:596
 msgid "THE GRAPH SECTION"
 msgstr "圖表"
 
-#: entrak/templates/graph.html:593
+#: entrak/templates/graph.html:597
 msgid "Check this out!"
 msgstr "要知道現在用電情況，請看看"
 
-#: entrak/templates/graph.html:603 entrak/templates/ranking.html:482
+#: entrak/templates/graph.html:607 entrak/templates/ranking.html:482
 msgid "Unit"
 msgstr "單位"
 
-#: entrak/templates/graph.html:604 entrak/templates/ranking.html:483
+#: entrak/templates/graph.html:608 entrak/templates/ranking.html:483
 msgid "Time"
 msgstr "時間"
 
-#: entrak/templates/graph.html:605
+#: entrak/templates/graph.html:609
 msgid "End-use"
 msgstr "最終用途"
 
-#: entrak/templates/graph.html:605
+#: entrak/templates/graph.html:609
 msgid "Compare"
 msgstr "比較"
 
-#: entrak/templates/graph.html:622
+#: entrak/templates/graph.html:626
 msgid "Compare between End-use types"
 msgstr "跟個別用電組成比較"
 
-#: entrak/templates/graph.html:623
+#: entrak/templates/graph.html:627
 msgid "(Max 5)"
 msgstr "(最多選擇5項)"
 
-#: entrak/templates/graph.html:624 entrak/templates/graph.html.py:634
+#: entrak/templates/graph.html:628 entrak/templates/graph.html.py:638
 msgid "Clear all"
 msgstr "全部清除"
 
-#: entrak/templates/graph.html:633
+#: entrak/templates/graph.html:637
 msgid "Compare between <span id='compare-between'>days</span>"
 msgstr "跟過往數據相比"
 
-#: entrak/templates/graph.html:643
+#: entrak/templates/graph.html:647
 msgid "Previous "
 msgstr "上"
 
-#: entrak/templates/graph.html:655
+#: entrak/templates/graph.html:659
 msgid "Highest "
 msgstr "最高用量的"
 
-#: entrak/templates/graph.html:667
+#: entrak/templates/graph.html:671
 msgid "Lowest "
 msgstr "最低用量的"
 
-#: entrak/templates/graph.html:679
+#: entrak/templates/graph.html:683
 msgid "Custom date selection"
 msgstr "自訂比較日期"
 
-#: entrak/templates/graph.html:696
+#: entrak/templates/graph.html:700
 msgid "Clear Graph"
 msgstr "清空圖表"
 
-#: entrak/templates/graph.html:717
+#: entrak/templates/graph.html:721
 msgid "Amount of energy consumed on: "
 msgstr "能源消耗量："
 
-#: entrak/templates/graph.html:718
+#: entrak/templates/graph.html:722
 msgid "from:"
 msgstr "由："
 
-#: entrak/templates/graph.html:719
+#: entrak/templates/graph.html:723
 msgid "to:"
 msgstr "至："
 
@@ -745,14 +869,6 @@ msgstr "En-trak - 你的互動能源監察系統<br>歡迎你!"
 #: entrak/templates/login.html:63
 msgid "To use the En-trak monitor platform, please sign in"
 msgstr "要使用 En-trak 能源管理系統，請先登入"
-
-#: entrak/templates/login.html:68
-msgid "Username"
-msgstr "用戶名稱"
-
-#: entrak/templates/login.html:72
-msgid "Password"
-msgstr "密碼"
 
 #: entrak/templates/login.html:74
 msgid "login"
@@ -809,8 +925,12 @@ msgid ""
 msgstr "節省 %(target_level)s<span class=\"saving-percent-symbol\">%%</span>"
 
 #: entrak/templates/progress.html:88
-msgid "Cumulative savings"
+msgid "Cumulative Savings"
 msgstr "累積能源節省 (相等於)"
+
+#: entrak/templates/progress.html:88
+msgid "Extra Spending"
+msgstr "累積額外耗能 (相等於)"
 
 #: entrak/templates/progress.html:93
 msgid " tons of CO<sub>2</sub>"

@@ -1,5 +1,6 @@
 {% extends "page_base.html" %}
 
+{% load i18n %}
 {% load static %}
 {% load entrak_extras %}
 
@@ -13,22 +14,22 @@
 <script src="{% static 'js/jquery.bpopup.min.js' %}"></script>
 {% endblock %}
 
-{% block page_title %}THE SETTINGS PAGE{% endblock %}
-{% block page_subtitle %}Find out what you can set here at{% endblock %}
+{% block page_title %}{% trans "THE SETTINGS PAGE" %}{% endblock %}
+{% block page_subtitle %}{% trans "Find out what you can set here at" %}{% endblock %}
 
 {% block extra_script %}
 {{block.super}}
 
 <script id="accrount-row-template" type="x-tmpl-mustache">
 <div class="account-row">
-	<div class="ar-label-col"><input type="text" name="label" placeholder="Label">
-	</div><div class="ar-user-col"><input type="text" name="username" placeholder="Unique Username"><div></div>
-	</div><div class="ar-email-col"><input type="email" name="email" placeholder="Recovering Email">
-	</div><div class="ar-pwd-col"><div class="change-pwd-btn">Change Password</div><div class="set-pwd-btn">Set Password</div>
+	<div class="ar-label-col"><input type="text" name="label" placeholder='{% trans "Label" %}'>
+	</div><div class="ar-user-col"><input type="text" name="username" placeholder='{% trans "Unique Username" %}'><div></div>
+	</div><div class="ar-email-col"><input type="email" name="email" placeholder='{% trans "Recovering Email" %}'>
+	</div><div class="ar-pwd-col"><div class="change-pwd-btn">{% trans "Change Password" %}</div><div class="set-pwd-btn">{% trans "Set Password" %}</div>
 	</div><div class="ar-action-col">
-		<div class="ar-cancel-btn">Cancel</div>
-		<div class="ar-delete-btn">Delete</div>
-		<div class="ar-apply-btn">Apply</div>
+		<div class="ar-cancel-btn">{% trans "Cancel" %}</div>
+		<div class="ar-delete-btn">{% trans "Delete" %}</div>
+		<div class="ar-apply-btn">{% trans "Apply" %}</div>
 	</div>
 	<input type="hidden" name="old_pwd">
 	<input type="hidden" name="new_pwd">
@@ -84,9 +85,9 @@ function setupChangePwdBtn(targetEle) {
 			var confirmPwd = dialogContainer.find('.confirm-pwd-input').val();
 
 			if (confirmPwd === "") {
-				popupWarning('Password cannot be blank');
+				popupWarning('{% trans "Password cannot be blank" %}');
 			} else if (confirmPwd !== newPwd) {
-				popupWarning('Confirm Password does not match');
+				popupWarning('{% trans "Confirm Password does not match" %}');
 			} else {
 				event.data.accountRow.find('input[name="old_pwd"]').val(oldPwd);
 				event.data.accountRow.find('input[name="new_pwd"]').val(newPwd);
@@ -98,13 +99,13 @@ function setupChangePwdBtn(targetEle) {
 
 function setUserInfo(info) {
 	if (info.username === '' || info.email === '' || info.label === '') {
-		popupWarning('All fields are required');
+		popupWarning('{% trans "All fields are required" %}');
 		return;
 	}
 
 	if (!('id' in info)) {
 		if (info.new_pwd === '') {
-			popupWarning('Please set password first');
+			popupWarning('{% trans "Please set password first" %}');
 			return;
 		}
 	}
@@ -123,6 +124,10 @@ function setUserInfo(info) {
 				Mustache.parse(accountRowTemplate);
 				insertAccountRow(user, accountRowTemplate, $('.general-account-table'), USER_TYPE_STANDARD);
 			}
+		}
+
+		if ('warning' in data) {
+			popupWarning(data.warning);
 		}
 	}).fail(function(jqXHR, textStatus) {
 		console.log(jqXHR.responseText);
@@ -276,9 +281,9 @@ $(function() {
 					var confirmPwd = dialogContainer.find('.confirm-pwd-input').val();
 
 					if (confirmPwd === "") {
-						popupWarning('password cannot be empty');
+						popupWarning('{% trans "Password cannot be blank" %}');
 					} else if (confirmPwd !== newPwd) {
-						popupWarning('confirm password not match');
+						popupWarning('{% trans "Confirm Password does not match" %}');
 					} else {
 						event.data.accountRow.find('input[name="new_pwd"]').val(newPwd);
 						pwdDialog.close();
@@ -297,78 +302,78 @@ $(function() {
 {% block page_content %}
 
 <div class="account-section settings-section">
-	<div class="section-header">Manage Accounts</div>
-	<div class="section-desc">Use the form below to manage or create new user accounts</div>
-	<div class="admin-account-title">Admin Account</div>
+	<div class="section-header">{% trans "Manage Accounts" %}</div>
+	<div class="section-desc">{% trans "Use the form below to manage or create new user accounts" %}</div>
+	<div class="admin-account-title">{% trans "Admin Account" %}</div>
 	<div class="account-table admin-account-table">
 		<div class="account-th">
-			<div class="account-th-label">Label
-			</div><div class="account-th-name">Username
-			</div><div class="account-th-email">Recovering Email
-			</div><div class="account-th-pwd">Password
-			</div><div class="account-th-actions">Actions</div>
+			<div class="account-th-label">{% trans "Label" %}
+			</div><div class="account-th-name">{% trans "Username" %}
+			</div><div class="account-th-email">{% trans "Recovering Email" %}
+			</div><div class="account-th-pwd">{% trans "Password" %}
+			</div><div class="account-th-actions">{% trans "Actions" %}</div>
 		</div>
 	</div>
 
 	<hr>
 	<div class="general-account-header">
-		<div class="admin-account-title">User Account</div>
+		<div class="admin-account-title">{% trans "User Account" %}</div>
 		<div class="add-account-btn-block">
-			<div class="add-account-btn">Add New Account</div>
-			<div class="add-account-note">All fields are required</div>
+			<div class="add-account-btn">{% trans "Add New Account" %}</div>
+			<div class="add-account-note">{% trans "All fields are required" %}</div>
 		</div>
 	</div>
 	
 	<div class="account-table general-account-table">
 		<div class="account-th">
-			<div class="account-th-label">Label
-			</div><div class="account-th-name">Username
-			</div><div class="account-th-email">Recovering Email
-			</div><div class="account-th-pwd">Password
-			</div><div class="account-th-actions">Actions</div>
+			<div class="account-th-label">{% trans "Label" %}
+			</div><div class="account-th-name">{% trans "Username" %}
+			</div><div class="account-th-email">{% trans "Recovering Email" %}
+			</div><div class="account-th-pwd">{% trans "Password" %}
+			</div><div class="account-th-actions">{% trans "Actions" %}</div>
 		</div>
 	</div>
 
 	<div class="change-pwd-dialog pwd-dialog">
 		<div class="pwd-block">
-			<div class="pwd-desc">Old Password</div>
+			<div class="pwd-desc">{% trans "Old Password" %}</div>
 			<input type="password" class="old-pwd-input">
 		</div>
 		<div class="pwd-block">
-			<div class="pwd-desc">New Password</div>
+			<div class="pwd-desc">{% trans "New Password" %}</div>
 			<input type="password" class="new-pwd-input">
 		</div>
 		<div class="pwd-block">
-			<div class="pwd-desc">Confirm Password</div>
+			<div class="pwd-desc">{% trans "Confirm Password" %}</div>
 			<input type="password" class="confirm-pwd-input">
 		</div>
-		<div class="pwd-apply-btn">Apply</div>
-		<div class="pwd-cancel-btn">Cancel</div>
+		<div class="pwd-apply-btn">{% trans "Apply" %}</div>
+		<div class="pwd-cancel-btn">{% trans "Cancel" %}</div>
 	</div>
 
 	<div class="set-pwd-dialog pwd-dialog">
 		<div class="pwd-block">
-			<div class="pwd-desc">New Password</div>
+			<div class="pwd-desc">{% trans "New Password" %}</div>
 			<input type="password" class="new-pwd-input">
 		</div>
 		<div class="pwd-block">
-			<div class="pwd-desc">Confirm Password</div>
+			<div class="pwd-desc">{% trans "Confirm Password" %}</div>
 			<input type="password" class="confirm-pwd-input">
 		</div>
-		<div class="pwd-apply-btn">Apply</div>
-		<div class="pwd-cancel-btn">Cancel</div>
+		<div class="pwd-apply-btn">{% trans "Apply" %}</div>
+		<div class="pwd-cancel-btn">{% trans "Cancel" %}</div>
 	</div>
 
 	<div class="warning-dialog">
 		<div class='warning-text'></div>
-		<div class="warning-btn">OK</div>
+		<div class="warning-btn">{% trans "OK" %}</div>
 	</div>
 
 	<div class="delete-dialog">
-		<div class="delete-title">Are you sure you want to delete</div>
+		<div class="delete-title">{% trans "Are you sure you want to delete" %}</div>
 		<div class="delete-btn-container">
-			<div class="delete-cancel-btn">Cancel</div>
-			<div class="delete-confirm-btn">Confirm</div>
+			<div class="delete-cancel-btn">{% trans "Cancel" %}</div>
+			<div class="delete-confirm-btn">{% trans "Confirm" %}</div>
 		</div>
 	</div>
 

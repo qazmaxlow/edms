@@ -85,7 +85,7 @@ $(function() {
 	</div>
 
 	<div class="cumulative-saving-container {% if total_co2_saving >= 0 %}positive-saving{% else %}negative-saving{% endif %}">
-		<div class="cumulative-saving-title">{% trans "Cumulative savings" %}</div>
+		<div class="cumulative-saving-title">{% if percengate_change >= 0 %}{% trans "Cumulative Savings" %}{% else %}{% trans "Extra Spending" %}{% endif %}</div>
 		<hr>
 		<div class="cumulative-saving-info">
 			<div class="cumulative-saving-block">
