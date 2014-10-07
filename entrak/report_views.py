@@ -409,7 +409,10 @@ def __generate_report_data(systems, report_type, start_timestamp, end_timestamp)
 	co2_unit_code = unit_info[CO2_CATEGORY_CODE]
 	money_unit_code = unit_info[MONEY_CATEGORY_CODE]
 	energy_saving = total_baseline_energy-total_energy
-	saving_info["energy"] = energy_saving/total_baseline_energy*100
+	if total_baseline_energy != 0:
+		saving_info["energy"] = energy_saving/total_baseline_energy*100
+	else:
+		saving_info["energy"] = 0
 	saving_info["co2"] = calculation.transform_reading(co2_unit_code, start_timestamp, energy_saving, co2_unit_rates)
 	saving_info["money"] = calculation.transform_reading(money_unit_code, start_timestamp, energy_saving, money_unit_rates)
 

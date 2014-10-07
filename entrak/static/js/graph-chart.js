@@ -406,6 +406,14 @@ GraphChart.prototype.plotGraphChart = function () {
 				family: "sans-serif",
 				color: "#2E3E52"
 			},
+			tickFormatter: function formatter(val, axis) {
+				var factor = axis.tickDecimals ? Math.pow(10, axis.tickDecimals) : 1;
+				var formatted = "" + Math.round(val * factor) / factor;
+				if (parseFloat(formatted) >= 1000) {
+					formatted = Utils.formatWithCommas(formatted)
+				}
+				return formatted;
+			},
 		},
 		legend: {
 			show: true,

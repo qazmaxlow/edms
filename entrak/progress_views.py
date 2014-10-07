@@ -152,7 +152,10 @@ def __calculate_progress_data(systems):
 	result = {}
 	result['static_url'] = STATIC_URL
 	result['last_12_months_co2_consumption_accurate'] = last_12_months_co2_consumption
-	result['percengate_change'] = (total_baseline_co2_consumption-last_12_months_co2_consumption)/total_baseline_co2_consumption*100.0
+	if total_baseline_co2_consumption != 0:
+		result['percengate_change'] = (total_baseline_co2_consumption-last_12_months_co2_consumption)/total_baseline_co2_consumption*100.0
+	else:
+		result['percengate_change'] = 0
 	result['total_co2_saving_in_kg'] = total_co2_saving
 	result['total_co2_saving'] = int(total_co2_saving/1000)
 	result['total_money_saving'] = total_money_saving
