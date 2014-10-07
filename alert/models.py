@@ -182,10 +182,7 @@ class Alert(models.Model):
 		if info['resolved_sub_msgs']:
 			email_content += ALERT_EMAIL_CONTENT_RESOLVED%('\n'.join(info['resolved_sub_msgs']))
 
-		if "%s" in SITE_LINK_FORMAT:
-			link_prefix = SITE_LINK_FORMAT%info['system_city']
-		else:
-			link_prefix = SITE_LINK_FORMAT
+		link_prefix = SITE_LINK_FORMAT
 		email_content +=  '\n\n' + link_prefix \
 			+ reverse('alert_settings', kwargs={'system_code': info['system_code']})
 

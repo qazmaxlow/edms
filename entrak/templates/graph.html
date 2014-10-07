@@ -352,10 +352,7 @@ function setupComparePanel() {
 	$("#compare-custom-checkbox").click(function() {
 		if ($(this).prop("checked")) {
 			graph.graphChart.showCustom = true;
-			if (graph.graphChart.customDt !== null) {
-				graph.graphChart.getCustomSourceReadings();
-			}
-			clearSourceChoice();
+			$('#compare-dt-picker').datetimepicker('show');
 		} else {
 			graph.graphChart.showCustom = false;
 			graph.graphChart.updateCompareChoice();
@@ -386,6 +383,15 @@ function resetXSliderNSummaryNHightlight() {
 			}
 		});
 	}
+}
+
+function customDtPickerSeleced(input) {
+	graph.graphChart.updateCompareDt(moment(input).startOf('hour'));
+	$("#compare-custom-date").text(formatCompareDtStr(graph.graphChart.customDt.startDt, graph.graphChart.currentRangeType))
+	if (graph.graphChart.showCustom) {
+		graph.graphChart.getCustomSourceReadings();
+	}
+	clearSourceChoice();
 }
 
 $(function() {
@@ -550,16 +556,12 @@ $(function() {
 		minDate: graph.firstRecord.toDate(),
 		maxDate: 0,
 		onSelectDate: function(input) {
-			graph.graphChart.updateCompareDt(moment(input).startOf('hour'));
-			$("#compare-custom-date").text(formatCompareDtStr(graph.graphChart.customDt.startDt, graph.graphChart.currentRangeType))
-			if (graph.graphChart.showCustom) {
-				graph.graphChart.getCustomSourceReadings();
-			}
-		}
+			customDtPickerSeleced(input);
+		},
+		onShow: function(input) {
+			customDtPickerSeleced(input);
+		},
 	});
-	$("#compare-calendar-icon").click(function () {
-		$('#compare-dt-picker').datetimepicker('show');
-	})
 
 	var dtPickerFormat = "D MMM YYYY, dddd";
 	$("#current-dt-picker").datetimepicker({
@@ -698,7 +700,6 @@ $(function() {
 							<label for="compare-custom-checkbox"></label>
 						</div>
 						<label for="compare-custom-checkbox" style="color: #354960;">{% trans "Custom date selection" %}</label>
-						<img id="compare-calendar-icon" src="{% static 'images/compare-calendar.png' %}">
 						<input type="text" id="compare-dt-picker">
 					</div>
 					<div>
