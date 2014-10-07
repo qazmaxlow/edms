@@ -30,6 +30,7 @@ function GraphChart(graphEleSel, yAxisSliderEleSel, xAxisSliderEleSel, retrieveR
 	this.needResetXSlider = true;
 	this.getSourceDataAjaxId = null;
 	this.getSourceDataTimeoutId = null;
+	this.growFinishCallback = null;
 
 	Utils.setLangText(GraphChart, multiLangTexts);
 }
@@ -93,7 +94,9 @@ GraphChart.prototype.needUpdatePeriodically = function() {
 		&& this.currentDt.isBefore(realtimeBoundStartEndDt.endDt));
 }
 
-GraphChart.prototype.getSourceReadings = function () {
+GraphChart.prototype.getSourceReadings = function (fromAutoRefresh) {
+	fromAutoRefresh = typeof fromAutoRefresh !== 'undefined' ? fromAutoRefresh : false;
+
 	var graphChartThis = this;
 	var startEndDt = this.genCurrentStartEndDt();
 	this.lastStartEndDt = Utils.genLastStartEndDt(startEndDt.startDt, this.currentRangeType);
@@ -104,7 +107,7 @@ GraphChart.prototype.getSourceReadings = function () {
 	clearTimeout(this.getSourceDataTimeoutId);
 	if (graphChartThis.needUpdatePeriodically()) {
 		this.getSourceDataTimeoutId = setTimeout(function() {
-			graphChartThis.getSourceReadings();
+			graphChartThis.getSourceReadings(true);
 		}, GraphChart.DATA_UPDATE_INTERVAL);
 	}
 
@@ -115,7 +118,7 @@ GraphChart.prototype.getSourceReadings = function () {
 			graphChartThis.transformReadingToChartDatasets(data);
 			graphChartThis.plotGraphChart();
 
-			graphChartThis.retrieveReadingCallback();
+			graphChartThis.retrieveReadingCallback(fromAutoRefresh);
 		}
 	});
 }
@@ -449,6 +452,9 @@ GraphChart.prototype.plotGraphChart = function () {
 	}).data("plot");
 	$(this.graphEleSel).on('growFinished', function() {
 		graphChartThis.plot.getOptions().series.grow.active = false;
+		if (graphChartThis.growFinishCallback !== null) {
+			graphChartThis.growFinishCallback();
+		}
 		$(this.graphEleSel).off('growFinished');
 	});
 	this.refreshYAxisSlider();

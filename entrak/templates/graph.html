@@ -165,12 +165,24 @@ function clearSourceChoice() {
 	}
 }
 
-function resetGraphNPanel() {
+function resetGraphNPanel(fromAutoRefresh) {
+	fromAutoRefresh = typeof fromAutoRefresh !== 'undefined' ? fromAutoRefresh : false;
+
 	updateCurrentDtText();
 
-	var checkedCompareChoice = $('.compare-choice-block :checked');
+	if (fromAutoRefresh) {
+		var checkedCompareChoice = $('.compare-choice-block :checked');
+		var previousSeletedCustomDt = graph.graphChart.customDt;
+		graph.graphChart.growFinishCallback = function() {
+			if (previousSeletedCustomDt !== null) {
+				graph.graphChart.customDt = previousSeletedCustomDt;
+				$("#compare-custom-date").text(formatCompareDtStr(graph.graphChart.customDt.startDt, graph.graphChart.currentRangeType));
+			}
+			checkedCompareChoice.click();
+			graph.graphChart.growFinishCallback = null;
+		};
+	}
 	clearCompareChoice();
-	checkedCompareChoice.click();
 
 	var compareHighestLowestContainer = $(".compare-highest-lowest-container");
 	if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_NIGHT) {
@@ -201,8 +213,8 @@ function resetGraphNPanel() {
 	$(".compare-target-text").text(compareTargetText);
 }
 
-function retrieveReadingFinished() {
-	resetGraphNPanel();
+function retrieveReadingFinished(fromAutoRefresh) {
+	resetGraphNPanel(fromAutoRefresh);
 }
 
 function retrieveSummaryFinished() {
@@ -287,6 +299,7 @@ function clearCompareChoice() {
 	$("#compare-custom-date").text("");
 
 	$(".compare-choice-block input").prop("checked", false);
+	graph.graphChart.updateCompareChoice();
 }
 
 function setupComparePanel() {
