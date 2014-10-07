@@ -179,19 +179,23 @@ class SourceManager:
 		source_reading_mins = []
 		need_update_source_ids = []
 		will_remove_invalid_reading = []
-		readings = SourceManager.__get_egauge_data(xml_url, start_timestamp, 1)
-		for source in sources:
-			if source['name'] in readings:
-				source_reading_min = SourceReadingMin(
-					datetime=retrieve_time,
-					source_id=source['source_id'],
-					value=readings[source['name']][0]
-				)
-				source_reading_mins.append(source_reading_min)
-				need_update_source_ids.append(source['source_id'])
-			else:
-				Utils.log_error("non-exist cname for source at recover! source: %s, cname: %s"%(xml_url, source['name']))
-			will_remove_invalid_reading.append(source['_id'])
+		try:
+			readings = SourceManager.__get_egauge_data(xml_url, start_timestamp, 1)
+			for source in sources:
+				if source['name'] in readings:
+					source_reading_min = SourceReadingMin(
+						datetime=retrieve_time,
+						source_id=source['source_id'],
+						value=readings[source['name']][0]
+					)
+					source_reading_mins.append(source_reading_min)
+					need_update_source_ids.append(source['source_id'])
+				else:
+					Utils.log_error("non-exist cname for source at recover! source: %s, cname: %s"%(xml_url, source['name']))
+				will_remove_invalid_reading.append(source['_id'])
+		except SourceManager.TimeDeltaNotMatchError, e:
+			# not handle compressed data when recover at this stage
+			will_remove_invalid_reading.append([source['_id'] for source in sources])
 
 		if source_reading_mins:
 			try:
@@ -259,6 +263,7 @@ class SourceManager:
 					) for (idx, reading_datetime) in enumerate(reading_datetimes)]
 			except SourceManager.TimeDeltaNotMatchError, e:
 				# recover cannot handle compressed data at this stage
+				# so do not add to invalid queue
 				readings = SourceManager.__get_egauge_compressed_data(xml_url, end_timestamp)
 				for source in sources:
 					if source['name'] in readings:
