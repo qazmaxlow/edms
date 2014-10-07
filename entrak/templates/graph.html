@@ -299,9 +299,6 @@ function clearCompareChoice() {
 	$("#compare-custom-date").text("");
 
 	$(".compare-choice-block input").prop("checked", false);
-	if (graph.graphChart.plot !== null) {
-		graph.graphChart.updateCompareChoice();
-	}
 }
 
 function setupComparePanel() {
@@ -599,6 +596,9 @@ $(function() {
 		clearSourceChoice();
 		resetXSliderNSummaryNHightlight();
 		resetGraphNPanel();
+		if (graph.graphChart.plot !== null) {
+			graph.graphChart.updateCompareChoice();
+		}
 	});
 
 	resetGraphNPanel();
