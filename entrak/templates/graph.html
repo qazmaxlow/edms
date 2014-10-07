@@ -168,7 +168,9 @@ function clearSourceChoice() {
 function resetGraphNPanel() {
 	updateCurrentDtText();
 
+	var checkedCompareChoice = $('.compare-choice-block :checked');
 	clearCompareChoice();
+	checkedCompareChoice.click();
 
 	var compareHighestLowestContainer = $(".compare-highest-lowest-container");
 	if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_NIGHT) {
