@@ -8,7 +8,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.translation import ugettext as _
 from django.utils.html import escapejs
 from django.db.models import Q
-from django.db import transaction
+from django.db import transaction, IntegrityError
 from system.models import System
 from egauge.manager import SourceManager
 from alert.models import Alert, AlertHistory, ALERT_TYPE_STILL_ON, ALERT_TYPE_SUMMARY, ALERT_TYPE_PEAK, ALERT_COMPARE_METHOD_ABOVE
@@ -186,13 +186,18 @@ def set_user_info_view(request, system_code=None):
 			user.save()
 
 		else:
-			user = EntrakUser.objects.create_user(username, email, new_pwd)
-			user.label = label
-			user.role_level = USER_ROLE_VIEWER_LEVEL
-			user.system = System.objects.get(code=system_code)
-			user.save()
-			result['created'] = True
+			try:
+				user = EntrakUser.objects.create_user(username, email, new_pwd)
+				user.label = label
+				user.role_level = USER_ROLE_VIEWER_LEVEL
+				user.system = System.objects.get(code=system_code)
+				user.save()
+				result['created'] = True
+			except IntegrityError, e:
+				is_success = False
+				result['warning'] = _("Username has already been taken")
 
+	if is_success:
 		result['user'] = {
 			'id': user.id,
 			'userName': user.username,
