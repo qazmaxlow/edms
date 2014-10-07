@@ -299,7 +299,9 @@ function clearCompareChoice() {
 	$("#compare-custom-date").text("");
 
 	$(".compare-choice-block input").prop("checked", false);
-	graph.graphChart.updateCompareChoice();
+	if (graph.graphChart.plot !== null) {
+		graph.graphChart.updateCompareChoice();
+	}
 }
 
 function setupComparePanel() {
