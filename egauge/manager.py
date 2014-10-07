@@ -195,7 +195,7 @@ class SourceManager:
 				will_remove_invalid_reading.append(source['_id'])
 		except SourceManager.TimeDeltaNotMatchError, e:
 			# not handle compressed data when recover at this stage
-			will_remove_invalid_reading.append([source['_id'] for source in sources])
+			will_remove_invalid_reading = [source['_id'] for source in sources]
 
 		if source_reading_mins:
 			try:
