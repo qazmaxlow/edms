@@ -402,6 +402,33 @@ class SourceManager:
 		return grouped_readings
 
 	@staticmethod
+	def is_reading_complete(range_type, source_ids, start_dt, tz_offset):
+		range_type_mapping = {
+			Utils.RANGE_TYPE_HOUR: {'check_collection': 'source_reading_min', 'complete_count': 60},
+			Utils.RANGE_TYPE_DAY: {'check_collection': 'source_reading_hour', 'complete_count': 24},
+			Utils.RANGE_TYPE_WEEK: {'check_collection': 'source_reading_day', 'complete_count': 7},
+			Utils.RANGE_TYPE_MONTH: {'check_collection': 'source_reading_day', 'complete_count': 28},
+			Utils.RANGE_TYPE_YEAR: {'check_collection': 'source_reading_month', 'complete_count': 12},
+		}
+		end_dt = Utils.gen_end_dt(range_type, start_dt, tz_offset)
+
+		current_db_conn = connection.get_db()
+		mapped_info = range_type_mapping[range_type]
+		result = current_db_conn[mapped_info['check_collection']].aggregate([
+			{
+				"$match": {
+					'source_id': {'$in': source_ids},
+					'datetime': {'$gte': start_dt, '$lt': end_dt},
+				}
+			},
+			{
+				"$group": {"_id": "$datetime"}
+			}
+		])
+
+		return len(result["result"]) >= mapped_info['complete_count']
+
+	@staticmethod
 	def get_most_readings(source_ids, range_type, tz_offset, sort_order, system, start_dt):
 		range_type_mapping = {
 			Utils.RANGE_TYPE_HOUR: {'compare_collection': 'source_reading_hour'},
@@ -410,13 +437,14 @@ class SourceManager:
 			Utils.RANGE_TYPE_MONTH: {'compare_collection': 'source_reading_month'},
 			Utils.RANGE_TYPE_YEAR: {'compare_collection': 'source_reading_year'},
 		}
+		objectlize_source_ids = [ObjectId(source_id) for source_id in source_ids]
 
 		system_timezone = pytz.timezone(system.timezone)
 		dt_lower_bound = system.first_record.astimezone(system_timezone).replace(
 				hour=0, minute=0, second=0, microsecond=0)
 		dt_upper_bound = pytz.utc.localize(datetime.datetime.utcnow()).astimezone(system_timezone).replace(
 			minute=0, second=0, microsecond=0)
-		match_condition = {'source_id': {'$in': [ObjectId(source_id) for source_id in source_ids]}}
+		match_condition = {'source_id': {'$in': objectlize_source_ids}}
 		if range_type == Utils.RANGE_TYPE_HOUR:
 			match_condition["datetime"] = {'$lt': dt_upper_bound}
 		elif range_type == Utils.RANGE_TYPE_DAY:
@@ -449,7 +477,8 @@ class SourceManager:
 			},
 			{"$sort": {"total": sort_order}},
 		]
-		if range_type != Utils.RANGE_TYPE_DAY:
+		# lowest need to check data complete or not, cannot limit to 1
+		if range_type != Utils.RANGE_TYPE_DAY and sort_order == -1:
 			aggregate_pipeline.append({"$limit": 1})
 
 		mapped_info = range_type_mapping[range_type]
@@ -460,9 +489,17 @@ class SourceManager:
 
 		if range_type == Utils.RANGE_TYPE_DAY:
 			target_weekday = start_dt.astimezone(system_timezone).weekday()
+			valid_results = []
 			for result_data in result["result"]:
 				result_data_dt = result_data["_id"].astimezone(system_timezone)
 				if result_data_dt.weekday() == target_weekday:
+					valid_results.append(result_data)
+			result["result"] = valid_results
+
+		# check if have complete data for lowest
+		if sort_order == 1:
+			for result_data in result["result"]:
+				if SourceManager.is_reading_complete(range_type, objectlize_source_ids, result_data["_id"], tz_offset):
 					result['result'] = [result_data]
 					break
 

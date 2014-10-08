@@ -199,15 +199,20 @@ function resetGraphNPanel(fromAutoRefresh) {
 		compareBetweenText = 'days';
 		compareTargetText = graph.graphChart.currentDt.format('dddd');
 	} else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_NIGHT) {
-		compareBetweenText = compareTargetText = '{% trans "compare_between_night" %}';
+		compareBetweenText = '{% trans "compare_between_night_plural" %}';
+		compareTargetText = '{% trans "compare_between_night" %}';
 	} else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_WEEK) {
-		compareBetweenText = compareTargetText = '{% trans "compare_between_week" %}';
+		compareBetweenText = '{% trans "compare_between_week_plural" %}';
+		compareTargetText = '{% trans "compare_between_week" %}';
 	} else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_MONTH) {
-		compareBetweenText = compareTargetText = '{% trans "compare_between_month" %}';
+		compareBetweenText = '{% trans "compare_between_month_plural" %}';
+		compareTargetText = '{% trans "compare_between_month" %}';
 	} else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_YEAR) {
-		compareBetweenText = compareTargetText = '{% trans "compare_between_year" %}';
+		compareBetweenText = '{% trans "compare_between_year_plural" %}';
+		compareTargetText = '{% trans "compare_between_year" %}';
 	} else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_HOUR) {
-		compareBetweenText = compareTargetText = '{% trans "compare_between_hour" %}';
+		compareBetweenText = '{% trans "compare_between_hour_plural" %}';
+		compareTargetText = '{% trans "compare_between_hour" %}';
 	}
 	$("#compare-between").text(compareBetweenText);
 	$(".compare-target-text").text(compareTargetText);
