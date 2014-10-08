@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-07 09:09+0000\n"
+"POT-Creation-Date: 2014-10-07 10:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -414,24 +414,24 @@ msgid ""
 "as well!"
 msgstr ""
 
-#: entrak/templates/display.html:201 entrak/templates/graph.html:400
+#: entrak/templates/display.html:201 entrak/templates/graph.html:403
 #: entrak/templates/ranking.html:492
 msgid "Total"
 msgstr ""
 
-#: entrak/templates/display.html:202 entrak/templates/graph.html:401
+#: entrak/templates/display.html:202 entrak/templates/graph.html:404
 msgid "Previous"
 msgstr ""
 
-#: entrak/templates/display.html:203 entrak/templates/graph.html:402
+#: entrak/templates/display.html:203 entrak/templates/graph.html:405
 msgid "Highest"
 msgstr ""
 
-#: entrak/templates/display.html:204 entrak/templates/graph.html:403
+#: entrak/templates/display.html:204 entrak/templates/graph.html:406
 msgid "Lowest"
 msgstr ""
 
-#: entrak/templates/display.html:205 entrak/templates/graph.html:404
+#: entrak/templates/display.html:205 entrak/templates/graph.html:407
 msgid "Custom"
 msgstr ""
 
@@ -754,7 +754,6 @@ msgid " to "
 msgstr ""
 
 #: entrak/templates/generate_report_pdf.html:47
-#: entrak/templates/report.html:454
 msgid " tons CO<sub>2</sub>"
 msgstr ""
 
@@ -913,75 +912,75 @@ msgstr "year"
 msgid "compare_between_hour"
 msgstr "hour"
 
-#: entrak/templates/graph.html:613
+#: entrak/templates/graph.html:615
 msgid "THE GRAPH SECTION"
 msgstr ""
 
-#: entrak/templates/graph.html:614
+#: entrak/templates/graph.html:616
 msgid "Check this out!"
 msgstr ""
 
-#: entrak/templates/graph.html:624 entrak/templates/ranking.html:482
+#: entrak/templates/graph.html:626 entrak/templates/ranking.html:482
 msgid "Unit"
 msgstr ""
 
-#: entrak/templates/graph.html:625 entrak/templates/ranking.html:483
+#: entrak/templates/graph.html:627 entrak/templates/ranking.html:483
 msgid "Time"
 msgstr ""
 
-#: entrak/templates/graph.html:626
+#: entrak/templates/graph.html:628
 msgid "End-use"
 msgstr ""
 
-#: entrak/templates/graph.html:626
+#: entrak/templates/graph.html:628
 msgid "Compare"
 msgstr ""
 
-#: entrak/templates/graph.html:643
+#: entrak/templates/graph.html:645
 msgid "Compare between End-use types"
 msgstr ""
 
-#: entrak/templates/graph.html:644
+#: entrak/templates/graph.html:646
 msgid "(Max 5)"
 msgstr ""
 
-#: entrak/templates/graph.html:645 entrak/templates/graph.html.py:655
+#: entrak/templates/graph.html:647 entrak/templates/graph.html.py:657
 msgid "Clear all"
 msgstr ""
 
-#: entrak/templates/graph.html:654
+#: entrak/templates/graph.html:656
 msgid "Compare between <span id='compare-between'>days</span>"
 msgstr ""
 
-#: entrak/templates/graph.html:664
+#: entrak/templates/graph.html:666
 msgid "Previous "
 msgstr ""
 
-#: entrak/templates/graph.html:676
+#: entrak/templates/graph.html:678
 msgid "Highest "
 msgstr ""
 
-#: entrak/templates/graph.html:688
+#: entrak/templates/graph.html:690
 msgid "Lowest "
 msgstr ""
 
-#: entrak/templates/graph.html:700
+#: entrak/templates/graph.html:702
 msgid "Custom date selection"
 msgstr ""
 
-#: entrak/templates/graph.html:717
+#: entrak/templates/graph.html:718
 msgid "Clear Graph"
 msgstr ""
 
-#: entrak/templates/graph.html:738
+#: entrak/templates/graph.html:739
 msgid "Amount of energy consumed on: "
 msgstr ""
 
-#: entrak/templates/graph.html:739
+#: entrak/templates/graph.html:740
 msgid "from:"
 msgstr ""
 
-#: entrak/templates/graph.html:740
+#: entrak/templates/graph.html:741
 msgid "to:"
 msgstr ""
 
@@ -1160,6 +1159,10 @@ msgstr ""
 msgid "YYYY MMMM"
 msgstr ""
 
+#: entrak/templates/report.html:454
+msgid " tons<span class=\"basic-info-col-unit\"> CO<sub>2</sub></span>"
+msgstr ""
+
 #: entrak/templates/report.html:659
 msgid "Monthly Report"
 msgstr ""
@@ -1272,12 +1275,12 @@ msgid "Save Report"
 msgstr ""
 
 #: entrak/templates/report_inner_template.html:63
-#: entrak/templates/report_main_content.html:292
-#: entrak/templates/report_main_content.html:324
-#: entrak/templates/report_main_content.html:421
-#: entrak/templates/report_main_content.html:453
-#: entrak/templates/report_main_content.html:550
-#: entrak/templates/report_main_content.html:582
+#: entrak/templates/report_main_content.html:294
+#: entrak/templates/report_main_content.html:326
+#: entrak/templates/report_main_content.html:423
+#: entrak/templates/report_main_content.html:455
+#: entrak/templates/report_main_content.html:552
+#: entrak/templates/report_main_content.html:584
 msgid "Energy Split by:"
 msgstr ""
 
@@ -1310,45 +1313,49 @@ msgstr ""
 msgid "HOW MUCH ENERGY<br>DID WE SAVE?"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:71
+#: entrak/templates/report_main_content.html:44
+msgid "(year-on-year)"
+msgstr ""
+
+#: entrak/templates/report_main_content.html:73
 msgid "HOW DID OUR<br>CARBON FOOTPRINT CHANGE?"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:108
-#: entrak/templates/report_main_content.html:198
-#: entrak/templates/report_main_content.html:338
-#: entrak/templates/report_main_content.html:467
-#: entrak/templates/report_main_content.html:597
+#: entrak/templates/report_main_content.html:110
+#: entrak/templates/report_main_content.html:200
+#: entrak/templates/report_main_content.html:340
+#: entrak/templates/report_main_content.html:469
+#: entrak/templates/report_main_content.html:599
 msgid "HIDE DETAILS"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:115
+#: entrak/templates/report_main_content.html:117
 msgid "Usage Type"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:116
+#: entrak/templates/report_main_content.html:118
 msgid "Total Energy Consumed (kWh)"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:117
+#: entrak/templates/report_main_content.html:119
 msgid "Total CO<sub>2</sub> Emissions (kg)"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:118
+#: entrak/templates/report_main_content.html:120
 msgid "Total Money Spent ($)"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:123
+#: entrak/templates/report_main_content.html:125
 msgid "HOW DOES THAT SPLIT BY PERCENTAGE?"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:140
+#: entrak/templates/report_main_content.html:142
 msgid ""
 "HOW MUCH MORE / LESS DID WE USE COMPARED TO LAST <span class=\"report-type-"
 "name\"></span>?"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:143
+#: entrak/templates/report_main_content.html:145
 #, python-format
 msgid ""
 "\n"
@@ -1365,160 +1372,160 @@ msgid ""
 "\t\t"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:154
+#: entrak/templates/report_main_content.html:156
 msgid ""
 "Total energy consumption for the last 6 <span class=\"report-type-name-lower-"
 "plural\"></span>"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:194
-#: entrak/templates/report_main_content.html:334
-#: entrak/templates/report_main_content.html:463
-#: entrak/templates/report_main_content.html:592
+#: entrak/templates/report_main_content.html:196
+#: entrak/templates/report_main_content.html:336
+#: entrak/templates/report_main_content.html:465
+#: entrak/templates/report_main_content.html:594
 msgid "* Data not available or incomplete for this period"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:203
+#: entrak/templates/report_main_content.html:205
 msgid "WHEN DID WE ACHIEVE OUR SAVINGS?"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:206
+#: entrak/templates/report_main_content.html:208
 msgid "Total consumption by days"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:210
+#: entrak/templates/report_main_content.html:212
 msgid "Day of the <span class=\"report-type-name-lower\"></span>"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:218
+#: entrak/templates/report_main_content.html:220
 msgid "HOW MUCH ENERGY DID WE USE ON <span>WEEKDAYS?</span>"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:223
+#: entrak/templates/report_main_content.html:225
 msgid "Average<br>Weekday<br>Energy Use:"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:259
-#: entrak/templates/report_main_content.html:388
-#: entrak/templates/report_main_content.html:517
+#: entrak/templates/report_main_content.html:261
+#: entrak/templates/report_main_content.html:390
+#: entrak/templates/report_main_content.html:519
 msgid ""
 "<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</"
 "div><div>FRI</div><div>SAT</div>"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:265
+#: entrak/templates/report_main_content.html:267
 msgid "Better than<br>average weekday"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:267
+#: entrak/templates/report_main_content.html:269
 msgid "Worse than<br>average weekday"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:269
+#: entrak/templates/report_main_content.html:271
 msgid "Average weekday"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:275
-#: entrak/templates/report_main_content.html:404
-#: entrak/templates/report_main_content.html:437
-#: entrak/templates/report_main_content.html:533
+#: entrak/templates/report_main_content.html:277
+#: entrak/templates/report_main_content.html:406
+#: entrak/templates/report_main_content.html:439
+#: entrak/templates/report_main_content.html:535
 msgid "Lowest Weekend Energy Use:"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:283
-#: entrak/templates/report_main_content.html:412
-#: entrak/templates/report_main_content.html:444
-#: entrak/templates/report_main_content.html:541
+#: entrak/templates/report_main_content.html:285
+#: entrak/templates/report_main_content.html:414
+#: entrak/templates/report_main_content.html:446
+#: entrak/templates/report_main_content.html:543
 msgid "Highest Weekend Energy Use:"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:296
-#: entrak/templates/report_main_content.html:326
-#: entrak/templates/report_main_content.html:425
-#: entrak/templates/report_main_content.html:455
-#: entrak/templates/report_main_content.html:554
+#: entrak/templates/report_main_content.html:298
+#: entrak/templates/report_main_content.html:328
+#: entrak/templates/report_main_content.html:427
+#: entrak/templates/report_main_content.html:457
+#: entrak/templates/report_main_content.html:556
 msgid "Weekdays: "
 msgstr ""
 
-#: entrak/templates/report_main_content.html:299
-#: entrak/templates/report_main_content.html:329
-#: entrak/templates/report_main_content.html:428
-#: entrak/templates/report_main_content.html:458
-#: entrak/templates/report_main_content.html:557
+#: entrak/templates/report_main_content.html:301
+#: entrak/templates/report_main_content.html:331
+#: entrak/templates/report_main_content.html:430
+#: entrak/templates/report_main_content.html:460
+#: entrak/templates/report_main_content.html:559
 msgid "Weekends: "
 msgstr ""
 
-#: entrak/templates/report_main_content.html:308
+#: entrak/templates/report_main_content.html:310
 msgid "Lowest Weekday Energy Use:"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:315
+#: entrak/templates/report_main_content.html:317
 msgid "Highest Weekday Energy Use:"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:335
-#: entrak/templates/report_main_content.html:464
-#: entrak/templates/report_main_content.html:593
+#: entrak/templates/report_main_content.html:337
+#: entrak/templates/report_main_content.html:466
+#: entrak/templates/report_main_content.html:595
 msgid "** The first month you started using En-trak"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:347
+#: entrak/templates/report_main_content.html:349
 msgid "HOW MUCH ENERGY DID WE USE ON <span>WEEKENDS AND HOLIDAYS?</span>"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:352
+#: entrak/templates/report_main_content.html:354
 msgid "Average<br>Weekend<br>Energy Use:"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:394
+#: entrak/templates/report_main_content.html:396
 msgid "Better than<br>average weekend"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:396
+#: entrak/templates/report_main_content.html:398
 msgid "Worse than<br>average weekend"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:398
+#: entrak/templates/report_main_content.html:400
 msgid "Average weekend"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:476
+#: entrak/templates/report_main_content.html:478
 msgid "HOW MUCH ENERGY DID WE USE <span>OVERNIGHT***?</span>"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:481
+#: entrak/templates/report_main_content.html:483
 msgid "Average<br>Overnight<br>Energy Use:"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:523
+#: entrak/templates/report_main_content.html:525
 msgid "Better than<br>average overnight"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:525
+#: entrak/templates/report_main_content.html:527
 msgid "Worse than<br>average overnight"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:527
+#: entrak/templates/report_main_content.html:529
 msgid "Average overnight"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:566
+#: entrak/templates/report_main_content.html:568
 msgid "Lowest Overnight Energy Use:"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:573
+#: entrak/templates/report_main_content.html:575
 msgid "Highest Overnight Energy Use:"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:584
+#: entrak/templates/report_main_content.html:586
 msgid "Daytime: "
 msgstr ""
 
-#: entrak/templates/report_main_content.html:587
+#: entrak/templates/report_main_content.html:589
 msgid "Overnight: "
 msgstr ""
 
-#: entrak/templates/report_main_content.html:605
+#: entrak/templates/report_main_content.html:607
 msgid ""
 "Cost values are for general reference only and should not be treated as "
 "accurate for accounting purposes."
