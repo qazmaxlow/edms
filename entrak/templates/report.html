@@ -25,6 +25,46 @@
 <script src="{% static 'js/entrak-system.js' %}"></script>
 <script src="{% static 'js/entrak-utils.js' %}"></script>
 <script src="{% static 'js/report-generator.js' %}"></script>
+
+<script type="text/javascript">
+// put here to share with extended template
+var report = {};
+report.reportGeneratorMultiLangTexts = {
+	'reportTypeMonthDtFormat': '{% trans "MMM YYYY" %}',
+	'reportTypeYearDtFormat': '{% trans "YYYY" %}',
+	'reportTypeCustomMonthDtFormat': '{% trans "D MMM YYYY, ddd" %}',
+	'reportTypeWeekDtFormat': '{% trans "D MMM YYYY, ddd" %}',
+	'genDtTo': '{% trans " to " %}',
+	'tons': '{% trans " tons" %}',
+	'tonsCo2': '{% blocktrans %} tons<span class="basic-info-col-unit"> CO<sub>2</sub></span>{% endblocktrans %}',
+	'reportTypeNameMonth': '{% trans "report_type_name_month" %}',
+	'reportTypeNameYear': '{% trans "report_type_name_year" %}',
+	'reportTypeNameQuarter': '{% trans "report_type_name_quarter" %}',
+	'reportTypeNameWeek': '{% trans "report_type_name_week" %}',
+	'more': '{% trans "more" %}',
+	'less': '{% trans "less" %}',
+	'overall': '{% trans "Overall: " %}',
+	'calendarMore': '{% trans "calendar_more" %}',
+	'calendarLess': '{% trans "calendar_less" %}',
+	'comparedTo': '{% trans "compared<br>to " %}',
+	'mSquare': '{% trans " m²" %}',
+	'pandas': '{% trans " pandas" %}',
+	'beginDtFormat': '{% trans "MMMM YYYY" %}',
+	'lastMonth': '{% trans "last month" %}',
+	'samePeriodLastYear': '{% trans "same period last year" %}',
+	'calendarUsageDtFormat': '{% trans "D MMM YYYY" %}',
+	'calendarTypeWeekday': '{% trans "Weekday" %}',
+	'calendarTypeWeekend': '{% trans "Weekend" %}',
+	'calendarTypeOvernight': '{% trans "Overnight" %}',
+	'calendarSplitWeekdays': '{% trans "Weekdays" %}',
+	'calendarSplitWeekends': '{% trans "Weekends" %}',
+	'calendarSplitDaytime': '{% trans "Daytime" %}',
+	'calendarSplitOvernight': '{% trans "Overnight" %}',
+	'overnightFootnoteFormat': '{% trans "hh:mmA" %}',
+	'comparePastLabelFormat': '{% trans "MMM D" %}',
+};
+
+</script>
 {% endblock %}
 
 {% block selected-menu-link-id %}menu-link-report{% endblock %}
@@ -41,8 +81,6 @@
 {% include "report_inner_template.html" %}
 
 <script type="text/javascript">
-
-var report = {};
 
 function updateReportName() {
 	$(".report-name").text(report.reportGenerator.genReportName());
@@ -444,43 +482,8 @@ $(function() {
 
 	$(".report-component").css("opacity", 0.0);
 
-	var reportGeneratorMultiLangTexts = {
-		'reportTypeMonthDtFormat': '{% trans "MMM YYYY" %}',
-		'reportTypeYearDtFormat': '{% trans "YYYY" %}',
-		'reportTypeCustomMonthDtFormat': '{% trans "D MMM YYYY, ddd" %}',
-		'reportTypeWeekDtFormat': '{% trans "D MMM YYYY, ddd" %}',
-		'genDtTo': '{% trans " to " %}',
-		'tons': '{% trans " tons" %}',
-		'tonsCo2': '{% blocktrans %} tons<span class="basic-info-col-unit"> CO<sub>2</sub></span>{% endblocktrans %}',
-		'reportTypeNameMonth': '{% trans "report_type_name_month" %}',
-		'reportTypeNameYear': '{% trans "report_type_name_year" %}',
-		'reportTypeNameQuarter': '{% trans "report_type_name_quarter" %}',
-		'reportTypeNameWeek': '{% trans "report_type_name_week" %}',
-		'more': '{% trans "more" %}',
-		'less': '{% trans "less" %}',
-		'overall': '{% trans "Overall: " %}',
-		'calendarMore': '{% trans "calendar_more" %}',
-		'calendarLess': '{% trans "calendar_less" %}',
-		'comparedTo': '{% trans "compared<br>to " %}',
-		'mSquare': '{% trans " m²" %}',
-		'pandas': '{% trans " pandas" %}',
-		'beginDtFormat': '{% trans "MMMM YYYY" %}',
-		'lastMonth': '{% trans "last month" %}',
-		'samePeriodLastYear': '{% trans "same period last year" %}',
-		'calendarUsageDtFormat': '{% trans "D MMM YYYY" %}',
-		'calendarTypeWeekday': '{% trans "Weekday" %}',
-		'calendarTypeWeekend': '{% trans "Weekend" %}',
-		'calendarTypeOvernight': '{% trans "Overnight" %}',
-		'calendarSplitWeekdays': '{% trans "Weekdays" %}',
-		'calendarSplitWeekends': '{% trans "Weekends" %}',
-		'calendarSplitDaytime': '{% trans "Daytime" %}',
-		'calendarSplitOvernight': '{% trans "Overnight" %}',
-		'overnightFootnoteFormat': '{% trans "hh:mmA" %}',
-		'comparePastLabelFormat': '{% trans "MMM D" %}',
-	};
-
 	report.reportGenerator = new ReportGenerator(report.entrakSystem.systemTree, report.timezone,
-		ReportGenerator.REPORT_TYPE_MONTH, reportGeneratorMultiLangTexts);
+		ReportGenerator.REPORT_TYPE_MONTH, report.reportGeneratorMultiLangTexts);
 	report.reportGenerator.langCode = '{{LANGUAGE_CODE}}';
 	if ("currentDt" in report) {
 		report.reportGenerator.updateDtInfo(report.currentDt, null);

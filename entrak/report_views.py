@@ -15,6 +15,7 @@ from django.core.context_processors import csrf
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.db.models import Q
 from django.utils.html import escapejs
+from django.utils import translation
 from mongoengine import Q as MongoQ
 from entrak.settings import MEDIA_ROOT, LANG_CODE_EN, LANG_CODE_TC
 from system.models import System
@@ -459,11 +460,13 @@ def report_pdf_view(request, system_code=None):
 		domain_url = "https://" + request.META['HTTP_HOST']
 	else:
 		domain_url = "http://" + request.META['HTTP_HOST']
+
 	request_url = domain_url + reverse('generate_report_pdf', kwargs={
 		'system_code': system_code,
 		'report_type': report_type,
 		'start_timestamp': start_timestamp,
 		'end_timestamp': end_timestamp,
+		'lang_code': translation.get_language()
 	})
 
 	report_pdf_name = datetime.datetime.now().strftime("%Y%m%d")
@@ -484,7 +487,7 @@ def report_pdf_view(request, system_code=None):
 
 	return response
 
-def generate_report_pdf_view(request, system_code, report_type, start_timestamp, end_timestamp):
+def generate_report_pdf_view(request, system_code, report_type, start_timestamp, end_timestamp, lang_code):
 	systems = System.get_systems_within_root(system_code)
 	start_timestamp = int(start_timestamp)
 	end_timestamp = int(end_timestamp)
@@ -494,6 +497,7 @@ def generate_report_pdf_view(request, system_code, report_type, start_timestamp,
 	m["report_type"] = report_type
 	m["start_timestamp"] = start_timestamp
 	m["end_timestamp"] = end_timestamp
+	m["lang_code"] = lang_code
 
 	m["report_data"] = escapejs(json.dumps(__generate_report_data(systems, report_type, start_timestamp, end_timestamp)))
 

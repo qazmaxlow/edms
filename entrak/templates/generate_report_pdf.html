@@ -6,19 +6,22 @@
 {% load humanize %}
 
 {% block extra_head %}
+{% language lang_code %}
+
 {{block.super}}
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/report-pdf.css' %}">
+{% endlanguage %}
 {% endblock %}
 
 {% block extra_script %}
+{% language lang_code %}
+
 {% get_current_language as LANGUAGE_CODE %}
 
 {% include "report_inner_template.html" %}
 
 <script type="text/javascript">
-
-var report = {};
 
 $(function() {
 	report.langCode = '{{LANGUAGE_CODE}}';
@@ -37,42 +40,8 @@ $(function() {
 	report.customMonthEndDt = null;
 	{% endifequal %}
 
-	var reportGeneratorMultiLangTexts = {
-		'reportTypeMonthDtFormat': '{% trans "MMM YYYY" %}',
-		'reportTypeYearDtFormat': '{% trans "YYYY" %}',
-		'reportTypeCustomMonthDtFormat': '{% trans "D MMM YYYY, ddd" %}',
-		'reportTypeWeekDtFormat': '{% trans "D MMM YYYY, ddd" %}',
-		'genDtTo': '{% trans " to " %}',
-		'tons': '{% trans " tons" %}',
-		'tonsCo2': '{% trans " tons CO<sub>2</sub>" %}',
-		'reportTypeNameMonth': '{% trans "report_type_name_month" %}',
-		'reportTypeNameYear': '{% trans "report_type_name_year" %}',
-		'reportTypeNameQuarter': '{% trans "report_type_name_quarter" %}',
-		'reportTypeNameWeek': '{% trans "report_type_name_week" %}',
-		'more': '{% trans "more" %}',
-		'less': '{% trans "less" %}',
-		'overall': '{% trans "Overall: " %}',
-		'calendarMore': '{% trans "calendar_more" %}',
-		'calendarLess': '{% trans "calendar_less" %}',
-		'comparedTo': '{% trans "compared<br>to " %}',
-		'mSquare': '{% trans " m²" %}',
-		'pandas': '{% trans " pandas" %}',
-		'beginDtFormat': '{% trans "MMMM YYYY" %}',
-		'lastMonth': '{% trans "last month" %}',
-		'samePeriodLastYear': '{% trans "same period last year" %}',
-		'calendarUsageDtFormat': '{% trans "D MMM YYYY" %}',
-		'calendarTypeWeekday': '{% trans "Weekday" %}',
-		'calendarTypeWeekend': '{% trans "Weekend" %}',
-		'calendarTypeOvernight': '{% trans "Overnight" %}',
-		'calendarSplitWeekdays': '{% trans "Weekdays" %}',
-		'calendarSplitWeekends': '{% trans "Weekends" %}',
-		'calendarSplitDaytime': '{% trans "Daytime" %}',
-		'calendarSplitOvernight': '{% trans "Overnight" %}',
-		'overnightFootnoteFormat': '{% trans "hh:mmA" %}',
-	};
-
 	report.reportGenerator = new ReportGenerator(report.entrakSystem.systemTree, report.timezone,
-		report.currentReportType, reportGeneratorMultiLangTexts);
+		report.currentReportType, report.reportGeneratorMultiLangTexts);
 	report.reportGenerator.langCode = '{{LANGUAGE_CODE}}';
 	report.reportGenerator.isPdf = true;
 	report.reportGenerator.updateDtInfo(report.currentDt, report.customMonthEndDt);
@@ -83,9 +52,12 @@ $(function() {
 	report.reportGenerator.generateFullReport();
 });
 </script>
+{% endlanguage %}
 {% endblock %}
 
 {% block content %}
+{% language lang_code %}
+
 {% get_current_language as LANGUAGE_CODE %}
 
 <div class="report-head">
@@ -97,4 +69,5 @@ $(function() {
 
 {% include "report_main_content_pdf.html" %}
 
+{% endlanguage %}
 {% endblock %}
