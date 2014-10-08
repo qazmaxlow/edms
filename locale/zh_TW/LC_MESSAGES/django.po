@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-07 10:41+0000\n"
+"POT-Creation-Date: 2014-10-08 02:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -450,7 +450,7 @@ msgstr ""
 "記得也把插座或拖板上的開關掣關掉！"
 
 #: entrak/templates/display.html:201 entrak/templates/graph.html:403
-#: entrak/templates/ranking.html:492
+#: entrak/templates/ranking.html:489
 msgid "Total"
 msgstr "總數"
 
@@ -941,7 +941,7 @@ msgid "h a, D MMM YYYY, ddd"
 msgstr "YYYY年MMMD日, a h時, dddd"
 
 #: entrak/templates/graph.html:102
-msgid "Night of D MMM YYYY, ddd"
+msgid "[Night of] D MMM YYYY, ddd"
 msgstr "YYYY年MMMD日, 夜間, dddd"
 
 #: entrak/templates/graph.html:124
@@ -980,75 +980,75 @@ msgstr "一年"
 msgid "compare_between_hour"
 msgstr "一小時"
 
-#: entrak/templates/graph.html:615
+#: entrak/templates/graph.html:637
 msgid "THE GRAPH SECTION"
 msgstr "圖表"
 
-#: entrak/templates/graph.html:616
+#: entrak/templates/graph.html:638
 msgid "Check this out!"
 msgstr "要知道現在用電情況，請看看"
 
-#: entrak/templates/graph.html:626 entrak/templates/ranking.html:482
+#: entrak/templates/graph.html:648 entrak/templates/ranking.html:479
 msgid "Unit"
 msgstr "單位"
 
-#: entrak/templates/graph.html:627 entrak/templates/ranking.html:483
+#: entrak/templates/graph.html:649 entrak/templates/ranking.html:480
 msgid "Time"
 msgstr "時間"
 
-#: entrak/templates/graph.html:628
+#: entrak/templates/graph.html:650
 msgid "End-use"
 msgstr "最終用途"
 
-#: entrak/templates/graph.html:628
+#: entrak/templates/graph.html:650
 msgid "Compare"
 msgstr "比較"
 
-#: entrak/templates/graph.html:645
-msgid "Compare between End-use types"
+#: entrak/templates/graph.html:668
+msgid "Compare between end-use types"
 msgstr "跟個別用電組成比較"
 
-#: entrak/templates/graph.html:646
+#: entrak/templates/graph.html:669
 msgid "(Max 5)"
 msgstr "(最多選擇5項)"
 
-#: entrak/templates/graph.html:647 entrak/templates/graph.html.py:657
+#: entrak/templates/graph.html:670 entrak/templates/graph.html.py:680
 msgid "Clear all"
 msgstr "全部清除"
 
-#: entrak/templates/graph.html:656
+#: entrak/templates/graph.html:679
 msgid "Compare between <span id='compare-between'>days</span>"
 msgstr "跟過往數據相比"
 
-#: entrak/templates/graph.html:666
+#: entrak/templates/graph.html:689
 msgid "Previous "
 msgstr "上"
 
-#: entrak/templates/graph.html:678
+#: entrak/templates/graph.html:701
 msgid "Highest "
 msgstr "最高用量的"
 
-#: entrak/templates/graph.html:690
+#: entrak/templates/graph.html:713
 msgid "Lowest "
 msgstr "最低用量的"
 
-#: entrak/templates/graph.html:702
+#: entrak/templates/graph.html:725
 msgid "Custom date selection"
 msgstr "自訂比較日期"
 
-#: entrak/templates/graph.html:718
+#: entrak/templates/graph.html:741
 msgid "Clear Graph"
 msgstr "清空圖表"
 
-#: entrak/templates/graph.html:739
+#: entrak/templates/graph.html:762
 msgid "Amount of energy consumed on: "
 msgstr "能源消耗量："
 
-#: entrak/templates/graph.html:740
+#: entrak/templates/graph.html:763
 msgid "from:"
 msgstr "由："
 
-#: entrak/templates/graph.html:741
+#: entrak/templates/graph.html:764
 msgid "to:"
 msgstr "至："
 
@@ -1186,36 +1186,36 @@ msgstr " - YYYY年MMMD日, Ah, dddd"
 msgid " - D MMM YYYY, ddd"
 msgstr " - YYYY年MMMD日, dddd"
 
-#: entrak/templates/ranking.html:415
+#: entrak/templates/ranking.html:412
 msgid "D MMM YYYY, dddd"
 msgstr "YYYY年MMMD日, dddd"
 
-#: entrak/templates/ranking.html:490
+#: entrak/templates/ranking.html:487
 #, python-format
 msgid "%% Change"
 msgstr "百份比變化"
 
-#: entrak/templates/ranking.html:491
+#: entrak/templates/ranking.html:488
 msgid "Per person"
 msgstr "人均"
 
-#: entrak/templates/ranking.html:493
+#: entrak/templates/ranking.html:490
 msgid "Sort by"
 msgstr "排序"
 
-#: entrak/templates/ranking.html:497
+#: entrak/templates/ranking.html:494
 msgid "Descending"
 msgstr "降序"
 
-#: entrak/templates/ranking.html:498
+#: entrak/templates/ranking.html:495
 msgid "Ascending"
 msgstr "升序"
 
-#: entrak/templates/ranking.html:499
+#: entrak/templates/ranking.html:496
 msgid "Alphabetical"
 msgstr "字母"
 
-#: entrak/templates/ranking.html:508
+#: entrak/templates/ranking.html:505
 msgid "CUSTOM SELECT"
 msgstr "自訂日期"
 

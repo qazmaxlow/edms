@@ -99,7 +99,7 @@ function formatDtStr(dt, rangeType) {
 		|| rangeType === Utils.RANGE_TYPE_WEEK) {
 		formatStr = '{% trans "D MMM YYYY, ddd" %}';
 	} else if (rangeType === Utils.RANGE_TYPE_NIGHT) {
-		formatStr = '{% trans "Night of D MMM YYYY, ddd" %}';
+		formatStr = '{% trans "[Night of] D MMM YYYY, ddd" %}';
 	} else if (rangeType === Utils.RANGE_TYPE_MONTH) {
 		formatStr = '{% trans "MMM YYYY" %}';
 	} else if (rangeType === Utils.RANGE_TYPE_YEAR) {
@@ -665,7 +665,7 @@ $(function() {
 		<p class='trip-unit-desc'></p>
 		<ul id="source-choice">
 			<div class="choice-panel">
-				<div class="choice-header">{% trans "Compare between End-use types" %} 
+				<div class="choice-header">{% trans "Compare between end-use types" %} 
 					<span>{% trans "(Max 5)" %}</span>
 					<span id="source-choice-clear" class="choice-clear">{% trans "Clear all" %}</span>
 				</div>

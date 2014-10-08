@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-07 10:41+0000\n"
+"POT-Creation-Date: 2014-10-08 02:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -415,7 +415,7 @@ msgid ""
 msgstr ""
 
 #: entrak/templates/display.html:201 entrak/templates/graph.html:403
-#: entrak/templates/ranking.html:492
+#: entrak/templates/ranking.html:489
 msgid "Total"
 msgstr ""
 
@@ -873,7 +873,7 @@ msgid "h a, D MMM YYYY, ddd"
 msgstr ""
 
 #: entrak/templates/graph.html:102
-msgid "Night of D MMM YYYY, ddd"
+msgid "[Night of] D MMM YYYY, ddd"
 msgstr ""
 
 #: entrak/templates/graph.html:124
@@ -894,93 +894,94 @@ msgstr ""
 
 #: entrak/templates/graph.html:202
 msgid "compare_between_night"
-msgstr "night"
+msgstr "nights"
 
 #: entrak/templates/graph.html:204
 msgid "compare_between_week"
-msgstr "week"
+msgstr "weeks"
 
 #: entrak/templates/graph.html:206
 msgid "compare_between_month"
-msgstr "month"
+msgstr "months"
 
 #: entrak/templates/graph.html:208
 msgid "compare_between_year"
-msgstr "year"
+msgstr "years"
 
 #: entrak/templates/graph.html:210
 msgid "compare_between_hour"
-msgstr "hour"
+msgstr "hours"
 
-#: entrak/templates/graph.html:615
+#: entrak/templates/graph.html:637
 msgid "THE GRAPH SECTION"
 msgstr ""
 
-#: entrak/templates/graph.html:616
+#: entrak/templates/graph.html:638
 msgid "Check this out!"
 msgstr ""
 
-#: entrak/templates/graph.html:626 entrak/templates/ranking.html:482
+#: entrak/templates/graph.html:648 entrak/templates/ranking.html:479
 msgid "Unit"
 msgstr ""
 
-#: entrak/templates/graph.html:627 entrak/templates/ranking.html:483
+#: entrak/templates/graph.html:649 entrak/templates/ranking.html:480
 msgid "Time"
 msgstr ""
 
-#: entrak/templates/graph.html:628
+#: entrak/templates/graph.html:650
 msgid "End-use"
 msgstr ""
 
-#: entrak/templates/graph.html:628
+#: entrak/templates/graph.html:650
 msgid "Compare"
 msgstr ""
 
-#: entrak/templates/graph.html:645
-msgid "Compare between End-use types"
-msgstr ""
+#: entrak/templates/graph.html:668
+#, fuzzy
+msgid "Compare between end-use types"
+msgstr "week"
 
-#: entrak/templates/graph.html:646
+#: entrak/templates/graph.html:669
 msgid "(Max 5)"
 msgstr ""
 
-#: entrak/templates/graph.html:647 entrak/templates/graph.html.py:657
+#: entrak/templates/graph.html:670 entrak/templates/graph.html.py:680
 msgid "Clear all"
 msgstr ""
 
-#: entrak/templates/graph.html:656
+#: entrak/templates/graph.html:679
 msgid "Compare between <span id='compare-between'>days</span>"
 msgstr ""
 
-#: entrak/templates/graph.html:666
+#: entrak/templates/graph.html:689
 msgid "Previous "
 msgstr ""
 
-#: entrak/templates/graph.html:678
+#: entrak/templates/graph.html:701
 msgid "Highest "
 msgstr ""
 
-#: entrak/templates/graph.html:690
+#: entrak/templates/graph.html:713
 msgid "Lowest "
 msgstr ""
 
-#: entrak/templates/graph.html:702
+#: entrak/templates/graph.html:725
 msgid "Custom date selection"
 msgstr ""
 
-#: entrak/templates/graph.html:718
+#: entrak/templates/graph.html:741
 msgid "Clear Graph"
 msgstr ""
 
-#: entrak/templates/graph.html:739
+#: entrak/templates/graph.html:762
 msgid "Amount of energy consumed on: "
 msgstr ""
 
-#: entrak/templates/graph.html:740
+#: entrak/templates/graph.html:763
 msgid "from:"
 msgstr ""
 
-#: entrak/templates/graph.html:741
+#: entrak/templates/graph.html:764
 msgid "to:"
 msgstr ""
 
@@ -1114,36 +1115,36 @@ msgstr ""
 msgid " - D MMM YYYY, ddd"
 msgstr ""
 
-#: entrak/templates/ranking.html:415
+#: entrak/templates/ranking.html:412
 msgid "D MMM YYYY, dddd"
 msgstr ""
 
-#: entrak/templates/ranking.html:490
+#: entrak/templates/ranking.html:487
 #, python-format
 msgid "%% Change"
 msgstr ""
 
-#: entrak/templates/ranking.html:491
+#: entrak/templates/ranking.html:488
 msgid "Per person"
 msgstr ""
 
-#: entrak/templates/ranking.html:493
+#: entrak/templates/ranking.html:490
 msgid "Sort by"
 msgstr ""
 
-#: entrak/templates/ranking.html:497
+#: entrak/templates/ranking.html:494
 msgid "Descending"
 msgstr ""
 
-#: entrak/templates/ranking.html:498
+#: entrak/templates/ranking.html:495
 msgid "Ascending"
 msgstr ""
 
-#: entrak/templates/ranking.html:499
+#: entrak/templates/ranking.html:496
 msgid "Alphabetical"
 msgstr ""
 
-#: entrak/templates/ranking.html:508
+#: entrak/templates/ranking.html:505
 msgid "CUSTOM SELECT"
 msgstr ""
 
