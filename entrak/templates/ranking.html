@@ -230,7 +230,7 @@ function finishReceiveRankData(data) {
 		if (ranking.currentRankingType === RANKING_TYPE_TOTAL
 			|| ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
 
-			var valueText = Utils.formatWithCommas(item.value.toFixed(0));
+			var valueText = Utils.formatWithCommas(Utils.fixedDecBaseOnVal(item.value));
 			if (ranking.currentUnit.isSuffix) {
 				valueText += ' '+'<span>'+ranking.currentUnit.shortDescInfo[ranking.langCode]+'</span>';
 			} else {
