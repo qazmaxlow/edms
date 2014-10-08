@@ -429,7 +429,7 @@ $(function() {
 	graph.timezone = '{{systems.0.timezone}}';
 	graph.firstRecord = moment.unix(graph.graphChart.entrakSystem.systemTree.data.firstRecord).tz(graph.timezone);
 
-	$("#unit-label").html(graph.unitCategorys[0].nameInfo[graph.langCode]);
+	$("#unit-label").html(graph.unitCategorys[0].shortDescInfo[graph.langCode]);
 	$("#unit-bg").attr("src", "{% get_static_prefix %}images/unit/" + graph.unitCategorys[0].bgImg);
 
 	$("#y-axis-slider").slider({
@@ -514,6 +514,19 @@ $(function() {
 				menuLinks.slideToggle(700, "easeOutBounce", function() {});
 				$('.expand-drop-down-panel-btn').css({transform: 'rotate(180deg)'});
 			}
+
+			if (eleIdx === 0 || eleIdx === 1) {
+				if (graph.graphChart.currentUnit.code === 'walkingtrip'
+					|| graph.graphChart.currentUnit.code === 'biketrip'
+					|| graph.graphChart.currentUnit.code === 'taxitrip') {
+
+					$('.trip-unit-desc').show().text(graph.graphChart.currentUnit.nameInfo[graph.langCode]);
+				} else {
+					$('.trip-unit-desc').hide();
+				};
+			} else {
+				$('.trip-unit-desc').hide();
+			}
 		});
 	});
 	$('#sub-menu-unit').addClass('selected-tab');
@@ -523,8 +536,17 @@ $(function() {
 
 	Utils.setupUnitChoiceLayout('#unit-choice', graph.unitCategorys, '{% get_static_prefix %}', function(unitCategory) {
 		graph.graphChart.updateUnit(unitCategory);
-		$("#unit-label").html(unitCategory.nameInfo[graph.langCode]);
+		$("#unit-label").html(unitCategory.shortDescInfo[graph.langCode]);
 		$("#unit-bg").attr("src", "{% get_static_prefix %}images/unit/" + unitCategory.bgImg);
+
+		if (unitCategory.code === 'walkingtrip'
+			|| unitCategory.code === 'biketrip'
+			|| unitCategory.code === 'taxitrip') {
+
+			$('.trip-unit-desc').show().text(unitCategory.nameInfo[graph.langCode]);
+		} else {
+			$('.trip-unit-desc').hide();
+		};
 	});
 
 	Utils.setupTimeChoiceLayout('#time-choice', function(newRangeType) {
@@ -640,6 +662,7 @@ $(function() {
 				<input type="text" id="current-dt-picker">
 			</div>
 		</ul>
+		<p class='trip-unit-desc'></p>
 		<ul id="source-choice">
 			<div class="choice-panel">
 				<div class="choice-header">{% trans "Compare between End-use types" %} 

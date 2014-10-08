@@ -386,13 +386,10 @@ $(function() {
 			if (unitCategory.code === 'walkingtrip'
 				|| unitCategory.code === 'biketrip'
 				|| unitCategory.code === 'taxitrip') {
-				if ($('#trip-unit-desc').length == 0) {
-					$('.drop-down-panel-content').append("<p id='trip-unit-desc'></p>");
-				}
 
-				$('#trip-unit-desc').text(unitCategory.nameInfo[ranking.langCode]);
+				$('.trip-unit-desc').show().text(unitCategory.nameInfo[ranking.langCode]);
 			} else {
-				$('.drop-down-panel-content').find('#trip-unit-desc').remove();
+				$('.trip-unit-desc').hide();
 			};
 		}
 	});
@@ -510,6 +507,7 @@ $(function() {
 				<input type="text" id="current-dt-picker">
 			</div>
 		</ul>
+		<p class='trip-unit-desc'></p>
 	</div>
 
 	<div class="panel-separator"></div>
