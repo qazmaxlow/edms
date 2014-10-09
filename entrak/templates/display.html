@@ -311,10 +311,10 @@ $(function() {
 					<div class="progress-medal saving-medal">
 						<img src="{% static 'images/display/medal.png' %}">
 						<div><span class="achieved-percent-val"></span><span class="percent-symbol">%</span></div>
-						<div class="medal-text">{% trans "Reduction<br>achieved" %}</div>
+						<div class="medal-text">{% trans "reduction<br>achieved" %}</div>
 					</div>
 					<div class="next-target-text">{% trans "Next target would be" %}</div>
-					<div class="next-target-percent">{% ifequal LANGUAGE_CODE 'zh-tw' %}節省<span class="target-percent-val"></span>%{% else %}<span class="target-percent-val"></span>% REDUCTION{% endifequal %}</div>
+					<div class="next-target-percent">{% ifequal LANGUAGE_CODE 'zh-tw' %}節省<span class="target-percent-val"></span>%{% else %}<span class="target-percent-val"></span>% Reduction{% endifequal %}</div>
 				</div>
 				<div class="progress-detail-separator"></div>
 				<div class="progress-detail">

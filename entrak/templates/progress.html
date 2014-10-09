@@ -49,10 +49,10 @@ $(function() {
 		<div class="saving-consumption">
 			{% ifequal LANGUAGE_CODE 'zh-tw' %}
 			<h2>過去12個月一共{% if percengate_change >= 0 %}減少消耗{% else %}多用了{% endif %}</h2>
-			<div class="{% if percengate_change >= 0 %}positive-saving{% else %}negative-saving{% endif %}"> {{percengate_change|abs_float|round_if_larger_than_10}}<span class="saving-percent-symbol">%</span> 電力能源</div>
+			<div class="{% if percengate_change >= 0 %}positive-saving{% else %}negative-saving{% endif %}"> {{percengate_change|abs_float|floatformat}}<span class="saving-percent-symbol">%</span> 電力能源</div>
 			{% else %}
 			<h2>Over the past 12 months</h2>
-			<div class="{% if percengate_change >= 0 %}positive-saving{% else %}negative-saving{% endif %}"> {{percengate_change|abs_float|round_if_larger_than_10}}<span class="saving-percent-symbol">%</span> {% if percengate_change >= 0 %}Energy Reduction{% else %}More Energy{% endif %}</div>
+			<div class="{% if percengate_change >= 0 %}positive-saving{% else %}negative-saving{% endif %}"> {{percengate_change|abs_float|floatformat}}<span class="saving-percent-symbol">%</span> {% if percengate_change >= 0 %}Energy Reduction{% else %}More Energy{% endif %}</div>
 			{% endifequal %}
 		</div>
 
@@ -67,12 +67,12 @@ $(function() {
 			<div class="medal-block">
 				<img src="{% static 'images/progress/medal.png' %}">
 				<div id="archived_percentage">{{archived_level}}<span class="saving-percent-symbol">%</span></div>
-				<div class="medal-text">{% trans "Reduction<br>achieved" %}</div>
+				<div class="medal-text">{% trans "reduction<br>achieved" %}</div>
 			</div>
 			{% endifequal %}
 			<div class="target-text-container">
-				<div class="next-target-text">{% trans "Next target" %}</div>
-				<div class="next-target-percent">{% blocktrans with target_level=target_level %}{{target_level}}<span class="saving-percent-symbol">%</span> REDUCTION{% endblocktrans %}</div>
+				<div class="next-target-text">{% trans "Next Target" %}</div>
+				<div class="next-target-percent">{% blocktrans with target_level=target_level %}{{target_level}}<span class="saving-percent-symbol">%</span> Reduction{% endblocktrans %}</div>
 			</div>
 		</div>
 	</div>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-09 03:48+0000\n"
+"POT-Creation-Date: 2014-10-09 07:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -444,7 +444,7 @@ msgstr ""
 "記得也把插座或拖板上的開關掣關掉！"
 
 #: entrak/templates/display.html:201 entrak/templates/graph.html:408
-#: entrak/templates/ranking.html:532
+#: entrak/templates/ranking.html:540
 msgid "Total"
 msgstr "總數"
 
@@ -493,7 +493,7 @@ msgid "Keep<br>Saving!"
 msgstr "繼續努力"
 
 #: entrak/templates/display.html:314 entrak/templates/progress.html:70
-msgid "Reduction<br>achieved"
+msgid "reduction<br>achieved"
 msgstr "已逹減省"
 
 #: entrak/templates/display.html:316
@@ -802,7 +802,7 @@ msgid "D MMM YYYY"
 msgstr "YYYY年MMMD日"
 
 #: entrak/templates/graph.html:88 entrak/templates/graph.html.py:104
-#: entrak/templates/graph.html:130 entrak/templates/ranking.html:334
+#: entrak/templates/graph.html:130 entrak/templates/ranking.html:342
 #: entrak/templates/report.html:33
 msgid "MMM YYYY"
 msgstr "YYYY年MMM"
@@ -811,12 +811,12 @@ msgstr "YYYY年MMM"
 msgid "h a, D MMM YYYY, ddd"
 msgstr "YYYY年MMMD日, a h時, dddd"
 
-#: entrak/templates/graph.html:102 entrak/templates/ranking.html:332
+#: entrak/templates/graph.html:102 entrak/templates/ranking.html:340
 msgid "[Night of] D MMM YYYY, ddd"
 msgstr "YYYY年MMMD日, 夜間, dddd"
 
 #: entrak/templates/graph.html:106 entrak/templates/graph.html.py:132
-#: entrak/templates/ranking.html:336 entrak/templates/report.html:34
+#: entrak/templates/ranking.html:344 entrak/templates/report.html:34
 #: entrak/templates/report.html.py:368 entrak/templates/report.html:369
 msgid "YYYY"
 msgstr "YYYY年"
@@ -885,11 +885,11 @@ msgstr "圖表"
 msgid "Check this out!"
 msgstr "要知道現在用電情況，請看看"
 
-#: entrak/templates/graph.html:653 entrak/templates/ranking.html:523
+#: entrak/templates/graph.html:653 entrak/templates/ranking.html:531
 msgid "Unit"
 msgstr "單位"
 
-#: entrak/templates/graph.html:654 entrak/templates/ranking.html:524
+#: entrak/templates/graph.html:654 entrak/templates/ranking.html:532
 msgid "Time"
 msgstr "時間"
 
@@ -1018,13 +1018,13 @@ msgid "Find out how you're doing here at the"
 msgstr "想知道你的累積表現如何，請看看"
 
 #: entrak/templates/progress.html:74
-msgid "Next target"
+msgid "Next Target"
 msgstr "下個目標"
 
 #: entrak/templates/progress.html:75
 #, python-format
 msgid ""
-"%(target_level)s<span class=\"saving-percent-symbol\">%%</span> REDUCTION"
+"%(target_level)s<span class=\"saving-percent-symbol\">%%</span> Reduction"
 msgstr "節省 %(target_level)s<span class=\"saving-percent-symbol\">%%</span>"
 
 #: entrak/templates/progress.html:88
@@ -1063,60 +1063,60 @@ msgstr "用電量排行榜"
 msgid "Find out where you stand at the"
 msgstr "想知道你的慳電成績，請看看"
 
-#: entrak/templates/ranking.html:271
+#: entrak/templates/ranking.html:279
 msgid "/person"
 msgstr "/人"
 
-#: entrak/templates/ranking.html:327
+#: entrak/templates/ranking.html:335
 msgid "D MMM YYYY, ddd hA"
 msgstr "YYYY年MMMD日, dddd, Ah"
 
-#: entrak/templates/ranking.html:328
+#: entrak/templates/ranking.html:336
 msgid " - hA"
 msgstr " - Ah"
 
-#: entrak/templates/ranking.html:330
+#: entrak/templates/ranking.html:338
 msgid " D MMM YYYY, ddd"
 msgstr "YYYY年MMMD日, dddd"
 
-#: entrak/templates/ranking.html:447
+#: entrak/templates/ranking.html:455
 msgid "D MMM YYYY, dddd"
 msgstr "YYYY年MMMD日, dddd"
 
-#: entrak/templates/ranking.html:530
+#: entrak/templates/ranking.html:538
 #, python-format
 msgid "%% Change"
 msgstr "百份比變化"
 
-#: entrak/templates/ranking.html:531
+#: entrak/templates/ranking.html:539
 msgid "Per person"
 msgstr "人均"
 
-#: entrak/templates/ranking.html:533
+#: entrak/templates/ranking.html:541
 msgid "Sort by"
 msgstr "排序"
 
-#: entrak/templates/ranking.html:537
+#: entrak/templates/ranking.html:545
 msgid "Descending"
 msgstr "降序"
 
-#: entrak/templates/ranking.html:538
+#: entrak/templates/ranking.html:546
 msgid "Ascending"
 msgstr "升序"
 
-#: entrak/templates/ranking.html:539
+#: entrak/templates/ranking.html:547
 msgid "Alphabetical"
 msgstr "字母"
 
-#: entrak/templates/ranking.html:548
+#: entrak/templates/ranking.html:556
 msgid "CUSTOM SELECT"
 msgstr "自訂日期"
 
-#: entrak/templates/ranking.html:562
+#: entrak/templates/ranking.html:570
 msgid "Energy Used on"
 msgstr "電力使用"
 
-#: entrak/templates/ranking.html:567
+#: entrak/templates/ranking.html:575
 msgid "Compared with"
 msgstr "與以前比較"
 
@@ -1607,12 +1607,3 @@ msgstr "用戶沒有訪問這部份的權限。"
 #: utils/auth.py:40
 msgid "Please enter username and password."
 msgstr "請輸入用戶名稱和密碼"
-
-#~ msgid " - D MMM YYYY, ddd hA"
-#~ msgstr " - YYYY年MMMD日, Ah, dddd"
-
-#~ msgid " - D MMM YYYY, ddd"
-#~ msgstr " - YYYY年MMMD日, dddd"
-
-#~ msgid " tons CO<sub>2</sub>"
-#~ msgstr "噸二氧化碳"
