@@ -4,7 +4,7 @@ import calendar
 import json
 from django.shortcuts import render_to_response
 from django.db.models import Q
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import ensure_csrf_cookie
 from settings import STATIC_URL

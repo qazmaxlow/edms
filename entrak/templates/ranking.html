@@ -119,28 +119,67 @@ COLOR_THEME_INFO[COLOR_THEME_MIDDLE] = {
 
 var ranking = {};
 
-function getRankingData() {
+function genStartEndDtInfo() {
 	var startEndDt = Utils.genStartEndDt(ranking.currentDt, ranking.currentRangeType);
+	var nowMoment = moment();
 	if (ranking.currentRangeType === Utils.RANGE_TYPE_NIGHT) {
 		var endDt = startEndDt.endDt;
 	} else {
-		var endDt = moment(ranking.currentDt);
+		// if data is complete (past data), use all of them,
+		// otherwise, use util now
+		if ((nowMoment.isAfter(startEndDt.startDt) || nowMoment.isSame(startEndDt.startDt))
+			&& nowMoment.isBefore(startEndDt.endDt)) {
+			var endDt = moment(ranking.currentDt);
+		} else {
+			var endDt = startEndDt.endDt;
+		}
 	}
+
+	var result = {
+		'currentStartEndDt': {
+			'startDt': startEndDt.startDt,
+			'endDt': endDt
+		}
+	}
+
+	if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
+		var deltaUnit = Utils.genLastDtDeltaUnit(ranking.currentRangeType);
+		var last_start_dt = moment(startEndDt.startDt).subtract(1, deltaUnit);
+		var last_end_dt = moment(endDt).subtract(1, deltaUnit);
+
+		result.lastStartEndDt = {
+			'startDt': last_start_dt,
+			'endDt': last_end_dt
+		}
+	}
+
+	return result;
+}
+
+function updateDtPanelDtText() {
+	$(".current-dt").text(formatFromToDt(ranking.currentDt, ranking.currentRangeType));
+	if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
+		$('.compare-dt').text(formatFromToDt(ranking.lastStartDt, ranking.currentRangeType));
+	}
+}
+
+function getRankingData() {
+	var startEndDtInfo = genStartEndDtInfo();
 	var requestData = {
 		grouped_source_infos: JSON.stringify(ranking.entrakSystem.getGroupedSourceInfos()),
 		range_type: Utils.API_RANGE_TYPES[ranking.currentRangeType],
 		unit_category_code: ranking.currentUnit.code,
 		has_detail_rate: ranking.currentUnit.hasDetailRate,
 		global_rate: ranking.currentUnit.globalRate,
-		start_dt: startEndDt.startDt.unix(),
-		end_dt: endDt.unix(),
+		start_dt: startEndDtInfo.currentStartEndDt.startDt.unix(),
+		end_dt: startEndDtInfo.currentStartEndDt.endDt.unix(),
 		ranking_type: ranking.currentRankingType
 	};
 
 	if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
-		var deltaUnit = Utils.genLastDtDeltaUnit(ranking.currentRangeType);
-		requestData.last_start_dt = moment(startEndDt.startDt).subtract(deltaUnit, 1).unix();
-		requestData.last_end_dt = moment(endDt).subtract(deltaUnit, 1).unix();
+		requestData.last_start_dt = startEndDtInfo.lastStartEndDt.startDt.unix();
+		requestData.last_end_dt = startEndDtInfo.lastStartEndDt.endDt.unix();
+		ranking.lastStartDt = startEndDtInfo.lastStartEndDt.startDt;
 	}
 
 	$.ajax({
@@ -295,18 +334,22 @@ function formatFromToDt(targetDt, rangeType) {
 	if (rangeType === Utils.RANGE_TYPE_HOUR) {
 		resultText = startEndDt.startDt.format('{% trans "D MMM YYYY, ddd hA" %}');
 		resultText += startEndDt.endDt.format('{% trans " - hA" %}');
-	} else if (rangeType === Utils.RANGE_TYPE_DAY) {
+	} else if (rangeType === Utils.RANGE_TYPE_DAY || rangeType === Utils.RANGE_TYPE_WEEK) {
 		resultText = startEndDt.startDt.format('{% trans " D MMM YYYY, ddd" %}');
 	} else if (rangeType === Utils.RANGE_TYPE_NIGHT) {
-		resultText = startEndDt.startDt.format('{% trans "D MMM YYYY, ddd hA" %}');
-		resultText += startEndDt.endDt.format('{% trans " - D MMM YYYY, ddd hA" %}');
-	} else if (rangeType === Utils.RANGE_TYPE_WEEK) {
-		resultText = startEndDt.startDt.format('{% trans "D MMM YYYY, ddd" %}');
-		resultText += startEndDt.endDt.format('{% trans " - D MMM YYYY, ddd" %}');
+		resultText = startEndDt.startDt.format('{% trans "[Night of] D MMM YYYY, ddd" %}');
 	} else if (rangeType === Utils.RANGE_TYPE_MONTH) {
 		resultText = startEndDt.startDt.format('{% trans "MMM YYYY" %}');
 	} else if (rangeType === Utils.RANGE_TYPE_YEAR) {
 		resultText = startEndDt.startDt.format('{% trans "YYYY" %}');
+	}
+
+	if (rangeType === Utils.RANGE_TYPE_WEEK) {
+		if (ranking.langCode === 'zh-tw') {
+			resultText = '從' + resultText + '開始';
+		} else {
+			resultText = 'Week starting ' + resultText;
+		}
 	}
 
 	return resultText;
@@ -397,8 +440,8 @@ $(function() {
 	Utils.setupTimeChoiceLayout('#time-choice', function(newRangeType) {
 		if (ranking.currentRangeType !== newRangeType) {
 			ranking.currentRangeType = newRangeType;
-			$("#current-dt").text(formatFromToDt(ranking.currentDt, ranking.currentRangeType));
 			getRankingData();
+			updateDtPanelDtText();
 		}
 	});
 
@@ -422,8 +465,8 @@ $(function() {
 			var nowMoment = Utils.getNowMoment();
 			ranking.currentDt = moment(input).startOf('minute');
 			ranking.currentDt.hour(nowMoment.hour());
-			$("#current-dt").text(formatFromToDt(ranking.currentDt, ranking.currentRangeType));
 			getRankingData();
+			updateDtPanelDtText();
 		}
 	});
 	$("#custom-calendar-icon").click(function () {
@@ -437,6 +480,15 @@ $(function() {
 			$(".panel-header-right-menu h3").removeClass('selected-submenu');
 			$(this).addClass('selected-submenu');
 			getRankingData();
+
+			if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
+				$('.dt-panel-hypen').css('display', 'inline-block');
+				$('.dt-panel-compare-with').css('display', 'inline-block');
+				$('.compare-dt').text(formatFromToDt(ranking.lastStartDt, ranking.currentRangeType));
+			} else {
+				$('.dt-panel-hypen').hide();
+				$('.dt-panel-compare-with').hide();
+			}
 		}
 	});
 	$(".panel-header-right-menu [ranking-type='total']").addClass('selected-submenu');
@@ -462,8 +514,8 @@ $(function() {
 		sortRankingItem(ranking.currentSortBy);
 	});
 
-	$("#current-dt").text(formatFromToDt(ranking.currentDt, ranking.currentRangeType));
 	getRankingData();
+	updateDtPanelDtText();
 });
 </script>
 {% endblock %}
@@ -480,7 +532,6 @@ $(function() {
 				{% trans "Time" %}</h3>
 			<img class="expand-drop-down-panel-btn" src="{% static 'images/expandable_button.png' %}">
 
-			<span id="current-dt"></span>
 		</div>
 
 		<div class="panel-header-right-menu">
@@ -511,6 +562,21 @@ $(function() {
 	</div>
 
 	<div class="panel-separator"></div>
+
+	<div class="dt-panel">
+		<div class="dt-panel-separator"></div>
+		<div class="dt-panel-center-block">
+			<div class="dt-panel-used-on dt-content-block">
+				<div class="dt-panel-title">{% trans "Energy Used on" %}</div>
+				<div class="dt-text current-dt"></div>
+			</div>
+			<div class="dt-panel-hypen">-</div>
+			<div class="dt-panel-compare-with dt-content-block">
+				<div class="dt-panel-title">{% trans "Compared with" %}</div>
+				<div class="dt-text compare-dt"></div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <div id="ranking-item-container" class="panel-component"></div>

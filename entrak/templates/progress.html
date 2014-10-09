@@ -48,7 +48,7 @@ $(function() {
 	<div class="saving-header">
 		<div class="saving-consumption">
 			{% ifequal LANGUAGE_CODE 'zh-tw' %}
-			<h2>過去12個月一共{% if percengate_change >= 0 %}減少消秏{% else %}多用了{% endif %}</h2>
+			<h2>過去12個月一共{% if percengate_change >= 0 %}減少消耗{% else %}多用了{% endif %}</h2>
 			<div class="{% if percengate_change >= 0 %}positive-saving{% else %}negative-saving{% endif %}"> {{percengate_change|abs_float|round_if_larger_than_10}}<span class="saving-percent-symbol">%</span> 電力能源</div>
 			{% else %}
 			<h2>Over the past 12 months</h2>

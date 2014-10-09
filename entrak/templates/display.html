@@ -93,7 +93,7 @@ function getProgressData() {
 		$('.last-12-month-percent-text').text(percentText);
 
 		if (display.langCode === 'zh-tw') {
-			var titleSuffix = (data.percengate_change >= 0) ? "一共減少消秏": "一共多用了";
+			var titleSuffix = (data.percengate_change >= 0) ? "一共減少消耗": "一共多用了";
 			$('.last-12-month-block-title').text('{% trans "Over the past 12 months" %}' + titleSuffix);
 		} else {
 			$('.last-12-month-block-title').text('{% trans "Over the past 12 months" %}');

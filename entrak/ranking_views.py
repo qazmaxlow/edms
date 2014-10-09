@@ -91,13 +91,16 @@ def ranking_data_view(request, system_code=None):
 		for source_id, reading_val in sources_sum_info.items():
 			target_group = grouped_readings[source_group_map[source_id]]
 			target_group['current'] = reading_val + target_group.get('current', 0)
-			target_group['last'] = reduce(
-				lambda prev,reading: prev+reading[1],
-				last_source_readings[source_id].items(),
-				0) + target_group.get('last', 0)
+			if source_id in last_source_readings:
+				target_group['last'] = reduce(
+					lambda prev,reading: prev+reading[1],
+					last_source_readings[source_id].items(),
+					0) + target_group.get('last', 0)
+			else:
+				target_group['last'] = target_group.get('last', 0)
 
 		for info in grouped_readings:
-			if sources_sum_info:
+			if sources_sum_info and info['last'] != 0:
 				info['value'] = (info['current']-info['last'])/info['last']*100.0
 			else:
 				info['value'] = 0
