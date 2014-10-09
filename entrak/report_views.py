@@ -405,11 +405,17 @@ def __generate_report_data(systems, report_type, start_timestamp, end_timestamp)
 		missing_daily_usages = system.first_record - dt_info['last_same_period_start_dt']
 
 		if missing_daily_usages.days > 0:
+			if missing_daily_usages.days > (dt_info['last_same_period_end_dt'] - dt_info['last_same_period_start_dt']).days:
+				missing_start_dt = dt_info['last_same_period_start_dt']
+				missing_end_dt = dt_info['last_same_period_end_dt']
+			else:
+				missing_start_dt = dt_info['last_same_period_start_dt']
+				missing_end_dt = system.first_record
 			baselines = grouped_baselines[system.id]
 			baseline_daily_usages = BaselineUsage.transform_to_daily_usages(baselines, system_timezone)
 			total_last_same_period_energy += calculation.calculate_total_baseline_energy_usage(
-				dt_info['last_same_period_start_dt'].astimezone(system_timezone),
-				system.first_record.astimezone(system_timezone),
+				missing_start_dt.astimezone(system_timezone),
+				missing_end_dt.astimezone(system_timezone),
 				baseline_daily_usages)
 
 	saving_info = {}
