@@ -194,7 +194,7 @@ ReportGenerator.prototype.genEndDt = function(startDt, targetReportType) {
 ReportGenerator.prototype.updateDtInfo = function(startDt, customEndDt) {
 	this.currentDt = startDt;
 	if (this.reportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-		this.currentEndDt = customEndDt;
+		this.currentEndDt = moment(customEndDt).add(1, 'd');
 	} else {
 		this.currentEndDt = this.genEndDt(this.currentDt, this.reportType);
 	}

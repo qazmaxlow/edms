@@ -133,7 +133,7 @@ function isCustomMonthDtValid(targetStartDt, targetEndDt) {
 		&& (targetStartDt.isBefore(endBound) || targetStartDt.isSame(endBound))
 		&& (targetEndDt.isAfter(report.firstRecord) || targetEndDt.isSame(report.firstRecord))
 		&& (targetEndDt.isBefore(endBound)|| targetEndDt.isSame(endBound))
-		&& (dtDiff >= 25 && dtDiff <= 35) )
+		&& (dtDiff >= 25 && dtDiff <= 34) )
 }
 
 function canCreateCustomReport() {
@@ -290,7 +290,7 @@ function timeRangeCustomMonthSelected() {
 			if (boundMinDate.isAfter(moment(), 'day')) {
 				boundMinDate = moment().startOf('day');
 			}
-			var boundMaxDate = moment(selectDt).add(35, 'd');
+			var boundMaxDate = moment(selectDt).add(34, 'd');
 			if (boundMaxDate.isAfter(moment(), 'day')) {
 				boundMaxDate = moment().startOf('day');
 			}
@@ -584,7 +584,7 @@ $(function() {
 		$(".download-pdf-form input[name='start_timestamp']").attr("value", report.currentDt.unix());
 		$(".download-pdf-form input[name='report_type']").attr("value", report.currentReportType);
 		if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-			$(".download-pdf-form input[name='end_timestamp']").attr("value", report.customMonthEndDt.unix());
+			$(".download-pdf-form input[name='end_timestamp']").attr("value", moment(report.customMonthEndDt).add(1, 'd').unix());
 		} else {
 			$(".download-pdf-form input[name='end_timestamp']").attr("value", 0);
 		}
