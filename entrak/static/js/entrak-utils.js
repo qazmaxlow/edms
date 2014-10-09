@@ -32,34 +32,47 @@ Utils.getNowMoment = function (startOf) {
 
 Utils.genStartEndDt = function (targetDt, rangeType) {
 	var startDt = null;
-	var endDt = null;
 	var dtClone = moment(targetDt).startOf('hour');
 
 	if (rangeType === Utils.RANGE_TYPE_HOUR) {
 		startDt = dtClone;
-		endDt = moment(startDt).add(1, 'h');
 	} else if (rangeType === Utils.RANGE_TYPE_DAY) {
 		startDt = dtClone.startOf('day');
-		endDt = moment(startDt).add(1, 'd');
 	} else if (rangeType == Utils.RANGE_TYPE_NIGHT) {
 		if (dtClone.hour() >= 8) {
 			startDt = dtClone.subtract(1, 'd').hour(20);
 		} else {
 			startDt = dtClone.subtract(2, 'd').hour(20);
 		}
-		endDt = moment(startDt).add(12, 'h');
 	} else if (rangeType == Utils.RANGE_TYPE_WEEK) {
 		startDt = dtClone.startOf('week');
-		endDt = moment(startDt).add(7, 'd');
 	} else if (rangeType == Utils.RANGE_TYPE_MONTH) {
 		startDt = dtClone.startOf('month');
-		endDt = moment(startDt).add(1, 'M');
 	} else if (rangeType == Utils.RANGE_TYPE_YEAR) {
 		startDt = dtClone.startOf('year');
+	}
+	var endDt = Utils.genEndDt(startDt, rangeType);
+
+	return {startDt: startDt, endDt: endDt};
+}
+
+Utils.genEndDt = function (startDt, rangeType) {
+	var endDt = null;
+	if (rangeType === Utils.RANGE_TYPE_HOUR) {
+		endDt = moment(startDt).add(1, 'h');
+	} else if (rangeType === Utils.RANGE_TYPE_DAY) {
+		endDt = moment(startDt).add(1, 'd');
+	} else if (rangeType == Utils.RANGE_TYPE_NIGHT) {
+		endDt = moment(startDt).add(12, 'h');
+	} else if (rangeType == Utils.RANGE_TYPE_WEEK) {
+		endDt = moment(startDt).add(7, 'd');
+	} else if (rangeType == Utils.RANGE_TYPE_MONTH) {
+		endDt = moment(startDt).add(1, 'M');
+	} else if (rangeType == Utils.RANGE_TYPE_YEAR) {
 		endDt = moment(startDt).add(1, 'y');
 	}
 
-	return {startDt: startDt, endDt: endDt};
+	return endDt;
 }
 
 Utils.getDtDetlaUnit = function (rangeType) {

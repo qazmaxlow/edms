@@ -653,7 +653,7 @@ GraphChart.prototype.sumUpSeriesValueInRange = function (startIdx, endIdx) {
 }
 
 GraphChart.prototype.genCurrentStartEndDt = function () {
-	return Utils.genStartEndDt(this.currentDt, this.currentRangeType);
+	return {startDt: this.currentDt, endDt: Utils.genEndDt(this.currentDt, this.currentRangeType)};
 }
 
 GraphChart.prototype.updateXAxisOptions = function (startDt) {
