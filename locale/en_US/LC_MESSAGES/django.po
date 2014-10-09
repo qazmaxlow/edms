@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-09 07:26+0000\n"
+"POT-Creation-Date: 2014-10-09 07:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1148,114 +1148,127 @@ msgstr ""
 msgid "YYYY MMMM"
 msgstr ""
 
-#: entrak/templates/report.html:662
+#: entrak/templates/report.html:567
+#: entrak/templates/report_main_content.html:110
+#: entrak/templates/report_main_content.html:200
+#: entrak/templates/report_main_content.html:340
+#: entrak/templates/report_main_content.html:469
+#: entrak/templates/report_main_content.html:599
+msgid "SHOW DETAILS"
+msgstr ""
+
+#: entrak/templates/report.html:569
+msgid "HIDE DETAILS"
+msgstr ""
+
+#: entrak/templates/report.html:667
 msgid "Monthly Report"
 msgstr ""
 
-#: entrak/templates/report.html:663
+#: entrak/templates/report.html:668
 msgid "Customize Report"
 msgstr ""
 
-#: entrak/templates/report.html:663
+#: entrak/templates/report.html:668
 msgid "Download Data"
 msgstr ""
 
-#: entrak/templates/report.html:670
+#: entrak/templates/report.html:675
 msgid "Monthly Reports"
 msgstr ""
 
-#: entrak/templates/report.html:671
+#: entrak/templates/report.html:676
 msgid "Energy Consumption (kWh)"
 msgstr ""
 
-#: entrak/templates/report.html:672
+#: entrak/templates/report.html:677
 msgid "CO<sub>2</sub> Emissions (kg)"
 msgstr ""
 
-#: entrak/templates/report.html:673
+#: entrak/templates/report.html:678
 msgid "Energy Cost ($)"
 msgstr ""
 
-#: entrak/templates/report.html:674
+#: entrak/templates/report.html:679
 msgid "Download"
 msgstr ""
 
-#: entrak/templates/report.html:695
+#: entrak/templates/report.html:700
 msgid "Select your time range"
 msgstr ""
 
-#: entrak/templates/report.html:706 entrak/templates/report.html.py:752
+#: entrak/templates/report.html:711 entrak/templates/report.html.py:757
 msgid "Select your time period"
 msgstr ""
 
-#: entrak/templates/report.html:736 entrak/templates/report.html.py:769
+#: entrak/templates/report.html:741 entrak/templates/report.html.py:774
 msgid "Create your report"
 msgstr ""
 
-#: entrak/templates/report.html:740 entrak/templates/report.html.py:773
-#: entrak/templates/report.html:814
+#: entrak/templates/report.html:745 entrak/templates/report.html.py:778
+#: entrak/templates/report.html:819
 msgid "Energy data - kWh"
 msgstr ""
 
-#: entrak/templates/report.html:742 entrak/templates/report.html.py:775
-#: entrak/templates/report.html:816
+#: entrak/templates/report.html:747 entrak/templates/report.html.py:780
+#: entrak/templates/report.html:821
 msgid "From:"
 msgstr ""
 
-#: entrak/templates/report.html:743 entrak/templates/report.html.py:776
-#: entrak/templates/report.html:817
+#: entrak/templates/report.html:748 entrak/templates/report.html.py:781
+#: entrak/templates/report.html:822
 msgid "To:"
 msgstr ""
 
-#: entrak/templates/report.html:746 entrak/templates/report.html.py:779
+#: entrak/templates/report.html:751 entrak/templates/report.html.py:784
 msgid "Create Report"
 msgstr ""
 
-#: entrak/templates/report.html:755
+#: entrak/templates/report.html:760
 msgid "Select the start and end date of your monthly electricity bill."
 msgstr ""
 
-#: entrak/templates/report.html:756
+#: entrak/templates/report.html:761
 msgid ""
 "If you wish to view a stardard calendar month, click on the Monthly Report "
 "tab at the top of the page"
 msgstr ""
 
-#: entrak/templates/report.html:760 entrak/templates/report.html.py:793
+#: entrak/templates/report.html:765 entrak/templates/report.html.py:798
 msgid "Choose your start date"
 msgstr ""
 
-#: entrak/templates/report.html:764 entrak/templates/report.html.py:797
+#: entrak/templates/report.html:769 entrak/templates/report.html.py:802
 msgid "Choose your end date"
 msgstr ""
 
-#: entrak/templates/report.html:787
+#: entrak/templates/report.html:792
 msgid "Here you can download your energy use data to files in .csv format."
 msgstr ""
 
-#: entrak/templates/report.html:788
+#: entrak/templates/report.html:793
 msgid ""
 "Simply select the start date, end date and the units that you would like "
 "obtain from the system."
 msgstr ""
 
-#: entrak/templates/report.html:789
+#: entrak/templates/report.html:794
 msgid "Choose your date"
 msgstr ""
 
-#: entrak/templates/report.html:803
+#: entrak/templates/report.html:808
 msgid "Select your units"
 msgstr ""
 
-#: entrak/templates/report.html:810
+#: entrak/templates/report.html:815
 msgid "Download your file"
 msgstr ""
 
-#: entrak/templates/report.html:820
+#: entrak/templates/report.html:825
 msgid "Download File"
 msgstr ""
 
-#: entrak/templates/report.html:833 entrak/templates/report.html.py:839
+#: entrak/templates/report.html:838 entrak/templates/report.html.py:844
 msgid "Save Report"
 msgstr ""
 
@@ -1280,7 +1293,7 @@ msgid "HOW MUCH ENERGY<br>DID WE USE?"
 msgstr ""
 
 #: entrak/templates/report_main_content.html:17
-msgid "of electricty"
+msgid "of electricity"
 msgstr ""
 
 #: entrak/templates/report_main_content.html:25
@@ -1304,14 +1317,6 @@ msgstr ""
 
 #: entrak/templates/report_main_content.html:73
 msgid "HOW DID OUR<br>CARBON FOOTPRINT CHANGE?"
-msgstr ""
-
-#: entrak/templates/report_main_content.html:110
-#: entrak/templates/report_main_content.html:200
-#: entrak/templates/report_main_content.html:340
-#: entrak/templates/report_main_content.html:469
-#: entrak/templates/report_main_content.html:599
-msgid "HIDE DETAILS"
 msgstr ""
 
 #: entrak/templates/report_main_content.html:117

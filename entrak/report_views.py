@@ -394,24 +394,31 @@ def __generate_report_data(systems, report_type, start_timestamp, end_timestamp)
 			overnight_name = "overnight"+cal_info["targetReadings"]
 			info[cal_info['keyPrefix']+'OvernightInfo'] = __calculate_overnight_info(info[overnight_name], current_system_timezone)
 
-	total_baseline_energy = 0
+	total_last_same_period_energy = SourceReadingDay.objects(
+			source_id__in=source_ids,
+			datetime__gte=dt_info['last_same_period_start_dt'],
+			datetime__lt=dt_info['last_same_period_end_dt']).sum('value')
 	need_calculate_systems = System.assign_source_under_system(systems, sources)
 	grouped_baselines = BaselineUsage.get_baselines_for_systems([system.id for system in need_calculate_systems.keys()])
 	for system, attached_sources in need_calculate_systems.items():
 		system_timezone = pytz.timezone(system.timezone)
+		missing_daily_usages = system.first_record - dt_info['last_same_period_start_dt']
 
-		baselines = grouped_baselines[system.id]
-		baseline_daily_usages = BaselineUsage.transform_to_daily_usages(baselines, system_timezone)
-		total_baseline_energy += calculation.calculate_total_baseline_energy_usage(
-			dt_info['start_dt'].astimezone(system_timezone), dt_info['end_dt'].astimezone(system_timezone), baseline_daily_usages)
+		if missing_daily_usages.days > 0:
+			baselines = grouped_baselines[system.id]
+			baseline_daily_usages = BaselineUsage.transform_to_daily_usages(baselines, system_timezone)
+			total_last_same_period_energy += calculation.calculate_total_baseline_energy_usage(
+				dt_info['last_same_period_start_dt'].astimezone(system_timezone),
+				system.first_record.astimezone(system_timezone),
+				baseline_daily_usages)
 
 	saving_info = {}
 	unit_info = json.loads(current_system.unit_info)
 	co2_unit_code = unit_info[CO2_CATEGORY_CODE]
 	money_unit_code = unit_info[MONEY_CATEGORY_CODE]
-	energy_saving = total_baseline_energy-total_energy
-	if total_baseline_energy != 0:
-		saving_info["energy"] = energy_saving/total_baseline_energy*100
+	energy_saving = total_last_same_period_energy-total_energy
+	if total_last_same_period_energy != 0:
+		saving_info["energy"] = energy_saving/total_last_same_period_energy*100
 	else:
 		saving_info["energy"] = 0
 	saving_info["co2"] = calculation.transform_reading(co2_unit_code, start_timestamp, energy_saving, co2_unit_rates)

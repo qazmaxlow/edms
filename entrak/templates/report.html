@@ -91,7 +91,7 @@ function updateBoundDt() {
 		if (report.firstRecord.month() === 0 && report.firstRecord.date() === 1) {
 			report.boundStartDt = moment(report.firstRecord).startOf('year');
 		} else {
-			report.boundStartDt = moment(report.firstRecord).add('y', 1).startOf('year');
+			report.boundStartDt = moment(report.firstRecord).add(1, 'y').startOf('year');
 		}
 
 		report.boundEndDt = moment().tz(report.timezone).startOf('year');
@@ -101,7 +101,7 @@ function updateBoundDt() {
 				|| report.firstRecord.month() === 6 || report.firstRecord.month() === 9)) {
 			report.boundStartDt = moment(report.firstRecord).startOf('quarter');
 		} else {
-			report.boundStartDt = moment(report.firstRecord).add('M', 3).startOf('quarter');
+			report.boundStartDt = moment(report.firstRecord).add(3, 'M').startOf('quarter');
 		}
 
 		report.boundEndDt = moment().tz(report.timezone).startOf('quarter');
@@ -109,7 +109,7 @@ function updateBoundDt() {
 		if (report.firstRecord.day() === 0) {
 			report.boundStartDt = moment(report.firstRecord).startOf('week');
 		} else {
-			report.boundStartDt = moment(report.firstRecord).add('w', 1).startOf('week');
+			report.boundStartDt = moment(report.firstRecord).add(1, 'w').startOf('week');
 		}
 
 		report.boundEndDt = moment().tz(report.timezone).startOf('week');
@@ -197,7 +197,7 @@ function updateReportType(targetReportType) {
 }
 
 function timeRangeYearSelected() {
-	report.currentDt = moment(report.boundEndDt).subtract('y', 1);
+	report.currentDt = moment(report.boundEndDt).subtract(1, 'y');
 
 	var targetYearEle = $(".year-quarter-calendar-head .target-year");
 	targetYearEle.text(report.currentDt.format('YYYY'));
@@ -205,17 +205,17 @@ function timeRangeYearSelected() {
 	$(".year-quarter-calendar-content").addClass("quarter-content-disable");
 
 	$(".year-quarter-calendar-head .prev-btn").off('click').click(function() {
-		var targetDt = moment(report.currentDt).subtract('y', 1);
+		var targetDt = moment(report.currentDt).subtract(1, 'y');
 		if (isTargetDtValid(targetDt)) {
-			report.currentDt.subtract('y', 1);
+			report.currentDt.subtract(1, 'y');
 			targetYearEle.text(report.currentDt.format('YYYY'));
 			updateGenReportSection();
 		}
 	});
 	$(".year-quarter-calendar-head .next-btn").off('click').click(function() {
-		var targetDt = moment(report.currentDt).add('y', 1);
+		var targetDt = moment(report.currentDt).add(1, 'y');
 		if (isTargetDtValid(targetDt)) {
-			report.currentDt.add('y', 1);
+			report.currentDt.add(1, 'y');
 			targetYearEle.text(report.currentDt.format('YYYY'));
 			updateGenReportSection();
 		}
@@ -240,7 +240,7 @@ function updateSelectedQuarter() {
 }
 
 function timeRangeQuarterSelected() {
-	report.currentDt = moment(report.boundEndDt).subtract('M', 3);
+	report.currentDt = moment(report.boundEndDt).subtract(3, 'M');
 
 	var targetYearEle = $(".year-quarter-calendar-head .target-year");
 	targetYearEle.text(report.currentDt.format('YYYY'));
@@ -249,11 +249,11 @@ function timeRangeQuarterSelected() {
 	$(".year-quarter-calendar-content").removeClass("quarter-content-disable");
 
 	$(".year-quarter-calendar-head .prev-btn").off('click').click(function() {
-		var targetDt = moment(report.currentDt).subtract('y', 1);
+		var targetDt = moment(report.currentDt).subtract(1, 'y');
 		if (targetDt.year() >= report.boundStartDt.year()) {
-			report.currentDt.subtract('y', 1);
+			report.currentDt.subtract(1, 'y');
 			while(report.currentDt.isBefore(report.boundStartDt)) {
-				report.currentDt.add('M', 3);
+				report.currentDt.add(3, 'M');
 			}
 			targetYearEle.text(report.currentDt.format('YYYY'));
 			updateSelectedQuarter();
@@ -261,12 +261,12 @@ function timeRangeQuarterSelected() {
 		}
 	});
 	$(".year-quarter-calendar-head .next-btn").off('click').click(function() {
-		var targetDt = moment(report.currentDt).add('y', 1);
+		var targetDt = moment(report.currentDt).add(1, 'y');
 		if (targetDt.year() < report.boundEndDt.year()
 			|| (targetDt.year() === report.boundEndDt.year() && report.boundEndDt.month() !== 0) ) {
-			report.currentDt.add('y', 1);
+			report.currentDt.add(1, 'y');
 			while(!(report.currentDt.isBefore(report.boundEndDt))) {
-				report.currentDt.subtract('M', 3);
+				report.currentDt.subtract(3, 'M');
 			}
 			targetYearEle.text(report.currentDt.format('YYYY'));
 			updateSelectedQuarter();
@@ -286,11 +286,11 @@ function timeRangeCustomMonthSelected() {
 		maxDate: "-26d",
 		onSelect: function(dateText, inst) {
 			var selectDt = moment($(this).datepicker('getDate'));
-			var boundMinDate = moment(selectDt).add('d', 25);
+			var boundMinDate = moment(selectDt).add(25, 'd');
 			if (boundMinDate.isAfter(moment(), 'day')) {
 				boundMinDate = moment().startOf('day');
 			}
-			var boundMaxDate = moment(selectDt).add('d', 35);
+			var boundMaxDate = moment(selectDt).add(35, 'd');
 			if (boundMaxDate.isAfter(moment(), 'day')) {
 				boundMaxDate = moment().startOf('day');
 			}
@@ -302,7 +302,7 @@ function timeRangeCustomMonthSelected() {
 		},
 	}, datepickerOptions));
 	$("#month-end-datepicker").datepicker($.extend({
-		minDate: moment(report.firstRecord).add('d', 25).toDate(),
+		minDate: moment(report.firstRecord).add(25, 'd').toDate(),
 		maxDate: "-0d",
 		onSelect: function(dateText, inst) {
 			report.customMonthEndDt = moment($(this).datepicker('getDate'));
@@ -335,7 +335,7 @@ function timeRangeWeekSelected() {
 		showOtherMonths: true,
 		selectOtherMonths: true,
 		minDate: report.boundStartDt.toDate(),
-		maxDate: moment(report.boundEndDt).subtract('d', 1).toDate(),
+		maxDate: moment(report.boundEndDt).subtract(1, 'd').toDate(),
 		onSelect: function(dateText, inst) {
 			var selectDt = moment($(this).datepicker('getDate')).startOf('week');
 			weekStartDate = selectDt.toDate();
@@ -375,7 +375,7 @@ function updateGenReportSection() {
 		toText = moment($("#month-end-datepicker").datepicker("getDate")).format('{% trans "D MMM YYYY, ddd" %}');
 	} else if (report.currentReportType === ReportGenerator.REPORT_TYPE_WEEK) {
 		fromText = report.currentDt.format('{% trans "D MMM YYYY, ddd" %}');
-		toText = moment(report.currentDt).add('w', 1).format('{% trans "D MMM YYYY, ddd" %}');
+		toText = moment(report.currentDt).add(1, 'w').format('{% trans "D MMM YYYY, ddd" %}');
 	}
 	$(".datetime-result .from-date").text(fromText);
 	$(".datetime-result .to-date").text(toText);
@@ -411,7 +411,7 @@ function dlRawDataSelected() {
 		maxDate: '-1d',
 		onSelect: function(dateText, inst) {
 			var selectDt = moment($(this).datepicker('getDate')).tz(report.timezone);
-			var boundMinDate = moment(selectDt).add('d', 1).toDate();
+			var boundMinDate = moment(selectDt).add(1, 'd').toDate();
 			$("#dl-data-end-datepicker").datepicker("option", "minDate", boundMinDate);
 
 			if (report.dlRawDataEndDt !== null
@@ -563,6 +563,11 @@ $(function() {
 
 	$(".hide-details-btn").click(function() {
 		$(this).toggleClass('btn-down');
+		if ($(this).hasClass('btn-down')) {
+			$(this).text('{% trans "SHOW DETAILS" %}');
+		} else {
+			$(this).text('{% trans "HIDE DETAILS" %}');
+		}
 		$(this).parent().parent().find(".detail-container").slideToggle();
 	});
 
