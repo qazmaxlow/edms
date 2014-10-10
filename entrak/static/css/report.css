@@ -575,7 +575,7 @@
 	color: #DD931F;
 	border-right: 1px solid #FFF;
 	height: 20px;
-	padding-top: 10px;
+	padding-top: 15px;
 	background-color: #FFF1CD;
 }
 #monthly-report-header span:last-child{
@@ -612,7 +612,23 @@
 	text-align: center;
 	color: #354960;
 	border-right: 1px solid #FFF;
+}
+#monthly-report-content > div {
 	border-bottom: 1px solid #FFF;
+}
+#monthly-report-content > div span:first-child {
+	border-radius: 8px;
+	width: 166px;
+	height: 16px;
+	padding-top: 6px;
+	border-bottom: 2px solid #D7C5AA;
+	margin-right: 15px;
+	margin-left: 12px;
+	display: inline-block;
+	border-right: none;
+}
+#monthly-report-content > div span:nth-child(2) {
+	border-left: 1px solid #fff;
 }
 #monthly-report-content .pdf-icon {
 	width: 17px;

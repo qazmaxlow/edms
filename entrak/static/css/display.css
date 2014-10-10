@@ -141,6 +141,18 @@
 	margin-right: 40px;
 	display: inline-block;
 }
+.graph-legend > span:first-child {
+	width: 30px;
+	height: 12px;
+	display: inline-block;
+	margin-right: 5px;
+}
+.today-legend-color-block {
+	background-color: #81D51D;
+}
+.last-legend-color-block {
+	background-color: #EF7C56;
+}
 .legend-last-text {
 	color: #EF7C56;
 }
@@ -211,12 +223,11 @@
 }
 
 .progress-info {
-	background-color: rgb(252,252,252);
+	background-color: #FFF;
 }
 .factory-background {
 	text-align: center;
-	background-image: url(../images/display/factory-texture-bg.jpg);
-	height: 470px;
+	height: 500px;
 	position: relative;
 }
 .factory-animation {
@@ -239,6 +250,7 @@
 	padding-bottom: 20px;
 	padding-left: 30px;
 	padding-right: 30px;
+	box-shadow: 0px 0px 4px #d0d0d0;
 }
 .last-12-month-block-title{
 	font-size: 17pt;
@@ -253,8 +265,9 @@
 }
 .progress-detail-container {
 	position: relative;
+	height: 100%;
 	text-align: center;
-	background-color: rgba(252,252,252,0.9);
+	background-color: rgb(245,245,245);
 }
 .progress-detail {
 	display: inline-block;

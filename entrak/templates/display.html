@@ -71,8 +71,8 @@ function getProgressData() {
 			aniLevel = 5;
 		}
 		var factoryAniFileName = 'progress-animation-' + aniLevel;
-		$('.factory-animation source:eq(0)').attr('src', data.static_url + 'images/progress/' + factoryAniFileName+'.webm');
-		$('.factory-animation source:eq(1)').attr('src', data.static_url + 'images/progress/' + factoryAniFileName+'.mp4');
+		$('.factory-animation source:eq(0)').attr('src', data.static_url + 'images/display/' + factoryAniFileName+'.webm');
+		$('.factory-animation source:eq(1)').attr('src', data.static_url + 'images/display/' + factoryAniFileName+'.mp4');
 		$('.factory-animation').load();
 
 		$('.last-12-month-percent-val').text(Math.abs(Utils.fixedDecBaseOnVal(data.percengate_change)));
@@ -261,11 +261,11 @@ $(function() {
 				<div class="graph-unit">kWh</div>
 				<div class="graph-legend-container">
 					<div class="graph-legend">
-						<span></span>
+						<span class="today-legend-color-block"></span>
 						<span>{% trans "Today" %}</span>
 					</div>
 					<div class="graph-legend">
-						<span></span>
+						<span class="last-legend-color-block"></span>
 						<span class="legend-last-text"></span>
 					</div>
 				</div>
@@ -282,7 +282,7 @@ $(function() {
 		<div class="progress-info">
 			<div class="header-empty-block"></div>
 			<div class="factory-background">
-				<video class="factory-animation" width="1058px" height="433px" autoplay loop>
+				<video class="factory-animation" width="1200px" height="500px" autoplay loop>
 					<source type="video/webm">
 					<source type="video/mp4">
 				</video>
