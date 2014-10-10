@@ -7,6 +7,7 @@ import smtplib
 from celery import shared_task
 from django.db.models import Q
 from django.core.mail import send_mail
+from django.db import transaction
 from .models import Alert, AlertHistory, AlertEmail
 from .models import ALERT_TYPE_STILL_ON, ALERT_TYPE_SUMMARY, ALERT_TYPE_PEAK
 from contact.models import Contact
@@ -115,18 +116,19 @@ def check_all_alerts():
 @shared_task(ignore_result=True)
 def send_alert_email():
 	send_success_email_ids = []
-	alert_emails = AlertEmail.objects.all()
-	for alert_email in alert_emails:
-		try:
-			send_mail(
-				alert_email.title,
-				alert_email.content,
-				EMAIL_HOST_USER,
-				[alert_email.recipient],
-				fail_silently=False)
-			send_success_email_ids.append(alert_email.id)
-		except smtplib.SMTPException, e:
-			alert_email.error = str(e)
-			alert_email.save(update_fields=['error'])
+	with transaction.atomic():
+		alert_emails = AlertEmail.objects.select_for_update().all()
+		for alert_email in alert_emails:
+			try:
+				send_mail(
+					alert_email.title,
+					alert_email.content,
+					EMAIL_HOST_USER,
+					[alert_email.recipient],
+					fail_silently=False)
+				send_success_email_ids.append(alert_email.id)
+			except smtplib.SMTPException, e:
+				alert_email.error = str(e)
+				alert_email.save(update_fields=['error'])
 
 	AlertEmail.objects.filter(id__in=send_success_email_ids).delete()

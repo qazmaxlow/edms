@@ -2,22 +2,22 @@
 {% load static %}
 
 <div id="summary">
-	<div id="summary-header"><img src="{% static 'images/summary.png' %}"></div>
+	<div id="summary-header">{% trans "Summary" %}</div>
 
 	<div id="summary-image">
-		<div id="last-summary">
+		<div id="last-summary" class="last-summary-block">
 			<p class="summary-text">{% trans "By this time last week you had used" %} </p>
 			<img class="electricity-icon" src="{% static 'images/red-electricity.png' %}">
 			<span id="last-consumption-val" class="consumption-val"></span><span class="consumption-unit">kWh</span>
 		</div>
 
-		<div id="this-summary">
+		<div id="this-summary" class="this-summary-block">
 			<p class="summary-text">{% trans "So far today you have used" %} </p>
 			<img class="electricity-icon" src="{% static 'images/green-electricity.png' %}">
 			<span id="this-consumption-val" class="consumption-val"></span><span class="consumption-unit">kWh</span>
 		</div>
 
-		<div id="summary-percentage">
+		<div id="summary-percentage" class="summary-percentage-block">
 			<span id="summary-percentage-number"></span>
 			<span id="summary-percentage-symbol">%</span>
 		</div>

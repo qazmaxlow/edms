@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-09 10:22+0000\n"
+"POT-Creation-Date: 2014-10-10 01:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -97,7 +97,7 @@ msgstr ""
 
 #: entrak/templates/alert_settings.html:46
 #: entrak/templates/alert_settings.html:61
-#: entrak/templates/alert_settings.html:1001
+#: entrak/templates/alert_settings.html:1002
 #: entrak/templates/general_settings.html:376
 msgid "Confirm"
 msgstr ""
@@ -134,92 +134,92 @@ msgstr "Weekdays"
 msgid "alert_options_weekends"
 msgstr "Weekends"
 
-#: entrak/templates/alert_settings.html:716
-#: entrak/templates/alert_settings.html:747
+#: entrak/templates/alert_settings.html:717
+#: entrak/templates/alert_settings.html:748
 msgid "DD MMM YYYY, ddd"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:717 entrak/templates/graph.html:143
+#: entrak/templates/alert_settings.html:718 entrak/templates/graph.html:143
 msgid "hh:mma"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:722
+#: entrak/templates/alert_settings.html:723
 msgid " energy use reached"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:729
+#: entrak/templates/alert_settings.html:730
 msgid "alert_history_used"
 msgstr " used"
 
-#: entrak/templates/alert_settings.html:737
+#: entrak/templates/alert_settings.html:738
 msgid "alert_history_on"
 msgstr "on "
 
-#: entrak/templates/alert_settings.html:741
-#: entrak/templates/alert_settings.html:743
-#: entrak/templates/alert_settings.html:745 entrak/templates/report.html:63
+#: entrak/templates/alert_settings.html:742
+#: entrak/templates/alert_settings.html:744
+#: entrak/templates/alert_settings.html:746 entrak/templates/report.html:63
 msgid "hh:mmA"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:751
+#: entrak/templates/alert_settings.html:752
 msgid "hh:mmA DD MMM YYYY,ddd"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:855
+#: entrak/templates/alert_settings.html:856
 msgid "Alert History"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:856
+#: entrak/templates/alert_settings.html:857
 msgid "Create/Manage Alerts"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:863
+#: entrak/templates/alert_settings.html:864
 msgid "Date"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:864
+#: entrak/templates/alert_settings.html:865
 msgid "End-Source"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:865
+#: entrak/templates/alert_settings.html:866
 msgid "Alert Issue"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:867
+#: entrak/templates/alert_settings.html:868
 msgid "Alert Status"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:868
+#: entrak/templates/alert_settings.html:869
 msgid "Unresolve"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:868
+#: entrak/templates/alert_settings.html:869
 msgid "Resolved"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:876
+#: entrak/templates/alert_settings.html:877
 msgid "Choose Alert Type:"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:883
+#: entrak/templates/alert_settings.html:884
 msgid ""
 "Peak Demand Alert will notify you immediately when your energy consumption "
 "(in kVA) is about to reach your peak level (see your utility bill for this "
 "peak level). This can help you avoid peak demand surcharge."
 msgstr ""
 
-#: entrak/templates/alert_settings.html:884
-#: entrak/templates/alert_settings.html:895
-#: entrak/templates/alert_settings.html:906
+#: entrak/templates/alert_settings.html:885
+#: entrak/templates/alert_settings.html:896
+#: entrak/templates/alert_settings.html:907
 msgid "Close"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:887
-#: entrak/templates/alert_settings.html:916
+#: entrak/templates/alert_settings.html:888
+#: entrak/templates/alert_settings.html:917
 msgid "Create Peak Demand Alert"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:894
+#: entrak/templates/alert_settings.html:895
 msgid ""
 "Summary Alert will notify you when your total energy consumption over your "
 "selected time period(s) is higher than average (calculated over the last "
@@ -228,12 +228,12 @@ msgid ""
 "the end of the selected time period(s)."
 msgstr ""
 
-#: entrak/templates/alert_settings.html:898
-#: entrak/templates/alert_settings.html:941
+#: entrak/templates/alert_settings.html:899
+#: entrak/templates/alert_settings.html:942
 msgid "Create Summary Alert"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:905
+#: entrak/templates/alert_settings.html:906
 msgid ""
 "Instance Alert will notify you immediately when your energy consumption "
 "(every 5 minutes intervals) over your selected time period(s) is higher than "
@@ -241,66 +241,70 @@ msgid ""
 "and respond to energy abnormalities for critical equipment/ areas."
 msgstr ""
 
-#: entrak/templates/alert_settings.html:909
-#: entrak/templates/alert_settings.html:968
+#: entrak/templates/alert_settings.html:910
+#: entrak/templates/alert_settings.html:969
 msgid "Create Instance Alert"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:924
-#: entrak/templates/alert_settings.html:949
-#: entrak/templates/alert_settings.html:976
+#: entrak/templates/alert_settings.html:925
+#: entrak/templates/alert_settings.html:950
+#: entrak/templates/alert_settings.html:977
 msgid "End-Use"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:926
-msgid "Threshold"
-msgstr ""
-
 #: entrak/templates/alert_settings.html:927
-#: entrak/templates/alert_settings.html:954
-#: entrak/templates/alert_settings.html:981
-msgid "Send to"
+msgid "Threshold"
 msgstr ""
 
 #: entrak/templates/alert_settings.html:928
 #: entrak/templates/alert_settings.html:955
 #: entrak/templates/alert_settings.html:982
-msgid "Date Created"
+msgid "Send to"
 msgstr ""
 
 #: entrak/templates/alert_settings.html:929
 #: entrak/templates/alert_settings.html:956
 #: entrak/templates/alert_settings.html:983
+msgid "Date Created"
+msgstr ""
+
+#: entrak/templates/alert_settings.html:930
+#: entrak/templates/alert_settings.html:957
+#: entrak/templates/alert_settings.html:984
 msgid "Action"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:934
-#: entrak/templates/alert_settings.html:961
-#: entrak/templates/alert_settings.html:988
+#: entrak/templates/alert_settings.html:935
+#: entrak/templates/alert_settings.html:962
+#: entrak/templates/alert_settings.html:989
 msgid "Back to Top"
-msgstr ""
-
-#: entrak/templates/alert_settings.html:951
-#: entrak/templates/alert_settings.html:978
-msgid "Time from"
 msgstr ""
 
 #: entrak/templates/alert_settings.html:952
 #: entrak/templates/alert_settings.html:979
-msgid "Time to"
+msgid "Time from"
 msgstr ""
 
 #: entrak/templates/alert_settings.html:953
 #: entrak/templates/alert_settings.html:980
+msgid "Time to"
+msgstr ""
+
+#: entrak/templates/alert_settings.html:954
+#: entrak/templates/alert_settings.html:981
 msgid "alert_weekdays"
 msgstr "Weekdays"
 
-#: entrak/templates/alert_settings.html:998
+#: entrak/templates/alert_settings.html:999
 msgid "Are you sure you want to remove?"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:1000
+#: entrak/templates/alert_settings.html:1001
 msgid "Canel"
+msgstr ""
+
+#: entrak/templates/bottom_energy_summary.html:5
+msgid "Summary"
 msgstr ""
 
 #: entrak/templates/bottom_energy_summary.html:9
