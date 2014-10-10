@@ -303,7 +303,7 @@ html, body {
 /* -- Where the illustrations is --*/
 .image-carousel{
 	position: absolute;
-	right: 50px;
+	right: 30px;
 }
 
 /*-- Sub heading --*/
@@ -331,6 +331,19 @@ html, body {
 	position: absolute;
 	right: 30px;
 	bottom: 10px;
+	font-size: 8pt;
+	color: #FFF;
+}
+.change-lang-block a {
+	color: #FFF;
+	text-decoration: none;
+}
+.change-lang-block a:hover {
+	text-decoration: underline;
+}
+.current-lang{
+	text-decoration: underline;
+	color: #FFF;
 }
 
 /*-- Main heading Ends --*/
