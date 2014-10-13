@@ -20,41 +20,41 @@
 
 <script type="text/javascript">
 $(function() {
-	setupAjaxForCsrf($.cookie('csrftoken'));
+    setupAjaxForCsrf($.cookie('csrftoken'));
 
-	var shortcutPopup;
-	$('#add-shortcut-btn').click(function() {
-		shortcutPopup = $('.shortcut-form-container').bPopup();
-	});
+    var shortcutPopup;
+    $('#add-shortcut-btn').click(function() {
+        shortcutPopup = $('.shortcut-form-container').bPopup();
+    });
 
-	$(".shortcut-form .dt-input").datepicker({defaultDate: "-1y"});
-	$(".shortcut-form .dt-input:eq(0)").datepicker('option', 'onSelect', function() {
-		var firstRowDt = moment($(this).datepicker('getDate'));
-		for (var i=1; i<13; i++) {
-			var defaultDt = moment(firstRowDt).add('M', i);
-			$(".shortcut-form .dt-input:eq("+i+")").datepicker('option', 'defaultDate', defaultDt.toDate());
-		}
-	});
+    $(".shortcut-form .dt-input").datepicker({defaultDate: "-1y"});
+    $(".shortcut-form .dt-input:eq(0)").datepicker('option', 'onSelect', function() {
+        var firstRowDt = moment($(this).datepicker('getDate'));
+        for (var i=1; i<13; i++) {
+            var defaultDt = moment(firstRowDt).add('M', i);
+            $(".shortcut-form .dt-input:eq("+i+")").datepicker('option', 'defaultDate', defaultDt.toDate());
+        }
+    });
 
-	$('.shortcut-form-save-btn').click(function() {
-		var postData = {};
-		postData['system_id'] = $('.shortcut-form select').val();
-		$('.shortcut-form input[type="text"], .shortcut-form input[type="number"]').each(function() {
-			postData[$(this).attr('name')] = $(this).val();
-		});
+    $('.shortcut-form-save-btn').click(function() {
+        var postData = {};
+        postData['system_id'] = $('.shortcut-form select').val();
+        $('.shortcut-form input[type="text"], .shortcut-form input[type="number"]').each(function() {
+            postData[$(this).attr('name')] = $(this).val();
+        });
 
-		$.ajax({
-			type: "POST",
-			url: "{% url 'add_multi_baseline' %}",
-			data: postData,
-		}).done(function(data) {
-			if (data.success) {
-				shortcutPopup.close();
-			}
-		}).fail(function(jqXHR, textStatus) {
-			console.log(jqXHR.responseText);
-		});
-	});
+        $.ajax({
+            type: "POST",
+            url: "{% url 'add_multi_baseline' %}",
+            data: postData,
+        }).done(function(data) {
+            if (data.success) {
+                shortcutPopup.close();
+            }
+        }).fail(function(jqXHR, textStatus) {
+            console.log(jqXHR.responseText);
+        });
+    });
 });
 </script>
 
@@ -62,7 +62,7 @@ $(function() {
 
 {% block object-tools-items %}
 <li>
-	<a id="add-shortcut-btn" href="#">Add Shortcut</a>
+    <a id="add-shortcut-btn" href="#">Add Shortcut</a>
 </li>
 {{ block.super }}
 {% endblock %}
@@ -71,34 +71,34 @@ $(function() {
 {{ block.super }}
 
 <div class="shortcut-form-container">
-	<form class="shortcut-form">
-		<div>
-			<span>System: </span>
-			<select>
-				<option value="" >None</option>
-			{% for system in all_systems %}
-				<option value="{{system.id}}" >{{system.full_name}}</option>
-			{% endfor %}
-			</select>
-		</div>
-		<div><input class="dt-input" type="text" name="start_dt_1"><input type="number" name="usage_1"></div>
-		<div><input class="dt-input" type="text" name="start_dt_2"><input type="number" name="usage_2"></div>
-		<div><input class="dt-input" type="text" name="start_dt_3"><input type="number" name="usage_3"></div>
-		<div><input class="dt-input" type="text" name="start_dt_4"><input type="number" name="usage_4"></div>
-		<div><input class="dt-input" type="text" name="start_dt_5"><input type="number" name="usage_5"></div>
-		<div><input class="dt-input" type="text" name="start_dt_6"><input type="number" name="usage_6"></div>
-		<div><input class="dt-input" type="text" name="start_dt_7"><input type="number" name="usage_7"></div>
-		<div><input class="dt-input" type="text" name="start_dt_8"><input type="number" name="usage_8"></div>
-		<div><input class="dt-input" type="text" name="start_dt_9"><input type="number" name="usage_9"></div>
-		<div><input class="dt-input" type="text" name="start_dt_10"><input type="number" name="usage_10"></div>
-		<div><input class="dt-input" type="text" name="start_dt_11"><input type="number" name="usage_11"></div>
-		<div>
-			<span>Last start datetime: </span><input class="dt-input" type="text" name="start_dt_12">
-			<span>Last end datetime: </span><input class="dt-input" type="text" name="end_dt_12">
-			<span>usage: </span><input type="number" name="usage_12">
-		</div>
-	</form>
-	<button class="shortcut-form-save-btn">Save</button>
+    <form class="shortcut-form">
+        <div>
+            <span>System: </span>
+            <select>
+                <option value="" >None</option>
+            {% for system in all_systems %}
+                <option value="{{system.id}}" >{{system.full_name}}</option>
+            {% endfor %}
+            </select>
+        </div>
+        <div><input class="dt-input" type="text" name="start_dt_1"><input type="number" name="usage_1"></div>
+        <div><input class="dt-input" type="text" name="start_dt_2"><input type="number" name="usage_2"></div>
+        <div><input class="dt-input" type="text" name="start_dt_3"><input type="number" name="usage_3"></div>
+        <div><input class="dt-input" type="text" name="start_dt_4"><input type="number" name="usage_4"></div>
+        <div><input class="dt-input" type="text" name="start_dt_5"><input type="number" name="usage_5"></div>
+        <div><input class="dt-input" type="text" name="start_dt_6"><input type="number" name="usage_6"></div>
+        <div><input class="dt-input" type="text" name="start_dt_7"><input type="number" name="usage_7"></div>
+        <div><input class="dt-input" type="text" name="start_dt_8"><input type="number" name="usage_8"></div>
+        <div><input class="dt-input" type="text" name="start_dt_9"><input type="number" name="usage_9"></div>
+        <div><input class="dt-input" type="text" name="start_dt_10"><input type="number" name="usage_10"></div>
+        <div><input class="dt-input" type="text" name="start_dt_11"><input type="number" name="usage_11"></div>
+        <div>
+            <span>Last start datetime: </span><input class="dt-input" type="text" name="start_dt_12">
+            <span>Last end datetime: </span><input class="dt-input" type="text" name="end_dt_12">
+            <span>usage: </span><input type="number" name="usage_12">
+        </div>
+    </form>
+    <button class="shortcut-form-save-btn">Save</button>
 </div>
 
 {% endblock %}

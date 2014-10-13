@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-10 03:14+0000\n"
+"POT-Creation-Date: 2014-10-13 11:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,12 +66,12 @@ msgstr "想知道系統可以提醒你些什麼，請看看"
 #, python-format
 msgid ""
 "\n"
-"\t<div>Let me know if <select class=\"source-select\" size=\"4\" placeholder="
-"\"Please select\"></select>energy</div>\n"
-"\t<div>reaches <select class=\"compare-percent-select\"></select>%% of my "
-"previous peak demand of <input class=\"peak-threshold-input\" type=\"number"
-"\">kVA.</div>\n"
-"\t"
+"        <div>Let me know if <select class=\"source-select\" size=\"4\" "
+"placeholder=\"Please select\"></select>energy</div>\n"
+"        <div>reaches <select class=\"compare-percent-select\"></select>%% of "
+"my previous peak demand of <input class=\"peak-threshold-input\" type="
+"\"number\">kVA.</div>\n"
+"        "
 msgstr ""
 "\n"
 "\t<div>如果<select class=\"source-select\" size=\"4\" placeholder=\"請選擇"
@@ -106,7 +106,7 @@ msgstr "取消"
 
 #: entrak/templates/alert_settings.html:46
 #: entrak/templates/alert_settings.html:61
-#: entrak/templates/alert_settings.html:1002
+#: entrak/templates/alert_settings.html:996
 #: entrak/templates/general_settings.html:376
 msgid "Confirm"
 msgstr "確認"
@@ -115,13 +115,13 @@ msgstr "確認"
 #, python-format
 msgid ""
 "\n"
-"\t<div>Let me know if <select class=\"source-select\" size=\"4\" placeholder="
-"\"Please select\"></select>energy use</div>\n"
-"\t<div>is <select class=\"compare-percent-select\"></select>%% higher than "
-"my recent average between <select class=\"start-time-select time-select\"></"
-"select> to <select class=\"end-time-select time-select\"></select> on "
+"        <div>Let me know if <select class=\"source-select\" size=\"4\" "
+"placeholder=\"Please select\"></select>energy use</div>\n"
+"        <div>is <select class=\"compare-percent-select\"></select>%% higher "
+"than my recent average between <select class=\"start-time-select time-select"
+"\"></select> to <select class=\"end-time-select time-select\"></select> on "
 "<select class=\"weekday-select\"></select></div>\n"
-"\t"
+"        "
 msgstr ""
 "\n"
 "<div>在<select class=\"weekday-select\"></select>的<select class=\"start-"
@@ -251,7 +251,7 @@ msgstr ""
 "下班後的用電異常情況。 "
 
 #: entrak/templates/alert_settings.html:899
-#: entrak/templates/alert_settings.html:942
+#: entrak/templates/alert_settings.html:940
 msgid "Create Summary Alert"
 msgstr "建立特定時段用電量異常提示"
 
@@ -267,64 +267,64 @@ msgstr ""
 "出重要機器或區域的異常用電，讓您立刻採取行動解決問題。"
 
 #: entrak/templates/alert_settings.html:910
-#: entrak/templates/alert_settings.html:969
+#: entrak/templates/alert_settings.html:965
 msgid "Create Instance Alert"
 msgstr "建立用電量異常即時提示"
 
-#: entrak/templates/alert_settings.html:925
-#: entrak/templates/alert_settings.html:950
-#: entrak/templates/alert_settings.html:977
+#: entrak/templates/alert_settings.html:923
+#: entrak/templates/alert_settings.html:946
+#: entrak/templates/alert_settings.html:971
 msgid "End-Use"
 msgstr "使用端"
 
-#: entrak/templates/alert_settings.html:927
+#: entrak/templates/alert_settings.html:925
 msgid "Threshold"
 msgstr "峰值"
 
-#: entrak/templates/alert_settings.html:928
-#: entrak/templates/alert_settings.html:955
-#: entrak/templates/alert_settings.html:982
+#: entrak/templates/alert_settings.html:926
+#: entrak/templates/alert_settings.html:951
+#: entrak/templates/alert_settings.html:976
 msgid "Send to"
 msgstr "寄給"
 
-#: entrak/templates/alert_settings.html:929
-#: entrak/templates/alert_settings.html:956
-#: entrak/templates/alert_settings.html:983
+#: entrak/templates/alert_settings.html:927
+#: entrak/templates/alert_settings.html:952
+#: entrak/templates/alert_settings.html:977
 msgid "Date Created"
 msgstr "建立日期"
 
-#: entrak/templates/alert_settings.html:930
-#: entrak/templates/alert_settings.html:957
-#: entrak/templates/alert_settings.html:984
+#: entrak/templates/alert_settings.html:928
+#: entrak/templates/alert_settings.html:953
+#: entrak/templates/alert_settings.html:978
 msgid "Action"
 msgstr "行動"
 
-#: entrak/templates/alert_settings.html:935
-#: entrak/templates/alert_settings.html:962
-#: entrak/templates/alert_settings.html:989
+#: entrak/templates/alert_settings.html:933
+#: entrak/templates/alert_settings.html:958
+#: entrak/templates/alert_settings.html:983
 msgid "Back to Top"
 msgstr "返回頂部"
 
-#: entrak/templates/alert_settings.html:952
-#: entrak/templates/alert_settings.html:979
+#: entrak/templates/alert_settings.html:948
+#: entrak/templates/alert_settings.html:973
 msgid "Time from"
 msgstr "從"
 
-#: entrak/templates/alert_settings.html:953
-#: entrak/templates/alert_settings.html:980
+#: entrak/templates/alert_settings.html:949
+#: entrak/templates/alert_settings.html:974
 msgid "Time to"
 msgstr "到"
 
-#: entrak/templates/alert_settings.html:954
-#: entrak/templates/alert_settings.html:981
+#: entrak/templates/alert_settings.html:950
+#: entrak/templates/alert_settings.html:975
 msgid "alert_weekdays"
 msgstr "哪一天"
 
-#: entrak/templates/alert_settings.html:999
+#: entrak/templates/alert_settings.html:993
 msgid "Are you sure you want to remove?"
 msgstr "你確認要刪除此項目嗎？"
 
-#: entrak/templates/alert_settings.html:1001
+#: entrak/templates/alert_settings.html:995
 msgid "Canel"
 msgstr "取消"
 
@@ -757,12 +757,12 @@ msgid "Admin Account"
 msgstr "管理員賬戶"
 
 #: entrak/templates/general_settings.html:311
-#: entrak/templates/general_settings.html:330 entrak/templates/login.html:71
+#: entrak/templates/general_settings.html:330 entrak/templates/login.html:64
 msgid "Username"
 msgstr "用戶名稱"
 
 #: entrak/templates/general_settings.html:313
-#: entrak/templates/general_settings.html:332 entrak/templates/login.html:75
+#: entrak/templates/general_settings.html:332 entrak/templates/login.html:68
 msgid "Password"
 msgstr "密碼"
 
@@ -954,31 +954,19 @@ msgid "to:"
 msgstr "至："
 
 #: entrak/templates/login.html:56
-msgid "Welcome to En-trak,<br>your interactive energy monitoring system!"
-msgstr "En-trak - 你的互動能源監察系統<br>歡迎你!"
+msgid "Welcome to En-trak<sup>TM</sup>"
+msgstr "En-trak<sup>TM</sup> 歡迎您"
 
-#: entrak/templates/login.html:58
-msgid ""
-"\n"
-"\tThis system tracks your energy usage in real-time, helping you to "
-"better<br>\n"
-"\tcontrol and reduce your costs and environmental impact, as well as to<br>\n"
-"\tincrease awareness of energy saving in your organization.<br><br>\n"
-"\tEn-trak - Powering Up Energy Efficiency, Turning Data into Actionable "
-"Intelligence\n"
-"\t"
-msgstr ""
-"\n"
-"En-trak™能源監察系統，可以實時追蹤您的能源使用情況，<br>助您輕鬆控制並降低成"
-"本，減低碳排放，以及提升大家的節能意識！<br><br>En-trak 提升能源效益，將數據"
-"轉化為慳電行為。"
+#: entrak/templates/login.html:57
+msgid "Turning Data into Actionable Intelligence"
+msgstr "化數據為實際行動"
 
-#: entrak/templates/login.html:66
+#: entrak/templates/login.html:59
 msgid "To use the En-trak monitor platform, please sign in"
 msgstr "要使用 En-trak 能源管理系統，請先登入"
 
-#: entrak/templates/login.html:77
-msgid "login"
+#: entrak/templates/login.html:70
+msgid "Sign In"
 msgstr "登入"
 
 #: entrak/templates/page_base.html:116
@@ -1224,7 +1212,7 @@ msgstr "想知道你在電力消耗方面的詳細分析，請看看"
 msgid "YYYY MMMM"
 msgstr "YYYY年MMM"
 
-#: entrak/templates/report.html:567
+#: entrak/templates/report.html:568
 #: entrak/templates/report_main_content.html:110
 #: entrak/templates/report_main_content.html:200
 #: entrak/templates/report_main_content.html:340
@@ -1233,118 +1221,118 @@ msgstr "YYYY年MMM"
 msgid "SHOW DETAILS"
 msgstr "顯示詳情"
 
-#: entrak/templates/report.html:569
+#: entrak/templates/report.html:570
 msgid "HIDE DETAILS"
 msgstr "隱藏詳情"
 
-#: entrak/templates/report.html:667
+#: entrak/templates/report.html:668
 msgid "Monthly Report"
 msgstr "每月報告"
 
-#: entrak/templates/report.html:668
+#: entrak/templates/report.html:669
 msgid "Customize Report"
 msgstr "自訂報告"
 
-#: entrak/templates/report.html:668
+#: entrak/templates/report.html:669
 msgid "Download Data"
 msgstr "數據下載"
 
-#: entrak/templates/report.html:675
+#: entrak/templates/report.html:676
 msgid "Monthly Reports"
 msgstr "每月報告"
 
-#: entrak/templates/report.html:676
+#: entrak/templates/report.html:677
 msgid "Energy Consumption (kWh)"
 msgstr "電力消耗量 (kWh)"
 
-#: entrak/templates/report.html:677
+#: entrak/templates/report.html:678
 msgid "CO<sub>2</sub> Emissions (kg)"
 msgstr "二氧化碳排放 (kg)"
 
-#: entrak/templates/report.html:678
+#: entrak/templates/report.html:679
 msgid "Energy Cost ($)"
 msgstr "電費 ($)"
 
-#: entrak/templates/report.html:679
+#: entrak/templates/report.html:680
 msgid "Download"
 msgstr "下載"
 
-#: entrak/templates/report.html:700
+#: entrak/templates/report.html:701
 msgid "Select your time range"
 msgstr "選擇你要的報告週期"
 
-#: entrak/templates/report.html:711 entrak/templates/report.html.py:757
+#: entrak/templates/report.html:712 entrak/templates/report.html.py:758
 msgid "Select your time period"
 msgstr "選擇你要的時段"
 
-#: entrak/templates/report.html:741 entrak/templates/report.html.py:774
+#: entrak/templates/report.html:742 entrak/templates/report.html.py:775
 msgid "Create your report"
 msgstr "建立報告"
 
-#: entrak/templates/report.html:745 entrak/templates/report.html.py:778
-#: entrak/templates/report.html:819
+#: entrak/templates/report.html:746 entrak/templates/report.html.py:779
+#: entrak/templates/report.html:820
 msgid "Energy data - kWh"
 msgstr "電力使用數據 - kWh"
 
-#: entrak/templates/report.html:747 entrak/templates/report.html.py:780
-#: entrak/templates/report.html:821
+#: entrak/templates/report.html:748 entrak/templates/report.html.py:781
+#: entrak/templates/report.html:822
 msgid "From:"
 msgstr "由:"
 
-#: entrak/templates/report.html:748 entrak/templates/report.html.py:781
-#: entrak/templates/report.html:822
+#: entrak/templates/report.html:749 entrak/templates/report.html.py:782
+#: entrak/templates/report.html:823
 msgid "To:"
 msgstr "到:"
 
-#: entrak/templates/report.html:751 entrak/templates/report.html.py:784
+#: entrak/templates/report.html:752 entrak/templates/report.html.py:785
 msgid "Create Report"
 msgstr "建立報告"
 
-#: entrak/templates/report.html:760
+#: entrak/templates/report.html:761
 msgid "Select the start and end date of your monthly electricity bill."
 msgstr "輸入你電費賬單上用來計算該次電費的開始和終結日期。"
 
-#: entrak/templates/report.html:761
+#: entrak/templates/report.html:762
 msgid ""
 "If you wish to view a standard calendar month, click on the Monthly Report "
 "tab at the top of the page"
 msgstr "如果你想檢視一個自然月度的報告，請按本頁左上方的“每月報告”。"
 
-#: entrak/templates/report.html:765 entrak/templates/report.html.py:798
+#: entrak/templates/report.html:766 entrak/templates/report.html.py:799
 msgid "Choose your start date"
 msgstr "選擇報告開始日期"
 
-#: entrak/templates/report.html:769 entrak/templates/report.html.py:802
+#: entrak/templates/report.html:770 entrak/templates/report.html.py:803
 msgid "Choose your end date"
 msgstr "選擇報告終結日期"
 
-#: entrak/templates/report.html:792
+#: entrak/templates/report.html:793
 msgid "Here you can download your energy use data to files in .csv format."
 msgstr "你可以在此下載你的能源使用數據，系統會自動以 .csv 檔案形式儲存。"
 
-#: entrak/templates/report.html:793
+#: entrak/templates/report.html:794
 msgid ""
 "Simply select the start date, end date and the units that you would like to "
 "obtain from the system."
 msgstr "請於下面選擇開始日期、終結日期和你想要的數據單位。"
 
-#: entrak/templates/report.html:794
+#: entrak/templates/report.html:795
 msgid "Choose your date"
 msgstr "選擇你要的日期"
 
-#: entrak/templates/report.html:808
+#: entrak/templates/report.html:809
 msgid "Select your units"
 msgstr "選擇你要的單位"
 
-#: entrak/templates/report.html:815
+#: entrak/templates/report.html:816
 msgid "Download your file"
 msgstr "下載檔案"
 
-#: entrak/templates/report.html:825
+#: entrak/templates/report.html:826
 msgid "Download File"
 msgstr "下載檔案"
 
-#: entrak/templates/report.html:838 entrak/templates/report.html.py:844
+#: entrak/templates/report.html:839 entrak/templates/report.html.py:845
 msgid "Save Report"
 msgstr "下載報告"
 
@@ -1375,8 +1363,8 @@ msgstr "電力"
 #: entrak/templates/report_main_content.html:25
 msgid ""
 "<span class=\"basic-info-col-unit\"> CO<sub>2</sub></span>\n"
-"\t\t\t\t\t<br>\n"
-"\t\t\t\t\t<span class=\"basic-info-col-subtext\">emitted</span>"
+"                    <br>\n"
+"                    <span class=\"basic-info-col-subtext\">emitted</span>"
 msgstr ""
 "<span class=\"basic-info-col-unit\">二氧化碳</span><br><span class=\"basic-"
 "info-col-subtext\">排放</span>"
@@ -1428,17 +1416,17 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"\t\t<div class=\"compare-past-desc\">Your energy consumption this<br><span "
-"class=\"report-type-name-lower\"></span> was \n"
-"\t\t\t<span>\n"
-"\t\t\t\t<span class=\"compare-past-percent\"></span>\n"
-"\t\t\t\t<span class=\"percent-symbol\">%%</span>\n"
-"\t\t\t\t<span class=\"compare-past-percent-suffix\"></span>\n"
-"\t\t\t</span> \n"
-"\t\t\tthan<br> it was last <span class=\"report-type-name-lower\"></span>. "
-"<span class=\"footnote-sybmol\">*</span>\n"
-"\t\t</div>\n"
-"\t\t"
+"        <div class=\"compare-past-desc\">Your energy consumption "
+"this<br><span class=\"report-type-name-lower\"></span> was \n"
+"            <span>\n"
+"                <span class=\"compare-past-percent\"></span>\n"
+"                <span class=\"percent-symbol\">%%</span>\n"
+"                <span class=\"compare-past-percent-suffix\"></span>\n"
+"            </span> \n"
+"            than<br> it was last <span class=\"report-type-name-lower\"></"
+"span>. <span class=\"footnote-sybmol\">*</span>\n"
+"        </div>\n"
+"        "
 msgstr ""
 "\n"
 "<div class=\"compare-past-desc\">你本<span class=\"report-type-name-lower"

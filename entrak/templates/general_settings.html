@@ -22,17 +22,17 @@
 
 <script id="accrount-row-template" type="x-tmpl-mustache">
 <div class="account-row">
-	<div class="ar-label-col"><input type="text" name="label" placeholder='{% trans "Label" %}'>
-	</div><div class="ar-user-col"><input type="text" name="username" placeholder='{% trans "Unique Username" %}'><div></div>
-	</div><div class="ar-email-col"><input type="email" name="email" placeholder='{% trans "Recovering Email" %}'>
-	</div><div class="ar-pwd-col"><div class="change-pwd-btn">{% trans "Change Password" %}</div><div class="set-pwd-btn">{% trans "Set Password" %}</div>
-	</div><div class="ar-action-col">
-		<div class="ar-cancel-btn">{% trans "Cancel" %}</div>
-		<div class="ar-delete-btn">{% trans "Delete" %}</div>
-		<div class="ar-apply-btn">{% trans "Apply" %}</div>
-	</div>
-	<input type="hidden" name="old_pwd">
-	<input type="hidden" name="new_pwd">
+    <div class="ar-label-col"><input type="text" name="label" placeholder='{% trans "Label" %}'>
+    </div><div class="ar-user-col"><input type="text" name="username" placeholder='{% trans "Unique Username" %}'><div></div>
+    </div><div class="ar-email-col"><input type="email" name="email" placeholder='{% trans "Recovering Email" %}'>
+    </div><div class="ar-pwd-col"><div class="change-pwd-btn">{% trans "Change Password" %}</div><div class="set-pwd-btn">{% trans "Set Password" %}</div>
+    </div><div class="ar-action-col">
+        <div class="ar-cancel-btn">{% trans "Cancel" %}</div>
+        <div class="ar-delete-btn">{% trans "Delete" %}</div>
+        <div class="ar-apply-btn">{% trans "Apply" %}</div>
+    </div>
+    <input type="hidden" name="old_pwd">
+    <input type="hidden" name="new_pwd">
 </div>
 </script>
 
@@ -46,253 +46,253 @@ USER_TYPE_ADMIN = 'admin'
 settings = {};
 
 function setupAccountRowCancelBtn(targetEle) {
-	targetEle.click(function() {
-		var accountRow = $(this).parent().parent();
-		var user = accountRow.data('user');
+    targetEle.click(function() {
+        var accountRow = $(this).parent().parent();
+        var user = accountRow.data('user');
 
-		accountRow.find('.ar-label-col input').val(user.label);
-		accountRow.find('.ar-email-col input').val(user.email);
-		accountRow.find('.ar-user-col input').val(user.userName);
-		accountRow.find('.ar-user-col div').text(user.userName);
-		accountRow.find('input[type="hidden"]').val('');
+        accountRow.find('.ar-label-col input').val(user.label);
+        accountRow.find('.ar-email-col input').val(user.email);
+        accountRow.find('.ar-user-col input').val(user.userName);
+        accountRow.find('.ar-user-col div').text(user.userName);
+        accountRow.find('input[type="hidden"]').val('');
 
-		if (user.roleLevel === USER_ROLE_VIEWER_LEVEL) {
-			changeToDeleteStatus(accountRow);
-		}
-	});
+        if (user.roleLevel === USER_ROLE_VIEWER_LEVEL) {
+            changeToDeleteStatus(accountRow);
+        }
+    });
 }
 
 function popupWarning(text) {
-	$('.warning-dialog .warning-text').text(text);
-	var warningDialog = $('.warning-dialog').bPopup();
-	$('.warning-dialog .warning-btn').off('click').click(function() {
-		warningDialog.close();
-	});
+    $('.warning-dialog .warning-text').text(text);
+    var warningDialog = $('.warning-dialog').bPopup();
+    $('.warning-dialog .warning-btn').off('click').click(function() {
+        warningDialog.close();
+    });
 }
 
 function setupChangePwdBtn(targetEle) {
-	targetEle.click(function() {
-		var accountRow = $(this).parent().parent();
-		$('.change-pwd-dialog input').val('');
-		var pwdDialog = $('.change-pwd-dialog').bPopup();
-		$('.change-pwd-dialog .pwd-cancel-btn').off('click').click(function() {
-			pwdDialog.close();
-		});
-		$('.change-pwd-dialog .pwd-apply-btn').off('click').click({'accountRow': accountRow}, function(event) {
-			var dialogContainer = $(this).parent();
-			var oldPwd = dialogContainer.find('.old-pwd-input').val();
-			var newPwd = dialogContainer.find('.new-pwd-input').val();
-			var confirmPwd = dialogContainer.find('.confirm-pwd-input').val();
+    targetEle.click(function() {
+        var accountRow = $(this).parent().parent();
+        $('.change-pwd-dialog input').val('');
+        var pwdDialog = $('.change-pwd-dialog').bPopup();
+        $('.change-pwd-dialog .pwd-cancel-btn').off('click').click(function() {
+            pwdDialog.close();
+        });
+        $('.change-pwd-dialog .pwd-apply-btn').off('click').click({'accountRow': accountRow}, function(event) {
+            var dialogContainer = $(this).parent();
+            var oldPwd = dialogContainer.find('.old-pwd-input').val();
+            var newPwd = dialogContainer.find('.new-pwd-input').val();
+            var confirmPwd = dialogContainer.find('.confirm-pwd-input').val();
 
-			if (confirmPwd === "") {
-				popupWarning('{% trans "Password cannot be blank" %}');
-			} else if (confirmPwd !== newPwd) {
-				popupWarning('{% trans "Confirm Password does not match" %}');
-			} else {
-				event.data.accountRow.find('input[name="old_pwd"]').val(oldPwd);
-				event.data.accountRow.find('input[name="new_pwd"]').val(newPwd);
-				pwdDialog.close();
-			}
-		});
-	});
+            if (confirmPwd === "") {
+                popupWarning('{% trans "Password cannot be blank" %}');
+            } else if (confirmPwd !== newPwd) {
+                popupWarning('{% trans "Confirm Password does not match" %}');
+            } else {
+                event.data.accountRow.find('input[name="old_pwd"]').val(oldPwd);
+                event.data.accountRow.find('input[name="new_pwd"]').val(newPwd);
+                pwdDialog.close();
+            }
+        });
+    });
 }
 
 function setUserInfo(info) {
-	if (info.username === '' || info.email === '' || info.label === '') {
-		popupWarning('{% trans "All fields are required" %}');
-		return;
-	}
+    if (info.username === '' || info.email === '' || info.label === '') {
+        popupWarning('{% trans "All fields are required" %}');
+        return;
+    }
 
-	if (!('id' in info)) {
-		if (info.new_pwd === '') {
-			popupWarning('{% trans "Please set password first" %}');
-			return;
-		}
-	}
+    if (!('id' in info)) {
+        if (info.new_pwd === '') {
+            popupWarning('{% trans "Please set password first" %}');
+            return;
+        }
+    }
 
-	$.ajax({
-		type: "POST",
-		url: "{% url 'set_user_info' system_code=systems.0.code %}",
-		data: info,
-	}).done(function(data) {
-		if (data.success) {
-			if(data.created) {
-				var createdAccountRow = $('.account-row.new-create').remove();
+    $.ajax({
+        type: "POST",
+        url: "{% url 'set_user_info' system_code=systems.0.code %}",
+        data: info,
+    }).done(function(data) {
+        if (data.success) {
+            if(data.created) {
+                var createdAccountRow = $('.account-row.new-create').remove();
 
-				var user = data.user;
-				var accountRowTemplate = $('#accrount-row-template').html();
-				Mustache.parse(accountRowTemplate);
-				insertAccountRow(user, accountRowTemplate, $('.general-account-table'), USER_TYPE_STANDARD);
-			}
-		}
+                var user = data.user;
+                var accountRowTemplate = $('#accrount-row-template').html();
+                Mustache.parse(accountRowTemplate);
+                insertAccountRow(user, accountRowTemplate, $('.general-account-table'), USER_TYPE_STANDARD);
+            }
+        }
 
-		if ('warning' in data) {
-			popupWarning(data.warning);
-		}
-	}).fail(function(jqXHR, textStatus) {
-		console.log(jqXHR.responseText);
-	});
+        if ('warning' in data) {
+            popupWarning(data.warning);
+        }
+    }).fail(function(jqXHR, textStatus) {
+        console.log(jqXHR.responseText);
+    });
 }
 
 function deleteUser(userId) {
-	$.ajax({
-		type: "POST",
-		url: "{% url 'delete_user' system_code=systems.0.code %}",
-		data: {'id': userId},
-	}).done(function(data) {
-		if (data.success) {
-			$('.general-account-table .account-row').each(function() {
-				var user = $(this).data('user');
-				if (user !== undefined && user.id === userId) {
-					$(this).remove();
-					return;
-				}
-			});
-		}
-	}).fail(function(jqXHR, textStatus) {
-		console.log(jqXHR.responseText);
-	});
+    $.ajax({
+        type: "POST",
+        url: "{% url 'delete_user' system_code=systems.0.code %}",
+        data: {'id': userId},
+    }).done(function(data) {
+        if (data.success) {
+            $('.general-account-table .account-row').each(function() {
+                var user = $(this).data('user');
+                if (user !== undefined && user.id === userId) {
+                    $(this).remove();
+                    return;
+                }
+            });
+        }
+    }).fail(function(jqXHR, textStatus) {
+        console.log(jqXHR.responseText);
+    });
 }
 
 function setupApplyBtn(targetEle) {
-	targetEle.click(function() {
-		var accountRow = $(this).parent().parent();
-		var originalUser = accountRow.data('user');
-		info = {};
+    targetEle.click(function() {
+        var accountRow = $(this).parent().parent();
+        var originalUser = accountRow.data('user');
+        info = {};
 
-		info.email = accountRow.find('.ar-email-col input').val();
-		info.label = accountRow.find('.ar-label-col input').val();
+        info.email = accountRow.find('.ar-email-col input').val();
+        info.label = accountRow.find('.ar-label-col input').val();
 
-		var oldPwd = accountRow.find('input[name="old_pwd"]').val();
-		var newPwd = accountRow.find('input[name="new_pwd"]').val();
+        var oldPwd = accountRow.find('input[name="old_pwd"]').val();
+        var newPwd = accountRow.find('input[name="new_pwd"]').val();
 
-		if (originalUser !== undefined) {
-			info.id = originalUser.id;
+        if (originalUser !== undefined) {
+            info.id = originalUser.id;
 
-			if (originalUser.roleLevel === USER_ROLE_ADMIN_LEVEL) {
-				info.username = accountRow.find('.ar-user-col div').text();
-			} else {
-				info.username = accountRow.find('.ar-user-col input').val();
-			}
+            if (originalUser.roleLevel === USER_ROLE_ADMIN_LEVEL) {
+                info.username = accountRow.find('.ar-user-col div').text();
+            } else {
+                info.username = accountRow.find('.ar-user-col input').val();
+            }
 
-			if (oldPwd !== "" && newPwd !== "") {
-				info.old_pwd = oldPwd;
-				info.new_pwd = newPwd;
-			}
-		} else {
-			info.new_pwd = newPwd;
-			info.username = accountRow.find('.ar-user-col input').val();
-		}
+            if (oldPwd !== "" && newPwd !== "") {
+                info.old_pwd = oldPwd;
+                info.new_pwd = newPwd;
+            }
+        } else {
+            info.new_pwd = newPwd;
+            info.username = accountRow.find('.ar-user-col input').val();
+        }
 
-		setUserInfo(info);
-	});
+        setUserInfo(info);
+    });
 }
 
 function setupDeleteBtn(targetEle) {
-	targetEle.click(function() {
-		var accountRow = $(this).parent().parent();
-		var deleteDialog = $('.delete-dialog').bPopup();
-		$('.delete-dialog .delete-cancel-btn').off('click').click(function () {
-			deleteDialog.close();
-		});
-		$('.delete-dialog .delete-confirm-btn').off('click').click({'userId': accountRow.data('user').id}, function(event) {
-			deleteUser(event.data.userId);
-			deleteDialog.close();
-		});
-	});
+    targetEle.click(function() {
+        var accountRow = $(this).parent().parent();
+        var deleteDialog = $('.delete-dialog').bPopup();
+        $('.delete-dialog .delete-cancel-btn').off('click').click(function () {
+            deleteDialog.close();
+        });
+        $('.delete-dialog .delete-confirm-btn').off('click').click({'userId': accountRow.data('user').id}, function(event) {
+            deleteUser(event.data.userId);
+            deleteDialog.close();
+        });
+    });
 }
 
 function changeToCancelStatus(container) {
-	container.find('.ar-delete-btn').css('display', 'none');
-	container.find('.ar-cancel-btn').css('display', 'inline-block');
+    container.find('.ar-delete-btn').css('display', 'none');
+    container.find('.ar-cancel-btn').css('display', 'inline-block');
 }
 
 function changeToDeleteStatus(container) {
-	container.find('.ar-cancel-btn').css('display', 'none');
-	container.find('.ar-delete-btn').css('display', 'inline-block');
+    container.find('.ar-cancel-btn').css('display', 'none');
+    container.find('.ar-delete-btn').css('display', 'inline-block');
 }
 
 function insertAccountRow(user, accountTemplate, targetEle, userType) {
-	var eleHtml = $(Mustache.render(accountTemplate, {}));
-	eleHtml.find('.ar-label-col input').val(user.label);
-	eleHtml.find('.ar-email-col input').val(user.email);
-	if (userType === USER_TYPE_ADMIN) {
-		eleHtml.find('.ar-user-col div').text(user.userName);
-		eleHtml.find('.ar-user-col input').hide();
-		changeToCancelStatus(eleHtml);
-	} else if (userType === USER_TYPE_STANDARD) {
-		eleHtml.find('.ar-user-col input').val(user.userName);
-		eleHtml.find('.ar-user-col div').hide()
-		changeToDeleteStatus(eleHtml);
+    var eleHtml = $(Mustache.render(accountTemplate, {}));
+    eleHtml.find('.ar-label-col input').val(user.label);
+    eleHtml.find('.ar-email-col input').val(user.email);
+    if (userType === USER_TYPE_ADMIN) {
+        eleHtml.find('.ar-user-col div').text(user.userName);
+        eleHtml.find('.ar-user-col input').hide();
+        changeToCancelStatus(eleHtml);
+    } else if (userType === USER_TYPE_STANDARD) {
+        eleHtml.find('.ar-user-col input').val(user.userName);
+        eleHtml.find('.ar-user-col div').hide()
+        changeToDeleteStatus(eleHtml);
 
-		eleHtml.find('input').on('change', function() {
-			var theAccountRow = $(this).parent().parent();
-			changeToCancelStatus(theAccountRow);
-		});
-	}
-	eleHtml.find('.set-pwd-btn').hide();
-	eleHtml.find('.change-pwd-btn').show();
+        eleHtml.find('input').on('change', function() {
+            var theAccountRow = $(this).parent().parent();
+            changeToCancelStatus(theAccountRow);
+        });
+    }
+    eleHtml.find('.set-pwd-btn').hide();
+    eleHtml.find('.change-pwd-btn').show();
 
-	setupApplyBtn(eleHtml.find('.ar-apply-btn'));
-	setupAccountRowCancelBtn(eleHtml.find('.ar-cancel-btn'));
-	setupChangePwdBtn(eleHtml.find('.change-pwd-btn'));
-	setupDeleteBtn(eleHtml.find('.ar-delete-btn'));
+    setupApplyBtn(eleHtml.find('.ar-apply-btn'));
+    setupAccountRowCancelBtn(eleHtml.find('.ar-cancel-btn'));
+    setupChangePwdBtn(eleHtml.find('.change-pwd-btn'));
+    setupDeleteBtn(eleHtml.find('.ar-delete-btn'));
 
-	eleHtml.data('user', user);
-	targetEle.append(eleHtml);
+    eleHtml.data('user', user);
+    targetEle.append(eleHtml);
 }
 
 $(function() {
-	setupAjaxForCsrf($.cookie('csrftoken'));
+    setupAjaxForCsrf($.cookie('csrftoken'));
 
-	settings.adminUsers = JSON.parse('{{admin_user_info|jsonifyPrimitiveObj}}');
-	settings.generalUsers = JSON.parse('{{general_user_info|jsonifyPrimitiveObj}}');
+    settings.adminUsers = JSON.parse('{{admin_user_info|jsonifyPrimitiveObj}}');
+    settings.generalUsers = JSON.parse('{{general_user_info|jsonifyPrimitiveObj}}');
 
-	var accountRowTemplate = $('#accrount-row-template').html();
-	Mustache.parse(accountRowTemplate);
-	$.each(settings.adminUsers, function(userIdx, userItem) {
-		insertAccountRow(userItem, accountRowTemplate, $('.admin-account-table'), USER_TYPE_ADMIN);
-	});
-	$.each(settings.generalUsers, function(userIdx, userItem) {
-		insertAccountRow(userItem, accountRowTemplate, $('.general-account-table'), USER_TYPE_STANDARD);
-	});
+    var accountRowTemplate = $('#accrount-row-template').html();
+    Mustache.parse(accountRowTemplate);
+    $.each(settings.adminUsers, function(userIdx, userItem) {
+        insertAccountRow(userItem, accountRowTemplate, $('.admin-account-table'), USER_TYPE_ADMIN);
+    });
+    $.each(settings.generalUsers, function(userIdx, userItem) {
+        insertAccountRow(userItem, accountRowTemplate, $('.general-account-table'), USER_TYPE_STANDARD);
+    });
 
-	$('.add-account-btn').click(function() {
-		if ($('.new-create').length === 0) {
-			var eleHtml = $(Mustache.render(accountRowTemplate, {}));
-			eleHtml.addClass('new-create');
-			eleHtml.find('.change-pwd-btn').hide();
-			eleHtml.find('.set-pwd-btn').show();
-			setupApplyBtn(eleHtml.find('.ar-apply-btn'));
-			eleHtml.find('.ar-cancel-btn').click(function() {
-				$('.new-create').remove();
-			});
-			changeToCancelStatus(eleHtml);
-			eleHtml.find('.set-pwd-btn').click(function() {
-				var accountRow = $(this).parent().parent();
-				var pwdDialog = $('.set-pwd-dialog').bPopup();
-				$('.change-pwd-dialog input').val('');
-				$('.set-pwd-dialog .pwd-cancel-btn').off('click').click(function() {
-					pwdDialog.close();
-				});
-				$('.set-pwd-dialog .pwd-apply-btn').off('click').click({'accountRow': accountRow}, function(event) {
-					var dialogContainer = $(this).parent();
-					var newPwd = dialogContainer.find('.new-pwd-input').val();
-					var confirmPwd = dialogContainer.find('.confirm-pwd-input').val();
+    $('.add-account-btn').click(function() {
+        if ($('.new-create').length === 0) {
+            var eleHtml = $(Mustache.render(accountRowTemplate, {}));
+            eleHtml.addClass('new-create');
+            eleHtml.find('.change-pwd-btn').hide();
+            eleHtml.find('.set-pwd-btn').show();
+            setupApplyBtn(eleHtml.find('.ar-apply-btn'));
+            eleHtml.find('.ar-cancel-btn').click(function() {
+                $('.new-create').remove();
+            });
+            changeToCancelStatus(eleHtml);
+            eleHtml.find('.set-pwd-btn').click(function() {
+                var accountRow = $(this).parent().parent();
+                var pwdDialog = $('.set-pwd-dialog').bPopup();
+                $('.change-pwd-dialog input').val('');
+                $('.set-pwd-dialog .pwd-cancel-btn').off('click').click(function() {
+                    pwdDialog.close();
+                });
+                $('.set-pwd-dialog .pwd-apply-btn').off('click').click({'accountRow': accountRow}, function(event) {
+                    var dialogContainer = $(this).parent();
+                    var newPwd = dialogContainer.find('.new-pwd-input').val();
+                    var confirmPwd = dialogContainer.find('.confirm-pwd-input').val();
 
-					if (confirmPwd === "") {
-						popupWarning('{% trans "Password cannot be blank" %}');
-					} else if (confirmPwd !== newPwd) {
-						popupWarning('{% trans "Confirm Password does not match" %}');
-					} else {
-						event.data.accountRow.find('input[name="new_pwd"]').val(newPwd);
-						pwdDialog.close();
-					}
-				});
-			});
-			$('.general-account-table').append(eleHtml);
-		}
-	});
+                    if (confirmPwd === "") {
+                        popupWarning('{% trans "Password cannot be blank" %}');
+                    } else if (confirmPwd !== newPwd) {
+                        popupWarning('{% trans "Confirm Password does not match" %}');
+                    } else {
+                        event.data.accountRow.find('input[name="new_pwd"]').val(newPwd);
+                        pwdDialog.close();
+                    }
+                });
+            });
+            $('.general-account-table').append(eleHtml);
+        }
+    });
 });
 
 </script>
@@ -302,80 +302,80 @@ $(function() {
 {% block page_content %}
 
 <div class="account-section settings-section">
-	<div class="section-header">{% trans "Manage Accounts" %}</div>
-	<div class="section-desc">{% trans "Use the form below to manage or create new user accounts" %}</div>
-	<div class="admin-account-title">{% trans "Admin Account" %}</div>
-	<div class="account-table admin-account-table">
-		<div class="account-th">
-			<div class="account-th-label">{% trans "Label" %}
-			</div><div class="account-th-name">{% trans "Username" %}
-			</div><div class="account-th-email">{% trans "Recovering Email" %}
-			</div><div class="account-th-pwd">{% trans "Password" %}
-			</div><div class="account-th-actions">{% trans "Actions" %}</div>
-		</div>
-	</div>
+    <div class="section-header">{% trans "Manage Accounts" %}</div>
+    <div class="section-desc">{% trans "Use the form below to manage or create new user accounts" %}</div>
+    <div class="admin-account-title">{% trans "Admin Account" %}</div>
+    <div class="account-table admin-account-table">
+        <div class="account-th">
+            <div class="account-th-label">{% trans "Label" %}
+            </div><div class="account-th-name">{% trans "Username" %}
+            </div><div class="account-th-email">{% trans "Recovering Email" %}
+            </div><div class="account-th-pwd">{% trans "Password" %}
+            </div><div class="account-th-actions">{% trans "Actions" %}</div>
+        </div>
+    </div>
 
-	<hr>
-	<div class="general-account-header">
-		<div class="admin-account-title">{% trans "User Account" %}</div>
-		<div class="add-account-btn-block">
-			<div class="add-account-btn">{% trans "Add New Account" %}</div>
-			<div class="add-account-note">{% trans "All fields are required" %}</div>
-		</div>
-	</div>
-	
-	<div class="account-table general-account-table">
-		<div class="account-th">
-			<div class="account-th-label">{% trans "Label" %}
-			</div><div class="account-th-name">{% trans "Username" %}
-			</div><div class="account-th-email">{% trans "Recovering Email" %}
-			</div><div class="account-th-pwd">{% trans "Password" %}
-			</div><div class="account-th-actions">{% trans "Actions" %}</div>
-		</div>
-	</div>
+    <hr>
+    <div class="general-account-header">
+        <div class="admin-account-title">{% trans "User Account" %}</div>
+        <div class="add-account-btn-block">
+            <div class="add-account-btn">{% trans "Add New Account" %}</div>
+            <div class="add-account-note">{% trans "All fields are required" %}</div>
+        </div>
+    </div>
+    
+    <div class="account-table general-account-table">
+        <div class="account-th">
+            <div class="account-th-label">{% trans "Label" %}
+            </div><div class="account-th-name">{% trans "Username" %}
+            </div><div class="account-th-email">{% trans "Recovering Email" %}
+            </div><div class="account-th-pwd">{% trans "Password" %}
+            </div><div class="account-th-actions">{% trans "Actions" %}</div>
+        </div>
+    </div>
 
-	<div class="change-pwd-dialog pwd-dialog">
-		<div class="pwd-block">
-			<div class="pwd-desc">{% trans "Old Password" %}</div>
-			<input type="password" class="old-pwd-input">
-		</div>
-		<div class="pwd-block">
-			<div class="pwd-desc">{% trans "New Password" %}</div>
-			<input type="password" class="new-pwd-input">
-		</div>
-		<div class="pwd-block">
-			<div class="pwd-desc">{% trans "Confirm Password" %}</div>
-			<input type="password" class="confirm-pwd-input">
-		</div>
-		<div class="pwd-apply-btn">{% trans "Apply" %}</div>
-		<div class="pwd-cancel-btn">{% trans "Cancel" %}</div>
-	</div>
+    <div class="change-pwd-dialog pwd-dialog">
+        <div class="pwd-block">
+            <div class="pwd-desc">{% trans "Old Password" %}</div>
+            <input type="password" class="old-pwd-input">
+        </div>
+        <div class="pwd-block">
+            <div class="pwd-desc">{% trans "New Password" %}</div>
+            <input type="password" class="new-pwd-input">
+        </div>
+        <div class="pwd-block">
+            <div class="pwd-desc">{% trans "Confirm Password" %}</div>
+            <input type="password" class="confirm-pwd-input">
+        </div>
+        <div class="pwd-apply-btn">{% trans "Apply" %}</div>
+        <div class="pwd-cancel-btn">{% trans "Cancel" %}</div>
+    </div>
 
-	<div class="set-pwd-dialog pwd-dialog">
-		<div class="pwd-block">
-			<div class="pwd-desc">{% trans "New Password" %}</div>
-			<input type="password" class="new-pwd-input">
-		</div>
-		<div class="pwd-block">
-			<div class="pwd-desc">{% trans "Confirm Password" %}</div>
-			<input type="password" class="confirm-pwd-input">
-		</div>
-		<div class="pwd-apply-btn">{% trans "Apply" %}</div>
-		<div class="pwd-cancel-btn">{% trans "Cancel" %}</div>
-	</div>
+    <div class="set-pwd-dialog pwd-dialog">
+        <div class="pwd-block">
+            <div class="pwd-desc">{% trans "New Password" %}</div>
+            <input type="password" class="new-pwd-input">
+        </div>
+        <div class="pwd-block">
+            <div class="pwd-desc">{% trans "Confirm Password" %}</div>
+            <input type="password" class="confirm-pwd-input">
+        </div>
+        <div class="pwd-apply-btn">{% trans "Apply" %}</div>
+        <div class="pwd-cancel-btn">{% trans "Cancel" %}</div>
+    </div>
 
-	<div class="warning-dialog">
-		<div class='warning-text'></div>
-		<div class="warning-btn">{% trans "OK" %}</div>
-	</div>
+    <div class="warning-dialog">
+        <div class='warning-text'></div>
+        <div class="warning-btn">{% trans "OK" %}</div>
+    </div>
 
-	<div class="delete-dialog">
-		<div class="delete-title">{% trans "Are you sure you want to delete" %}</div>
-		<div class="delete-btn-container">
-			<div class="delete-cancel-btn">{% trans "Cancel" %}</div>
-			<div class="delete-confirm-btn">{% trans "Confirm" %}</div>
-		</div>
-	</div>
+    <div class="delete-dialog">
+        <div class="delete-title">{% trans "Are you sure you want to delete" %}</div>
+        <div class="delete-btn-container">
+            <div class="delete-cancel-btn">{% trans "Cancel" %}</div>
+            <div class="delete-confirm-btn">{% trans "Confirm" %}</div>
+        </div>
+    </div>
 
 </div>
 

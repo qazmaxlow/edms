@@ -9,35 +9,35 @@
 
 <script type="text/javascript">
 $(function() {
-	var pathInputEle = $('input[name="path"]');
-	pathInputEle.prop('readonly', true);
-	var selectEle = $('<select class="path-select-picker"><option>None</option></select>');
-	{% for system in can_append_to_systems %}
-	selectEle.append('<option code="{{system.code}}" path="{{system.path}}">{{system.full_name}}</option>');
-	{% endfor %}
-	pathInputEle.after(selectEle);
-	selectEle.change(function () {
-		var selectedOption = $(this).find('option:selected');
-		var parentCode = selectedOption.attr('code');
-		if (parentCode === undefined) {
-			pathInputEle.val('');
-		} else {
-			var parentPath = selectedOption.attr('path');
-			var generatedPath;
-			if (parentPath == "") {
-				generatedPath = ',' + parentCode + ',';
-			} else {
-				generatedPath = parentPath + parentCode + ',';
-			}
-			pathInputEle.val(generatedPath);
-		}
-	});
+    var pathInputEle = $('input[name="path"]');
+    pathInputEle.prop('readonly', true);
+    var selectEle = $('<select class="path-select-picker"><option>None</option></select>');
+    {% for system in can_append_to_systems %}
+    selectEle.append('<option code="{{system.code}}" path="{{system.path}}">{{system.full_name}}</option>');
+    {% endfor %}
+    pathInputEle.after(selectEle);
+    selectEle.change(function () {
+        var selectedOption = $(this).find('option:selected');
+        var parentCode = selectedOption.attr('code');
+        if (parentCode === undefined) {
+            pathInputEle.val('');
+        } else {
+            var parentPath = selectedOption.attr('path');
+            var generatedPath;
+            if (parentPath == "") {
+                generatedPath = ',' + parentCode + ',';
+            } else {
+                generatedPath = parentPath + parentCode + ',';
+            }
+            pathInputEle.val(generatedPath);
+        }
+    });
 
-	{% if original.path %}
-	var defaultPath = "{{original.path}}".split(',').filter(function(value){return value!==''});
-	var selectedParentCode = defaultPath.pop();
-	selectEle.find('option[code="' + selectedParentCode + '"]').prop('selected', true);
-	{% endif %}
+    {% if original.path %}
+    var defaultPath = "{{original.path}}".split(',').filter(function(value){return value!==''});
+    var selectedParentCode = defaultPath.pop();
+    selectEle.find('option[code="' + selectedParentCode + '"]').prop('selected', true);
+    {% endif %}
 });
 </script>
 
@@ -52,58 +52,58 @@ theBPopup = null;
 recapBPopup = null;
 
 $(function() {
-	setupAjaxForCsrf($.cookie('csrftoken'));
+    setupAjaxForCsrf($.cookie('csrftoken'));
 
-	$("#edit-sources-btn").click(function(e) {
-		e.preventDefault();
+    $("#edit-sources-btn").click(function(e) {
+        e.preventDefault();
 
-		theBPopup = $("#edit-sources-container").css({
-			'width': '800px',
-			'height': '400px',
-		}).bPopup({
-			content: 'iframe',
-			contentContainer: '.edit-sources-content',
-			loadUrl: "{% url 'edit_sources' system_code=original.code %}",
-			iframeAttr: {
-				'scrolling': 'yes',
-			}
-		});
-	});
+        theBPopup = $("#edit-sources-container").css({
+            'width': '800px',
+            'height': '400px',
+        }).bPopup({
+            content: 'iframe',
+            contentContainer: '.edit-sources-content',
+            loadUrl: "{% url 'edit_sources' system_code=original.code %}",
+            iframeAttr: {
+                'scrolling': 'yes',
+            }
+        });
+    });
 
-	// Create IE + others compatible event handler
-	var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
-	var eventer = window[eventMethod];
-	var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+    // Create IE + others compatible event handler
+    var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+    var eventer = window[eventMethod];
+    var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
 
-	// Listen to message from child window
-	eventer(messageEvent,function(e) {
-		if (e.data === 'closeBPopup') {
-			theBPopup.close();
-		}
-	}, false);
+    // Listen to message from child window
+    eventer(messageEvent,function(e) {
+        if (e.data === 'closeBPopup') {
+            theBPopup.close();
+        }
+    }, false);
 
-	$('.recap-form-container input[type="text"]').datetimepicker();
-	$('#recap-data-btn').click(function() {
-		recapBPopup = $('.recap-form-container').bPopup();
-	});
-	$('.recap-form-container button').click(function() {
-		var postData = {};
-		$('.recap-form-container input').each(function() {
-			postData[$(this).attr('name')] = $(this).val();
-		});
+    $('.recap-form-container input[type="text"]').datetimepicker();
+    $('#recap-data-btn').click(function() {
+        recapBPopup = $('.recap-form-container').bPopup();
+    });
+    $('.recap-form-container button').click(function() {
+        var postData = {};
+        $('.recap-form-container input').each(function() {
+            postData[$(this).attr('name')] = $(this).val();
+        });
 
-		$.ajax({
-			type: "POST",
-			url: "{% url 'recap_data' %}",
-			data: postData,
-		}).done(function(data) {
-			if (data.success) {
-				recapBPopup.close();
-			}
-		}).fail(function(jqXHR, textStatus) {
-			console.log(jqXHR.responseText);
-		});
-	});
+        $.ajax({
+            type: "POST",
+            url: "{% url 'recap_data' %}",
+            data: postData,
+        }).done(function(data) {
+            if (data.success) {
+                recapBPopup.close();
+            }
+        }).fail(function(jqXHR, textStatus) {
+            console.log(jqXHR.responseText);
+        });
+    });
 });
 </script>
 {% endif %}
@@ -118,16 +118,16 @@ $(function() {
 {% endblock %}
 
 {% block object-tools-items %}
-	{% if change %}
-	<li>
-		<a id="recap-data-btn" href="#">Recap Data</a>
-	</li>
-	<li>
-		<a id="edit-sources-btn" href="#">Edit Sources</a>
-	</li>
-	{% endif %}
-	
-	{{ block.super }}
+    {% if change %}
+    <li>
+        <a id="recap-data-btn" href="#">Recap Data</a>
+    </li>
+    <li>
+        <a id="edit-sources-btn" href="#">Edit Sources</a>
+    </li>
+    {% endif %}
+    
+    {{ block.super }}
 {% endblock %}
 
 {% block after_field_sets %}
@@ -135,15 +135,15 @@ $(function() {
 
 {% if change %}
 <div id="edit-sources-container">
-	<div class="edit-sources-content"></div>
+    <div class="edit-sources-content"></div>
 </div>
 <div class="recap-form-container">
-	<form action="hk.yahoo.com">
-		<input type="hidden" name="system_code" value="{{original.code}}">
-		<input type="text" name="start_dt">
-		<input type="text" name="end_dt">
-		<button class="submit-recap-btn">recap</button>
-	</form>
+    <form action="hk.yahoo.com">
+        <input type="hidden" name="system_code" value="{{original.code}}">
+        <input type="text" name="start_dt">
+        <input type="text" name="end_dt">
+        <button class="submit-recap-btn">recap</button>
+    </form>
 </div>
 {% endif %}
 

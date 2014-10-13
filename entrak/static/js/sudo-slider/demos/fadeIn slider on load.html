@@ -2,16 +2,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>Sudo Slider | Fade in the slider on load</title>
-	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />    
-	<link rel="STYLESHEET" type="text/css" href="../css/style.css">
-	<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-	<script type="text/javascript" src="../js/jquery.sudoSlider.min.js"></script>
-	<script type="text/javascript" >
-	$(document).ready(function(){
+    <title>Sudo Slider | Fade in the slider on load</title>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />    
+    <link rel="STYLESHEET" type="text/css" href="../css/style.css">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.sudoSlider.min.js"></script>
+    <script type="text/javascript" >
+    $(document).ready(function(){
         var loadFadeSpeed = 400;
-		var sudoSlider = $("#slider").sudoSlider({
-			numeric:true,
+        var sudoSlider = $("#slider").sudoSlider({
+            numeric:true,
             preloadAjax: false,
             // Using AJAX is of course optional.
             // But i use it here to show that it works.
@@ -54,19 +54,19 @@
                     container.height("auto");
                 });
             }
-		});
-	});	
-	</script>
+        });
+    }); 
+    </script>
     <style>
         .slideContainer {opacity: 0.001;height: 0px;}
     </style>
 </head>
 <body>
 <div id="container">
-	<h1>Sudo Slider jQuery Plugin - Fade in the slider on load</h1>
-	<div class="slideContainer" style="position:relative;">
+    <h1>Sudo Slider jQuery Plugin - Fade in the slider on load</h1>
+    <div class="slideContainer" style="position:relative;">
         <div id="slider"></div>
-	</div>
+    </div>
     <h3>Usage: see source code</h3>
     <h3>Note: This demo also showcases loadStart and loadFinish callbacks. These are used to partially fadeOut a slide when we try to go to a slide that has yet to be <loaded class=""></loaded></h3>
 </div>

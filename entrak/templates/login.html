@@ -15,11 +15,11 @@
 {% block extra_script %}
 <script type="text/javascript">
 $(function() {
-	$(".change-lang-block > a").click(function(event) {
-		event.preventDefault();
-		$('.change-lang-form input[name=language]').val($(this).attr('lang_code'));
-		$('.change-lang-form').submit();
-	});
+    $(".change-lang-block > a").click(function(event) {
+        event.preventDefault();
+        $('.change-lang-form input[name=language]').val($(this).attr('lang_code'));
+        $('.change-lang-form').submit();
+    });
 });
 </script>
 {% endblock %}
@@ -27,66 +27,59 @@ $(function() {
 {% block content %}
 {% get_current_language as LANGUAGE_CODE %}
 <div class="system-info-container">
-	{% block system_info_container %}
-	<div class="system-title">{{system|get_system_full_name:LANGUAGE_CODE}}</div>
-	<div class="system-logo">
-		<div class="logo-circle-bound" style="background-image: url('{{system.logo.url}}');"></div>
-		<img src="{% static 'images/user-logo-bg.png' %}">
-	</div>
-	{% endblock %}
+    {% block system_info_container %}
+    <div class="system-title">{{system|get_system_full_name:LANGUAGE_CODE}}</div>
+    <div class="system-logo">
+        <div class="logo-circle-bound" style="background-image: url('{{system.logo.url}}');"></div>
+        <img src="{% static 'images/user-logo-bg.png' %}">
+    </div>
+    {% endblock %}
 
-	<div class="change-lang-block">
-		<a lang_code="zh-tw" class="{% ifequal LANGUAGE_CODE 'zh-tw' %}current-lang{% endifequal %}" href="#">繁體中文</a>
-		<span> / </span>
-		<a lang_code="en" class="{% ifequal LANGUAGE_CODE 'en' %}current-lang{% endifequal %}" href="#">ENGLISH</a>
-	</div>
+    <div class="change-lang-block">
+        <a lang_code="zh-tw" class="{% ifequal LANGUAGE_CODE 'zh-tw' %}current-lang{% endifequal %}" href="#">繁體中文</a>
+        <span> / </span>
+        <a lang_code="en" class="{% ifequal LANGUAGE_CODE 'en' %}current-lang{% endifequal %}" href="#">ENGLISH</a>
+    </div>
 
-	<div style="display:none;">
-		<form class="change-lang-form" action="{% url 'set_language' %}" method="post">
-			{% csrf_token %}
-			<input name="language" type="hidden" value="" />
-		</form>
-	</div>
+    <div style="display:none;">
+        <form class="change-lang-form" action="{% url 'set_language' %}" method="post">
+            {% csrf_token %}
+            <input name="language" type="hidden" value="" />
+        </form>
+    </div>
 </div>
 
 <div class="bg-container">
-	<img src="{% static 'images/login/bg.png' %}">
+    <img src="{% static 'images/login/bg.png' %}">
 </div>
 
-<div class="desc-header">{% trans "Welcome to En-trak,<br>your interactive energy monitoring system!" %}</div>
-<div class="desc-content">
-	{% blocktrans %}
-	This system tracks your energy usage in real-time, helping you to better<br>
-	control and reduce your costs and environmental impact, as well as to<br>
-	increase awareness of energy saving in your organization.<br><br>
-	En-trak - Powering Up Energy Efficiency, Turning Data into Actionable Intelligence
-	{% endblocktrans %}
-</div>
+<div class="desc-header">{% trans "Welcome to En-trak<sup>TM</sup>" %}</div>
+<div class="desc-content">{% trans "Turning Data into Actionable Intelligence" %}</div>
 <div class="login-panel">
-	<div>{% trans "To use the En-trak monitor platform, please sign in" %}</div>
-	<hr>
-	<form method="POST">{% csrf_token %}
-		<div>
-			<img src="{% static 'images/login/username-icon.png' %}">
-			<input type="text" name="username" placeholder='{% trans "Username" %}'>
-		</div>
-		<div>
-			<img src="{% static 'images/login/password-icon.png' %}">
-			<input type="password" name="password" placeholder='{% trans "Password" %}'>
-		</div>
-		<input type="submit" value='{% trans "login" %}'>
-	</form>
-	{% if warning_msg %}
-	<div class="warning-msg">{{warning_msg}}</div>
-	{% endif %}
+    <div>{% trans "To use the En-trak monitor platform, please sign in" %}</div>
+    <hr>
+    <form method="POST">{% csrf_token %}
+        <div>
+            <img src="{% static 'images/login/username-icon.png' %}">
+            <input type="text" name="username" placeholder='{% trans "Username" %}'>
+        </div>
+        <div>
+            <img src="{% static 'images/login/password-icon.png' %}">
+            <input type="password" name="password" placeholder='{% trans "Password" %}'>
+        </div>
+        <input type="submit" value='{% trans "Sign In" %}'>
+    </form>
+    {% if warning_msg %}
+    <div class="warning-msg">{{warning_msg}}</div>
+    {% endif %}
 </div>
 
 <footer class="site-footer">
-	<p style="clear: both;"></p>
-	<p id="copyright">Copyright © En-trak Hong Kong Ltd 2013. All rights reserved.</p>
-	<a href="#"><img id="entrak-logo" src="{% static 'images/powered-by-logo.png' %}"></a>
-	<p class="footer-main"></p>				
-	<p style="clear: both;"></p>
+    <p style="clear: both;"></p>
+    <p id="copyright">Copyright © En-trak Hong Kong Ltd 2013. All rights reserved.</p>
+    <a href="#"><img id="entrak-logo" src="{% static 'images/powered-by-logo.png' %}"></a>
+    <p class="footer-main"></p>             
+    <p style="clear: both;"></p>
 </footer>
 
 {% endblock %}

@@ -48,592 +48,592 @@ var graph = {};
 graph.sourceChoiceContainerHeight = 0;
 
 function updateDonutChart(data, total) {
-	$("#selection-summary-chart").empty();
-	var donutChart = Morris.Donut({
-		element: 'selection-summary-chart',
-		data: data,
-		colors: ['#FFAE20', '#EF7C56', '#35BC99', '#C94CD7', '#587EFF'],
-		labelColors: ['#FFAE20', '#EF7C56', '#35BC99', '#C94CD7', '#587EFF'],
-		formatter: function (x) { return x + "%"}
-	});
-	donutChart.on('select', function(i, row){
-		$("#selection-summary-value").text(Utils.formatWithCommas(row.orgValue.toFixed(0)));
-		$("#selection-summary-source").text(row.label);
-		$("#selection-summary-source").css("color", donutChart.options.colors[i]);
-	});
-	donutChart.on('deselect', function(i, row) {
-		$("#selection-summary-value").text(Utils.formatWithCommas(total.toFixed(0)));
-		$("#selection-summary-source").text('');
-	});
+    $("#selection-summary-chart").empty();
+    var donutChart = Morris.Donut({
+        element: 'selection-summary-chart',
+        data: data,
+        colors: ['#FFAE20', '#EF7C56', '#35BC99', '#C94CD7', '#587EFF'],
+        labelColors: ['#FFAE20', '#EF7C56', '#35BC99', '#C94CD7', '#587EFF'],
+        formatter: function (x) { return x + "%"}
+    });
+    donutChart.on('select', function(i, row){
+        $("#selection-summary-value").text(Utils.formatWithCommas(row.orgValue.toFixed(0)));
+        $("#selection-summary-source").text(row.label);
+        $("#selection-summary-source").css("color", donutChart.options.colors[i]);
+    });
+    donutChart.on('deselect', function(i, row) {
+        $("#selection-summary-value").text(Utils.formatWithCommas(total.toFixed(0)));
+        $("#selection-summary-source").text('');
+    });
 
-	$("#selection-summary-value").text(Utils.formatWithCommas(total.toFixed(0)));
-	if (graph.graphChart.currentUnit.isSuffix) {
-		$("#selection-summary-unit-prefix").html('');
-		$("#selection-summary-unit-suffix").html(graph.graphChart.currentUnit.shortDescInfo[graph.langCode]);
-	} else {
-		$("#selection-summary-unit-prefix").html(graph.graphChart.currentUnit.shortDescInfo[graph.langCode]);
-		$("#selection-summary-unit-suffix").html('');
-	}
+    $("#selection-summary-value").text(Utils.formatWithCommas(total.toFixed(0)));
+    if (graph.graphChart.currentUnit.isSuffix) {
+        $("#selection-summary-unit-prefix").html('');
+        $("#selection-summary-unit-suffix").html(graph.graphChart.currentUnit.shortDescInfo[graph.langCode]);
+    } else {
+        $("#selection-summary-unit-prefix").html(graph.graphChart.currentUnit.shortDescInfo[graph.langCode]);
+        $("#selection-summary-unit-suffix").html('');
+    }
 }
 
 function formatDtAtStr(dt, rangeType) {
-	var formatStr = null;
-	if (rangeType === Utils.RANGE_TYPE_HOUR
-		|| rangeType === Utils.RANGE_TYPE_DAY
-		|| rangeType === Utils.RANGE_TYPE_NIGHT) {
-		formatStr = '{% trans "D MMM YYYY, ddd" %}';
-	} else if (rangeType === Utils.RANGE_TYPE_WEEK) {
-		formatStr = '{% trans "D MMM YYYY" %}';
-	} else if (rangeType === Utils.RANGE_TYPE_MONTH) {
-		formatStr = '{% trans "MMM YYYY" %}';
-	}
+    var formatStr = null;
+    if (rangeType === Utils.RANGE_TYPE_HOUR
+        || rangeType === Utils.RANGE_TYPE_DAY
+        || rangeType === Utils.RANGE_TYPE_NIGHT) {
+        formatStr = '{% trans "D MMM YYYY, ddd" %}';
+    } else if (rangeType === Utils.RANGE_TYPE_WEEK) {
+        formatStr = '{% trans "D MMM YYYY" %}';
+    } else if (rangeType === Utils.RANGE_TYPE_MONTH) {
+        formatStr = '{% trans "MMM YYYY" %}';
+    }
 
-	return (formatStr !== null) ? dt.format(formatStr) : '';
+    return (formatStr !== null) ? dt.format(formatStr) : '';
 }
 
 function formatDtStr(dt, rangeType) {
-	var formatStr = null;
-	if (rangeType === Utils.RANGE_TYPE_HOUR) {
-		formatStr = '{% trans "h a, D MMM YYYY, ddd" %}';
-	} else if (rangeType === Utils.RANGE_TYPE_DAY
-		|| rangeType === Utils.RANGE_TYPE_WEEK) {
-		formatStr = '{% trans "D MMM YYYY, ddd" %}';
-	} else if (rangeType === Utils.RANGE_TYPE_NIGHT) {
-		formatStr = '{% trans "[Night of] D MMM YYYY, ddd" %}';
-	} else if (rangeType === Utils.RANGE_TYPE_MONTH) {
-		formatStr = '{% trans "MMM YYYY" %}';
-	} else if (rangeType === Utils.RANGE_TYPE_YEAR) {
-		formatStr = '{% trans "YYYY" %}';
-	}
+    var formatStr = null;
+    if (rangeType === Utils.RANGE_TYPE_HOUR) {
+        formatStr = '{% trans "h a, D MMM YYYY, ddd" %}';
+    } else if (rangeType === Utils.RANGE_TYPE_DAY
+        || rangeType === Utils.RANGE_TYPE_WEEK) {
+        formatStr = '{% trans "D MMM YYYY, ddd" %}';
+    } else if (rangeType === Utils.RANGE_TYPE_NIGHT) {
+        formatStr = '{% trans "[Night of] D MMM YYYY, ddd" %}';
+    } else if (rangeType === Utils.RANGE_TYPE_MONTH) {
+        formatStr = '{% trans "MMM YYYY" %}';
+    } else if (rangeType === Utils.RANGE_TYPE_YEAR) {
+        formatStr = '{% trans "YYYY" %}';
+    }
 
-	var result = dt.format(formatStr);
-	if (rangeType === Utils.RANGE_TYPE_WEEK) {
-		if (graph.langCode === 'zh-tw') {
-			result = '從' + result + '開始';
-		} else {
-			result = 'Week starting ' + result;
-		}
-	}
+    var result = dt.format(formatStr);
+    if (rangeType === Utils.RANGE_TYPE_WEEK) {
+        if (graph.langCode === 'zh-tw') {
+            result = '從' + result + '開始';
+        } else {
+            result = 'Week starting ' + result;
+        }
+    }
 
-	return result
+    return result
 }
 
 function formatCompareDtStr(dt, rangeType) {
-	var formatStr = null;
-	if (rangeType === Utils.RANGE_TYPE_HOUR) {
-		formatStr = '{% trans "HH:mm D MMM YYYY, ddd" %}';
-	} else if (rangeType === Utils.RANGE_TYPE_DAY
-		|| rangeType === Utils.RANGE_TYPE_NIGHT
-		|| rangeType === Utils.RANGE_TYPE_WEEK) {
-		formatStr = '{% trans "D MMM YYYY, ddd" %}';
-	} else if (rangeType === Utils.RANGE_TYPE_MONTH) {
-		formatStr = '{% trans "MMM YYYY" %}';
-	} else if (rangeType === Utils.RANGE_TYPE_YEAR) {
-		formatStr = '{% trans "YYYY" %}';
-	}
+    var formatStr = null;
+    if (rangeType === Utils.RANGE_TYPE_HOUR) {
+        formatStr = '{% trans "HH:mm D MMM YYYY, ddd" %}';
+    } else if (rangeType === Utils.RANGE_TYPE_DAY
+        || rangeType === Utils.RANGE_TYPE_NIGHT
+        || rangeType === Utils.RANGE_TYPE_WEEK) {
+        formatStr = '{% trans "D MMM YYYY, ddd" %}';
+    } else if (rangeType === Utils.RANGE_TYPE_MONTH) {
+        formatStr = '{% trans "MMM YYYY" %}';
+    } else if (rangeType === Utils.RANGE_TYPE_YEAR) {
+        formatStr = '{% trans "YYYY" %}';
+    }
 
-	return dt.format(formatStr);
+    return dt.format(formatStr);
 }
 
 function formatDtFromToStr(dt, rangeType) {
-	var formatStr = null;
-	if (rangeType === Utils.RANGE_TYPE_HOUR
-		|| rangeType === Utils.RANGE_TYPE_DAY
-		|| rangeType === Utils.RANGE_TYPE_NIGHT) {
-		formatStr = '{% trans "hh:mma" %}';
-	} else if (rangeType === Utils.RANGE_TYPE_WEEK) {
-		formatStr = '{% trans "ddd" %}';
-	} else if (rangeType === Utils.RANGE_TYPE_MONTH) {
-		formatStr = '{% trans "MMM D" %}';
-	} else if (rangeType === Utils.RANGE_TYPE_YEAR) {
-		formatStr = '{% trans "MMM" %}';
-	}
+    var formatStr = null;
+    if (rangeType === Utils.RANGE_TYPE_HOUR
+        || rangeType === Utils.RANGE_TYPE_DAY
+        || rangeType === Utils.RANGE_TYPE_NIGHT) {
+        formatStr = '{% trans "hh:mma" %}';
+    } else if (rangeType === Utils.RANGE_TYPE_WEEK) {
+        formatStr = '{% trans "ddd" %}';
+    } else if (rangeType === Utils.RANGE_TYPE_MONTH) {
+        formatStr = '{% trans "MMM D" %}';
+    } else if (rangeType === Utils.RANGE_TYPE_YEAR) {
+        formatStr = '{% trans "MMM" %}';
+    }
 
-	return dt.format(formatStr);
+    return dt.format(formatStr);
 }
 
 function updateCurrentDtText() {
-	$("#current-dt").text(' ' + formatDtStr(graph.graphChart.currentDt, graph.graphChart.currentRangeType) + ' ');
+    $("#current-dt").text(' ' + formatDtStr(graph.graphChart.currentDt, graph.graphChart.currentRangeType) + ' ');
 }
 
 function clearSourceChoice() {
-	var choiceContainer = $("#source-choice-container");
-	if (choiceContainer.find('input:checked').length != 0) {
-		choiceContainer.find("input").prop('disabled', false).prop('checked', false);
-		choiceContainer.find('.disabled-source-choice').removeClass('disabled-source-choice');
-		graph.graphChart.updateSourceChoice([]);
-	}
+    var choiceContainer = $("#source-choice-container");
+    if (choiceContainer.find('input:checked').length != 0) {
+        choiceContainer.find("input").prop('disabled', false).prop('checked', false);
+        choiceContainer.find('.disabled-source-choice').removeClass('disabled-source-choice');
+        graph.graphChart.updateSourceChoice([]);
+    }
 }
 
 function resetGraphNPanel(fromAutoRefresh) {
-	fromAutoRefresh = typeof fromAutoRefresh !== 'undefined' ? fromAutoRefresh : false;
+    fromAutoRefresh = typeof fromAutoRefresh !== 'undefined' ? fromAutoRefresh : false;
 
-	updateCurrentDtText();
+    updateCurrentDtText();
 
-	if (fromAutoRefresh) {
-		var checkedCompareChoice = $('.compare-choice-block :checked');
-		var previousSeletedCustomDt = graph.graphChart.customDt;
-		graph.graphChart.growFinishCallback = function() {
-			if (previousSeletedCustomDt !== null) {
-				graph.graphChart.customDt = previousSeletedCustomDt;
-				$("#compare-custom-date").text(formatCompareDtStr(graph.graphChart.customDt.startDt, graph.graphChart.currentRangeType));
-			}
-			checkedCompareChoice.click();
-			graph.graphChart.growFinishCallback = null;
-		};
-	}
-	clearCompareChoice();
+    if (fromAutoRefresh) {
+        var checkedCompareChoice = $('.compare-choice-block :checked');
+        var previousSeletedCustomDt = graph.graphChart.customDt;
+        graph.graphChart.growFinishCallback = function() {
+            if (previousSeletedCustomDt !== null) {
+                graph.graphChart.customDt = previousSeletedCustomDt;
+                $("#compare-custom-date").text(formatCompareDtStr(graph.graphChart.customDt.startDt, graph.graphChart.currentRangeType));
+            }
+            checkedCompareChoice.click();
+            graph.graphChart.growFinishCallback = null;
+        };
+    }
+    clearCompareChoice();
 
-	var compareHighestLowestContainer = $(".compare-highest-lowest-container");
-	if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_NIGHT) {
-		compareHighestLowestContainer.find("input").prop('disabled', true);
-		compareHighestLowestContainer.addClass('compare-disabled');
-	} else {
-		compareHighestLowestContainer.find("input").prop('disabled', false);
-		compareHighestLowestContainer.removeClass('compare-disabled');
-	}
+    var compareHighestLowestContainer = $(".compare-highest-lowest-container");
+    if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_NIGHT) {
+        compareHighestLowestContainer.find("input").prop('disabled', true);
+        compareHighestLowestContainer.addClass('compare-disabled');
+    } else {
+        compareHighestLowestContainer.find("input").prop('disabled', false);
+        compareHighestLowestContainer.removeClass('compare-disabled');
+    }
 
-	var compareBetweenText;
-	var compareTargetText;
-	if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_DAY) {
-		compareBetweenText = 'days';
-		compareTargetText = graph.graphChart.currentDt.format('dddd');
-	} else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_NIGHT) {
-		compareBetweenText = '{% trans "compare_between_night_plural" %}';
-		compareTargetText = '{% trans "compare_between_night" %}';
-	} else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_WEEK) {
-		compareBetweenText = '{% trans "compare_between_week_plural" %}';
-		compareTargetText = '{% trans "compare_between_week" %}';
-	} else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_MONTH) {
-		compareBetweenText = '{% trans "compare_between_month_plural" %}';
-		compareTargetText = '{% trans "compare_between_month" %}';
-	} else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_YEAR) {
-		compareBetweenText = '{% trans "compare_between_year_plural" %}';
-		compareTargetText = '{% trans "compare_between_year" %}';
-	} else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_HOUR) {
-		compareBetweenText = '{% trans "compare_between_hour_plural" %}';
-		compareTargetText = '{% trans "compare_between_hour" %}';
-	}
-	$("#compare-between").text(compareBetweenText);
-	$(".compare-target-text").text(compareTargetText);
+    var compareBetweenText;
+    var compareTargetText;
+    if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_DAY) {
+        compareBetweenText = 'days';
+        compareTargetText = graph.graphChart.currentDt.format('dddd');
+    } else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_NIGHT) {
+        compareBetweenText = '{% trans "compare_between_night_plural" %}';
+        compareTargetText = '{% trans "compare_between_night" %}';
+    } else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_WEEK) {
+        compareBetweenText = '{% trans "compare_between_week_plural" %}';
+        compareTargetText = '{% trans "compare_between_week" %}';
+    } else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_MONTH) {
+        compareBetweenText = '{% trans "compare_between_month_plural" %}';
+        compareTargetText = '{% trans "compare_between_month" %}';
+    } else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_YEAR) {
+        compareBetweenText = '{% trans "compare_between_year_plural" %}';
+        compareTargetText = '{% trans "compare_between_year" %}';
+    } else if (graph.graphChart.currentRangeType === Utils.RANGE_TYPE_HOUR) {
+        compareBetweenText = '{% trans "compare_between_hour_plural" %}';
+        compareTargetText = '{% trans "compare_between_hour" %}';
+    }
+    $("#compare-between").text(compareBetweenText);
+    $(".compare-target-text").text(compareTargetText);
 }
 
 function retrieveReadingFinished(fromAutoRefresh) {
-	resetGraphNPanel(fromAutoRefresh);
+    resetGraphNPanel(fromAutoRefresh);
 }
 
 function retrieveSummaryFinished() {
-	graph.energySummary.assignSummaryToHtml(
-		"#last-consumption-val", "#this-consumption-val", "#summary-percentage-number",
-		"#summary-image", '{{STATIC_URL}}');
+    graph.energySummary.assignSummaryToHtml(
+        "#last-consumption-val", "#this-consumption-val", "#summary-percentage-number",
+        "#summary-image", '{{STATIC_URL}}');
 
-	setTimeout(function() {
-		graph.energySummary.getSummaryWithSystem(graph.graphChart.entrakSystem, retrieveSummaryFinished);
-	}, 60000);
+    setTimeout(function() {
+        graph.energySummary.getSummaryWithSystem(graph.graphChart.entrakSystem, retrieveSummaryFinished);
+    }, 60000);
 }
 
 function setupSourceChoice() {
-	var choiceContainer = $("#source-choice-container");
-	choiceContainer.empty();
+    var choiceContainer = $("#source-choice-container");
+    choiceContainer.empty();
 
-	var sourceNames = [];
-	$.each(graph.graphChart.entrakSystem.systemTree.children, function(idx, subSystem) {
-		sourceNames.push(subSystem.data.nameInfo[graph.langCode]);
-	});
-	$.each(graph.graphChart.entrakSystem.systemTree.data.sources, function(sourceIdx, source) {
-		sourceNames.push(source.nameInfo[graph.langCode]);
-	});
+    var sourceNames = [];
+    $.each(graph.graphChart.entrakSystem.systemTree.children, function(idx, subSystem) {
+        sourceNames.push(subSystem.data.nameInfo[graph.langCode]);
+    });
+    $.each(graph.graphChart.entrakSystem.systemTree.data.sources, function(sourceIdx, source) {
+        sourceNames.push(source.nameInfo[graph.langCode]);
+    });
 
-	graph.sourceChoiceContainerHeight = Math.ceil(sourceNames.length/4.0)*22 + 100;
+    graph.sourceChoiceContainerHeight = Math.ceil(sourceNames.length/4.0)*22 + 100;
 
-	$.each(sourceNames, function(seriesIdx, sourceName) {
-		var choiceHtml = "<div>";
-		var checkboxId = "source-checkbox-" + seriesIdx;
-		choiceHtml += "<div class='circle-checkbox'><input id='" + checkboxId + "'"
-			+ "' type='checkbox' " + "series_idx='" + seriesIdx + "'"
-			+ " name='" + sourceName + "'"
-			+ " ></input>"
-			+ "<label for='" + checkboxId + "'></label></div>"
-			+ "<label class='source-label' for='" + checkboxId + "'>" + sourceName + "</label>"
-			+ "</div>";
-		choiceContainer.append(choiceHtml);
-	});
+    $.each(sourceNames, function(seriesIdx, sourceName) {
+        var choiceHtml = "<div>";
+        var checkboxId = "source-checkbox-" + seriesIdx;
+        choiceHtml += "<div class='circle-checkbox'><input id='" + checkboxId + "'"
+            + "' type='checkbox' " + "series_idx='" + seriesIdx + "'"
+            + " name='" + sourceName + "'"
+            + " ></input>"
+            + "<label for='" + checkboxId + "'></label></div>"
+            + "<label class='source-label' for='" + checkboxId + "'>" + sourceName + "</label>"
+            + "</div>";
+        choiceContainer.append(choiceHtml);
+    });
 
-	choiceContainer.find("input").click(function () {
-		clearCompareChoice();
-		graph.graphChart.updateCompareChoice();
+    choiceContainer.find("input").click(function () {
+        clearCompareChoice();
+        graph.graphChart.updateCompareChoice();
 
-		if (choiceContainer.find("input:checked").length >= 5) {
-			choiceContainer.find("input:not(:checked)").prop('disabled', true);
-			choiceContainer.find("input:not(:checked)").parent().parent().addClass('disabled-source-choice');
+        if (choiceContainer.find("input:checked").length >= 5) {
+            choiceContainer.find("input:not(:checked)").prop('disabled', true);
+            choiceContainer.find("input:not(:checked)").parent().parent().addClass('disabled-source-choice');
 
-			var maxSourceLimitLabel = $('#source-choice .choice-header>span:eq(0)');
-			maxSourceLimitLabel.addClass('tada animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
-				$(this).removeClass();
-			});
-		} else {
-			choiceContainer.find("input").prop('disabled', false);
-			choiceContainer.find(".disabled-source-choice").removeClass('disabled-source-choice');
-		}
+            var maxSourceLimitLabel = $('#source-choice .choice-header>span:eq(0)');
+            maxSourceLimitLabel.addClass('tada animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+                $(this).removeClass();
+            });
+        } else {
+            choiceContainer.find("input").prop('disabled', false);
+            choiceContainer.find(".disabled-source-choice").removeClass('disabled-source-choice');
+        }
 
-		var selectedSeriesIdxs = [];
+        var selectedSeriesIdxs = [];
 
-		choiceContainer.find("input:checked").each(function () {
-			var seriesIdx = parseInt($(this).attr("series_idx"), 10);
-			selectedSeriesIdxs.push(seriesIdx);
-		});
+        choiceContainer.find("input:checked").each(function () {
+            var seriesIdx = parseInt($(this).attr("series_idx"), 10);
+            selectedSeriesIdxs.push(seriesIdx);
+        });
 
-		graph.graphChart.updateSourceChoice(selectedSeriesIdxs);
-	});
+        graph.graphChart.updateSourceChoice(selectedSeriesIdxs);
+    });
 
-	$("#source-choice-clear").click(function() {
-		clearSourceChoice();
-	});
+    $("#source-choice-clear").click(function() {
+        clearSourceChoice();
+    });
 }
 
 function clearCompareChoice() {
-	$(".compare-choice-block input").prop("checked", false);
-	graph.graphChart.showLast = false;
-	graph.graphChart.showHighest = false;
-	graph.graphChart.showLowest = false;
-	graph.graphChart.showCustom = false;
-	graph.graphChart.customDt = null;
-	$("#compare-prev-date").text(formatCompareDtStr(graph.graphChart.lastStartEndDt.startDt, graph.graphChart.currentRangeType));
-	$("#compare-highest-date").text("");
-	$("#compare-lowest-date").text("");
-	$("#compare-custom-date").text("");
+    $(".compare-choice-block input").prop("checked", false);
+    graph.graphChart.showLast = false;
+    graph.graphChart.showHighest = false;
+    graph.graphChart.showLowest = false;
+    graph.graphChart.showCustom = false;
+    graph.graphChart.customDt = null;
+    $("#compare-prev-date").text(formatCompareDtStr(graph.graphChart.lastStartEndDt.startDt, graph.graphChart.currentRangeType));
+    $("#compare-highest-date").text("");
+    $("#compare-lowest-date").text("");
+    $("#compare-custom-date").text("");
 
-	$(".compare-choice-block input").prop("checked", false);
+    $(".compare-choice-block input").prop("checked", false);
 }
 
 function setupComparePanel() {
-	$("#compare-prev-checkbox").click(function() {
-		if ($(this).prop("checked")) {
-			graph.graphChart.showLast = true;
-			graph.graphChart.getLastSourceReadings();
-			clearSourceChoice();
-		} else {
-			graph.graphChart.showLast = false;
-			graph.graphChart.updateCompareChoice();
-		}
-	});
+    $("#compare-prev-checkbox").click(function() {
+        if ($(this).prop("checked")) {
+            graph.graphChart.showLast = true;
+            graph.graphChart.getLastSourceReadings();
+            clearSourceChoice();
+        } else {
+            graph.graphChart.showLast = false;
+            graph.graphChart.updateCompareChoice();
+        }
+    });
 
-	$("#compare-highest-checkbox").click(function() {
-		if ($(this).prop("checked")) {
-			graph.graphChart.showHighest = true;
-			graph.graphChart.getHighestSourceReadings(function () {
-				if (graph.graphChart.highestDt !== null) {
-					$("#compare-highest-date").text(
-						formatCompareDtStr(graph.graphChart.highestDt, graph.graphChart.currentRangeType)
-					);
-				}
-			});
-			clearSourceChoice();
-		} else {
-			graph.graphChart.showHighest = false;
-			graph.graphChart.updateCompareChoice();
-			$("#compare-highest-date").text("");
-		}
-	});
+    $("#compare-highest-checkbox").click(function() {
+        if ($(this).prop("checked")) {
+            graph.graphChart.showHighest = true;
+            graph.graphChart.getHighestSourceReadings(function () {
+                if (graph.graphChart.highestDt !== null) {
+                    $("#compare-highest-date").text(
+                        formatCompareDtStr(graph.graphChart.highestDt, graph.graphChart.currentRangeType)
+                    );
+                }
+            });
+            clearSourceChoice();
+        } else {
+            graph.graphChart.showHighest = false;
+            graph.graphChart.updateCompareChoice();
+            $("#compare-highest-date").text("");
+        }
+    });
 
-	$("#compare-lowest-checkbox").click(function() {
-		if ($(this).prop("checked")) {
-			graph.graphChart.showLowest = true;
-			graph.graphChart.getLowestSourceReadings(function () {
-				if (graph.graphChart.lowestDt !== null) {
-					$("#compare-lowest-date").text(
-						formatCompareDtStr(graph.graphChart.lowestDt, graph.graphChart.currentRangeType)
-					);
-			}
-			});
-			clearSourceChoice();
-		} else {
-			graph.graphChart.showLowest = false;
-			graph.graphChart.updateCompareChoice();
-			$("#compare-lowest-date").text("");
-		}
-	});
+    $("#compare-lowest-checkbox").click(function() {
+        if ($(this).prop("checked")) {
+            graph.graphChart.showLowest = true;
+            graph.graphChart.getLowestSourceReadings(function () {
+                if (graph.graphChart.lowestDt !== null) {
+                    $("#compare-lowest-date").text(
+                        formatCompareDtStr(graph.graphChart.lowestDt, graph.graphChart.currentRangeType)
+                    );
+            }
+            });
+            clearSourceChoice();
+        } else {
+            graph.graphChart.showLowest = false;
+            graph.graphChart.updateCompareChoice();
+            $("#compare-lowest-date").text("");
+        }
+    });
 
-	$("#compare-custom-checkbox").click(function() {
-		if ($(this).prop("checked")) {
-			graph.graphChart.showCustom = true;
-			$('#compare-dt-picker').datetimepicker('show');
-		} else {
-			graph.graphChart.showCustom = false;
-			graph.graphChart.updateCompareChoice();
-		}
-	});
+    $("#compare-custom-checkbox").click(function() {
+        if ($(this).prop("checked")) {
+            graph.graphChart.showCustom = true;
+            $('#compare-dt-picker').datetimepicker('show');
+        } else {
+            graph.graphChart.showCustom = false;
+            graph.graphChart.updateCompareChoice();
+        }
+    });
 
-	$("#compare-choice-clear").click(function() {
-		if ($('#day-choice .choice-panel input:checked').length != 0) {
-			clearCompareChoice();
-			graph.graphChart.updateCompareChoice();
-		}
-	});
+    $("#compare-choice-clear").click(function() {
+        if ($('#day-choice .choice-panel input:checked').length != 0) {
+            clearCompareChoice();
+            graph.graphChart.updateCompareChoice();
+        }
+    });
 }
 
 function resetXSliderNSummaryNHightlight() {
-	$("#x-axis-slider").slider("values", [0, 0]);
+    $("#x-axis-slider").slider("values", [0, 0]);
 
-	var selectionSummary = $("#selection-summary");
-	if (selectionSummary.css('display') !== 'none') {
-		selectionSummary.fadeOut();
-	}
+    var selectionSummary = $("#selection-summary");
+    if (selectionSummary.css('display') !== 'none') {
+        selectionSummary.fadeOut();
+    }
 
-	if (graph.graphChart.plot !== null) {
-		graph.graphChart.plot.setSelection({
-			xaxis: {
-				from: 0,
-				to: 0,
-			}
-		});
-	}
+    if (graph.graphChart.plot !== null) {
+        graph.graphChart.plot.setSelection({
+            xaxis: {
+                from: 0,
+                to: 0,
+            }
+        });
+    }
 }
 
 function customDtPickerSeleced(input) {
-	graph.graphChart.updateCompareDt(moment(input).startOf('hour'));
-	$("#compare-custom-date").text(formatCompareDtStr(graph.graphChart.customDt.startDt, graph.graphChart.currentRangeType))
-	if (graph.graphChart.showCustom) {
-		graph.graphChart.getCustomSourceReadings();
-	}
-	clearSourceChoice();
+    graph.graphChart.updateCompareDt(moment(input).startOf('hour'));
+    $("#compare-custom-date").text(formatCompareDtStr(graph.graphChart.customDt.startDt, graph.graphChart.currentRangeType))
+    if (graph.graphChart.showCustom) {
+        graph.graphChart.getCustomSourceReadings();
+    }
+    clearSourceChoice();
 }
 
 $(function() {
-	setupAjaxForCsrf($.cookie('csrftoken'));
-	graph.langCode = '{{LANGUAGE_CODE}}';
-	moment.locale(graph.langCode);
+    setupAjaxForCsrf($.cookie('csrftoken'));
+    graph.langCode = '{{LANGUAGE_CODE}}';
+    moment.locale(graph.langCode);
 
-	var graphChartMultiLangTexts = {
-		'TOTAL_TEXT': '{% trans "Total" %}',
-		'PREVIOUS_TEXT': '{% trans "Previous" %}',
-		'HIGHEST_TEXT': '{% trans "Highest" %}',
-		'LOWEST_TEXT': '{% trans "Lowest" %}',
-		'CUSTOM_TEXT': '{% trans "Custom" %}',
-	};
+    var graphChartMultiLangTexts = {
+        'TOTAL_TEXT': '{% trans "Total" %}',
+        'PREVIOUS_TEXT': '{% trans "Previous" %}',
+        'HIGHEST_TEXT': '{% trans "Highest" %}',
+        'LOWEST_TEXT': '{% trans "Lowest" %}',
+        'CUSTOM_TEXT': '{% trans "Custom" %}',
+    };
 
-	graph.graphChart = new GraphChart(
-		"#chart",
-		"#y-axis-slider",
-		"#x-axis-slider",
-		retrieveReadingFinished,
-		graphChartMultiLangTexts);
-	graph.graphChart.currentRangeType = Utils.RANGE_TYPE_DAY;
-	graph.graphChart.currentDt = Utils.getNowMoment('hour');
+    graph.graphChart = new GraphChart(
+        "#chart",
+        "#y-axis-slider",
+        "#x-axis-slider",
+        retrieveReadingFinished,
+        graphChartMultiLangTexts);
+    graph.graphChart.currentRangeType = Utils.RANGE_TYPE_DAY;
+    graph.graphChart.currentDt = Utils.getNowMoment('hour');
 
-	graph.graphChart.entrakSystem = new EntrakSystem();
-	graph.graphChart.entrakSystem.langCode = graph.langCode;
-	graph.graphChart.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
-	graph.graphChart.currentSelectedSystem = graph.graphChart.entrakSystem.systemTree;
+    graph.graphChart.entrakSystem = new EntrakSystem();
+    graph.graphChart.entrakSystem.langCode = graph.langCode;
+    graph.graphChart.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
+    graph.graphChart.currentSelectedSystem = graph.graphChart.entrakSystem.systemTree;
 
-	graph.graphChart.entrakSystem.addSourceToSystem('{{sources|jsonifySources}}');
+    graph.graphChart.entrakSystem.addSourceToSystem('{{sources|jsonifySources}}');
 
-	graph.unitCategorys = JSON.parse('{{unit_categorys|jsonifyUnitCategorys}}');
-	graph.graphChart.currentUnit = graph.unitCategorys[0];
+    graph.unitCategorys = JSON.parse('{{unit_categorys|jsonifyUnitCategorys}}');
+    graph.graphChart.currentUnit = graph.unitCategorys[0];
 
-	graph.timezone = '{{systems.0.timezone}}';
-	graph.firstRecord = moment.unix(graph.graphChart.entrakSystem.systemTree.data.firstRecord).tz(graph.timezone);
+    graph.timezone = '{{systems.0.timezone}}';
+    graph.firstRecord = moment.unix(graph.graphChart.entrakSystem.systemTree.data.firstRecord).tz(graph.timezone);
 
-	$("#unit-label").html(graph.unitCategorys[0].shortDescInfo[graph.langCode]);
-	$("#unit-bg").attr("src", "{% get_static_prefix %}images/unit/" + graph.unitCategorys[0].bgImg);
+    $("#unit-label").html(graph.unitCategorys[0].shortDescInfo[graph.langCode]);
+    $("#unit-bg").attr("src", "{% get_static_prefix %}images/unit/" + graph.unitCategorys[0].bgImg);
 
-	$("#y-axis-slider").slider({
-		orientation: "vertical",
-		animate: "fast",
-		create: function(event, ui) {
-			var wrapDiv = $('<div>')
-			wrapDiv.append($(this).find('a'));
-			$(this).append(wrapDiv);
-		}
-	});
+    $("#y-axis-slider").slider({
+        orientation: "vertical",
+        animate: "fast",
+        create: function(event, ui) {
+            var wrapDiv = $('<div>')
+            wrapDiv.append($(this).find('a'));
+            $(this).append(wrapDiv);
+        }
+    });
 
-	$("#x-axis-slider").slider({
-		range: true,
-		min: 0,
-		values: [0, 0],
-		step: 1,
-		animate: "fast",
-	});
-	graph.graphChart.xAxisSliderCallback = function (ranges, fromDt, toDt, data) {
-		var selectionSummary = $("#selection-summary");
-		if (fromDt.unix() === toDt.unix()) {
-			if (selectionSummary.css('display') !== 'none') {
-				selectionSummary.fadeOut();
-			}
-		} else {
-			if (selectionSummary.css('display') === 'none') {
-				selectionSummary.fadeIn();
-			}
-			$("#selection-summary-at span").text(formatDtAtStr(graph.graphChart.currentDt, graph.graphChart.currentRangeType));
-			$("#selection-summary-from .summary-content-span").text(formatDtFromToStr(fromDt, graph.graphChart.currentRangeType));
-			$("#selection-summary-to .summary-content-span").text(formatDtFromToStr(toDt, graph.graphChart.currentRangeType));
+    $("#x-axis-slider").slider({
+        range: true,
+        min: 0,
+        values: [0, 0],
+        step: 1,
+        animate: "fast",
+    });
+    graph.graphChart.xAxisSliderCallback = function (ranges, fromDt, toDt, data) {
+        var selectionSummary = $("#selection-summary");
+        if (fromDt.unix() === toDt.unix()) {
+            if (selectionSummary.css('display') !== 'none') {
+                selectionSummary.fadeOut();
+            }
+        } else {
+            if (selectionSummary.css('display') === 'none') {
+                selectionSummary.fadeIn();
+            }
+            $("#selection-summary-at span").text(formatDtAtStr(graph.graphChart.currentDt, graph.graphChart.currentRangeType));
+            $("#selection-summary-from .summary-content-span").text(formatDtFromToStr(fromDt, graph.graphChart.currentRangeType));
+            $("#selection-summary-to .summary-content-span").text(formatDtFromToStr(toDt, graph.graphChart.currentRangeType));
 
-			var total = data.reduce(function (previousVal, current, index, array) {
-				return previousVal + current.value;
-			}, 0);
-			var transformedData = data.map(function (seriesData) {
-				var percentage = Math.round((seriesData.value/total)*1000)/10;
-				return {label: seriesData.label, value: percentage, orgValue: seriesData.value};
-			});
-			transformedData.sort(function (a, b) {
-				return b.label - a.label;
-			});
+            var total = data.reduce(function (previousVal, current, index, array) {
+                return previousVal + current.value;
+            }, 0);
+            var transformedData = data.map(function (seriesData) {
+                var percentage = Math.round((seriesData.value/total)*1000)/10;
+                return {label: seriesData.label, value: percentage, orgValue: seriesData.value};
+            });
+            transformedData.sort(function (a, b) {
+                return b.label - a.label;
+            });
 
-			if (total === 0) {
-				$("#selection-summary-chart").empty();
-				$("#selection-summary-value").text('');
-				$("#selection-summary-source").text('');
-				$("#selection-summary-unit-prefix").html('');
-				$("#selection-summary-unit-suffix").html('');
-			} else {
-				updateDonutChart(transformedData, total);
-			}
-		}
-	};
+            if (total === 0) {
+                $("#selection-summary-chart").empty();
+                $("#selection-summary-value").text('');
+                $("#selection-summary-source").text('');
+                $("#selection-summary-unit-prefix").html('');
+                $("#selection-summary-unit-suffix").html('');
+            } else {
+                updateDonutChart(transformedData, total);
+            }
+        }
+    };
 
-	setupSourceChoice();
-	setupComparePanel();
+    setupSourceChoice();
+    setupComparePanel();
 
-	var subMenuPanel = $(".drop-down-panel-content ul");
-	$(".panel-header-left-menu h3").each(function (eleIdx) {
-		$(this).click({connectedPanel: subMenuPanel[eleIdx]}, function (event) {
-			$(".panel-header-left-menu h3").removeClass('selected-tab');
-			$(this).addClass('selected-tab');
-			
-			var connectedPanel = $(event.data.connectedPanel);
-			if (!(connectedPanel.hasClass('selected-submenu'))) {
-				subMenuPanel.filter(".selected-submenu").removeClass('selected-submenu').hide();
-				connectedPanel.addClass('selected-submenu').fadeIn();
-			}
+    var subMenuPanel = $(".drop-down-panel-content ul");
+    $(".panel-header-left-menu h3").each(function (eleIdx) {
+        $(this).click({connectedPanel: subMenuPanel[eleIdx]}, function (event) {
+            $(".panel-header-left-menu h3").removeClass('selected-tab');
+            $(this).addClass('selected-tab');
+            
+            var connectedPanel = $(event.data.connectedPanel);
+            if (!(connectedPanel.hasClass('selected-submenu'))) {
+                subMenuPanel.filter(".selected-submenu").removeClass('selected-submenu').hide();
+                connectedPanel.addClass('selected-submenu').fadeIn();
+            }
 
-			if ($(connectedPanel).attr('id') === "source-choice") {
-				$(".drop-down-panel-content").height(graph.sourceChoiceContainerHeight + "px");
-			} else if ($(connectedPanel).attr('id') === "day-choice") {
-				$(".drop-down-panel-content").height("125px");
-			} else {
-				$(".drop-down-panel-content").height("95px");
-			}
+            if ($(connectedPanel).attr('id') === "source-choice") {
+                $(".drop-down-panel-content").height(graph.sourceChoiceContainerHeight + "px");
+            } else if ($(connectedPanel).attr('id') === "day-choice") {
+                $(".drop-down-panel-content").height("125px");
+            } else {
+                $(".drop-down-panel-content").height("95px");
+            }
 
-			var menuLinks = $('.drop-down-panel-content');
-			if (menuLinks.css("display") === 'none') {
-				menuLinks.slideToggle(700, "easeOutBounce", function() {});
-				$('.expand-drop-down-panel-btn').css({transform: 'rotate(180deg)'});
-			}
+            var menuLinks = $('.drop-down-panel-content');
+            if (menuLinks.css("display") === 'none') {
+                menuLinks.slideToggle(700, "easeOutBounce", function() {});
+                $('.expand-drop-down-panel-btn').css({transform: 'rotate(180deg)'});
+            }
 
-			if (eleIdx === 0 || eleIdx === 1) {
-				if (graph.graphChart.currentUnit.code === 'walkingtrip'
-					|| graph.graphChart.currentUnit.code === 'biketrip'
-					|| graph.graphChart.currentUnit.code === 'taxitrip') {
+            if (eleIdx === 0 || eleIdx === 1) {
+                if (graph.graphChart.currentUnit.code === 'walkingtrip'
+                    || graph.graphChart.currentUnit.code === 'biketrip'
+                    || graph.graphChart.currentUnit.code === 'taxitrip') {
 
-					$('.trip-unit-desc').show().text(graph.graphChart.currentUnit.nameInfo[graph.langCode]);
-				} else {
-					$('.trip-unit-desc').hide();
-				};
-			} else {
-				$('.trip-unit-desc').hide();
-			}
-		});
-	});
-	$('#sub-menu-unit').addClass('selected-tab');
-	$("#unit-choice").addClass('selected-submenu').show();
+                    $('.trip-unit-desc').show().text(graph.graphChart.currentUnit.nameInfo[graph.langCode]);
+                } else {
+                    $('.trip-unit-desc').hide();
+                };
+            } else {
+                $('.trip-unit-desc').hide();
+            }
+        });
+    });
+    $('#sub-menu-unit').addClass('selected-tab');
+    $("#unit-choice").addClass('selected-submenu').show();
 
-	Utils.setupDropDownPanelBtn();
+    Utils.setupDropDownPanelBtn();
 
-	Utils.setupUnitChoiceLayout('#unit-choice', graph.unitCategorys, '{% get_static_prefix %}', function(unitCategory) {
-		graph.graphChart.updateUnit(unitCategory);
-		$("#unit-label").html(unitCategory.shortDescInfo[graph.langCode]);
-		$("#unit-bg").attr("src", "{% get_static_prefix %}images/unit/" + unitCategory.bgImg);
+    Utils.setupUnitChoiceLayout('#unit-choice', graph.unitCategorys, '{% get_static_prefix %}', function(unitCategory) {
+        graph.graphChart.updateUnit(unitCategory);
+        $("#unit-label").html(unitCategory.shortDescInfo[graph.langCode]);
+        $("#unit-bg").attr("src", "{% get_static_prefix %}images/unit/" + unitCategory.bgImg);
 
-		if (unitCategory.code === 'walkingtrip'
-			|| unitCategory.code === 'biketrip'
-			|| unitCategory.code === 'taxitrip') {
+        if (unitCategory.code === 'walkingtrip'
+            || unitCategory.code === 'biketrip'
+            || unitCategory.code === 'taxitrip') {
 
-			$('.trip-unit-desc').show().text(unitCategory.nameInfo[graph.langCode]);
-		} else {
-			$('.trip-unit-desc').hide();
-		};
-	});
+            $('.trip-unit-desc').show().text(unitCategory.nameInfo[graph.langCode]);
+        } else {
+            $('.trip-unit-desc').hide();
+        };
+    });
 
-	Utils.setupTimeChoiceLayout('#time-choice', function(newRangeType) {
-		if (graph.graphChart.currentRangeType !== newRangeType) {
-			graph.graphChart.currentDt = Utils.genStartEndDt(Utils.getNowMoment('hour'), newRangeType).startDt;
-			graph.graphChart.updateCurrentRangeType(newRangeType);
+    Utils.setupTimeChoiceLayout('#time-choice', function(newRangeType) {
+        if (graph.graphChart.currentRangeType !== newRangeType) {
+            graph.graphChart.currentDt = Utils.genStartEndDt(Utils.getNowMoment('hour'), newRangeType).startDt;
+            graph.graphChart.updateCurrentRangeType(newRangeType);
 
-			resetXSliderNSummaryNHightlight();
-			resetGraphNPanel();
-		}
-	});
+            resetXSliderNSummaryNHightlight();
+            resetGraphNPanel();
+        }
+    });
 
-	graph.graphChart.getSourceReadings();
+    graph.graphChart.getSourceReadings();
 
-	Date.parseDate = function( input, format ){
-		return moment(input,format).toDate();
-	};
-	Date.prototype.dateFormat = function( format ){
-		return moment(this).format(format);
-	};
+    Date.parseDate = function( input, format ){
+        return moment(input,format).toDate();
+    };
+    Date.prototype.dateFormat = function( format ){
+        return moment(this).format(format);
+    };
 
-	var dtPickerFormat = "D MMM YYYY, dddd";
-	$("#compare-dt-picker").datetimepicker({
-		format: dtPickerFormat,
-		formatTime: "h:mm a",
-		formatDate: "DD.MM.YYYY",
-		scrollMonth: false,
-		timepicker: false,
-		minDate: graph.firstRecord.toDate(),
-		maxDate: 0,
-		onSelectDate: function(input) {
-			customDtPickerSeleced(input);
-		},
-		onShow: function(input) {
-			customDtPickerSeleced(input);
-		},
-	});
+    var dtPickerFormat = "D MMM YYYY, dddd";
+    $("#compare-dt-picker").datetimepicker({
+        format: dtPickerFormat,
+        formatTime: "h:mm a",
+        formatDate: "DD.MM.YYYY",
+        scrollMonth: false,
+        timepicker: false,
+        minDate: graph.firstRecord.toDate(),
+        maxDate: 0,
+        onSelectDate: function(input) {
+            customDtPickerSeleced(input);
+        },
+        onShow: function(input) {
+            customDtPickerSeleced(input);
+        },
+    });
 
-	var dtPickerFormat = "D MMM YYYY, dddd";
-	$("#current-dt-picker").datetimepicker({
-		format: dtPickerFormat,
-		formatTime: "h:mm a",
-		formatDate: "DD.MM.YYYY",
-		scrollMonth: false,
-		timepicker: false,
-		minDate: graph.firstRecord.toDate(),
-		maxDate: 0,
-		onSelectDate: function(input) {
-			graph.graphChart.updateCurrentDt(moment(input).startOf('hour'));
-			resetGraphNPanel();
-		}
-	});
-	$("#custom-calendar-icon").click(function () {
-		$('#current-dt-picker').datetimepicker('show');
-	})
+    var dtPickerFormat = "D MMM YYYY, dddd";
+    $("#current-dt-picker").datetimepicker({
+        format: dtPickerFormat,
+        formatTime: "h:mm a",
+        formatDate: "DD.MM.YYYY",
+        scrollMonth: false,
+        timepicker: false,
+        minDate: graph.firstRecord.toDate(),
+        maxDate: 0,
+        onSelectDate: function(input) {
+            graph.graphChart.updateCurrentDt(moment(input).startOf('hour'));
+            resetGraphNPanel();
+        }
+    });
+    $("#custom-calendar-icon").click(function () {
+        $('#current-dt-picker').datetimepicker('show');
+    })
 
-	$("#dt-prev-icon").click(function () {
-		graph.graphChart.goPrev();
-		resetGraphNPanel();
-	});
-	$("#dt-next-icon").click(function () {
-		graph.graphChart.goNext();
-		resetGraphNPanel();
-	});
-	$("#dt-now-icon").click(function() {
-		graph.graphChart.updateCurrentDt(Utils.getNowMoment('hour'));
-		resetGraphNPanel();
-	});
+    $("#dt-prev-icon").click(function () {
+        graph.graphChart.goPrev();
+        resetGraphNPanel();
+    });
+    $("#dt-next-icon").click(function () {
+        graph.graphChart.goNext();
+        resetGraphNPanel();
+    });
+    $("#dt-now-icon").click(function() {
+        graph.graphChart.updateCurrentDt(Utils.getNowMoment('hour'));
+        resetGraphNPanel();
+    });
 
-	$("#clear-graph").click(function () {
-		clearSourceChoice();
-		resetXSliderNSummaryNHightlight();
-		resetGraphNPanel();
-		if (graph.graphChart.plot !== null) {
-			graph.graphChart.updateCompareChoice();
-		}
-	});
+    $("#clear-graph").click(function () {
+        clearSourceChoice();
+        resetXSliderNSummaryNHightlight();
+        resetGraphNPanel();
+        if (graph.graphChart.plot !== null) {
+            graph.graphChart.updateCompareChoice();
+        }
+    });
 
-	resetGraphNPanel();
+    resetGraphNPanel();
 
-	graph.energySummary = new EnergySummary();
-	graph.energySummary.getSummaryWithSystem(graph.graphChart.entrakSystem, retrieveSummaryFinished);
+    graph.energySummary = new EnergySummary();
+    graph.energySummary.getSummaryWithSystem(graph.graphChart.entrakSystem, retrieveSummaryFinished);
 });
 
 </script>
@@ -644,142 +644,142 @@ $(function() {
 
 {% block page_content %}
 <div class="panel-component">
-	<div id="graph-panel-header" class="drop-down-panel-header">
-		<!-- Sub Menu Item -->
-		<div class="panel-header-left-menu">
-			<!-- write this way to remove space between inline-blocks -->
-			<!-- http://css-tricks.com/fighting-the-space-between-inline-block-elements/ -->
-			<h3 id="sub-menu-unit">
-				{% trans "Unit" %}</h3><h3 id="sub-menu-time">
-				{% trans "Time" %}</h3><h3 id="sub-menu-source">
-				{% trans "End-use" %}</h3><h3 id="sub-menu-days">{% trans "Compare" %}</h3>
-			<img class="expand-drop-down-panel-btn" src="{% static 'images/expandable_button.png' %}">
-		</div>
-	</div>
+    <div id="graph-panel-header" class="drop-down-panel-header">
+        <!-- Sub Menu Item -->
+        <div class="panel-header-left-menu">
+            <!-- write this way to remove space between inline-blocks -->
+            <!-- http://css-tricks.com/fighting-the-space-between-inline-block-elements/ -->
+            <h3 id="sub-menu-unit">
+                {% trans "Unit" %}</h3><h3 id="sub-menu-time">
+                {% trans "Time" %}</h3><h3 id="sub-menu-source">
+                {% trans "End-use" %}</h3><h3 id="sub-menu-days">{% trans "Compare" %}</h3>
+            <img class="expand-drop-down-panel-btn" src="{% static 'images/expandable_button.png' %}">
+        </div>
+    </div>
 
-	<!-- Sub Menu Item Links -->
-	<div class="drop-down-panel-content">
-		<ul id="unit-choice"></ul>
-		<ul id="time-choice">
-			<div id="select-dt-section" style="display: none;">
-				<div id="custom-select-title">CUSTOM SELECT</div>
-				<div id="custom-calendar-icon"></div>
-				<input type="text" id="current-dt-picker">
-			</div>
-		</ul>
-		<p class='trip-unit-desc'></p>
-		<ul id="source-choice">
-			<div class="choice-panel">
-				<div class="choice-header">{% trans "Compare between end-use types" %} 
-					<span>{% trans "(Max 5)" %}</span>
-					<span id="source-choice-clear" class="choice-clear">{% trans "Clear all" %}</span>
-				</div>
-				<hr>
-				<div id="source-choice-container"></div>
-				<div style="clear: both;"></div>
-			</div>
-		</ul>
-		<ul id="day-choice">
-			<div class="choice-panel">
-				<div class="choice-header">{% trans "Compare between <span id='compare-between'>days</span>" %}
-					<span id="compare-choice-clear" class="choice-clear">{% trans "Clear all" %}</span>
-				</div>
-				<hr>
-				<div class="compare-choice-block">
-					<div>
-						<div class='circle-checkbox'>
-							<input type='checkbox' id="compare-prev-checkbox"></input>
-							<label for="compare-prev-checkbox"></label>
-						</div>
-						<label for="compare-prev-checkbox" style="color: #354960;">{% trans "Previous " %}<span class="compare-target-text"></span></label>
-					</div>
-					<div>
-						<span id="compare-prev-date"></span>
-					</div>
-				</div>
-				<div class="compare-choice-block" style="left: 197px;">
-					<div class="compare-highest-lowest-container">
-						<div class='circle-checkbox'>
-							<input type='checkbox' id="compare-highest-checkbox"></input>
-							<label for="compare-highest-checkbox"></label>
-						</div>
-						<label for="compare-highest-checkbox" style="color: #354960;">{% trans "Highest " %}<span class="compare-target-text"></span></label>
-					</div>
-					<div>
-						<span id="compare-highest-date"></span>
-					</div>
-				</div>
-				<div class="compare-choice-block" style="left: 380px;">
-					<div class="compare-highest-lowest-container">
-						<div class='circle-checkbox'>
-							<input type='checkbox' id="compare-lowest-checkbox"></input>
-							<label for="compare-lowest-checkbox"></label>
-						</div>
-						<label for="compare-lowest-checkbox" style="color: #354960;">{% trans "Lowest " %}<span class="compare-target-text"></span></label>
-					</div>
-					<div>
-						<span id="compare-lowest-date"></span>
-					</div>
-				</div>
-				<div class="compare-choice-block" style="left: 564px;">
-					<div>
-						<div class='circle-checkbox'>
-							<input type='checkbox' id="compare-custom-checkbox"></input>
-							<label for="compare-custom-checkbox"></label>
-						</div>
-						<label for="compare-custom-checkbox" style="color: #354960;">{% trans "Custom date selection" %}</label>
-						<input type="text" id="compare-dt-picker">
-					</div>
-					<div>
-						<span id="compare-custom-date"></span>
-					</div>
-				</div>
-			</div>
-		</ul>
-	</div>
-	<div style="clear: both;"></div>
+    <!-- Sub Menu Item Links -->
+    <div class="drop-down-panel-content">
+        <ul id="unit-choice"></ul>
+        <ul id="time-choice">
+            <div id="select-dt-section" style="display: none;">
+                <div id="custom-select-title">CUSTOM SELECT</div>
+                <div id="custom-calendar-icon"></div>
+                <input type="text" id="current-dt-picker">
+            </div>
+        </ul>
+        <p class='trip-unit-desc'></p>
+        <ul id="source-choice">
+            <div class="choice-panel">
+                <div class="choice-header">{% trans "Compare between end-use types" %} 
+                    <span>{% trans "(Max 5)" %}</span>
+                    <span id="source-choice-clear" class="choice-clear">{% trans "Clear all" %}</span>
+                </div>
+                <hr>
+                <div id="source-choice-container"></div>
+                <div style="clear: both;"></div>
+            </div>
+        </ul>
+        <ul id="day-choice">
+            <div class="choice-panel">
+                <div class="choice-header">{% trans "Compare between <span id='compare-between'>days</span>" %}
+                    <span id="compare-choice-clear" class="choice-clear">{% trans "Clear all" %}</span>
+                </div>
+                <hr>
+                <div class="compare-choice-block">
+                    <div>
+                        <div class='circle-checkbox'>
+                            <input type='checkbox' id="compare-prev-checkbox"></input>
+                            <label for="compare-prev-checkbox"></label>
+                        </div>
+                        <label for="compare-prev-checkbox" style="color: #354960;">{% trans "Previous " %}<span class="compare-target-text"></span></label>
+                    </div>
+                    <div>
+                        <span id="compare-prev-date"></span>
+                    </div>
+                </div>
+                <div class="compare-choice-block" style="left: 197px;">
+                    <div class="compare-highest-lowest-container">
+                        <div class='circle-checkbox'>
+                            <input type='checkbox' id="compare-highest-checkbox"></input>
+                            <label for="compare-highest-checkbox"></label>
+                        </div>
+                        <label for="compare-highest-checkbox" style="color: #354960;">{% trans "Highest " %}<span class="compare-target-text"></span></label>
+                    </div>
+                    <div>
+                        <span id="compare-highest-date"></span>
+                    </div>
+                </div>
+                <div class="compare-choice-block" style="left: 380px;">
+                    <div class="compare-highest-lowest-container">
+                        <div class='circle-checkbox'>
+                            <input type='checkbox' id="compare-lowest-checkbox"></input>
+                            <label for="compare-lowest-checkbox"></label>
+                        </div>
+                        <label for="compare-lowest-checkbox" style="color: #354960;">{% trans "Lowest " %}<span class="compare-target-text"></span></label>
+                    </div>
+                    <div>
+                        <span id="compare-lowest-date"></span>
+                    </div>
+                </div>
+                <div class="compare-choice-block" style="left: 564px;">
+                    <div>
+                        <div class='circle-checkbox'>
+                            <input type='checkbox' id="compare-custom-checkbox"></input>
+                            <label for="compare-custom-checkbox"></label>
+                        </div>
+                        <label for="compare-custom-checkbox" style="color: #354960;">{% trans "Custom date selection" %}</label>
+                        <input type="text" id="compare-dt-picker">
+                    </div>
+                    <div>
+                        <span id="compare-custom-date"></span>
+                    </div>
+                </div>
+            </div>
+        </ul>
+    </div>
+    <div style="clear: both;"></div>
 
-	<!-- Simple bar for decoration -->
-	<div class="panel-separator"></div>
-	<div id="dt-panel">
-		<div id="unit-label"></div>
-		<div id="clear-graph">{% trans "Clear Graph" %}</div>
-		<div class="dt-navigate-panel">
-			<div id="dt-prev-icon"></div>
-			<span id="current-dt"></span>
-			<div id="dt-next-icon"></div>
-		</div>
-	</div>
-	<hr>
+    <!-- Simple bar for decoration -->
+    <div class="panel-separator"></div>
+    <div id="dt-panel">
+        <div id="unit-label"></div>
+        <div id="clear-graph">{% trans "Clear Graph" %}</div>
+        <div class="dt-navigate-panel">
+            <div id="dt-prev-icon"></div>
+            <span id="current-dt"></span>
+            <div id="dt-next-icon"></div>
+        </div>
+    </div>
+    <hr>
 </div>
 
 <!-- Main Graph -->
 <div id="graph-panel" class="panel-component">
-	<img id="unit-bg">
-	<div class="chart-legend-container"></div>
-	<div id="chart"></div>
-	<div id="y-axis-slider"></div>
-	<div id="x-axis-slider"></div>
+    <img id="unit-bg">
+    <div class="chart-legend-container"></div>
+    <div id="chart"></div>
+    <div id="y-axis-slider"></div>
+    <div id="x-axis-slider"></div>
 
-	<div id="selection-summary">
-		<div id="selection-summary-left">
-			<p id="selection-summary-at">{% trans "Amount of energy consumed on: " %}<span></span></p>
-			<p id="selection-summary-from"><span>{% trans "from:" %}</span><span class="summary-content-span"></span></p>
-			<p id="selection-summary-to"><span>{% trans "to:" %}</span><span class="summary-content-span"></span></p>
-			<p id="selection-summary-line"></p>
-			<!-- <p id="selection-summary-equal">which equates to:</p> -->
-			<p id="selection-summary-value-container">
-				<span id="selection-summary-unit-prefix"></span>
-				<span id="selection-summary-value"></span>
-				<span id="selection-summary-unit-suffix"></span>
-			</p>
-		</div>
-		<div id="selection-summary-right">
-			<div id="selection-summary-chart"></div>
-			<p id="selection-summary-source"></p>
-		</div>
-		<p style="clear: both;"></p>
-	</div>
+    <div id="selection-summary">
+        <div id="selection-summary-left">
+            <p id="selection-summary-at">{% trans "Amount of energy consumed on: " %}<span></span></p>
+            <p id="selection-summary-from"><span>{% trans "from:" %}</span><span class="summary-content-span"></span></p>
+            <p id="selection-summary-to"><span>{% trans "to:" %}</span><span class="summary-content-span"></span></p>
+            <p id="selection-summary-line"></p>
+            <!-- <p id="selection-summary-equal">which equates to:</p> -->
+            <p id="selection-summary-value-container">
+                <span id="selection-summary-unit-prefix"></span>
+                <span id="selection-summary-value"></span>
+                <span id="selection-summary-unit-suffix"></span>
+            </p>
+        </div>
+        <div id="selection-summary-right">
+            <div id="selection-summary-chart"></div>
+            <p id="selection-summary-source"></p>
+        </div>
+        <p style="clear: both;"></p>
+    </div>
 </div>
 <!-- Main Graph Ends -->
 
