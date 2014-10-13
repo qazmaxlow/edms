@@ -35,101 +35,101 @@
 
 <script id="peak-conversation-template" type="x-tmpl-mustache">
 <div class="conversational-block" alert_type="peak">
-	{% blocktrans %}
-	<div>Let me know if <select class="source-select" size="4" placeholder="Please select"></select>energy</div>
-	<div>reaches <select class="compare-percent-select"></select>% of my previous peak demand of <input class="peak-threshold-input" type="number">kVA.</div>
-	{% endblocktrans %}
-	<div class="send-alert-to">{% trans "Send alert to: " %}<ul class="email-input"></ul></div>
-	<div class="email-notes">{% trans "You may use max 5 emails, use semi-colon to separate emails<br>e.g user@email.com; user@email.com" %}</div>
-	<div class="btn-container">
-		<div class="conversational-btn conversational-cancel-btn">{% trans "Cancel" %}</div>
-		<div class="conversational-btn conversational-confirm-btn">{% trans "Confirm" %}</div>
-	</div>
+        {% blocktrans %}
+        <div>Let me know if <select class="source-select" size="4" placeholder="Please select"></select>energy</div>
+        <div>reaches <select class="compare-percent-select"></select>% of my previous peak demand of <input class="peak-threshold-input" type="number">kVA.</div>
+        {% endblocktrans %}
+        <div class="send-alert-to">{% trans "Send alert to: " %}<ul class="email-input"></ul></div>
+        <div class="email-notes">{% trans "You may use max 5 emails, use semi-colon to separate emails<br>e.g user@email.com; user@email.com" %}</div>
+        <div class="btn-container">
+                <div class="conversational-btn conversational-cancel-btn">{% trans "Cancel" %}</div>
+                <div class="conversational-btn conversational-confirm-btn">{% trans "Confirm" %}</div>
+        </div>
 </div>
 </script>
 
 <script id="summary-still-on-conversation-template" type="x-tmpl-mustache">
 <div class="conversational-block" alert_type="{% templatetag openvariable %}alertType{% templatetag closevariable %}">
-	{% blocktrans %}
-	<div>Let me know if <select class="source-select" size="4" placeholder="Please select"></select>energy use</div>
-	<div>is <select class="compare-percent-select"></select>% higher than my recent average between <select class="start-time-select time-select"></select> to <select class="end-time-select time-select"></select> on <select class="weekday-select"></select></div>
-	{% endblocktrans %}
-	<div class="send-alert-to">{% trans "Send alert to: " %}<ul class="email-input"></ul></div>
-	<div class="email-notes">{% trans "You may use max 5 emails, use semi-colon to separate emails<br>e.g user@email.com; user@email.com" %}</div>
-	<div class="btn-container">
-		<div class="conversational-btn conversational-cancel-btn">{% trans "Cancel" %}</div>
-		<div class="conversational-btn conversational-confirm-btn">{% trans "Confirm" %}</div>
-	</div>
+        {% blocktrans %}
+        <div>Let me know if <select class="source-select" size="4" placeholder="Please select"></select>energy use</div>
+        <div>is <select class="compare-percent-select"></select>% higher than my recent average between <select class="start-time-select time-select"></select> to <select class="end-time-select time-select"></select> on <select class="weekday-select"></select></div>
+        {% endblocktrans %}
+        <div class="send-alert-to">{% trans "Send alert to: " %}<ul class="email-input"></ul></div>
+        <div class="email-notes">{% trans "You may use max 5 emails, use semi-colon to separate emails<br>e.g user@email.com; user@email.com" %}</div>
+        <div class="btn-container">
+                <div class="conversational-btn conversational-cancel-btn">{% trans "Cancel" %}</div>
+                <div class="conversational-btn conversational-confirm-btn">{% trans "Confirm" %}</div>
+        </div>
 </div>
 </script>
 
 <script id="history-row-template" type="x-tmpl-mustache">
 <div class="history-row {% templatetag openvariable %}resolvedColClass{% templatetag closevariable %}" history_id="{% templatetag openvariable %}historyId{% templatetag closevariable %}">
-	<div class="date-col">
-		<div class="created-date">{% templatetag openvariable %}createdDate{% templatetag closevariable %}</div>
-		<div class="created-time">{% templatetag openvariable %}createdTime{% templatetag closevariable %}</div>
-	</div><div class="source-col">{% templatetag openvariable %}sourceName{% templatetag closevariable %}
-	</div><div class="issue-col">
-		<div class="issue-line-1">{% templatetag openvariable %}issueLine1{% templatetag closevariable %}</div>
-		<div class="issue-line-2">{% templatetag openvariable %}issueLine2{% templatetag closevariable %}</div>
-		<div class="issue-line-3">{% templatetag openvariable %}issueLine3{% templatetag closevariable %}</div>
-	</div><div class="resolved-col">
-		<div class="resolved-dot"></div>
-		<div class="resolved-dt-container">
-			<div class="resolved-text">{% trans "Resolved at" %}</div>
-			<div class="resolved-dt">{% templatetag openvariable %}resolvedDt{% templatetag closevariable %}</div>
-		</div>
-	</div>
+        <div class="date-col">
+                <div class="created-date">{% templatetag openvariable %}createdDate{% templatetag closevariable %}</div>
+                <div class="created-time">{% templatetag openvariable %}createdTime{% templatetag closevariable %}</div>
+        </div><div class="source-col">{% templatetag openvariable %}sourceName{% templatetag closevariable %}
+        </div><div class="issue-col">
+                <div class="issue-line-1">{% templatetag openvariable %}issueLine1{% templatetag closevariable %}</div>
+                <div class="issue-line-2">{% templatetag openvariable %}issueLine2{% templatetag closevariable %}</div>
+                <div class="issue-line-3">{% templatetag openvariable %}issueLine3{% templatetag closevariable %}</div>
+        </div><div class="resolved-col">
+                <div class="resolved-dot"></div>
+                <div class="resolved-dt-container">
+                        <div class="resolved-text">{% trans "Resolved at" %}</div>
+                        <div class="resolved-dt">{% templatetag openvariable %}resolvedDt{% templatetag closevariable %}</div>
+                </div>
+        </div>
 </div>
 </script>
 
 <script id="peak-alert-row-template" type="x-tmpl-mustache">
 <div class="alert-row" alert_id="{% templatetag openvariable %}alertId{% templatetag closevariable %}" source_info='{% templatetag openvariable %}sourceInfo{% templatetag closevariable %}'>
-	<div class="end-use-col">
-		<div class="display-text end-use-text">{% templatetag openvariable %}endUse{% templatetag closevariable %}</div>
-		<select class="end-use-select"></select>
-	</div><div class="percent-col">
-		<div class="display-text percent-text">{% templatetag openvariable %}percent{% templatetag closevariable %}</div>
-		<select class="compare-percent-select"></select>
-	</div><div class="peak-threshold-col">
-		<div class="display-text peak-threshold-text">{% templatetag openvariable %}peakThreshold{% templatetag closevariable %}</div>
-		<input class="peak-threshold-input" type="number"></input>
-	</div><div class="receiver-col">
-		<div class="display-text receiver-text"><span class="receiver-num-val">{% templatetag openvariable %}numOfreceiver{% templatetag closevariable %}</span> Receiver</div>
-		<select multiple="multiple" class="receiver-select"></select>
-	</div><div class="created-col">{% templatetag openvariable %}created{% templatetag closevariable %}
-	</div><div class="action-col">
-		<div class="normal-action-block"><img class="row-edit-btn" src="{% static 'images/alert/edit-icon.png' %}"><img class="row-copy-btn" src="{% static 'images/alert/duplicate-icon.png' %}"><img class="row-delete-btn" src="{% static 'images/alert/delete-icon.png' %}"></div>
-		<div class="confirm-action-block"><img class="row-confirm-btn" src="{% static 'images/alert/confirm-icon.png' %}"><img class="row-cancel-btn" src="{% static 'images/alert/cancel-icon.png' %}"></div>
-	</div>
+        <div class="end-use-col">
+                <div class="display-text end-use-text">{% templatetag openvariable %}endUse{% templatetag closevariable %}</div>
+                <select class="end-use-select"></select>
+        </div><div class="percent-col">
+                <div class="display-text percent-text">{% templatetag openvariable %}percent{% templatetag closevariable %}</div>
+                <select class="compare-percent-select"></select>
+        </div><div class="peak-threshold-col">
+                <div class="display-text peak-threshold-text">{% templatetag openvariable %}peakThreshold{% templatetag closevariable %}</div>
+                <input class="peak-threshold-input" type="number"></input>
+        </div><div class="receiver-col">
+                <div class="display-text receiver-text"><span class="receiver-num-val">{% templatetag openvariable %}numOfreceiver{% templatetag closevariable %}</span> Receiver</div>
+                <select multiple="multiple" class="receiver-select"></select>
+        </div><div class="created-col">{% templatetag openvariable %}created{% templatetag closevariable %}
+        </div><div class="action-col">
+                <div class="normal-action-block"><img class="row-edit-btn" src="{% static 'images/alert/edit-icon.png' %}"><img class="row-copy-btn" src="{% static 'images/alert/duplicate-icon.png' %}"><img class="row-delete-btn" src="{% static 'images/alert/delete-icon.png' %}"></div>
+                <div class="confirm-action-block"><img class="row-confirm-btn" src="{% static 'images/alert/confirm-icon.png' %}"><img class="row-cancel-btn" src="{% static 'images/alert/cancel-icon.png' %}"></div>
+        </div>
 </div>
 </script>
 
 <script id="summary-still-on-alert-row-template" type="x-tmpl-mustache">
 <div class="alert-row" alert_id="{% templatetag openvariable %}alertId{% templatetag closevariable %}">
-	<div class="end-use-col">
-		<div class="display-text end-use-text">{% templatetag openvariable %}endUse{% templatetag closevariable %}</div>
-		<select class="end-use-select"></select>
-	</div><div class="percent-col">
-		<div class="display-text percent-text">{% templatetag openvariable %}percent{% templatetag closevariable %}</div>
-		<select class="compare-percent-select"></select>
-	</div><div class="time-from-col">
-		<div class="display-text time-from-text">{% templatetag openvariable %}timeFrom{% templatetag closevariable %}</div>
-		<select class="time-from-select time-select"></select>
-	</div><div class="time-to-col">
-		<div class="display-text time-to-text">{% templatetag openvariable %}timeTo{% templatetag closevariable %}</div>
-		<select class="time-to-select time-select"></select>
-	</div><div class="weekday-col">
-		<div class="display-text weekday-text">{% templatetag openvariable %}weekday{% templatetag closevariable %}</div>
-		<select class="weekday-select"></select>
-	</div><div class="receiver-col">
-		<div class="display-text receiver-text"><span class="receiver-num-val">{% templatetag openvariable %}numOfreceiver{% templatetag closevariable %}</span> Receiver</div>
-		<select multiple="multiple" class="receiver-select"></select>
-	</div><div class="created-col">{% templatetag openvariable %}created{% templatetag closevariable %}
-	</div><div class="action-col">
-		<div class="normal-action-block"><img class="row-edit-btn" src="{% static 'images/alert/edit-icon.png' %}"><img class="row-copy-btn" src="{% static 'images/alert/duplicate-icon.png' %}"><img class="row-delete-btn" src="{% static 'images/alert/delete-icon.png' %}"></div>
-		<div class="confirm-action-block"><img class="row-confirm-btn" src="{% static 'images/alert/confirm-icon.png' %}"><img class="row-cancel-btn" src="{% static 'images/alert/cancel-icon.png' %}"></div>
-	</div>
+        <div class="end-use-col">
+                <div class="display-text end-use-text">{% templatetag openvariable %}endUse{% templatetag closevariable %}</div>
+                <select class="end-use-select"></select>
+        </div><div class="percent-col">
+                <div class="display-text percent-text">{% templatetag openvariable %}percent{% templatetag closevariable %}</div>
+                <select class="compare-percent-select"></select>
+        </div><div class="time-from-col">
+                <div class="display-text time-from-text">{% templatetag openvariable %}timeFrom{% templatetag closevariable %}</div>
+                <select class="time-from-select time-select"></select>
+        </div><div class="time-to-col">
+                <div class="display-text time-to-text">{% templatetag openvariable %}timeTo{% templatetag closevariable %}</div>
+                <select class="time-to-select time-select"></select>
+        </div><div class="weekday-col">
+                <div class="display-text weekday-text">{% templatetag openvariable %}weekday{% templatetag closevariable %}</div>
+                <select class="weekday-select"></select>
+        </div><div class="receiver-col">
+                <div class="display-text receiver-text"><span class="receiver-num-val">{% templatetag openvariable %}numOfreceiver{% templatetag closevariable %}</span> Receiver</div>
+                <select multiple="multiple" class="receiver-select"></select>
+        </div><div class="created-col">{% templatetag openvariable %}created{% templatetag closevariable %}
+        </div><div class="action-col">
+                <div class="normal-action-block"><img class="row-edit-btn" src="{% static 'images/alert/edit-icon.png' %}"><img class="row-copy-btn" src="{% static 'images/alert/duplicate-icon.png' %}"><img class="row-delete-btn" src="{% static 'images/alert/delete-icon.png' %}"></div>
+                <div class="confirm-action-block"><img class="row-confirm-btn" src="{% static 'images/alert/confirm-icon.png' %}"><img class="row-cancel-btn" src="{% static 'images/alert/cancel-icon.png' %}"></div>
+        </div>
 </div>
 </script>
 
@@ -137,713 +137,713 @@
 var settings = {};
 
 function genSystemOptionInfo(systemTree) {
-	var sourceIds = [];
-	systemTree.traverseDown(function (node) {
-		for (var sourceId in node.data.sources) {
-			sourceIds.push(sourceId);
-		}
-	});
+        var sourceIds = [];
+        systemTree.traverseDown(function (node) {
+                for (var sourceId in node.data.sources) {
+                        sourceIds.push(sourceId);
+                }
+        });
 
-	return {'nameInfo': systemTree.data.nameInfo, 'source_ids': sourceIds};
+        return {'nameInfo': systemTree.data.nameInfo, 'source_ids': sourceIds};
 }
 
 function transformToPythonWeekday(momentWeekday) {
-	var pythonWeekday = momentWeekday-1;
-	pythonWeekday = (pythonWeekday < 0 ) ? 6 : pythonWeekday;
-	return pythonWeekday;
+        var pythonWeekday = momentWeekday-1;
+        pythonWeekday = (pythonWeekday < 0 ) ? 6 : pythonWeekday;
+        return pythonWeekday;
 }
 
 function transformToMomentWeekday(pythonWeekday) {
-	var momentWeekday = pythonWeekday+1;
-	momentWeekday = momentWeekday%7;
-	return momentWeekday;
+        var momentWeekday = pythonWeekday+1;
+        momentWeekday = momentWeekday%7;
+        return momentWeekday;
 }
 
 function transformPythonWeekdaysToName(weekdays) {
-	var allWeekdays = [0,1,2,3,4,5,6];
-	var weekdayWeekdays = [0,1,2,3,4];
-	var weekendWeekdays = [5,6];
-	var weekdayName;
-	if (weekdays.length === allWeekdays.length) {
-		weekdayName = '{% trans "alert_options_all" %}';
-	} else if (weekdays.length === weekdayWeekdays.length) {
-		weekdayName = '{% trans "alert_options_weekdays" %}';
-	} else if (weekdays.length === weekendWeekdays.length) {
-		weekdayName = '{% trans "alert_options_weekends" %}';
-	} else if (weekdays.length === 1) {
-		weekdayName = moment().day(transformToMomentWeekday(weekdays[0])).format('dddd');
-	}
+        var allWeekdays = [0,1,2,3,4,5,6];
+        var weekdayWeekdays = [0,1,2,3,4];
+        var weekendWeekdays = [5,6];
+        var weekdayName;
+        if (weekdays.length === allWeekdays.length) {
+                weekdayName = '{% trans "alert_options_all" %}';
+        } else if (weekdays.length === weekdayWeekdays.length) {
+                weekdayName = '{% trans "alert_options_weekdays" %}';
+        } else if (weekdays.length === weekendWeekdays.length) {
+                weekdayName = '{% trans "alert_options_weekends" %}';
+        } else if (weekdays.length === 1) {
+                weekdayName = moment().day(transformToMomentWeekday(weekdays[0])).format('dddd');
+        }
 
-	return weekdayName;
+        return weekdayName;
 }
 
 function transformToSourceMapKey(info) {
-	var name = info['name'];
-	var secondPart = ('source_ids' in info) ? 'source_ids'+JSON.stringify(info['source_ids']) : 'source_id'+JSON.stringify(info['source_id']);
-	return $.md5(name+secondPart);
+        var name = info['name'];
+        var secondPart = ('source_ids' in info) ? 'source_ids'+JSON.stringify(info['source_ids']) : 'source_id'+JSON.stringify(info['source_id']);
+        return $.md5(name+secondPart);
 }
 
 function findValueIdxInSelect(selectEle, value) {
-	var optionIdx;
-	selectEle.find('option').each(function(idx) {
-		if ($(this).attr('value') === value) {
-			optionIdx = idx;
-			return false;
-		}
-	});
+        var optionIdx;
+        selectEle.find('option').each(function(idx) {
+                if ($(this).attr('value') === value) {
+                        optionIdx = idx;
+                        return false;
+                }
+        });
 
-	return optionIdx;
+        return optionIdx;
 }
 
 function findAlertById(alertId) {
-	var matchAlert = null;
-	$.each(settings.alerts, function(alertIdx, alert) {
-		if (alert.id === alertId) {
-			matchAlert = alert;
-			return false;
-		}
-	});
+        var matchAlert = null;
+        $.each(settings.alerts, function(alertIdx, alert) {
+                if (alert.id === alertId) {
+                        matchAlert = alert;
+                        return false;
+                }
+        });
 
-	return matchAlert;
+        return matchAlert;
 }
 
 function removeAlertById(alertId) {
-	settings.alerts = $.grep(settings.alerts, function(alert) {
-		return alert.id !== alertId;
-	});
+        settings.alerts = $.grep(settings.alerts, function(alert) {
+                return alert.id !== alertId;
+        });
 }
 
 function setSumoSelectedItem(selEle, value) {
-	if (selEle.length > 0) {
-		selEle[0].sumo.selectItem(findValueIdxInSelect(selEle, value));
-	}
+        if (selEle.length > 0) {
+                selEle[0].sumo.selectItem(findValueIdxInSelect(selEle, value));
+        }
 }
 
 function unSelectSumoItem(selEle) {
-	if (selEle.length > 0 && selEle.val() !== null) {
-		selEle[0].sumo.unSelectItem(findValueIdxInSelect(selEle, selEle.val()))
-	}
+        if (selEle.length > 0 && selEle.val() !== null) {
+                selEle[0].sumo.unSelectItem(findValueIdxInSelect(selEle, selEle.val()))
+        }
 }
 
 function setupSourceSelect(targetEle) {
-	$.each(settings.sourceInfoList, function(infoIdx, info) {
-		var mapKey = transformToSourceMapKey(info);
-		var selectHtml = '<option value=\'' + mapKey + '\'>' + info.nameInfo[settings.langCode] + '</option>';
-		targetEle.append(selectHtml);
-	});
+        $.each(settings.sourceInfoList, function(infoIdx, info) {
+                var mapKey = transformToSourceMapKey(info);
+                var selectHtml = '<option value=\'' + mapKey + '\'>' + info.nameInfo[settings.langCode] + '</option>';
+                targetEle.append(selectHtml);
+        });
 }
 
 function setupReceiverSelect(targetEle) {
-	targetEle.each(function() {
-		var selectContainer = $(this);
-		$.each(settings.contactEmails, function(emailIdx, email) {
-			selectContainer.append('<option value="' + email + '">' + email + '</option>');
-		});
-	});
+        targetEle.each(function() {
+                var selectContainer = $(this);
+                $.each(settings.contactEmails, function(emailIdx, email) {
+                        selectContainer.append('<option value="' + email + '">' + email + '</option>');
+                });
+        });
 }
 
 function setupTimeSelect(targetEle) {
-	targetEle.each(function() {
-		var selectContainer = $(this);
-		var optionDt = moment().startOf('day');
-		var endDt = moment(optionDt).add(1, 'd');
-		for (; optionDt.isBefore(endDt); optionDt.add(30, 'm')) {
-			selectContainer.append('<option value="' + optionDt.format('HH:mm') + '">' + optionDt.format('HH:mm') + '</option>');
-		};
-	});
+        targetEle.each(function() {
+                var selectContainer = $(this);
+                var optionDt = moment().startOf('day');
+                var endDt = moment(optionDt).add(1, 'd');
+                for (; optionDt.isBefore(endDt); optionDt.add(30, 'm')) {
+                        selectContainer.append('<option value="' + optionDt.format('HH:mm') + '">' + optionDt.format('HH:mm') + '</option>');
+                };
+        });
 }
 
 function setupWeekdaySelect(targetEle) {
-	targetEle.each(function() {
-		var selectContainer = $(this);
+        targetEle.each(function() {
+                var selectContainer = $(this);
 
-		selectContainer.append('<option value="[0,1,2,3,4,5,6]">{% trans "alert_options_all" %}</option>');
-		selectContainer.append('<option value="[0,1,2,3,4]">{% trans "alert_options_weekdays" %}</option>');
-		selectContainer.append('<option value="[5,6]">{% trans "alert_options_weekends" %}</option>');
+                selectContainer.append('<option value="[0,1,2,3,4,5,6]">{% trans "alert_options_all" %}</option>');
+                selectContainer.append('<option value="[0,1,2,3,4]">{% trans "alert_options_weekdays" %}</option>');
+                selectContainer.append('<option value="[5,6]">{% trans "alert_options_weekends" %}</option>');
 
-		var optionDt = moment().startOf('week');
-		var endDt = moment(optionDt).add(1, 'w');
-		for (; optionDt.isBefore(endDt); optionDt.add(1, 'd')) {
-			selectContainer.append('<option value="[' + transformToPythonWeekday(optionDt.day()) + ']">' + optionDt.format('dddd') + '</option>');
-		};
-	});
+                var optionDt = moment().startOf('week');
+                var endDt = moment(optionDt).add(1, 'w');
+                for (; optionDt.isBefore(endDt); optionDt.add(1, 'd')) {
+                        selectContainer.append('<option value="[' + transformToPythonWeekday(optionDt.day()) + ']">' + optionDt.format('dddd') + '</option>');
+                };
+        });
 }
 
 function setupComparePercentSelect(targetEle) {
-	targetEle.each(function() {
-		var selectContainer = $(this);
-		for (var i = 5; i <= 100; i += 5) {
-			selectContainer.append('<option value="' + i + '">' + i + '</option>');
-		};
-	});
+        targetEle.each(function() {
+                var selectContainer = $(this);
+                for (var i = 5; i <= 100; i += 5) {
+                        selectContainer.append('<option value="' + i + '">' + i + '</option>');
+                };
+        });
 }
 
 function updateReceiverSelect(emailInputEle) {
-	if (settings.skipSignalEvent) {
-		return;
-	}
-	
-	var emails = emailInputEle.tagit("assignedTags");
-	var receiverSelect = emailInputEle.parent().parent().parent().find('.on-edit .receiver-select');
-	if (receiverSelect.length > 0) {
-		receiverSelect.find('option').each(function(optionIdx) {
-			receiverSelect[0].sumo.unSelectItem(optionIdx);
-		});
+        if (settings.skipSignalEvent) {
+                return;
+        }
+        
+        var emails = emailInputEle.tagit("assignedTags");
+        var receiverSelect = emailInputEle.parent().parent().parent().find('.on-edit .receiver-select');
+        if (receiverSelect.length > 0) {
+                receiverSelect.find('option').each(function(optionIdx) {
+                        receiverSelect[0].sumo.unSelectItem(optionIdx);
+                });
 
-		$.each(emails, function(emailIdx, email) {
-			if (receiverSelect.find('option[value="' + email + '"]').length > 0) {
-				setSumoSelectedItem(receiverSelect, email);
-			} else {
-				receiverSelect[0].sumo.add(email);
-				setSumoSelectedItem(receiverSelect, email);
-			}
-		});
-	}
+                $.each(emails, function(emailIdx, email) {
+                        if (receiverSelect.find('option[value="' + email + '"]').length > 0) {
+                                setSumoSelectedItem(receiverSelect, email);
+                        } else {
+                                receiverSelect[0].sumo.add(email);
+                                setSumoSelectedItem(receiverSelect, email);
+                        }
+                });
+        }
 }
 
 function requestSetAlert(alertData) {
-	if ('peak_threshold' in alertData) {
-		alertData.peak_threshold = Math.round(alertData.peak_threshold);
-	}
+        if ('peak_threshold' in alertData) {
+                alertData.peak_threshold = Math.round(alertData.peak_threshold);
+        }
 
-	$.ajax({
-		type: "POST",
-		url: "{% url 'set_alert' system_code=systems.0.code %}",
-		data: alertData,
-	}).done(function(data) {
-		if (data.success) {
-			var settedAlert = data.alert;
-			$.unique($.merge(settings.contactEmails, settedAlert.contactEmails));
+        $.ajax({
+                type: "POST",
+                url: "{% url 'set_alert' system_code=systems.0.code %}",
+                data: alertData,
+        }).done(function(data) {
+                if (data.success) {
+                        var settedAlert = data.alert;
+                        $.unique($.merge(settings.contactEmails, settedAlert.contactEmails));
 
-			if (data['is_edit']) {
-				removeAlertById(settedAlert.id);
-				settings.alerts.push(settedAlert);
+                        if (data['is_edit']) {
+                                removeAlertById(settedAlert.id);
+                                settings.alerts.push(settedAlert);
 
-				var tableRow = $('.alert-row[alert_id="' + settedAlert.id + '"]');
-				if (tableRow.hasClass('on-edit')) {
-					cancelEditMode(tableRow);
-				}
-				updateAlertRowDisplayText(tableRow, settedAlert);
-			} else {
-				settings.alerts.push(settedAlert);
+                                var tableRow = $('.alert-row[alert_id="' + settedAlert.id + '"]');
+                                if (tableRow.hasClass('on-edit')) {
+                                        cancelEditMode(tableRow);
+                                }
+                                updateAlertRowDisplayText(tableRow, settedAlert);
+                        } else {
+                                settings.alerts.push(settedAlert);
 
-				var peakRowTemplate = $('#peak-alert-row-template').html();
-				Mustache.parse(peakRowTemplate);
-				var summaryStillOnRowTemplate = $('#summary-still-on-alert-row-template').html();
-				Mustache.parse(summaryStillOnRowTemplate);
-				var tableRow = insertAlertToTable(settedAlert, peakRowTemplate, summaryStillOnRowTemplate);
+                                var peakRowTemplate = $('#peak-alert-row-template').html();
+                                Mustache.parse(peakRowTemplate);
+                                var summaryStillOnRowTemplate = $('#summary-still-on-alert-row-template').html();
+                                Mustache.parse(summaryStillOnRowTemplate);
+                                var tableRow = insertAlertToTable(settedAlert, peakRowTemplate, summaryStillOnRowTemplate);
 
-				setupSourceSelect(tableRow.find('.end-use-select'));
-				setupReceiverSelect(tableRow.find('.receiver-select'));
-				setupTimeSelect(tableRow.find('.time-select'));
-				setupWeekdaySelect(tableRow.find('.weekday-select'));
-				setupComparePercentSelect(tableRow.find('.compare-percent-select'));
+                                setupSourceSelect(tableRow.find('.end-use-select'));
+                                setupReceiverSelect(tableRow.find('.receiver-select'));
+                                setupTimeSelect(tableRow.find('.time-select'));
+                                setupWeekdaySelect(tableRow.find('.weekday-select'));
+                                setupComparePercentSelect(tableRow.find('.compare-percent-select'));
 
-				setupRowEditBtn(tableRow.find('.row-edit-btn'));
-				setupRowCancelBtn(tableRow.find('.row-cancel-btn'));
-				setupRowDeleteBtn(tableRow.find('.row-delete-btn'));
-				setupRowConfirmBtn(tableRow.find('.row-confirm-btn'));
-				setupDuplicateBtn(tableRow.find('.row-copy-btn'));
-			}
-		}
-	}).fail(function(jqXHR, textStatus) {
-		console.log(jqXHR.responseText);
-	});
+                                setupRowEditBtn(tableRow.find('.row-edit-btn'));
+                                setupRowCancelBtn(tableRow.find('.row-cancel-btn'));
+                                setupRowDeleteBtn(tableRow.find('.row-delete-btn'));
+                                setupRowConfirmBtn(tableRow.find('.row-confirm-btn'));
+                                setupDuplicateBtn(tableRow.find('.row-copy-btn'));
+                        }
+                }
+        }).fail(function(jqXHR, textStatus) {
+                console.log(jqXHR.responseText);
+        });
 }
 
 function insertAlertToTable(alert, peakRowTemplate, summaryStillOnRowTemplate) {
-	var info = {
-		alertId: alert.id,
-		endUse: alert.sourceInfo.nameInfo[settings.langCode],
-		percent: alert.comparePercent,
-		created: alert.created,
-		numOfreceiver: alert.contactEmails.length,
-	};
-	var target, targetTemplate;
-	if (alert.type === 'summary' || alert.type === 'still_on') {
-		targetTemplate = summaryStillOnRowTemplate;
-		target = (alert.type === 'summary') ? '.summary-alert .content-table' : '.still-on-alert .content-table';
+        var info = {
+                alertId: alert.id,
+                endUse: alert.sourceInfo.nameInfo[settings.langCode],
+                percent: alert.comparePercent,
+                created: alert.created,
+                numOfreceiver: alert.contactEmails.length,
+        };
+        var target, targetTemplate;
+        if (alert.type === 'summary' || alert.type === 'still_on') {
+                targetTemplate = summaryStillOnRowTemplate;
+                target = (alert.type === 'summary') ? '.summary-alert .content-table' : '.still-on-alert .content-table';
 
-		info.timeFrom = alert.startTime;
-		info.timeTo = alert.endTime;
-		info.weekday = transformPythonWeekdaysToName(alert.checkWeekdays);
-	} else {
-		targetTemplate = peakRowTemplate;
-		target = '.peak-demand .content-table';
+                info.timeFrom = alert.startTime;
+                info.timeTo = alert.endTime;
+                info.weekday = transformPythonWeekdaysToName(alert.checkWeekdays);
+        } else {
+                targetTemplate = peakRowTemplate;
+                target = '.peak-demand .content-table';
 
-		info.peakThreshold = alert.peakThreshold;
-	}
+                info.peakThreshold = alert.peakThreshold;
+        }
 
-	var eleHtml = Mustache.render(targetTemplate, info);
-	$(target).append(eleHtml);
+        var eleHtml = Mustache.render(targetTemplate, info);
+        $(target).append(eleHtml);
 
-	return $(target).find('.alert-row[alert_id="' + alert.id + '"]');
+        return $(target).find('.alert-row[alert_id="' + alert.id + '"]');
 }
 
 function requestRemoveAlert(alertId) {
-	$.ajax({
-		type: "POST",
-		url: "{% url 'remove_alert' system_code=systems.0.code %}",
-		data: {
-			alert_id: alertId
-		},
-	}).done(function(data) {
-		if (data.success) {
-			$('.alert-row[alert_id="' + alertId + '"]').slideUp(400, function() {
-				$(this).remove();
-				removeAlertById(alertId);
-			});
-		}
-	}).fail(function(jqXHR, textStatus) {
-		console.log(jqXHR.responseText);
-	});
+        $.ajax({
+                type: "POST",
+                url: "{% url 'remove_alert' system_code=systems.0.code %}",
+                data: {
+                        alert_id: alertId
+                },
+        }).done(function(data) {
+                if (data.success) {
+                        $('.alert-row[alert_id="' + alertId + '"]').slideUp(400, function() {
+                                $(this).remove();
+                                removeAlertById(alertId);
+                        });
+                }
+        }).fail(function(jqXHR, textStatus) {
+                console.log(jqXHR.responseText);
+        });
 }
 
 function updateAlertRowDisplayText(tableRow, alert) {
-	tableRow.attr('alert_id', alert.id);
-	tableRow.find('.end-use-text').text(alert.sourceInfo.name);
-	tableRow.find('.percent-text').text(alert.comparePercent);
-	tableRow.find('.receiver-num-val').text(alert.contactEmails.length);
-	if (alert.type === 'peak') {
-		tableRow.find('.peak-threshold-text').text(alert.peakThreshold);
-	} else if (alert.type === 'summary' || alert.type === 'still_on') {
-		tableRow.find('.time-from-text').text(alert.startTime);
-		tableRow.find('.time-to-text').text(alert.endTime);
-		tableRow.find('.weekday-text').text(transformPythonWeekdaysToName(alert.checkWeekdays));
-	}
+        tableRow.attr('alert_id', alert.id);
+        tableRow.find('.end-use-text').text(alert.sourceInfo.name);
+        tableRow.find('.percent-text').text(alert.comparePercent);
+        tableRow.find('.receiver-num-val').text(alert.contactEmails.length);
+        if (alert.type === 'peak') {
+                tableRow.find('.peak-threshold-text').text(alert.peakThreshold);
+        } else if (alert.type === 'summary' || alert.type === 'still_on') {
+                tableRow.find('.time-from-text').text(alert.startTime);
+                tableRow.find('.time-to-text').text(alert.endTime);
+                tableRow.find('.weekday-text').text(transformPythonWeekdaysToName(alert.checkWeekdays));
+        }
 }
 
 function turnOnEditMode(tableRow) {
-	var rowToCBlockselectClassMap = {
-		'.end-use-select': '.source-select',
-		'.compare-percent-select': '.compare-percent-select',
-		'.time-from-select': '.start-time-select',
-		'.time-to-select': '.end-time-select',
-		'.weekday-select': '.weekday-select',
-	};
+        var rowToCBlockselectClassMap = {
+                '.end-use-select': '.source-select',
+                '.compare-percent-select': '.compare-percent-select',
+                '.time-from-select': '.start-time-select',
+                '.time-to-select': '.end-time-select',
+                '.weekday-select': '.weekday-select',
+        };
 
-	var blockContainer = tableRow.parent().parent();
-	var prevEditRow = blockContainer.find('.alert-row.on-edit');
-	if (prevEditRow.length > 0 && prevEditRow.attr('alert_id') !== tableRow.attr('alert_id')) {
-		cancelEditMode(prevEditRow);
-	}
+        var blockContainer = tableRow.parent().parent();
+        var prevEditRow = blockContainer.find('.alert-row.on-edit');
+        if (prevEditRow.length > 0 && prevEditRow.attr('alert_id') !== tableRow.attr('alert_id')) {
+                cancelEditMode(prevEditRow);
+        }
 
-	tableRow.addClass('on-edit');
-	var alert = findAlertById(parseInt(tableRow.attr('alert_id'), 10));
+        tableRow.addClass('on-edit');
+        var alert = findAlertById(parseInt(tableRow.attr('alert_id'), 10));
 
-	tableRow.find('.display-text').hide();
-	tableRow.find('input').show();
-	tableRow.find('select').show().SumoSelect();
+        tableRow.find('.display-text').hide();
+        tableRow.find('input').show();
+        tableRow.find('select').show().SumoSelect();
 
-	setSumoSelectedItem(tableRow.find('.end-use-select'), transformToSourceMapKey(alert.sourceInfo));
-	setSumoSelectedItem(tableRow.find('.compare-percent-select'), alert.comparePercent.toString());
-	$.each(alert.contactEmails, function(emailIdx, email) {
-		setSumoSelectedItem(tableRow.find('.receiver-select'), email);
-	});
+        setSumoSelectedItem(tableRow.find('.end-use-select'), transformToSourceMapKey(alert.sourceInfo));
+        setSumoSelectedItem(tableRow.find('.compare-percent-select'), alert.comparePercent.toString());
+        $.each(alert.contactEmails, function(emailIdx, email) {
+                setSumoSelectedItem(tableRow.find('.receiver-select'), email);
+        });
 
-	if (alert.type === 'summary' || alert.type === 'still_on') {
-		setSumoSelectedItem(tableRow.find('.time-from-select'), alert.startTime);
-		setSumoSelectedItem(tableRow.find('.time-to-select'), alert.endTime);
-		setSumoSelectedItem(tableRow.find('.weekday-select'), JSON.stringify(alert.checkWeekdays));
-	} else if (alert.type === 'peak') {
-		tableRow.find('.peak-threshold-input').val(alert.peakThreshold);
-	}
+        if (alert.type === 'summary' || alert.type === 'still_on') {
+                setSumoSelectedItem(tableRow.find('.time-from-select'), alert.startTime);
+                setSumoSelectedItem(tableRow.find('.time-to-select'), alert.endTime);
+                setSumoSelectedItem(tableRow.find('.weekday-select'), JSON.stringify(alert.checkWeekdays));
+        } else if (alert.type === 'peak') {
+                tableRow.find('.peak-threshold-input').val(alert.peakThreshold);
+        }
 
-	tableRow.parent().find('select').off('change');
-	$.each(rowToCBlockselectClassMap, function(rowClass, affectClass) {
-		tableRow.find(rowClass).change(function() {
-			setSumoSelectedItem(blockContainer.find('.conversational-block '+affectClass), $(this).val());
-		}).change();
-	});
-	tableRow.find('.receiver-select').change(function() {
-		var emailInput = blockContainer.find('.conversational-block .email-input');
-		settings.skipSignalEvent = true;
-		emailInput.tagit("removeAll");
-		if ($(this).val() !== null) {
-			$.each($(this).val(), function(emailIdx, email) {
-				emailInput.tagit("createTag", email);
-			});
-		}
-		settings.skipSignalEvent = false;
-	}).change();
+        tableRow.parent().find('select').off('change');
+        $.each(rowToCBlockselectClassMap, function(rowClass, affectClass) {
+                tableRow.find(rowClass).change(function() {
+                        setSumoSelectedItem(blockContainer.find('.conversational-block '+affectClass), $(this).val());
+                }).change();
+        });
+        tableRow.find('.receiver-select').change(function() {
+                var emailInput = blockContainer.find('.conversational-block .email-input');
+                settings.skipSignalEvent = true;
+                emailInput.tagit("removeAll");
+                if ($(this).val() !== null) {
+                        $.each($(this).val(), function(emailIdx, email) {
+                                emailInput.tagit("createTag", email);
+                        });
+                }
+                settings.skipSignalEvent = false;
+        }).change();
 
-	if (alert.type === 'peak') {
-		tableRow.parent().find('.peak-threshold-input').off('change');
-		tableRow.find('.peak-threshold-input').change(function() {
-			blockContainer.find('.conversational-block .peak-threshold-input').val($(this).val());
-		}).change();
-	}
+        if (alert.type === 'peak') {
+                tableRow.parent().find('.peak-threshold-input').off('change');
+                tableRow.find('.peak-threshold-input').change(function() {
+                        blockContainer.find('.conversational-block .peak-threshold-input').val($(this).val());
+                }).change();
+        }
 }
 
 function restoreConversationBlock(conversationBlockEle) {
-	var tableRow = conversationBlockEle.parent().find('.alert-row.on-edit');
-	tableRow.find('select').each(function() {
-		$(this).val('');
-		$(this)[0].sumo.unload();
-	});
-	turnOnEditMode(tableRow);
+        var tableRow = conversationBlockEle.parent().find('.alert-row.on-edit');
+        tableRow.find('select').each(function() {
+                $(this).val('');
+                $(this)[0].sumo.unload();
+        });
+        turnOnEditMode(tableRow);
 }
 
 function clearConversationBlock(conversationBlockEle) {
-	unSelectSumoItem(conversationBlockEle.find('.source-select'));
-	conversationBlockEle.find('input').val('');
-	conversationBlockEle.find('select:not(.source-select)').each(function() {
-		$(this)[0].sumo.selectItem(0);
-	});
-	conversationBlockEle.find('.email-input').tagit("removeAll");
+        unSelectSumoItem(conversationBlockEle.find('.source-select'));
+        conversationBlockEle.find('input').val('');
+        conversationBlockEle.find('select:not(.source-select)').each(function() {
+                $(this)[0].sumo.selectItem(0);
+        });
+        conversationBlockEle.find('.email-input').tagit("removeAll");
 }
 
 function cancelEditMode(tableRow) {
-	tableRow.removeClass('on-edit');
-	var blockContainer = tableRow.parent().parent();
+        tableRow.removeClass('on-edit');
+        var blockContainer = tableRow.parent().parent();
 
-	clearConversationBlock(blockContainer.find('.conversational-block'));
+        clearConversationBlock(blockContainer.find('.conversational-block'));
 
-	tableRow.find('select').off('change');
+        tableRow.find('select').off('change');
 
-	tableRow.find('.display-text').show();
-	tableRow.find('input').hide();
-	tableRow.find('select').each(function() {
-		$(this)[0].sumo.unload();
-	}).hide();
+        tableRow.find('.display-text').show();
+        tableRow.find('input').hide();
+        tableRow.find('select').each(function() {
+                $(this)[0].sumo.unload();
+        }).hide();
 }
 
 function popupRemoveDialog(confirmCallback) {
-	var removeDialog = $('.remove-dialog').bPopup();
-	$('.remove-dialog .dialog-cancel-btn').off('click').click(function() {
-		removeDialog.close();
-	});
-	$('.remove-dialog .dialog-confirm-btn').off('click').click(function() {
-		confirmCallback();
-		removeDialog.close();
-	});
+        var removeDialog = $('.remove-dialog').bPopup();
+        $('.remove-dialog .dialog-cancel-btn').off('click').click(function() {
+                removeDialog.close();
+        });
+        $('.remove-dialog .dialog-confirm-btn').off('click').click(function() {
+                confirmCallback();
+                removeDialog.close();
+        });
 }
 
 function setupRowEditBtn(targetEle) {
-	targetEle.click(function() {
-		var tableRow = $(this).parent().parent().parent();
-		turnOnEditMode(tableRow);
-	});
+        targetEle.click(function() {
+                var tableRow = $(this).parent().parent().parent();
+                turnOnEditMode(tableRow);
+        });
 }
 
 function setupRowCancelBtn(targetEle) {
-	targetEle.click(function() {
-		var tableRow = $(this).parent().parent().parent();
-		cancelEditMode(tableRow);
-	});
+        targetEle.click(function() {
+                var tableRow = $(this).parent().parent().parent();
+                cancelEditMode(tableRow);
+        });
 }
 
 function setupRowDeleteBtn(targetEle) {
-	targetEle.click(function() {
-		var tableRow = $(this).parent().parent().parent();
-		popupRemoveDialog(function() {
-			var alertId = tableRow.attr('alert_id');
-			requestRemoveAlert(alertId);
-		});
-	});
+        targetEle.click(function() {
+                var tableRow = $(this).parent().parent().parent();
+                popupRemoveDialog(function() {
+                        var alertId = tableRow.attr('alert_id');
+                        requestRemoveAlert(alertId);
+                });
+        });
 }
 
 function setupRowConfirmBtn(targetEle) {
-	targetEle.click(function() {
-		var conversationalBlock = $(this).parent().parent().parent().parent().parent().find('.conversational-block');
-		conversationalBlock.find('.conversational-confirm-btn').click();
-	});
+        targetEle.click(function() {
+                var conversationalBlock = $(this).parent().parent().parent().parent().parent().find('.conversational-block');
+                conversationalBlock.find('.conversational-confirm-btn').click();
+        });
 }
 
 function setupConversationConfirmBtn(targetEle) {
-	targetEle.click(function() {
-		var conversationalBlockContainer = $(this).parent().parent();
-		var onEditRow = conversationalBlockContainer.parent().find('.alert-row.on-edit');
-		var alertType = conversationalBlockContainer.attr('alert_type');
-		var postData = {
-			system_id: settings.entrakSystem.systemTree.data.id,
-			alert_id: (onEditRow.length !== 1) ? null : onEditRow.attr('alert_id'),
-			source_info: settings.sourceInfoMap[conversationalBlockContainer.find('.source-select').val()],
-			alert_type: alertType,
-			compare_percent: conversationalBlockContainer.find('.compare-percent-select').val(),
-			contact_emails: JSON.stringify(conversationalBlockContainer.find('.email-input').tagit("assignedTags")),
-		};
-		if (alertType === 'peak') {
-			postData.peak_threshold = conversationalBlockContainer.find('.peak-threshold-input').val();
-		} else if (alertType === 'summary' || alertType === 'still_on') {
-			postData.start_time = conversationalBlockContainer.find('.start-time-select').val();
-			postData.end_time = conversationalBlockContainer.find('.end-time-select').val();
-			postData.check_weekdays = conversationalBlockContainer.find('.weekday-select').val();
-		}
-		requestSetAlert(postData);
-	});
+        targetEle.click(function() {
+                var conversationalBlockContainer = $(this).parent().parent();
+                var onEditRow = conversationalBlockContainer.parent().find('.alert-row.on-edit');
+                var alertType = conversationalBlockContainer.attr('alert_type');
+                var postData = {
+                        system_id: settings.entrakSystem.systemTree.data.id,
+                        alert_id: (onEditRow.length !== 1) ? null : onEditRow.attr('alert_id'),
+                        source_info: settings.sourceInfoMap[conversationalBlockContainer.find('.source-select').val()],
+                        alert_type: alertType,
+                        compare_percent: conversationalBlockContainer.find('.compare-percent-select').val(),
+                        contact_emails: JSON.stringify(conversationalBlockContainer.find('.email-input').tagit("assignedTags")),
+                };
+                if (alertType === 'peak') {
+                        postData.peak_threshold = conversationalBlockContainer.find('.peak-threshold-input').val();
+                } else if (alertType === 'summary' || alertType === 'still_on') {
+                        postData.start_time = conversationalBlockContainer.find('.start-time-select').val();
+                        postData.end_time = conversationalBlockContainer.find('.end-time-select').val();
+                        postData.check_weekdays = conversationalBlockContainer.find('.weekday-select').val();
+                }
+                requestSetAlert(postData);
+        });
 }
 
 function setupDuplicateBtn(targetEle) {
-	targetEle.click(function() {
-		$('.duplicate-container').empty();
-		$('.duplicate-container').removeClass('peak-demand');
-		$('.duplicate-container').removeClass('summary-alert');
-		$('.duplicate-container').removeClass('still-on-alert');
+        targetEle.click(function() {
+                $('.duplicate-container').empty();
+                $('.duplicate-container').removeClass('peak-demand');
+                $('.duplicate-container').removeClass('summary-alert');
+                $('.duplicate-container').removeClass('still-on-alert');
 
-		var tableRow = $(this).parent().parent().parent();
-		var alert = findAlertById(parseInt(tableRow.attr('alert_id'), 10));
-		var eleHtml, containerClass;
-		if (alert.type === 'peak') {
-			containerClass = 'peak-demand';
-			var peakConversationTemplate = $('#peak-conversation-template').html();
-			Mustache.parse(peakConversationTemplate);
-			eleHtml = Mustache.render(peakConversationTemplate, {});
-		} else if (alert.type === 'summary' || alert.type === 'still_on') {
-			var summaryStillOnConversationTemplate = $('#summary-still-on-conversation-template').html();
-			Mustache.parse(summaryStillOnConversationTemplate);
+                var tableRow = $(this).parent().parent().parent();
+                var alert = findAlertById(parseInt(tableRow.attr('alert_id'), 10));
+                var eleHtml, containerClass;
+                if (alert.type === 'peak') {
+                        containerClass = 'peak-demand';
+                        var peakConversationTemplate = $('#peak-conversation-template').html();
+                        Mustache.parse(peakConversationTemplate);
+                        eleHtml = Mustache.render(peakConversationTemplate, {});
+                } else if (alert.type === 'summary' || alert.type === 'still_on') {
+                        var summaryStillOnConversationTemplate = $('#summary-still-on-conversation-template').html();
+                        Mustache.parse(summaryStillOnConversationTemplate);
 
-			if (alert.type === 'summary') {
-				containerClass = 'summary-alert';
-				eleHtml = Mustache.render(summaryStillOnConversationTemplate, {
-					alertType: 'summary',
-				});
-			} else {
-				containerClass = 'still-on-alert';
-				eleHtml = Mustache.render(summaryStillOnConversationTemplate, {
-					alertType: 'still_on',
-				});
-			}
-		}
-		$('.duplicate-container').addClass(containerClass);
-		$('.duplicate-container').append(eleHtml);
-		setupSourceSelect($('.duplicate-container .source-select'));
-		setupReceiverSelect($('.duplicate-container .receiver-select'));
-		setupTimeSelect($('.duplicate-container .time-select'));
-		setupWeekdaySelect($('.duplicate-container .weekday-select'));
-		setupComparePercentSelect($('.duplicate-container .compare-percent-select'));
+                        if (alert.type === 'summary') {
+                                containerClass = 'summary-alert';
+                                eleHtml = Mustache.render(summaryStillOnConversationTemplate, {
+                                        alertType: 'summary',
+                                });
+                        } else {
+                                containerClass = 'still-on-alert';
+                                eleHtml = Mustache.render(summaryStillOnConversationTemplate, {
+                                        alertType: 'still_on',
+                                });
+                        }
+                }
+                $('.duplicate-container').addClass(containerClass);
+                $('.duplicate-container').append(eleHtml);
+                setupSourceSelect($('.duplicate-container .source-select'));
+                setupReceiverSelect($('.duplicate-container .receiver-select'));
+                setupTimeSelect($('.duplicate-container .time-select'));
+                setupWeekdaySelect($('.duplicate-container .weekday-select'));
+                setupComparePercentSelect($('.duplicate-container .compare-percent-select'));
 
-		var duplicateContainer = $('.duplicate-container');
-		duplicateContainer.find('select').SumoSelect();
+                var duplicateContainer = $('.duplicate-container');
+                duplicateContainer.find('select').SumoSelect();
 
-		duplicateContainer.find('.email-input').tagit({
-			availableTags: settings.contactEmails,
-			tagLimit: 5,
-		}).tagit('autoCompleteInstance').addClass('duplicate-container-autocomplete');
+                duplicateContainer.find('.email-input').tagit({
+                        availableTags: settings.contactEmails,
+                        tagLimit: 5,
+                }).tagit('autoCompleteInstance').addClass('duplicate-container-autocomplete');
 
-		setSumoSelectedItem(duplicateContainer.find('.source-select'), transformToSourceMapKey(alert.sourceInfo));
-		setSumoSelectedItem(duplicateContainer.find('.compare-percent-select'), alert.comparePercent.toString());
-		var emailInput = duplicateContainer.find('.email-input');
-		$.each(alert.contactEmails, function(emailIdx, email) {
-			emailInput.tagit("createTag", email);
-		});
+                setSumoSelectedItem(duplicateContainer.find('.source-select'), transformToSourceMapKey(alert.sourceInfo));
+                setSumoSelectedItem(duplicateContainer.find('.compare-percent-select'), alert.comparePercent.toString());
+                var emailInput = duplicateContainer.find('.email-input');
+                $.each(alert.contactEmails, function(emailIdx, email) {
+                        emailInput.tagit("createTag", email);
+                });
 
-		if (alert.type === 'summary' || alert.type === 'still_on') {
-			setSumoSelectedItem(duplicateContainer.find('.start-time-select'), alert.startTime);
-			setSumoSelectedItem(duplicateContainer.find('.end-time-select'), alert.endTime);
-			setSumoSelectedItem(duplicateContainer.find('.weekday-select'), JSON.stringify(alert.checkWeekdays));
-		} else if (alert.type === 'peak') {
-			duplicateContainer.find('.peak-threshold-input').val(alert.peakThreshold);
-		}
+                if (alert.type === 'summary' || alert.type === 'still_on') {
+                        setSumoSelectedItem(duplicateContainer.find('.start-time-select'), alert.startTime);
+                        setSumoSelectedItem(duplicateContainer.find('.end-time-select'), alert.endTime);
+                        setSumoSelectedItem(duplicateContainer.find('.weekday-select'), JSON.stringify(alert.checkWeekdays));
+                } else if (alert.type === 'peak') {
+                        duplicateContainer.find('.peak-threshold-input').val(alert.peakThreshold);
+                }
 
-		var duplicateDialog = $('.duplicate-popup').bPopup();
+                var duplicateDialog = $('.duplicate-popup').bPopup();
 
-		duplicateContainer.find('.conversational-cancel-btn').click(function() {
-			duplicateDialog.close();
-		});
-		setupConversationConfirmBtn(duplicateContainer.find('.conversational-confirm-btn'));
-		duplicateContainer.find('.conversational-confirm-btn').click(function() {
-			duplicateDialog.close();
-		});
-	});
+                duplicateContainer.find('.conversational-cancel-btn').click(function() {
+                        duplicateDialog.close();
+                });
+                setupConversationConfirmBtn(duplicateContainer.find('.conversational-confirm-btn'));
+                duplicateContainer.find('.conversational-confirm-btn').click(function() {
+                        duplicateDialog.close();
+                });
+        });
 }
 
 $(function() {
-	setupAjaxForCsrf($.cookie('csrftoken'));
-	settings.langCode = '{{LANGUAGE_CODE}}';
-	moment.locale(settings.langCode);
-	
-	var peakConversationTemplate = $('#peak-conversation-template').html();
-	Mustache.parse(peakConversationTemplate);
-	var peakConversationHtml = Mustache.render(peakConversationTemplate, {});
-	$(peakConversationHtml).insertBefore($('.peak-demand .alert-content>*:eq(0)'));
+        setupAjaxForCsrf($.cookie('csrftoken'));
+        settings.langCode = '{{LANGUAGE_CODE}}';
+        moment.locale(settings.langCode);
+        
+        var peakConversationTemplate = $('#peak-conversation-template').html();
+        Mustache.parse(peakConversationTemplate);
+        var peakConversationHtml = Mustache.render(peakConversationTemplate, {});
+        $(peakConversationHtml).insertBefore($('.peak-demand .alert-content>*:eq(0)'));
 
-	var summaryStillOnConversationTemplate = $('#summary-still-on-conversation-template').html();
-	Mustache.parse(summaryStillOnConversationTemplate);
-	var summaryConversationHtml = Mustache.render(summaryStillOnConversationTemplate, {
-		alertType: 'summary',
-	});
-	$(summaryConversationHtml).insertBefore($('.summary-alert .alert-content>*:eq(0)'));
-	var stillOnConversationHtml = Mustache.render(summaryStillOnConversationTemplate, {
-		alertType: 'still_on',
-	});
-	$(stillOnConversationHtml).insertBefore($('.still-on-alert .alert-content>*:eq(0)'));
+        var summaryStillOnConversationTemplate = $('#summary-still-on-conversation-template').html();
+        Mustache.parse(summaryStillOnConversationTemplate);
+        var summaryConversationHtml = Mustache.render(summaryStillOnConversationTemplate, {
+                alertType: 'summary',
+        });
+        $(summaryConversationHtml).insertBefore($('.summary-alert .alert-content>*:eq(0)'));
+        var stillOnConversationHtml = Mustache.render(summaryStillOnConversationTemplate, {
+                alertType: 'still_on',
+        });
+        $(stillOnConversationHtml).insertBefore($('.still-on-alert .alert-content>*:eq(0)'));
 
-	var subMenuPanel = $(".main-content-container>div");;
-	$(".panel-header-left-menu h3").each(function (eleIdx) {
-		$(this).click({connectedPanel: subMenuPanel[eleIdx]}, function (event) {
-			$(".panel-header-left-menu h3").removeClass('selected-tab');
-			$(this).addClass('selected-tab');
-			
-			var connectedPanel = $(event.data.connectedPanel);
-			if (!(connectedPanel.hasClass('selected-submenu'))) {
-				subMenuPanel.filter(".selected-submenu").removeClass('selected-submenu').hide();
-				connectedPanel.addClass('selected-submenu').fadeIn();
-			}
-		});
-	});
+        var subMenuPanel = $(".main-content-container>div");;
+        $(".panel-header-left-menu h3").each(function (eleIdx) {
+                $(this).click({connectedPanel: subMenuPanel[eleIdx]}, function (event) {
+                        $(".panel-header-left-menu h3").removeClass('selected-tab');
+                        $(this).addClass('selected-tab');
+                        
+                        var connectedPanel = $(event.data.connectedPanel);
+                        if (!(connectedPanel.hasClass('selected-submenu'))) {
+                                subMenuPanel.filter(".selected-submenu").removeClass('selected-submenu').hide();
+                                connectedPanel.addClass('selected-submenu').fadeIn();
+                        }
+                });
+        });
 
-	$(".info-btn").click(function () {
-		$('.info-tooltip').hide();
-		$(this).parent().find('.info-tooltip').show();
-		$(this).parent().find('.info-tooltip .info-tooltip-close-btn').click(function () {
-			$(this).parent().hide();
-		});
-	});
+        $(".info-btn").click(function () {
+                $('.info-tooltip').hide();
+                $(this).parent().find('.info-tooltip').show();
+                $(this).parent().find('.info-tooltip .info-tooltip-close-btn').click(function () {
+                        $(this).parent().hide();
+                });
+        });
 
-	settings.entrakSystem = new EntrakSystem();
-	settings.entrakSystem.langCode = settings.langCode;
-	settings.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
-	settings.entrakSystem.addSourceToSystem('{{sources|jsonifySources}}');
-	settings.contactEmails = JSON.parse('{{contact_emails|jsonifyPrimitiveObj}}');
-	settings.alerts = JSON.parse('{{alerts|jsonifyAlerts}}');
-	settings.alertHistorys = JSON.parse('{{alert_history_infos}}');
-	settings.skipSignalEvent = false;
+        settings.entrakSystem = new EntrakSystem();
+        settings.entrakSystem.langCode = settings.langCode;
+        settings.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
+        settings.entrakSystem.addSourceToSystem('{{sources|jsonifySources}}');
+        settings.contactEmails = JSON.parse('{{contact_emails|jsonifyPrimitiveObj}}');
+        settings.alerts = JSON.parse('{{alerts|jsonifyAlerts}}');
+        settings.alertHistorys = JSON.parse('{{alert_history_infos}}');
+        settings.skipSignalEvent = false;
 
-	if (settings.alertHistorys.length > 0) {
-		$('.sub-menu-alert-history').addClass('selected-tab');
-		$(".alert-history-container").addClass('selected-submenu').show();
-	} else {
-		$('.sub-menu-create-alert').addClass('selected-tab');
-		$(".create-alert-container").addClass('selected-submenu').show();
-	}
+        if (settings.alertHistorys.length > 0) {
+                $('.sub-menu-alert-history').addClass('selected-tab');
+                $(".alert-history-container").addClass('selected-submenu').show();
+        } else {
+                $('.sub-menu-create-alert').addClass('selected-tab');
+                $(".create-alert-container").addClass('selected-submenu').show();
+        }
 
-	var historyContentContainer = $('.history-content');
-	var historyRowTemplate = $('#history-row-template').html();
-	Mustache.parse(historyRowTemplate);
-	$.each(settings.alertHistorys, function(historyIdx, alertHistory) {
-		var createdDt = moment.unix(alertHistory.created);
-		var info = {
-			createdDate: createdDt.format('{% trans "DD MMM YYYY, ddd" %}'),
-			createdTime: createdDt.format('{% trans "hh:mma" %}'),
-			sourceName: alertHistory.nameInfo[settings.langCode],
-		};
+        var historyContentContainer = $('.history-content');
+        var historyRowTemplate = $('#history-row-template').html();
+        Mustache.parse(historyRowTemplate);
+        $.each(settings.alertHistorys, function(historyIdx, alertHistory) {
+                var createdDt = moment.unix(alertHistory.created);
+                var info = {
+                        createdDate: createdDt.format('{% trans "DD MMM YYYY, ddd" %}'),
+                        createdTime: createdDt.format('{% trans "hh:mma" %}'),
+                        sourceName: alertHistory.nameInfo[settings.langCode],
+                };
 
-		if (alertHistory.alert_type === 'peak') {
-			info.issueLine1 = alertHistory.nameInfo[settings.langCode] + '{% trans " energy use reached" %}';
-			if (settings.langCode === 'zh-tw') {
-				info.issueLine2 = '已達電力需求峰值的' + alertHistory.diff_percent + '%';
-			} else {
-				info.issueLine2 = alertHistory.diff_percent + '% of previous peak demand';
-			}
-		} else  if (alertHistory.alert_type === 'summary' || alertHistory.alert_type === 'still_on') {
-			info.issueLine1 = alertHistory.nameInfo[settings.langCode] + '{% trans "alert_history_used" %}';
-			if (settings.langCode === 'zh-tw') {
-				info.issueLine2 = '已超過近期' + createdDt.format('dddd') + '平均值的' + alertHistory.diff_percent + '%';
-			} else {
-				info.issueLine2 = alertHistory.diff_percent + '% MORE than recent ' + createdDt.format('dddd') + ' average';
-			}
-		}
+                if (alertHistory.alert_type === 'peak') {
+                        info.issueLine1 = alertHistory.nameInfo[settings.langCode] + '{% trans " energy use reached" %}';
+                        if (settings.langCode === 'zh-tw') {
+                                info.issueLine2 = '已達電力需求峰值的' + alertHistory.diff_percent + '%';
+                        } else {
+                                info.issueLine2 = alertHistory.diff_percent + '% of previous peak demand';
+                        }
+                } else  if (alertHistory.alert_type === 'summary' || alertHistory.alert_type === 'still_on') {
+                        info.issueLine1 = alertHistory.nameInfo[settings.langCode] + '{% trans "alert_history_used" %}';
+                        if (settings.langCode === 'zh-tw') {
+                                info.issueLine2 = '已超過近期' + createdDt.format('dddd') + '平均值的' + alertHistory.diff_percent + '%';
+                        } else {
+                                info.issueLine2 = alertHistory.diff_percent + '% MORE than recent ' + createdDt.format('dddd') + ' average';
+                        }
+                }
 
-		info.issueLine3 = '{% trans "alert_history_on" %}';
-		if (alertHistory.alert_type === 'summary') {
-			var startTimeDt = moment().hour(alertHistory.start_time_h).minute(alertHistory.start_time_m);
-			var endTimeDt = moment().hour(alertHistory.end_time_h).minute(alertHistory.end_time_m);
-			info.issueLine3 += startTimeDt.format('{% trans "hh:mmA" %}') + ' - ' + endTimeDt.format('{% trans "hh:mmA" %}');
-		} else if(alertHistory.alert_type === 'peak' || alertHistory.alert_type === 'still_on') {
-			info.issueLine3 += moment(createdDt).subtract(5, 'm').format('{% trans "hh:mmA" %}')
-				+ ' - '
-				+ createdDt.format('{% trans "hh:mmA" %}');
-		}
-		info.issueLine3 += createdDt.format(' | ' + '{% trans "DD MMM YYYY, ddd" %}');
+                info.issueLine3 = '{% trans "alert_history_on" %}';
+                if (alertHistory.alert_type === 'summary') {
+                        var startTimeDt = moment().hour(alertHistory.start_time_h).minute(alertHistory.start_time_m);
+                        var endTimeDt = moment().hour(alertHistory.end_time_h).minute(alertHistory.end_time_m);
+                        info.issueLine3 += startTimeDt.format('{% trans "hh:mmA" %}') + ' - ' + endTimeDt.format('{% trans "hh:mmA" %}');
+                } else if(alertHistory.alert_type === 'peak' || alertHistory.alert_type === 'still_on') {
+                        info.issueLine3 += moment(createdDt).subtract(5, 'm').format('{% trans "hh:mmA" %}')
+                                + ' - '
+                                + createdDt.format('{% trans "hh:mmA" %}');
+                }
+                info.issueLine3 += createdDt.format(' | ' + '{% trans "DD MMM YYYY, ddd" %}');
 
-		if (alertHistory.resolved) {
-			info.resolvedColClass = 'resolved-history';
-			info.resolvedDt = moment.unix(alertHistory.resolved_datetime).format('{% trans "hh:mmA DD MMM YYYY,ddd" %}');
-		} else {
-			info.resolvedColClass = 'unresolve-history';
-		}
+                if (alertHistory.resolved) {
+                        info.resolvedColClass = 'resolved-history';
+                        info.resolvedDt = moment.unix(alertHistory.resolved_datetime).format('{% trans "hh:mmA DD MMM YYYY,ddd" %}');
+                } else {
+                        info.resolvedColClass = 'unresolve-history';
+                }
 
-		var eleHtml = Mustache.render(historyRowTemplate, info);
-		historyContentContainer.append(eleHtml);
-	});
+                var eleHtml = Mustache.render(historyRowTemplate, info);
+                historyContentContainer.append(eleHtml);
+        });
 
-	settings.sourceInfoMap = {};
-	settings.sourceInfoList = [];
-	settings.entrakSystem.systemTree.traverseDown(function (node) {
-		var systemOptionInfo = genSystemOptionInfo(node);
-		var mapKey = transformToSourceMapKey(systemOptionInfo);
-		settings.sourceInfoMap[mapKey] = JSON.stringify(systemOptionInfo);
-		settings.sourceInfoList.push(systemOptionInfo);
-		$.each(node.data.sources, function(sourceId, source) {
-			sourceOptionInfo = {'nameInfo': source.nameInfo, 'source_id': source.id};
-			var mapKey = transformToSourceMapKey(sourceOptionInfo);
-			settings.sourceInfoMap[mapKey] = JSON.stringify(sourceOptionInfo);
-			settings.sourceInfoList.push(sourceOptionInfo);
-		})
-	});
-	settings.sourceInfoList.sort(function(a, b) {
-		var bOrder = ('source_ids' in b) ? b['source_ids'].length : 0;
-		var aOrder = ('source_ids' in a) ? a['source_ids'].length : 0;
-		return bOrder - aOrder;
-	});
+        settings.sourceInfoMap = {};
+        settings.sourceInfoList = [];
+        settings.entrakSystem.systemTree.traverseDown(function (node) {
+                var systemOptionInfo = genSystemOptionInfo(node);
+                var mapKey = transformToSourceMapKey(systemOptionInfo);
+                settings.sourceInfoMap[mapKey] = JSON.stringify(systemOptionInfo);
+                settings.sourceInfoList.push(systemOptionInfo);
+                $.each(node.data.sources, function(sourceId, source) {
+                        sourceOptionInfo = {'nameInfo': source.nameInfo, 'source_id': source.id};
+                        var mapKey = transformToSourceMapKey(sourceOptionInfo);
+                        settings.sourceInfoMap[mapKey] = JSON.stringify(sourceOptionInfo);
+                        settings.sourceInfoList.push(sourceOptionInfo);
+                })
+        });
+        settings.sourceInfoList.sort(function(a, b) {
+                var bOrder = ('source_ids' in b) ? b['source_ids'].length : 0;
+                var aOrder = ('source_ids' in a) ? a['source_ids'].length : 0;
+                return bOrder - aOrder;
+        });
 
-	setupSourceSelect($('.source-select'));
+        setupSourceSelect($('.source-select'));
 
-	$('.email-input').tagit({
-		availableTags: settings.contactEmails,
-		tagLimit: 5,
-		afterTagAdded: function(event, ui) {
-			updateReceiverSelect($(this));
-		},
-		afterTagRemoved: function(event, ui) {
-			updateReceiverSelect($(this));
-		},
-	});
+        $('.email-input').tagit({
+                availableTags: settings.contactEmails,
+                tagLimit: 5,
+                afterTagAdded: function(event, ui) {
+                        updateReceiverSelect($(this));
+                },
+                afterTagRemoved: function(event, ui) {
+                        updateReceiverSelect($(this));
+                },
+        });
 
-	setupConversationConfirmBtn($('.conversational-confirm-btn'));
+        setupConversationConfirmBtn($('.conversational-confirm-btn'));
 
-	var peakRowTemplate = $('#peak-alert-row-template').html();
-	Mustache.parse(peakRowTemplate);
-	var summaryStillOnRowTemplate = $('#summary-still-on-alert-row-template').html();
-	Mustache.parse(summaryStillOnRowTemplate);
-	$.each(settings.alerts, function(alertIdx, alert) {
-		insertAlertToTable(alert, peakRowTemplate, summaryStillOnRowTemplate);
-	});
+        var peakRowTemplate = $('#peak-alert-row-template').html();
+        Mustache.parse(peakRowTemplate);
+        var summaryStillOnRowTemplate = $('#summary-still-on-alert-row-template').html();
+        Mustache.parse(summaryStillOnRowTemplate);
+        $.each(settings.alerts, function(alertIdx, alert) {
+                insertAlertToTable(alert, peakRowTemplate, summaryStillOnRowTemplate);
+        });
 
-	setupSourceSelect($('.end-use-select'));
-	setupReceiverSelect($('.receiver-select'));
-	setupTimeSelect($('.time-select'));
-	setupWeekdaySelect($('.weekday-select'));
-	setupComparePercentSelect($('.compare-percent-select'));
+        setupSourceSelect($('.end-use-select'));
+        setupReceiverSelect($('.receiver-select'));
+        setupTimeSelect($('.time-select'));
+        setupWeekdaySelect($('.weekday-select'));
+        setupComparePercentSelect($('.compare-percent-select'));
 
-	$('.conversational-block select').SumoSelect();
+        $('.conversational-block select').SumoSelect();
 
-	var cBlockToRowSelectClassMap = {
-		'.source-select': '.end-use-select',
-		'.compare-percent-select': '.compare-percent-select',
-		'.start-time-select': '.time-from-select',
-		'.end-time-select': '.time-to-select',
-		'.weekday-select': '.weekday-select'
-	};
-	$('.conversational-block').each(function() {
-		var cBlockEle = $(this);
-		var blockContainer = cBlockEle.parent();
-		$.each(cBlockToRowSelectClassMap, function(cBlockClass, affectClass) {
-			cBlockEle.find(cBlockClass).change(function() {
-				setSumoSelectedItem(blockContainer.find('.alert-row.on-edit '+affectClass), $(this).val());
-			});
-		});
+        var cBlockToRowSelectClassMap = {
+                '.source-select': '.end-use-select',
+                '.compare-percent-select': '.compare-percent-select',
+                '.start-time-select': '.time-from-select',
+                '.end-time-select': '.time-to-select',
+                '.weekday-select': '.weekday-select'
+        };
+        $('.conversational-block').each(function() {
+                var cBlockEle = $(this);
+                var blockContainer = cBlockEle.parent();
+                $.each(cBlockToRowSelectClassMap, function(cBlockClass, affectClass) {
+                        cBlockEle.find(cBlockClass).change(function() {
+                                setSumoSelectedItem(blockContainer.find('.alert-row.on-edit '+affectClass), $(this).val());
+                        });
+                });
 
-		cBlockEle.find('.peak-threshold-input').change(function() {
-			blockContainer.find('.alert-row.on-edit .peak-threshold-input').val($(this).val());
-		});
-	});
+                cBlockEle.find('.peak-threshold-input').change(function() {
+                        blockContainer.find('.alert-row.on-edit .peak-threshold-input').val($(this).val());
+                });
+        });
 
-	$('.conversational-cancel-btn').click(function() {
-		var conversationalBlock = $(this).parent().parent();
-		if (conversationalBlock.parent().find('.alert-row.on-edit').length > 0) {
-			restoreConversationBlock(conversationalBlock);
-		} else {
-			clearConversationBlock(conversationalBlock);
-		}
-	});
+        $('.conversational-cancel-btn').click(function() {
+                var conversationalBlock = $(this).parent().parent();
+                if (conversationalBlock.parent().find('.alert-row.on-edit').length > 0) {
+                        restoreConversationBlock(conversationalBlock);
+                } else {
+                        clearConversationBlock(conversationalBlock);
+                }
+        });
 
-	setupRowEditBtn($('.row-edit-btn'));
-	setupRowCancelBtn($('.row-cancel-btn'));
-	setupRowDeleteBtn($('.row-delete-btn'));
-	setupRowConfirmBtn($('.row-confirm-btn'));
-	setupDuplicateBtn($('.row-copy-btn'));
+        setupRowEditBtn($('.row-edit-btn'));
+        setupRowCancelBtn($('.row-cancel-btn'));
+        setupRowDeleteBtn($('.row-delete-btn'));
+        setupRowConfirmBtn($('.row-confirm-btn'));
+        setupDuplicateBtn($('.row-copy-btn'));
 });
 </script>
 
@@ -852,156 +852,156 @@ $(function() {
 {% block page_content %}
 
 <div class="panel-header-left-menu">
-	<h3 id="sub-menu-alert-history">
-		{% trans "Alert History" %}</h3><h3 class="sub-menu-create-alert">
-		{% trans "Create/Manage Alerts" %}</h3>
+        <h3 id="sub-menu-alert-history">
+                {% trans "Alert History" %}</h3><h3 class="sub-menu-create-alert">
+                {% trans "Create/Manage Alerts" %}</h3>
 </div>
 
 <div class="main-content-container">
 
-	<div class="alert-history-container">
-		<div class="history-table-header">
-			<div class="history-th-date">{% trans "Date" %}
-			</div><div class="history-th-source">{% trans "End-Source" %}
-			</div><div class="history-th-issue">{% trans "Alert Issue" %}
-			</div><div class="history-th-status">
-				<div>{% trans "Alert Status" %}</div>
-				<div><span class="history-th-unresolve">{% trans "Unresolve" %}</span><span>/</span><span class="history-th-resolved">{% trans "Resolved" %}</span></div>
-			</div>
-		</div>
-		<div class="history-content">
-		</div>
-	</div>
+        <div class="alert-history-container">
+                <div class="history-table-header">
+                        <div class="history-th-date">{% trans "Date" %}
+                        </div><div class="history-th-source">{% trans "End-Source" %}
+                        </div><div class="history-th-issue">{% trans "Alert Issue" %}
+                        </div><div class="history-th-status">
+                                <div>{% trans "Alert Status" %}</div>
+                                <div><span class="history-th-unresolve">{% trans "Unresolve" %}</span><span>/</span><span class="history-th-resolved">{% trans "Resolved" %}</span></div>
+                        </div>
+                </div>
+                <div class="history-content">
+                </div>
+        </div>
 
-	<div class="create-alert-container">
-		<div class="choose-alert-title">{% trans "Choose Alert Type:" %}</div>
-		<div class="choose-alert-container">
-			<div class="choose-alert-block peak-demand-choose-block">
-				<div class="choose-alert-info-block">
-					<img class="alert-img" src="{% static 'images/alert/create-peak-demand.png' %}">
-					<img class="info-btn" src="{% static 'images/alert/info-icon.png' %}">
-					<div class="info-tooltip">
-						<div class="info-tooltip-content">{% trans "Peak Demand Alert will notify you immediately when your energy consumption (in kVA) is about to reach your peak level (see your utility bill for this peak level). This can help you avoid peak demand surcharge." %}</div>
-						<div class="info-tooltip-close-btn">{% trans "Close" %}</div>
-					</div>
-				</div>
-				<a class="choose-alert-link" href="#peak-demand-section"><div class="choose-alert-btn">{% trans "Create Peak Demand Alert" %}</div></a>
-			</div>
-			<div class="choose-alert-block">
-				<div class="choose-alert-info-block summary-alert-choose-block">
-					<img class="alert-img" src="{% static 'images/alert/create-summary-alert.png' %}">
-					<img class="info-btn" src="{% static 'images/alert/info-icon.png' %}">
-					<div class="info-tooltip">
-						<div class="info-tooltip-content">{% trans "Summary Alert will notify you when your total energy consumption over your selected time period(s) is higher than average (calculated over the last four weeks). This can help you identify abnormal energy consumption e.g. during lunch or after-work periods. A summary email will be sent to you at the end of the selected time period(s)." %}</div>
-						<div class="info-tooltip-close-btn">{% trans "Close" %}</div>
-					</div>
-				</div>
-				<a class="choose-alert-link" href="#summary-alert-section"><div class="choose-alert-btn">{% trans "Create Summary Alert" %}</div></a>
-			</div>
-			<div class="choose-alert-block">
-				<div class="choose-alert-info-block instance-alert-choose-block">
-					<img class="alert-img" src="{% static 'images/alert/create-instance-alert.png' %}">
-					<img class="info-btn" src="{% static 'images/alert/info-icon.png' %}">
-					<div class="info-tooltip">
-						<div class="info-tooltip-content">{% trans "Instance Alert will notify you immediately when your energy consumption (every 5 minutes intervals) over your selected time period(s) is higher than average (calculated over the last four weeks). This can help you to monitor and respond to energy abnormalities for critical equipment/ areas." %}</div>
-						<div class="info-tooltip-close-btn">{% trans "Close" %}</div>
-					</div>
-				</div>
-				<a class="choose-alert-link" href="#still-on-alert-section"><div class="choose-alert-btn">{% trans "Create Instance Alert" %}</div></a>
-			</div>
-		</div>
+        <div class="create-alert-container">
+                <div class="choose-alert-title">{% trans "Choose Alert Type:" %}</div>
+                <div class="choose-alert-container">
+                        <div class="choose-alert-block peak-demand-choose-block">
+                                <div class="choose-alert-info-block">
+                                        <img class="alert-img" src="{% static 'images/alert/create-peak-demand.png' %}">
+                                        <img class="info-btn" src="{% static 'images/alert/info-icon.png' %}">
+                                        <div class="info-tooltip">
+                                                <div class="info-tooltip-content">{% trans "Peak Demand Alert will notify you immediately when your energy consumption (in kVA) is about to reach your peak level (see your utility bill for this peak level). This can help you avoid peak demand surcharge." %}</div>
+                                                <div class="info-tooltip-close-btn">{% trans "Close" %}</div>
+                                        </div>
+                                </div>
+                                <a class="choose-alert-link" href="#peak-demand-section"><div class="choose-alert-btn">{% trans "Create Peak Demand Alert" %}</div></a>
+                        </div>
+                        <div class="choose-alert-block">
+                                <div class="choose-alert-info-block summary-alert-choose-block">
+                                        <img class="alert-img" src="{% static 'images/alert/create-summary-alert.png' %}">
+                                        <img class="info-btn" src="{% static 'images/alert/info-icon.png' %}">
+                                        <div class="info-tooltip">
+                                                <div class="info-tooltip-content">{% trans "Summary Alert will notify you when your total energy consumption over your selected time period(s) is higher than average (calculated over the last four weeks). This can help you identify abnormal energy consumption e.g. during lunch or after-work periods. A summary email will be sent to you at the end of the selected time period(s)." %}</div>
+                                                <div class="info-tooltip-close-btn">{% trans "Close" %}</div>
+                                        </div>
+                                </div>
+                                <a class="choose-alert-link" href="#summary-alert-section"><div class="choose-alert-btn">{% trans "Create Summary Alert" %}</div></a>
+                        </div>
+                        <div class="choose-alert-block">
+                                <div class="choose-alert-info-block instance-alert-choose-block">
+                                        <img class="alert-img" src="{% static 'images/alert/create-instance-alert.png' %}">
+                                        <img class="info-btn" src="{% static 'images/alert/info-icon.png' %}">
+                                        <div class="info-tooltip">
+                                                <div class="info-tooltip-content">{% trans "Instance Alert will notify you immediately when your energy consumption (every 5 minutes intervals) over your selected time period(s) is higher than average (calculated over the last four weeks). This can help you to monitor and respond to energy abnormalities for critical equipment/ areas." %}</div>
+                                                <div class="info-tooltip-close-btn">{% trans "Close" %}</div>
+                                        </div>
+                                </div>
+                                <a class="choose-alert-link" href="#still-on-alert-section"><div class="choose-alert-btn">{% trans "Create Instance Alert" %}</div></a>
+                        </div>
+                </div>
 
-		<div id="peak-demand-section" class="peak-demand alert-container">
-			<div class="alert-header">
-				<img class="alert-header-img" src="{% static 'images/alert/peak-demand-icon-small.png' %}">
-				<div class="alert-header-title">{% trans "Create Peak Demand Alert" %}</div>
-				<img class="alert-header-info-btn" src="{% static 'images/alert/info-icon-small.png' %}">
-			</div>
+                <div id="peak-demand-section" class="peak-demand alert-container">
+                        <div class="alert-header">
+                                <img class="alert-header-img" src="{% static 'images/alert/peak-demand-icon-small.png' %}">
+                                <div class="alert-header-title">{% trans "Create Peak Demand Alert" %}</div>
+                                <img class="alert-header-info-btn" src="{% static 'images/alert/info-icon-small.png' %}">
+                        </div>
 
-			<div class="alert-content">
-				<div class="content-table">
-					<div class="table-header">
-						<div class="table-header-end-use">{% trans "End-Use" %}
-						</div><div class="table-header-percentage">%
-						</div><div class="table-header-threshold">{% trans "Threshold" %}
-						</div><div class="table-header-send-to">{% trans "Send to" %}
-						</div><div class="table-header-created">{% trans "Date Created" %}
-						</div><div class="table-header-action">{% trans "Action" %}</div>
-					</div>
-				</div>
-			</div>
-			<div class="back-to-top">
-				<a href="#">{% trans "Back to Top" %}<img src="{% static 'images/alert/back-to-top.png' %}"></a>
-			</div>
-		</div>
+                        <div class="alert-content">
+                                <div class="content-table">
+                                        <div class="table-header">
+                                                <div class="table-header-end-use">{% trans "End-Use" %}
+                                                </div><div class="table-header-percentage">%
+                                                </div><div class="table-header-threshold">{% trans "Threshold" %}
+                                                </div><div class="table-header-send-to">{% trans "Send to" %}
+                                                </div><div class="table-header-created">{% trans "Date Created" %}
+                                                </div><div class="table-header-action">{% trans "Action" %}</div>
+                                        </div>
+                                </div>
+                        </div>
+                        <div class="back-to-top">
+                                <a href="#">{% trans "Back to Top" %}<img src="{% static 'images/alert/back-to-top.png' %}"></a>
+                        </div>
+                </div>
 
-		<div id="summary-alert-section" class="summary-alert alert-container">
-			<div class="alert-header">
-				<img class="alert-header-img" src="{% static 'images/alert/summary-alert-icon-small.png' %}">
-				<div class="alert-header-title">{% trans "Create Summary Alert" %}</div>
-				<img class="alert-header-info-btn" src="{% static 'images/alert/info-icon-small.png' %}">
-			</div>
+                <div id="summary-alert-section" class="summary-alert alert-container">
+                        <div class="alert-header">
+                                <img class="alert-header-img" src="{% static 'images/alert/summary-alert-icon-small.png' %}">
+                                <div class="alert-header-title">{% trans "Create Summary Alert" %}</div>
+                                <img class="alert-header-info-btn" src="{% static 'images/alert/info-icon-small.png' %}">
+                        </div>
 
-			<div class="alert-content">
-				<div class="content-table">
-					<div class="table-header">
-						<div class="table-header-end-use">{% trans "End-Use" %}
-						</div><div class="table-header-percentage">%
-						</div><div class="table-header-time-from">{% trans "Time from" %}
-						</div><div class="table-header-time-to">{% trans "Time to" %}
-						</div><div class="table-header-weekdays">{% trans "alert_weekdays" %}
-						</div><div class="table-header-send-to">{% trans "Send to" %}
-						</div><div class="table-header-created">{% trans "Date Created" %}
-						</div><div class="table-header-action">{% trans "Action" %}</div>
-					</div>
-				</div>
-			</div>
-			<div class="back-to-top">
-				<a href="#">{% trans "Back to Top" %}<img src="{% static 'images/alert/back-to-top.png' %}"></a>
-			</div>
-		</div>
+                        <div class="alert-content">
+                                <div class="content-table">
+                                        <div class="table-header">
+                                                <div class="table-header-end-use">{% trans "End-Use" %}
+                                                </div><div class="table-header-percentage">%
+                                                </div><div class="table-header-time-from">{% trans "Time from" %}
+                                                </div><div class="table-header-time-to">{% trans "Time to" %}
+                                                </div><div class="table-header-weekdays">{% trans "alert_weekdays" %}
+                                                </div><div class="table-header-send-to">{% trans "Send to" %}
+                                                </div><div class="table-header-created">{% trans "Date Created" %}
+                                                </div><div class="table-header-action">{% trans "Action" %}</div>
+                                        </div>
+                                </div>
+                        </div>
+                        <div class="back-to-top">
+                                <a href="#">{% trans "Back to Top" %}<img src="{% static 'images/alert/back-to-top.png' %}"></a>
+                        </div>
+                </div>
 
-		<div id="still-on-alert-section" class="still-on-alert alert-container">
-			<div class="alert-header">
-				<img class="alert-header-img" src="{% static 'images/alert/instance-alert-icon-small.png' %}">
-				<div class="alert-header-title">{% trans "Create Instance Alert" %}</div>
-				<img class="alert-header-info-btn" src="{% static 'images/alert/info-icon-small.png' %}">
-			</div>
+                <div id="still-on-alert-section" class="still-on-alert alert-container">
+                        <div class="alert-header">
+                                <img class="alert-header-img" src="{% static 'images/alert/instance-alert-icon-small.png' %}">
+                                <div class="alert-header-title">{% trans "Create Instance Alert" %}</div>
+                                <img class="alert-header-info-btn" src="{% static 'images/alert/info-icon-small.png' %}">
+                        </div>
 
-			<div class="alert-content">
-				<div class="content-table">
-					<div class="table-header">
-						<div class="table-header-end-use">{% trans "End-Use" %}
-						</div><div class="table-header-percentage">%
-						</div><div class="table-header-time-from">{% trans "Time from" %}
-						</div><div class="table-header-time-to">{% trans "Time to" %}
-						</div><div class="table-header-weekdays">{% trans "alert_weekdays" %}
-						</div><div class="table-header-send-to">{% trans "Send to" %}
-						</div><div class="table-header-created">{% trans "Date Created" %}
-						</div><div class="table-header-action">{% trans "Action" %}</div>
-					</div>
-				</div>
-			</div>
-			<div class="back-to-top">
-				<a href="#">{% trans "Back to Top" %}<img src="{% static 'images/alert/back-to-top.png' %}"></a>
-			</div>
-		</div>
-	</div>
+                        <div class="alert-content">
+                                <div class="content-table">
+                                        <div class="table-header">
+                                                <div class="table-header-end-use">{% trans "End-Use" %}
+                                                </div><div class="table-header-percentage">%
+                                                </div><div class="table-header-time-from">{% trans "Time from" %}
+                                                </div><div class="table-header-time-to">{% trans "Time to" %}
+                                                </div><div class="table-header-weekdays">{% trans "alert_weekdays" %}
+                                                </div><div class="table-header-send-to">{% trans "Send to" %}
+                                                </div><div class="table-header-created">{% trans "Date Created" %}
+                                                </div><div class="table-header-action">{% trans "Action" %}</div>
+                                        </div>
+                                </div>
+                        </div>
+                        <div class="back-to-top">
+                                <a href="#">{% trans "Back to Top" %}<img src="{% static 'images/alert/back-to-top.png' %}"></a>
+                        </div>
+                </div>
+        </div>
 
-	<div class="bottom-empty-space"></div>
+        <div class="bottom-empty-space"></div>
 
 </div>
 
 <div class="remove-dialog">
-	<div class="dialog-title">{% trans "Are you sure you want to remove?" %}</div>
-	<div class="dialog-btn-container">
-		<div class="dialog-cancel-btn">{% trans "Canel" %}</div>
-		<div class="dialog-confirm-btn">{% trans "Confirm" %}</div>
-	</div>
+        <div class="dialog-title">{% trans "Are you sure you want to remove?" %}</div>
+        <div class="dialog-btn-container">
+                <div class="dialog-cancel-btn">{% trans "Canel" %}</div>
+                <div class="dialog-confirm-btn">{% trans "Confirm" %}</div>
+        </div>
 </div>
 
 <div class="duplicate-popup">
-	<div class="duplicate-container"></div>
+        <div class="duplicate-container"></div>
 </div>
 
 {% endblock %}
