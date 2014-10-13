@@ -9,6 +9,8 @@ class AlertAdmin(admin.ModelAdmin):
 
 class AlertHistoryAdmin(admin.ModelAdmin):
     list_display = ('alert', 'created', 'diff_percent', 'resolved', 'resolved_datetime')
+    list_filter = ('alert__system', 'alert__type')
+    search_fields = ['alert__system__code']
 
 class AlertEmailAdmin(admin.ModelAdmin):
     list_display = ('created', 'recipient', 'title', 'error')
