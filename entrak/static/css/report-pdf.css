@@ -1,48 +1,48 @@
 @font-face {
-	font-family: 'HelveticaNeue-Light';
-	src: url('../fonts/HelveticaNeue-Light.otf') format('opentype');
-	font-weight: normal;
-	font-style: normal;
+    font-family: 'HelveticaNeue-Light';
+    src: url('../fonts/HelveticaNeue-Light.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
 }
 
 html {
-	height: auto;
+    height: auto;
 }
 
 body {
-	width: 972px;
-	font-family: 'HelveticaNeue-Light';
+    width: 972px;
+    font-family: 'HelveticaNeue-Light';
 }
 
 .report-name {
-	width: auto;
-	margin-left: auto;
-	margin-right: auto;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .report-component {
-	margin-left: 0;
-	margin-right: 0;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .basic-info-container + hr {
-	display: block;
-	height: 1px;
+    display: block;
+    height: 1px;
     border: 0;
-	background-color: #CACACA;
+    background-color: #CACACA;
 }
 
 .report-component {
-	page-break-after: always;
+    page-break-after: always;
 }
 #overnight-info.report-component {
-	page-break-after: auto;
+    page-break-after: auto;
 }
 .key-statistics-row, .key-statistics-percentage, .compare-past-basic-info,
 .compare-past-line-chart, .compare-past-sub-info, .sub-calendar-info-block{
-	page-break-inside: avoid;
+    page-break-inside: avoid;
 }
 
 .key-stat-donut-container {
-	margin-right: 36px !important;
+    margin-right: 36px !important;
 }

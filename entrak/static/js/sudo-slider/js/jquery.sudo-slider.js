@@ -2757,7 +2757,7 @@
         var encodedFuncName = "bez_" + coOrdArray.join("_").replace(/\./g, "p");
         var jqueryEasing = $.easing;
         if (!isFunction(jqueryEasing[encodedFuncName])) {
-            var	polyBez = function(p1, p2) {
+            var polyBez = function(p1, p2) {
                 var A = [0, 0];
                 var B = [0, 0];
                 var C = [0, 0];
