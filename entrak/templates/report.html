@@ -30,38 +30,38 @@
 // put here to share with extended template
 var report = {};
 report.reportGeneratorMultiLangTexts = {
-	'reportTypeMonthDtFormat': '{% trans "MMM YYYY" %}',
-	'reportTypeYearDtFormat': '{% trans "YYYY" %}',
-	'reportTypeCustomMonthDtFormat': '{% trans "D MMM YYYY, ddd" %}',
-	'reportTypeWeekDtFormat': '{% trans "D MMM YYYY, ddd" %}',
-	'genDtTo': '{% trans " to " %}',
-	'tons': '{% trans " tons" %}',
-	'tonsCo2': '{% blocktrans %} tons<span class="basic-info-col-unit"> CO<sub>2</sub></span>{% endblocktrans %}',
-	'reportTypeNameMonth': '{% trans "report_type_name_month" %}',
-	'reportTypeNameYear': '{% trans "report_type_name_year" %}',
-	'reportTypeNameQuarter': '{% trans "report_type_name_quarter" %}',
-	'reportTypeNameWeek': '{% trans "report_type_name_week" %}',
-	'more': '{% trans "more" %}',
-	'less': '{% trans "less" %}',
-	'overall': '{% trans "Overall: " %}',
-	'calendarMore': '{% trans "calendar_more" %}',
-	'calendarLess': '{% trans "calendar_less" %}',
-	'comparedTo': '{% trans "compared<br>to " %}',
-	'mSquare': '{% trans " m²" %}',
-	'pandas': '{% trans " pandas" %}',
-	'beginDtFormat': '{% trans "MMMM YYYY" %}',
-	'lastMonth': '{% trans "last month" %}',
-	'samePeriodLastYear': '{% trans "same period last year" %}',
-	'calendarUsageDtFormat': '{% trans "D MMM YYYY" %}',
-	'calendarTypeWeekday': '{% trans "Weekday" %}',
-	'calendarTypeWeekend': '{% trans "Weekend" %}',
-	'calendarTypeOvernight': '{% trans "Overnight" %}',
-	'calendarSplitWeekdays': '{% trans "Weekdays" %}',
-	'calendarSplitWeekends': '{% trans "Weekends" %}',
-	'calendarSplitDaytime': '{% trans "Daytime" %}',
-	'calendarSplitOvernight': '{% trans "Overnight" %}',
-	'overnightFootnoteFormat': '{% trans "hh:mmA" %}',
-	'comparePastLabelFormat': '{% trans "MMM D" %}',
+        'reportTypeMonthDtFormat': '{% trans "MMM YYYY" %}',
+        'reportTypeYearDtFormat': '{% trans "YYYY" %}',
+        'reportTypeCustomMonthDtFormat': '{% trans "D MMM YYYY, ddd" %}',
+        'reportTypeWeekDtFormat': '{% trans "D MMM YYYY, ddd" %}',
+        'genDtTo': '{% trans " to " %}',
+        'tons': '{% trans " tons" %}',
+        'tonsCo2': '{% blocktrans %} tons<span class="basic-info-col-unit"> CO<sub>2</sub></span>{% endblocktrans %}',
+        'reportTypeNameMonth': '{% trans "report_type_name_month" %}',
+        'reportTypeNameYear': '{% trans "report_type_name_year" %}',
+        'reportTypeNameQuarter': '{% trans "report_type_name_quarter" %}',
+        'reportTypeNameWeek': '{% trans "report_type_name_week" %}',
+        'more': '{% trans "more" %}',
+        'less': '{% trans "less" %}',
+        'overall': '{% trans "Overall: " %}',
+        'calendarMore': '{% trans "calendar_more" %}',
+        'calendarLess': '{% trans "calendar_less" %}',
+        'comparedTo': '{% trans "compared<br>to " %}',
+        'mSquare': '{% trans " m²" %}',
+        'pandas': '{% trans " pandas" %}',
+        'beginDtFormat': '{% trans "MMMM YYYY" %}',
+        'lastMonth': '{% trans "last month" %}',
+        'samePeriodLastYear': '{% trans "same period last year" %}',
+        'calendarUsageDtFormat': '{% trans "D MMM YYYY" %}',
+        'calendarTypeWeekday': '{% trans "Weekday" %}',
+        'calendarTypeWeekend': '{% trans "Weekend" %}',
+        'calendarTypeOvernight': '{% trans "Overnight" %}',
+        'calendarSplitWeekdays': '{% trans "Weekdays" %}',
+        'calendarSplitWeekends': '{% trans "Weekends" %}',
+        'calendarSplitDaytime': '{% trans "Daytime" %}',
+        'calendarSplitOvernight': '{% trans "Overnight" %}',
+        'overnightFootnoteFormat': '{% trans "hh:mmA" %}',
+        'comparePastLabelFormat': '{% trans "MMM D" %}',
 };
 
 </script>
@@ -83,576 +83,576 @@ report.reportGeneratorMultiLangTexts = {
 <script type="text/javascript">
 
 function updateReportName() {
-	$(".report-name").text(report.reportGenerator.genReportName());
+        $(".report-name").text(report.reportGenerator.genReportName());
 }
 
 function updateBoundDt() {
-	if (report.currentReportType === ReportGenerator.REPORT_TYPE_YEAR) {
-		if (report.firstRecord.month() === 0 && report.firstRecord.date() === 1) {
-			report.boundStartDt = moment(report.firstRecord).startOf('year');
-		} else {
-			report.boundStartDt = moment(report.firstRecord).add(1, 'y').startOf('year');
-		}
+        if (report.currentReportType === ReportGenerator.REPORT_TYPE_YEAR) {
+                if (report.firstRecord.month() === 0 && report.firstRecord.date() === 1) {
+                        report.boundStartDt = moment(report.firstRecord).startOf('year');
+                } else {
+                        report.boundStartDt = moment(report.firstRecord).add(1, 'y').startOf('year');
+                }
 
-		report.boundEndDt = moment().tz(report.timezone).startOf('year');
-	} else if (report.currentReportType === ReportGenerator.REPORT_TYPE_QUARTER) {
-		if (report.firstRecord.date() === 1
-			&& (report.firstRecord.month() === 0 || report.firstRecord.month() === 3
-				|| report.firstRecord.month() === 6 || report.firstRecord.month() === 9)) {
-			report.boundStartDt = moment(report.firstRecord).startOf('quarter');
-		} else {
-			report.boundStartDt = moment(report.firstRecord).add(3, 'M').startOf('quarter');
-		}
+                report.boundEndDt = moment().tz(report.timezone).startOf('year');
+        } else if (report.currentReportType === ReportGenerator.REPORT_TYPE_QUARTER) {
+                if (report.firstRecord.date() === 1
+                        && (report.firstRecord.month() === 0 || report.firstRecord.month() === 3
+                                || report.firstRecord.month() === 6 || report.firstRecord.month() === 9)) {
+                        report.boundStartDt = moment(report.firstRecord).startOf('quarter');
+                } else {
+                        report.boundStartDt = moment(report.firstRecord).add(3, 'M').startOf('quarter');
+                }
 
-		report.boundEndDt = moment().tz(report.timezone).startOf('quarter');
-	} else if (report.currentReportType === ReportGenerator.REPORT_TYPE_WEEK) {
-		if (report.firstRecord.day() === 0) {
-			report.boundStartDt = moment(report.firstRecord).startOf('week');
-		} else {
-			report.boundStartDt = moment(report.firstRecord).add(1, 'w').startOf('week');
-		}
+                report.boundEndDt = moment().tz(report.timezone).startOf('quarter');
+        } else if (report.currentReportType === ReportGenerator.REPORT_TYPE_WEEK) {
+                if (report.firstRecord.day() === 0) {
+                        report.boundStartDt = moment(report.firstRecord).startOf('week');
+                } else {
+                        report.boundStartDt = moment(report.firstRecord).add(1, 'w').startOf('week');
+                }
 
-		report.boundEndDt = moment().tz(report.timezone).startOf('week');
-	}
+                report.boundEndDt = moment().tz(report.timezone).startOf('week');
+        }
 }
 
 function isTargetDtValid(targetDt) {
-	return ( (targetDt.isAfter(report.boundStartDt) || targetDt.isSame(report.boundStartDt))
-		&& targetDt.isBefore(report.boundEndDt));
+        return ( (targetDt.isAfter(report.boundStartDt) || targetDt.isSame(report.boundStartDt))
+                && targetDt.isBefore(report.boundEndDt));
 }
 
 function isCustomMonthDtValid(targetStartDt, targetEndDt) {
-	if (targetStartDt === undefined || targetEndDt === undefined
-		|| targetStartDt === null || targetEndDt === null) {
-		return false;
-	}
+        if (targetStartDt === undefined || targetEndDt === undefined
+                || targetStartDt === null || targetEndDt === null) {
+                return false;
+        }
 
-	var endBound = moment().tz(report.timezone).startOf('day');
-	var dtDiff = targetEndDt.diff(targetStartDt, 'days');
-	return ( (targetStartDt.isAfter(report.firstRecord) || targetStartDt.isSame(report.firstRecord))
-		&& (targetStartDt.isBefore(endBound) || targetStartDt.isSame(endBound))
-		&& (targetEndDt.isAfter(report.firstRecord) || targetEndDt.isSame(report.firstRecord))
-		&& (targetEndDt.isBefore(endBound)|| targetEndDt.isSame(endBound))
-		&& (dtDiff >= 25 && dtDiff <= 34) )
+        var endBound = moment().tz(report.timezone).startOf('day');
+        var dtDiff = targetEndDt.diff(targetStartDt, 'days');
+        return ( (targetStartDt.isAfter(report.firstRecord) || targetStartDt.isSame(report.firstRecord))
+                && (targetStartDt.isBefore(endBound) || targetStartDt.isSame(endBound))
+                && (targetEndDt.isAfter(report.firstRecord) || targetEndDt.isSame(report.firstRecord))
+                && (targetEndDt.isBefore(endBound)|| targetEndDt.isSame(endBound))
+                && (dtDiff >= 25 && dtDiff <= 34) )
 }
 
 function canCreateCustomReport() {
-	var canCreate = true;
-	if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-		if (!(isCustomMonthDtValid(report.currentDt, report.customMonthEndDt))) {
-			canCreate = false;
-		}
-	} else {
-		if (!(isTargetDtValid(report.currentDt))) {
-			canCreate = false;
-		}
-	}
+        var canCreate = true;
+        if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+                if (!(isCustomMonthDtValid(report.currentDt, report.customMonthEndDt))) {
+                        canCreate = false;
+                }
+        } else {
+                if (!(isTargetDtValid(report.currentDt))) {
+                        canCreate = false;
+                }
+        }
 
-	return canCreate;
+        return canCreate;
 }
 
 function updateReportType(targetReportType) {
-	if (targetReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-		$("#panel-content").css('height', '723px');
+        if (targetReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+                $("#panel-content").css('height', '723px');
 
-		$(".customize-detail-section .three-column-section").fadeIn();
-		$(".customize-detail-section .two-column-section").hide();
-	} else {
-		if (targetReportType === ReportGenerator.REPORT_TYPE_WEEK) {
-			$("#panel-content").css('height', '406px');
-			$("#customize-report .two-column-section").addClass('custom-week');
-		} else {
-			$("#panel-content").css('height', '362px');
-			$("#customize-report .two-column-section").removeClass('custom-week');
-		}
+                $(".customize-detail-section .three-column-section").fadeIn();
+                $(".customize-detail-section .two-column-section").hide();
+        } else {
+                if (targetReportType === ReportGenerator.REPORT_TYPE_WEEK) {
+                        $("#panel-content").css('height', '406px');
+                        $("#customize-report .two-column-section").addClass('custom-week');
+                } else {
+                        $("#panel-content").css('height', '362px');
+                        $("#customize-report .two-column-section").removeClass('custom-week');
+                }
 
-		$(".customize-detail-section .two-column-section").fadeIn();
-		$(".customize-detail-section .three-column-section").hide();
+                $(".customize-detail-section .two-column-section").fadeIn();
+                $(".customize-detail-section .three-column-section").hide();
 
-		if (targetReportType === ReportGenerator.REPORT_TYPE_WEEK) {
-			$(".two-column-section #week-datepicker").fadeIn();
-			$(".two-column-section .year-quarter-calendar").hide();
-		} else {
-			$(".two-column-section .year-quarter-calendar").fadeIn();
-			$(".two-column-section #week-datepicker").hide();
-		}
-	}
+                if (targetReportType === ReportGenerator.REPORT_TYPE_WEEK) {
+                        $(".two-column-section #week-datepicker").fadeIn();
+                        $(".two-column-section .year-quarter-calendar").hide();
+                } else {
+                        $(".two-column-section .year-quarter-calendar").fadeIn();
+                        $(".two-column-section #week-datepicker").hide();
+                }
+        }
 
-	report.currentReportType = targetReportType;
-	updateBoundDt();
+        report.currentReportType = targetReportType;
+        updateBoundDt();
 
-	$(".datetime-result .from-date").text('');
-	$(".datetime-result .to-date").text('');
-	$(".create-report-btn").addClass("btn-disable");
+        $(".datetime-result .from-date").text('');
+        $(".datetime-result .to-date").text('');
+        $(".create-report-btn").addClass("btn-disable");
 
-	if (targetReportType === ReportGenerator.REPORT_TYPE_YEAR) {
-		timeRangeYearSelected();
-	} else if (targetReportType === ReportGenerator.REPORT_TYPE_QUARTER) {
-		timeRangeQuarterSelected();
-	} else if (targetReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-		timeRangeCustomMonthSelected();
-	} else if (targetReportType === ReportGenerator.REPORT_TYPE_WEEK) {
-		timeRangeWeekSelected();
-	}
+        if (targetReportType === ReportGenerator.REPORT_TYPE_YEAR) {
+                timeRangeYearSelected();
+        } else if (targetReportType === ReportGenerator.REPORT_TYPE_QUARTER) {
+                timeRangeQuarterSelected();
+        } else if (targetReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+                timeRangeCustomMonthSelected();
+        } else if (targetReportType === ReportGenerator.REPORT_TYPE_WEEK) {
+                timeRangeWeekSelected();
+        }
 }
 
 function timeRangeYearSelected() {
-	report.currentDt = moment(report.boundEndDt).subtract(1, 'y');
+        report.currentDt = moment(report.boundEndDt).subtract(1, 'y');
 
-	var targetYearEle = $(".year-quarter-calendar-head .target-year");
-	targetYearEle.text(report.currentDt.format('YYYY'));
+        var targetYearEle = $(".year-quarter-calendar-head .target-year");
+        targetYearEle.text(report.currentDt.format('YYYY'));
 
-	$(".year-quarter-calendar-content").addClass("quarter-content-disable");
+        $(".year-quarter-calendar-content").addClass("quarter-content-disable");
 
-	$(".year-quarter-calendar-head .prev-btn").off('click').click(function() {
-		var targetDt = moment(report.currentDt).subtract(1, 'y');
-		if (isTargetDtValid(targetDt)) {
-			report.currentDt.subtract(1, 'y');
-			targetYearEle.text(report.currentDt.format('YYYY'));
-			updateGenReportSection();
-		}
-	});
-	$(".year-quarter-calendar-head .next-btn").off('click').click(function() {
-		var targetDt = moment(report.currentDt).add(1, 'y');
-		if (isTargetDtValid(targetDt)) {
-			report.currentDt.add(1, 'y');
-			targetYearEle.text(report.currentDt.format('YYYY'));
-			updateGenReportSection();
-		}
-	});
+        $(".year-quarter-calendar-head .prev-btn").off('click').click(function() {
+                var targetDt = moment(report.currentDt).subtract(1, 'y');
+                if (isTargetDtValid(targetDt)) {
+                        report.currentDt.subtract(1, 'y');
+                        targetYearEle.text(report.currentDt.format('YYYY'));
+                        updateGenReportSection();
+                }
+        });
+        $(".year-quarter-calendar-head .next-btn").off('click').click(function() {
+                var targetDt = moment(report.currentDt).add(1, 'y');
+                if (isTargetDtValid(targetDt)) {
+                        report.currentDt.add(1, 'y');
+                        targetYearEle.text(report.currentDt.format('YYYY'));
+                        updateGenReportSection();
+                }
+        });
 
-	updateGenReportSection();
+        updateGenReportSection();
 }
 
 function updateSelectedQuarter() {
-	$(".year-quarter-calendar-content>div").removeClass('selected-quarter');
-	var quarterIdx = report.currentDt.month()/3;
-	$($(".year-quarter-calendar-content>div")[quarterIdx]).addClass('selected-quarter');
+        $(".year-quarter-calendar-content>div").removeClass('selected-quarter');
+        var quarterIdx = report.currentDt.month()/3;
+        $($(".year-quarter-calendar-content>div")[quarterIdx]).addClass('selected-quarter');
 
-	$(".year-quarter-calendar-content>div").each(function(btnIdx) {
-		var btnDt = moment(report.currentDt).month(btnIdx*3);
-		if (isTargetDtValid(btnDt)) {
-			$(this).removeClass('invalid-quarter');
-		} else {
-			$(this).addClass('invalid-quarter');
-		}
-	});
+        $(".year-quarter-calendar-content>div").each(function(btnIdx) {
+                var btnDt = moment(report.currentDt).month(btnIdx*3);
+                if (isTargetDtValid(btnDt)) {
+                        $(this).removeClass('invalid-quarter');
+                } else {
+                        $(this).addClass('invalid-quarter');
+                }
+        });
 }
 
 function timeRangeQuarterSelected() {
-	report.currentDt = moment(report.boundEndDt).subtract(3, 'M');
+        report.currentDt = moment(report.boundEndDt).subtract(3, 'M');
 
-	var targetYearEle = $(".year-quarter-calendar-head .target-year");
-	targetYearEle.text(report.currentDt.format('YYYY'));
-	updateSelectedQuarter();
+        var targetYearEle = $(".year-quarter-calendar-head .target-year");
+        targetYearEle.text(report.currentDt.format('YYYY'));
+        updateSelectedQuarter();
 
-	$(".year-quarter-calendar-content").removeClass("quarter-content-disable");
+        $(".year-quarter-calendar-content").removeClass("quarter-content-disable");
 
-	$(".year-quarter-calendar-head .prev-btn").off('click').click(function() {
-		var targetDt = moment(report.currentDt).subtract(1, 'y');
-		if (targetDt.year() >= report.boundStartDt.year()) {
-			report.currentDt.subtract(1, 'y');
-			while(report.currentDt.isBefore(report.boundStartDt)) {
-				report.currentDt.add(3, 'M');
-			}
-			targetYearEle.text(report.currentDt.format('YYYY'));
-			updateSelectedQuarter();
-			updateGenReportSection();
-		}
-	});
-	$(".year-quarter-calendar-head .next-btn").off('click').click(function() {
-		var targetDt = moment(report.currentDt).add(1, 'y');
-		if (targetDt.year() < report.boundEndDt.year()
-			|| (targetDt.year() === report.boundEndDt.year() && report.boundEndDt.month() !== 0) ) {
-			report.currentDt.add(1, 'y');
-			while(!(report.currentDt.isBefore(report.boundEndDt))) {
-				report.currentDt.subtract(3, 'M');
-			}
-			targetYearEle.text(report.currentDt.format('YYYY'));
-			updateSelectedQuarter();
-			updateGenReportSection();
-		}
-	});
+        $(".year-quarter-calendar-head .prev-btn").off('click').click(function() {
+                var targetDt = moment(report.currentDt).subtract(1, 'y');
+                if (targetDt.year() >= report.boundStartDt.year()) {
+                        report.currentDt.subtract(1, 'y');
+                        while(report.currentDt.isBefore(report.boundStartDt)) {
+                                report.currentDt.add(3, 'M');
+                        }
+                        targetYearEle.text(report.currentDt.format('YYYY'));
+                        updateSelectedQuarter();
+                        updateGenReportSection();
+                }
+        });
+        $(".year-quarter-calendar-head .next-btn").off('click').click(function() {
+                var targetDt = moment(report.currentDt).add(1, 'y');
+                if (targetDt.year() < report.boundEndDt.year()
+                        || (targetDt.year() === report.boundEndDt.year() && report.boundEndDt.month() !== 0) ) {
+                        report.currentDt.add(1, 'y');
+                        while(!(report.currentDt.isBefore(report.boundEndDt))) {
+                                report.currentDt.subtract(3, 'M');
+                        }
+                        targetYearEle.text(report.currentDt.format('YYYY'));
+                        updateSelectedQuarter();
+                        updateGenReportSection();
+                }
+        });
 
-	updateGenReportSection();
+        updateGenReportSection();
 }
 
 function timeRangeCustomMonthSelected() {
-	$(".three-column-section .report-datepicker").datepicker("destroy");
-	var datepickerOptions = {
-	};
-	$("#month-start-datepicker").datepicker($.extend({
-		minDate: report.firstRecord.toDate(),
-		maxDate: "-26d",
-		onSelect: function(dateText, inst) {
-			var selectDt = moment($(this).datepicker('getDate'));
-			var boundMinDate = moment(selectDt).add(25, 'd');
-			if (boundMinDate.isAfter(moment(), 'day')) {
-				boundMinDate = moment().startOf('day');
-			}
-			var boundMaxDate = moment(selectDt).add(34, 'd');
-			if (boundMaxDate.isAfter(moment(), 'day')) {
-				boundMaxDate = moment().startOf('day');
-			}
-			$("#month-end-datepicker").datepicker("option", "minDate", boundMinDate.toDate());
-			$("#month-end-datepicker").datepicker("option", "maxDate", boundMaxDate.toDate());
+        $(".three-column-section .report-datepicker").datepicker("destroy");
+        var datepickerOptions = {
+        };
+        $("#month-start-datepicker").datepicker($.extend({
+                minDate: report.firstRecord.toDate(),
+                maxDate: "-26d",
+                onSelect: function(dateText, inst) {
+                        var selectDt = moment($(this).datepicker('getDate'));
+                        var boundMinDate = moment(selectDt).add(25, 'd');
+                        if (boundMinDate.isAfter(moment(), 'day')) {
+                                boundMinDate = moment().startOf('day');
+                        }
+                        var boundMaxDate = moment(selectDt).add(34, 'd');
+                        if (boundMaxDate.isAfter(moment(), 'day')) {
+                                boundMaxDate = moment().startOf('day');
+                        }
+                        $("#month-end-datepicker").datepicker("option", "minDate", boundMinDate.toDate());
+                        $("#month-end-datepicker").datepicker("option", "maxDate", boundMaxDate.toDate());
 
-			report.currentDt = selectDt;
-			updateGenReportSection();
-		},
-	}, datepickerOptions));
-	$("#month-end-datepicker").datepicker($.extend({
-		minDate: moment(report.firstRecord).add(25, 'd').toDate(),
-		maxDate: "-0d",
-		onSelect: function(dateText, inst) {
-			report.customMonthEndDt = moment($(this).datepicker('getDate'));
-			updateGenReportSection();
-		},
-	}, datepickerOptions));
+                        report.currentDt = selectDt;
+                        updateGenReportSection();
+                },
+        }, datepickerOptions));
+        $("#month-end-datepicker").datepicker($.extend({
+                minDate: moment(report.firstRecord).add(25, 'd').toDate(),
+                maxDate: "-0d",
+                onSelect: function(dateText, inst) {
+                        report.customMonthEndDt = moment($(this).datepicker('getDate'));
+                        updateGenReportSection();
+                },
+        }, datepickerOptions));
 }
 
 function selectWholeWeek() {
-	window.setTimeout(function () {
-		$('#week-datepicker').find('.ui-datepicker-current-day a').addClass('ui-state-active')
-	}, 1);
+        window.setTimeout(function () {
+                $('#week-datepicker').find('.ui-datepicker-current-day a').addClass('ui-state-active')
+        }, 1);
 }
 
 function setWeekHoverEffect() {
-	window.setTimeout(function () {
-		$('#week-datepicker .ui-datepicker-calendar tr').on("mousemove", function() {
-			$(this).find('td a').addClass('ui-state-hover');
-		});
-		$('#week-datepicker .ui-datepicker-calendar tr').on("mouseleave", function() {
-			$(this).find('td a').removeClass('ui-state-hover');
-		});
-	}, 1);
+        window.setTimeout(function () {
+                $('#week-datepicker .ui-datepicker-calendar tr').on("mousemove", function() {
+                        $(this).find('td a').addClass('ui-state-hover');
+                });
+                $('#week-datepicker .ui-datepicker-calendar tr').on("mouseleave", function() {
+                        $(this).find('td a').removeClass('ui-state-hover');
+                });
+        }, 1);
 }
 
 function timeRangeWeekSelected() {
-	var weekStartDate, weekEndDate;
-	$("#week-datepicker").datepicker('destroy');
-	$("#week-datepicker").datepicker({
-		showOtherMonths: true,
-		selectOtherMonths: true,
-		minDate: report.boundStartDt.toDate(),
-		maxDate: moment(report.boundEndDt).subtract(1, 'd').toDate(),
-		onSelect: function(dateText, inst) {
-			var selectDt = moment($(this).datepicker('getDate')).startOf('week');
-			weekStartDate = selectDt.toDate();
-			weekEndDate = moment(selectDt).endOf('week').toDate();
-			selectWholeWeek();
+        var weekStartDate, weekEndDate;
+        $("#week-datepicker").datepicker('destroy');
+        $("#week-datepicker").datepicker({
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                minDate: report.boundStartDt.toDate(),
+                maxDate: moment(report.boundEndDt).subtract(1, 'd').toDate(),
+                onSelect: function(dateText, inst) {
+                        var selectDt = moment($(this).datepicker('getDate')).startOf('week');
+                        weekStartDate = selectDt.toDate();
+                        weekEndDate = moment(selectDt).endOf('week').toDate();
+                        selectWholeWeek();
 
-			report.currentDt = selectDt;
-			updateGenReportSection();
-			setWeekHoverEffect();
-		},
-		beforeShowDay: function(date) {
-			var cssClass = '';
-			if(date >= weekStartDate && date <= weekEndDate) {
-				cssClass = 'ui-datepicker-current-day';
-			}
-			return [true, cssClass];
-		},
-		onChangeMonthYear: function(year, month, inst) {
-			selectWholeWeek();
-			setWeekHoverEffect();
-		}
-	});
+                        report.currentDt = selectDt;
+                        updateGenReportSection();
+                        setWeekHoverEffect();
+                },
+                beforeShowDay: function(date) {
+                        var cssClass = '';
+                        if(date >= weekStartDate && date <= weekEndDate) {
+                                cssClass = 'ui-datepicker-current-day';
+                        }
+                        return [true, cssClass];
+                },
+                onChangeMonthYear: function(year, month, inst) {
+                        selectWholeWeek();
+                        setWeekHoverEffect();
+                }
+        });
 
-	setWeekHoverEffect();
+        setWeekHoverEffect();
 }
 
 function updateGenReportSection() {
-	var fromText, toText;
-	if (report.currentReportType === ReportGenerator.REPORT_TYPE_YEAR) {
-		fromText = report.currentDt.format('{% trans "YYYY" %}');
-		toText = report.reportGenerator.genEndDt(report.currentDt, report.currentReportType).format('{% trans "YYYY" %}');
-	} else if (report.currentReportType === ReportGenerator.REPORT_TYPE_QUARTER) {
-		fromText = report.currentDt.format('{% trans "YYYY MMMM" %}');
-		toText = report.reportGenerator.genEndDt(report.currentDt, report.currentReportType).format('{% trans "YYYY MMMM" %}');
-	} else if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-		fromText = moment($("#month-start-datepicker").datepicker("getDate")).format('{% trans "D MMM YYYY, ddd" %}');
-		toText = moment($("#month-end-datepicker").datepicker("getDate")).format('{% trans "D MMM YYYY, ddd" %}');
-	} else if (report.currentReportType === ReportGenerator.REPORT_TYPE_WEEK) {
-		fromText = report.currentDt.format('{% trans "D MMM YYYY, ddd" %}');
-		toText = moment(report.currentDt).add(1, 'w').format('{% trans "D MMM YYYY, ddd" %}');
-	}
-	$(".datetime-result .from-date").text(fromText);
-	$(".datetime-result .to-date").text(toText);
+        var fromText, toText;
+        if (report.currentReportType === ReportGenerator.REPORT_TYPE_YEAR) {
+                fromText = report.currentDt.format('{% trans "YYYY" %}');
+                toText = report.reportGenerator.genEndDt(report.currentDt, report.currentReportType).format('{% trans "YYYY" %}');
+        } else if (report.currentReportType === ReportGenerator.REPORT_TYPE_QUARTER) {
+                fromText = report.currentDt.format('{% trans "YYYY MMMM" %}');
+                toText = report.reportGenerator.genEndDt(report.currentDt, report.currentReportType).format('{% trans "YYYY MMMM" %}');
+        } else if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+                fromText = moment($("#month-start-datepicker").datepicker("getDate")).format('{% trans "D MMM YYYY, ddd" %}');
+                toText = moment($("#month-end-datepicker").datepicker("getDate")).format('{% trans "D MMM YYYY, ddd" %}');
+        } else if (report.currentReportType === ReportGenerator.REPORT_TYPE_WEEK) {
+                fromText = report.currentDt.format('{% trans "D MMM YYYY, ddd" %}');
+                toText = moment(report.currentDt).add(1, 'w').format('{% trans "D MMM YYYY, ddd" %}');
+        }
+        $(".datetime-result .from-date").text(fromText);
+        $(".datetime-result .to-date").text(toText);
 
-	updateCreateBtnStatus();
+        updateCreateBtnStatus();
 }
 
 function updateCreateBtnStatus() {
-	var createBtnEnable = canCreateCustomReport();
+        var createBtnEnable = canCreateCustomReport();
 
-	if (createBtnEnable) {
-		$(".create-report-btn").removeClass("btn-disable");
-	} else {
-		$(".create-report-btn").addClass("btn-disable");
-	}
+        if (createBtnEnable) {
+                $(".create-report-btn").removeClass("btn-disable");
+        } else {
+                $(".create-report-btn").addClass("btn-disable");
+        }
 }
 
 function dlRawDataSelected() {
-	$(".datetime-result .from-date").text('');
-	$(".datetime-result .to-date").text('');
-	$(".create-report-btn").addClass("btn-disable");
+        $(".datetime-result .from-date").text('');
+        $(".datetime-result .to-date").text('');
+        $(".create-report-btn").addClass("btn-disable");
 
-	$('.unit-container>span').removeClass('selected-unit')
-	$('.unit-container>span:eq(0)').addClass('selected-unit');
+        $('.unit-container>span').removeClass('selected-unit')
+        $('.unit-container>span:eq(0)').addClass('selected-unit');
 
-	report.dlRawDataStartDt = null;
-	report.dlRawDataEndDt = null;
-	report.dlRawDataUnit = 'kwh';
+        report.dlRawDataStartDt = null;
+        report.dlRawDataEndDt = null;
+        report.dlRawDataUnit = 'kwh';
 
-	$("#download-raw-data .report-datepicker").datepicker('destroy');
-	$("#dl-data-start-datepicker").datepicker({
-		minDate: report.firstRecord.toDate(),
-		maxDate: '-1d',
-		onSelect: function(dateText, inst) {
-			var selectDt = moment($(this).datepicker('getDate')).tz(report.timezone);
-			var boundMinDate = moment(selectDt).add(1, 'd').toDate();
-			$("#dl-data-end-datepicker").datepicker("option", "minDate", boundMinDate);
+        $("#download-raw-data .report-datepicker").datepicker('destroy');
+        $("#dl-data-start-datepicker").datepicker({
+                minDate: report.firstRecord.toDate(),
+                maxDate: '-1d',
+                onSelect: function(dateText, inst) {
+                        var selectDt = moment($(this).datepicker('getDate')).tz(report.timezone);
+                        var boundMinDate = moment(selectDt).add(1, 'd').toDate();
+                        $("#dl-data-end-datepicker").datepicker("option", "minDate", boundMinDate);
 
-			if (report.dlRawDataEndDt !== null
-				&& (selectDt.isSame(report.dlRawDataEndDt)) || selectDt.isAfter(report.dlRawDataEndDt)) {
-				var endDt = moment($("#dl-data-end-datepicker").datepicker('getDate')).tz(report.timezone);
-				report.dlRawDataEndDt = endDt;
-				$(".datetime-result .to-date").text(endDt.format('{% trans "D MMM YYYY, ddd" %}'));
-			}
+                        if (report.dlRawDataEndDt !== null
+                                && (selectDt.isSame(report.dlRawDataEndDt)) || selectDt.isAfter(report.dlRawDataEndDt)) {
+                                var endDt = moment($("#dl-data-end-datepicker").datepicker('getDate')).tz(report.timezone);
+                                report.dlRawDataEndDt = endDt;
+                                $(".datetime-result .to-date").text(endDt.format('{% trans "D MMM YYYY, ddd" %}'));
+                        }
 
-			report.dlRawDataStartDt = selectDt;
-			$(".datetime-result .from-date").text(selectDt.format('{% trans "D MMM YYYY, ddd" %}'));
+                        report.dlRawDataStartDt = selectDt;
+                        $(".datetime-result .from-date").text(selectDt.format('{% trans "D MMM YYYY, ddd" %}'));
 
-			updateDlRawBtnStatus();
-		},
-	});
-	$("#dl-data-end-datepicker").datepicker({
-		minDate: report.firstRecord.toDate(),
-		maxDate: '0d',
-		onSelect: function(dateText, inst) {
-			var selectDt = moment($(this).datepicker('getDate')).tz(report.timezone);
-			report.dlRawDataEndDt = selectDt;
-			$(".datetime-result .to-date").text(selectDt.format('{% trans "D MMM YYYY, ddd" %}'));
+                        updateDlRawBtnStatus();
+                },
+        });
+        $("#dl-data-end-datepicker").datepicker({
+                minDate: report.firstRecord.toDate(),
+                maxDate: '0d',
+                onSelect: function(dateText, inst) {
+                        var selectDt = moment($(this).datepicker('getDate')).tz(report.timezone);
+                        report.dlRawDataEndDt = selectDt;
+                        $(".datetime-result .to-date").text(selectDt.format('{% trans "D MMM YYYY, ddd" %}'));
 
-			updateDlRawBtnStatus();
-		},
-	});
+                        updateDlRawBtnStatus();
+                },
+        });
 }
 
 function canDlRawData() {
-	return (report.dlRawDataStartDt !== null
-		&& report.dlRawDataEndDt !== null
-		&& report.dlRawDataEndDt.isAfter(report.dlRawDataStartDt))
+        return (report.dlRawDataStartDt !== null
+                && report.dlRawDataEndDt !== null
+                && report.dlRawDataEndDt.isAfter(report.dlRawDataStartDt))
 }
 
 function updateDlRawBtnStatus() {
-	if (canDlRawData()) {
-		$(".create-report-btn").removeClass("btn-disable");
-	} else {
-		$(".create-report-btn").addClass("btn-disable");
-	}
+        if (canDlRawData()) {
+                $(".create-report-btn").removeClass("btn-disable");
+        } else {
+                $(".create-report-btn").addClass("btn-disable");
+        }
 }
 
 function setDetailShow(isShow) {
-	if (isShow) {
-		$(".hide-details-btn").removeClass('btn-down');
-		$(".detail-container").show();
-	} else {
-		$(".hide-details-btn").addClass('btn-down');
-		$(".detail-container").hide();
-	}
+        if (isShow) {
+                $(".hide-details-btn").removeClass('btn-down');
+                $(".detail-container").show();
+        } else {
+                $(".hide-details-btn").addClass('btn-down');
+                $(".detail-container").hide();
+        }
 }
 
 $(function() {
-	setupAjaxForCsrf($.cookie('csrftoken'));
-	report.langCode = '{{LANGUAGE_CODE}}';
-	moment.locale(report.langCode);
+        setupAjaxForCsrf($.cookie('csrftoken'));
+        report.langCode = '{{LANGUAGE_CODE}}';
+        moment.locale(report.langCode);
 
-	report.entrakSystem = new EntrakSystem();
-	report.entrakSystem.langCode = report.langCode;
-	report.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
+        report.entrakSystem = new EntrakSystem();
+        report.entrakSystem.langCode = report.langCode;
+        report.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
 
-	report.currentReportType = ReportGenerator.REPORT_TYPE_MONTH;
-	report.timezone = '{{systems.0.timezone}}';
-	report.firstRecord = moment.unix(report.entrakSystem.systemTree.data.firstRecord).tz(report.timezone);
-	{% if monthly_summary|length >= 1 %}
-	report.currentDt =  moment.unix({{monthly_summary.0.timestamp}}).tz(report.timezone);
-	{% endif %}
+        report.currentReportType = ReportGenerator.REPORT_TYPE_MONTH;
+        report.timezone = '{{systems.0.timezone}}';
+        report.firstRecord = moment.unix(report.entrakSystem.systemTree.data.firstRecord).tz(report.timezone);
+        {% if monthly_summary|length >= 1 %}
+        report.currentDt =  moment.unix({{monthly_summary.0.timestamp}}).tz(report.timezone);
+        {% endif %}
 
-	$(".report-component").css("opacity", 0.0);
+        $(".report-component").css("opacity", 0.0);
 
-	report.reportGenerator = new ReportGenerator(report.entrakSystem.systemTree, report.timezone,
-		ReportGenerator.REPORT_TYPE_MONTH, report.reportGeneratorMultiLangTexts);
-	report.reportGenerator.langCode = '{{LANGUAGE_CODE}}';
-	if ("currentDt" in report) {
-		report.reportGenerator.updateDtInfo(report.currentDt, null);
-		updateReportName();
+        report.reportGenerator = new ReportGenerator(report.entrakSystem.systemTree, report.timezone,
+                ReportGenerator.REPORT_TYPE_MONTH, report.reportGeneratorMultiLangTexts);
+        report.reportGenerator.langCode = '{{LANGUAGE_CODE}}';
+        if ("currentDt" in report) {
+                report.reportGenerator.updateDtInfo(report.currentDt, null);
+                updateReportName();
 
-		report.reportGenerator.getReportData(function(data) {
-			report.reportGenerator.assignData(data);
-			setDetailShow(true);
-			report.reportGenerator.generateFullReport();
-			setDetailShow(false);
-			$(".report-component").fadeTo(600, 1.0);
-		});
-	}
+                report.reportGenerator.getReportData(function(data) {
+                        report.reportGenerator.assignData(data);
+                        setDetailShow(true);
+                        report.reportGenerator.generateFullReport();
+                        setDetailShow(false);
+                        $(".report-component").fadeTo(600, 1.0);
+                });
+        }
 
-	$(".panel-header-left-menu h3").each(function(btnIdx) {
-		$(this).click({btnIdx: btnIdx}, function(event) {
-			var btnIdx = event.data.btnIdx;
+        $(".panel-header-left-menu h3").each(function(btnIdx) {
+                $(this).click({btnIdx: btnIdx}, function(event) {
+                        var btnIdx = event.data.btnIdx;
 
-			$(".panel-header-left-menu h3").removeClass('selected-tab');
-			$(this).addClass('selected-tab');
+                        $(".panel-header-left-menu h3").removeClass('selected-tab');
+                        $(this).addClass('selected-tab');
 
-			var panelContentHeight;
-			if (btnIdx === 0) {
-				panelContentHeight = '162px';
-			} else if (btnIdx === 1) {
-				panelContentHeight = '362px';
-				updateReportType(ReportGenerator.REPORT_TYPE_YEAR);
-			} else if (btnIdx === 2) {
-				panelContentHeight = '608px';
-				dlRawDataSelected();
-			}
-			$("#panel-content").css("height", panelContentHeight);
+                        var panelContentHeight;
+                        if (btnIdx === 0) {
+                                panelContentHeight = '162px';
+                        } else if (btnIdx === 1) {
+                                panelContentHeight = '362px';
+                                updateReportType(ReportGenerator.REPORT_TYPE_YEAR);
+                        } else if (btnIdx === 2) {
+                                panelContentHeight = '608px';
+                                dlRawDataSelected();
+                        }
+                        $("#panel-content").css("height", panelContentHeight);
 
-			var targetPanel = $($('#panel-content>div')[btnIdx]);
-			if (targetPanel.css("display") == 'none') {
-				$('#panel-content>div').fadeOut();
-				targetPanel.fadeIn();
-			}
-		});
-	});
-	$(".panel-header-left-menu h3:eq(0)").click();
+                        var targetPanel = $($('#panel-content>div')[btnIdx]);
+                        if (targetPanel.css("display") == 'none') {
+                                $('#panel-content>div').fadeOut();
+                                targetPanel.fadeIn();
+                        }
+                });
+        });
+        $(".panel-header-left-menu h3:eq(0)").click();
 
-	$(".time-range-section span").each(function(btnIdx) {
-		$(this).click({btnIdx: btnIdx}, function(event) {
-			var btnIdx = event.data.btnIdx;
-			var targetReportType;
-			if (btnIdx === 0) {
-				targetReportType = ReportGenerator.REPORT_TYPE_YEAR;
-			} else if(btnIdx === 1) {
-				targetReportType = ReportGenerator.REPORT_TYPE_QUARTER;
-			} else if(btnIdx === 2) {
-				targetReportType = ReportGenerator.REPORT_TYPE_CUSTOM_MONTH;
-			} else if(btnIdx===3) {
-				targetReportType = ReportGenerator.REPORT_TYPE_WEEK;
-			}
+        $(".time-range-section span").each(function(btnIdx) {
+                $(this).click({btnIdx: btnIdx}, function(event) {
+                        var btnIdx = event.data.btnIdx;
+                        var targetReportType;
+                        if (btnIdx === 0) {
+                                targetReportType = ReportGenerator.REPORT_TYPE_YEAR;
+                        } else if(btnIdx === 1) {
+                                targetReportType = ReportGenerator.REPORT_TYPE_QUARTER;
+                        } else if(btnIdx === 2) {
+                                targetReportType = ReportGenerator.REPORT_TYPE_CUSTOM_MONTH;
+                        } else if(btnIdx===3) {
+                                targetReportType = ReportGenerator.REPORT_TYPE_WEEK;
+                        }
 
-			if (targetReportType !== report.currentReportType) {
-				updateReportType(targetReportType);
-			}
-		});
-	});
+                        if (targetReportType !== report.currentReportType) {
+                                updateReportType(targetReportType);
+                        }
+                });
+        });
 
-	$(".summary-date-col").click(function() {
-		$(".report-component").fadeTo(600, 0.0);
-		var targetDt = moment.unix(parseInt($(this).attr("dt_timestamp")));
-		report.currentDt = targetDt;
-		report.reportGenerator.updateDtInfo(report.currentDt, null);
-		report.reportGenerator.getReportData(function(data) {
-			report.reportGenerator.assignData(data);
-			setDetailShow(true);
-			report.reportGenerator.generateFullReport();
-			setDetailShow(false);
-			$(".report-component").fadeTo(600, 1.0);
-		});
-		updateReportName();
-	});
+        $(".summary-date-col").click(function() {
+                $(".report-component").fadeTo(600, 0.0);
+                var targetDt = moment.unix(parseInt($(this).attr("dt_timestamp")));
+                report.currentDt = targetDt;
+                report.reportGenerator.updateDtInfo(report.currentDt, null);
+                report.reportGenerator.getReportData(function(data) {
+                        report.reportGenerator.assignData(data);
+                        setDetailShow(true);
+                        report.reportGenerator.generateFullReport();
+                        setDetailShow(false);
+                        $(".report-component").fadeTo(600, 1.0);
+                });
+                updateReportName();
+        });
 
-	$(".hide-details-btn").click(function() {
-		$(this).toggleClass('btn-down');
-		if ($(this).hasClass('btn-down')) {
-			$(this).text('{% trans "SHOW DETAILS" %}');
-		} else {
-			$(this).text('{% trans "HIDE DETAILS" %}');
-		}
-		$(this).parent().parent().find(".detail-container").slideToggle();
-	});
+        $(".hide-details-btn").click(function() {
+                $(this).toggleClass('btn-down');
+                if ($(this).hasClass('btn-down')) {
+                        $(this).text('{% trans "SHOW DETAILS" %}');
+                } else {
+                        $(this).text('{% trans "HIDE DETAILS" %}');
+                }
+                $(this).parent().parent().find(".detail-container").slideToggle();
+        });
 
-	$(".pdf-icon, .pdf-text").click(function() {
-		var targetTimestamp = $(this).parent().find('.summary-date-col').attr('dt_timestamp');
+        $(".pdf-icon, .pdf-text").click(function() {
+                var targetTimestamp = $(this).parent().find('.summary-date-col').attr('dt_timestamp');
 
-		$(".download-pdf-form input[name='start_timestamp']").attr("value", targetTimestamp);
-		$(".download-pdf-form input[name='report_type']").attr("value", ReportGenerator.REPORT_TYPE_MONTH);
-		$(".download-pdf-form input[name='end_timestamp']").attr("value", 0);
-		$(".download-pdf-form").submit();
-	});
+                $(".download-pdf-form input[name='start_timestamp']").attr("value", targetTimestamp);
+                $(".download-pdf-form input[name='report_type']").attr("value", ReportGenerator.REPORT_TYPE_MONTH);
+                $(".download-pdf-form input[name='end_timestamp']").attr("value", 0);
+                $(".download-pdf-form").submit();
+        });
 
-	$(".save-report-btn, .bottom-save-report-btn").click(function() {
-		$(".download-pdf-form input[name='start_timestamp']").attr("value", report.currentDt.unix());
-		$(".download-pdf-form input[name='report_type']").attr("value", report.currentReportType);
-		if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-			$(".download-pdf-form input[name='end_timestamp']").attr("value", moment(report.customMonthEndDt).add(1, 'd').unix());
-		} else {
-			$(".download-pdf-form input[name='end_timestamp']").attr("value", 0);
-		}
-		$(".download-pdf-form").submit();
-	});
+        $(".save-report-btn, .bottom-save-report-btn").click(function() {
+                $(".download-pdf-form input[name='start_timestamp']").attr("value", report.currentDt.unix());
+                $(".download-pdf-form input[name='report_type']").attr("value", report.currentReportType);
+                if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+                        $(".download-pdf-form input[name='end_timestamp']").attr("value", moment(report.customMonthEndDt).add(1, 'd').unix());
+                } else {
+                        $(".download-pdf-form input[name='end_timestamp']").attr("value", 0);
+                }
+                $(".download-pdf-form").submit();
+        });
 
-	$("#customize-report .create-report-btn").click(function() {
-		if (!(canCreateCustomReport())) {
-			return;
-		}
+        $("#customize-report .create-report-btn").click(function() {
+                if (!(canCreateCustomReport())) {
+                        return;
+                }
 
-		report.reportGenerator.reportType = report.currentReportType;
-		if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-			report.reportGenerator.updateDtInfo(report.currentDt, report.customMonthEndDt);
-		} else {
-			report.reportGenerator.updateDtInfo(report.currentDt, null);
-		}
+                report.reportGenerator.reportType = report.currentReportType;
+                if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+                        report.reportGenerator.updateDtInfo(report.currentDt, report.customMonthEndDt);
+                } else {
+                        report.reportGenerator.updateDtInfo(report.currentDt, null);
+                }
 
-		$(".report-component").fadeTo(600, 0.0);
-		updateReportName();
-		report.reportGenerator.getReportData(function(data) {
-			report.reportGenerator.assignData(data);
-			setDetailShow(true);
-			report.reportGenerator.generateFullReport();
-			setDetailShow(false);
-			$(".report-component").fadeTo(600, 1.0);
-		});
-	});
+                $(".report-component").fadeTo(600, 0.0);
+                updateReportName();
+                report.reportGenerator.getReportData(function(data) {
+                        report.reportGenerator.assignData(data);
+                        setDetailShow(true);
+                        report.reportGenerator.generateFullReport();
+                        setDetailShow(false);
+                        $(".report-component").fadeTo(600, 1.0);
+                });
+        });
 
-	$(".year-quarter-calendar-content>div").each(function(btnIdx) {
-		$(this).click({btnIdx: btnIdx}, function(event) {
-			var btnIdx = event.data.btnIdx;
-			var targetDt = moment(report.currentDt).month(btnIdx*3);
-			if (isTargetDtValid(targetDt)) {
-				$(".year-quarter-calendar-content>div").removeClass('selected-quarter');
-				$(this).addClass('selected-quarter');
-				report.currentDt = targetDt;
-				updateGenReportSection();
-			}
-		});
-	});
+        $(".year-quarter-calendar-content>div").each(function(btnIdx) {
+                $(this).click({btnIdx: btnIdx}, function(event) {
+                        var btnIdx = event.data.btnIdx;
+                        var targetDt = moment(report.currentDt).month(btnIdx*3);
+                        if (isTargetDtValid(targetDt)) {
+                                $(".year-quarter-calendar-content>div").removeClass('selected-quarter');
+                                $(this).addClass('selected-quarter');
+                                report.currentDt = targetDt;
+                                updateGenReportSection();
+                        }
+                });
+        });
 
-	$(".unit-container>span").each(function(btnIdx) {
-		$(this).click({btnIdx: btnIdx}, function(event) {
-			var btnIdx = event.data.btnIdx;
-			if (btnIdx === 0) {
-				report.dlRawDataUnit = 'kwh';
-			} else if (btnIdx === 1) {
-				report.dlRawDataUnit = 'money';
-			} else if (btnIdx === 2) {
-				report.dlRawDataUnit = 'co2';
-			} else if (btnIdx === 3) {
-				report.dlRawDataUnit = 'all';
-			}
+        $(".unit-container>span").each(function(btnIdx) {
+                $(this).click({btnIdx: btnIdx}, function(event) {
+                        var btnIdx = event.data.btnIdx;
+                        if (btnIdx === 0) {
+                                report.dlRawDataUnit = 'kwh';
+                        } else if (btnIdx === 1) {
+                                report.dlRawDataUnit = 'money';
+                        } else if (btnIdx === 2) {
+                                report.dlRawDataUnit = 'co2';
+                        } else if (btnIdx === 3) {
+                                report.dlRawDataUnit = 'all';
+                        }
 
-			$(".unit-container>span").removeClass('selected-unit');
-			$(this).addClass('selected-unit');
-		});
-	});
+                        $(".unit-container>span").removeClass('selected-unit');
+                        $(this).addClass('selected-unit');
+                });
+        });
 
-	$("#download-raw-data .create-report-btn").click(function() {
-		if (canDlRawData()) {
-			$(".download-raw-data-form input[name='start_timestamp']").attr("value", report.dlRawDataStartDt.unix());
-			$(".download-raw-data-form input[name='end_timestamp']").attr("value", report.dlRawDataEndDt.unix());
-			$(".download-raw-data-form input[name='unit']").attr("value", report.dlRawDataUnit);
-			$(".download-raw-data-form").submit();
-		}
-	});
+        $("#download-raw-data .create-report-btn").click(function() {
+                if (canDlRawData()) {
+                        $(".download-raw-data-form input[name='start_timestamp']").attr("value", report.dlRawDataStartDt.unix());
+                        $(".download-raw-data-form input[name='end_timestamp']").attr("value", report.dlRawDataEndDt.unix());
+                        $(".download-raw-data-form input[name='unit']").attr("value", report.dlRawDataUnit);
+                        $(".download-raw-data-form").submit();
+                }
+        });
 });
 </script>
 
@@ -661,182 +661,182 @@ $(function() {
 {% block page_content %}
 
 <div class="panel-component">
-	<div class="drop-down-panel-header">
-		<div class="panel-header-left-menu">
-			<h3 panel="monthly-report">
-				{% trans "Monthly Report" %}</h3><h3 panel="customize-report">
-				{% trans "Customize Report" %}</h3><h3 panel="download-data">{% trans "Download Data" %}</h3>
-		</div>
-	</div>
+        <div class="drop-down-panel-header">
+                <div class="panel-header-left-menu">
+                        <h3 panel="monthly-report">
+                                {% trans "Monthly Report" %}</h3><h3 panel="customize-report">
+                                {% trans "Customize Report" %}</h3><h3 panel="download-data">{% trans "Download Data" %}</h3>
+                </div>
+        </div>
 
-	<div id="panel-content">
-		<div id="monthly-report">
-			<div id="monthly-report-header">
-				<span>{% trans "Monthly Reports" %}</span>
-				<span>{% trans "Energy Consumption (kWh)" %}</span>
-				<span>{% trans "CO<sub>2</sub> Emissions (kg)" %}</span>
-				<span>{% trans "Energy Cost ($)" %}</span>
-				<span>{% trans "Download" %}</span>
-			</div>
-			<hr>
-			<hr>
-			<div id="monthly-report-content">
-				{% for summary in monthly_summary %}
-				<div>
-					<span class="summary-date-col" dt_timestamp="{{summary.timestamp}}">{% ifequal LANGUAGE_CODE 'zh-tw' %}{{summary.dt|date:"Y年M"}}{% else %}{{summary.dt|date:"M Y"}}{% endifequal %}</span>
-					{% language 'en' %}
-					<span>{{summary.energy_usage|floatformat:"0"|intcomma}}</span>
-					<span>{{summary.co2_usage|floatformat:"0"|intcomma}}</span>
-					<span>{{summary.money_usage|floatformat:"0"|intcomma}}</span>
-					{% endlanguage %}
-					<img class="pdf-icon" src="{% static 'images/report/pdf-icon.png' %}">
-					<span class="pdf-text">PDF</span>
-				</div>
-				{% endfor %}
-			</div>
-		</div>
+        <div id="panel-content">
+                <div id="monthly-report">
+                        <div id="monthly-report-header">
+                                <span>{% trans "Monthly Reports" %}</span>
+                                <span>{% trans "Energy Consumption (kWh)" %}</span>
+                                <span>{% trans "CO<sub>2</sub> Emissions (kg)" %}</span>
+                                <span>{% trans "Energy Cost ($)" %}</span>
+                                <span>{% trans "Download" %}</span>
+                        </div>
+                        <hr>
+                        <hr>
+                        <div id="monthly-report-content">
+                                {% for summary in monthly_summary %}
+                                <div>
+                                        <span class="summary-date-col" dt_timestamp="{{summary.timestamp}}">{% ifequal LANGUAGE_CODE 'zh-tw' %}{{summary.dt|date:"Y年M"}}{% else %}{{summary.dt|date:"M Y"}}{% endifequal %}</span>
+                                        {% language 'en' %}
+                                        <span>{{summary.energy_usage|floatformat:"0"|intcomma}}</span>
+                                        <span>{{summary.co2_usage|floatformat:"0"|intcomma}}</span>
+                                        <span>{{summary.money_usage|floatformat:"0"|intcomma}}</span>
+                                        {% endlanguage %}
+                                        <img class="pdf-icon" src="{% static 'images/report/pdf-icon.png' %}">
+                                        <span class="pdf-text">PDF</span>
+                                </div>
+                                {% endfor %}
+                        </div>
+                </div>
 
-		<div id="customize-report">
-			<div class="customize-section-title"><span>1</span>{% trans "Select your time range" %}</div>
-			<hr>
-			<div class="time-range-section">
-				<span></span>
-				<span></span>
-				<span></span>
-				<span></span>
-			</div>
-			<div class="customize-detail-section">
-				<div class="two-column-section">
-					<div>
-						<div class="customize-section-title"><span>2</span>{% trans "Select your time period" %}</div>
-						<hr>
-						<div class="customize-calendar-section">
-							<div class="year-quarter-calendar">
-								<div class="year-quarter-calendar-head">
-									<span class="prev-btn">◀</span><span class="target-year"></span><span class="next-btn">▶</span>
-								</div>
-								<div class="year-quarter-calendar-content">
-									<div>
-										<div class="quarter-idx">Q1</div>
-										<div class="quarter-month"><span>Jan</span><span>Feb</span><span>Mar</span></div>
-									</div>
-									<div>
-										<div class="quarter-idx">Q2</div>
-										<div class="quarter-month"><span>Apr</span><span>May</span><span>Jun</span></div>
-									</div>
-									<div>
-										<div class="quarter-idx">Q3</div>
-										<div class="quarter-month"><span>Jul</span><span>Aug</span><span>Sep</span></div>
-									</div>
-									<div>
-										<div class="quarter-idx">Q4</div>
-										<div class="quarter-month"><span>Oct</span><span>Nov</span><span>Dec</span></div>
-									</div>
-								</div>
-							</div>
-							<div id="week-datepicker" class="report-datepicker"></div>
-						</div>
-					</div>
-					<div>
-						<div class="customize-section-title section-three-title"><span>3</span>{% trans "Create your report" %}</div>
-						<hr>
-						<div class="create-report-section">
-							<div class="datetime-result">
-								<div class="datetime-result-title">{% trans "Energy data - kWh" %}</div>
-								<div class="datetime-result-from-to">
-									<div><span>{% trans "From:" %}</span><span class="from-date"></span></div>
-									<div><span>{% trans "To:" %}</span><span class="to-date"></span></div>
-								</div>
-								<hr>
-								<div class="create-report-btn">{% trans "Create Report" %}</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="three-column-section">
-					<div class="customize-section-title"><span>2</span>{% trans "Select your time period" %}</div>
-					<hr>
-					<div class="select-time-period-section">
-						<div>{% trans "Select the start and end date of your monthly electricity bill." %}</div>
-						<div>{% trans "If you wish to view a standard calendar month, click on the Monthly Report tab at the top of the page" %}</div>
-						<hr>
-						<div>
-							<div class="report-datepicker-container">
-								<div>{% trans "Choose your start date" %}</div>
-								<div id="month-start-datepicker" class="report-datepicker"></div>
-							</div>
-							<div class="report-datepicker-container">
-								<div>{% trans "Choose your end date" %}</div>
-								<div id="month-end-datepicker" class="report-datepicker"></div>
-							</div>
-						</div>
-					</div>
-					<div class="customize-section-title"><span>3</span>{% trans "Create your report" %}</div>
-					<hr>
-					<div class="create-report-section">
-						<div class="datetime-result">
-							<div class="datetime-result-title">{% trans "Energy data - kWh" %}</div>
-							<div class="datetime-result-from-to">
-								<div><span>{% trans "From:" %}</span><span class="from-date"></span></div>
-								<div><span>{% trans "To:" %}</span><span class="to-date"></span></div>
-							</div>
-							<hr>
-							<div class="create-report-btn">{% trans "Create Report" %}</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+                <div id="customize-report">
+                        <div class="customize-section-title"><span>1</span>{% trans "Select your time range" %}</div>
+                        <hr>
+                        <div class="time-range-section">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                        </div>
+                        <div class="customize-detail-section">
+                                <div class="two-column-section">
+                                        <div>
+                                                <div class="customize-section-title"><span>2</span>{% trans "Select your time period" %}</div>
+                                                <hr>
+                                                <div class="customize-calendar-section">
+                                                        <div class="year-quarter-calendar">
+                                                                <div class="year-quarter-calendar-head">
+                                                                        <span class="prev-btn">◀</span><span class="target-year"></span><span class="next-btn">▶</span>
+                                                                </div>
+                                                                <div class="year-quarter-calendar-content">
+                                                                        <div>
+                                                                                <div class="quarter-idx">Q1</div>
+                                                                                <div class="quarter-month"><span>Jan</span><span>Feb</span><span>Mar</span></div>
+                                                                        </div>
+                                                                        <div>
+                                                                                <div class="quarter-idx">Q2</div>
+                                                                                <div class="quarter-month"><span>Apr</span><span>May</span><span>Jun</span></div>
+                                                                        </div>
+                                                                        <div>
+                                                                                <div class="quarter-idx">Q3</div>
+                                                                                <div class="quarter-month"><span>Jul</span><span>Aug</span><span>Sep</span></div>
+                                                                        </div>
+                                                                        <div>
+                                                                                <div class="quarter-idx">Q4</div>
+                                                                                <div class="quarter-month"><span>Oct</span><span>Nov</span><span>Dec</span></div>
+                                                                        </div>
+                                                                </div>
+                                                        </div>
+                                                        <div id="week-datepicker" class="report-datepicker"></div>
+                                                </div>
+                                        </div>
+                                        <div>
+                                                <div class="customize-section-title section-three-title"><span>3</span>{% trans "Create your report" %}</div>
+                                                <hr>
+                                                <div class="create-report-section">
+                                                        <div class="datetime-result">
+                                                                <div class="datetime-result-title">{% trans "Energy data - kWh" %}</div>
+                                                                <div class="datetime-result-from-to">
+                                                                        <div><span>{% trans "From:" %}</span><span class="from-date"></span></div>
+                                                                        <div><span>{% trans "To:" %}</span><span class="to-date"></span></div>
+                                                                </div>
+                                                                <hr>
+                                                                <div class="create-report-btn">{% trans "Create Report" %}</div>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                </div>
+                                <div class="three-column-section">
+                                        <div class="customize-section-title"><span>2</span>{% trans "Select your time period" %}</div>
+                                        <hr>
+                                        <div class="select-time-period-section">
+                                                <div>{% trans "Select the start and end date of your monthly electricity bill." %}</div>
+                                                <div>{% trans "If you wish to view a standard calendar month, click on the Monthly Report tab at the top of the page" %}</div>
+                                                <hr>
+                                                <div>
+                                                        <div class="report-datepicker-container">
+                                                                <div>{% trans "Choose your start date" %}</div>
+                                                                <div id="month-start-datepicker" class="report-datepicker"></div>
+                                                        </div>
+                                                        <div class="report-datepicker-container">
+                                                                <div>{% trans "Choose your end date" %}</div>
+                                                                <div id="month-end-datepicker" class="report-datepicker"></div>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                        <div class="customize-section-title"><span>3</span>{% trans "Create your report" %}</div>
+                                        <hr>
+                                        <div class="create-report-section">
+                                                <div class="datetime-result">
+                                                        <div class="datetime-result-title">{% trans "Energy data - kWh" %}</div>
+                                                        <div class="datetime-result-from-to">
+                                                                <div><span>{% trans "From:" %}</span><span class="from-date"></span></div>
+                                                                <div><span>{% trans "To:" %}</span><span class="to-date"></span></div>
+                                                        </div>
+                                                        <hr>
+                                                        <div class="create-report-btn">{% trans "Create Report" %}</div>
+                                                </div>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
 
-		<div id="download-raw-data">
-			<div class="dl-data-title">{% trans "Here you can download your energy use data to files in .csv format." %}</div>
-			<div class="dl-data-title">{% trans "Simply select the start date, end date and the units that you would like to obtain from the system." %}</div>
-			<div class="customize-section-title"><span>1</span>{% trans "Choose your date" %}</div>
-			<hr>
-			<div class="dl-choose-date-section">
-				<div class="report-datepicker-container">
-					<div>{% trans "Choose your start date" %}</div>
-					<div id="dl-data-start-datepicker" class="report-datepicker"></div>
-				</div>
-				<div class="report-datepicker-container">
-					<div>{% trans "Choose your end date" %}</div>
-					<div id="dl-data-end-datepicker" class="report-datepicker"></div>
-				</div>
-			</div>
-			<div class="two-column-section">
-				<div class="choose-unit-section">
-					<div class="customize-section-title"><span>2</span>{% trans "Select your units" %}</div>
-					<hr>
-					<div class="unit-container">
-						<span></span><span></span><span></span><span></span>
-					</div>
-				</div>
-				<div>
-					<div class="customize-section-title"><span>3</span>{% trans "Download your file" %}</div>
-					<hr>
-					<div class="create-report-section">
-						<div class="datetime-result">
-							<div class="datetime-result-title">{% trans "Energy data - kWh" %}</div>
-							<div class="datetime-result-from-to">
-								<div><span>{% trans "From:" %}</span><span class="from-date"></span></div>
-								<div><span>{% trans "To:" %}</span><span class="to-date"></span></div>
-							</div>
-							<hr>
-							<div class="create-report-btn">{% trans "Download File" %}</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                <div id="download-raw-data">
+                        <div class="dl-data-title">{% trans "Here you can download your energy use data to files in .csv format." %}</div>
+                        <div class="dl-data-title">{% trans "Simply select the start date, end date and the units that you would like to obtain from the system." %}</div>
+                        <div class="customize-section-title"><span>1</span>{% trans "Choose your date" %}</div>
+                        <hr>
+                        <div class="dl-choose-date-section">
+                                <div class="report-datepicker-container">
+                                        <div>{% trans "Choose your start date" %}</div>
+                                        <div id="dl-data-start-datepicker" class="report-datepicker"></div>
+                                </div>
+                                <div class="report-datepicker-container">
+                                        <div>{% trans "Choose your end date" %}</div>
+                                        <div id="dl-data-end-datepicker" class="report-datepicker"></div>
+                                </div>
+                        </div>
+                        <div class="two-column-section">
+                                <div class="choose-unit-section">
+                                        <div class="customize-section-title"><span>2</span>{% trans "Select your units" %}</div>
+                                        <hr>
+                                        <div class="unit-container">
+                                                <span></span><span></span><span></span><span></span>
+                                        </div>
+                                </div>
+                                <div>
+                                        <div class="customize-section-title"><span>3</span>{% trans "Download your file" %}</div>
+                                        <hr>
+                                        <div class="create-report-section">
+                                                <div class="datetime-result">
+                                                        <div class="datetime-result-title">{% trans "Energy data - kWh" %}</div>
+                                                        <div class="datetime-result-from-to">
+                                                                <div><span>{% trans "From:" %}</span><span class="from-date"></span></div>
+                                                                <div><span>{% trans "To:" %}</span><span class="to-date"></span></div>
+                                                        </div>
+                                                        <hr>
+                                                        <div class="create-report-btn">{% trans "Download File" %}</div>
+                                                </div>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+        </div>
 </div>
 
 <div class="report-head">
-	<div class="system-name">{{systems.0|get_system_full_name:LANGUAGE_CODE}}</div>
-	<hr class="title-separator">
-	<div class="report-name"></div>
-	<div class="save-report-btn">{% trans "Save Report" %}</div>
-	<hr class="head-separator">
+        <div class="system-name">{{systems.0|get_system_full_name:LANGUAGE_CODE}}</div>
+        <hr class="title-separator">
+        <div class="report-name"></div>
+        <div class="save-report-btn">{% trans "Save Report" %}</div>
+        <hr class="head-separator">
 </div>
 
 {% include "report_main_content.html" %}
@@ -845,15 +845,15 @@ $(function() {
 <div class="bottom-space"></div>
 
 <form class="download-pdf-form" action="{% url 'report_pdf' system_code=systems.0.code %}" method="POST">{% csrf_token %}
-	<input name="start_timestamp" value="">
-	<input name="end_timestamp" value="">
-	<input name="report_type" value="">
+        <input name="start_timestamp" value="">
+        <input name="end_timestamp" value="">
+        <input name="report_type" value="">
 </form>
 
 <form class="download-raw-data-form" action="{% url 'export_data' system_code=systems.0.code %}" method="POST">{% csrf_token %}
-	<input name="start_timestamp" value="">
-	<input name="end_timestamp" value="">
-	<input name="unit" value="">
+        <input name="start_timestamp" value="">
+        <input name="end_timestamp" value="">
+        <input name="unit" value="">
 </form>
 
 {% endblock %}
