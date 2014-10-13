@@ -549,6 +549,7 @@ $(function() {
 	$(".summary-date-col").click(function() {
 		$(".report-component").fadeTo(600, 0.0);
 		var targetDt = moment.unix(parseInt($(this).attr("dt_timestamp")));
+		report.reportGenerator.reportType = report.currentReportType = ReportGenerator.REPORT_TYPE_MONTH;
 		report.currentDt = targetDt;
 		report.reportGenerator.updateDtInfo(report.currentDt, null);
 		report.reportGenerator.getReportData(function(data) {
