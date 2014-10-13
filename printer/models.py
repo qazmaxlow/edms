@@ -4,41 +4,41 @@ from mongoengine.document import Document
 from mongoengine.fields import *
 
 class Printer(models.Model):
-	p_id = models.CharField(max_length=200, unique=True)
-	name = models.CharField(max_length=200)
-	system = models.ForeignKey('system.System')
-	order = models.IntegerField(default=1)
+    p_id = models.CharField(max_length=200, unique=True)
+    name = models.CharField(max_length=200)
+    system = models.ForeignKey('system.System')
+    order = models.IntegerField(default=1)
 
 class BasePrinterReading(Document):
-	meta = {
-		'abstract': True,
-		'indexes': [
-			{'fields': [('p_id', 1), ("datetime", 1)], 'unique': True}
-		]
-	}
+    meta = {
+        'abstract': True,
+        'indexes': [
+            {'fields': [('p_id', 1), ("datetime", 1)], 'unique': True}
+        ]
+    }
 
-	p_id = StringField(max_length=200)
-	datetime = DateTimeField()
-	total = IntField(default=0)
-	duplex = IntField(default=0)
-	one_side = IntField(default=0)
-	color = IntField(default=0)
-	b_n_w = IntField(default=0)
+    p_id = StringField(max_length=200)
+    datetime = DateTimeField()
+    total = IntField(default=0)
+    duplex = IntField(default=0)
+    one_side = IntField(default=0)
+    color = IntField(default=0)
+    b_n_w = IntField(default=0)
 
 class PrinterReadingMin(BasePrinterReading):
-	pass
+    pass
 
 class PrinterReadingHour(BasePrinterReading):
-	pass
+    pass
 
 class PrinterReadingDay(BasePrinterReading):
-	pass
+    pass
 
 class PrinterReadingWeek(BasePrinterReading):
-	pass
+    pass
 
 class PrinterReadingMonth(BasePrinterReading):
-	pass
+    pass
 
 class PrinterReadingYear(BasePrinterReading):
-	pass
+    pass

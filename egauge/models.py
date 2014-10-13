@@ -5,50 +5,50 @@ from mongoengine.fields import *
 SOURCE_TZ_HK = u'Asia/Hong_Kong'
 
 class Source(Document):
-	name = StringField(max_length=200)
-	group = StringField(max_length=200)
-	xml_url = StringField(max_length=120)
-	system_code = StringField(max_length=100)
-	system_path = StringField(max_length=2000)
-	d_name = StringField(max_length=200)
-	d_name_tc = StringField(max_length=200)
-	order = IntField(default=1)
-	tz = StringField(max_length=50, default=SOURCE_TZ_HK)
-	active = BooleanField(default=True)
+    name = StringField(max_length=200)
+    group = StringField(max_length=200)
+    xml_url = StringField(max_length=120)
+    system_code = StringField(max_length=100)
+    system_path = StringField(max_length=2000)
+    d_name = StringField(max_length=200)
+    d_name_tc = StringField(max_length=200)
+    order = IntField(default=1)
+    tz = StringField(max_length=50, default=SOURCE_TZ_HK)
+    active = BooleanField(default=True)
 
 class BaseSourceReading(Document):
-	meta = {
-		'abstract': True,
-		'indexes': [
-			{'fields': [('source_id', 1), ("datetime", 1)], 'unique': True}
-		]
-	}
+    meta = {
+        'abstract': True,
+        'indexes': [
+            {'fields': [('source_id', 1), ("datetime", 1)], 'unique': True}
+        ]
+    }
 
-	source_id = ObjectIdField()
-	datetime = DateTimeField()
-	value = FloatField()
+    source_id = ObjectIdField()
+    datetime = DateTimeField()
+    value = FloatField()
 
 class SourceReadingMin(BaseSourceReading):
-	pass
+    pass
 
 class SourceReadingMinInvalid(Document):
-	source_id = ObjectIdField()
-	datetime = DateTimeField()
-	xml_url = StringField(max_length=120)
-	name = StringField(max_length=200)
-	tz = StringField(max_length=50, default=SOURCE_TZ_HK)
+    source_id = ObjectIdField()
+    datetime = DateTimeField()
+    xml_url = StringField(max_length=120)
+    name = StringField(max_length=200)
+    tz = StringField(max_length=50, default=SOURCE_TZ_HK)
 
 class SourceReadingHour(BaseSourceReading):
-	pass
+    pass
 
 class SourceReadingDay(BaseSourceReading):
-	pass
+    pass
 
 class SourceReadingWeek(BaseSourceReading):
-	pass
+    pass
 
 class SourceReadingMonth(BaseSourceReading):
-	pass
+    pass
 
 class SourceReadingYear(BaseSourceReading):
-	pass
+    pass

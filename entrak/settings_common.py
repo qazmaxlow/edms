@@ -31,8 +31,8 @@ ALLOWED_HOSTS = []
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'entrak', 'static')
 STATICFILES_FINDERS = (
-	'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-	'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'django.contrib.staticfiles.finders.FileSystemFinder',
 )
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'entrak', 'media')
@@ -40,35 +40,35 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'entrak', 'media')
 # Application definition
 
 INSTALLED_APPS = (
-	'grappelli',
-	'django.contrib.admin',
-	'django.contrib.auth',
-	'django.contrib.contenttypes',
-	'django.contrib.sessions',
-	'django.contrib.messages',
-	'django.contrib.staticfiles',
-	'django.contrib.humanize',
-	'egauge',
-	'system',
-	'user',
-	'baseline',
-	'holiday',
-	'unit',
-	'contact',
-	'alert',
-	'printer',
-	'entrak',
+    'grappelli',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django.contrib.humanize',
+    'egauge',
+    'system',
+    'user',
+    'baseline',
+    'holiday',
+    'unit',
+    'contact',
+    'alert',
+    'printer',
+    'entrak',
 )
 
 MIDDLEWARE_CLASSES = (
-	'django.contrib.sessions.middleware.SessionMiddleware',
-	'django.middleware.locale.LocaleMiddleware',
-	'django.middleware.common.CommonMiddleware',
-	'django.middleware.csrf.CsrfViewMiddleware',
-	'django.contrib.auth.middleware.AuthenticationMiddleware',
-	'django.contrib.messages.middleware.MessageMiddleware',
-	'django.middleware.clickjacking.XFrameOptionsMiddleware',
-	'entrak.middleware.timezone_middleware.TimezoneMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'entrak.middleware.timezone_middleware.TimezoneMiddleware',
 )
 
 global_settings.TEMPLATE_CONTEXT_PROCESSORS += ('django.core.context_processors.request',)
@@ -93,46 +93,46 @@ USE_TZ = True
 LANG_CODE_EN = 'en'
 LANG_CODE_TC = 'zh-tw'
 LANGUAGES = (
-	(LANG_CODE_EN, _('English')),
-	(LANG_CODE_TC, _('Traditional Chinese')),
+    (LANG_CODE_EN, _('English')),
+    (LANG_CODE_TC, _('Traditional Chinese')),
 )
 LOCALE_PATHS = (
-	os.path.join(BASE_DIR, 'locale'),
+    os.path.join(BASE_DIR, 'locale'),
 )
 
 LOGGING = {
-	'version': 1,
-	'formatters': {
-		'normal': {
-			'format': '%(asctime)s %(message)s'
-		},
-	},
-	'handlers': {
-		'timed_rotating_handler': {
-			'level': 'DEBUG',
-			'class': 'logging.handlers.TimedRotatingFileHandler',
-			'when': 'D',
-			'formatter': 'normal',
-		},
-		'recap_timed_rotating_handler': {
-			'level': 'DEBUG',
-			'class': 'logging.handlers.TimedRotatingFileHandler',
-			'when': 'D',
-			'formatter': 'normal',
-		},
-	},
-	'loggers': {
-		'django.entrak_error': {
-			'handlers': ['timed_rotating_handler'],
-			'level': 'DEBUG',
-			'propagate': True,
-		},
-		'django.recap_data_log': {
-			'handlers': ['recap_timed_rotating_handler'],
-			'level': 'DEBUG',
-			'propagate': True,
-		},
-	},
+    'version': 1,
+    'formatters': {
+        'normal': {
+            'format': '%(asctime)s %(message)s'
+        },
+    },
+    'handlers': {
+        'timed_rotating_handler': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'when': 'D',
+            'formatter': 'normal',
+        },
+        'recap_timed_rotating_handler': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'when': 'D',
+            'formatter': 'normal',
+        },
+    },
+    'loggers': {
+        'django.entrak_error': {
+            'handlers': ['timed_rotating_handler'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.recap_data_log': {
+            'handlers': ['recap_timed_rotating_handler'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
 }
 
 EMAIL_HOST = 'en-trak.com'

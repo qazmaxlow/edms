@@ -6,23 +6,23 @@ from django.contrib.auth import forms
 from .models import EntrakUser
 
 class EntrakUserCreationForm(UserCreationForm):
-	def clean_username(self):
-		# Since User.username is unique, this check is redundant,
-		# but it sets a nicer error message than the ORM. See #13147.
-		username = self.cleaned_data["username"]
-		try:
-			get_user_model()._default_manager.get(username=username)
-		except get_user_model().DoesNotExist:
-			return username
-		raise forms.ValidationError(self.error_messages['duplicate_username'])
+    def clean_username(self):
+        # Since User.username is unique, this check is redundant,
+        # but it sets a nicer error message than the ORM. See #13147.
+        username = self.cleaned_data["username"]
+        try:
+            get_user_model()._default_manager.get(username=username)
+        except get_user_model().DoesNotExist:
+            return username
+        raise forms.ValidationError(self.error_messages['duplicate_username'])
 
-	class Meta(UserCreationForm.Meta):
-		model = EntrakUser
+    class Meta(UserCreationForm.Meta):
+        model = EntrakUser
 
 class EntrakUserAdmin(UserAdmin):
-	UserAdmin.list_display += ('label', 'system', 'role_level')
-	list_editable = ('label', 'system', 'role_level')
+    UserAdmin.list_display += ('label', 'system', 'role_level')
+    list_editable = ('label', 'system', 'role_level')
 
-	add_form = EntrakUserCreationForm
+    add_form = EntrakUserCreationForm
 
 admin.site.register(EntrakUser, EntrakUserAdmin)
