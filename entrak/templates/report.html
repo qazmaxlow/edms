@@ -577,6 +577,19 @@ $(function() {
                 $(".download-pdf-form input[name='start_timestamp']").attr("value", targetTimestamp);
                 $(".download-pdf-form input[name='report_type']").attr("value", ReportGenerator.REPORT_TYPE_MONTH);
                 $(".download-pdf-form input[name='end_timestamp']").attr("value", 0);
+                $(".download-pdf-form input[name='report_layout']").attr("value", 'detail');
+                $(".download-pdf-form").submit();
+        });
+
+        $(".save-summary-report-btn").click(function() {
+                $(".download-pdf-form input[name='start_timestamp']").attr("value", report.currentDt.unix());
+                $(".download-pdf-form input[name='report_type']").attr("value", report.currentReportType);
+                $(".download-pdf-form input[name='report_layout']").attr("value", 'summary');
+                if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+                        $(".download-pdf-form input[name='end_timestamp']").attr("value", moment(report.customMonthEndDt).add(1, 'd').unix());
+                } else {
+                        $(".download-pdf-form input[name='end_timestamp']").attr("value", 0);
+                }
                 $(".download-pdf-form").submit();
         });
 
@@ -590,6 +603,7 @@ $(function() {
                 }
                 $(".download-pdf-form").submit();
         });
+
 
         $("#customize-report .create-report-btn").click(function() {
                 if (!(canCreateCustomReport())) {
@@ -836,6 +850,7 @@ $(function() {
         <hr class="title-separator">
         <div class="report-name"></div>
         <div class="save-report-btn">{% trans "Save Report" %}</div>
+        <div class="save-summary-report-btn">{% trans "Save Summary Report" %}</div>
         <hr class="head-separator">
 </div>
 
@@ -848,6 +863,7 @@ $(function() {
         <input name="start_timestamp" value="">
         <input name="end_timestamp" value="">
         <input name="report_type" value="">
+        <input name="report_layout" value="">
 </form>
 
 <form class="download-raw-data-form" action="{% url 'export_data' system_code=systems.0.code %}" method="POST">{% csrf_token %}

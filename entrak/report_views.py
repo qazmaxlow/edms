@@ -468,13 +468,18 @@ def report_pdf_view(request, system_code=None):
     start_timestamp = request.POST.get("start_timestamp")
     end_timestamp = request.POST.get("end_timestamp", 0)
     report_type = request.POST.get("report_type")
+    report_layout = request.POST.get('report_layout')
 
     if request.is_secure():
         domain_url = "https://" + request.META['HTTP_HOST']
     else:
         domain_url = "http://" + request.META['HTTP_HOST']
 
-    request_url = domain_url + reverse('generate_report_pdf', kwargs={
+    report_name = 'generate_report_pdf'
+    if report_layout == 'summary':
+        report_name = 'generate_summary_report_pdf'
+
+    request_url = domain_url + reverse(report_name, kwargs={
         'system_code': system_code,
         'report_type': report_type,
         'start_timestamp': start_timestamp,
@@ -515,3 +520,20 @@ def generate_report_pdf_view(request, system_code, report_type, start_timestamp,
     m["report_data"] = escapejs(json.dumps(__generate_report_data(systems, report_type, start_timestamp, end_timestamp)))
 
     return render_to_response('generate_report_pdf.html', m)
+
+
+def generate_summary_report_pdf_view(request, system_code, report_type, start_timestamp, end_timestamp, lang_code):
+    systems = System.get_systems_within_root(system_code)
+    start_timestamp = int(start_timestamp)
+    end_timestamp = int(end_timestamp)
+
+    m = {}
+    m['systems'] = systems
+    m["report_type"] = report_type
+    m["start_timestamp"] = start_timestamp
+    m["end_timestamp"] = end_timestamp
+    m["lang_code"] = lang_code
+
+    m["report_data"] = escapejs(json.dumps(__generate_report_data(systems, report_type, start_timestamp, end_timestamp)))
+
+    return render_to_response('generate_summary_report_pdf.html', m)
