@@ -1,306 +1,306 @@
 .panel-header-right-menu h3, .sort-menu li {
-	cursor: pointer;
-	cursor: hand;
+    cursor: pointer;
+    cursor: hand;
 }
 
 .panel-header-left-menu{
-	width: 62.5% !important;
-	font-size: 11pt;
+    width: 62.5% !important;
+    font-size: 11pt;
 }
 
 .panel-header-right-menu {
-	position: absolute;
-	right: 0px;
-	height: 100%;
-	background-color: #699eab;
-	border-top-right-radius: 5px;
-	-moz-border-top-right-radius: 5px;
-	-webkit-border-top-right-radius: 5px;
+    position: absolute;
+    right: 0px;
+    height: 100%;
+    background-color: #699eab;
+    border-top-right-radius: 5px;
+    -moz-border-top-right-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
 }
 .panel-header-right-menu h3 {
-	float: right;
-	height: 26px;
-	padding-left: 10px;
-	padding-right: 10px;
-	padding-top: 8px;
-	border-left: solid 1px #fff;
-	color: #fff;
-	font-size: 11pt;
+    float: right;
+    height: 26px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 8px;
+    border-left: solid 1px #fff;
+    color: #fff;
+    font-size: 11pt;
 }
 .panel-header-right-menu h3:first-child {
-	border-top-right-radius: 5px;
-	-moz-border-top-right-radius: 5px;
-	-webkit-border-top-right-radius: 5px;
+    border-top-right-radius: 5px;
+    -moz-border-top-right-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
 }
 .panel-header-right-menu .sort-by-btn {
-	padding-left: 10px;
-	padding-right: 14px;
+    padding-left: 10px;
+    padding-right: 14px;
 }
 .panel-header-right-menu h3.selected-submenu {
-	background-color: #7fd51e;
+    background-color: #7fd51e;
 }
 .panel-header-right-menu h3:hover{
-	background: -webkit-linear-gradient(top, #aee428, #67cd18);
-	background: -o-linear-gradient(top, #aee428, #67cd18);
-	background: -moz-linear-gradient(top, #aee428, #67cd18);
-	background: linear-gradient(to bottom, #aee428, #67cd18);
+    background: -webkit-linear-gradient(top, #aee428, #67cd18);
+    background: -o-linear-gradient(top, #aee428, #67cd18);
+    background: -moz-linear-gradient(top, #aee428, #67cd18);
+    background: linear-gradient(to bottom, #aee428, #67cd18);
 }
 
 .sort-menu {
-	display: none;
-	position: absolute;
-	width: 100px;
-	height: 95px;
-	z-index: 100;
-	top: 33px;
-	left: 1px;
-	background-color: #354960;
-	color: white;
-	font-size: 11pt;
+    display: none;
+    position: absolute;
+    width: 100px;
+    height: 95px;
+    z-index: 100;
+    top: 33px;
+    left: 1px;
+    background-color: #354960;
+    color: white;
+    font-size: 11pt;
 }
 .sort-menu li{
-	padding: 8px 2px 8px 11px;
-	border-bottom: 1px solid #ffffff;
+    padding: 8px 2px 8px 11px;
+    border-bottom: 1px solid #ffffff;
 }
 .sort-menu li:hover{
-	background: -webkit-linear-gradient(right, #aee428, #67cd18);
-	background: -o-linear-gradient(left, #aee428, #67cd18);
-	background: -moz-linear-gradient(left, #aee428, #67cd18);
-	background: linear-gradient(to left, #aee428, #67cd18);
+    background: -webkit-linear-gradient(right, #aee428, #67cd18);
+    background: -o-linear-gradient(left, #aee428, #67cd18);
+    background: -moz-linear-gradient(left, #aee428, #67cd18);
+    background: linear-gradient(to left, #aee428, #67cd18);
 }
 
 .dt-panel{
-	position: relative;
-	width: 100%;
-	height: 60px;
-	font-size: 12pt;
-	background-color: #F4F4F4;
-	border-bottom: 1px solid #FFF;
-	text-align: center;
+    position: relative;
+    width: 100%;
+    height: 60px;
+    font-size: 12pt;
+    background-color: #F4F4F4;
+    border-bottom: 1px solid #FFF;
+    text-align: center;
 }
 .dt-panel-center-block {
-	display: inline-block;
-	margin-left: auto;
-	margin-right: auto;
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
 }
 .dt-panel-center-block>div {
-	display: inline-block;
+    display: inline-block;
 }
 .dt-content-block {
-	height: 60px;
-	text-align: center;
-	vertical-align: bottom;
+    height: 60px;
+    text-align: center;
+    vertical-align: bottom;
 }
 .dt-panel-title {
-	height: 23px;
-	text-align: center;
-	padding-top: 5px;
-	color: #354960;
-	font-size: 11pt;
-	background-color: #F4F4F4;
+    height: 23px;
+    text-align: center;
+    padding-top: 5px;
+    color: #354960;
+    font-size: 11pt;
+    background-color: #F4F4F4;
 }
 .dt-text{
-	color: #354960;
-	font-weight: bold;
-	padding: 7px;
-	vertical-align: middle;
+    color: #354960;
+    font-weight: bold;
+    padding: 7px;
+    vertical-align: middle;
 }
 .dt-panel-center-block .dt-panel-hypen {
-	display: none;
-	margin-bottom: 10px;
+    display: none;
+    margin-bottom: 10px;
 }
 .dt-panel-center-block .dt-panel-compare-with {
-	display: none;
+    display: none;
 }
 .dt-panel-separator {
-	position: absolute;
-	width: 100%;
-	height: 2px;
-	left: 0px;
-	background-color: #FFF;
-	top: 29px;
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    left: 0px;
+    background-color: #FFF;
+    top: 29px;
 }
 
 #ranking-item-container {
-	height: 490px;
-	overflow-y: auto;
-	margin-top: 0px !important;
-	margin-bottom: 70px;
-	display: inline-block;
-	margin-left: 43px;
+    height: 490px;
+    overflow-y: auto;
+    margin-top: 0px !important;
+    margin-bottom: 70px;
+    display: inline-block;
+    margin-left: 43px;
 }
 .ranking-item {
-	position: absolute;
-	height: 120px;
-	width: 100%;
-	border-bottom: 3px solid #F7F7F7;
-	background-color: #F5F5F5;
+    position: absolute;
+    height: 120px;
+    width: 100%;
+    border-bottom: 3px solid #F7F7F7;
+    background-color: #F5F5F5;
 }
 .rank-name{
-	position: absolute;
-	font-size: 10pt;
-	width: 300px;
-	height: 11px;
-	margin-left: 105px;
-	margin-top: 30px;
-	padding-left: 30px;
-	padding-top: 4px;
-	padding-bottom: 5px;
-	border-top-right-radius: 10px;
-	border-bottom-right-radius: 10px;
-	color: #354960;
-	font-weight: bold;
+    position: absolute;
+    font-size: 10pt;
+    width: 300px;
+    height: 11px;
+    margin-left: 105px;
+    margin-top: 30px;
+    padding-left: 30px;
+    padding-top: 4px;
+    padding-bottom: 5px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    color: #354960;
+    font-weight: bold;
 }
 .ranking-total-or-person .rank-separate-line {
-	position: absolute;
-	top: 94px;
-	left: 80px;
-	width: 875px;
-	height: 1px;
-	background-color: #D5D5D5;
+    position: absolute;
+    top: 94px;
+    left: 80px;
+    width: 875px;
+    height: 1px;
+    background-color: #D5D5D5;
 }
 .ranking-total-or-person .rank-separate-line-top {
-	position: absolute;
-	top: 57px;
-	left: 80px;
-	width: 875px;
-	height: 1px;
-	background-color: #D5D5D5;
+    position: absolute;
+    top: 57px;
+    left: 80px;
+    width: 875px;
+    height: 1px;
+    background-color: #D5D5D5;
 }
 .ranking-percent .rank-separate-line {
-	position: absolute;
-	top: 52px;
-	left: 80px;
-	width: 248px;
-	height: 2px;
-	background-color: #DEDEDE;
+    position: absolute;
+    top: 52px;
+    left: 80px;
+    width: 248px;
+    height: 2px;
+    background-color: #DEDEDE;
 }
 .rank-img {
-	position: absolute;
-	width: 86px;
-	height: 86px;
-	margin-left: 38px;
-	margin-top: 16px;
-	border-radius: 50px;
-	background-size: 86px 86px;
-	z-index: 800;
+    position: absolute;
+    width: 86px;
+    height: 86px;
+    margin-left: 38px;
+    margin-top: 16px;
+    border-radius: 50px;
+    background-size: 86px 86px;
+    z-index: 800;
 }
 .rank-cover-img {
-	position: absolute;
-	width: 117px;
-	height: 90px;
-	margin-top: 15px;
-	margin-left: 10px;
-	z-index: 1000;
+    position: absolute;
+    width: 117px;
+    height: 90px;
+    margin-top: 15px;
+    margin-left: 10px;
+    z-index: 1000;
 }
 .rank-digit {
-	position: absolute;
-	top: 32px;
-	left: 19px;
-	width: 24px;
-	font-size: 11pt;
-	color: #fff;
-	text-align: center;
-	z-index: 1200;
+    position: absolute;
+    top: 32px;
+    left: 19px;
+    width: 24px;
+    font-size: 11pt;
+    color: #fff;
+    text-align: center;
+    z-index: 1200;
 }
 .rank-detail-value {
-	position: absolute;
-	right: 0px;
-	width: 200px;
-	height: 29px;
-	margin-top: 57px;
-	padding-top: 8px;
-	padding-right: 18px;
-	font-size: 16pt;
-	font-weight: bolder;
-	letter-spacing: 0.02em;
-	color: #354960;
-	text-align: right;
+    position: absolute;
+    right: 0px;
+    width: 200px;
+    height: 29px;
+    margin-top: 57px;
+    padding-top: 8px;
+    padding-right: 18px;
+    font-size: 16pt;
+    font-weight: bolder;
+    letter-spacing: 0.02em;
+    color: #354960;
+    text-align: right;
 }
 .rank-detail-value>span {
-	font-size: 10pt;
+    font-size: 10pt;
 }
 .ranking-total-or-person .rank-meter-bar {
-	position: absolute;
-	top: 62px;
-	height: 27px;
-	width: 580px;
-	left: 100px;
-	background-image: url(../images/ranking/rank-meter-bar-bg.png);
-	border-right: 3px solid #C7C7C7;
+    position: absolute;
+    top: 62px;
+    height: 27px;
+    width: 580px;
+    left: 100px;
+    background-image: url(../images/ranking/rank-meter-bar-bg.png);
+    border-right: 3px solid #C7C7C7;
 }
 .ranking-total-or-person .rank-meter-bar-inner {
-	height: 100%;
-	background: linear-gradient(to right, #7dd790 , #01a65a);
-	opacity: 0.9;
-	border-top-right-radius: 15px; 
-	border-bottom-right-radius: 15px;
-	box-shadow: 1px 1px 1px #888888;
+    height: 100%;
+    background: linear-gradient(to right, #7dd790 , #01a65a);
+    opacity: 0.9;
+    border-top-right-radius: 15px; 
+    border-bottom-right-radius: 15px;
+    box-shadow: 1px 1px 1px #888888;
 }
 .ranking-percent .rank-meter-bar-container {
-	position: absolute;
-	top: 65px;
-	right: 35px;
-	width: 620px;
-	height: 34px;
+    position: absolute;
+    top: 65px;
+    right: 35px;
+    width: 620px;
+    height: 34px;
 }
 .ranking-percent .rank-meter-bar {
-	position: absolute;
-	width: 620px;
-	height: 34px;
-	background-color: #F8F8F8;
-	box-shadow: inset 0px 0px 1px 1px rgba(0,0,0,0.1);
+    position: absolute;
+    width: 620px;
+    height: 34px;
+    background-color: #F8F8F8;
+    box-shadow: inset 0px 0px 1px 1px rgba(0,0,0,0.1);
 }
 .ranking-percent .rank-meter-bar>div {
-	position: relative;
-	top: 4px;
-	margin-left: auto;
-	margin-right: auto;
-	background-image: url(../images/ranking/rank-meter-bar-bg.png);
-	width: 610px;
-	height: 26px;
+    position: relative;
+    top: 4px;
+    margin-left: auto;
+    margin-right: auto;
+    background-image: url(../images/ranking/rank-meter-bar-bg.png);
+    width: 610px;
+    height: 26px;
 }
 .ranking-percent .rank-meter-bar-inner {
-	position: absolute;
-	height: 100%;
-	opacity: 0.9;
-	box-shadow: 1px 1px 1px #888888;
+    position: absolute;
+    height: 100%;
+    opacity: 0.9;
+    box-shadow: 1px 1px 1px #888888;
 }
 .ranking-percent .rank-positive .rank-meter-bar-inner {
-	background: linear-gradient(to right, #F3AE9B , #E65A3C);
-	border-top-right-radius: 15px;
-	border-bottom-right-radius: 15px;
+    background: linear-gradient(to right, #F3AE9B , #E65A3C);
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
 }
 .ranking-percent .rank-negative .rank-meter-bar-inner {
-	background: linear-gradient(to right, #01A65A , #6CA68B);
-	border-top-left-radius: 15px;
-	border-bottom-left-radius: 15px;
+    background: linear-gradient(to right, #01A65A , #6CA68B);
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
 }
 .meter-indicator {
-	font-size: 8pt;
-	position: absolute;
-	width: 48px;
-	height: 32px;
-	top: 0px;
+    font-size: 8pt;
+    position: absolute;
+    width: 48px;
+    height: 32px;
+    top: 0px;
 }
 .meter-indicator>div{
-	font-size: 12pt;
-	font-weight: bold;
-	color: #FFF;
-	margin-top: 9px;
-	margin-left: 2px;
-	margin-right: 25px;
-	text-align: center;
-	text-shadow: 0px 0px 4px #000000;
+    font-size: 12pt;
+    font-weight: bold;
+    color: #FFF;
+    margin-top: 9px;
+    margin-left: 2px;
+    margin-right: 25px;
+    text-align: center;
+    text-shadow: 0px 0px 4px #000000;
 }
 .ranking-percent .rank-positive .meter-indicator {
 }
 .ranking-percent .rank-negative .meter-indicator {
 }
 .rank-meter-bar-middle {
-	position: absolute;
-	top: 0px;
-	width: 2px;
-	height: 27px;
-	background-color: #bdbdbd;
+    position: absolute;
+    top: 0px;
+    width: 2px;
+    height: 27px;
+    background-color: #bdbdbd;
 }

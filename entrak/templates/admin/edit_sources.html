@@ -10,12 +10,12 @@
 
 <script id="input-block-template" type="x-tmpl-mustache">
 <div class="input-block" system_code="{% templatetag openvariable %}systemCode{% templatetag closevariable %}" system_path="{% templatetag openvariable %}systemPath{% templatetag closevariable %}">
-	<div>name: <input type="text" name="name"></div>
-	<div>xml-url: <input type="text" name="xml_url" size="40"></div><br>
-	<div>display name: <input type="text" name="d_name"></div>
-	<div>display name (TC): <input type="text" name="d_name_tc"></div>
-	<div>order: <input type="text" name="order" size="3"></div>
-	<div class="remove-btn">X</div>
+    <div>name: <input type="text" name="name"></div>
+    <div>xml-url: <input type="text" name="xml_url" size="40"></div><br>
+    <div>display name: <input type="text" name="d_name"></div>
+    <div>display name (TC): <input type="text" name="d_name_tc"></div>
+    <div>order: <input type="text" name="order" size="3"></div>
+    <div class="remove-btn">X</div>
 </div>
 </script>
 
@@ -26,57 +26,57 @@
 
 <script type="text/javascript">
 $(function() {
-	setupAjaxForCsrf($.cookie('csrftoken'));
+    setupAjaxForCsrf($.cookie('csrftoken'));
 
-	var inputBlockTemplate = $("#input-block-template").html();
-	Mustache.parse(inputBlockTemplate);
+    var inputBlockTemplate = $("#input-block-template").html();
+    Mustache.parse(inputBlockTemplate);
 
-	$(".add-more-btn").each(function(systemIdx) {
-		$(this).click({systemIdx: systemIdx}, function(event) {
-			var systemCode = $(this).attr('system_code');
-			var systemPath = $(this).attr('system_path');
-			var inputBlockHtml = Mustache.render(inputBlockTemplate, {systemCode: systemCode, systemPath: systemPath});
-			var inputBlockEle = $(inputBlockHtml);
-			inputBlockEle.find(".remove-btn").click(function() {
-				$(this).parent().remove();
-			})
-			$(".input-container:eq("+event.data.systemIdx+")").append(inputBlockEle);
-		});
-	});
+    $(".add-more-btn").each(function(systemIdx) {
+        $(this).click({systemIdx: systemIdx}, function(event) {
+            var systemCode = $(this).attr('system_code');
+            var systemPath = $(this).attr('system_path');
+            var inputBlockHtml = Mustache.render(inputBlockTemplate, {systemCode: systemCode, systemPath: systemPath});
+            var inputBlockEle = $(inputBlockHtml);
+            inputBlockEle.find(".remove-btn").click(function() {
+                $(this).parent().remove();
+            })
+            $(".input-container:eq("+event.data.systemIdx+")").append(inputBlockEle);
+        });
+    });
 
-	$(".save-btn").click(function() {
-		var sourceInfos = [];
-		$('.input-block').each(function(inputBlockIdx) {
-			var info = {}
-			info.system_code = $(this).attr('system_code');
-			info.system_path = $(this).attr('system_path');
-			info.name = $(this).find("input[name='name']").val();
-			info.xml_url = $(this).find("input[name='xml_url']").val();
-			info.d_name = $(this).find("input[name='d_name']").val();
-			info.d_name_tc = $(this).find("input[name='d_name_tc']").val();
-			info.order = $(this).find("input[name='order']").val();
-			var sourceIdInput = $(this).find("input[name='source_id']");
-			if (sourceIdInput.length === 0) {
-				info.source_id = null;
-			} else {
-				info.source_id = sourceIdInput.val();
-			}
+    $(".save-btn").click(function() {
+        var sourceInfos = [];
+        $('.input-block').each(function(inputBlockIdx) {
+            var info = {}
+            info.system_code = $(this).attr('system_code');
+            info.system_path = $(this).attr('system_path');
+            info.name = $(this).find("input[name='name']").val();
+            info.xml_url = $(this).find("input[name='xml_url']").val();
+            info.d_name = $(this).find("input[name='d_name']").val();
+            info.d_name_tc = $(this).find("input[name='d_name_tc']").val();
+            info.order = $(this).find("input[name='order']").val();
+            var sourceIdInput = $(this).find("input[name='source_id']");
+            if (sourceIdInput.length === 0) {
+                info.source_id = null;
+            } else {
+                info.source_id = sourceIdInput.val();
+            }
 
-			sourceInfos.push(info);
-		});
+            sourceInfos.push(info);
+        });
 
-		$.ajax({
-			type: "POST",
-			url: "",
-			data: {'source_infos': JSON.stringify(sourceInfos)},
-		}).done(function(data) {
-			if (data.success) {
-				parent.postMessage("closeBPopup", "*");
-			}
-		}).fail(function(jqXHR, textStatus) {
-			console.log(jqXHR.responseText);
-		});
-	});
+        $.ajax({
+            type: "POST",
+            url: "",
+            data: {'source_infos': JSON.stringify(sourceInfos)},
+        }).done(function(data) {
+            if (data.success) {
+                parent.postMessage("closeBPopup", "*");
+            }
+        }).fail(function(jqXHR, textStatus) {
+            console.log(jqXHR.responseText);
+        });
+    });
 });
 </script>
 {% endblock %}
@@ -87,16 +87,16 @@ $(function() {
 <div>{{system.code}} &#8195;<span class="add-more-btn" system_code="{{system.code}}" system_path="{{system.path}}">Add More</span></div>
 <hr>
 <div class="input-container">
-	{% for source in system.sources %}
-	<div class="input-block" system_code="{{system.code}}" system_path="{{system.path}}">
-		<div>name: <input type="text" name="name" value="{{source.name}}"></div>
-		<div>xml-url: <input type="text" name="xml_url" size="40" value="{{source.xml_url}}"></div><br>
-		<div>display name: <input type="text" name="d_name" value="{{source.d_name}}"></div>
-		<div>display name (TC): <input type="text" name="d_name_tc" value="{{source.d_name_tc}}"></div>
-		<div>order: <input type="text" name="order" size="3" value="{{source.order}}"></div>
-		<div><input type="hidden" name="source_id" value="{{source.id}}"></div>
-	</div>
-	{% endfor %}
+    {% for source in system.sources %}
+    <div class="input-block" system_code="{{system.code}}" system_path="{{system.path}}">
+        <div>name: <input type="text" name="name" value="{{source.name}}"></div>
+        <div>xml-url: <input type="text" name="xml_url" size="40" value="{{source.xml_url}}"></div><br>
+        <div>display name: <input type="text" name="d_name" value="{{source.d_name}}"></div>
+        <div>display name (TC): <input type="text" name="d_name_tc" value="{{source.d_name_tc}}"></div>
+        <div>order: <input type="text" name="order" size="3" value="{{source.order}}"></div>
+        <div><input type="hidden" name="source_id" value="{{source.id}}"></div>
+    </div>
+    {% endfor %}
 </div>
 <hr>
 {% endfor %}

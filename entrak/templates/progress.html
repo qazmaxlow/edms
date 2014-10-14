@@ -12,24 +12,24 @@
 
 <script type="text/javascript">
 $(function() {
-	var archivedLevel = {{archived_level}};
-	var aniLevel;
+    var archivedLevel = {{archived_level}};
+    var aniLevel;
 
-	if (archivedLevel <= 0) {
-		aniLevel = 1;
-	} else if (archivedLevel <= 5) {
-		aniLevel = 2;
-	} else if (archivedLevel <= 15) {
-		aniLevel = 3;
-	} else if (archivedLevel <= 25) {
-		aniLevel = 4;
-	} else {
-		aniLevel = 5;
-	}
-	var factoryAniFileName = 'progress-animation-' + aniLevel;
-	$('.factory-animation source:eq(0)').attr('src', '{{static_url}}images/progress/' + factoryAniFileName+'.webm');
-	$('.factory-animation source:eq(1)').attr('src', '{{static_url}}images/progress/' + factoryAniFileName+'.mp4');
-	$('.factory-animation').load();
+    if (archivedLevel <= 0) {
+        aniLevel = 1;
+    } else if (archivedLevel <= 5) {
+        aniLevel = 2;
+    } else if (archivedLevel <= 15) {
+        aniLevel = 3;
+    } else if (archivedLevel <= 25) {
+        aniLevel = 4;
+    } else {
+        aniLevel = 5;
+    }
+    var factoryAniFileName = 'progress-animation-' + aniLevel;
+    $('.factory-animation source:eq(0)').attr('src', '{{static_url}}images/progress/' + factoryAniFileName+'.webm');
+    $('.factory-animation source:eq(1)').attr('src', '{{static_url}}images/progress/' + factoryAniFileName+'.mp4');
+    $('.factory-animation').load();
 });
 </script>
 {% endblock %}
@@ -45,73 +45,73 @@ $(function() {
 {% get_current_language as LANGUAGE_CODE %}
 
 <div class="main-saving-container">
-	<div class="saving-header">
-		<div class="saving-consumption">
-			{% ifequal LANGUAGE_CODE 'zh-tw' %}
-			<h2>過去12個月一共{% if percengate_change >= 0 %}減少消耗{% else %}多用了{% endif %}</h2>
-			<div class="{% if percengate_change >= 0 %}positive-saving{% else %}negative-saving{% endif %}"> {{percengate_change|abs_float|floatformat}}<span class="saving-percent-symbol">%</span> 電力能源</div>
-			{% else %}
-			<h2>Over the past 12 months</h2>
-			<div class="{% if percengate_change >= 0 %}positive-saving{% else %}negative-saving{% endif %}"> {{percengate_change|abs_float|floatformat}}<span class="saving-percent-symbol">%</span> {% if percengate_change >= 0 %}Energy Reduction{% else %}More Energy{% endif %}</div>
-			{% endifequal %}
-		</div>
+    <div class="saving-header">
+        <div class="saving-consumption">
+            {% ifequal LANGUAGE_CODE 'zh-tw' %}
+            <h2>過去12個月一共{% if percengate_change >= 0 %}減少消耗{% else %}多用了{% endif %}</h2>
+            <div class="{% if percengate_change >= 0 %}positive-saving{% else %}negative-saving{% endif %}"> {{percengate_change|abs_float|floatformat}}<span class="saving-percent-symbol">%</span> 電力能源</div>
+            {% else %}
+            <h2>Over the past 12 months</h2>
+            <div class="{% if percengate_change >= 0 %}positive-saving{% else %}negative-saving{% endif %}"> {{percengate_change|abs_float|floatformat}}<span class="saving-percent-symbol">%</span> {% if percengate_change >= 0 %}Energy Reduction{% else %}More Energy{% endif %}</div>
+            {% endifequal %}
+        </div>
 
-		<div id="target-block">
-			{% ifequal archived_level 0 %}
-			<div class="medal-block work-harder-medal">
-				<img src="{% static 'images/progress/empty-medal.png' %}">
-				<div id="archived_percentage">{{archived_level}}<span class="saving-percent-symbol">%</span></div>
-				<div class="medal-text">{% trans "Keep<br>Saving!" %}</div>
-			</div>
-			{% else %}
-			<div class="medal-block">
-				<img src="{% static 'images/progress/medal.png' %}">
-				<div id="archived_percentage">{{archived_level}}<span class="saving-percent-symbol">%</span></div>
-				<div class="medal-text">{% trans "reduction<br>achieved" %}</div>
-			</div>
-			{% endifequal %}
-			<div class="target-text-container">
-				<div class="next-target-text">{% trans "Next Target" %}</div>
-				<div class="next-target-percent">{% blocktrans with target_level=target_level %}{{target_level}}<span class="saving-percent-symbol">%</span> Reduction{% endblocktrans %}</div>
-			</div>
-		</div>
-	</div>
+        <div id="target-block">
+            {% ifequal archived_level 0 %}
+            <div class="medal-block work-harder-medal">
+                <img src="{% static 'images/progress/empty-medal.png' %}">
+                <div id="archived_percentage">{{archived_level}}<span class="saving-percent-symbol">%</span></div>
+                <div class="medal-text">{% trans "Keep<br>Saving!" %}</div>
+            </div>
+            {% else %}
+            <div class="medal-block">
+                <img src="{% static 'images/progress/medal.png' %}">
+                <div id="archived_percentage">{{archived_level}}<span class="saving-percent-symbol">%</span></div>
+                <div class="medal-text">{% trans "reduction<br>achieved" %}</div>
+            </div>
+            {% endifequal %}
+            <div class="target-text-container">
+                <div class="next-target-text">{% trans "Next Target" %}</div>
+                <div class="next-target-percent">{% blocktrans with target_level=target_level %}{{target_level}}<span class="saving-percent-symbol">%</span> Reduction{% endblocktrans %}</div>
+            </div>
+        </div>
+    </div>
 
-	<div class="factory-animation-container">
-		<video class="factory-animation" width="1058px" height="444px" autoplay loop>
-			<source type="video/webm">
-			<source type="video/mp4">
-		</video>
-	</div>
+    <div class="factory-animation-container">
+        <video class="factory-animation" width="1058px" height="444px" autoplay loop>
+            <source type="video/webm">
+            <source type="video/mp4">
+        </video>
+    </div>
 
-	<div class="cumulative-saving-container {% if total_co2_saving >= 0 %}positive-saving{% else %}negative-saving{% endif %}">
-		<div class="cumulative-saving-title">{% if percengate_change >= 0 %}{% trans "Cumulative Savings" %}{% else %}{% trans "Extra Spending" %}{% endif %}</div>
-		<hr>
-		<div class="cumulative-saving-info">
-			<div class="cumulative-saving-block">
-				<img src="{% static 'images/progress/co2.png' %}">
-				<div class="cumulative-text"><span class="cumulative-val">{% language 'en' %}{{total_co2_saving|abs_int|intcomma}}{% endlanguage %}</span>{% trans " tons of CO<sub>2</sub>" %}</div>
-			</div>
-			<img class="equal-symbol" src="{% static 'images/progress/equal-symbol.png' %}">
-			<div class="cumulative-saving-block">
-				<img src="{% static 'images/progress/elephant.png' %}">
-				<div class="cumulative-text"><span class="cumulative-val">{% language 'en' %}{{elephant_num|abs_int|intcomma}}{% endlanguage %}</span>{% trans " elephants" %}</div>
-			</div>
-			<div class="cumulative-separator"></div>
-			<div class="cumulative-saving-block">
-				<img src="{% static 'images/progress/money.png' %}">
-				<div class="cumulative-text"><span class="cumulative-val">{% language 'en' %}${{total_money_saving|abs_int|intcomma}}{% endlanguage %}</span></div>
-			</div>
-			<img class="equal-symbol" src="{% static 'images/progress/equal-symbol.png' %}">
-			<div class="cumulative-saving-block">
-				<img src="{% static 'images/progress/taxi.png' %}">
-				<div class="cumulative-text">
-					<span class="cumulative-val">{% language 'en' %}{{taxi_trip.count|abs_int|intcomma}}{% endlanguage %}</span>{% trans " taxi trips" %}
-					<div class="taxi-desc">{% trans "from " %}{{taxi_trip.from}}{% trans " to " %}{{taxi_trip.to}}{% ifequal LANGUAGE_CODE 'en' %} (cost){% endifequal %}</div>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="cumulative-saving-container {% if total_co2_saving >= 0 %}positive-saving{% else %}negative-saving{% endif %}">
+        <div class="cumulative-saving-title">{% if percengate_change >= 0 %}{% trans "Cumulative Savings" %}{% else %}{% trans "Extra Spending" %}{% endif %}</div>
+        <hr>
+        <div class="cumulative-saving-info">
+            <div class="cumulative-saving-block">
+                <img src="{% static 'images/progress/co2.png' %}">
+                <div class="cumulative-text"><span class="cumulative-val">{% language 'en' %}{{total_co2_saving|abs_int|intcomma}}{% endlanguage %}</span>{% trans " tons of CO<sub>2</sub>" %}</div>
+            </div>
+            <img class="equal-symbol" src="{% static 'images/progress/equal-symbol.png' %}">
+            <div class="cumulative-saving-block">
+                <img src="{% static 'images/progress/elephant.png' %}">
+                <div class="cumulative-text"><span class="cumulative-val">{% language 'en' %}{{elephant_num|abs_int|intcomma}}{% endlanguage %}</span>{% trans " elephants" %}</div>
+            </div>
+            <div class="cumulative-separator"></div>
+            <div class="cumulative-saving-block">
+                <img src="{% static 'images/progress/money.png' %}">
+                <div class="cumulative-text"><span class="cumulative-val">{% language 'en' %}${{total_money_saving|abs_int|intcomma}}{% endlanguage %}</span></div>
+            </div>
+            <img class="equal-symbol" src="{% static 'images/progress/equal-symbol.png' %}">
+            <div class="cumulative-saving-block">
+                <img src="{% static 'images/progress/taxi.png' %}">
+                <div class="cumulative-text">
+                    <span class="cumulative-val">{% language 'en' %}{{taxi_trip.count|abs_int|intcomma}}{% endlanguage %}</span>{% trans " taxi trips" %}
+                    <div class="taxi-desc">{% trans "from " %}{{taxi_trip.from}}{% trans " to " %}{{taxi_trip.to}}{% ifequal LANGUAGE_CODE 'en' %} (cost){% endifequal %}</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

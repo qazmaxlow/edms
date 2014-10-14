@@ -27,11 +27,11 @@
 
 <script id="tips-template" type="x-tmpl-mustache">
 <div class="tips" style="background-image: url({% templatetag openvariable %}bgImg{% templatetag closevariable %});">
-	<div class="tips-block" style="{% templatetag openvariable %}posStyle{% templatetag closevariable %}">
-		<img src="{% static 'images/display/plug-icon.png' %}">
-		<div class='tips-title'>{% templatetag openvariable %}title{% templatetag closevariable %}</div>
-		<div class='tips-desc'>{% templatetag openvariable %}desc{% templatetag closevariable %}</div>
-	</div>
+    <div class="tips-block" style="{% templatetag openvariable %}posStyle{% templatetag closevariable %}">
+        <img src="{% static 'images/display/plug-icon.png' %}">
+        <div class='tips-title'>{% templatetag openvariable %}title{% templatetag closevariable %}</div>
+        <div class='tips-desc'>{% templatetag openvariable %}desc{% templatetag closevariable %}</div>
+    </div>
 </div>
 </script>
 
@@ -44,197 +44,197 @@ SLIDE_TYPE_DYNAMIC = 'dynamic';
 display = {};
 
 function updateGraphText() {
-	$('.graph-dt-text').text(moment().format('{% trans "D MMM YYYY, ddd" %}'));
+    $('.graph-dt-text').text(moment().format('{% trans "D MMM YYYY, ddd" %}'));
 
-	var lastText = moment().format('dddd')
-	$(".legend-last-text").text('{% trans "Last " %}'+lastText);
+    var lastText = moment().format('dddd')
+    $(".legend-last-text").text('{% trans "Last " %}'+lastText);
 }
 
 function getProgressData() {
-	$.ajax({
-		type: "POST",
-		url: "../progress_data/",
-		data: {},
-	}).done(function(data) {
-		var archivedLevel = data.archived_level;
-		var aniLevel;
+    $.ajax({
+        type: "POST",
+        url: "../progress_data/",
+        data: {},
+    }).done(function(data) {
+        var archivedLevel = data.archived_level;
+        var aniLevel;
 
-		if (archivedLevel <= 0) {
-			aniLevel = 1;
-		} else if (archivedLevel <= 5) {
-			aniLevel = 2;
-		} else if (archivedLevel <= 15) {
-			aniLevel = 3;
-		} else if (archivedLevel <= 25) {
-			aniLevel = 4;
-		} else {
-			aniLevel = 5;
-		}
-		var factoryAniFileName = 'progress-animation-' + aniLevel;
-		$('.factory-animation source:eq(0)').attr('src', data.static_url + 'images/display/' + factoryAniFileName+'.webm');
-		$('.factory-animation source:eq(1)').attr('src', data.static_url + 'images/display/' + factoryAniFileName+'.mp4');
-		$('.factory-animation').load();
+        if (archivedLevel <= 0) {
+            aniLevel = 1;
+        } else if (archivedLevel <= 5) {
+            aniLevel = 2;
+        } else if (archivedLevel <= 15) {
+            aniLevel = 3;
+        } else if (archivedLevel <= 25) {
+            aniLevel = 4;
+        } else {
+            aniLevel = 5;
+        }
+        var factoryAniFileName = 'progress-animation-' + aniLevel;
+        $('.factory-animation source:eq(0)').attr('src', data.static_url + 'images/display/' + factoryAniFileName+'.webm');
+        $('.factory-animation source:eq(1)').attr('src', data.static_url + 'images/display/' + factoryAniFileName+'.mp4');
+        $('.factory-animation').load();
 
-		$('.last-12-month-percent-val').text(Math.abs(Utils.fixedDecBaseOnVal(data.percengate_change)));
-		var percentText, moneySavingText;
-		if (data.percengate_change >= 0) {
-			percentText = '{% trans "Energy Reduction" %}';
-			moneySavingText = '{% trans "Saving up to" %}';
+        $('.last-12-month-percent-val').text(Math.abs(Utils.fixedDecBaseOnVal(data.percengate_change)));
+        var percentText, moneySavingText;
+        if (data.percengate_change >= 0) {
+            percentText = '{% trans "Energy Reduction" %}';
+            moneySavingText = '{% trans "Saving up to" %}';
 
-			$('.progress-info').addClass('progress-positive-saving');
-			$('.progress-info').removeClass('progress-negative-saving');
-		} else {
-			percentText = '{% trans "More Energy" %}';
-			moneySavingText = '{% trans "Extra spending up to" %}';
+            $('.progress-info').addClass('progress-positive-saving');
+            $('.progress-info').removeClass('progress-negative-saving');
+        } else {
+            percentText = '{% trans "More Energy" %}';
+            moneySavingText = '{% trans "Extra spending up to" %}';
 
-			$('.progress-info').addClass('progress-negative-saving');
-			$('.progress-info').removeClass('progress-positive-saving');
-		}
-		$('.last-12-month-percent-text').text(percentText);
+            $('.progress-info').addClass('progress-negative-saving');
+            $('.progress-info').removeClass('progress-positive-saving');
+        }
+        $('.last-12-month-percent-text').text(percentText);
 
-		if (display.langCode === 'zh-tw') {
-			var titleSuffix = (data.percengate_change >= 0) ? "一共減少消耗": "一共多用了";
-			$('.last-12-month-block-title').text('{% trans "Over the past 12 months" %}' + titleSuffix);
-		} else {
-			$('.last-12-month-block-title').text('{% trans "Over the past 12 months" %}');
-		}
+        if (display.langCode === 'zh-tw') {
+            var titleSuffix = (data.percengate_change >= 0) ? "一共減少消耗": "一共多用了";
+            $('.last-12-month-block-title').text('{% trans "Over the past 12 months" %}' + titleSuffix);
+        } else {
+            $('.last-12-month-block-title').text('{% trans "Over the past 12 months" %}');
+        }
 
-		if (data.archived_level === 0) {
-			$('.empty-medal').show();
-			$('.saving-medal').hide();
-		} else {
-			$('.saving-medal').show();
-			$('.empty-medal').hide();
-		}
+        if (data.archived_level === 0) {
+            $('.empty-medal').show();
+            $('.saving-medal').hide();
+        } else {
+            $('.saving-medal').show();
+            $('.empty-medal').hide();
+        }
 
-		$('.progress-co2-val').text(Utils.formatWithCommas(Math.abs(data.total_co2_saving.toFixed(0))) + '{% trans " tons" %}');
-		$('.achieved-percent-val').text(data.archived_level);
-		$('.target-percent-val').text(data.target_level);
+        $('.progress-co2-val').text(Utils.formatWithCommas(Math.abs(data.total_co2_saving.toFixed(0))) + '{% trans " tons" %}');
+        $('.achieved-percent-val').text(data.archived_level);
+        $('.target-percent-val').text(data.target_level);
 
-		$('.money-saving-text').text(moneySavingText);
-		$('.money-saving-val').text('$' + Utils.formatWithCommas(Math.abs(data.total_money_saving.toFixed(0))));
-	});
+        $('.money-saving-text').text(moneySavingText);
+        $('.money-saving-val').text('$' + Utils.formatWithCommas(Math.abs(data.total_money_saving.toFixed(0))));
+    });
 }
 
 function scheduledTask() {
-	display.graphChart.getDisplayEnergyReadings();
-	updateGraphText();
-	display.energySummary.getSummaryWithSourceIds(display.sourceIds, function() {
-		display.energySummary.assignSummaryToHtml(
-		"#last-consumption-val", "#this-consumption-val", "#summary-percentage-number",
-		"#summary-image", '{{STATIC_URL}}');
-	});
-	getProgressData();
+    display.graphChart.getDisplayEnergyReadings();
+    updateGraphText();
+    display.energySummary.getSummaryWithSourceIds(display.sourceIds, function() {
+        display.energySummary.assignSummaryToHtml(
+        "#last-consumption-val", "#this-consumption-val", "#summary-percentage-number",
+        "#summary-image", '{{STATIC_URL}}');
+    });
+    getProgressData();
 }
 
 function changeSlide() {
-	var futureSlideIdx, futureSlideType;
-	var targetArrayKey, targetUsedArrayKey;
-	if (display.currentSlideType === SLIDE_TYPE_DYNAMIC) {
-		targetArrayKey = 'tipsSlideIdxs';
-		targetUsedArrayKey = 'usedTipsSlideIdxs';
-		futureSlideType = SLIDE_TYPE_TIPS;
-	} else {
-		targetArrayKey = 'dynamicSlideIdxs';
-		targetUsedArrayKey = 'usedDynamicSlideIdxs';
-		futureSlideType = SLIDE_TYPE_DYNAMIC;
-	}
-	if (display[targetArrayKey].length === 0) {
-		display[targetArrayKey] = display[targetUsedArrayKey].slice();
-		display[targetUsedArrayKey].length = 0;
-	}
+    var futureSlideIdx, futureSlideType;
+    var targetArrayKey, targetUsedArrayKey;
+    if (display.currentSlideType === SLIDE_TYPE_DYNAMIC) {
+        targetArrayKey = 'tipsSlideIdxs';
+        targetUsedArrayKey = 'usedTipsSlideIdxs';
+        futureSlideType = SLIDE_TYPE_TIPS;
+    } else {
+        targetArrayKey = 'dynamicSlideIdxs';
+        targetUsedArrayKey = 'usedDynamicSlideIdxs';
+        futureSlideType = SLIDE_TYPE_DYNAMIC;
+    }
+    if (display[targetArrayKey].length === 0) {
+        display[targetArrayKey] = display[targetUsedArrayKey].slice();
+        display[targetUsedArrayKey].length = 0;
+    }
 
-	display.currentSlideType = futureSlideType;
-	if (futureSlideType === SLIDE_TYPE_DYNAMIC) {
-		futureSlideIdx = display[targetArrayKey].shift();
-	} else {
-		display[targetArrayKey].sort(function() { return 0.5 - Math.random() });
-		futureSlideIdx = display[targetArrayKey].pop();
-	}
-	display[targetUsedArrayKey].push(futureSlideIdx);
-	display.nextSlide = futureSlideIdx;
+    display.currentSlideType = futureSlideType;
+    if (futureSlideType === SLIDE_TYPE_DYNAMIC) {
+        futureSlideIdx = display[targetArrayKey].shift();
+    } else {
+        display[targetArrayKey].sort(function() { return 0.5 - Math.random() });
+        futureSlideIdx = display[targetArrayKey].pop();
+    }
+    display[targetUsedArrayKey].push(futureSlideIdx);
+    display.nextSlide = futureSlideIdx;
 
-	display.sudoSlider.goToSlide(futureSlideIdx, 1500);
+    display.sudoSlider.goToSlide(futureSlideIdx, 1500);
 }
 
 $(function() {
-	display.sourceIds = JSON.parse('{{source_ids}}');
-	display.langCode = '{{LANGUAGE_CODE}}';
-	moment.locale(display.langCode);
+    display.sourceIds = JSON.parse('{{source_ids}}');
+    display.langCode = '{{LANGUAGE_CODE}}';
+    moment.locale(display.langCode);
 
-	var tipInfos = [
-		{bgImg: "{% static 'images/tips/light-tube.jpg' %}", title: '{% trans "Remove a tube" %}', desc: '{% trans "If you have more light than you need in an area, you can remove one light tube from a fixture and save energy!" %}', posStyle: 'top: 200px; left: 50px;'},
-		{bgImg: "{% static 'images/tips/ac-temperature.jpg' %}", title: '{% trans "Re-assess Air Conditioning’s Temperature" %}', desc: '{% trans "After 30 minutes of turning on the AirCon, you should assess whether the temperature is too cold, if so you should adjust the temperature to minimize energy wastage." %}', posStyle: 'top: 250px; right: 50px;'},
-		{bgImg: "{% static 'images/tips/ac-ribbon.jpg' %}", title: '{% trans "Put a Ribbon on it" %}', desc: '{% blocktrans %}Tie a small colored ribbon to the vent of each aircon unit - this makes it easier to tell whether the aircon is on or off, so you don\'t accidentally leave aircon on!{% endblocktrans %}', posStyle: 'top: 250px; right: 50px;'},
-		{bgImg: "{% static 'images/tips/light-switch.jpg' %}", title: '{% trans "Label Your Plugs & Switch" %}', desc: '{% blocktrans %}Label the plugs of electrical devices - sometime it\'s hard to tell what is what, so this helps you to safely unplug or turn off appliances without worrying about turning off important things!{% endblocktrans %}', posStyle: 'top: 250px; left: 170px;'},
-		{bgImg: "{% static 'images/tips/plugs.jpg' %}", title: '{% trans "Turn off the switch" %}', desc: '{% blocktrans %}Even if an appliance turned off it still consume 5-10% of energy, if its being plug into the socket. Therefore remember to turn off the socket switch as well!{% endblocktrans %}', posStyle: 'top: 250px; left: 170px;'},
-	]
-
-
-	display.dynamicSlideIdxs = [2];
-	display.usedDynamicSlideIdxs = [1];
-	display.tipsSlideIdxs = [];
-	display.usedTipsSlideIdxs = [];
-	display.currentSlideType = SLIDE_TYPE_DYNAMIC;
-
-	var tipsTemplate = $("#tips-template").html();
-	Mustache.parse(tipsTemplate);
-	var sliderContainer = $('.slider-container');
-	var tipStartIdx = display.dynamicSlideIdxs.length + display.usedDynamicSlideIdxs.length + 1;
-	$.each(tipInfos, function(idx, tipInfo) {
-		display.tipsSlideIdxs.push(tipStartIdx+idx);
-		var tipsHtml = Mustache.render(tipsTemplate, tipInfo);
-		sliderContainer.append(tipsHtml);
-	});
+    var tipInfos = [
+        {bgImg: "{% static 'images/tips/light-tube.jpg' %}", title: '{% trans "Remove a tube" %}', desc: '{% trans "If you have more light than you need in an area, you can remove one light tube from a fixture and save energy!" %}', posStyle: 'top: 200px; left: 50px;'},
+        {bgImg: "{% static 'images/tips/ac-temperature.jpg' %}", title: '{% trans "Re-assess Air Conditioning’s Temperature" %}', desc: '{% trans "After 30 minutes of turning on the AirCon, you should assess whether the temperature is too cold, if so you should adjust the temperature to minimize energy wastage." %}', posStyle: 'top: 250px; right: 50px;'},
+        {bgImg: "{% static 'images/tips/ac-ribbon.jpg' %}", title: '{% trans "Put a Ribbon on it" %}', desc: '{% blocktrans %}Tie a small colored ribbon to the vent of each aircon unit - this makes it easier to tell whether the aircon is on or off, so you don\'t accidentally leave aircon on!{% endblocktrans %}', posStyle: 'top: 250px; right: 50px;'},
+        {bgImg: "{% static 'images/tips/light-switch.jpg' %}", title: '{% trans "Label Your Plugs & Switch" %}', desc: '{% blocktrans %}Label the plugs of electrical devices - sometime it\'s hard to tell what is what, so this helps you to safely unplug or turn off appliances without worrying about turning off important things!{% endblocktrans %}', posStyle: 'top: 250px; left: 170px;'},
+        {bgImg: "{% static 'images/tips/plugs.jpg' %}", title: '{% trans "Turn off the switch" %}', desc: '{% blocktrans %}Even if an appliance turned off it still consume 5-10% of energy, if its being plug into the socket. Therefore remember to turn off the socket switch as well!{% endblocktrans %}', posStyle: 'top: 250px; left: 170px;'},
+    ]
 
 
-	var viewportWidth = $(window).width();
-	var viewportHeight = $(window).height();
-	$('.slider-container>div').css({
-		'width': viewportWidth+"px",
-		'height': viewportHeight+"px",
-	});
+    display.dynamicSlideIdxs = [2];
+    display.usedDynamicSlideIdxs = [1];
+    display.tipsSlideIdxs = [];
+    display.usedTipsSlideIdxs = [];
+    display.currentSlideType = SLIDE_TYPE_DYNAMIC;
 
-	setupAjaxForCsrf($.cookie('csrftoken'));
+    var tipsTemplate = $("#tips-template").html();
+    Mustache.parse(tipsTemplate);
+    var sliderContainer = $('.slider-container');
+    var tipStartIdx = display.dynamicSlideIdxs.length + display.usedDynamicSlideIdxs.length + 1;
+    $.each(tipInfos, function(idx, tipInfo) {
+        display.tipsSlideIdxs.push(tipStartIdx+idx);
+        var tipsHtml = Mustache.render(tipsTemplate, tipInfo);
+        sliderContainer.append(tipsHtml);
+    });
 
-	var graphChartMultiLangTexts = {
-		'TOTAL_TEXT': '{% trans "Total" %}',
-		'PREVIOUS_TEXT': '{% trans "Previous" %}',
-		'HIGHEST_TEXT': '{% trans "Highest" %}',
-		'LOWEST_TEXT': '{% trans "Lowest" %}',
-		'CUSTOM_TEXT': '{% trans "Custom" %}',
-	};
 
-	display.graphChart = new GraphChart(".graph-info .chart", null, null, null, graphChartMultiLangTexts);
-	display.graphChart.currentRangeType = Utils.RANGE_TYPE_DAY;
+    var viewportWidth = $(window).width();
+    var viewportHeight = $(window).height();
+    $('.slider-container>div').css({
+        'width': viewportWidth+"px",
+        'height': viewportHeight+"px",
+    });
 
-	display.sudoSlider = $('.slider-container').sudoSlider({
-		effect: 'sliceFadeLeft',
-		continuous: true,
-		controlsShow: false,
-		pause: SLIDER_PAUSE_M_SECOND,
-		auto: false,
-		beforeAnimation: function() {
-			if (display.nextSlide === 2) {
-				$('.factory-animation')[0].pause();
-			}
-		},
-		afterAnimation: function() {
-			if (display.sudoSlider.getValue('currentSlide') === 2) {
-				$('.factory-animation')[0].play();
-			}
-		},
-	});
-	setInterval(function() {
-		changeSlide();
-	}, SLIDER_PAUSE_M_SECOND);
+    setupAjaxForCsrf($.cookie('csrftoken'));
 
-	display.energySummary = new EnergySummary();
+    var graphChartMultiLangTexts = {
+        'TOTAL_TEXT': '{% trans "Total" %}',
+        'PREVIOUS_TEXT': '{% trans "Previous" %}',
+        'HIGHEST_TEXT': '{% trans "Highest" %}',
+        'LOWEST_TEXT': '{% trans "Lowest" %}',
+        'CUSTOM_TEXT': '{% trans "Custom" %}',
+    };
 
-	scheduledTask();
-	setInterval(function() {
-		scheduledTask();
-	}, SCHEDULE_TASK_INTERVAL);
+    display.graphChart = new GraphChart(".graph-info .chart", null, null, null, graphChartMultiLangTexts);
+    display.graphChart.currentRangeType = Utils.RANGE_TYPE_DAY;
+
+    display.sudoSlider = $('.slider-container').sudoSlider({
+        effect: 'sliceFadeLeft',
+        continuous: true,
+        controlsShow: false,
+        pause: SLIDER_PAUSE_M_SECOND,
+        auto: false,
+        beforeAnimation: function() {
+            if (display.nextSlide === 2) {
+                $('.factory-animation')[0].pause();
+            }
+        },
+        afterAnimation: function() {
+            if (display.sudoSlider.getValue('currentSlide') === 2) {
+                $('.factory-animation')[0].play();
+            }
+        },
+    });
+    setInterval(function() {
+        changeSlide();
+    }, SLIDER_PAUSE_M_SECOND);
+
+    display.energySummary = new EnergySummary();
+
+    scheduledTask();
+    setInterval(function() {
+        scheduledTask();
+    }, SCHEDULE_TASK_INTERVAL);
 
 });
 </script>
@@ -243,89 +243,89 @@ $(function() {
 {% block content %}
 {% get_current_language as LANGUAGE_CODE %}
 <div class="system-info-container">
-	<div class="system-title">{{system|get_system_full_name:LANGUAGE_CODE}}</div>
-	<div class="system-sub-text">{% trans "REAL TIME ENERGY MONITORING SYSTEM" %}</div>
-	<div class="system-logo">
-		<div class="logo-circle-bound" style="background-image: url('{{system.logo.url}}');"></div>
-		<img src="{% static 'images/user-logo-bg.png' %}">
-	</div>
+    <div class="system-title">{{system|get_system_full_name:LANGUAGE_CODE}}</div>
+    <div class="system-sub-text">{% trans "REAL TIME ENERGY MONITORING SYSTEM" %}</div>
+    <div class="system-logo">
+        <div class="logo-circle-bound" style="background-image: url('{{system.logo.url}}');"></div>
+        <img src="{% static 'images/user-logo-bg.png' %}">
+    </div>
 </div>
 
 <div class="display-container">
-	<div class="slider-container">
+    <div class="slider-container">
 
-		<div class="graph-info">
-			<div class="header-empty-block"></div>
-			<div class="graph-title">{% trans "Our energy consumption today: " %}<span class="graph-dt-text"></span></div>
-			<div class="graph-header">
-				<div class="graph-unit">kWh</div>
-				<div class="graph-legend-container">
-					<div class="graph-legend">
-						<span class="today-legend-color-block"></span>
-						<span>{% trans "Today" %}</span>
-					</div>
-					<div class="graph-legend">
-						<span class="last-legend-color-block"></span>
-						<span class="legend-last-text"></span>
-					</div>
-				</div>
-				<hr>
-			</div>
-			<div class="chart"></div>
-			<div class="chart-hour">{% trans "hour" %}</div>
-			<hr class="graph-divider">
+        <div class="graph-info">
+            <div class="header-empty-block"></div>
+            <div class="graph-title">{% trans "Our energy consumption today: " %}<span class="graph-dt-text"></span></div>
+            <div class="graph-header">
+                <div class="graph-unit">kWh</div>
+                <div class="graph-legend-container">
+                    <div class="graph-legend">
+                        <span class="today-legend-color-block"></span>
+                        <span>{% trans "Today" %}</span>
+                    </div>
+                    <div class="graph-legend">
+                        <span class="last-legend-color-block"></span>
+                        <span class="legend-last-text"></span>
+                    </div>
+                </div>
+                <hr>
+            </div>
+            <div class="chart"></div>
+            <div class="chart-hour">{% trans "hour" %}</div>
+            <hr class="graph-divider">
 
-			{% include "display_bottom_energy_summary.html" %}
+            {% include "display_bottom_energy_summary.html" %}
 
-		</div>
+        </div>
 
-		<div class="progress-info">
-			<div class="header-empty-block"></div>
-			<div class="factory-background">
-				<video class="factory-animation" width="1200px" height="500px" autoplay loop>
-					<source type="video/webm">
-					<source type="video/mp4">
-				</video>
-				<div>
-					<div class="last-12-month-block">
-						<div class="last-12-month-block-title"></div>
-						<div class="last-12-month-percent-change">
-							<span class="last-12-month-percent-val"></span><span class="last-12-month-percent-symbol">%</span>
-							<span class="last-12-month-percent-text"></span>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="progress-detail-container">
-				<div class="progress-detail">
-					<img src="{% static 'images/progress/co2.png' %}">
-					<div>{% trans "Which is equivalent to" %}</div>
-					<div class="progress-detail-text"><span class="progress-co2-val"></span>{% trans " of CO<sub>2</sub>" %}</div>
-				</div>
-				<div class="progress-detail-separator"></div>
-				<div class="progress-detail progress-target-detail">
-					<div class="progress-medal empty-medal">
-						<img src="{% static 'images/display/empty-medal.png' %}">
-						<div class="medal-text">{% trans "Keep<br>Saving!" %}</div>
-					</div>
-					<div class="progress-medal saving-medal">
-						<img src="{% static 'images/display/medal.png' %}">
-						<div><span class="achieved-percent-val"></span><span class="percent-symbol">%</span></div>
-						<div class="medal-text">{% trans "reduction<br>achieved" %}</div>
-					</div>
-					<div class="next-target-text">{% trans "Next target would be" %}</div>
-					<div class="next-target-percent">{% ifequal LANGUAGE_CODE 'zh-tw' %}節省<span class="target-percent-val"></span>%{% else %}<span class="target-percent-val"></span>% Reduction{% endifequal %}</div>
-				</div>
-				<div class="progress-detail-separator"></div>
-				<div class="progress-detail">
-					<img src="{% static 'images/progress/money.png' %}">
-					<div class="money-saving-text"></div>
-					<div class="money-saving-val"></div>
-				</div>
-			</div>
-		</div>
+        <div class="progress-info">
+            <div class="header-empty-block"></div>
+            <div class="factory-background">
+                <video class="factory-animation" width="1200px" height="500px" autoplay loop>
+                    <source type="video/webm">
+                    <source type="video/mp4">
+                </video>
+                <div>
+                    <div class="last-12-month-block">
+                        <div class="last-12-month-block-title"></div>
+                        <div class="last-12-month-percent-change">
+                            <span class="last-12-month-percent-val"></span><span class="last-12-month-percent-symbol">%</span>
+                            <span class="last-12-month-percent-text"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-detail-container">
+                <div class="progress-detail">
+                    <img src="{% static 'images/progress/co2.png' %}">
+                    <div>{% trans "Which is equivalent to" %}</div>
+                    <div class="progress-detail-text"><span class="progress-co2-val"></span>{% trans " of CO<sub>2</sub>" %}</div>
+                </div>
+                <div class="progress-detail-separator"></div>
+                <div class="progress-detail progress-target-detail">
+                    <div class="progress-medal empty-medal">
+                        <img src="{% static 'images/display/empty-medal.png' %}">
+                        <div class="medal-text">{% trans "Keep<br>Saving!" %}</div>
+                    </div>
+                    <div class="progress-medal saving-medal">
+                        <img src="{% static 'images/display/medal.png' %}">
+                        <div><span class="achieved-percent-val"></span><span class="percent-symbol">%</span></div>
+                        <div class="medal-text">{% trans "reduction<br>achieved" %}</div>
+                    </div>
+                    <div class="next-target-text">{% trans "Next target would be" %}</div>
+                    <div class="next-target-percent">{% ifequal LANGUAGE_CODE 'zh-tw' %}節省<span class="target-percent-val"></span>%{% else %}<span class="target-percent-val"></span>% Reduction{% endifequal %}</div>
+                </div>
+                <div class="progress-detail-separator"></div>
+                <div class="progress-detail">
+                    <img src="{% static 'images/progress/money.png' %}">
+                    <div class="money-saving-text"></div>
+                    <div class="money-saving-val"></div>
+                </div>
+            </div>
+        </div>
 
-	</div>
+    </div>
 </div>
 
 <img class="powered-by-img" src="{% static 'images/powered-by-logo.png' %}">

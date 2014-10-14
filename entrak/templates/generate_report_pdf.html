@@ -24,32 +24,32 @@
 <script type="text/javascript">
 
 $(function() {
-	report.langCode = '{{LANGUAGE_CODE}}';
-	moment.locale(report.langCode);
+    report.langCode = '{{LANGUAGE_CODE}}';
+    moment.locale(report.langCode);
 
-	report.entrakSystem = new EntrakSystem();
-	report.entrakSystem.langCode = report.langCode;
-	report.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
+    report.entrakSystem = new EntrakSystem();
+    report.entrakSystem.langCode = report.langCode;
+    report.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
 
-	report.currentReportType = '{{report_type}}';
-	report.timezone = '{{systems.0.timezone}}';
-	report.currentDt =  moment.unix({{start_timestamp}}).tz(report.timezone);
-	{% ifequal report_type "custom-month" %}
-	report.customMonthEndDt = moment.unix({{end_timestamp}}).tz(report.timezone);
-	{% else %}
-	report.customMonthEndDt = null;
-	{% endifequal %}
+    report.currentReportType = '{{report_type}}';
+    report.timezone = '{{systems.0.timezone}}';
+    report.currentDt =  moment.unix({{start_timestamp}}).tz(report.timezone);
+    {% ifequal report_type "custom-month" %}
+    report.customMonthEndDt = moment.unix({{end_timestamp}}).tz(report.timezone);
+    {% else %}
+    report.customMonthEndDt = null;
+    {% endifequal %}
 
-	report.reportGenerator = new ReportGenerator(report.entrakSystem.systemTree, report.timezone,
-		report.currentReportType, report.reportGeneratorMultiLangTexts);
-	report.reportGenerator.langCode = '{{LANGUAGE_CODE}}';
-	report.reportGenerator.isPdf = true;
-	report.reportGenerator.updateDtInfo(report.currentDt, report.customMonthEndDt);
+    report.reportGenerator = new ReportGenerator(report.entrakSystem.systemTree, report.timezone,
+        report.currentReportType, report.reportGeneratorMultiLangTexts);
+    report.reportGenerator.langCode = '{{LANGUAGE_CODE}}';
+    report.reportGenerator.isPdf = true;
+    report.reportGenerator.updateDtInfo(report.currentDt, report.customMonthEndDt);
 
-	$(".report-name").text(report.reportGenerator.genReportName());
-	
-	report.reportGenerator.assignData(JSON.parse("{{report_data}}"));
-	report.reportGenerator.generateFullReport();
+    $(".report-name").text(report.reportGenerator.genReportName());
+    
+    report.reportGenerator.assignData(JSON.parse("{{report_data}}"));
+    report.reportGenerator.generateFullReport();
 });
 </script>
 {% endlanguage %}
@@ -61,10 +61,10 @@ $(function() {
 {% get_current_language as LANGUAGE_CODE %}
 
 <div class="report-head">
-	<div class="system-name">{{systems.0|get_system_full_name:LANGUAGE_CODE}}</div>
-	<hr class="title-separator">
-	<div class="report-name"></div>
-	<hr class="head-separator">
+    <div class="system-name">{{systems.0|get_system_full_name:LANGUAGE_CODE}}</div>
+    <hr class="title-separator">
+    <div class="report-name"></div>
+    <hr class="head-separator">
 </div>
 
 {% include "report_main_content_pdf.html" %}

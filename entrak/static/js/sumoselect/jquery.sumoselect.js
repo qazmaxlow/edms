@@ -310,7 +310,7 @@
                 setNativeMobile: function () {
                     var O = this;
                     O.E.addClass('SelectClass')//.css('height', O.select.outerHeight());
-					O.mob = true;
+                    O.mob = true;
                     O.E.change(function () {
                         O.setText();
                     });

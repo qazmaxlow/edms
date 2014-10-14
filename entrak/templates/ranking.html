@@ -39,38 +39,38 @@
 
 <script id="total-rank-template" type="x-tmpl-mustache">
 <div style="top: {% templatetag openvariable %}topPos{% templatetag closevariable %}px;" value="{% templatetag openvariable %}value{% templatetag closevariable %}" class="ranking-item ranking-total-or-person">
-	<div class="rank-name">{% templatetag openvariable %}rankName{% templatetag closevariable %}</div>
-	<div class="rank-separate-line-top"></div>
-	<div class="rank-separate-line"></div>
-	<div class="rank-img" style="background-image: url('{% templatetag openvariable %}logoUrl{% templatetag closevariable %}');"></div>
-	<img class="rank-cover-img" src="{% static 'images/ranking/rank-cover.png' %}">
-	<span class="rank-digit">{% templatetag openvariable %}rankDigit{% templatetag closevariable %}</span>
-	<div class="rank-meter-bar">
-		<div style="width: {% templatetag openvariable %}meterWidth{% templatetag closevariable %}%;" class="rank-meter-bar-inner"></div>
-	</div>
-	<div class="rank-detail-value">{% templatetag openvariable %}& valueText{% templatetag closevariable %}</div>
+    <div class="rank-name">{% templatetag openvariable %}rankName{% templatetag closevariable %}</div>
+    <div class="rank-separate-line-top"></div>
+    <div class="rank-separate-line"></div>
+    <div class="rank-img" style="background-image: url('{% templatetag openvariable %}logoUrl{% templatetag closevariable %}');"></div>
+    <img class="rank-cover-img" src="{% static 'images/ranking/rank-cover.png' %}">
+    <span class="rank-digit">{% templatetag openvariable %}rankDigit{% templatetag closevariable %}</span>
+    <div class="rank-meter-bar">
+        <div style="width: {% templatetag openvariable %}meterWidth{% templatetag closevariable %}%;" class="rank-meter-bar-inner"></div>
+    </div>
+    <div class="rank-detail-value">{% templatetag openvariable %}& valueText{% templatetag closevariable %}</div>
 </div>
 </script>
 
 <script id="percent-rank-template" type="x-tmpl-mustache">
 <div style="top: {% templatetag openvariable %}topPos{% templatetag closevariable %}px;" value="{% templatetag openvariable %}value{% templatetag closevariable %}" class="ranking-item ranking-percent">
-	<div class="rank-name">{% templatetag openvariable %}rankName{% templatetag closevariable %}</div>
-	<div class="rank-separate-line-top"></div>
-	<div class="rank-separate-line"></div>
-	<div class="rank-img" style="background-image: url('{% templatetag openvariable %}logoUrl{% templatetag closevariable %}');"></div>
-	<img class="rank-cover-img" src="{% static 'images/ranking/rank-cover.png' %}">
-	<span class="rank-digit">{% templatetag openvariable %}rankDigit{% templatetag closevariable %}</span>
-	<div class="rank-meter-bar-container {% templatetag openvariable %}meterContainerClass{% templatetag closevariable %}">
-		<div class="rank-meter-bar">
-			<div>
-				<div style="width: {% templatetag openvariable %}meterWidth{% templatetag closevariable %}%; left: {% templatetag openvariable %}meterLeft{% templatetag closevariable %}px; right: {% templatetag openvariable %}meterRight{% templatetag closevariable %}px;" class="rank-meter-bar-inner">
-				</div>
-				<div class="rank-meter-bar-middle" style="left: {% templatetag openvariable %}meterMidSeparatorLeft{% templatetag closevariable %}px;"></div> 
-			</div>
-		</div>
+    <div class="rank-name">{% templatetag openvariable %}rankName{% templatetag closevariable %}</div>
+    <div class="rank-separate-line-top"></div>
+    <div class="rank-separate-line"></div>
+    <div class="rank-img" style="background-image: url('{% templatetag openvariable %}logoUrl{% templatetag closevariable %}');"></div>
+    <img class="rank-cover-img" src="{% static 'images/ranking/rank-cover.png' %}">
+    <span class="rank-digit">{% templatetag openvariable %}rankDigit{% templatetag closevariable %}</span>
+    <div class="rank-meter-bar-container {% templatetag openvariable %}meterContainerClass{% templatetag closevariable %}">
+        <div class="rank-meter-bar">
+            <div>
+                <div style="width: {% templatetag openvariable %}meterWidth{% templatetag closevariable %}%; left: {% templatetag openvariable %}meterLeft{% templatetag closevariable %}px; right: {% templatetag openvariable %}meterRight{% templatetag closevariable %}px;" class="rank-meter-bar-inner">
+                </div>
+                <div class="rank-meter-bar-middle" style="left: {% templatetag openvariable %}meterMidSeparatorLeft{% templatetag closevariable %}px;"></div> 
+            </div>
+        </div>
 
-		<div style="left: {% templatetag openvariable %}indicatorLeft{% templatetag closevariable %}px;" class="meter-indicator"><div>{% templatetag openvariable %}& valueText{% templatetag closevariable %}</div></div>
-	</div>
+        <div style="left: {% templatetag openvariable %}indicatorLeft{% templatetag closevariable %}px;" class="meter-indicator"><div>{% templatetag openvariable %}& valueText{% templatetag closevariable %}</div></div>
+    </div>
 </div>
 </script>
 
@@ -97,486 +97,486 @@ COLOR_THEME_MIDDLE = 'middle';
 
 COLOR_THEME_INFO = {};
 COLOR_THEME_INFO[COLOR_THEME_GREENEST] = {
-	'barBg': 'linear-gradient(to left, #01A65A , #6CA68B)',
-	'coverImg': '{% static "images/ranking/rank-cover-greenest.png" %}'
+    'barBg': 'linear-gradient(to left, #01A65A , #6CA68B)',
+    'coverImg': '{% static "images/ranking/rank-cover-greenest.png" %}'
 };
 COLOR_THEME_INFO[COLOR_THEME_GREENER] = {
-	'barBg': 'linear-gradient(to left, #38CA3C , #83C985)',
-	'coverImg': '{% static "images/ranking/rank-cover-greener.png" %}'
+    'barBg': 'linear-gradient(to left, #38CA3C , #83C985)',
+    'coverImg': '{% static "images/ranking/rank-cover-greener.png" %}'
 };
 COLOR_THEME_INFO[COLOR_THEME_RED] = {
-	'barBg': 'linear-gradient(to left, #ED6D4A , #F3AE9B)',
-	'coverImg': '{% static "images/ranking/rank-cover-red.png" %}'
+    'barBg': 'linear-gradient(to left, #ED6D4A , #F3AE9B)',
+    'coverImg': '{% static "images/ranking/rank-cover-red.png" %}'
 };
 COLOR_THEME_INFO[COLOR_THEME_ORANGE] = {
-	'barBg': 'linear-gradient(to left, #EDB24A , #EDCF9A)',
-	'coverImg': '{% static "images/ranking/rank-cover-orange.png" %}'
+    'barBg': 'linear-gradient(to left, #EDB24A , #EDCF9A)',
+    'coverImg': '{% static "images/ranking/rank-cover-orange.png" %}'
 };
 COLOR_THEME_INFO[COLOR_THEME_MIDDLE] = {
-	'barBg': 'linear-gradient(to left, #8AC754 , #A2C781)',
-	'coverImg': '{% static "images/ranking/rank-cover-middle.png" %}'
+    'barBg': 'linear-gradient(to left, #8AC754 , #A2C781)',
+    'coverImg': '{% static "images/ranking/rank-cover-middle.png" %}'
 };
 
 var ranking = {};
 
 function genStartEndDtInfo() {
-	var startEndDt = Utils.genStartEndDt(ranking.currentDt, ranking.currentRangeType);
-	var nowMoment = moment();
-	if (ranking.currentRangeType === Utils.RANGE_TYPE_NIGHT) {
-		var endDt = startEndDt.endDt;
-	} else {
-		// if data is complete (past data), use all of them,
-		// otherwise, use util now
-		if ((nowMoment.isAfter(startEndDt.startDt) || nowMoment.isSame(startEndDt.startDt))
-			&& nowMoment.isBefore(startEndDt.endDt)) {
-			var endDt = moment(ranking.currentDt);
-		} else {
-			var endDt = startEndDt.endDt;
-		}
-	}
+    var startEndDt = Utils.genStartEndDt(ranking.currentDt, ranking.currentRangeType);
+    var nowMoment = moment();
+    if (ranking.currentRangeType === Utils.RANGE_TYPE_NIGHT) {
+        var endDt = startEndDt.endDt;
+    } else {
+        // if data is complete (past data), use all of them,
+        // otherwise, use util now
+        if ((nowMoment.isAfter(startEndDt.startDt) || nowMoment.isSame(startEndDt.startDt))
+            && nowMoment.isBefore(startEndDt.endDt)) {
+            var endDt = moment(ranking.currentDt);
+        } else {
+            var endDt = startEndDt.endDt;
+        }
+    }
 
-	var result = {
-		'currentStartEndDt': {
-			'startDt': startEndDt.startDt,
-			'endDt': endDt
-		}
-	}
+    var result = {
+        'currentStartEndDt': {
+            'startDt': startEndDt.startDt,
+            'endDt': endDt
+        }
+    }
 
-	if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
-		var deltaUnit = Utils.genLastDtDeltaUnit(ranking.currentRangeType);
-		var last_start_dt = moment(startEndDt.startDt).subtract(1, deltaUnit);
-		var last_end_dt = moment(endDt).subtract(1, deltaUnit);
+    if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
+        var deltaUnit = Utils.genLastDtDeltaUnit(ranking.currentRangeType);
+        var last_start_dt = moment(startEndDt.startDt).subtract(1, deltaUnit);
+        var last_end_dt = moment(endDt).subtract(1, deltaUnit);
 
-		result.lastStartEndDt = {
-			'startDt': last_start_dt,
-			'endDt': last_end_dt
-		}
-	}
+        result.lastStartEndDt = {
+            'startDt': last_start_dt,
+            'endDt': last_end_dt
+        }
+    }
 
-	return result;
+    return result;
 }
 
 function updateDtPanelDtText() {
-	$(".current-dt").text(formatFromToDt(ranking.currentDt, ranking.currentRangeType));
-	if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
-		$('.compare-dt').text(formatFromToDt(ranking.lastStartDt, ranking.currentRangeType));
-	}
+    $(".current-dt").text(formatFromToDt(ranking.currentDt, ranking.currentRangeType));
+    if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
+        $('.compare-dt').text(formatFromToDt(ranking.lastStartDt, ranking.currentRangeType));
+    }
 }
 
 function getRankingData() {
-	var startEndDtInfo = genStartEndDtInfo();
-	var requestData = {
-		grouped_source_infos: JSON.stringify(ranking.entrakSystem.getGroupedSourceInfos()),
-		range_type: Utils.API_RANGE_TYPES[ranking.currentRangeType],
-		unit_category_code: ranking.currentUnit.code,
-		has_detail_rate: ranking.currentUnit.hasDetailRate,
-		global_rate: ranking.currentUnit.globalRate,
-		start_dt: startEndDtInfo.currentStartEndDt.startDt.unix(),
-		end_dt: startEndDtInfo.currentStartEndDt.endDt.unix(),
-		ranking_type: ranking.currentRankingType
-	};
+    var startEndDtInfo = genStartEndDtInfo();
+    var requestData = {
+        grouped_source_infos: JSON.stringify(ranking.entrakSystem.getGroupedSourceInfos()),
+        range_type: Utils.API_RANGE_TYPES[ranking.currentRangeType],
+        unit_category_code: ranking.currentUnit.code,
+        has_detail_rate: ranking.currentUnit.hasDetailRate,
+        global_rate: ranking.currentUnit.globalRate,
+        start_dt: startEndDtInfo.currentStartEndDt.startDt.unix(),
+        end_dt: startEndDtInfo.currentStartEndDt.endDt.unix(),
+        ranking_type: ranking.currentRankingType
+    };
 
-	if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
-		requestData.last_start_dt = startEndDtInfo.lastStartEndDt.startDt.unix();
-		requestData.last_end_dt = startEndDtInfo.lastStartEndDt.endDt.unix();
-		ranking.lastStartDt = startEndDtInfo.lastStartEndDt.startDt;
-	}
+    if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
+        requestData.last_start_dt = startEndDtInfo.lastStartEndDt.startDt.unix();
+        requestData.last_end_dt = startEndDtInfo.lastStartEndDt.endDt.unix();
+        ranking.lastStartDt = startEndDtInfo.lastStartEndDt.startDt;
+    }
 
-	$.ajax({
-		type: "POST",
-		url: "{% url 'ranking_data' system_code=systems.0.code %}",
-		data: requestData,
-	}).done(function(data) {
-		finishReceiveRankData(data);
-	}).fail(function(jqXHR, textStatus) {
-		console.log(jqXHR.responseText);
-	});
+    $.ajax({
+        type: "POST",
+        url: "{% url 'ranking_data' system_code=systems.0.code %}",
+        data: requestData,
+    }).done(function(data) {
+        finishReceiveRankData(data);
+    }).fail(function(jqXHR, textStatus) {
+        console.log(jqXHR.responseText);
+    });
 }
 
 function setRankingColorThemeForVal(targetVal, colorTheme) {
-	var targetRow = $('.ranking-item[value="' + targetVal + '"]');
-	targetRow.find('.rank-meter-bar-inner').css('background', COLOR_THEME_INFO[colorTheme].barBg);
-	targetRow.find('.rank-cover-img').attr('src', COLOR_THEME_INFO[colorTheme].coverImg);
+    var targetRow = $('.ranking-item[value="' + targetVal + '"]');
+    targetRow.find('.rank-meter-bar-inner').css('background', COLOR_THEME_INFO[colorTheme].barBg);
+    targetRow.find('.rank-cover-img').attr('src', COLOR_THEME_INFO[colorTheme].coverImg);
 }
 
 function finishReceiveRankData(data) {
-	if (ranking.currentSortBy === RANKING_SORT_BY_VAL_DESC) {
-		data.sort(function(a, b) {
-			return b.value - a.value;
-		});
-	} else if (ranking.currentSortBy === RANKING_SORT_BY_VAL_ASC) {
-		data.sort(function(a, b) {
-			return a.value - b.value;
-		})
-	} else if (ranking.currentSortBy === RANKING_SORT_BY_ALPHABET) {
-		data.sort(function(a, b) {
-			if(a.name < b.name) {
-				return -1;
-			} else {
-				return 1;
-			}
-		})
-	}
+    if (ranking.currentSortBy === RANKING_SORT_BY_VAL_DESC) {
+        data.sort(function(a, b) {
+            return b.value - a.value;
+        });
+    } else if (ranking.currentSortBy === RANKING_SORT_BY_VAL_ASC) {
+        data.sort(function(a, b) {
+            return a.value - b.value;
+        })
+    } else if (ranking.currentSortBy === RANKING_SORT_BY_ALPHABET) {
+        data.sort(function(a, b) {
+            if(a.name < b.name) {
+                return -1;
+            } else {
+                return 1;
+            }
+        })
+    }
 
-	ranking.rankingData = data;
+    ranking.rankingData = data;
 
-	var maxValue = data.reduce(function (prevVal, currentItem, idx, array) {
-		return (prevVal < Math.abs(currentItem.value)) ? Math.abs(currentItem.value) : prevVal;
-	}, 0);
-	var barBoundValue = maxValue*1.1;
+    var maxValue = data.reduce(function (prevVal, currentItem, idx, array) {
+        return (prevVal < Math.abs(currentItem.value)) ? Math.abs(currentItem.value) : prevVal;
+    }, 0);
+    var barBoundValue = maxValue*1.1;
 
-	if (ranking.currentRankingType === RANKING_TYPE_TOTAL
-		|| ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
-		var templateSelector = '#total-rank-template';
-	} else if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
-		var templateSelector = '#percent-rank-template';
-	}
-	var template = $(templateSelector).html();
-	Mustache.parse(template);
+    if (ranking.currentRankingType === RANKING_TYPE_TOTAL
+        || ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
+        var templateSelector = '#total-rank-template';
+    } else if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
+        var templateSelector = '#percent-rank-template';
+    }
+    var template = $(templateSelector).html();
+    Mustache.parse(template);
 
-	var barBoundPercent, barPositiveLeft, barNegativeRight, barMidSeparatorLeft;
-	if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
-		var maxPercentVal = data.reduce(function(prevVal, item) {
-			return Math.max(prevVal, item.value);
-		}, 0);
-		var minPercentVal = data.reduce(function(prevVal, item) {
-			return Math.min(prevVal, item.value);
-		}, 0);
-		barBoundPercent = (maxPercentVal*1.05 + Math.abs(minPercentVal)*1.05);
-		var separatePercent = maxPercentVal*1.05;
-		barMidSeparatorLeft = (1 - (separatePercent/barBoundPercent))*METER_WIDTH - METER_MID_SEPARATOR_WIDTH/2;
-		barPositiveLeft = barMidSeparatorLeft + METER_MID_SEPARATOR_WIDTH;
-		barPositiveRight = METER_WIDTH - barMidSeparatorLeft;
-	}
+    var barBoundPercent, barPositiveLeft, barNegativeRight, barMidSeparatorLeft;
+    if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
+        var maxPercentVal = data.reduce(function(prevVal, item) {
+            return Math.max(prevVal, item.value);
+        }, 0);
+        var minPercentVal = data.reduce(function(prevVal, item) {
+            return Math.min(prevVal, item.value);
+        }, 0);
+        barBoundPercent = (maxPercentVal*1.05 + Math.abs(minPercentVal)*1.05);
+        var separatePercent = maxPercentVal*1.05;
+        barMidSeparatorLeft = (1 - (separatePercent/barBoundPercent))*METER_WIDTH - METER_MID_SEPARATOR_WIDTH/2;
+        barPositiveLeft = barMidSeparatorLeft + METER_MID_SEPARATOR_WIDTH;
+        barPositiveRight = METER_WIDTH - barMidSeparatorLeft;
+    }
 
-	var itemContainer = $("#ranking-item-container");
-	itemContainer.empty();
-	$.each(data, function(idx, item) {
-		var matchSystem = ranking.entrakSystem.systemTree.find(function (node) {
-			return node.data.code == item.code;
-		});
+    var itemContainer = $("#ranking-item-container");
+    itemContainer.empty();
+    $.each(data, function(idx, item) {
+        var matchSystem = ranking.entrakSystem.systemTree.find(function (node) {
+            return node.data.code == item.code;
+        });
 
-		var logoUrl = (matchSystem !== null) ? matchSystem.data.logo : "{% static 'images/ranking/src-default.png' %}";
+        var logoUrl = (matchSystem !== null) ? matchSystem.data.logo : "{% static 'images/ranking/src-default.png' %}";
 
-		var info = {
-			topPos: idx*RANKING_ITEM_HEIGHT,
-			value: item.value,
-			rankName: item.name,
-			rankDigit: (idx + 1),
-			logoUrl: logoUrl
-		};
+        var info = {
+            topPos: idx*RANKING_ITEM_HEIGHT,
+            value: item.value,
+            rankName: item.name,
+            rankDigit: (idx + 1),
+            logoUrl: logoUrl
+        };
 
-		if (ranking.currentRankingType === RANKING_TYPE_TOTAL
-			|| ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
+        if (ranking.currentRankingType === RANKING_TYPE_TOTAL
+            || ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
 
-			var valueText = Utils.formatWithCommas(Utils.fixedDecBaseOnVal(item.value));
-			if (ranking.currentUnit.isSuffix) {
-				valueText += ' '+'<span>'+ranking.currentUnit.shortDescInfo[ranking.langCode]+'</span>';
-			} else {
-				valueText = '<span>'+ranking.currentUnit.shortDescInfo[ranking.langCode]+'</span>'+' '+valueText;
-			}
-			if (ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
-				valueText += '<span>{% trans "/person" %}</span>';
-			}
+            var valueText = Utils.formatWithCommas(Utils.fixedDecBaseOnVal(item.value));
+            if (ranking.currentUnit.isSuffix) {
+                valueText += ' '+'<span>'+ranking.currentUnit.shortDescInfo[ranking.langCode]+'</span>';
+            } else {
+                valueText = '<span>'+ranking.currentUnit.shortDescInfo[ranking.langCode]+'</span>'+' '+valueText;
+            }
+            if (ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
+                valueText += '<span>{% trans "/person" %}</span>';
+            }
 
-			var meterWidth = item.value/barBoundValue*100;
+            var meterWidth = item.value/barBoundValue*100;
 
-		} else if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
-			var meterWidth = Math.abs(item.value/barBoundPercent*100);
-			if (item.value >= 0) {
-				var meterContainerClass = "rank-positive";
-				var valueText = "+"+Utils.fixedDecBaseOnVal(item.value)+"%";
-				info['meterLeft'] = barPositiveLeft;
-				var indicatorLeft = barMidSeparatorLeft + (METER_WIDTH*(meterWidth/100)) + INDICATOR_POSITIVE_OFFSET;
-			} else {
-				var meterContainerClass = "rank-negative";
-				var valueText = Utils.fixedDecBaseOnVal(item.value)+"%";
-				info['meterRight'] = barPositiveRight;
-				var indicatorLeft = barMidSeparatorLeft - (METER_WIDTH*(meterWidth/100)) + INDICATOR_NEGATIVE_OFFSET;
-			}
+        } else if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
+            var meterWidth = Math.abs(item.value/barBoundPercent*100);
+            if (item.value >= 0) {
+                var meterContainerClass = "rank-positive";
+                var valueText = "+"+Utils.fixedDecBaseOnVal(item.value)+"%";
+                info['meterLeft'] = barPositiveLeft;
+                var indicatorLeft = barMidSeparatorLeft + (METER_WIDTH*(meterWidth/100)) + INDICATOR_POSITIVE_OFFSET;
+            } else {
+                var meterContainerClass = "rank-negative";
+                var valueText = Utils.fixedDecBaseOnVal(item.value)+"%";
+                info['meterRight'] = barPositiveRight;
+                var indicatorLeft = barMidSeparatorLeft - (METER_WIDTH*(meterWidth/100)) + INDICATOR_NEGATIVE_OFFSET;
+            }
 
-			info['meterContainerClass'] = meterContainerClass;
-			info['meterMidSeparatorLeft'] = barMidSeparatorLeft + METER_MID_SEPARATOR_PADDING;
-			info['indicatorLeft'] = indicatorLeft;
-		}
+            info['meterContainerClass'] = meterContainerClass;
+            info['meterMidSeparatorLeft'] = barMidSeparatorLeft + METER_MID_SEPARATOR_PADDING;
+            info['indicatorLeft'] = indicatorLeft;
+        }
 
-		info['meterWidth'] = meterWidth;
-		info['valueText'] = valueText;
+        info['meterWidth'] = meterWidth;
+        info['valueText'] = valueText;
 
-		var rankingEleHtml = Mustache.render(template, info);
-		itemContainer.append(rankingEleHtml);
-	});
+        var rankingEleHtml = Mustache.render(template, info);
+        itemContainer.append(rankingEleHtml);
+    });
 
-	if (ranking.currentRankingType === RANKING_TYPE_TOTAL
-		|| ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
-		var dataVals = [];
-		$.each(data, function(idx, item){
-			dataVals.push(item.value);
-		});
-		$.unique(dataVals);
-		dataVals.sort(function(a, b) {
-			return a - b;
-		});
-		setRankingColorThemeForVal(dataVals.shift(), COLOR_THEME_GREENEST);
-		setRankingColorThemeForVal(dataVals.pop(), COLOR_THEME_RED);
-		setRankingColorThemeForVal(dataVals.shift(), COLOR_THEME_GREENER);
-		setRankingColorThemeForVal(dataVals.pop(), COLOR_THEME_ORANGE);
-		$.each(dataVals, function(idx, dataVal){
-			setRankingColorThemeForVal(dataVal, COLOR_THEME_MIDDLE);
-		});
-	}
+    if (ranking.currentRankingType === RANKING_TYPE_TOTAL
+        || ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
+        var dataVals = [];
+        $.each(data, function(idx, item){
+            dataVals.push(item.value);
+        });
+        $.unique(dataVals);
+        dataVals.sort(function(a, b) {
+            return a - b;
+        });
+        setRankingColorThemeForVal(dataVals.shift(), COLOR_THEME_GREENEST);
+        setRankingColorThemeForVal(dataVals.pop(), COLOR_THEME_RED);
+        setRankingColorThemeForVal(dataVals.shift(), COLOR_THEME_GREENER);
+        setRankingColorThemeForVal(dataVals.pop(), COLOR_THEME_ORANGE);
+        $.each(dataVals, function(idx, dataVal){
+            setRankingColorThemeForVal(dataVal, COLOR_THEME_MIDDLE);
+        });
+    }
 }
 
 function formatFromToDt(targetDt, rangeType) {
-	var startEndDt = Utils.genStartEndDt(targetDt, rangeType);
+    var startEndDt = Utils.genStartEndDt(targetDt, rangeType);
 
-	var resultText = '';
-	if (rangeType === Utils.RANGE_TYPE_HOUR) {
-		resultText = startEndDt.startDt.format('{% trans "D MMM YYYY, ddd hA" %}');
-		resultText += startEndDt.endDt.format('{% trans " - hA" %}');
-	} else if (rangeType === Utils.RANGE_TYPE_DAY || rangeType === Utils.RANGE_TYPE_WEEK) {
-		resultText = startEndDt.startDt.format('{% trans " D MMM YYYY, ddd" %}');
-	} else if (rangeType === Utils.RANGE_TYPE_NIGHT) {
-		resultText = startEndDt.startDt.format('{% trans "[Night of] D MMM YYYY, ddd" %}');
-	} else if (rangeType === Utils.RANGE_TYPE_MONTH) {
-		resultText = startEndDt.startDt.format('{% trans "MMM YYYY" %}');
-	} else if (rangeType === Utils.RANGE_TYPE_YEAR) {
-		resultText = startEndDt.startDt.format('{% trans "YYYY" %}');
-	}
+    var resultText = '';
+    if (rangeType === Utils.RANGE_TYPE_HOUR) {
+        resultText = startEndDt.startDt.format('{% trans "D MMM YYYY, ddd hA" %}');
+        resultText += startEndDt.endDt.format('{% trans " - hA" %}');
+    } else if (rangeType === Utils.RANGE_TYPE_DAY || rangeType === Utils.RANGE_TYPE_WEEK) {
+        resultText = startEndDt.startDt.format('{% trans " D MMM YYYY, ddd" %}');
+    } else if (rangeType === Utils.RANGE_TYPE_NIGHT) {
+        resultText = startEndDt.startDt.format('{% trans "[Night of] D MMM YYYY, ddd" %}');
+    } else if (rangeType === Utils.RANGE_TYPE_MONTH) {
+        resultText = startEndDt.startDt.format('{% trans "MMM YYYY" %}');
+    } else if (rangeType === Utils.RANGE_TYPE_YEAR) {
+        resultText = startEndDt.startDt.format('{% trans "YYYY" %}');
+    }
 
-	if (rangeType === Utils.RANGE_TYPE_WEEK) {
-		if (ranking.langCode === 'zh-tw') {
-			resultText = '從' + resultText + '開始';
-		} else {
-			resultText = 'Week starting ' + resultText;
-		}
-	}
+    if (rangeType === Utils.RANGE_TYPE_WEEK) {
+        if (ranking.langCode === 'zh-tw') {
+            resultText = '從' + resultText + '開始';
+        } else {
+            resultText = 'Week starting ' + resultText;
+        }
+    }
 
-	return resultText;
+    return resultText;
 }
 
 function sortRankingItem(sortType) {
-	var rankingItems = $("#ranking-item-container>div");
-	if (sortType === RANKING_SORT_BY_VAL_DESC) {
-		rankingItems.tsort({order: 'desc', attr: 'value'});
-	} else if (sortType === RANKING_SORT_BY_VAL_ASC) {
-		rankingItems.tsort({order: 'asc', attr: 'value'});
-	} else if (sortType === RANKING_SORT_BY_ALPHABET) {
-		rankingItems.tsort('.rank-name', {order: 'asc'});
-	}
+    var rankingItems = $("#ranking-item-container>div");
+    if (sortType === RANKING_SORT_BY_VAL_DESC) {
+        rankingItems.tsort({order: 'desc', attr: 'value'});
+    } else if (sortType === RANKING_SORT_BY_VAL_ASC) {
+        rankingItems.tsort({order: 'asc', attr: 'value'});
+    } else if (sortType === RANKING_SORT_BY_ALPHABET) {
+        rankingItems.tsort('.rank-name', {order: 'asc'});
+    }
 
-	rankingItems.each(function(idx, ele) {
-		var rankingItem = $(ele);
-		rankingItem.find(".rank-digit").text(idx+1);
-		rankingItem.css({
-			position: 'absolute',
-			top: rankingItem.position().top
-		}).animate({
-			top: idx*RANKING_ITEM_HEIGHT
-		}, 500);
-	});
+    rankingItems.each(function(idx, ele) {
+        var rankingItem = $(ele);
+        rankingItem.find(".rank-digit").text(idx+1);
+        rankingItem.css({
+            position: 'absolute',
+            top: rankingItem.position().top
+        }).animate({
+            top: idx*RANKING_ITEM_HEIGHT
+        }, 500);
+    });
 }
 
 $(function() {
-	setupAjaxForCsrf($.cookie('csrftoken'));
-	ranking.langCode = '{{LANGUAGE_CODE}}';
-	moment.locale(ranking.langCode);
+    setupAjaxForCsrf($.cookie('csrftoken'));
+    ranking.langCode = '{{LANGUAGE_CODE}}';
+    moment.locale(ranking.langCode);
 
-	ranking.entrakSystem = new EntrakSystem();
-	ranking.entrakSystem.langCode = ranking.langCode;
-	ranking.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
-	ranking.entrakSystem.addSourceToSystem('{{sources|jsonifySources}}');
+    ranking.entrakSystem = new EntrakSystem();
+    ranking.entrakSystem.langCode = ranking.langCode;
+    ranking.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
+    ranking.entrakSystem.addSourceToSystem('{{sources|jsonifySources}}');
 
-	ranking.timezone = '{{systems.0.timezone}}';
-	ranking.firstRecord = moment.unix(ranking.entrakSystem.systemTree.data.firstRecord).tz(ranking.timezone);
+    ranking.timezone = '{{systems.0.timezone}}';
+    ranking.firstRecord = moment.unix(ranking.entrakSystem.systemTree.data.firstRecord).tz(ranking.timezone);
 
-	ranking.currentDt = Utils.getNowMoment('minute');
-	ranking.currentRangeType = Utils.RANGE_TYPE_DAY;
-	ranking.currentRankingType = RANKING_TYPE_TOTAL;
-	ranking.currentSortBy = RANKING_SORT_BY_VAL_DESC;
+    ranking.currentDt = Utils.getNowMoment('minute');
+    ranking.currentRangeType = Utils.RANGE_TYPE_DAY;
+    ranking.currentRankingType = RANKING_TYPE_TOTAL;
+    ranking.currentSortBy = RANKING_SORT_BY_VAL_DESC;
 
-	var subMenuPanel = $(".drop-down-panel-content ul");
-	$(".panel-header-left-menu h3").each(function (eleIdx) {
-		$(this).click({connectedPanel: subMenuPanel[eleIdx]}, function (event) {
-			$(".panel-header-left-menu h3").removeClass('selected-tab');
-			$(this).addClass('selected-tab');
+    var subMenuPanel = $(".drop-down-panel-content ul");
+    $(".panel-header-left-menu h3").each(function (eleIdx) {
+        $(this).click({connectedPanel: subMenuPanel[eleIdx]}, function (event) {
+            $(".panel-header-left-menu h3").removeClass('selected-tab');
+            $(this).addClass('selected-tab');
 
-			var connectedPanel = $(event.data.connectedPanel);
-			if (!(connectedPanel.hasClass('selected-submenu'))) {
-				subMenuPanel.filter(".selected-submenu").removeClass('selected-submenu').hide();
-				connectedPanel.addClass('selected-submenu').fadeIn();
-			}
+            var connectedPanel = $(event.data.connectedPanel);
+            if (!(connectedPanel.hasClass('selected-submenu'))) {
+                subMenuPanel.filter(".selected-submenu").removeClass('selected-submenu').hide();
+                connectedPanel.addClass('selected-submenu').fadeIn();
+            }
 
-			$(".drop-down-panel-content").height("95px");
+            $(".drop-down-panel-content").height("95px");
 
-			var menuLinks = $('.drop-down-panel-content');
-			if (menuLinks.css("display") === 'none') {
-				menuLinks.slideToggle(700, "easeOutBounce", function() {});
-				$('.expand-drop-down-panel-btn').css({transform: 'rotate(180deg)'});
-			}
-		});
-	});
-	$('#sub-menu-unit').addClass('selected-tab');
-	$("#unit-choice").addClass('selected-submenu').show();
+            var menuLinks = $('.drop-down-panel-content');
+            if (menuLinks.css("display") === 'none') {
+                menuLinks.slideToggle(700, "easeOutBounce", function() {});
+                $('.expand-drop-down-panel-btn').css({transform: 'rotate(180deg)'});
+            }
+        });
+    });
+    $('#sub-menu-unit').addClass('selected-tab');
+    $("#unit-choice").addClass('selected-submenu').show();
 
-	ranking.unitCategorys = JSON.parse('{{unit_categorys|jsonifyUnitCategorys}}');
-	ranking.currentUnit = ranking.unitCategorys[0];
-	Utils.setupUnitChoiceLayout('#unit-choice', ranking.unitCategorys, '{% get_static_prefix %}', function(unitCategory) {
-		if (ranking.currentUnit.code !== unitCategory.code) {
-			ranking.currentUnit = unitCategory;
-			getRankingData();
+    ranking.unitCategorys = JSON.parse('{{unit_categorys|jsonifyUnitCategorys}}');
+    ranking.currentUnit = ranking.unitCategorys[0];
+    Utils.setupUnitChoiceLayout('#unit-choice', ranking.unitCategorys, '{% get_static_prefix %}', function(unitCategory) {
+        if (ranking.currentUnit.code !== unitCategory.code) {
+            ranking.currentUnit = unitCategory;
+            getRankingData();
 
-			if (unitCategory.code === 'walkingtrip'
-				|| unitCategory.code === 'biketrip'
-				|| unitCategory.code === 'taxitrip') {
+            if (unitCategory.code === 'walkingtrip'
+                || unitCategory.code === 'biketrip'
+                || unitCategory.code === 'taxitrip') {
 
-				$('.trip-unit-desc').show().text(unitCategory.nameInfo[ranking.langCode]);
-			} else {
-				$('.trip-unit-desc').hide();
-			};
-		}
-	});
+                $('.trip-unit-desc').show().text(unitCategory.nameInfo[ranking.langCode]);
+            } else {
+                $('.trip-unit-desc').hide();
+            };
+        }
+    });
 
-	Utils.setupTimeChoiceLayout('#time-choice', function(newRangeType) {
-		if (ranking.currentRangeType !== newRangeType) {
-			ranking.currentRangeType = newRangeType;
-			getRankingData();
-			updateDtPanelDtText();
-		}
-	});
+    Utils.setupTimeChoiceLayout('#time-choice', function(newRangeType) {
+        if (ranking.currentRangeType !== newRangeType) {
+            ranking.currentRangeType = newRangeType;
+            getRankingData();
+            updateDtPanelDtText();
+        }
+    });
 
-	Date.parseDate = function( input, format ){
-		return moment(input,format).toDate();
-	};
-	Date.prototype.dateFormat = function( format ){
-		return moment(this).format(format);
-	};
+    Date.parseDate = function( input, format ){
+        return moment(input,format).toDate();
+    };
+    Date.prototype.dateFormat = function( format ){
+        return moment(this).format(format);
+    };
 
-	var dtPickerFormat = '{% trans "D MMM YYYY, dddd" %}';
-	$("#current-dt-picker").datetimepicker({
-		format: dtPickerFormat,
-		formatTime: "h:mm a",
-		formatDate: "DD.MM.YYYY",
-		scrollMonth: false,
-		timepicker: false,
-		minDate: ranking.firstRecord.toDate(),
-		maxDate: 0,
-		onSelectDate: function(input) {
-			var nowMoment = Utils.getNowMoment();
-			ranking.currentDt = moment(input).startOf('minute');
-			ranking.currentDt.hour(nowMoment.hour());
-			getRankingData();
-			updateDtPanelDtText();
-		}
-	});
-	$("#custom-calendar-icon").click(function () {
-		$('#current-dt-picker').datetimepicker('show');
-	})
+    var dtPickerFormat = '{% trans "D MMM YYYY, dddd" %}';
+    $("#current-dt-picker").datetimepicker({
+        format: dtPickerFormat,
+        formatTime: "h:mm a",
+        formatDate: "DD.MM.YYYY",
+        scrollMonth: false,
+        timepicker: false,
+        minDate: ranking.firstRecord.toDate(),
+        maxDate: 0,
+        onSelectDate: function(input) {
+            var nowMoment = Utils.getNowMoment();
+            ranking.currentDt = moment(input).startOf('minute');
+            ranking.currentDt.hour(nowMoment.hour());
+            getRankingData();
+            updateDtPanelDtText();
+        }
+    });
+    $("#custom-calendar-icon").click(function () {
+        $('#current-dt-picker').datetimepicker('show');
+    })
 
-	$(".panel-header-right-menu h3:not(.sort-by-btn)").click(function(event) {
-		var newRankingType = $(this).attr('ranking-type');
-		if (ranking.currentRankingType !== newRankingType) {
-			ranking.currentRankingType = newRankingType;
-			$(".panel-header-right-menu h3").removeClass('selected-submenu');
-			$(this).addClass('selected-submenu');
-			getRankingData();
+    $(".panel-header-right-menu h3:not(.sort-by-btn)").click(function(event) {
+        var newRankingType = $(this).attr('ranking-type');
+        if (ranking.currentRankingType !== newRankingType) {
+            ranking.currentRankingType = newRankingType;
+            $(".panel-header-right-menu h3").removeClass('selected-submenu');
+            $(this).addClass('selected-submenu');
+            getRankingData();
 
-			if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
-				$('.dt-panel-hypen').css('display', 'inline-block');
-				$('.dt-panel-compare-with').css('display', 'inline-block');
-				$('.compare-dt').text(formatFromToDt(ranking.lastStartDt, ranking.currentRangeType));
-			} else {
-				$('.dt-panel-hypen').hide();
-				$('.dt-panel-compare-with').hide();
-			}
-		}
-	});
-	$(".panel-header-right-menu [ranking-type='total']").addClass('selected-submenu');
+            if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
+                $('.dt-panel-hypen').css('display', 'inline-block');
+                $('.dt-panel-compare-with').css('display', 'inline-block');
+                $('.compare-dt').text(formatFromToDt(ranking.lastStartDt, ranking.currentRangeType));
+            } else {
+                $('.dt-panel-hypen').hide();
+                $('.dt-panel-compare-with').hide();
+            }
+        }
+    });
+    $(".panel-header-right-menu [ranking-type='total']").addClass('selected-submenu');
 
-	Utils.setupDropDownPanelBtn();
+    Utils.setupDropDownPanelBtn();
 
-	$(".sort-by-btn, .sort-menu li").hover(
-		function() {
-			$(".sort-menu").stop().slideDown(150);
-		},
-		function() {
-			$(".sort-menu").stop().slideUp(150);
-		}
-	);
-	var sortTypes = [RANKING_SORT_BY_VAL_DESC, RANKING_SORT_BY_VAL_ASC, RANKING_SORT_BY_ALPHABET];
-	$(".sort-menu li").each(function(idx) {
-		$(this).attr('sort-type', sortTypes[idx]);
-	});
-	$(".sort-menu li").click(function() {
-		$('#sort-by-text').text($(this).text());
-		var sortType = $(this).attr('sort-type');
-		ranking.currentSortBy = sortType;
-		sortRankingItem(ranking.currentSortBy);
-	});
+    $(".sort-by-btn, .sort-menu li").hover(
+        function() {
+            $(".sort-menu").stop().slideDown(150);
+        },
+        function() {
+            $(".sort-menu").stop().slideUp(150);
+        }
+    );
+    var sortTypes = [RANKING_SORT_BY_VAL_DESC, RANKING_SORT_BY_VAL_ASC, RANKING_SORT_BY_ALPHABET];
+    $(".sort-menu li").each(function(idx) {
+        $(this).attr('sort-type', sortTypes[idx]);
+    });
+    $(".sort-menu li").click(function() {
+        $('#sort-by-text').text($(this).text());
+        var sortType = $(this).attr('sort-type');
+        ranking.currentSortBy = sortType;
+        sortRankingItem(ranking.currentSortBy);
+    });
 
-	getRankingData();
-	updateDtPanelDtText();
+    getRankingData();
+    updateDtPanelDtText();
 });
 </script>
 {% endblock %}
 
 {% block page_content %}
 <div class="panel-component">
-	<div id="ranking-panel-header" class="drop-down-panel-header">
-		<!-- Sub Menu Item -->
-		<div class="panel-header-left-menu">
-			<!-- write this way to remove space between inline-blocks -->
-			<!-- http://css-tricks.com/fighting-the-space-between-inline-block-elements/ -->
-			<h3 id="sub-menu-unit">
-				{% trans "Unit" %}</h3><h3 id="sub-menu-time">
-				{% trans "Time" %}</h3>
-			<img class="expand-drop-down-panel-btn" src="{% static 'images/expandable_button.png' %}">
+    <div id="ranking-panel-header" class="drop-down-panel-header">
+        <!-- Sub Menu Item -->
+        <div class="panel-header-left-menu">
+            <!-- write this way to remove space between inline-blocks -->
+            <!-- http://css-tricks.com/fighting-the-space-between-inline-block-elements/ -->
+            <h3 id="sub-menu-unit">
+                {% trans "Unit" %}</h3><h3 id="sub-menu-time">
+                {% trans "Time" %}</h3>
+            <img class="expand-drop-down-panel-btn" src="{% static 'images/expandable_button.png' %}">
 
-		</div>
+        </div>
 
-		<div class="panel-header-right-menu">
-			<h3 ranking-type='percent'>{% blocktrans %}% Change{% endblocktrans %}</h3>
-			<h3 ranking-type='per_person'>{% trans "Per person" %}</h3>
-			<h3 ranking-type='total'>{% trans "Total" %}</h3>
-			<h3 class='sort-by-btn'><span id="sort-by-text">{% trans "Sort by" %}</span> &nbsp;&nbsp; &#9662;</h3>
-			<span style='clear: both;'></span>
+        <div class="panel-header-right-menu">
+            <h3 ranking-type='percent'>{% blocktrans %}% Change{% endblocktrans %}</h3>
+            <h3 ranking-type='per_person'>{% trans "Per person" %}</h3>
+            <h3 ranking-type='total'>{% trans "Total" %}</h3>
+            <h3 class='sort-by-btn'><span id="sort-by-text">{% trans "Sort by" %}</span> &nbsp;&nbsp; &#9662;</h3>
+            <span style='clear: both;'></span>
 
-			<ul class="sort-menu">
-				<li>{% trans "Descending" %}</li>
-				<li>{% trans "Ascending" %}</li>
-				<li>{% trans "Alphabetical" %}</li>
-			</ul>
-		</div>
-	</div>
+            <ul class="sort-menu">
+                <li>{% trans "Descending" %}</li>
+                <li>{% trans "Ascending" %}</li>
+                <li>{% trans "Alphabetical" %}</li>
+            </ul>
+        </div>
+    </div>
 
-	<div class="drop-down-panel-content">
-		<ul id="unit-choice"></ul>
-		<ul id="time-choice">
-			<div id="select-dt-section">
-				<div id="custom-select-title">{% trans "CUSTOM SELECT" %}</div>
-				<div id="custom-calendar-icon"></div>
-				<input type="text" id="current-dt-picker">
-			</div>
-		</ul>
-		<p class='trip-unit-desc'></p>
-	</div>
+    <div class="drop-down-panel-content">
+        <ul id="unit-choice"></ul>
+        <ul id="time-choice">
+            <div id="select-dt-section">
+                <div id="custom-select-title">{% trans "CUSTOM SELECT" %}</div>
+                <div id="custom-calendar-icon"></div>
+                <input type="text" id="current-dt-picker">
+            </div>
+        </ul>
+        <p class='trip-unit-desc'></p>
+    </div>
 
-	<div class="panel-separator"></div>
+    <div class="panel-separator"></div>
 
-	<div class="dt-panel">
-		<div class="dt-panel-separator"></div>
-		<div class="dt-panel-center-block">
-			<div class="dt-panel-used-on dt-content-block">
-				<div class="dt-panel-title">{% trans "Energy Used on" %}</div>
-				<div class="dt-text current-dt"></div>
-			</div>
-			<div class="dt-panel-hypen">-</div>
-			<div class="dt-panel-compare-with dt-content-block">
-				<div class="dt-panel-title">{% trans "Compared with" %}</div>
-				<div class="dt-text compare-dt"></div>
-			</div>
-		</div>
-	</div>
+    <div class="dt-panel">
+        <div class="dt-panel-separator"></div>
+        <div class="dt-panel-center-block">
+            <div class="dt-panel-used-on dt-content-block">
+                <div class="dt-panel-title">{% trans "Energy Used on" %}</div>
+                <div class="dt-text current-dt"></div>
+            </div>
+            <div class="dt-panel-hypen">-</div>
+            <div class="dt-panel-compare-with dt-content-block">
+                <div class="dt-panel-title">{% trans "Compared with" %}</div>
+                <div class="dt-text compare-dt"></div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div id="ranking-item-container" class="panel-component"></div>

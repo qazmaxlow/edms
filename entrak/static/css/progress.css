@@ -1,198 +1,198 @@
 #page-container {
-	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 
 .main-saving-container {
-	width: 100%;
-	position: relative;
+    width: 100%;
+    position: relative;
 }
 
 .saving-header {
-	position: absolute;
-	width: 100%;
-	font-size: 0px;
+    position: absolute;
+    width: 100%;
+    font-size: 0px;
 }
 .saving-header>div {
-	display: inline-block;
-	width: 49.9%;
-	height: 120px;
-	vertical-align: top;
+    display: inline-block;
+    width: 49.9%;
+    height: 120px;
+    vertical-align: top;
 }
 .saving-consumption {
-	background-color: rgba(242, 249, 251, 0.95);
-	border-bottom: 1px solid rgba(156, 207, 218, 0.95);
-	border-right: 1px solid rgba(224,239,242, 0.95);
+    background-color: rgba(242, 249, 251, 0.95);
+    border-bottom: 1px solid rgba(156, 207, 218, 0.95);
+    border-right: 1px solid rgba(224,239,242, 0.95);
 }
 .saving-consumption>h2 {
-	padding-top: 40px;
-	font-size: 16pt;
-	color: #354960;
-	font-weight: bold;
-	text-align: center;
+    padding-top: 40px;
+    font-size: 16pt;
+    color: #354960;
+    font-weight: bold;
+    text-align: center;
 }
 .saving-consumption>div {
-	font-size: 23pt;
-	font-weight: bold;
-	margin-top: 10px;
-	text-align: center;
+    font-size: 23pt;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
 }
 
 .saving-percent-symbol {
-	font-size: 16pt;
+    font-size: 16pt;
 }
 
 .saving-consumption .positive-saving {
-	color: #81D51D;
+    color: #81D51D;
 }
 .saving-consumption .negative-saving {
-	color: #D72335;
+    color: #D72335;
 }
 
 #target-block {
-	position: relative;
-	background-color: rgba(249, 244, 240, 0.95);
-	border-bottom: 1px solid rgba(199, 176,155, 0.95);
-	border-right: 1px solid rgba(243,241,233, 0.95);
+    position: relative;
+    background-color: rgba(249, 244, 240, 0.95);
+    border-bottom: 1px solid rgba(199, 176,155, 0.95);
+    border-right: 1px solid rgba(243,241,233, 0.95);
 }
 #target-block > div {
-	display: inline-block;
+    display: inline-block;
 }
 .medal-block {
-	position: absolute;
-	top: -10px;
-	left: 30px;
+    position: absolute;
+    top: -10px;
+    left: 30px;
 }
 .medal-block > img {
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 #archived_percentage {
-	position: absolute;
-	width: 100%;
-	top: 35px;
-	text-align: center;
-	font-size: 32px;
-	color: #81D51D;
-	font-weight: bold;
+    position: absolute;
+    width: 100%;
+    top: 35px;
+    text-align: center;
+    font-size: 32px;
+    color: #81D51D;
+    font-weight: bold;
 }
 #archived_percentage span{
-	font-size: 16pt;
+    font-size: 16pt;
 }
 .medal-text {
-	position: absolute;
-	width: 100%;
-	top: 70px;
-	color: #81D51D;
-	font-size: 11pt;
-	text-align: center;
-	line-height: 1.2em;
+    position: absolute;
+    width: 100%;
+    top: 70px;
+    color: #81D51D;
+    font-size: 11pt;
+    text-align: center;
+    line-height: 1.2em;
 }
 .target-text-container {
-	margin-left: 200px;
-	margin-top: 30px;
-	font-weight: bold;
+    margin-left: 200px;
+    margin-top: 30px;
+    font-weight: bold;
 }
 .next-target-text{
-	font-size: 16pt;
-	color: #354960;
-	padding-top: 9px;
-	text-align: center;
+    font-size: 16pt;
+    color: #354960;
+    padding-top: 9px;
+    text-align: center;
 }
 .next-target-percent{
-	padding-top: 10px;
-	font-size: 23pt;
-	color: #81D51D;
-	width: 250px;
-	margin-left: 15px;
-	text-align: center;
+    padding-top: 10px;
+    font-size: 23pt;
+    color: #81D51D;
+    width: 250px;
+    margin-left: 15px;
+    text-align: center;
 }
 
 .factory-animation-container {
-	height: 464px;
+    height: 464px;
 }
 .factory-animation {
-	margin-top: 20px;
+    margin-top: 20px;
 }
 
 .cumulative-saving-container {
-	width: 100%;
-	height: 346px;
-	background-image: url(../images/progress/factory-bg-bottom.png);
-	background-color: rgba(242, 249, 251, 0.95);
+    width: 100%;
+    height: 346px;
+    background-image: url(../images/progress/factory-bg-bottom.png);
+    background-color: rgba(242, 249, 251, 0.95);
 }
 .cumulative-saving-container hr{
-	width: 80%;
-	margin-left: auto;
-	margin-right: auto;
-	border: none;
-	height: 1px;
-	background-color: rgba(212, 229, 233, 0.9);
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    border: none;
+    height: 1px;
+    background-color: rgba(212, 229, 233, 0.9);
 }
 .cumulative-saving-info {
-	font-size: 0pt;
-	height: 260px;
-	text-align: center;
+    font-size: 0pt;
+    height: 260px;
+    text-align: center;
 }
 .cumulative-saving-title {
-	width: 80%;
-	text-align: center;
-	margin-left: auto;
-	margin-right: auto;
-	border-bottom: 1px solid #e9f2f3;
-	height: 36px;
-	font-size: 16pt;
-	font-weight: bold;
-	padding-top: 10px;
-	color: #354960;
+    width: 80%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    border-bottom: 1px solid #e9f2f3;
+    height: 36px;
+    font-size: 16pt;
+    font-weight: bold;
+    padding-top: 10px;
+    color: #354960;
 }
 .cumulative-saving-block {
-	display: inline-block;
-	width: 206px;
-	text-align: center;
-	vertical-align: top;
-	margin-top: 26px;
+    display: inline-block;
+    width: 206px;
+    text-align: center;
+    vertical-align: top;
+    margin-top: 26px;
 }
 .cumulative-text {
-	font-weight: bold;
-	font-size: 16pt;
-	line-height: 1.3em;
-	margin-top: 10px;
+    font-weight: bold;
+    font-size: 16pt;
+    line-height: 1.3em;
+    margin-top: 10px;
 }
 .cumulative-val {
-	font-size: 23pt;
+    font-size: 23pt;
 }
 
 .positive-saving .cumulative-text {
-	color: #81D51D;
+    color: #81D51D;
 }
 .negative-saving .cumulative-text {
-	color: #D72335;
+    color: #D72335;
 }
 
 .equal-symbol {
-	width: 25px;
-	height: 13px;
-	vertical-align: top;
-	margin-top: 90px;
+    width: 25px;
+    height: 13px;
+    vertical-align: top;
+    margin-top: 90px;
 }
 
 .cumulative-separator {
-	display: inline-block;
-	vertical-align: top;
-	width: 1px;
-	height: 210px;
-	background-color: #E0EFF2;
-	margin-top: 30px;
-	border-right: 1px solid #E9F2F3;
+    display: inline-block;
+    vertical-align: top;
+    width: 1px;
+    height: 210px;
+    background-color: #E0EFF2;
+    margin-top: 30px;
+    border-right: 1px solid #E9F2F3;
 }
 
 .taxi-desc {
-	width: 200px;
-	font-size: 12pt;
-	color: #354960;
-	text-align: center;
-	font-weight: bold;
-	line-height: 1.3em; 
-	margin-top: 2px;
+    width: 200px;
+    font-size: 12pt;
+    color: #354960;
+    text-align: center;
+    font-weight: bold;
+    line-height: 1.3em; 
+    margin-top: 2px;
 }
