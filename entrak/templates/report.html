@@ -581,9 +581,22 @@ $(function() {
         $(".download-pdf-form").submit();
     });
 
+    $(".save-summary-report-btn").click(function() {
+        $(".download-pdf-form input[name='start_timestamp']").attr("value", report.currentDt.unix());
+        $(".download-pdf-form input[name='report_type']").attr("value", report.currentReportType);
+        $(".download-pdf-form input[name='report_layout']").attr("value", 'summary');
+        if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+            $(".download-pdf-form input[name='end_timestamp']").attr("value", moment(report.customMonthEndDt).add(1, 'd').unix());
+        } else {
+            $(".download-pdf-form input[name='end_timestamp']").attr("value", 0);
+        }
+        $(".download-pdf-form").submit();
+    });
+
     $(".save-report-btn, .bottom-save-report-btn").click(function() {
         $(".download-pdf-form input[name='start_timestamp']").attr("value", report.currentDt.unix());
         $(".download-pdf-form input[name='report_type']").attr("value", report.currentReportType);
+        $(".download-pdf-form input[name='report_layout']").attr("value", 'detail');
         if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
             $(".download-pdf-form input[name='end_timestamp']").attr("value", moment(report.customMonthEndDt).add(1, 'd').unix());
         } else {
@@ -833,11 +846,12 @@ $(function() {
 </div>
 
 <div class="report-head">
-    <div class="system-name">{{systems.0|get_system_full_name:LANGUAGE_CODE}}</div>
-    <hr class="title-separator">
-    <div class="report-name"></div>
-    <div class="save-report-btn">{% trans "Save Report" %}</div>
-    <hr class="head-separator">
+        <div class="system-name">{{systems.0|get_system_full_name:LANGUAGE_CODE}}</div>
+        <hr class="title-separator">
+        <div class="report-name"></div>
+        <div class="save-report-btn">{% trans "Save Report" %}</div>
+        <div class="save-summary-report-btn">{% trans "Save Summary Report" %}</div>
+        <hr class="head-separator">
 </div>
 
 {% include "report_main_content.html" %}
@@ -846,15 +860,16 @@ $(function() {
 <div class="bottom-space"></div>
 
 <form class="download-pdf-form" action="{% url 'report_pdf' system_code=systems.0.code %}" method="POST">{% csrf_token %}
-    <input name="start_timestamp" value="">
-    <input name="end_timestamp" value="">
-    <input name="report_type" value="">
+        <input name="start_timestamp" value="">
+        <input name="end_timestamp" value="">
+        <input name="report_type" value="">
+        <input name="report_layout" value="">
 </form>
 
 <form class="download-raw-data-form" action="{% url 'export_data' system_code=systems.0.code %}" method="POST">{% csrf_token %}
-    <input name="start_timestamp" value="">
-    <input name="end_timestamp" value="">
-    <input name="unit" value="">
+        <input name="start_timestamp" value="">
+        <input name="end_timestamp" value="">
+        <input name="unit" value="">
 </form>
 
 {% endblock %}
