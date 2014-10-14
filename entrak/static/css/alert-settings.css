@@ -60,10 +60,6 @@
     margin-top: 4px;
     text-align: center;
 }
-.main-content-container .conversational-block > div:first-child .SumoSelect .SumoSelect{
-    width: 245px;
-    text-align:center;
-}
 .main-content-container .conversational-block > div:first-child .SumoSelect label{
     text-align:left;
 }
@@ -244,21 +240,48 @@
     background-color: #FFF;
     padding-top:15px;
     padding-left: 15px;
+    padding-bottom: 25px;
     border-radius: 8px;
     height: 150px;
     z-index: 1000;
+    box-shadow: 0px 0px 8px #AFAFAF;
 }
 .peak-demand-choose-block .info-tooltip {
     border: 2px solid #35BC99;
+    height: 115px;
+}
+.peak-demand-choose-block .info-btn:hover {
+    background-color: #62CBB0;
+    border-bottom-color: #35BC99;
+}
+.peak-demand-choose-block .choose-alert-btn:hover {
+    background-color: #62CBB0;
+    box-shadow: 0px 2px 1px #35BC99;
 }
 .summary-alert-choose-block .info-tooltip {
     border: 2px solid #4F50A1;
 }
+.summary-alert-choose-block .info-btn:hover {
+    background-color: #7273C3;
+    border-bottom-color: #4F50A1;
+}
+.summary-alert-choose-block .choose-alert-btn:hover {
+    background-color: #7273C3;
+    box-shadow: 0px 2px 1px #4F50A1;
+}
 .instance-alert-choose-block .info-tooltip {
     border: 2px solid #EB9524;
 }
+.instance-alert-choose-block .info-btn:hover {
+    background-color: #EEAB52;
+    border-bottom-color: #EB9524;
+}
+.instance-alert-choose-block .choose-alert-btn:hover {
+    background-color: #EEAB52;
+    box-shadow: 0px 2px 1px #EB9524;
+}
 .info-tooltip-content {
-    font-size: 10pt;
+    font-size: 11pt;
     color: #393939;
     line-height: 1.3em;
     padding-right: 15px;
@@ -270,7 +293,10 @@
     display: inline-block;
     right: 10px;
     bottom: 10px;
-    color: #393939;
+    color: #999999;
+}
+.info-tooltip-close-btn:hover {
+    text-decoration: underline;
 }
 .choose-alert-link {
     text-decoration: none;
@@ -288,16 +314,16 @@
     color: #fff;
     letter-spacing: 0.07em;
 }
-.choose-alert-block:nth-child(1) .choose-alert-btn{
+.peak-demand-choose-block .choose-alert-btn{
     background-color: #35BC99;
     box-shadow: 0px 2px 1px #1B5B4A;
 }
-.choose-alert-block:nth-child(2) .choose-alert-btn{
+.summary-alert-choose-block .choose-alert-btn{
     background-color: #4F50A1;
     box-shadow: 0px 2px 1px #1E1E43;
     margin-left: 68px;
 }
-.choose-alert-block:nth-child(3) .choose-alert-btn{
+.instance-alert-choose-block .choose-alert-btn{
     background-color: #EB9524;
     box-shadow: 0px 2px 1px #84510E;
     margin-left: 68px;
