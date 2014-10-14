@@ -6,9 +6,13 @@
 
 {% block extra_head %}
 {{block.super}}
+{% get_current_language as LANGUAGE_CODE %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/alert-settings.css' %}">
+{% ifequal LANGUAGE_CODE 'zh-tw' %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/alert-settings-zh-tw.css' %}">
+{% endifequal %}
 <link rel="stylesheet" type="text/css" href="{% static 'js/sumoselect/sumoselect.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'js/tag-it-master/css/jquery.tagit.css' %}">
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
@@ -866,7 +870,7 @@ $(function() {
                         </div><div class="history-th-issue">{% trans "Alert Issue" %}
                         </div><div class="history-th-status">
                                 <div>{% trans "Alert Status" %}</div>
-                                <div><span class="history-th-unresolve">{% trans "Unresolve" %}</span><span>/</span><span class="history-th-resolved">{% trans "Resolved" %}</span></div>
+                                <div><span class="history-th-unresolve">{% trans "Unresolved" %}</span><span>/</span><span class="history-th-resolved">{% trans "Resolved" %}</span></div>
                         </div>
                 </div>
                 <div class="history-content">
@@ -887,8 +891,8 @@ $(function() {
                                 </div>
                                 <a class="choose-alert-link" href="#peak-demand-section"><div class="choose-alert-btn">{% trans "Create Peak Demand Alert" %}</div></a>
                         </div>
-                        <div class="choose-alert-block">
-                                <div class="choose-alert-info-block summary-alert-choose-block">
+                        <div class="choose-alert-block summary-alert-choose-block">
+                                <div class="choose-alert-info-block">
                                         <img class="alert-img" src="{% static 'images/alert/create-summary-alert.png' %}">
                                         <img class="info-btn" src="{% static 'images/alert/info-icon.png' %}">
                                         <div class="info-tooltip">
@@ -898,8 +902,8 @@ $(function() {
                                 </div>
                                 <a class="choose-alert-link" href="#summary-alert-section"><div class="choose-alert-btn">{% trans "Create Summary Alert" %}</div></a>
                         </div>
-                        <div class="choose-alert-block">
-                                <div class="choose-alert-info-block instance-alert-choose-block">
+                        <div class="choose-alert-block instance-alert-choose-block">
+                                <div class="choose-alert-info-block">
                                         <img class="alert-img" src="{% static 'images/alert/create-instance-alert.png' %}">
                                         <img class="info-btn" src="{% static 'images/alert/info-icon.png' %}">
                                         <div class="info-tooltip">
@@ -992,7 +996,7 @@ $(function() {
 <div class="remove-dialog">
         <div class="dialog-title">{% trans "Are you sure you want to remove?" %}</div>
         <div class="dialog-btn-container">
-                <div class="dialog-cancel-btn">{% trans "Canel" %}</div>
+                <div class="dialog-cancel-btn">{% trans "Cancel" %}</div>
                 <div class="dialog-confirm-btn">{% trans "Confirm" %}</div>
         </div>
 </div>
