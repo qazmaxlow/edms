@@ -17,14 +17,6 @@ class PseudoBuffer(object):
         return value
 
 def __result_generator(source_readings, source_id_map, unit_category_code, money_unit_rates, co2_unit_rates):
-    csv_header = ["name", "timestamp", "kWh"]
-    if unit_category_code == MONEY_CATEGORY_CODE:
-        csv_header.append("money")
-    elif unit_category_code == CO2_CATEGORY_CODE:
-        csv_header.append("co2")
-    elif unit_category_code == EXPORT_UNIT_ALL:
-        csv_header += ["money", "co2"]
-
     # Generate CSV header
     csv_header = ["time_stamp"]
     for reading in source_readings:
@@ -44,17 +36,14 @@ def __result_generator(source_readings, source_id_map, unit_category_code, money
         source_name = source.name
         timestamp = calendar.timegm(reading.datetime.utctimetuple())
 
-        result = [source_name, timestamp, reading.value]
         reading_val = reading.value
         if unit_category_code == MONEY_CATEGORY_CODE:
             money_val = calculation.transform_reading(source.money_unit_rate_code,
                 timestamp, reading.value, money_unit_rates)
-            result.append(money_val)
             reading_val = money_val
         elif unit_category_code == CO2_CATEGORY_CODE:
             co2_val = calculation.transform_reading(source.co2_unit_rate_code,
                 timestamp, reading.value, co2_unit_rates)
-            result.append(co2_val)
             reading_val = co2_val
         # All option would not be used, remove this?
         elif unit_category_code == EXPORT_UNIT_ALL:
