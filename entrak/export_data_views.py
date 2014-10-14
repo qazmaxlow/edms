@@ -24,22 +24,39 @@ def __result_generator(source_readings, source_id_map, unit_category_code, money
         csv_header.append("co2")
     elif unit_category_code == EXPORT_UNIT_ALL:
         csv_header += ["money", "co2"]
+
+    # Generate CSV header
+    csv_header = ["time_stamp"]
+    for reading in source_readings:
+        source = source_id_map[str(reading.source_id)]
+        source_name = source.name
+        if not source_name in csv_header:
+            csv_header.append(source_name)
+        else:
+            break
+
     yield csv_header
 
+    last_ts = None
+    source_vals = []
     for reading in source_readings:
         source = source_id_map[str(reading.source_id)]
         source_name = source.name
         timestamp = calendar.timegm(reading.datetime.utctimetuple())
 
         result = [source_name, timestamp, reading.value]
+        reading_val = reading.value
         if unit_category_code == MONEY_CATEGORY_CODE:
             money_val = calculation.transform_reading(source.money_unit_rate_code,
                 timestamp, reading.value, money_unit_rates)
             result.append(money_val)
+            reading_val = money_val
         elif unit_category_code == CO2_CATEGORY_CODE:
             co2_val = calculation.transform_reading(source.co2_unit_rate_code,
                 timestamp, reading.value, co2_unit_rates)
             result.append(co2_val)
+            reading_val = co2_val
+        # All option would not be used, remove this?
         elif unit_category_code == EXPORT_UNIT_ALL:
             money_val = calculation.transform_reading(source.money_unit_rate_code,
                 timestamp, reading.value, money_unit_rates)
@@ -47,7 +64,16 @@ def __result_generator(source_readings, source_id_map, unit_category_code, money
                 timestamp, reading.value, co2_unit_rates)
             result += [money_val, co2_val]
 
-        yield result
+        if not last_ts:
+            last_ts = timestamp
+
+        if last_ts != timestamp:
+            last_ts = timestamp
+            result = [timestamp] + source_vals
+            source_vals = []
+            yield result
+
+        source_vals.append(reading_val)
 
 def export_data_view(request, system_code):
     start_timestamp = int(request.POST.get('start_timestamp'))
@@ -73,7 +99,7 @@ def export_data_view(request, system_code):
         source_id__in=source_ids,
         datetime__gte=start_dt,
         datetime__lt=end_dt
-    ).order_by('source_id', 'datetime')
+    ).order_by('datetime', 'source_id')
 
     money_unit_rates = None
     co2_unit_rates = None
