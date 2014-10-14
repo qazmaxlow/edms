@@ -57,16 +57,16 @@ function updateDonutChart(data, total) {
         formatter: function (x) { return x + "%"}
     });
     donutChart.on('select', function(i, row){
-        $("#selection-summary-value").text(Utils.formatWithCommas(row.orgValue.toFixed(0)));
+        $("#selection-summary-value").text(Utils.formatWithCommas(Utils.fixedDecBaseOnVal(row.orgValue)));
         $("#selection-summary-source").text(row.label);
         $("#selection-summary-source").css("color", donutChart.options.colors[i]);
     });
     donutChart.on('deselect', function(i, row) {
-        $("#selection-summary-value").text(Utils.formatWithCommas(total.toFixed(0)));
+        $("#selection-summary-value").text(Utils.formatWithCommas(Utils.fixedDecBaseOnVal(total)));
         $("#selection-summary-source").text('');
     });
 
-    $("#selection-summary-value").text(Utils.formatWithCommas(total.toFixed(0)));
+    $("#selection-summary-value").text(Utils.formatWithCommas(Utils.fixedDecBaseOnVal(total)));
     if (graph.graphChart.currentUnit.isSuffix) {
         $("#selection-summary-unit-prefix").html('');
         $("#selection-summary-unit-suffix").html(graph.graphChart.currentUnit.shortDescInfo[graph.langCode]);
