@@ -886,6 +886,10 @@
 .detail-container>div {
     width: 100%;
 }
+.detail-title {
+    overflow: hidden;
+    white-space: nowrap;
+}
 .detail-title span{
     width: 242px;
     display: inline-block;
@@ -1027,6 +1031,8 @@
     background-color: #F5F5F5;
     text-align: center;
     color:#505050;
+    overflow: hidden;
+    white-space: nowrap;
 }
 .key-statistics-row span{
     display: inline-block;
@@ -1873,9 +1879,12 @@
 .detail-container .sub-calendar-info-block {
     display: inline-block;
     float: left;
-    width: 485px;
+    width: 50%;
     height: 312px;
     border-right: 1px solid #fff;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 }
 .sub-calendar-info-block .calendar-left-info {
     width: 260px;
