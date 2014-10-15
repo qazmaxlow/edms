@@ -1463,10 +1463,6 @@
 .calendar-component {
     background-color: #F5F5F5;
 }
-.calendar-component .detail-container {
-    overflow: hidden;
-    white-space: nowrap;
-}
 
 .calendar-left-info {
     display: inline-block;
@@ -1883,10 +1879,12 @@
 .detail-container .sub-calendar-info-block {
     display: inline-block;
     float: left;
-    width: 485px;
+    width: 50%;
     height: 312px;
     border-right: 1px solid #fff;
-    white-space: normal;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 }
 .sub-calendar-info-block .calendar-left-info {
     width: 260px;
