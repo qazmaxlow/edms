@@ -7,7 +7,7 @@ import pytz
 from django.http import StreamingHttpResponse
 from django.db.models import Q
 from system.models import System
-from egauge.models import SourceReadingMin
+from egauge.models import SourceReadingHour
 from egauge.manager import SourceManager
 from unit.models import UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
 from utils.utils import Utils
@@ -21,19 +21,13 @@ class PseudoBuffer(object):
 
 def __result_generator(source_readings, source_id_map, unit_category_code, money_unit_rates, co2_unit_rates, system=None):
     # Generate CSV header
-    csv_header = ["time_stamp"]
-    for reading in source_readings:
-        source = source_id_map[str(reading.source_id)]
-        source_name = source.name
-        if not source_name in csv_header:
-            csv_header.append(source_name)
-        else:
-            break
-
+    sources = SourceManager.get_sources(system)
+    source_headers = [s.name for s in sources]
+    csv_header = ["Date Time"] + source_headers
     yield csv_header
 
     last_ts = None
-    source_vals = []
+    source_vals = {}
     for reading in source_readings:
         source = source_id_map[str(reading.source_id)]
         source_name = source.name
@@ -66,12 +60,22 @@ def __result_generator(source_readings, source_id_map, unit_category_code, money
             last_ts = timestamp
 
         if last_ts != timestamp:
+            row_vals = []
+            for header_fn in source_headers:
+                row_vals.append(source_vals.get(header_fn, ''))
+            result = [last_ts] + row_vals
             last_ts = timestamp
-            result = [timestamp] + source_vals
-            source_vals = []
+            source_vals = {}
             yield result
 
-        source_vals.append(reading_val)
+        # need to log if the key already exist?
+        source_vals[source_name] = reading_val
+
+    row_vals = []
+    for header_fn in source_headers:
+        row_vals.append(source_vals.get(header_fn, ''))
+    result = [last_ts] + row_vals
+    yield result
 
 def export_data_view(request, system_code):
     start_timestamp = int(request.POST.get('start_timestamp'))
@@ -93,7 +97,7 @@ def export_data_view(request, system_code):
         source.money_unit_rate_code = unit_info[MONEY_CATEGORY_CODE]
         source.co2_unit_rate_code = unit_info[CO2_CATEGORY_CODE]
 
-    source_readings = SourceReadingMin.objects(
+    source_readings = SourceReadingHour.objects(
         source_id__in=source_ids,
         datetime__gte=start_dt,
         datetime__lt=end_dt
