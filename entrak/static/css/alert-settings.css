@@ -508,6 +508,8 @@
     border-left: 1px solid #AFAFAF;
     border-right: 1px solid #AFAFAF;
     background-color: #E8E8E8;
+    overflow: hidden;
+    white-space: nowrap;
 }
 .table-header>div {
     display: inline-block;
@@ -965,9 +967,14 @@
     height: 17px;
 }
 
+.alert-row {
+    overflow: hidden;
+    white-space: nowrap;
+}
 .alert-row>div {
     display: inline-block;
     vertical-align: middle;
+    white-space: normal;
 }
 .alert-row select {
     display: none;

@@ -886,6 +886,10 @@
 .detail-container>div {
     width: 100%;
 }
+.detail-title {
+    overflow: hidden;
+    white-space: nowrap;
+}
 .detail-title span{
     width: 242px;
     display: inline-block;
@@ -1027,6 +1031,8 @@
     background-color: #F5F5F5;
     text-align: center;
     color:#505050;
+    overflow: hidden;
+    white-space: nowrap;
 }
 .key-statistics-row span{
     display: inline-block;
