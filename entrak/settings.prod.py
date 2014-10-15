@@ -3,6 +3,7 @@ from mongoengine import connect
 from settings_common import *
 
 DEBUG = False
+ALLOWED_HOSTS = ['.en-trak.com']
 
 DATABASES = {
     'default': {

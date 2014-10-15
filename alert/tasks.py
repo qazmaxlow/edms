@@ -12,6 +12,7 @@ from .models import Alert, AlertHistory, AlertEmail
 from .models import ALERT_TYPE_STILL_ON, ALERT_TYPE_SUMMARY, ALERT_TYPE_PEAK
 from contact.models import Contact
 from entrak.settings import EMAIL_HOST_USER
+from utils.utils import Utils
 
 def __valid_alert_filter_f(utc_now):
     def filter_f(alert):
@@ -61,7 +62,11 @@ def check_all_alerts(check_dt):
     will_send_email_info = {}
     will_send_emails = []
     for alert in need_check_alerts:
-        verify_result = alert.verify(check_dt)
+        try:
+            verify_result = alert.verify(check_dt)
+        except ZeroDivisionError, e:
+            Utils.log_error("ZeroDivisionError for alert: %d"%alert.id)
+            continue
         if alert.type == ALERT_TYPE_SUMMARY:
             alert.summary_last_check = check_dt
             alert.save(update_fields=['summary_last_check'])
