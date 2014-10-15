@@ -66,12 +66,13 @@ def __result_generator(source_readings, source_id_map, unit_category_code, money
             last_ts = timestamp
 
         if last_ts != timestamp:
+            result = [last_ts] + source_vals
             last_ts = timestamp
-            result = [timestamp] + source_vals
             source_vals = []
             yield result
 
         source_vals.append(reading_val)
+    yield [last_ts] + source_vals
 
 def export_data_view(request, system_code):
     start_timestamp = int(request.POST.get('start_timestamp'))
