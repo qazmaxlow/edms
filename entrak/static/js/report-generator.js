@@ -1212,7 +1212,7 @@ ReportGenerator.prototype.generateWeekendReport = function(combinedReadings) {
 
     $.each(combinedReadings, function(timestamp, val) {
         var dt = moment.unix(timestamp).tz(reportGenThis.timezone);
-        if (dt.day() === 0 || dt.day() === 6) {
+        if (dt.day() === 0 || dt.day() === 6 || ($.inArray(dt.format("YYYY-MM-DD"), reportGenThis.holidays) != -1)) {
             if (val > highestUsage) {
                 highestUsage = val;
                 highestDt = dt;
@@ -1228,7 +1228,9 @@ ReportGenerator.prototype.generateWeekendReport = function(combinedReadings) {
     });
 
     var isNotConcernFunc = function(targetDt) {
-        return (targetDt.day() >= 1 && targetDt.day() <= 5)
+        return (targetDt.day() >= 1
+            && targetDt.day() <= 5
+            && ($.inArray(targetDt.format("YYYY-MM-DD"), reportGenThis.holidays) == -1))
     }
 
     this.generateCalendarReport('#weekend-info', combinedReadings,
