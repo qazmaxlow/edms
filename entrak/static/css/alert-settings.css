@@ -1256,6 +1256,68 @@
     z-index: 10000;
 }
 
+.edit-popup {
+    display: none;
+    background-color: #FFF;
+    width: 850px;
+    height: 400px;
+}
+.edit-container {
+    position: relative;
+}
+.edit-container .conversational-block {
+    box-shadow: none;
+    background-color: transparent;
+    margin-top: 10px;
+    width: 94%;
+}
+.edit-container .conversational-block > div:first-child .SumoSelect {
+    width: 245px;
+    margin-right: 20px;
+    margin-left: 5px;
+}
+.edit-container .conversational-block > div:first-child .SumoSelect .CaptionCont {
+    width: 245px;
+    background-color: #F3F3F3;
+    border: none;
+}
+.edit-container .conversational-block > div:first-child .SumoSelect .CaptionCont span {
+    font-size: 14pt;
+    margin-top: 4px;
+    text-align: center;
+    height: 25px;
+}
+.edit-container .conversational-block > div:nth-child(2) .SumoSelect {
+    width: 80px;
+    margin-right: 27px;
+    margin-left: 5px;
+    margin-top: 5px;
+}
+.edit-container .conversational-block > div:nth-child(2) .SumoSelect .CaptionCont {
+    width: 90px;
+    background-color: #F5F5F5;
+    border: none;
+}
+.edit-popup .conversational-block div:nth-child(2) .CaptionCont span {
+    font-size: 14pt;
+    margin-top: 4px;
+    text-align: center;
+    height: 25px;
+}
+.edit-container .conversational-block input {
+    width: 120px;
+    border: 1px solid #35BC99;
+    height: 20px;
+    font-size: 14pt;
+    margin-right: 6px;
+    margin-left: 3px;
+    background-color: #f3f3f3;
+    color: #35BC99;
+}
+.edit-container-autocomplete {
+    z-index: 10000;
+}
+
 .back-to-top{
     text-align: right;
     font-size: 9pt;
