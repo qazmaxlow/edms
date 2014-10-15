@@ -45,20 +45,25 @@ def __valid_alert_filter_f(utc_now):
     return filter_f
 
 @shared_task(ignore_result=True)
-def check_all_alerts():
+def invoke_check_all_alerts():
+    # this wrapper function is to ensure check alert time is correct
     utc_now = pytz.utc.localize(datetime.datetime.utcnow()).replace(second=0, microsecond=0)
     # delay 5 minutes to ensure data is ready
     utc_now -= datetime.timedelta(minutes=5)
+    check_all_alerts.delay(utc_now)
+
+@shared_task(ignore_result=True)
+def check_all_alerts(check_dt):
     alerts = Alert.objects.select_related('system__code', 'system__city', 'system__timezone').all()
-    need_check_alerts = filter(__valid_alert_filter_f(utc_now), alerts)
+    need_check_alerts = filter(__valid_alert_filter_f(check_dt), alerts)
 
     will_insert_historys = []
     will_send_email_info = {}
     will_send_emails = []
     for alert in need_check_alerts:
-        verify_result = alert.verify(utc_now)
+        verify_result = alert.verify(check_dt)
         if alert.type == ALERT_TYPE_SUMMARY:
-            alert.summary_last_check = utc_now
+            alert.summary_last_check = check_dt
             alert.save(update_fields=['summary_last_check'])
 
         need_alert = not (verify_result['pass_verify'])
@@ -70,7 +75,7 @@ def check_all_alerts():
             and (len(prev_historys) == 0 or (prev_historys and prev_historys[0].resolved)):
             alert_history = AlertHistory(
                 alert_id=alert.id,
-                created=utc_now,
+                created=check_dt,
                 resolved=False,
                 diff_percent=verify_result['diff_percent'])
 
@@ -79,7 +84,7 @@ def check_all_alerts():
             and (prev_historys and (not prev_historys[0].resolved)):
             prev_history = prev_historys[0]
             prev_history.resolved = True
-            prev_history.resolved_datetime = utc_now
+            prev_history.resolved_datetime = check_dt
             prev_history.save()
 
             need_send_email = True

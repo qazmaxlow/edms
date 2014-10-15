@@ -130,11 +130,11 @@ def __calculate_weekday_info(readings, holidays, timezone):
 
     return __calculcate_total_max_min(filterd_readings, timezone)
 
-def __calculate_weekend_info(readings, timezone):
+def __calculate_weekend_info(readings, holidays, timezone):
     filterd_readings = {}
     for timestamp, val in readings.items():
         dt = Utils.utc_dt_from_utc_timestamp(timestamp).astimezone(timezone)
-        if dt.weekday() >= 5:
+        if dt.weekday() >= 5 or (dt.date() in holidays):
             filterd_readings[timestamp] = val
 
     return __calculcate_total_max_min(filterd_readings, timezone)
@@ -390,7 +390,7 @@ def __generate_report_data(systems, report_type, start_timestamp, end_timestamp)
             info[cal_info['keyPrefix']+'WeekdayInfo'] = __calculate_weekday_info(info[cal_info["targetReadings"]],
                 all_holidays, current_system_timezone)
             info[cal_info['keyPrefix']+'WeekendInfo'] = __calculate_weekend_info(info[cal_info["targetReadings"]],
-                current_system_timezone)
+                all_holidays, current_system_timezone)
             overnight_name = "overnight"+cal_info["targetReadings"]
             info[cal_info['keyPrefix']+'OvernightInfo'] = __calculate_overnight_info(info[overnight_name], current_system_timezone)
 
