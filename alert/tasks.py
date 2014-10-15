@@ -55,7 +55,7 @@ def invoke_check_all_alerts():
 
 @shared_task(ignore_result=True)
 def check_all_alerts(check_dt):
-    alerts = Alert.objects.select_related('system__code', 'system__city', 'system__timezone').all()
+    alerts = Alert.objects.select_related('system__code', 'system__full_name', 'system__timezone').all()
     need_check_alerts = filter(__valid_alert_filter_f(check_dt), alerts)
 
     will_insert_historys = []
@@ -100,24 +100,23 @@ def check_all_alerts(check_dt):
         if need_send_email:
             recipients = alert.contacts.values_list('email', flat=True)
             for recipient_email in recipients:
-                email_key = "%s|%s|%s"%(alert.system.code, alert.type, recipient_email)
+                email_key = "%s|%s|%s"%(alert.system.code, recipient_email, verify_result['pass_verify'])
                 if not email_key in will_send_email_info:
                     will_send_email_info[email_key] = {}
                     will_send_email_info[email_key]['system_code'] = alert.system.code
-                    will_send_email_info[email_key]['system_city'] = alert.system.city
-                    will_send_email_info[email_key]['title'] = alert.gen_email_title()
+                    will_send_email_info[email_key]['system_timezone'] = alert.system.timezone
+                    will_send_email_info[email_key]['title'] = alert.gen_email_title(verify_result['pass_verify'])
                     will_send_email_info[email_key]['recipient'] = recipient_email
-                    will_send_email_info[email_key]['alert_sub_msgs'] = []
-                    will_send_email_info[email_key]['resolved_sub_msgs'] = []
+                    will_send_email_info[email_key]['resolved'] = verify_result['pass_verify']
+                    will_send_email_info[email_key]['sub_msgs'] = []
 
-                sub_msgs_key = 'resolved_sub_msgs' if verify_result['pass_verify'] else 'alert_sub_msgs'
-                will_send_email_info[email_key][sub_msgs_key].append(alert.gen_email_sub_msg(verify_result))
+                will_send_email_info[email_key]['sub_msgs'].append(alert.gen_email_sub_msg(verify_result))
 
     for email_key, info in will_send_email_info.items():
         will_send_emails.append(AlertEmail(
             recipient=info['recipient'],
             title=info['title'],
-            content=Alert.gen_email_content(info)
+            content=Alert.gen_email_content(info, check_dt)
         ))
 
     AlertHistory.objects.bulk_create(will_insert_historys)

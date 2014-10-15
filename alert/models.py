@@ -34,7 +34,7 @@ En-trak has detected that your energy use is not normal in some areas.
 When this problem has been resolved, you will receive another notification email.
 '''
 ALERT_EMAIL_CONTENT_RESOLVED = u'''
-One or more of your previously activated alerts has been resolved.
+One or more of your previously activated alerts has been resolved at %s.
 
 %s
 
@@ -125,25 +125,23 @@ class Alert(models.Model):
 
         return verify_result
 
-    def gen_email_title(self):
-        if self.type == ALERT_TYPE_STILL_ON:
-            substitute_text = ALERT_EMAIL_TITLE_STILL_ON
-        elif self.type == ALERT_TYPE_SUMMARY:
-            substitute_text = ALERT_EMAIL_TITLE_SUMMARY
-        elif self.type == ALERT_TYPE_PEAK:
-            substitute_text = ALERT_EMAIL_TITLE_PEAK
+    def gen_email_title(self, resolved):
+        if resolved:
+            substitute_text = "RESOLVED"
+        else:
+            substitute_text = "ACTIVATED"
 
         return ALERT_EMAIL_TITLE%(substitute_text)
 
     def gen_email_sub_msg(self, info):
         if info['pass_verify']:
-            sub_msg = 'RESOLVED - '
+            sub_msg = "RESOLVED - "
         else:
-            sub_msg = ''
+            sub_msg = ""
         sub_msg += info['start_dt'].strftime('%d %b %Y, %I:%M%p')
         sub_msg += info['end_dt'].strftime('-%I:%M%p')
-        sub_msg += '   %s'%(self.source_info['nameInfo'][LANG_CODE_EN])
-        if info['diff_percent'] is not None:
+        sub_msg += '   %s - %s'%(self.system.full_name, self.source_info['nameInfo'][LANG_CODE_EN])
+        if (not info['pass_verify']) and info['diff_percent'] is not None:
             sub_msg += '   %d%%'%abs(info['diff_percent'])
             
         if self.type == ALERT_TYPE_PEAK:
@@ -175,12 +173,14 @@ class Alert(models.Model):
         return info
 
     @staticmethod
-    def gen_email_content(info):
-        email_content = ""
-        if info['alert_sub_msgs']:
-            email_content += ALERT_EMAIL_CONTENT_UNRESOLVED%('\n'.join(info['alert_sub_msgs']))
-        if info['resolved_sub_msgs']:
-            email_content += ALERT_EMAIL_CONTENT_RESOLVED%('\n'.join(info['resolved_sub_msgs']))
+    def gen_email_content(info, check_dt):
+        if info['resolved']:
+            email_content = ALERT_EMAIL_CONTENT_RESOLVED%(
+                check_dt.astimezone(pytz.timezone(info["system_timezone"])).strftime("%d %b %Y, %I:%M%p"),
+                '\n'.join(info['sub_msgs'])
+            )
+        else:
+            email_content = ALERT_EMAIL_CONTENT_UNRESOLVED%('\n'.join(info['sub_msgs']))
 
         link_prefix = SITE_LINK_FORMAT
         email_content +=  '\n\n' + link_prefix \
