@@ -30,7 +30,7 @@ app.conf.update(
             'schedule': crontab(minute='*/10'),
         },
         'check-alert-every-5-min': {
-            'task': 'alert.tasks.check_all_alerts',
+            'task': 'alert.tasks.invoke_check_all_alerts',
             'schedule': crontab(minute='*/5'),
         },
         'send-alert-email-every-5-min': {
@@ -45,6 +45,7 @@ app.conf.update(
         'egauge.tasks.recover_min_reading_for_xml_url': {'queue': 'recover'},
         'egauge.tasks.force_retrieve_reading': {'queue': 'recap'},
         'egauge.tasks.force_retrieve_hour_reading': {'queue': 'recap'},
+        'alert.tasks.invoke_check_all_alerts': {'queue': 'task_starter'},
     },
 )
 
