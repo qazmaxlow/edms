@@ -23,7 +23,7 @@ def __result_generator(source_readings, source_id_map, unit_category_code, money
     # Generate CSV header
     sources = SourceManager.get_sources(system)
     source_headers = [s.name for s in sources]
-    csv_header = ["time_stamp"] + source_headers
+    csv_header = ["Date Time"] + source_headers
     yield csv_header
 
     last_ts = None
