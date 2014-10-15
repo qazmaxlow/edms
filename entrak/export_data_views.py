@@ -7,7 +7,7 @@ import pytz
 from django.http import StreamingHttpResponse
 from django.db.models import Q
 from system.models import System
-from egauge.models import SourceReadingMin
+from egauge.models import SourceReadingHour
 from egauge.manager import SourceManager
 from unit.models import UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
 from utils.utils import Utils
@@ -93,7 +93,7 @@ def export_data_view(request, system_code):
         source.money_unit_rate_code = unit_info[MONEY_CATEGORY_CODE]
         source.co2_unit_rate_code = unit_info[CO2_CATEGORY_CODE]
 
-    source_readings = SourceReadingMin.objects(
+    source_readings = SourceReadingHour.objects(
         source_id__in=source_ids,
         datetime__gte=start_dt,
         datetime__lt=end_dt
