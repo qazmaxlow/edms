@@ -22,17 +22,24 @@
     padding-top: 8px;
 }
 
+#last-summary, #this-summary {
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    display: inline-block;
+}
+
 #summary-image{
     background-image: url(../images/summary-neutral.png);
     background-repeat: no-repeat;
-    margin-top: 13px;
+    margin-top: 30px;
     height: 150px;
+    position: relative;
 }
 
 #last-summary {
-    position: absolute;
     left: 120px;
-    top: 55px;
+    top: 10px;
     width: 155px;
     line-height: 1.2em;
 }
@@ -52,17 +59,19 @@
     font-weight: bold;
 }
 #this-summary {
-    position: absolute;
-    left: 350px;
-    top: 55px;
+    left: 190px;
+    top: 10px;
     width: 155px;
     line-height: 1.2em;
 }
 
 #summary-percentage{
-    position: absolute;
-    top: 79px;
-    left: 632px;
+    position: relative;
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    top: -15px;
+    left: 325px;
 }
 #summary-percentage-number {
     width: 80px;
