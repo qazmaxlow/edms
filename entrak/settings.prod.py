@@ -2,7 +2,7 @@ import os
 from mongoengine import connect
 from settings_common import *
 
-DEBUG = True
+DEBUG = False
 
 DATABASES = {
     'default': {

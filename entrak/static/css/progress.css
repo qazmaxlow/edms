@@ -11,10 +11,12 @@
     position: absolute;
     width: 100%;
     font-size: 0px;
+    white-space: nowrap;
+    overflow: hidden;
 }
 .saving-header>div {
     display: inline-block;
-    width: 49.9%;
+    width: 50%;
     height: 120px;
     vertical-align: top;
 }
@@ -60,7 +62,7 @@
 .medal-block {
     position: absolute;
     top: -10px;
-    left: 30px;
+    left: 560px;
 }
 .medal-block > img {
     display: block;
