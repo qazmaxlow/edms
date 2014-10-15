@@ -57,25 +57,26 @@ $(function() {
         </div>
 
         <div id="target-block">
-            {% ifequal archived_level 0 %}
-            <div class="medal-block work-harder-medal">
-                <img src="{% static 'images/progress/empty-medal.png' %}">
-                <div id="archived_percentage">{{archived_level}}<span class="saving-percent-symbol">%</span></div>
-                <div class="medal-text">{% trans "Keep<br>Saving!" %}</div>
-            </div>
-            {% else %}
-            <div class="medal-block">
-                <img src="{% static 'images/progress/medal.png' %}">
-                <div id="archived_percentage">{{archived_level}}<span class="saving-percent-symbol">%</span></div>
-                <div class="medal-text">{% trans "reduction<br>achieved" %}</div>
-            </div>
-            {% endifequal %}
             <div class="target-text-container">
                 <div class="next-target-text">{% trans "Next Target" %}</div>
                 <div class="next-target-percent">{% blocktrans with target_level=target_level %}{{target_level}}<span class="saving-percent-symbol">%</span> Reduction{% endblocktrans %}</div>
             </div>
         </div>
     </div>
+
+    {% ifequal archived_level 0 %}
+    <div class="medal-block work-harder-medal">
+        <img src="{% static 'images/progress/empty-medal.png' %}">
+        <div id="archived_percentage">{{archived_level}}<span class="saving-percent-symbol">%</span></div>
+        <div class="medal-text">{% trans "Keep<br>Saving!" %}</div>
+    </div>
+    {% else %}
+    <div class="medal-block">
+        <img src="{% static 'images/progress/medal.png' %}">
+        <div id="archived_percentage">{{archived_level}}<span class="saving-percent-symbol">%</span></div>
+        <div class="medal-text">{% trans "reduction<br>achieved" %}</div>
+    </div>
+    {% endifequal %}
 
     <div class="factory-animation-container">
         <video class="factory-animation" width="1058px" height="444px" autoplay loop>
