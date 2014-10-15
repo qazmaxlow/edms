@@ -525,8 +525,72 @@ function popupRemoveDialog(confirmCallback) {
 
 function setupRowEditBtn(targetEle) {
         targetEle.click(function() {
-                var tableRow = $(this).parent().parent().parent();
-                turnOnEditMode(tableRow);
+            $('.edit-container').empty();
+            var tableRow = $(this).parent().parent().parent();
+            var alert_id = parseInt(tableRow.attr('alert_id'), 10)
+            var alert = findAlertById(alert_id);
+            var eleHtml, containerClass;
+            if (alert.type === 'peak') {
+                containerClass = 'peak-demand';
+                var peakConversationTemplate = $('#peak-conversation-template').html();
+                Mustache.parse(peakConversationTemplate);
+                eleHtml = Mustache.render(peakConversationTemplate, {});
+            } else if (alert.type === 'summary' || alert.type === 'still_on') {
+                var summaryStillOnConversationTemplate = $('#summary-still-on-conversation-template').html();
+                Mustache.parse(summaryStillOnConversationTemplate);
+
+                if (alert.type === 'summary') {
+                    containerClass = 'summary-alert';
+                    eleHtml = Mustache.render(summaryStillOnConversationTemplate, {
+                        alertType: 'summary',
+                    });
+                } else {
+                    containerClass = 'still-on-alert';
+                    eleHtml = Mustache.render(summaryStillOnConversationTemplate, {
+                        alertType: 'still_on',
+                    });
+                }
+            }
+            $('.edit-container').addClass(containerClass);
+            $('.edit-container').append(eleHtml);
+            setupSourceSelect($('.edit-container .source-select'));
+            setupReceiverSelect($('.edit-container .receiver-select'));
+            setupTimeSelect($('.edit-container .time-select'));
+            setupWeekdaySelect($('.edit-container .weekday-select'));
+            setupComparePercentSelect($('.edit-container .compare-percent-select'));
+
+            var editContainer = $('.edit-container');
+            editContainer.find('select').SumoSelect();
+
+            editContainer.find('.email-input').tagit({
+                availableTags: settings.contactEmails,
+                tagLimit: 5,
+            }).tagit('autoCompleteInstance').addClass('duplicate-container-autocomplete');
+
+            setSumoSelectedItem(editContainer.find('.source-select'), transformToSourceMapKey(alert.sourceInfo));
+            setSumoSelectedItem(editContainer.find('.compare-percent-select'), alert.comparePercent.toString());
+            var emailInput = editContainer.find('.email-input');
+            $.each(alert.contactEmails, function(emailIdx, email) {
+                emailInput.tagit("createTag", email);
+            });
+
+            if (alert.type === 'summary' || alert.type === 'still_on') {
+                setSumoSelectedItem(editContainer.find('.start-time-select'), alert.startTime);
+                setSumoSelectedItem(editContainer.find('.end-time-select'), alert.endTime);
+                setSumoSelectedItem(editContainer.find('.weekday-select'), JSON.stringify(alert.checkWeekdays));
+            } else if (alert.type === 'peak') {
+                editContainer.find('.peak-threshold-input').val(alert.peakThreshold);
+            }
+
+            var editDialog = $('.edit-popup').bPopup();
+
+            editContainer.find('.conversational-cancel-btn').click(function() {
+                editDialog.close();
+            });
+            setupConversationConfirmBtn(editContainer.find('.conversational-confirm-btn'), alert_id);
+            editContainer.find('.conversational-confirm-btn').click(function() {
+                editDialog.close();
+            });
         });
 }
 
@@ -554,14 +618,19 @@ function setupRowConfirmBtn(targetEle) {
         });
 }
 
-function setupConversationConfirmBtn(targetEle) {
+function setupConversationConfirmBtn(targetEle, alert_id) {
         targetEle.click(function() {
                 var conversationalBlockContainer = $(this).parent().parent();
                 var onEditRow = conversationalBlockContainer.parent().find('.alert-row.on-edit');
                 var alertType = conversationalBlockContainer.attr('alert_type');
+                alert_id = typeof alert_id !== 'undefined' ?  alert_id : null;
+                if(!alert_id) {
+                    alert_id = (onEditRow.length !== 1) ? null : onEditRow.attr('alert_id');
+                }
+
                 var postData = {
                         system_id: settings.entrakSystem.systemTree.data.id,
-                        alert_id: (onEditRow.length !== 1) ? null : onEditRow.attr('alert_id'),
+                        alert_id: alert_id,
                         source_info: settings.sourceInfoMap[conversationalBlockContainer.find('.source-select').val()],
                         alert_type: alertType,
                         compare_percent: conversationalBlockContainer.find('.compare-percent-select').val(),
@@ -1003,6 +1072,10 @@ $(function() {
 
 <div class="duplicate-popup">
         <div class="duplicate-container"></div>
+</div>
+
+<div class="edit-popup">
+        <div class="edit-container"></div>
 </div>
 
 {% endblock %}
