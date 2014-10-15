@@ -1,6 +1,9 @@
 import csv
 import calendar
+from datetime import datetime
 import json
+import pytz
+
 from django.http import StreamingHttpResponse
 from django.db.models import Q
 from system.models import System
@@ -16,7 +19,7 @@ class PseudoBuffer(object):
     def write(self, value):
         return value
 
-def __result_generator(source_readings, source_id_map, unit_category_code, money_unit_rates, co2_unit_rates):
+def __result_generator(source_readings, source_id_map, unit_category_code, money_unit_rates, co2_unit_rates, system=None):
     # Generate CSV header
     csv_header = ["time_stamp"]
     for reading in source_readings:
@@ -35,6 +38,12 @@ def __result_generator(source_readings, source_id_map, unit_category_code, money
         source = source_id_map[str(reading.source_id)]
         source_name = source.name
         timestamp = calendar.timegm(reading.datetime.utctimetuple())
+        if system:
+            # convert time in system's timezone
+            local_tz = pytz.timezone(system.timezone)
+            utc_dt = datetime.utcfromtimestamp(timestamp).replace(tzinfo=pytz.utc)
+            local_dt = local_tz.normalize(utc_dt.astimezone(local_tz))
+            timestamp = local_dt.strftime("%Y-%m-%d %H:%M")
 
         reading_val = reading.value
         if unit_category_code == MONEY_CATEGORY_CODE:
@@ -104,7 +113,7 @@ def export_data_view(request, system_code):
     pseudo_buffer = PseudoBuffer()
     csv_writer = csv.writer(pseudo_buffer)
     result_rows = __result_generator(source_readings, source_id_map,
-        unit_category_code, money_unit_rates, co2_unit_rates)
+                                     unit_category_code, money_unit_rates, co2_unit_rates, system)
 
     response = StreamingHttpResponse((csv_writer.writerow(row) for row in result_rows),
         content_type='text/csv')
