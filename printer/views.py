@@ -15,12 +15,15 @@ def set_paper_count_view(request):
     one_side = int(request.POST.get('one_side'))
     color = int(request.POST.get('color'))
     b_n_w = int(request.POST.get('b_n_w'))
+    papersize_a4 = int(request.POST.get('papersize_a4'))
+    papersize_non_a4 = int(request.POST.get('papersize_non_a4'))
 
     printer_timezone = Printer.objects.select_related('system__timezone').get(p_id=p_id).system.timezone
 
     paper_reading_min, created = PrinterReadingMin.objects.get_or_create(p_id=p_id, datetime=datetime, defaults={
         'total': total, 'duplex': duplex, 'one_side': one_side,
-        'color': color, 'b_n_w': b_n_w
+        'color': color, 'b_n_w': b_n_w,
+        'papersize_a4': papersize_a4, 'papersize_non_a4': papersize_non_a4
     })
     if not created:
         paper_reading_min.update(set__total=total, set__duplex=duplex,
@@ -52,6 +55,8 @@ def set_paper_count_view(request):
                     "one_side": {"$sum": "$one_side"},
                     "color": {"$sum": "$color"},
                     "b_n_w": {"$sum": "$b_n_w"},
+                    'papersize_a4': {"$sum": "$papersize_a4"},
+                    'papersize_non_a4': {"$sum": "$papersize_non_a4"},
                 }
             }
         ])
@@ -61,6 +66,8 @@ def set_paper_count_view(request):
                 p_id=info['_id'], datetime=start_time
             ).update_one(set__total=info['total'], set__duplex=info['duplex'],
                 set__one_side=info['one_side'], set__color=info['color'],
-                set__b_n_w=info['b_n_w'], upsert=True)
+                         set__b_n_w=info['b_n_w'],
+                         set__papersize_a4=info['papersize_a4'],
+                         set__papersize_non_a4=info['papersize_non_a4'], upsert=True)
 
     return Utils.json_response({'success': True})

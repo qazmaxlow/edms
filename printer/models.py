@@ -24,6 +24,8 @@ class BasePrinterReading(Document):
     one_side = IntField(default=0)
     color = IntField(default=0)
     b_n_w = IntField(default=0)
+    papersize_a4 = IntField(default=0)
+    papersize_non_a4 = IntField(default=0)
 
 class PrinterReadingMin(BasePrinterReading):
     pass
