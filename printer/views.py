@@ -1,6 +1,7 @@
 import datetime
 import pytz
 from functools import wraps
+from django.http import HttpResponse
 from django.utils.decorators import available_attrs
 from django.views.decorators.csrf import csrf_exempt
 from mongoengine import connection, NotUniqueError
@@ -85,4 +86,4 @@ def set_paper_count_view(request):
                          set__papersize_a4=info['papersize_a4'],
                          set__papersize_non_a4=info['papersize_non_a4'], upsert=True)
 
-    return Utils.json_response({'success': True})
+    return HttpResponse(paper_reading_hour.to_json(), content_type="application/json")
