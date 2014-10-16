@@ -721,6 +721,11 @@ function setupDuplicateBtn(targetEle) {
         });
 }
 
+function formatDiffPercent(val) {
+        var max_percent = 1000;
+        return (val <= max_percent) ? val.toString() : ">"+max_percent;
+}
+
 $(function() {
         setupAjaxForCsrf($.cookie('csrftoken'));
         settings.langCode = '{{LANGUAGE_CODE}}';
@@ -795,16 +800,16 @@ $(function() {
                 if (alertHistory.alert_type === 'peak') {
                         info.issueLine1 = alertHistory.nameInfo[settings.langCode] + '{% trans " energy use reached" %}';
                         if (settings.langCode === 'zh-tw') {
-                                info.issueLine2 = '已達電力需求峰值的' + alertHistory.diff_percent + '%';
+                                info.issueLine2 = '已達電力需求峰值的' + formatDiffPercent(alertHistory.diff_percent) + '%';
                         } else {
-                                info.issueLine2 = alertHistory.diff_percent + '% of previous peak demand';
+                                info.issueLine2 = formatDiffPercent(alertHistory.diff_percent) + '% of previous peak demand';
                         }
                 } else  if (alertHistory.alert_type === 'summary' || alertHistory.alert_type === 'still_on') {
                         info.issueLine1 = alertHistory.nameInfo[settings.langCode] + '{% trans "alert_history_used" %}';
                         if (settings.langCode === 'zh-tw') {
-                                info.issueLine2 = '已超過近期' + createdDt.format('dddd') + '平均值的' + alertHistory.diff_percent + '%';
+                                info.issueLine2 = '已超過近期' + createdDt.format('dddd') + '平均值的' + formatDiffPercent(alertHistory.diff_percent) + '%';
                         } else {
-                                info.issueLine2 = alertHistory.diff_percent + '% MORE than recent ' + createdDt.format('dddd') + ' average';
+                                info.issueLine2 = formatDiffPercent(alertHistory.diff_percent) + '% MORE than recent ' + createdDt.format('dddd') + ' average';
                         }
                 }
 

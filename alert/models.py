@@ -24,6 +24,7 @@ ALERT_COMPARE_METHOD_CHOICES = (
 
 CONTINUOUS_INTERVAL_MIN = 10
 KVA_TO_KWH_FACTOR = 0.95
+MAX_DIFF_PERCENT_DISPLAY = 1000
 
 ALERT_EMAIL_TITLE = u'En-trak Alert: %s'
 ALERT_EMAIL_CONTENT_UNRESOLVED = u'''
@@ -147,7 +148,8 @@ class Alert(models.Model):
             sub_msg += info['end_dt'].strftime('-%I:%M%p')
         sub_msg += '   %s - %s'%(self.system.full_name, self.source_info['nameInfo'][LANG_CODE_EN])
         if (not info['pass_verify']) and info['diff_percent'] is not None:
-            sub_msg += '   %d%%'%abs(info['diff_percent'])
+            diff_percent_text = "%d"%abs(info['diff_percent']) if abs(info['diff_percent']) <= MAX_DIFF_PERCENT_DISPLAY else ">%d"%MAX_DIFF_PERCENT_DISPLAY
+            sub_msg += '   %s%%'%diff_percent_text
             
         if self.type == ALERT_TYPE_PEAK:
             sub_msg += '  of previous peak of %d kVA'%self.peak_threshold
