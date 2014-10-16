@@ -24,7 +24,7 @@ def api_error(view_func):
 
 @csrf_exempt
 @api_error
-def set_paper_count_view(request):
+def measure_view(request):
     p_id = request.POST.get('p_id')
     datetime = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('timestamp')))
     total = int(request.POST.get('total'))
