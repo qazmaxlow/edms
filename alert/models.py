@@ -133,13 +133,18 @@ class Alert(models.Model):
 
         return ALERT_EMAIL_TITLE%(substitute_text)
 
-    def gen_email_sub_msg(self, info):
+    def gen_email_sub_msg(self, info, prev_history):
         if info['pass_verify']:
             sub_msg = "RESOLVED - "
+            created_dt = prev_history.created.astimezone(pytz.timezone(self.system.timezone))
+            history_start_dt, history_end_dt = self.gen_start_end_dt(created_dt)
+            sub_msg += created_dt.strftime('%d %b %Y')
+            sub_msg += history_start_dt.strftime(', %I:%M%p')
+            sub_msg += history_end_dt.strftime('-%I:%M%p')
         else:
             sub_msg = ""
-        sub_msg += info['start_dt'].strftime('%d %b %Y, %I:%M%p')
-        sub_msg += info['end_dt'].strftime('-%I:%M%p')
+            sub_msg += info['start_dt'].strftime('%d %b %Y, %I:%M%p')
+            sub_msg += info['end_dt'].strftime('-%I:%M%p')
         sub_msg += '   %s - %s'%(self.system.full_name, self.source_info['nameInfo'][LANG_CODE_EN])
         if (not info['pass_verify']) and info['diff_percent'] is not None:
             sub_msg += '   %d%%'%abs(info['diff_percent'])

@@ -75,6 +75,7 @@ def check_all_alerts(check_dt):
         alert_history = None
         need_send_email = False
         prev_historys = AlertHistory.objects.filter(alert_id=alert.id).order_by('-created')
+        prev_history = None
 
         if need_alert \
             and (len(prev_historys) == 0 or (prev_historys and prev_historys[0].resolved)):
@@ -110,7 +111,7 @@ def check_all_alerts(check_dt):
                     will_send_email_info[email_key]['resolved'] = verify_result['pass_verify']
                     will_send_email_info[email_key]['sub_msgs'] = []
 
-                will_send_email_info[email_key]['sub_msgs'].append(alert.gen_email_sub_msg(verify_result))
+                will_send_email_info[email_key]['sub_msgs'].append(alert.gen_email_sub_msg(verify_result, prev_history))
 
     for email_key, info in will_send_email_info.items():
         will_send_emails.append(AlertEmail(
