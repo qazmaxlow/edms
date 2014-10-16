@@ -374,6 +374,7 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
     var positiveOrNegativePrefix, carImpactSuffix, carImpactSubText, forestImpactSubText, pandaImpactSubText;
     if (reportGenThis.savingInfo.energy >= 0) {
         $(".basic-info-container").addClass('positive-saving');
+        $(".basic-info-container").removeClass('negative-saving');
         positiveOrNegativePrefix = "-";
         savedMoneySubText = "in savings";
         if (this.langCode === 'zh-tw') {
@@ -388,6 +389,7 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
         }
     } else {
         $(".basic-info-container").addClass('negative-saving');
+        $(".basic-info-container").removeClass('positive-saving');
         positiveOrNegativePrefix = "+";
         savedMoneySubText = "extra spending";
         if (this.langCode === 'zh-tw') {

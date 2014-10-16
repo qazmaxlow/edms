@@ -9,7 +9,7 @@ from django.db.models import Q
 from django.core.mail import send_mail
 from django.db import transaction
 from .models import Alert, AlertHistory, AlertEmail
-from .models import ALERT_TYPE_STILL_ON, ALERT_TYPE_SUMMARY, ALERT_TYPE_PEAK
+from .models import ALERT_TYPE_STILL_ON, ALERT_TYPE_SUMMARY, ALERT_TYPE_PEAK, CONTINUOUS_INTERVAL_MIN
 from contact.models import Contact
 from entrak.settings import EMAIL_HOST_USER
 from utils.utils import Utils
@@ -24,6 +24,8 @@ def __valid_alert_filter_f(utc_now):
             if now.weekday() in alert.check_weekdays:
 
                 if alert.type == ALERT_TYPE_STILL_ON:
+                    # make sure the whole time slot lay within checking period
+                    now -= datetime.timedelta(minutes=CONTINUOUS_INTERVAL_MIN)
                     if alert.start_time >= alert.end_time:
                         if now.time() >= alert.start_time or now.time() <= alert.end_time:
                             isValid = True
@@ -49,13 +51,13 @@ def __valid_alert_filter_f(utc_now):
 def invoke_check_all_alerts():
     # this wrapper function is to ensure check alert time is correct
     utc_now = pytz.utc.localize(datetime.datetime.utcnow()).replace(second=0, microsecond=0)
-    # delay 5 minutes to ensure data is ready
-    utc_now -= datetime.timedelta(minutes=5)
+    # check previous time slot to ensure data is ready
+    utc_now -= datetime.timedelta(minutes=CONTINUOUS_INTERVAL_MIN)
     check_all_alerts.delay(utc_now)
 
 @shared_task(ignore_result=True)
 def check_all_alerts(check_dt):
-    alerts = Alert.objects.select_related('system__code', 'system__city', 'system__timezone').all()
+    alerts = Alert.objects.select_related('system__code', 'system__full_name', 'system__timezone').all()
     need_check_alerts = filter(__valid_alert_filter_f(check_dt), alerts)
 
     will_insert_historys = []
@@ -75,6 +77,7 @@ def check_all_alerts(check_dt):
         alert_history = None
         need_send_email = False
         prev_historys = AlertHistory.objects.filter(alert_id=alert.id).order_by('-created')
+        prev_history = None
 
         if need_alert \
             and (len(prev_historys) == 0 or (prev_historys and prev_historys[0].resolved)):
@@ -100,24 +103,23 @@ def check_all_alerts(check_dt):
         if need_send_email:
             recipients = alert.contacts.values_list('email', flat=True)
             for recipient_email in recipients:
-                email_key = "%s|%s|%s"%(alert.system.code, alert.type, recipient_email)
+                email_key = "%s|%s|%s"%(alert.system.code, recipient_email, verify_result['pass_verify'])
                 if not email_key in will_send_email_info:
                     will_send_email_info[email_key] = {}
                     will_send_email_info[email_key]['system_code'] = alert.system.code
-                    will_send_email_info[email_key]['system_city'] = alert.system.city
-                    will_send_email_info[email_key]['title'] = alert.gen_email_title()
+                    will_send_email_info[email_key]['system_timezone'] = alert.system.timezone
+                    will_send_email_info[email_key]['title'] = alert.gen_email_title(verify_result['pass_verify'])
                     will_send_email_info[email_key]['recipient'] = recipient_email
-                    will_send_email_info[email_key]['alert_sub_msgs'] = []
-                    will_send_email_info[email_key]['resolved_sub_msgs'] = []
+                    will_send_email_info[email_key]['resolved'] = verify_result['pass_verify']
+                    will_send_email_info[email_key]['sub_msgs'] = []
 
-                sub_msgs_key = 'resolved_sub_msgs' if verify_result['pass_verify'] else 'alert_sub_msgs'
-                will_send_email_info[email_key][sub_msgs_key].append(alert.gen_email_sub_msg(verify_result))
+                will_send_email_info[email_key]['sub_msgs'].append(alert.gen_email_sub_msg(verify_result, prev_history))
 
     for email_key, info in will_send_email_info.items():
         will_send_emails.append(AlertEmail(
             recipient=info['recipient'],
             title=info['title'],
-            content=Alert.gen_email_content(info)
+            content=Alert.gen_email_content(info, check_dt)
         ))
 
     AlertHistory.objects.bulk_create(will_insert_historys)
