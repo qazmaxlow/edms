@@ -20,17 +20,16 @@ def set_paper_count_view(request):
 
     printer_timezone = Printer.objects.select_related('system__timezone').get(p_id=p_id).system.timezone
 
-    paper_reading_min, created = PrinterReadingMin.objects.get_or_create(p_id=p_id, datetime=datetime, defaults={
+    paper_reading_hour, created = PrinterReadingHour.objects.get_or_create(p_id=p_id, datetime=datetime, defaults={
         'total': total, 'duplex': duplex, 'one_side': one_side,
         'color': color, 'b_n_w': b_n_w,
         'papersize_a4': papersize_a4, 'papersize_non_a4': papersize_non_a4
     })
     if not created:
-        paper_reading_min.update(set__total=total, set__duplex=duplex,
+        paper_reading_hour.update(set__total=total, set__duplex=duplex,
             set__one_side=one_side, set__color=color, set__b_n_w=b_n_w)
 
     sum_infos = [
-        {'range_type': Utils.RANGE_TYPE_HOUR, 'target_collection': 'printer_reading_min', 'update_class': PrinterReadingHour},
         {'range_type': Utils.RANGE_TYPE_DAY, 'target_collection': 'printer_reading_hour', 'update_class': PrinterReadingDay},
         {'range_type': Utils.RANGE_TYPE_WEEK, 'target_collection': 'printer_reading_day', 'update_class': PrinterReadingWeek},
         {'range_type': Utils.RANGE_TYPE_MONTH, 'target_collection': 'printer_reading_day', 'update_class': PrinterReadingMonth},
