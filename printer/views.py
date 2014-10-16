@@ -1,12 +1,28 @@
 import datetime
 import pytz
+from functools import wraps
+from django.utils.decorators import available_attrs
 from django.views.decorators.csrf import csrf_exempt
 from mongoengine import connection, NotUniqueError
 from .models import Printer, PrinterReadingMin, PrinterReadingHour, \
     PrinterReadingDay, PrinterReadingWeek, PrinterReadingMonth, PrinterReadingYear
 from utils.utils import Utils
 
+
+def api_error(view_func):
+    @wraps(view_func, assigned=available_attrs(view_func))
+    def _wrapped_view_func(request, *args, **kwargs):
+        try:
+            response = view_func(request, *args, **kwargs)
+            return response
+        except Exception as e:
+            return Utils.json_response({'errors': [{'message': str(e)}]})
+
+    return _wrapped_view_func
+
+
 @csrf_exempt
+@api_error
 def set_paper_count_view(request):
     p_id = request.POST.get('p_id')
     datetime = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('timestamp')))
