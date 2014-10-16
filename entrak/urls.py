@@ -18,7 +18,7 @@ urlpatterns = patterns('',
     url(r'^edit_sources/(?P<system_code>[\w\-]+)/$', 'entrak.admin_customize_views.edit_sources_view', name='edit_sources'),
     url(r'^add_multi_baseline/$', 'entrak.admin_customize_views.add_multi_baseline_view', name='add_multi_baseline'),
     url(r'^recap_data/$', 'entrak.admin_customize_views.recap_data_view', name='recap_data'),
-    url(r'^printer/', include('printer.urls')),
+    url(r'^printers/', include('printer.urls')),
 
     url(r'^i18n/', include('django.conf.urls.i18n')),
 
