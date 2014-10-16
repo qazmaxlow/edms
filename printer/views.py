@@ -1,6 +1,8 @@
 import datetime
+import json
 import pytz
 from functools import wraps
+from django.http import Http404
 from django.http import HttpResponse
 from django.utils.decorators import available_attrs
 from django.views.decorators.csrf import csrf_exempt
@@ -25,15 +27,20 @@ def api_error(view_func):
 @csrf_exempt
 @api_error
 def measure_view(request):
-    p_id = request.POST.get('p_id')
-    datetime = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('timestamp')))
-    total = int(request.POST.get('total'))
-    duplex = int(request.POST.get('duplex'))
-    one_side = int(request.POST.get('one_side'))
-    color = int(request.POST.get('color'))
-    b_n_w = int(request.POST.get('b_n_w'))
-    papersize_a4 = int(request.POST.get('papersize_a4'))
-    papersize_non_a4 = int(request.POST.get('papersize_non_a4'))
+    if request.method == 'POST':
+        post_data = json.loads(request.body.decode("utf-8"))
+    else:
+        raise Http404
+
+    p_id = post_data['p_id']
+    datetime = Utils.utc_dt_from_utc_timestamp(post_data['timestamp'])
+    total = post_data['total']
+    duplex = post_data['duplex']
+    one_side = post_data['one_side']
+    color = post_data['color']
+    b_n_w = post_data['b_n_w']
+    papersize_a4 = post_data['papersize_a4']
+    papersize_non_a4 = post_data['papersize_non_a4']
 
     printer_timezone = Printer.objects.select_related('system__timezone').get(p_id=p_id).system.timezone
 
