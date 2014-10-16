@@ -29,9 +29,9 @@ app.conf.update(
             'task': 'egauge.tasks.recover_all_invalid_reading',
             'schedule': crontab(minute='*/10'),
         },
-        'check-alert-every-5-min': {
+        'check-alert-every-10-min': {
             'task': 'alert.tasks.invoke_check_all_alerts',
-            'schedule': crontab(minute='*/5'),
+            'schedule': crontab(minute='*/10'),
         },
         'send-alert-email-every-5-min': {
             'task': 'alert.tasks.send_alert_email',

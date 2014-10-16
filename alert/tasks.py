@@ -9,7 +9,7 @@ from django.db.models import Q
 from django.core.mail import send_mail
 from django.db import transaction
 from .models import Alert, AlertHistory, AlertEmail
-from .models import ALERT_TYPE_STILL_ON, ALERT_TYPE_SUMMARY, ALERT_TYPE_PEAK
+from .models import ALERT_TYPE_STILL_ON, ALERT_TYPE_SUMMARY, ALERT_TYPE_PEAK, CONTINUOUS_INTERVAL_MIN
 from contact.models import Contact
 from entrak.settings import EMAIL_HOST_USER
 from utils.utils import Utils
@@ -24,6 +24,8 @@ def __valid_alert_filter_f(utc_now):
             if now.weekday() in alert.check_weekdays:
 
                 if alert.type == ALERT_TYPE_STILL_ON:
+                    # make sure the whole time slot lay within checking period
+                    now -= datetime.timedelta(minutes=CONTINUOUS_INTERVAL_MIN)
                     if alert.start_time >= alert.end_time:
                         if now.time() >= alert.start_time or now.time() <= alert.end_time:
                             isValid = True
@@ -49,8 +51,8 @@ def __valid_alert_filter_f(utc_now):
 def invoke_check_all_alerts():
     # this wrapper function is to ensure check alert time is correct
     utc_now = pytz.utc.localize(datetime.datetime.utcnow()).replace(second=0, microsecond=0)
-    # delay 5 minutes to ensure data is ready
-    utc_now -= datetime.timedelta(minutes=5)
+    # check previous time slot to ensure data is ready
+    utc_now -= datetime.timedelta(minutes=CONTINUOUS_INTERVAL_MIN)
     check_all_alerts.delay(utc_now)
 
 @shared_task(ignore_result=True)
