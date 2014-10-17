@@ -5,6 +5,8 @@
 {% load static %}
 {% load humanize %}
 
+{% block ga_page_title %}report{% endblock %}
+
 {% block extra_head %}
 {{block.super}}
 {% get_current_language as LANGUAGE_CODE %}
