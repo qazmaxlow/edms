@@ -135,6 +135,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
+        'django.request': {
+            'handlers': ['timed_rotating_handler'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
     },
 }
 
