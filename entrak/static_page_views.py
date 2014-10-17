@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import ensure_csrf_cookie
 from system.models import System
@@ -11,7 +11,7 @@ def disclaimer_view(request, system_code=None):
     m = systems_info
     m.update(csrf(request))
 
-    return render_to_response('disclaimer.html', m)
+    return render(request, 'disclaimer.html', m)
 
 @permission_required()
 @ensure_csrf_cookie
@@ -20,4 +20,4 @@ def faq_view(request, system_code=None):
     m = systems_info
     m.update(csrf(request))
 
-    return render_to_response('faq.html', m)
+    return render(request, 'faq.html', m)

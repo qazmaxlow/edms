@@ -24,3 +24,5 @@ LOGGING['handlers']['recap_timed_rotating_handler']['filename'] = os.path.join('
 SITE_LINK_FORMAT = 'https://data.en-trak.com'
 
 PYTHON_BIN = '/app/ENV/entrak/bin/python'
+
+ANALYTICS_TRACKING = True

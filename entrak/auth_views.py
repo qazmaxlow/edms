@@ -1,6 +1,6 @@
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.core.context_processors import csrf
 from django.utils.translation import ugettext as _
 from system.models import System
@@ -27,7 +27,7 @@ def login_view(request, system_code=None):
     m["system"] = system
     m["warning_msg"] = warning_msg
 
-    return render_to_response('login.html', m)
+    return render(request, 'login.html', m)
 
 def logout_view(request, system_code=None):
     logout(request)
@@ -52,4 +52,4 @@ def centeral_login_view(request):
     m = {}
     m.update(csrf(request))
     m["warning_msg"] = warning_msg
-    return render_to_response('central_login.html', m)
+    return render(request, 'central_login.html', m)

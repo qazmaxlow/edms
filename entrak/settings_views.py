@@ -2,7 +2,7 @@ import datetime
 import json
 import pytz
 import calendar
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.translation import ugettext as _
@@ -63,7 +63,7 @@ def alert_settings_view(request, system_code=None):
     m['alert_history_infos'] = escapejs(json.dumps(alert_history_infos))
     m.update(csrf(request))
 
-    return render_to_response('alert_settings.html', m)
+    return render(request, 'alert_settings.html', m)
 
 @permission_required(USER_ROLE_ADMIN_LEVEL)
 def set_alert_view(request, system_code=None):
@@ -151,7 +151,7 @@ def general_settings_view(request, system_code=None):
             m['general_user_info'].append(info)
     m.update(csrf(request))
 
-    return render_to_response('general_settings.html', m)
+    return render(request, 'general_settings.html', m)
 
 @permission_required()
 def set_user_info_view(request, system_code=None):

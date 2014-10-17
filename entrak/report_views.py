@@ -9,7 +9,7 @@ import calendar
 import pdfkit
 import uuid
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -84,7 +84,7 @@ def report_view(request, system_code=None):
     m["monthly_summary"] = sorted(monthly_summary, key=lambda x: x['timestamp'], reverse=True)
     m.update(csrf(request))
 
-    return render_to_response('report.html', m)
+    return render(request, 'report.html', m)
 
 def __calculcate_total_max_min(readings, timezone):
     total_val = 0
@@ -519,7 +519,7 @@ def generate_report_pdf_view(request, system_code, report_type, start_timestamp,
 
     m["report_data"] = escapejs(json.dumps(__generate_report_data(systems, report_type, start_timestamp, end_timestamp)))
 
-    return render_to_response('generate_report_pdf.html', m)
+    return render(request, 'generate_report_pdf.html', m)
 
 
 def generate_summary_report_pdf_view(request, system_code, report_type, start_timestamp, end_timestamp, lang_code):
@@ -536,4 +536,4 @@ def generate_summary_report_pdf_view(request, system_code, report_type, start_ti
 
     m["report_data"] = escapejs(json.dumps(__generate_report_data(systems, report_type, start_timestamp, end_timestamp)))
 
-    return render_to_response('generate_summary_report_pdf.html', m)
+    return render(request, 'generate_summary_report_pdf.html', m)

@@ -1,5 +1,5 @@
 import json
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.db.models import Q
@@ -28,7 +28,7 @@ def ranking_view(request, system_code=None):
     m.update({'sources': sources, 'unit_categorys': unit_categorys})
     m.update(csrf(request))
 
-    return render_to_response('ranking.html', m)
+    return render(request, 'ranking.html', m)
 
 def ranking_data_view(request, system_code=None):
     grouped_source_infos = json.loads(request.POST.get('grouped_source_infos'))

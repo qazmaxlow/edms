@@ -2,7 +2,7 @@ import datetime
 import pytz
 import calendar
 import json
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.context_processors import csrf
@@ -192,7 +192,7 @@ def progress_view(request, system_code=None):
     }
     m.update(csrf(request))
 
-    return render_to_response('progress.html', m)
+    return render(request, 'progress.html', m)
 
 @permission_required()
 def progress_data_view(request, system_code=None):

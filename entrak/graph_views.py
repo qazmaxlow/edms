@@ -3,7 +3,7 @@ import pytz
 import operator
 import json
 import itertools
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.db.models import Q
@@ -31,7 +31,7 @@ def graph_view(request, system_code=None):
     m.update({'sources': sources, 'unit_categorys': unit_categorys})
     m.update(csrf(request))
 
-    return render_to_response('graph.html', m)
+    return render(request, 'graph.html', m)
 
 def source_readings_view(request, system_code):
     grouped_source_infos = json.loads(request.POST.get('grouped_source_infos'))

@@ -3,7 +3,7 @@ import datetime
 import calendar
 import json
 from django.utils.html import escapejs
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import ensure_csrf_cookie
 from mongoengine import Q as MongoQ
@@ -26,7 +26,7 @@ def display_view(request, system_code=None):
     m['STATIC_URL'] = STATIC_URL
     m.update(csrf(request))
 
-    return render_to_response('display.html', m)
+    return render(request, 'display.html', m)
 
 def display_energy_readings_view(request, system_code=None):
     system = System.objects.get(code=system_code)
