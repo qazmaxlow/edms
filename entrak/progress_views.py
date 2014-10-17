@@ -127,7 +127,7 @@ def __calculate_progress_data(systems):
 
         combined_readings = {}
         for source in attached_sources:
-            target_readings = grouped_monthly_readings[str(source.id)]
+            target_readings = grouped_monthly_readings.get(str(source.id), {})
             for timestamp, reading in target_readings.items():
                 combined_readings[timestamp] = combined_readings.get(timestamp, 0) + reading
 
