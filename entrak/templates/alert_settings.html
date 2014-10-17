@@ -407,7 +407,7 @@ function requestRemoveAlert(alertId) {
 
 function updateAlertRowDisplayText(tableRow, alert) {
     tableRow.attr('alert_id', alert.id);
-    tableRow.find('.end-use-text').text(alert.sourceInfo.name);
+    tableRow.find('.end-use-text').text(alert.sourceInfo.nameInfo["{{ LANGUAGE_CODE }}"]);
     tableRow.find('.percent-text').text(alert.comparePercent);
     tableRow.find('.receiver-num-val').text(alert.contactEmails.length);
     if (alert.type === 'peak') {
