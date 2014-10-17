@@ -2,3 +2,22 @@
 .still-on-alert .conversational-block > div:first-child .SumoSelect .SlectBox{
     width: 150px !important;
 }
+.duplicate-container .conversational-block > div:first-child .SumoSelect {
+    width: auto !important;
+}
+.duplicate-container .conversational-block > div:nth-child(2) .SumoSelect .CaptionCont {
+    width: auto !important;
+}
+.summary-alert .alert-content .conversational-block>div:nth-child(2) .SumoSelect,
+.still-on-alert .alert-content .conversational-block>div:nth-child(2) .SumoSelect {
+    margin-right: 10px !important;
+    margin-left: 10px !important;
+}
+.summary-alert.duplicate-container .conversational-block > div:nth-child(2) .SumoSelect,
+.still-on-alert.duplicate-container .conversational-block > div:nth-child(2) .SumoSelect {
+    width: 200px !important;
+}
+.summary-alert.duplicate-container .conversational-block > div:nth-child(2) .SumoSelect .CaptionCont,
+.still-on-alert.duplicate-container .conversational-block > div:nth-child(2) .SumoSelect .CaptionCont {
+    width: 200px !important;
+}
