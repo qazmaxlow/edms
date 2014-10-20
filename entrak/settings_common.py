@@ -71,7 +71,10 @@ MIDDLEWARE_CLASSES = (
     'entrak.middleware.timezone_middleware.TimezoneMiddleware',
 )
 
-global_settings.TEMPLATE_CONTEXT_PROCESSORS += ('django.core.context_processors.request',)
+TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
+    'django.core.context_processors.request',
+    'entrak.context_processors.analytics',
+)
 
 ROOT_URLCONF = 'entrak.urls'
 
@@ -132,6 +135,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
+        'django.request': {
+            'handlers': ['timed_rotating_handler'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
     },
 }
 
@@ -150,3 +158,5 @@ AUTH_USER_MODEL = 'user.EntrakUser'
 
 # Grappelli
 GRAPPELLI_ADMIN_TITLE = 'En-trak CMS'
+
+ANALYTICS_TRACKING = False

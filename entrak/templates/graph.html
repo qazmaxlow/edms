@@ -5,6 +5,8 @@
 {% load staticfiles %}
 {% load entrak_extras %}
 
+{% block ga_page_title %}graph{% endblock %}
+
 {% block extra_head %}
 {{block.super}}
 {% get_current_language as LANGUAGE_CODE %}

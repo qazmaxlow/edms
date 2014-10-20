@@ -15,6 +15,7 @@
     <div>display name: <input type="text" name="d_name"></div>
     <div>display name (TC): <input type="text" name="d_name_tc"></div>
     <div>order: <input type="text" name="order" size="3"></div>
+    <div>active: <input type="checkbox" name="active" value="true" checked></div>
     <div class="remove-btn">X</div>
 </div>
 </script>
@@ -55,6 +56,7 @@ $(function() {
             info.d_name = $(this).find("input[name='d_name']").val();
             info.d_name_tc = $(this).find("input[name='d_name_tc']").val();
             info.order = $(this).find("input[name='order']").val();
+            info.active = $(this).find("input[name='active']").prop("checked");
             var sourceIdInput = $(this).find("input[name='source_id']");
             if (sourceIdInput.length === 0) {
                 info.source_id = null;
@@ -94,6 +96,7 @@ $(function() {
         <div>display name: <input type="text" name="d_name" value="{{source.d_name}}"></div>
         <div>display name (TC): <input type="text" name="d_name_tc" value="{{source.d_name_tc}}"></div>
         <div>order: <input type="text" name="order" size="3" value="{{source.order}}"></div>
+        <div>active: <input type="checkbox" name="active" value="true" {% if source.active %}checked{% endif %}></div>
         <div><input type="hidden" name="source_id" value="{{source.id}}"></div>
     </div>
     {% endfor %}

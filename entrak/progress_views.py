@@ -2,7 +2,7 @@ import datetime
 import pytz
 import calendar
 import json
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.context_processors import csrf
@@ -127,7 +127,7 @@ def __calculate_progress_data(systems):
 
         combined_readings = {}
         for source in attached_sources:
-            target_readings = grouped_monthly_readings[str(source.id)]
+            target_readings = grouped_monthly_readings.get(str(source.id), {})
             for timestamp, reading in target_readings.items():
                 combined_readings[timestamp] = combined_readings.get(timestamp, 0) + reading
 
@@ -192,7 +192,7 @@ def progress_view(request, system_code=None):
     }
     m.update(csrf(request))
 
-    return render_to_response('progress.html', m)
+    return render(request, 'progress.html', m)
 
 @permission_required()
 def progress_data_view(request, system_code=None):
