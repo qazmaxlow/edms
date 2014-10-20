@@ -72,7 +72,7 @@ GraphChart.prototype._retrieveSourceReadings = function(groupedSourceInfos, star
 
     $.ajax({
         type: "POST",
-        url: "../source_readings/",
+        url: "../show_measures/",
         data: {
             grouped_source_infos: JSON.stringify(groupedSourceInfos),
             range_type: Utils.API_RANGE_TYPES[graphChartThis.currentRangeType],
