@@ -1,3 +1,4 @@
+import calendar
 import json
 
 from django.core.context_processors import csrf
@@ -43,8 +44,6 @@ def show_measures_view(request, system_code):
     source_group_map = Utils.gen_source_group_map(grouped_source_infos)
     all_source_ids = Utils.get_source_ids_from_grouped_source_info(grouped_source_infos)
 
-    source_readings = SourceManager.get_readings(all_source_ids, range_type, start_dt, end_dt)
-
     if unit_category_code != KWH_CATEGORY_CODE:
         if has_detail_rate:
             systems = System.get_systems_within_root(system_code)
@@ -55,13 +54,23 @@ def show_measures_view(request, system_code):
         else:
             calculation.transform_source_readings_with_global_rate(source_readings, global_rate)
 
-    grouped_readings = [{'name': info['name'], 'readings': {}} for info in grouped_source_infos]
-    for source_id, readings in source_readings.items():
-        target_group = grouped_readings[source_group_map[source_id]]['readings']
-        for timestamp, val in readings.items():
-            if timestamp in target_group:
-                target_group[timestamp] += val
-            else:
-                target_group[timestamp] = val
+    # only one printer per one system
+    system = System.get_systems_within_root(system_code)[0]
+    printer = system.printers.first()
+    printers_response = [{'name': printer.name}]
 
-    return Utils.json_response(grouped_readings)
+    from printers.models import PrinterReadingHour
+    printer_measures = PrinterReadingHour.objects(
+        p_id = str(printer.id),
+        datetime__gte=start_dt,
+        datetime__lte=end_dt
+    )
+
+    printer_readings = {}
+    for printer_measure in printer_measures:
+        dt_key = calendar.timegm(printer_measure.datetime.utctimetuple())
+        printer_readings[dt_key] = printer_measure.total
+
+    printers_response[0]['readings'] = printer_readings
+
+    return Utils.json_response(printers_response)

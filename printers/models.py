@@ -6,7 +6,7 @@ from mongoengine.fields import *
 class Printer(models.Model):
     p_id = models.CharField(max_length=200, unique=True)
     name = models.CharField(max_length=200)
-    system = models.ForeignKey('system.System')
+    system = models.ForeignKey('system.System', related_name='printers')
     order = models.IntegerField(default=1)
 
 class BasePrinterReading(Document):
