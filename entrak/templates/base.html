@@ -17,7 +17,7 @@
         });
         ga('send', 'pageview', {
             'title': '{% block ga_page_title %}{% endblock %}',
-            {% if SYSTEM_CODE %}'system-code': '{{SYSTEM_CODE}}',{% endif %}
+            {% if SYSTEM_CODE %}'dimension1': '{{SYSTEM_CODE}}',{% endif %}
         });
         </script>
         {% endblock %}
