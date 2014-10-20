@@ -56,7 +56,7 @@ INSTALLED_APPS = (
     'unit',
     'contact',
     'alert',
-    'printer',
+    'printers',
     'entrak',
 )
 
