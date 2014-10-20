@@ -1,5 +1,7 @@
 from django.conf.urls import patterns, include, url
 
+from . import graph_views
+
 urlpatterns = patterns('',
-    url(r'^measure/$', 'printer.views.measure_view', name='set_paper_count'),
+    url(r'^graph/$', graph_views.graph_view),
 )
