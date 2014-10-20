@@ -33,7 +33,7 @@ def measure_view(request):
         raise Http404
 
     printer_code = post_data['p_id']
-    printer = Printer.objects.get(p_id=printer_code)
+    printer = Printer.objects.get(code=printer_code)
     p_id = str(printer.id)
     datetime = Utils.utc_dt_from_utc_timestamp(post_data['timestamp'])
     total = post_data['total']
@@ -44,7 +44,7 @@ def measure_view(request):
     papersize_a4 = post_data['papersize_a4']
     papersize_non_a4 = post_data['papersize_non_a4']
 
-    printer_timezone = Printer.objects.select_related('system__timezone').get(p_id=printer_code).system.timezone
+    printer_timezone = Printer.objects.select_related('system__timezone').get(code=printer_code).system.timezone
 
     paper_reading_hour, created = PrinterReadingHour.objects.get_or_create(p_id=p_id, datetime=datetime, defaults={
         'total': total, 'duplex': duplex, 'one_side': one_side,
