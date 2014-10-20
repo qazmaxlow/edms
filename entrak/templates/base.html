@@ -17,6 +17,7 @@
         });
         ga('send', 'pageview', {
             'title': '{% block ga_page_title %}{% endblock %}',
+            'dimension2': '{{GA_USER_ID}}',
             {% if SYSTEM_CODE %}'dimension1': '{{SYSTEM_CODE}}',{% endif %}
         });
         </script>
