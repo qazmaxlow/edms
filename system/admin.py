@@ -7,6 +7,7 @@ from egauge.models import Source
 class SystemAdmin(admin.ModelAdmin):
     list_display = ('code', 'name', 'full_name', 'path', 'city')
     list_editable = ('name', 'full_name',)
+    search_fields = ['code', 'full_name']
 
     def save_model(self, request, obj, form, change):
         if not change:
