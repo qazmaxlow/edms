@@ -11,7 +11,7 @@ from egauge.tasks import force_retrieve_reading
 from baseline.models import BaselineUsage
 from utils.utils import Utils
 
-CAN_UPDATE_SOURCE_FIELDS = ['name', 'xml_url', 'system_code', 'system_path', 'd_name', 'd_name_tc', 'order']
+CAN_UPDATE_SOURCE_FIELDS = ['name', 'xml_url', 'system_code', 'system_path', 'd_name', 'd_name_tc', 'order', 'active']
 
 def __is_source_need_update(source, info):
     need_update = False
@@ -68,7 +68,8 @@ def edit_sources_view(request, system_code=None):
                     system_path=info['system_path'],
                     d_name=info['d_name'],
                     d_name_tc=info['d_name_tc'],
-                    order=info['order']))
+                    order=info['order'],
+                    active=info['active']))
             else:
                 original_source = source_id_map[info['source_id']]
                 if __is_source_need_update(original_source, info):
