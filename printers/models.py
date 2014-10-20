@@ -4,7 +4,7 @@ from mongoengine.document import Document
 from mongoengine.fields import *
 
 class Printer(models.Model):
-    p_id = models.CharField(max_length=200, unique=True)
+    code = models.SlugField(max_length=200)
     name = models.CharField(max_length=200)
     system = models.ForeignKey('system.System', related_name='printers')
     order = models.IntegerField(default=1)
