@@ -1,13 +1,19 @@
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
+
 
 KWH_CATEGORY_CODE = 'kwh'
 CO2_CATEGORY_CODE = 'co2'
 MONEY_CATEGORY_CODE = 'money'
 
 
+@python_2_unicode_compatible
 class UnitType(models.Model):
     code = models.SlugField(max_length=30)
     name = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.name
 
 
 class UnitCategory(models.Model):
