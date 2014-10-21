@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static humanize %}
+
+{% block extra_head %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static "css/invalid-readings.css" %}" />
+{% endblock %}
+
+{% block content %}
+<table class="reading-table">
+    <tr>
+        <th>meter</th>
+        <th>count</th>
+    </tr>
+    {% for invalid_reading in invalid_readings %}
+    <tr>
+        <td>{{invalid_reading.xml_url}}</td>
+        <td>{{invalid_reading.count|intcomma}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
