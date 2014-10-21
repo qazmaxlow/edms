@@ -7,6 +7,11 @@ CO2_CATEGORY_CODE = 'co2'
 MONEY_CATEGORY_CODE = 'money'
 
 
+class ElectricUnitManager(models.Manager):
+    def get_queryset(self):
+        return super(ElectricUnitManager, self).get_queryset().filter(unit_type__code='electric')
+
+
 @python_2_unicode_compatible
 class UnitType(models.Model):
     code = models.SlugField(max_length=30)
@@ -31,6 +36,9 @@ class UnitCategory(models.Model):
     has_detail_rate = models.BooleanField(default=False)
     city = models.CharField(max_length=200)
     unit_type = models.ManyToManyField(UnitType, related_name="unit_types")
+
+    objects = models.Manager()
+    electric_units = ElectricUnitManager()
 
 
 class UnitRate(models.Model):
