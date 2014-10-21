@@ -12,6 +12,11 @@ class ElectricUnitManager(models.Manager):
         return super(ElectricUnitManager, self).get_queryset().filter(unit_type__code='electric')
 
 
+class PrinterUnitManager(models.Manager):
+    def get_queryset(self):
+        return super(PrinterUnitManager, self).get_queryset().filter(unit_type__code='printer')
+
+
 @python_2_unicode_compatible
 class UnitType(models.Model):
     code = models.SlugField(max_length=30)
@@ -39,6 +44,7 @@ class UnitCategory(models.Model):
 
     objects = models.Manager()
     electric_units = ElectricUnitManager()
+    printer_units = PrinterUnitManager()
 
 
 class UnitRate(models.Model):
