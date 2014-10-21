@@ -27,8 +27,6 @@ class BasePrinterReading(Document):
     papersize_a4 = IntField(default=0)
     papersize_non_a4 = IntField(default=0)
 
-class PrinterReadingMin(BasePrinterReading):
-    pass
 
 class PrinterReadingHour(BasePrinterReading):
     pass
