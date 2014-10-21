@@ -1,8 +1,30 @@
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
+
 
 KWH_CATEGORY_CODE = 'kwh'
 CO2_CATEGORY_CODE = 'co2'
 MONEY_CATEGORY_CODE = 'money'
+
+
+class ElectricUnitManager(models.Manager):
+    def get_queryset(self):
+        return super(ElectricUnitManager, self).get_queryset().filter(unit_type__code='electric')
+
+
+class PrinterUnitManager(models.Manager):
+    def get_queryset(self):
+        return super(PrinterUnitManager, self).get_queryset().filter(unit_type__code='printer')
+
+
+@python_2_unicode_compatible
+class UnitType(models.Model):
+    code = models.SlugField(max_length=30)
+    name = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.name
+
 
 class UnitCategory(models.Model):
     code = models.CharField(max_length=200)
@@ -18,6 +40,12 @@ class UnitCategory(models.Model):
     global_rate = models.FloatField(default=1)
     has_detail_rate = models.BooleanField(default=False)
     city = models.CharField(max_length=200)
+    unit_type = models.ManyToManyField(UnitType, related_name="unit_types")
+
+    objects = models.Manager()
+    electric_units = ElectricUnitManager()
+    printer_units = PrinterUnitManager()
+
 
 class UnitRate(models.Model):
     category_code = models.CharField(max_length=200)

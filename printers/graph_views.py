@@ -13,6 +13,7 @@ from egauge.manager import SourceManager
 from entrak.settings import STATIC_URL
 from system.models import System, CITY_ALL
 from unit.models import UnitCategory, UnitRate, KWH_CATEGORY_CODE
+from utils import calculation
 
 
 @permission_required()
@@ -22,7 +23,7 @@ def graph_view(request, system_code=None):
 
     sources = SourceManager.get_sources(systems_info["systems"][0])
 
-    unit_categorys = list(UnitCategory.objects.filter(Q(city=CITY_ALL) | Q(city=systems_info["systems"][0].city)).order_by('order'))
+    unit_categorys = list(UnitCategory.printer_units.filter(Q(city=CITY_ALL) | Q(city=systems_info["systems"][0].city)).order_by('order'))
 
     m = systems_info
     m['STATIC_URL'] = STATIC_URL
@@ -44,16 +45,6 @@ def show_measures_view(request, system_code):
     source_group_map = Utils.gen_source_group_map(grouped_source_infos)
     all_source_ids = Utils.get_source_ids_from_grouped_source_info(grouped_source_infos)
 
-    if unit_category_code != KWH_CATEGORY_CODE:
-        if has_detail_rate:
-            systems = System.get_systems_within_root(system_code)
-            sources = Source.objects(id__in=all_source_ids)
-            unit_rates = UnitRate.objects.filter(category_code=unit_category_code)
-
-            calculation.transform_source_readings(source_readings, systems, sources, unit_rates, unit_category_code)
-        else:
-            calculation.transform_source_readings_with_global_rate(source_readings, global_rate)
-
     # only one printer per one system
     system = System.get_systems_within_root(system_code)[0]
     printer = system.printers.first()
@@ -70,6 +61,18 @@ def show_measures_view(request, system_code):
     for printer_measure in printer_measures:
         dt_key = calendar.timegm(printer_measure.datetime.utctimetuple())
         printer_readings[dt_key] = printer_measure.total
+
+    # convert to another units
+    if unit_category_code != 'paper':
+        if has_detail_rate:
+            systems = System.get_systems_within_root(system_code)
+            sources = Source.objects(id__in=all_source_ids)
+            unit_rates = UnitRate.objects.filter(category_code=unit_category_code)
+
+            calculation.transform_source_readings(source_readings, systems, sources, unit_rates, unit_category_code)
+        else:
+            for timestamp, val in printer_readings.items():
+                printer_readings[timestamp] *= global_rate
 
     printers_response[0]['readings'] = printer_readings
 

@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.utils.decorators import available_attrs
 from django.views.decorators.csrf import csrf_exempt
 from mongoengine import connection, NotUniqueError
-from .models import Printer, PrinterReadingMin, PrinterReadingHour, \
+from .models import Printer, PrinterReadingHour, \
     PrinterReadingDay, PrinterReadingWeek, PrinterReadingMonth, PrinterReadingYear
 from utils.utils import Utils
 

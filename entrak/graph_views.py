@@ -24,7 +24,7 @@ def graph_view(request, system_code=None):
 
     sources = SourceManager.get_sources(systems_info["systems"][0])
 
-    unit_categorys = list(UnitCategory.objects.filter(Q(city=CITY_ALL) | Q(city=systems_info["systems"][0].city)).order_by('order'))
+    unit_categorys = list(UnitCategory.electric_units.filter(Q(city=CITY_ALL) | Q(city=systems_info["systems"][0].city)).order_by('order'))
 
     m = systems_info
     m['STATIC_URL'] = STATIC_URL
