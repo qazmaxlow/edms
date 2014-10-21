@@ -4,6 +4,12 @@ KWH_CATEGORY_CODE = 'kwh'
 CO2_CATEGORY_CODE = 'co2'
 MONEY_CATEGORY_CODE = 'money'
 
+
+class UnitType(models.Model):
+    code = models.SlugField(max_length=30)
+    name = models.CharField(max_length=30)
+
+
 class UnitCategory(models.Model):
     code = models.CharField(max_length=200)
     name = models.CharField(max_length=300)
@@ -18,6 +24,8 @@ class UnitCategory(models.Model):
     global_rate = models.FloatField(default=1)
     has_detail_rate = models.BooleanField(default=False)
     city = models.CharField(max_length=200)
+    unit_type = models.ManyToManyField(UnitType, related_name="unit_types")
+
 
 class UnitRate(models.Model):
     category_code = models.CharField(max_length=200)
