@@ -5,7 +5,7 @@ def analytics(request):
     if request.user.is_authenticated():
         ga_user_id = '%d|%s'%(request.user.id, request.user.username)
     else:
-        ga_user_id = 'anonymous'
+        ga_user_id = None
     system_code = resolve(request.path).kwargs.get('system_code', '')
 
     context_extras = {

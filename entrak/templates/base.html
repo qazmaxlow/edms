@@ -13,11 +13,11 @@
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
         ga('create', 'UA-55827643-1', {
-            'userId': '{{GA_USER_ID}}',
+            {% if GA_USER_ID %}'userId': '{{GA_USER_ID}}',{% endif %}
         });
         ga('send', 'pageview', {
             'title': '{% block ga_page_title %}{% endblock %}',
-            'dimension2': '{{GA_USER_ID}}',
+            {% if GA_USER_ID %}'dimension2': '{{GA_USER_ID}}',{% endif %}
             {% if SYSTEM_CODE %}'dimension1': '{{SYSTEM_CODE}}',{% endif %}
         });
         </script>
