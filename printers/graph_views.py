@@ -13,6 +13,7 @@ from egauge.manager import SourceManager
 from entrak.settings import STATIC_URL
 from system.models import System, CITY_ALL
 from unit.models import UnitCategory, UnitRate, KWH_CATEGORY_CODE
+from utils import calculation
 
 
 @permission_required()
@@ -44,16 +45,6 @@ def show_measures_view(request, system_code):
     source_group_map = Utils.gen_source_group_map(grouped_source_infos)
     all_source_ids = Utils.get_source_ids_from_grouped_source_info(grouped_source_infos)
 
-    if unit_category_code != KWH_CATEGORY_CODE:
-        if has_detail_rate:
-            systems = System.get_systems_within_root(system_code)
-            sources = Source.objects(id__in=all_source_ids)
-            unit_rates = UnitRate.objects.filter(category_code=unit_category_code)
-
-            calculation.transform_source_readings(source_readings, systems, sources, unit_rates, unit_category_code)
-        else:
-            calculation.transform_source_readings_with_global_rate(source_readings, global_rate)
-
     # only one printer per one system
     system = System.get_systems_within_root(system_code)[0]
     printer = system.printers.first()
@@ -72,5 +63,16 @@ def show_measures_view(request, system_code):
         printer_readings[dt_key] = printer_measure.total
 
     printers_response[0]['readings'] = printer_readings
+
+    if unit_category_code != 'paper':
+        if has_detail_rate:
+            systems = System.get_systems_within_root(system_code)
+            sources = Source.objects(id__in=all_source_ids)
+            unit_rates = UnitRate.objects.filter(category_code=unit_category_code)
+
+            calculation.transform_source_readings(source_readings, systems, sources, unit_rates, unit_category_code)
+        else:
+            calculation.transform_source_readings_with_global_rate(source_readings, global_rate)
+
 
     return Utils.json_response(printers_response)
