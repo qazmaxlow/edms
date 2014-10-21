@@ -62,8 +62,7 @@ def show_measures_view(request, system_code):
         dt_key = calendar.timegm(printer_measure.datetime.utctimetuple())
         printer_readings[dt_key] = printer_measure.total
 
-    printers_response[0]['readings'] = printer_readings
-
+    # convert to another units
     if unit_category_code != 'paper':
         if has_detail_rate:
             systems = System.get_systems_within_root(system_code)
@@ -72,7 +71,9 @@ def show_measures_view(request, system_code):
 
             calculation.transform_source_readings(source_readings, systems, sources, unit_rates, unit_category_code)
         else:
-            calculation.transform_source_readings_with_global_rate(source_readings, global_rate)
+            for timestamp, val in printer_readings.items():
+                printer_readings[timestamp] *= global_rate
 
+    printers_response[0]['readings'] = printer_readings
 
     return Utils.json_response(printers_response)
