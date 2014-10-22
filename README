@@ -1,53 +1,61 @@
 SETUP:
 
-a) pip
-	1. download get-pip.py (http://pip.readthedocs.org/en/latest/installing.html)
-	2. python get-pip.py
+a) git clone source code
+    1. git clone https://entrak@bitbucket.org/entrak/entrak.git
 
-b) virtualenv, virtualenv-wrapper
-	1. pip install virtualenvwrapper
-	2. edit ~/.profile
-		export WORKON_HOME=/app/ENV
-		source /usr/local/bin/virtualenvwrapper.sh
+b) pip
+    1. download get-pip.py (http://pip.readthedocs.org/en/latest/installing.html)
+    2. python get-pip.py
 
-c) mongodb
-	1a. brew install mongodb
-	OR
-	1b. apt-get install mongodb (http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/)
+c) virtualenv, virtualenv-wrapper
+    1. pip install virtualenvwrapper
+    2. edit ~/.profile
+        export WORKON_HOME=/app/ENV
+        source /usr/local/bin/virtualenvwrapper.sh
+    3. pip install -r pip_requirements.txt
 
-	2. run mongodb daemon mode
+d) install MySQL OR PostreqSQL
 
-d) celery
-	1. brew install rabbitmq
-	2. run rabbitmq
-	3. pip install celery
-	4. run celery worker (worker for processing task) AND beat (beat for fire periodic task)
+e) mongodb
+    1a. brew install mongodb
+    OR
+    1b. apt-get install mongodb (http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/)
 
-f) nginx
-	1. sudo pip install uwsgi (http://uwsgi-docs.readthedocs.org/en/latest/tutorials/Django_and_nginx.html)
+    2. run mongodb daemon mode
 
-g) wkhtmltopdf
-	1. http://wkhtmltopdf.org/downloads.html
-	2. pip install pdfkit
+f) celery
+    1. brew install rabbitmq
+    2. run rabbitmq
+    3. pip install celery
+    4. config to run different quene for different tasks (ref: entrak/celery.py, example: task_starter, recover, recap)
+    5. run celery worker (worker for processing task) AND beat (beat for fire periodic task)
+
+g) nginx
+    1. sudo pip install uwsgi (http://uwsgi-docs.readthedocs.org/en/latest/tutorials/Django_and_nginx.html)
+
+h) wkhtmltopdf
+    1. http://wkhtmltopdf.org/downloads.html
+    2. pip install pdfkit
 
 RESTART SERVER:
 
 a) restart uWsgi
-	1. su entrak
-	2. touch /app/entrak/entrak_uwsgi.ini
+    1. su entrak
+    2. touch /app/entrak/entrak_uwsgi.ini
 
 b) complete restart uWsgi in Emperor mode
-	1. sudo service uwsgi restart
+    1. sudo service uwsgi restart
 
-c) restart celery (REMEMBER to restart celery as it always use old version of code)
-	1. sudo /etc/init.d/celeryd restart
-	2. sudo /etc/init.d/celerybeat restart
+c) restart celery (REMEMBER to restart celery if task code has updated as it always use old version of code)
+    1. sudo /etc/init.d/celeryd restart
+    2. sudo /etc/init.d/celerybeat restart
 
 d) restart nginx
-	1. sudo service nginx restart
+    1. sudo service nginx restart
 
 DEPLOY:
 
-a) git pull
-b) restart entrak uwsgi instance
-c) restart celery
+a) sudo su entrak
+b) git pull
+c) restart entrak uwsgi instance
+d) restart celery (optional)

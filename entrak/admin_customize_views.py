@@ -4,9 +4,10 @@ import datetime
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import ensure_csrf_cookie
+from mongoengine import connection
 from system.models import System
 from egauge.manager import SourceManager
-from egauge.models import Source
+from egauge.models import Source, SourceReadingMinInvalid
 from egauge.tasks import force_retrieve_reading
 from baseline.models import BaselineUsage
 from utils.utils import Utils
@@ -25,6 +26,39 @@ def __is_source_need_update(source, info):
 def __assign_source_info(source, info):
     for info_key in CAN_UPDATE_SOURCE_FIELDS:
         source.__setattr__(info_key, info[info_key])
+
+@user_passes_test(lambda user: user.is_superuser, login_url='/admin/')
+@ensure_csrf_cookie
+def invalid_readings_view(request):
+    current_db_conn = connection.get_db()
+    invalid_readings = current_db_conn.source_reading_min_invalid.aggregate([
+        {
+            "$group": {
+                "_id": "$xml_url",
+                "count": { "$sum": 1 },
+                "oldest": { "$min": "$datetime" },
+                "newest": { "$max": "$datetime" },
+            }
+        },
+        { "$sort" : { "count": -1 } }
+    ])['result']
+
+    m = {}
+    m['invalid_readings'] = [
+        {
+            'xml_url': invalid_reading['_id'],
+            'count': invalid_reading['count'],
+            'oldest': (invalid_reading['oldest']).astimezone(pytz.timezone("Asia/Hong_Kong")),
+            'newest': (invalid_reading['newest']).astimezone(pytz.timezone("Asia/Hong_Kong")),
+        } for invalid_reading in invalid_readings]
+    return render_to_response('admin/invalid_readings.html', m)
+
+@user_passes_test(lambda user: user.is_superuser, login_url='/admin/')
+def remove_invalid_readings_view(request):
+    xml_url = request.POST.get('xml_url')
+    SourceReadingMinInvalid.objects(xml_url=xml_url).delete()
+
+    return Utils.json_response({'success': True})
 
 @user_passes_test(lambda user: user.is_superuser, login_url='/admin/')
 @ensure_csrf_cookie

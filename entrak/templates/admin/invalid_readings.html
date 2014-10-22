@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static humanize %}
+
+{% block extra_head %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static "css/invalid-readings.css" %}" />
+
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
+<script src="{% static 'js/csrf_ajax.js' %}"></script>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$(function() {
+    setupAjaxForCsrf($.cookie('csrftoken'));
+
+    $('.remove-btn').click(function() {
+        var xmlUrl = $(this).parent().parent().attr('xml_url');
+        $.ajax({
+            type: "POST",
+            url: "{% url 'remove_invalid_readings' %}",
+            data: {
+                'xml_url': xmlUrl,
+            },
+        }).done(function(data) {
+            if (data.success) {
+                $('tr[xml_url="' + xmlUrl + '"]').remove();
+            }
+        }).fail(function(jqXHR, textStatus) {
+            console.log(jqXHR.responseText);
+        });
+    });
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<table class="reading-table">
+    <tr>
+        <th>meter</th>
+        <th>count</th>
+        <th>oldest</th>
+        <th>newest</th>
+        <th>action</th>
+    </tr>
+    {% for invalid_reading in invalid_readings %}
+    <tr xml_url="{{invalid_reading.xml_url}}">
+        <td>{{invalid_reading.xml_url}}</td>
+        <td>{{invalid_reading.count|intcomma}}</td>
+        <td>{{invalid_reading.oldest|date:"Y-m-d H:i"}}</td>
+        <td>{{invalid_reading.newest|date:"Y-m-d H:i"}}</td>
+        <td><button class="remove-btn">Remove</button></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

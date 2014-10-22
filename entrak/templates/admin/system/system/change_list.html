@@ -1,0 +1,46 @@
+{% extends "admin/change_list.html" %}
+
+{% load i18n grp_tags admin_urls admin_static admin_list %}
+
+{% block stylesheets %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "css/system-admin.css" %}" />
+{% endblock %}
+
+{% block javascripts %}
+    {{ block.super }}
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="{% static 'js/jquery.bpopup.min.js' %}"></script>
+    
+    <script type="text/javascript">
+    $(function() {
+        $(".invalid-readings-btn").click(function(e) {
+            e.preventDefault();
+
+            theBPopup = $(".invalid-readings-container").css({
+                'width': '700px',
+                'height': '460px',
+            }).bPopup({
+                content: 'iframe',
+                contentContainer: '.invalid-readings-content',
+                loadUrl: "{% url 'invalid_readings' %}",
+                iframeAttr: {
+                    'scrolling': 'yes',
+                }
+            });
+        });
+    });
+    </script>
+{% endblock %}
+
+{% block object-tools-items %}
+    <li><a class="invalid-readings-btn" href="#">Invalid Readings</a></li>
+    {% if has_add_permission %}
+        {% url cl.opts|admin_urlname:'add' as add_url %}
+        <li><a href="{% add_preserved_filters add_url is_popup %}" class="addlink">{% blocktrans with cl.opts.verbose_name as name %}Add {{ name }}{% endblocktrans %}</a></li>
+    {% endif %}
+
+    <div class="invalid-readings-container">
+        <div class="invalid-readings-content"></div>
+    </div>
+{% endblock %}
