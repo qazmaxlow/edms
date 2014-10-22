@@ -1,5 +1,8 @@
 import calendar
 import json
+import pytz
+import datetime
+from mongoengine import connection
 
 from django.core.context_processors import csrf
 from django.db.models import Q
@@ -9,6 +12,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from utils.auth import permission_required
 from utils.utils import Utils
 
+from printers.models import (PrinterReadingHour, PrinterReadingDay, PrinterReadingWeek, PrinterReadingMonth, PrinterReadingYear)
 from egauge.manager import SourceManager
 from entrak.settings import STATIC_URL
 from system.models import System, CITY_ALL
@@ -50,7 +54,6 @@ def show_measures_view(request, system_code):
     printer = system.printers.first()
     printers_response = [{'name': printer.name}]
 
-    from printers.models import PrinterReadingHour
     printer_measures = PrinterReadingHour.objects(
         p_id = str(printer.id),
         datetime__gte=start_dt,
@@ -79,6 +82,120 @@ def show_measures_view(request, system_code):
     return Utils.json_response(printers_response)
 
 
+def get_readings(printer, range_type, start_dt, end_dt):
+    range_type_mapping = {
+        Utils.RANGE_TYPE_DAY: {'target_class': PrinterReadingHour},
+        Utils.RANGE_TYPE_WEEK: {'target_class': PrinterReadingDay},
+        Utils.RANGE_TYPE_MONTH: {'target_class': PrinterReadingDay},
+        Utils.RANGE_TYPE_YEAR: {'target_class': PrinterReadingMonth},
+    }
+    target_class = range_type_mapping[range_type]['target_class']
+    readings = target_class.objects(
+        p_id=str(printer.id),
+        datetime__gte=start_dt,
+        datetime__lt=end_dt)
+    grouped_readings = {}
+
+    for reading in readings:
+        if str(reading.p_id) not in grouped_readings:
+            grouped_readings[str(reading.p_id)] = {}
+
+        dt_key = calendar.timegm(reading.datetime.utctimetuple())
+        grouped_readings[str(reading.p_id)][dt_key] = reading.total
+
+    return grouped_readings
+
+
+def get_most_readings(printer, range_type, tz_offset, sort_order, system, start_dt):
+    range_type_mapping = {
+        Utils.RANGE_TYPE_HOUR: {'compare_collection': 'printer_reading_hour'},
+        Utils.RANGE_TYPE_DAY: {'compare_collection': 'printer_reading_day'},
+        Utils.RANGE_TYPE_WEEK: {'compare_collection': 'printer_reading_week'},
+        Utils.RANGE_TYPE_MONTH: {'compare_collection': 'printer_reading_month'},
+        Utils.RANGE_TYPE_YEAR: {'compare_collection': 'printer_reading_year'},
+    }
+
+    system_timezone = pytz.timezone(system.timezone)
+    dt_lower_bound = system.first_record.astimezone(system_timezone).replace(
+            hour=0, minute=0, second=0, microsecond=0)
+    dt_upper_bound = pytz.utc.localize(datetime.datetime.utcnow()).astimezone(system_timezone).replace(
+        minute=0, second=0, microsecond=0)
+
+    match_condition = {'p_id': str(printer.id)}
+    if range_type == Utils.RANGE_TYPE_HOUR:
+        match_condition["datetime"] = {'$lt': dt_upper_bound}
+    elif range_type == Utils.RANGE_TYPE_DAY:
+        dt_upper_bound = dt_upper_bound.replace(hour=0)
+        match_condition["datetime"] = {'$lt': dt_upper_bound}
+    elif range_type == Utils.RANGE_TYPE_WEEK:
+        dt_upper_bound = dt_upper_bound.replace(hour=0)
+        dt_upper_bound -= datetime.timedelta(days=(dt_upper_bound.weekday()+1))
+        if dt_lower_bound.weekday() != 6:
+            dt_lower_bound += datetime.timedelta(days=(6-dt_lower_bound.weekday()))
+        match_condition["datetime"] = {'$gte': dt_lower_bound, '$lt': dt_upper_bound}
+    elif range_type == Utils.RANGE_TYPE_MONTH:
+        dt_upper_bound = dt_upper_bound.replace(day=1, hour=0)
+        if dt_lower_bound.day != 1:
+            dt_lower_bound = Utils.add_month(dt_lower_bound, 1).replace(day=1)
+        match_condition["datetime"] = {'$gte': dt_lower_bound, '$lt': dt_upper_bound}
+    elif range_type == Utils.RANGE_TYPE_YEAR:
+        dt_upper_bound = dt_upper_bound.replace(month=1, day=1, hour=0)
+        if dt_lower_bound.month != 1 or dt_lower_bound.day != 1:
+            dt_lower_bound = dt_lower_bound.replace(year=(dt_lower_bound.year+1), month=1, day=1)
+        match_condition["datetime"] = {'$gte': dt_lower_bound, '$lt': dt_upper_bound}
+
+    aggregate_pipeline = [
+        {"$match": match_condition},
+        {
+            "$group": {
+                "_id": "$datetime",
+                "total": {"$sum": "$total"}
+            }
+        },
+        {"$sort": {"total": sort_order}},
+    ]
+
+    # lowest need to check data complete or not, cannot limit to 1
+    if range_type != Utils.RANGE_TYPE_DAY and sort_order == -1:
+        aggregate_pipeline.append({"$limit": 1})
+
+    mapped_info = range_type_mapping[range_type]
+    current_db_conn = connection.get_db()
+    result = current_db_conn[mapped_info['compare_collection']].aggregate(aggregate_pipeline)
+
+    info = {}
+
+    # only that day of a week, e.g Monday
+    if range_type == Utils.RANGE_TYPE_DAY:
+        target_weekday = start_dt.astimezone(system_timezone).weekday()
+        valid_results = []
+        for result_data in result["result"]:
+            result_data_dt = result_data["_id"].astimezone(system_timezone)
+            if result_data_dt.weekday() == target_weekday:
+                valid_results.append(result_data)
+        result["result"] = valid_results
+
+    # check if have complete data for lowest
+    if sort_order == 1:
+        for result_data in result["result"]:
+            if SourceManager.is_reading_complete(range_type, objectlize_source_ids, result_data["_id"], tz_offset):
+                result['result'] = [result_data]
+                break
+
+    if result["result"]:
+        start_dt = result["result"][0]["_id"].astimezone(pytz.utc)
+        end_dt = Utils.gen_end_dt(range_type, start_dt, tz_offset)
+
+        info['timestamp'] = calendar.timegm(start_dt.utctimetuple())
+        info['readings'] = get_readings(printer, range_type, start_dt, end_dt)
+
+    else:
+        info['timestamp'] = None
+        info['readings'] = {}
+
+    return info
+
+
 def show_highest_and_lowest_view(request, system_code):
     start_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('start_dt')))
     source_infos = json.loads(request.POST.get('source_infos'))
@@ -92,11 +209,15 @@ def show_highest_and_lowest_view(request, system_code):
     systems = System.get_systems_within_root(system_code)
     current_system = systems[0]
 
-    source_readings_info = SourceManager.get_most_readings(source_infos['source_ids'],
-        range_type, tz_offset,sort_order, current_system, start_dt)
-    source_readings_info['name'] = source_infos['name']
+    printer = current_system.printers.first()
+    printers_response = [{'name': printer.name}]
 
-    if unit_category_code != KWH_CATEGORY_CODE:
+    printer_readings_info = get_most_readings(
+        printer,
+        range_type, tz_offset,sort_order, current_system, start_dt)
+    printer_readings_info['name'] = printer.name
+
+    if unit_category_code != 'paper':
         if has_detail_rate:
             sources = Source.objects(id__in=source_infos['source_ids'])
             unit_rates = UnitRate.objects.filter(category_code=unit_category_code)
@@ -106,12 +227,12 @@ def show_highest_and_lowest_view(request, system_code):
             calculation.transform_source_readings_with_global_rate(source_readings_info['readings'], global_rate)
 
     total_readings = {}
-    for _, readings in source_readings_info['readings'].items():
+    for _, readings in printer_readings_info['readings'].items():
         for timestamp, val in readings.items():
             if timestamp in total_readings:
                 total_readings[timestamp] += val
             else:
                 total_readings[timestamp] = val
-    source_readings_info['readings'] = total_readings
+    printer_readings_info['readings'] = total_readings
 
-    return Utils.json_response(source_readings_info)
+    return Utils.json_response(printer_readings_info)
