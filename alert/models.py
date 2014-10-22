@@ -104,9 +104,18 @@ class Alert(models.Model):
                 diff_percent = int((float(value)/transformed_peak_threshold)*100)
 
             elif self.type == ALERT_TYPE_STILL_ON or self.type == ALERT_TYPE_SUMMARY:
-                recent_start_dt = start_dt - datetime.timedelta(days=7)
-                recent_end_dt = end_dt - datetime.timedelta(days=7)
-                recent_value, recent_num_of_reading = SourceManager.get_readings_sum(all_source_ids, recent_start_dt, recent_end_dt)
+                recent_start_dt = start_dt
+                recent_end_dt = end_dt
+
+                recent_value = 0
+                num_of_compare_weeks = 4
+                for x in range(num_of_compare_weeks):
+                    recent_start_dt = recent_start_dt - datetime.timedelta(days=7)
+                    recent_end_dt = recent_end_dt - datetime.timedelta(days=7)
+                    _recent_value, recent_num_of_reading = SourceManager.get_readings_sum(all_source_ids, recent_start_dt, recent_end_dt)
+                    recent_value += _recent_value
+
+                recent_value = float(recent_value)/num_of_compare_weeks
 
                 if recent_value != 0:
                     if self.compare_method == ALERT_COMPARE_METHOD_ABOVE:
