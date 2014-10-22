@@ -2,10 +2,19 @@
     width: 100%;
 }
 .reading-table th:nth-child(1) {
-    width: 70%;
+    width: 35%;
 }
 .reading-table th:nth-child(2) {
-    width: 30%;
+    width: 20%;
+}
+.reading-table th:nth-child(3) {
+    width: 20%;
+}
+.reading-table th:nth-child(4) {
+    width: 20%;
+}
+.reading-table th:nth-child(5) {
+    width: 5%;
 }
 
 table, th, td {
@@ -13,4 +22,9 @@ table, th, td {
 }
 .reading-table td:nth-child(2) {
     text-align: right;
+}
+.reading-table td:nth-child(3),
+.reading-table td:nth-child(4),
+.reading-table td:nth-child(5) {
+    text-align: center;
 }

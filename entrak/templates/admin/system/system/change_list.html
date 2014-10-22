@@ -11,13 +11,14 @@
     {{ block.super }}
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="{% static 'js/jquery.bpopup.min.js' %}"></script>
+    
     <script type="text/javascript">
     $(function() {
         $(".invalid-readings-btn").click(function(e) {
             e.preventDefault();
 
             theBPopup = $(".invalid-readings-container").css({
-                'width': '400px',
+                'width': '700px',
                 'height': '460px',
             }).bPopup({
                 content: 'iframe',
