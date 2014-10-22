@@ -9,11 +9,16 @@ class CityHoliday(models.Model):
 
     @staticmethod
     def insert_holidays_in_csv(city, csv_path):
-        holiday_date_infos = []
         with open(csv_path, 'rb') as csv_file:
-            csv_reader = csv.reader(csv_file)
-            for row in csv_reader:
-                holiday_date_infos.append((datetime.datetime.strptime(row[0], '%Y-%m-%d').date(), row[1]))
+            CityHoliday.insert_holidays_with_file(city, csv_file)
+
+    @staticmethod
+    def insert_holidays_with_file(city, csv_file):
+        holiday_date_infos = []
+
+        csv_reader = csv.reader(csv_file)
+        for row in csv_reader:
+            holiday_date_infos.append((datetime.datetime.strptime(row[0], '%Y-%m-%d').date(), row[1]))
 
         duplicate_holiday_dates = CityHoliday.objects.filter(
             city=city, date__in=[info[0] for info in holiday_date_infos]
