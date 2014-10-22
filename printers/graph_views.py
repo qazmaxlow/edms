@@ -1,4 +1,5 @@
 import calendar
+import decimal
 import json
 import pytz
 import datetime
@@ -236,3 +237,20 @@ def show_highest_and_lowest_view(request, system_code):
     printer_readings_info['readings'] = total_readings
 
     return Utils.json_response(printer_readings_info)
+
+
+def show_summary_view(request, system_code):
+    from egauge.models import SourceReadingMin
+    source_ids = json.loads(request.POST.get('source_ids'))
+    start_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('start_dt'))))
+    end_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('end_dt'))))
+    last_start_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('last_start_dt'))))
+    last_end_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('last_end_dt'))))
+
+    source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingMin, start_dt, end_dt)
+    usage = calculation.sum_all_readings(source_readings)
+
+    last_source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingMin, last_start_dt, last_end_dt)
+    last_usage = calculation.sum_all_readings(last_source_readings)
+
+    return Utils.json_response({'realtime': usage, 'last': last_usage})
