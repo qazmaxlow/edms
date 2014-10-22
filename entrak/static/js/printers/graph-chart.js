@@ -152,7 +152,7 @@ GraphChart.prototype.getHighestSourceReadings = function(doneCallback) {
 
     $.ajax({
         type: "POST",
-        url: "../highest_lowest_source_readings/",
+        url: "../measures/show_highest_and_lowest/",
         data: {
             start_dt: startEndDt.startDt.unix(),
             source_infos: JSON.stringify(sourceInfos),

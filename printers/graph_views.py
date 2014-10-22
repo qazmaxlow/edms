@@ -77,3 +77,41 @@ def show_measures_view(request, system_code):
     printers_response[0]['readings'] = printer_readings
 
     return Utils.json_response(printers_response)
+
+
+def show_highest_and_lowest_view(request, system_code):
+    start_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('start_dt')))
+    source_infos = json.loads(request.POST.get('source_infos'))
+    range_type = request.POST.get('range_type')
+    unit_category_code = request.POST.get('unit_category_code')
+    has_detail_rate = (request.POST.get('has_detail_rate') == 'true')
+    global_rate = float(request.POST.get('global_rate'))
+    tz_offset = int(request.POST.get('tz_offset'))/60
+    is_highest = (request.POST.get('is_highest') == "true")
+    sort_order = -1 if is_highest else 1
+    systems = System.get_systems_within_root(system_code)
+    current_system = systems[0]
+
+    source_readings_info = SourceManager.get_most_readings(source_infos['source_ids'],
+        range_type, tz_offset,sort_order, current_system, start_dt)
+    source_readings_info['name'] = source_infos['name']
+
+    if unit_category_code != KWH_CATEGORY_CODE:
+        if has_detail_rate:
+            sources = Source.objects(id__in=source_infos['source_ids'])
+            unit_rates = UnitRate.objects.filter(category_code=unit_category_code)
+
+            calculation.transform_source_readings(source_readings_info['readings'], systems, sources, unit_rates, unit_category_code)
+        else:
+            calculation.transform_source_readings_with_global_rate(source_readings_info['readings'], global_rate)
+
+    total_readings = {}
+    for _, readings in source_readings_info['readings'].items():
+        for timestamp, val in readings.items():
+            if timestamp in total_readings:
+                total_readings[timestamp] += val
+            else:
+                total_readings[timestamp] = val
+    source_readings_info['readings'] = total_readings
+
+    return Utils.json_response(source_readings_info)
