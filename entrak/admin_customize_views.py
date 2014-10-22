@@ -10,6 +10,7 @@ from egauge.manager import SourceManager
 from egauge.models import Source, SourceReadingMinInvalid
 from egauge.tasks import force_retrieve_reading
 from baseline.models import BaselineUsage
+from holiday.models import CityHoliday
 from utils.utils import Utils
 
 CAN_UPDATE_SOURCE_FIELDS = ['name', 'xml_url', 'system_code', 'system_path', 'd_name', 'd_name_tc', 'order', 'active']
@@ -139,6 +140,14 @@ def add_multi_baseline_view(request):
         will_insert_baselines.append(baseline_usage)
 
     BaselineUsage.objects.bulk_create(will_insert_baselines)
+
+    return Utils.json_response({'success': True})
+
+@user_passes_test(lambda user: user.is_superuser, login_url='/admin/')
+def import_city_holidays_view(request):
+    city = request.POST.get('city')
+    holiday_csv = request.FILES.get('csv_file')
+    CityHoliday.insert_holidays_with_file(city, holiday_csv)
 
     return Utils.json_response({'success': True})
 

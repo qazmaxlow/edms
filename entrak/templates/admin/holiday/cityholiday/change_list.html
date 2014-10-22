@@ -1,0 +1,74 @@
+{% extends "admin/change_list.html" %}
+
+{% load i18n grp_tags admin_urls admin_static admin_list %}
+
+{% block stylesheets %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "css/holiday-admin.css" %}" />
+{% endblock %}
+
+{% block javascripts %}
+    {{ block.super }}
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="{% static 'js/jquery.bpopup.min.js' %}"></script>
+    <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
+    <script src="{% static 'js/csrf_ajax.js' %}"></script>
+    
+    <script type="text/javascript">
+    $(function() {
+        setupAjaxForCsrf($.cookie('csrftoken'));
+
+        var importPopup;
+        $('.import-btn').click(function(e) {
+            e.preventDefault();
+            shortcutPopup = $('.import-form-container').bPopup();
+        });
+
+        $('.import-form-save-btn').click(function() {
+            var formData = new FormData($(".import-form")[0]);
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'import_city_holidays' %}",
+                data: formData,
+                processData: false,
+                contentType: false,
+            }).done(function(data) {
+                if (data.success) {
+                    shortcutPopup.close();
+                }
+            }).fail(function(jqXHR, textStatus) {
+                console.log(jqXHR.responseText);
+            });
+        });
+    });
+    </script>
+{% endblock %}
+
+{% block object-tools-items %}
+    <li><a class="import-btn" href="#">Import</a></li>
+    {{ block.super }}
+
+    <div class="invalid-readings-container">
+        <div class="invalid-readings-content"></div>
+    </div>
+{% endblock %}
+
+{% block content %}
+{{ block.super }}
+
+<div class="import-form-container">
+    <form class="import-form" method="post" enctype="multipart/form-data">
+        <div>
+            <select name="city" class="city-select">
+                <option value="hk">hk</option>
+                <option value="mo">mo</option>
+                <option value="sg">sg</option>
+            </select>
+        </div>
+        <div><input type="file" name="csv_file"></div>
+    </form>
+    <button class="import-form-save-btn">Import</button>
+</div>
+
+{% endblock %}
