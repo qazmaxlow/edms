@@ -732,15 +732,14 @@ ReportGenerator.prototype.insertComparePastSubInfo = function(template, info, cl
 
         if (this.langCode === 'zh-tw') {
             titleText = this.multiLangTexts.overall;
-
+            var pastDiffPercent = (info.currentTotalEnergy-info.lastTotalEnergy)/info.lastTotalEnergy*100;
             titleText += "比上"+this.getReportTypeName();
+
             if (pastDiffPercent >= 0) {
                 titleText += "多用";
             } else {
                 titleText += "少用";
             }
-
-            var pastDiffPercent = (info.currentTotalEnergy-info.lastTotalEnergy)/info.lastTotalEnergy*100;
             titleText += parseFloat(Utils.fixedDecBaseOnVal(Math.abs(pastDiffPercent))) + '%';
         } else {
             titleText = this.multiLangTexts.overall;

@@ -6,12 +6,12 @@ class UnitCategoryAdmin(admin.ModelAdmin):
     list_editable = ('name', 'order', 'global_rate',)
 
 class UnitRateAdmin(admin.ModelAdmin):
-    pass
-
+    list_display = ('category_code', 'code', 'rate', 'effective_date')
+    list_editable = ('code', 'rate', 'effective_date')
+    ordering = ('category_code', 'effective_date')
 
 class UnitTypeAdmin(admin.ModelAdmin):
     pass
-
 
 admin.site.register(UnitCategory, UnitCategoryAdmin)
 admin.site.register(UnitRate, UnitRateAdmin)

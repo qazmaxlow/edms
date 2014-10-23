@@ -1,5 +1,6 @@
 import datetime
 import csv
+import codecs
 from django.db import models
 
 class CityHoliday(models.Model):
@@ -18,6 +19,8 @@ class CityHoliday(models.Model):
 
         csv_reader = csv.reader(csv_file)
         for row in csv_reader:
+            if row[0].startswith(codecs.BOM_UTF8):
+                row[0] = row[0].decode('utf-8-sig').encode('utf-8')
             holiday_date_infos.append((datetime.datetime.strptime(row[0], '%Y-%m-%d').date(), row[1]))
 
         duplicate_holiday_dates = CityHoliday.objects.filter(
