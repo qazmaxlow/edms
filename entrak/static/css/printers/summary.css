@@ -24,8 +24,9 @@
 
 .summary-column {
     display: inline-block;
-    width: 158px;
+    width: 300px;
     vertical-align: top;
+    text-align: center;
 }
 
 .summary-arrow-column {
@@ -60,6 +61,7 @@
     color: #4D565E;
     font-size: 15px;
     font-weight: bold;
+    margin-bottom: 20px;
 }
 .electricity-icon{
     margin-top: 22px;
@@ -79,6 +81,8 @@
     color: #0D9547;
     height: 133px;
     text-align: center;
+    width: 158px;
+    margin: 0 auto;
 }
 
 #this-summary {
@@ -86,7 +90,8 @@
     color: #9F2829;
     height: 133px;
     text-align: center;
-
+    width: 158px;
+    margin: 0 auto;
 }
 
 #summary-percentage{
@@ -94,6 +99,10 @@
     height: 112px;
     color: #9F2829;
     font-weight: bold;
+    width: 154px;
+    margin: 0 auto;
+    position: relative;
+    top: 20px;
 }
 
 #summary > a{
