@@ -8,9 +8,9 @@ EnergySummary.prototype.getSummaryWithSystem = function(entrakSystem, getSummary
 EnergySummary.prototype.getSummaryWithSourceIds = function(sourceIds, getSummaryCallback) {
     var energySummaryThis = this;
     var uptilMoment = Utils.getNowMoment();
-    var startDt = moment(uptilMoment).startOf('day');
-    var lastStartDt = moment(startDt).subtract(1, 'w');
-    var lastEndDt = moment(uptilMoment).subtract(1, 'w');
+    var startDt = moment(uptilMoment).startOf('month');
+    var lastStartDt = moment(startDt).subtract(1, 'M');
+    var lastEndDt = moment(uptilMoment).subtract(1, 'M');
 
     $.ajax({
         type: "POST",
