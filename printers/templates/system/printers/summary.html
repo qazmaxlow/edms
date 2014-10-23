@@ -5,21 +5,40 @@
     <div id="summary-header">{% trans "Summary" %}</div>
 
     <div id="summary-image">
-        <div id="last-summary" class="last-summary-block">
-            <p class="summary-text">{% trans "By this time last month you had used" %} </p>
-            <img class="electricity-icon" src="{% static 'images/red-electricity.png' %}">
-            <span id="last-consumption-val" class="consumption-val"></span><span class="consumption-unit">kWh</span>
+        <div class="summary-column">
+            <p class="summary-text">{% trans "By this time last month you had used" %}</p>
+            <div id="last-summary" class="xlast-summary-block">
+                <div class="consumption">
+                    <span id="last-consumption-val" class="consumption-val"></span><br><span class="consumption-unit">sheet of papers</span>
+                </div>
+            </div>
         </div>
 
-        <div id="this-summary" class="this-summary-block">
+        <div class="summary-arrow-column">
+          <img class="x-icon" src="{% static 'images/printers/next-icon.png' %}">
+        </div>
+
+        <div class="summary-column">
             <p class="summary-text">{% trans "So far this month you have used" %} </p>
-            <img class="electricity-icon" src="{% static 'images/green-electricity.png' %}">
-            <span id="this-consumption-val" class="consumption-val"></span><span class="consumption-unit">kWh</span>
+            <div id="this-summary" class="xthis-summary-block">
+                <div class="consumption">
+                <span id="this-consumption-val" class="consumption-val"></span><br><span class="consumption-unit">sheet of papers</span>
+                </div>
+            </div>
         </div>
 
-        <div id="summary-percentage" class="summary-percentage-block">
-            <span id="summary-percentage-number"></span>
-            <span id="summary-percentage-symbol">%</span>
+        <div class="summary-arrow-column">
+          <img class="x-icon" src="{% static 'images/printers/next-icon.png' %}">
         </div>
+
+        <div class="summary-column">
+            <p class="summary-text">{% trans "This is an overall" %} </p>
+            <div id="summary-percentage" class="xthis-summary-block">
+                <span id="summary-percentage-number"></span>
+                <span id="summary-percentage-symbol">%</span>
+
+            </div>
+        </div>
+
     </div>
 </div>
