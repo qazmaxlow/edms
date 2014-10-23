@@ -35,14 +35,4 @@ EnergySummary.prototype.assignSummaryToHtml = function(lastValSel, currentValSel
 
     var diffPercentage = Utils.fixedDecBaseOnVal((Math.abs(this.realtimeConsumption - this.lastConsumption)/this.lastConsumption)*100);
     $(percentNumSel).text(diffPercentage);
-
-    var summaryBgImg = null;
-    if (this.lastConsumption > this.realtimeConsumption) {
-        summaryBgImg = mediaUrlPrefix+'images/summary-lower.png';
-    } else if (this.lastConsumption < this.realtimeConsumption) {
-        summaryBgImg = mediaUrlPrefix+'images/summary-higher.png';
-    } else {
-        summaryBgImg = mediaUrlPrefix+'images/summary-neutral.png';
-    }
-    $(imgSel).css("background-image", 'url(' + summaryBgImg + ')');
 }
