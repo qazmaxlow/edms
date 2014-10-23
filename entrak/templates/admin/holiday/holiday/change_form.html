@@ -1,0 +1,36 @@
+{% extends "admin/change_form.html" %}
+
+{% load static %}
+
+{% block extrahead %}
+{{ block.super }}
+
+{% if not change %}
+
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="{% static 'js/mustache.js-master/mustache.js' %}"></script>
+
+<script id="apply-subsystem-template" type="x-tmpl-mustache">
+<div class="grp-row grp-cells-1 apply_subsystem ">
+    <div class="l-2c-fluid l-d-4">
+        <div class="c-1">&nbsp;</div>
+        <div class="c-2">
+            <input checked="checked" id="id_apply_subsystem" name="apply_subsystem" type="checkbox">
+            <label class="vCheckboxLabel" for="id_apply_subsystem">Apply to sub-system</label>
+        </div>
+    </div>
+</div>
+</script>
+
+<script type="text/javascript">
+$(function() {
+    var applySubsystemTemplate = $("#apply-subsystem-template").html();
+    Mustache.parse(applySubsystemTemplate);
+    var templateHtml = Mustache.render(applySubsystemTemplate, {});
+    $("fieldset").append(templateHtml);
+});
+</script>
+
+{% endif %}
+
+{% endblock %}
