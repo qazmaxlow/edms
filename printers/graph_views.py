@@ -240,9 +240,6 @@ def show_highest_and_lowest_view(request, system_code):
 
 
 def show_summary_view(request, system_code):
-    from egauge.models import SourceReadingMin
-    source_ids = json.loads(request.POST.get('source_ids'))
-
     system = System.get_systems_within_root(system_code)[0]
     printer = system.printers.first()
 
@@ -251,8 +248,8 @@ def show_summary_view(request, system_code):
     last_start_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('last_start_dt'))))
     last_end_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('last_end_dt'))))
 
-    source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingMin, start_dt, end_dt)
-    usage = calculation.sum_all_readings(source_readings)
+    printer_readings = get_readings(printer, Utils.RANGE_TYPE_MONTH, start_dt, end_dt)
+    usage = calculation.sum_all_readings(printer_readings)
 
     last_source_readings = get_readings(printer, Utils.RANGE_TYPE_MONTH, last_start_dt, last_end_dt)
     last_usage = calculation.sum_all_readings(last_source_readings)
