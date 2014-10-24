@@ -145,6 +145,47 @@ GraphChart.prototype.getCustomSourceReadings = function() {
     });
 }
 
+GraphChart.prototype.getPaperTypeReadings = function(paper_types, doneCallback) {
+    var graphChartThis = this;
+    var startEndDt = this.genCurrentStartEndDt();
+    var sourceInfos = {name: GraphChart.HIGHEST_TEXT, source_ids: graphChartThis.entrakSystem.getAllSourceIds()};
+
+    $.each(paper_types, function(index, paper_type) {
+    $.ajax({
+        type: "POST",
+        url: "../measures/show/",
+        data: {
+            start_dt: startEndDt.startDt.unix(),
+            end_dt: startEndDt.endDt.unix(),
+            source_infos: JSON.stringify(sourceInfos),
+            range_type: Utils.API_RANGE_TYPES[graphChartThis.currentRangeType],
+            unit_category_code: graphChartThis.currentUnit.code,
+            has_detail_rate: graphChartThis.currentUnit.hasDetailRate,
+            global_rate: graphChartThis.currentUnit.globalRate,
+            tz_offset: graphChartThis.currentDt.toDate().getTimezoneOffset(),
+            is_highest: true,
+            paper_type: paper_type
+        },
+    }).done(function(data) {
+        data = data[0];
+        if (data['name'] !== null) {
+            graphChartThis.highestDt = moment.unix(data["timestamp"]);
+            graphChartThis.transformReadingToSeries(data, 'highestSeries');
+            graphChartThis.highestSeries.color = "#DDDDDD";
+            graphChartThis.showHighest = true;
+            graphChartThis.updatePaperTypeChoice();
+        } else {
+            graphChartThis.highestDt = null;
+            graphChartThis.highestSeries = null;
+        }
+
+        doneCallback();
+    }).fail(function(jqXHR, textStatus) {
+        console.log(jqXHR.responseText);
+    });
+    });
+}
+
 GraphChart.prototype.getHighestSourceReadings = function(doneCallback) {
     var graphChartThis = this;
     var startEndDt = this.genCurrentStartEndDt();
@@ -524,6 +565,30 @@ GraphChart.prototype.updateSourceChoice = function (selectedSeriesIdxs) {
 }
 
 GraphChart.prototype.updateCompareChoice = function () {
+    var graphChartThis = this;
+    var willPlotSeries = [];
+    if (this.showLast && graphChartThis.lastSeries !== null) {
+        willPlotSeries.push(graphChartThis.lastSeries);
+    }
+    if (this.showHighest && graphChartThis.highestSeries !== null) {
+        willPlotSeries.push(graphChartThis.highestSeries);
+    }
+    if (this.showLowest && graphChartThis.lowestSeries !== null) {
+        willPlotSeries.push(graphChartThis.lowestSeries);
+    }
+    if (this.showCustom && graphChartThis.customSeries !== null) {
+        willPlotSeries.push(graphChartThis.customSeries);
+    }
+
+    willPlotSeries.splice(0, 0, this.totalSeries);
+
+    this.plot.setData(willPlotSeries);
+    this.refreshYAxisSlider();
+    this.plot.setupGrid();
+    this.plot.draw();
+}
+
+GraphChart.prototype.updatePaperTypeChoice = function () {
     var graphChartThis = this;
     var willPlotSeries = [];
     if (this.showLast && graphChartThis.lastSeries !== null) {

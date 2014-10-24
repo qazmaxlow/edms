@@ -39,16 +39,16 @@ def graph_view(request, system_code=None):
 
 
 def show_measures_view(request, system_code):
-    grouped_source_infos = json.loads(request.POST.get('grouped_source_infos'))
     range_type = request.POST.get('range_type')
+    paper_type = request.POST.get('paper_type')
+    if paper_type:
+        paper_type = int(paper_type)
+
     unit_category_code = request.POST.get('unit_category_code')
     has_detail_rate = (request.POST.get('has_detail_rate') == 'true')
     global_rate = float(request.POST.get('global_rate'))
     start_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('start_dt')))
     end_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('end_dt')))
-
-    source_group_map = Utils.gen_source_group_map(grouped_source_infos)
-    all_source_ids = Utils.get_source_ids_from_grouped_source_info(grouped_source_infos)
 
     # only one printer per one system
     system = System.get_systems_within_root(system_code)[0]
@@ -61,10 +61,23 @@ def show_measures_view(request, system_code):
         datetime__lte=end_dt
     )
 
+    measure_field = 'total'
+    measure_field_map = {
+        0: 'color',
+        1: 'b_n_w',
+        2: 'one_side',
+        3: 'duplex',
+        4: 'papersize_a4',
+        5: 'papersize_non_a4'
+    }
+
+    if paper_type:
+        measure_field = measure_field_map[paper_type]
+
     printer_readings = {}
     for printer_measure in printer_measures:
         dt_key = calendar.timegm(printer_measure.datetime.utctimetuple())
-        printer_readings[dt_key] = printer_measure.total
+        printer_readings[dt_key] = getattr(printer_measure, measure_field)
 
     # convert to another units
     if unit_category_code != 'paper':

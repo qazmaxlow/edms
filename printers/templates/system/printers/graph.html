@@ -244,6 +244,8 @@ function setupSourceChoice() {
         sourceNames.push(source.nameInfo[graph.langCode]);
     });
 
+    sourceNames = ['Color', 'Black and White', 'Single', 'Duplex', 'A4', 'Other Size'];
+
     graph.sourceChoiceContainerHeight = Math.ceil(sourceNames.length/4.0)*22 + 100;
 
     $.each(sourceNames, function(seriesIdx, sourceName) {
@@ -279,11 +281,11 @@ function setupSourceChoice() {
         var selectedSeriesIdxs = [];
 
         choiceContainer.find("input:checked").each(function () {
-            var seriesIdx = parseInt($(this).attr("series_idx"), 10);
+            var seriesIdx = parseInt($(this).attr("series_idx"), 10)+1;
             selectedSeriesIdxs.push(seriesIdx);
         });
 
-        graph.graphChart.updateSourceChoice(selectedSeriesIdxs);
+        graph.graphChart.getPaperTypeReadings(selectedSeriesIdxs, function() {});
     });
 
     $("#source-choice-clear").click(function() {
