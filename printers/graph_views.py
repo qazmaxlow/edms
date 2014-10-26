@@ -63,12 +63,12 @@ def show_measures_view(request, system_code):
 
     measure_field = 'total'
     measure_field_map = {
-        0: 'color',
-        1: 'b_n_w',
-        2: 'one_side',
-        3: 'duplex',
-        4: 'papersize_a4',
-        5: 'papersize_non_a4'
+        1: 'color',
+        2: 'b_n_w',
+        3: 'one_side',
+        4: 'duplex',
+        5: 'papersize_a4',
+        6: 'papersize_non_a4'
     }
 
     if paper_type:
@@ -92,6 +92,7 @@ def show_measures_view(request, system_code):
                 printer_readings[timestamp] *= global_rate
 
     printers_response[0]['readings'] = printer_readings
+    printers_response[0]['paper_type'] = paper_type
 
     return Utils.json_response(printers_response)
 
