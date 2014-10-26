@@ -149,8 +149,27 @@ GraphChart.prototype.getPaperTypeReadings = function(paper_types, doneCallback) 
     var graphChartThis = this;
     var startEndDt = this.genCurrentStartEndDt();
     var sourceInfos = {name: GraphChart.HIGHEST_TEXT, source_ids: graphChartThis.entrakSystem.getAllSourceIds()};
+    var papertype_indexs = [1, 2, 3, 4, 5, 6];
+    var paper_type_map = {
+        1: 'color',
+        2: 'b_n_w',
+        3: 'one_side',
+        4: 'duplex',
+        5: 'papersize_a4',
+        6: 'papersize_non_a4'
+    };
 
-    $.each(paper_types, function(index, paper_type) {
+    var paper_type_name_map = {
+        1: 'Color',
+        2: 'Black and White',
+        3: 'Single',
+        4: 'Duplex',
+        5: 'A4',
+        6: 'Other Size'
+    };
+
+    $.each(papertype_indexs, function(index, paper_type) {
+        if ($.inArray(paper_type, paper_types) != -1) {
     $.ajax({
         type: "POST",
         url: "../measures/show/",
@@ -168,21 +187,26 @@ GraphChart.prototype.getPaperTypeReadings = function(paper_types, doneCallback) 
         },
     }).done(function(data) {
         data = data[0];
-        if (data['name'] !== null) {
+        if (data['paper_type'] !== null) {
+
             graphChartThis.highestDt = moment.unix(data["timestamp"]);
-            graphChartThis.transformReadingToSeries(data, 'highestSeries');
-            graphChartThis.highestSeries.color = "#DDDDDD";
-            graphChartThis.showHighest = true;
+            data.name = paper_type_name_map[data['paper_type']];
+            graphChartThis.transformReadingToSeries(data, paper_type_map[data['paper_type']]);
+            // graphChartThis[paper_type_map[data['paper_type']]].color = '#DDDDDD';
+
             graphChartThis.updatePaperTypeChoice();
         } else {
-            graphChartThis.highestDt = null;
-            graphChartThis.highestSeries = null;
+            graphChartThis[paper_type_map[data['paper_type']]] = null;
         }
 
         doneCallback();
     }).fail(function(jqXHR, textStatus) {
         console.log(jqXHR.responseText);
     });
+            }
+        else {
+            graphChartThis[paper_type_map[paper_type]] = null;
+        }
     });
 }
 
@@ -591,17 +615,28 @@ GraphChart.prototype.updateCompareChoice = function () {
 GraphChart.prototype.updatePaperTypeChoice = function () {
     var graphChartThis = this;
     var willPlotSeries = [];
-    if (this.showLast && graphChartThis.lastSeries !== null) {
-        willPlotSeries.push(graphChartThis.lastSeries);
+    if (graphChartThis.color) {
+        willPlotSeries.push(graphChartThis.color);
     }
-    if (this.showHighest && graphChartThis.highestSeries !== null) {
-        willPlotSeries.push(graphChartThis.highestSeries);
+
+    if (graphChartThis.b_n_w) {
+        willPlotSeries.push(graphChartThis.b_n_w);
     }
-    if (this.showLowest && graphChartThis.lowestSeries !== null) {
-        willPlotSeries.push(graphChartThis.lowestSeries);
+
+    if (graphChartThis.one_side) {
+        willPlotSeries.push(graphChartThis.one_side);
     }
-    if (this.showCustom && graphChartThis.customSeries !== null) {
-        willPlotSeries.push(graphChartThis.customSeries);
+
+    if (graphChartThis.duplex) {
+        willPlotSeries.push(graphChartThis.duplex);
+    }
+
+    if (graphChartThis.papersize_a4) {
+        willPlotSeries.push(graphChartThis.papersize_a4);
+    }
+
+    if (graphChartThis.papersize_non_a4) {
+        willPlotSeries.push(graphChartThis.papersize_non_a4);
     }
 
     willPlotSeries.splice(0, 0, this.totalSeries);
