@@ -84,6 +84,7 @@ GraphChart.prototype._retrieveSourceReadings = function(groupedSourceInfos, star
         },
     }).done(function(data) {
         doneFunc(data);
+        graphChartThis.updatePaperTypeChoice();
     });
 }
 
@@ -834,6 +835,8 @@ GraphChart.prototype.goPrevOrNext = function (direction) {
     var delta = (direction === 'prev') ? -1 : 1;
     var deltaUnit = Utils.getDtDetlaUnit(this.currentRangeType);
     this.currentDt.add(delta, deltaUnit);
+
+    clearEnduseChoice();
     this.getSourceReadings();
 }
 

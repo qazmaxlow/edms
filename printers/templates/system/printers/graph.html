@@ -308,6 +308,10 @@ function clearCompareChoice() {
     $(".compare-choice-block input").prop("checked", false);
 }
 
+function clearEnduseChoice() {
+    $("#source-choice-container input").prop("checked", false);
+}
+
 function setupComparePanel() {
     $("#compare-prev-checkbox").click(function() {
         if ($(this).prop("checked")) {
