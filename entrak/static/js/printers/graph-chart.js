@@ -665,6 +665,11 @@ GraphChart.prototype.refreshYAxisSlider = function () {
         currentYMax = Math.max(currentYMax, yMax);
     });
 
+    // get max value of the green bars
+    var total_vals = $(graphThis.sourceSeries[0].data).map(function(n, i) { return i[1]; });
+    var max_total_val = Math.max.apply(Math, total_vals);
+    currentYMax = Math.max(currentYMax, max_total_val);
+
     currentYMax = roundMax(currentYMax);
     graphThis.plot.getAxes().yaxis.options.max = currentYMax;
     var yMin = currentYMax*0.05;
