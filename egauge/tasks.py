@@ -45,18 +45,25 @@ from StringIO import StringIO
 from egauge.models import SourceReadingMin
 from system.models import System
 
+
 @shared_task(ignore_result=True)
 def retrieve_hkis_hs_reading():
+    system_code = 'hkis-high'
+    file_paths = [
+        {'source_name': 'air-conditioning', 'path': '/home/hkisftp/entrak/measures/csv/upload/HS+HS-AC_2.csv'},
+        {'source_name': 'lights-and-sockets', 'path': '/home/hkisftp/entrak/measures/csv/upload/HS+HS-Main_1.csv'},
+    ]
+
+    retrieve_hkis_reading(system_code, file_paths)
+
+
+@shared_task(ignore_result=True)
+def retrieve_hkis_reading(system_code, file_paths):
     ftp_info = {
         'HOST': 'ec2-54-169-17-125.ap-southeast-1.compute.amazonaws.com',
         'USER': 'hkisftp',
         'PASSWORD': 'HKis1P@ssword'
     }
-
-    file_paths = [
-        {'source_name': 'air-conditioning', 'path': '/home/hkisftp/entrak/measures/csv/upload/HS+HS-AC_2.csv'},
-        {'source_name': 'lights-and-sockets', 'path': '/home/hkisftp/entrak/measures/csv/upload/HS+HS-Main_1.csv'},
-    ]
 
     ftp = FTP(ftp_info['HOST'])
     ftp.login(ftp_info['USER'], ftp_info['PASSWORD'])
@@ -68,7 +75,7 @@ def retrieve_hkis_hs_reading():
         r.close()
 
         source = Source.objects(
-            system_code='hkis-high', name=file_path['source_name']).first()
+            system_code=system_code, name=file_path['source_name']).first()
 
         # last 4 records and calculate consumption...
         csv_reader = csv.reader(rl[-4:])
