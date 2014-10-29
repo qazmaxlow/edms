@@ -41,6 +41,10 @@ app.conf.update(
             'task': 'egauge.tasks.retrieve_hkis_hs_measures',
             'schedule': crontab(minute='*/5'),
         },
+        'retrieve-hkis-ms-measures': {
+            'task': 'egauge.tasks.retrieve_hkis_ms_measures',
+            'schedule': crontab(minute='*/5'),
+        },
     },
 
     CELERY_ROUTES = {

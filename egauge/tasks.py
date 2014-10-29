@@ -58,6 +58,17 @@ def retrieve_hkis_hs_measures():
 
 
 @shared_task(ignore_result=True)
+def retrieve_hkis_ms_measures():
+    system_code = 'hkis-middle'
+    file_paths = [
+        {'source_name': 'air-conditioning', 'path': '/home/hkisftp/entrak/measures/csv/upload/MidSch+MS-AC_3.csv'},
+        {'source_name': 'lights-and-sockets', 'path': '/home/hkisftp/entrak/measures/csv/upload/MidSch+MS-Main_4.csv'},
+    ]
+
+    retrieve_hkis_measures(system_code, file_paths)
+
+
+@shared_task(ignore_result=True)
 def retrieve_hkis_measures(system_code, file_paths):
     ftp_info = {
         'HOST': 'ec2-54-169-17-125.ap-southeast-1.compute.amazonaws.com',
