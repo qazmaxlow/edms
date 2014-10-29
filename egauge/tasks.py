@@ -47,18 +47,18 @@ from system.models import System
 
 
 @shared_task(ignore_result=True)
-def retrieve_hkis_hs_reading():
+def retrieve_hkis_hs_measures():
     system_code = 'hkis-high'
     file_paths = [
         {'source_name': 'air-conditioning', 'path': '/home/hkisftp/entrak/measures/csv/upload/HS+HS-AC_2.csv'},
         {'source_name': 'lights-and-sockets', 'path': '/home/hkisftp/entrak/measures/csv/upload/HS+HS-Main_1.csv'},
     ]
 
-    retrieve_hkis_reading(system_code, file_paths)
+    retrieve_hkis_measures(system_code, file_paths)
 
 
 @shared_task(ignore_result=True)
-def retrieve_hkis_reading(system_code, file_paths):
+def retrieve_hkis_measures(system_code, file_paths):
     ftp_info = {
         'HOST': 'ec2-54-169-17-125.ap-southeast-1.compute.amazonaws.com',
         'USER': 'hkisftp',

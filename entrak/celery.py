@@ -37,8 +37,8 @@ app.conf.update(
             'task': 'alert.tasks.send_alert_email',
             'schedule': crontab(minute='*/5'),
         },
-        'retrieve-hkis-measures': {
-            'task': 'egauge.tasks.retrieve_hkis_hs_reading',
+        'retrieve-hkis-hs-measures': {
+            'task': 'egauge.tasks.retrieve_hkis_hs_measures',
             'schedule': crontab(minute='*/5'),
         },
     },
