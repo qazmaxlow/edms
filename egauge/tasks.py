@@ -55,7 +55,7 @@ def retrieve_hkis_hs_reading():
 
     file_paths = [
         {'source_name': 'air-conditioning', 'path': '/home/hkisftp/entrak/measures/csv/upload/HS+HS-AC_2.csv'},
-        {'source_name': 'light-and-sockets', 'path': '/home/hkisftp/entrak/measures/csv/upload/HS+HS-Main_1.csv'},
+        {'source_name': 'lights-and-sockets', 'path': '/home/hkisftp/entrak/measures/csv/upload/HS+HS-Main_1.csv'},
     ]
 
     ftp = FTP(ftp_info['HOST'])
@@ -68,7 +68,7 @@ def retrieve_hkis_hs_reading():
         r.close()
 
         source = Source.objects(
-            system_code='hkis', name=file_path['source_name']).first()
+            system_code='hkis-high', name=file_path['source_name']).first()
 
         # last 4 records and calculate consumption...
         csv_reader = csv.reader(rl[-4:])
