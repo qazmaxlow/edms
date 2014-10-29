@@ -84,12 +84,14 @@ def retrieve_hkis_hs_reading():
                 consumption1 = float(row[4]) - float(previous_row[4])
                 consumption1 = consumption1/5.0 # the value was in 5 min, convert to per min
                 previous_row = row
-                source_reading_min = SourceReadingMin(
-                    source_id = source.id,
-                    datetime = timestamp1,
-                    value = consumption1
-                )
-                SourceReadingMin.objects.insert(source_reading_min)
+                for i in range(5):
+                    measure_time = timestamp1 + datetime.timedelta(seconds=60)*i
+                    source_reading_min = SourceReadingMin(
+                        source_id = source.id,
+                        datetime = measure_time,
+                        value = consumption1
+                    )
+                    SourceReadingMin.objects.insert(source_reading_min)
             except Exception:
                 pass
 
