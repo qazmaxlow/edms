@@ -69,6 +69,17 @@ def retrieve_hkis_ms_measures():
 
 
 @shared_task(ignore_result=True)
+def retrieve_hkis_ups_measures():
+    system_code = 'hkis-upper-primary'
+    file_paths = [
+        {'source_name': 'air-conditioning', 'path': '/home/hkisftp/entrak/measures/csv/upload/UPS-Main + UPS-Main(AC)_7.csv'},
+        {'source_name': 'lights-and-sockets', 'path': '/home/hkisftp/entrak/measures/csv/upload/UPS-Sub + UPS-AC_8.csv'},
+    ]
+
+    retrieve_hkis_measures(system_code, file_paths)
+
+
+@shared_task(ignore_result=True)
 def retrieve_hkis_measures(system_code, file_paths):
     ftp_info = {
         'HOST': 'ec2-54-169-17-125.ap-southeast-1.compute.amazonaws.com',
