@@ -55,7 +55,16 @@ def show_measures_view(request, system_code):
     printer = system.printers.first()
     printers_response = [{'name': printer.name}]
 
-    printer_measures = PrinterReadingHour.objects(
+    range_type_mapping = {
+        # Utils.RANGE_TYPE_HOUR: {'target_class': SourceReadingMin},
+        Utils.RANGE_TYPE_DAY: {'target_class': PrinterReadingHour},
+        Utils.RANGE_TYPE_WEEK: {'target_class': PrinterReadingDay},
+        Utils.RANGE_TYPE_MONTH: {'target_class': PrinterReadingDay},
+        Utils.RANGE_TYPE_YEAR: {'target_class': PrinterReadingMonth},
+    }
+    target_class = range_type_mapping[range_type]['target_class']
+
+    printer_measures = target_class.objects(
         p_id = str(printer.id),
         datetime__gte=start_dt,
         datetime__lte=end_dt
