@@ -36,6 +36,7 @@ def measure_view(request):
     printer = Printer.objects.get(code=printer_code)
     p_id = str(printer.id)
     datetime = Utils.utc_dt_from_utc_timestamp(post_data['timestamp'])
+    datetime = datetime.replace(minute=0, second=0, microsecond=0)
     total = post_data['total']
     duplex = post_data['duplex']
     one_side = post_data['one_side']
@@ -52,8 +53,10 @@ def measure_view(request):
         'papersize_a4': papersize_a4, 'papersize_non_a4': papersize_non_a4
     })
     if not created:
-        paper_reading_hour.update(set__total=total, set__duplex=duplex,
-            set__one_side=one_side, set__color=color, set__b_n_w=b_n_w)
+        paper_reading_hour.update(
+            set__total=paper_reading_hour.total+total, set__duplex=paper_reading_hour.duplex+duplex,
+            set__one_side=paper_reading_hour.one_side+one_side, set__color=paper_reading_hour.color+color, set__b_n_w=paper_reading_hour.b_n_w+b_n_w,
+            set__papersize_a4=paper_reading_hour.papersize_a4+papersize_a4, set__papersize_non_a4=paper_reading_hour.papersize_non_a4+papersize_non_a4)
 
     sum_infos = [
         {'range_type': Utils.RANGE_TYPE_DAY, 'target_collection': 'printer_reading_hour', 'update_class': PrinterReadingDay},
