@@ -135,6 +135,11 @@ $(function() {
                 <li id="menu-link-alert">
                     <a href="{% url 'alert_settings' system_code=systems.0.code %}"><img width="23" height="22" src="{% static 'images/alert-icon.png' %}"><span>{% trans "Alert" %}</span></a>
                 </li>
+                {% if systems.0.printers.count > 0 %}
+                <li id="menu-link-printer-graph">
+                    <a href="{% url 'printers.graph' system_code=systems.0.code %}"><img width="19" height="25" src="{% static 'images/paper-icon.png' %}"><span>{% trans "Paper" %}</span></a>
+                </li>
+                {% endif %}
                 <li id="menu-link-logout">
                     <a href="{% url 'logout' system_code=systems.0.code %}"><img width="23" height="24" src="{% static 'images/logout-icon.png' %}"><span>{% trans "Logout" %}</span></a>
                 </li>
