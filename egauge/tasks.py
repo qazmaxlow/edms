@@ -79,7 +79,6 @@ def retrieve_hkis_ups_measures():
     retrieve_hkis_measures(system_code, file_paths)
 
 
-@shared_task(ignore_result=True)
 def retrieve_hkis_measures(system_code, file_paths):
     ftp_info = {
         'HOST': 'ec2-54-169-17-125.ap-southeast-1.compute.amazonaws.com',
