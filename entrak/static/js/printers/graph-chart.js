@@ -72,7 +72,7 @@ GraphChart.prototype._retrieveSourceReadings = function(groupedSourceInfos, star
 
     $.ajax({
         type: "POST",
-        url: "../measures/show/",
+        url: "../measures/show_with_types/",
         data: {
             grouped_source_infos: JSON.stringify(groupedSourceInfos),
             range_type: Utils.API_RANGE_TYPES[graphChartThis.currentRangeType],
@@ -401,9 +401,9 @@ GraphChart.prototype.transformReadingToChartDatasets = function (groupedReadings
             });
 
             if (transformedX in totalReadings) {
-                totalReadings[transformedX] += readingVal;
+                totalReadings[transformedX] += readingVal.total;
             } else {
-                totalReadings[transformedX] = readingVal;
+                totalReadings[transformedX] = readingVal.total;
             }
         });
 
@@ -666,7 +666,7 @@ GraphChart.prototype.refreshYAxisSlider = function () {
     });
 
     // get max value of the green bars
-    var total_vals = $(graphThis.sourceSeries[0].data).map(function(n, i) { return i[1]; });
+    var total_vals = $(graphThis.sourceSeries[0].data).map(function(n, i) { return i[1].total; });
     var max_total_val = Math.max.apply(Math, total_vals);
     currentYMax = Math.max(currentYMax, max_total_val);
 

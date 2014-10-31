@@ -106,6 +106,78 @@ def show_measures_view(request, system_code):
     return Utils.json_response(printers_response)
 
 
+def show_measures_with_types_view(request, system_code):
+    range_type = request.POST.get('range_type')
+    paper_type = request.POST.get('paper_type')
+    if paper_type:
+        paper_type = int(paper_type)
+
+    unit_category_code = request.POST.get('unit_category_code')
+    has_detail_rate = (request.POST.get('has_detail_rate') == 'true')
+    global_rate = float(request.POST.get('global_rate'))
+    start_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('start_dt')))
+    end_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('end_dt')))
+
+    # only one printer per one system
+    system = System.get_systems_within_root(system_code)[0]
+    printer = system.printers.first()
+    printers_response = [{'name': printer.name}]
+
+    range_type_mapping = {
+        # Utils.RANGE_TYPE_HOUR: {'target_class': SourceReadingMin},
+        Utils.RANGE_TYPE_DAY: {'target_class': PrinterReadingHour},
+        Utils.RANGE_TYPE_WEEK: {'target_class': PrinterReadingDay},
+        Utils.RANGE_TYPE_MONTH: {'target_class': PrinterReadingDay},
+        Utils.RANGE_TYPE_YEAR: {'target_class': PrinterReadingMonth},
+    }
+    target_class = range_type_mapping[range_type]['target_class']
+
+    printer_measures = target_class.objects(
+        p_id = str(printer.id),
+        datetime__gte=start_dt,
+        datetime__lte=end_dt
+    )
+
+    measure_field = 'total'
+    measure_field_map = {
+        1: 'color',
+        2: 'b_n_w',
+        3: 'one_side',
+        4: 'duplex',
+        5: 'papersize_a4',
+        6: 'papersize_non_a4'
+    }
+
+    if paper_type:
+        measure_field = measure_field_map[paper_type]
+
+    printer_readings = {}
+    for printer_measure in printer_measures:
+        dt_key = calendar.timegm(printer_measure.datetime.utctimetuple())
+        # printer_readings[dt_key] = getattr(printer_measure, measure_field)
+        printer_readings[dt_key] = {
+            'total': printer_measure.total, 'color': printer_measure.color,
+            'b_n_w': printer_measure.one_side, 'one_side': printer_measure.one_side,
+            'papersize_a4': printer_measure.papersize_a4, 'papersize_non_a4': printer_measure.papersize_non_a4}
+
+    # convert to another units
+    # if unit_category_code != 'paper':
+    #     if has_detail_rate:
+    #         systems = System.get_systems_within_root(system_code)
+    #         sources = Source.objects(id__in=all_source_ids)
+    #         unit_rates = UnitRate.objects.filter(category_code=unit_category_code)
+
+    #         calculation.transform_source_readings(source_readings, systems, sources, unit_rates, unit_category_code)
+    #     else:
+    #         for timestamp, val in printer_readings.items():
+    #             printer_readings[timestamp] *= global_rate
+
+    printers_response[0]['readings'] = printer_readings
+    printers_response[0]['paper_type'] = paper_type
+
+    return Utils.json_response(printers_response)
+
+
 def get_readings(printer, range_type, start_dt, end_dt):
     range_type_mapping = {
         Utils.RANGE_TYPE_DAY: {'target_class': PrinterReadingHour},
