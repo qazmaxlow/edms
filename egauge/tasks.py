@@ -102,6 +102,8 @@ def retrieve_hkis_measures(system_code, file_paths):
         csv_reader = csv.reader(rl[-4:])
         previous_row = csv_reader.next()
 
+        last_time_newrecord = None
+
         for row in csv_reader:
             try:
                 timestamp1 = row[2]
@@ -120,12 +122,10 @@ def retrieve_hkis_measures(system_code, file_paths):
                         value = consumption1
                     )
                     SourceReadingMin.objects.insert(source_reading_min)
+                    if last_time_newrecord is None:
+                        last_time_newrecord = timestamp1
             except Exception:
                 pass
 
-            # neccessary?
-            retrieve_time = datetime.datetime.utcnow()
-            retrieve_time = pytz.utc.localize(retrieve_time.replace(second=0, microsecond=0))
-            retrieve_time -= datetime.timedelta(minutes=2)
-
-            SourceManager.update_sum(retrieve_time, 'Asia/Hong_Kong', [source.id])
+            if last_time_newrecord:
+                SourceManager.update_sum(last_time_newrecord, 'Asia/Hong_Kong', [source.id])
