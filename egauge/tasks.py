@@ -139,6 +139,10 @@ def import_v2_hkis_ms():
     import_v2_hkis('hkis_v2_data/hkis_ms.csv', 'hkis-middle', 'air-conditioning', 'lights-and-sockets')
 
 
+def import_v2_hkis_ps():
+    import_v2_hkis('hkis_v2_data/hkis_ps.csv', 'hkis-upper-primary', 'air-conditioning', 'lights-and-sockets')
+
+
 # Just for import the old data from v2, will be removed later
 def import_v2_hkis(csv_filename, system_code, source1_name, source2_name):
     source1 = Source.objects(
