@@ -129,3 +129,59 @@ def retrieve_hkis_measures(system_code, file_paths):
 
             if last_time_newrecord:
                 SourceManager.update_sum(last_time_newrecord, 'Asia/Hong_Kong', [source.id])
+
+
+def import_v2_hkis_hs():
+    import_v2_hkis('hkis-high', 'air-conditioning', 'lights-and-sockets')
+
+
+# Just for import the old data from v2, will be removed later
+def import_v2_hkis(system_code, source1_name, source2_name):
+    source1 = Source.objects(
+        system_code=system_code, name=source1_name).first()
+
+    source2 = Source.objects(
+        system_code=system_code, name=source2_name).first()
+
+    row_read_count = 0
+    last_time_newrecord = None
+    with open('hkis_v2_data/hkis_hs.csv', 'rb') as csvfile:
+        spamreader = csv.reader(csvfile, delimiter='\t')
+        # Skip first line headers
+        spamreader.next()
+
+        # Update data every 3 records
+        for row in spamreader:
+            try:
+                timestamp1 = datetime.datetime.strptime(row[0], '%Y-%m-%d %H:%M:%S')
+                hk_tz = pytz.timezone('Asia/Hong_Kong')
+                timestamp1 = hk_tz.localize(timestamp1)
+
+                print(row[0])
+                print(timestamp1)
+                consumption1 = float(row[1])
+                source_reading_min = SourceReadingMin(
+                    source_id = source1.id,
+                    datetime = timestamp1,
+                    value = consumption1
+                )
+                SourceReadingMin.objects.insert(source_reading_min)
+
+                consumption2 = float(row[2])
+                source_reading_min = SourceReadingMin(
+                    source_id = source2.id,
+                    datetime = timestamp1,
+                    value = consumption2
+                )
+                SourceReadingMin.objects.insert(source_reading_min)
+
+                row_read_count += 1
+                if last_time_newrecord is None:
+                    last_time_newrecord = timestamp1
+                # update sum for every 3 record
+                if row_read_count % 3 == 0:
+                    SourceManager.update_sum(last_time_newrecord, 'Asia/Hong_Kong', [source1.id, source2.id])
+                    last_time_newrecord = None
+
+            except Exception as e:
+                print(e)
