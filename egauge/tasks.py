@@ -132,11 +132,11 @@ def retrieve_hkis_measures(system_code, file_paths):
 
 
 def import_v2_hkis_hs():
-    import_v2_hkis('hkis-high', 'air-conditioning', 'lights-and-sockets')
+    import_v2_hkis('hkis_v2_data/hkis_hs.csv', 'hkis-high', 'air-conditioning', 'lights-and-sockets')
 
 
 # Just for import the old data from v2, will be removed later
-def import_v2_hkis(system_code, source1_name, source2_name):
+def import_v2_hkis(csv_filename, system_code, source1_name, source2_name):
     source1 = Source.objects(
         system_code=system_code, name=source1_name).first()
 
@@ -145,7 +145,7 @@ def import_v2_hkis(system_code, source1_name, source2_name):
 
     row_read_count = 0
     last_time_newrecord = None
-    with open('hkis_v2_data/hkis_hs.csv', 'rb') as csvfile:
+    with open(csv_filename, 'rb') as csvfile:
         spamreader = csv.reader(csvfile, delimiter='\t')
         # Skip first line headers
         spamreader.next()
