@@ -163,10 +163,10 @@ GraphChart.prototype.getPaperTypeReadings = function(paper_types, doneCallback) 
     var paper_type_name_map = {
         1: 'Color',
         2: 'Black and White',
-        3: 'Single',
+        3: 'Simplex',
         4: 'Duplex',
         5: 'A4',
-        6: 'Other Size'
+        6: 'Non-A4'
     };
 
     $.each(papertype_indexs, function(index, paper_type) {
