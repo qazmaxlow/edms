@@ -47,17 +47,20 @@
 var graph = {};
 graph.sourceChoiceContainerHeight = 0;
 
-function updateDonutChart(data, total) {
+function updateDonutChart(data, total, org_data) {
     $("#selection-summary-chart").empty();
     var donutChart = Morris.Donut({
         element: 'selection-summary-chart',
-        data: data,
+        data: [
+            {label: "Simplex", value: org_data[0].simplex},
+            {label: "Duplex", value: org_data[0].duplex}
+        ],
         colors: ['#FFAE20', '#EF7C56', '#35BC99', '#C94CD7', '#587EFF'],
         labelColors: ['#FFAE20', '#EF7C56', '#35BC99', '#C94CD7', '#587EFF'],
         formatter: function (x) { return x + "%"}
     });
     donutChart.on('select', function(i, row){
-        $("#selection-summary-value").text(Utils.formatWithCommas(Utils.fixedDecBaseOnVal(row.orgValue)));
+        $("#selection-summary-value").text(Utils.formatWithCommas(Utils.fixedDecBaseOnVal(row.value)));
         $("#selection-summary-source").text(row.label);
         $("#selection-summary-source").css("color", donutChart.options.colors[i]);
     });
@@ -492,7 +495,7 @@ $(function() {
                 $("#selection-summary-unit-prefix").html('');
                 $("#selection-summary-unit-suffix").html('');
             } else {
-                updateDonutChart(transformedData, total);
+                updateDonutChart(transformedData, total, data);
             }
         }
     };

@@ -750,11 +750,21 @@ GraphChart.prototype.transformXToDt = function (startDt, xVal) {
 GraphChart.prototype.sumUpSeriesValueInRange = function (startIdx, endIdx) {
     return this.sourceSeries.map(function (series) {
         var value = series.data.reduce(function (previousVal, currentPts, index, array) {
-            var value = (currentPts[0] >= startIdx && currentPts[0] < endIdx) ? currentPts[1] : 0;
+            var value = (currentPts[0] >= startIdx && currentPts[0] < endIdx) ? currentPts[1].total : 0;
             return previousVal + value;
         }, 0);
 
-        return {label: series.label, value: value};
+        var simplex_sum = series.data.reduce(function (previousVal, currentPts, index, array) {
+            var value = (currentPts[0] >= startIdx && currentPts[0] < endIdx) ? currentPts[1].one_side : 0;
+            return previousVal + value;
+        }, 0);
+
+        var duplex_sum = series.data.reduce(function (previousVal, currentPts, index, array) {
+            var value = (currentPts[0] >= startIdx && currentPts[0] < endIdx) ? currentPts[1].duplex : 0;
+            return previousVal + value;
+        }, 0);
+
+        return {label: series.label, value: value, simplex: simplex_sum, duplex: duplex_sum};
     });
 }
 

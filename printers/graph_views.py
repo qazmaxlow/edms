@@ -158,6 +158,7 @@ def show_measures_with_types_view(request, system_code):
         printer_readings[dt_key] = {
             'total': printer_measure.total, 'color': printer_measure.color,
             'b_n_w': printer_measure.one_side, 'one_side': printer_measure.one_side,
+            'duplex': printer_measure.duplex,
             'papersize_a4': printer_measure.papersize_a4, 'papersize_non_a4': printer_measure.papersize_non_a4}
 
     # convert to another units
