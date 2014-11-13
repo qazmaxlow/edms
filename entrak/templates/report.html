@@ -700,6 +700,10 @@ $(function() {
 
                     <ul class="menu-content">
                       <li>
+                        <a href="{% url 'entrak.download_summary_report' systems.0.code summary.timestamp 0 'month' %}">Summary</a>
+                      </li>
+
+                      <li>
                         <a href="{% url 'entrak.download_report' systems.0.code summary.timestamp 0 'month' %}">Detailed</a>
                       </li>
                     </ul>
