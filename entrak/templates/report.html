@@ -28,6 +28,14 @@
 <script src="{% static 'js/entrak-utils.js' %}"></script>
 <script src="{% static 'js/report-generator.js' %}"></script>
 
+<link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
+<link href="{% static 'assets/kendoui/styles/kendo.default.min.css' %}" rel="stylesheet">
+<!-- Because now using jquery v1.11 -->
+<!-- <script src="{% static 'kendoui/js/jquery.min.js' %}"></script> -->
+<script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
+<script src="{% static 'assets/kendoui/js/kendo.ui.core.min.js' %}"></script>
+
+
 <script type="text/javascript">
 // put here to share with extended template
 var report = {};
@@ -82,7 +90,7 @@ report.reportGeneratorMultiLangTexts = {
 
 {% include "report_inner_template.html" %}
 
-<script type="text/javascript">
+<script>
 
 function updateReportName() {
     $(".report-name").text(report.reportGenerator.genReportName());
@@ -574,27 +582,6 @@ $(function() {
         $(this).parent().parent().find(".detail-container").slideToggle();
     });
 
-    $(".pdf-icon, .pdf-text").click(function() {
-        var targetTimestamp = $(this).parent().find('.summary-date-col').attr('dt_timestamp');
-
-        $(".download-pdf-form input[name='start_timestamp']").attr("value", targetTimestamp);
-        $(".download-pdf-form input[name='report_type']").attr("value", ReportGenerator.REPORT_TYPE_MONTH);
-        $(".download-pdf-form input[name='end_timestamp']").attr("value", 0);
-        $(".download-pdf-form").submit();
-    });
-
-    $(".save-summary-report-btn").click(function() {
-        $(".download-pdf-form input[name='start_timestamp']").attr("value", report.currentDt.unix());
-        $(".download-pdf-form input[name='report_type']").attr("value", report.currentReportType);
-        $(".download-pdf-form input[name='report_layout']").attr("value", 'summary');
-        if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-            $(".download-pdf-form input[name='end_timestamp']").attr("value", moment(report.customMonthEndDt).add(1, 'd').unix());
-        } else {
-            $(".download-pdf-form input[name='end_timestamp']").attr("value", 0);
-        }
-        $(".download-pdf-form").submit();
-    });
-
     $(".save-report-btn, .bottom-save-report-btn").click(function() {
         $(".download-pdf-form input[name='start_timestamp']").attr("value", report.currentDt.unix());
         $(".download-pdf-form input[name='report_type']").attr("value", report.currentReportType);
@@ -705,8 +692,17 @@ $(function() {
                     <span>{{summary.co2_usage|floatformat:"0"|intcomma}}</span>
                     <span>{{summary.money_usage|floatformat:"0"|intcomma}}</span>
                     {% endlanguage %}
-                    <img class="pdf-icon" src="{% static 'images/report/pdf-icon.png' %}">
-                    <span class="pdf-text">PDF</span>
+
+                    <a class="menu-target">
+                      <img class="pdf-icon" src="{% static 'images/report/pdf-icon.png' %}">
+                      <span class="pdf-text">PDF</span>
+                    </a>
+
+                    <ul class="menu-content">
+                      <li>
+                        <a href="{% url 'entrak.download_report' systems.0.code summary.timestamp 0 'month' %}">Detailed</a>
+                      </li>
+                    </ul>
                 </div>
                 {% endfor %}
             </div>
@@ -873,5 +869,18 @@ $(function() {
         <input name="end_timestamp" value="">
         <input name="unit" value="">
 </form>
+
+<script>
+$(document).ready(function()  {
+    $('#monthly-report-content div').each(function() {
+        var a = $(this).find('.menu-target:first');
+        var m = $(this).find('.menu-content:first').kendoContextMenu({
+            orientation: 'horizontal',
+            target: a,
+            showOn: 'click'
+        });
+    });
+});
+</script>
 
 {% endblock %}

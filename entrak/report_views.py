@@ -505,6 +505,48 @@ def report_pdf_view(request, system_code=None):
 
     return response
 
+@permission_required()
+def download_report_view(request, system_code, start_timestamp, end_timestamp, report_type, report_layout=None):
+    # start_timestamp = request.POST.get("start_timestamp")
+    # end_timestamp = request.POST.get("end_timestamp", 0)
+    # report_type = request.POST.get("report_type")
+    # report_layout = request.POST.get('report_layout')
+
+    if request.is_secure():
+        domain_url = "https://" + request.META['HTTP_HOST']
+    else:
+        domain_url = "http://" + request.META['HTTP_HOST']
+
+    report_name = 'generate_report_pdf'
+    if report_layout == 'summary':
+        report_name = 'generate_summary_report_pdf'
+
+    request_url = domain_url + reverse(report_name, kwargs={
+        'system_code': system_code,
+        'report_type': report_type,
+        'start_timestamp': start_timestamp,
+        'end_timestamp': end_timestamp,
+        'lang_code': translation.get_language()
+    })
+
+    report_pdf_name = datetime.datetime.now().strftime("%Y%m%d")
+    report_pdf_name += "-" + uuid.uuid4().hex[:10] + ".pdf"
+    report_pdf_path = os.path.join(TEMP_MEDIA_DIR, report_pdf_name)
+    pdf_options = {
+        "javascript-delay": '3000',
+        'quiet': '',
+        'margin-left': '18mm',
+        'page-size': 'A3',
+    }
+    pdfkit.from_url(request_url, report_pdf_path, options=pdf_options)
+
+    with open(report_pdf_path, 'rb') as f:
+        response = HttpResponse(f.read(), content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+    os.remove(report_pdf_path)
+
+    return response
+
 def generate_report_pdf_view(request, system_code, report_type, start_timestamp, end_timestamp, lang_code):
     systems = System.get_systems_within_root(system_code)
     start_timestamp = int(start_timestamp)
