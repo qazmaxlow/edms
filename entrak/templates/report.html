@@ -600,6 +600,25 @@ $(function() {
         document.body.appendChild(f);
     });
 
+    $(".bottom-save-summary-report-btn").click(function() {
+        var start_timestamp = report.currentDt.unix();
+        var end_timestamp = 0;
+        var report_type = report.currentReportType;
+
+        if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+            end_timestamp = moment(report.customMonthEndDt).add(1, 'd').unix();
+        }
+
+        var url = 'http://{{ request.get_host }}/{{ systems.0.code }}/summary-report/' + start_timestamp + '/' + end_timestamp + '/' + report_type + '/download/';
+
+        document.getElementById('save-summary-report-spinner').style.display='';
+        var f = document.createElement('iframe');
+        f.onload=function(){document.getElementById('save-summary-report-spinner').style.display='none';}
+        f.src = url;
+        document.body.appendChild(f);
+    });
+
+
     $("#customize-report .create-report-btn").click(function() {
         if (!(canCreateCustomReport())) {
             return;
@@ -869,6 +888,13 @@ $(function() {
 <table class="centered-table" align="center">
 <tbody>
 <tr>
+  <td>
+  <div class="bottom-save-summary-report-btn"><img alt="summary report" src="{% static 'images/report/download_summary_report.png' %}">{% trans "summary" %}</div>
+  <div id="save-summary-report-spinner" style="display:none;">
+    <div class="load-container load-spinner"><div class="loader">Loading...</div></div>
+    <span>Downloading</span>
+  </div>
+  </td>
   <td>
   <div class="bottom-save-report-btn"><img alt="detailed report" src="{% static 'images/report/download_detail_report.png' %}">{% trans "Detailed" %}</div>
   <div id="save-report-spinner" style="display:none;">
