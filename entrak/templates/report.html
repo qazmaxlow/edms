@@ -583,15 +583,21 @@ $(function() {
     });
 
     $(".save-report-btn, .bottom-save-report-btn").click(function() {
-        $(".download-pdf-form input[name='start_timestamp']").attr("value", report.currentDt.unix());
-        $(".download-pdf-form input[name='report_type']").attr("value", report.currentReportType);
-        $(".download-pdf-form input[name='report_layout']").attr("value", 'detail');
+        var start_timestamp = report.currentDt.unix();
+        var end_timestamp = 0;
+        var report_type = report.currentReportType;
+
         if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-            $(".download-pdf-form input[name='end_timestamp']").attr("value", moment(report.customMonthEndDt).add(1, 'd').unix());
-        } else {
-            $(".download-pdf-form input[name='end_timestamp']").attr("value", 0);
+            end_timestamp = moment(report.customMonthEndDt).add(1, 'd').unix();
         }
-        $(".download-pdf-form").submit();
+
+        var url = 'http://{{ request.get_host }}/{{ systems.0.code }}/report/' + start_timestamp + '/' + end_timestamp + '/' + report_type + '/download/';
+
+        document.getElementById('save-report-spinner').style.display='';
+        var f = document.createElement('iframe');
+        f.onload=function(){document.getElementById('save-report-spinner').style.display='none';}
+        f.src = url;
+        document.body.appendChild(f);
     });
 
     $("#customize-report .create-report-btn").click(function() {
@@ -857,8 +863,21 @@ $(function() {
 </div>
 
 {% include "report_main_content.html" %}
+<!-- use table because the CSS code done not well -->
+<table class="centered-table" align="center">
+<tbody>
+<tr>
+  <td>
+  <div class="bottom-save-report-btn">{% trans "Save Report" %}</div>
+  <div id="save-report-spinner" style="display:none;">
+    <div class="load-container load-spinner"><div class="loader">Loading...</div></div>
+    <span>Downloading</span>
+  </div>
+  </td>
+</tr>
+</tbody>
+</table>
 
-<div class="bottom-save-report-btn">{% trans "Save Report" %}</div>
 <div class="bottom-space"></div>
 
 <form class="download-pdf-form" action="{% url 'report_pdf' system_code=systems.0.code %}" method="POST">{% csrf_token %}
@@ -886,5 +905,4 @@ $(document).ready(function()  {
     });
 });
 </script>
-
 {% endblock %}
