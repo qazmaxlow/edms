@@ -2016,12 +2016,19 @@
     border-radius: 10px;
     border: 2px solid #354960;
     text-align: center;
-    padding-top: 18px;
     font-weight: bold;
     color: #354960;
     box-shadow: 0px 1px 2px 1px #aeaeae;
     font-size: 14pt;
+    line-height: 40px;
+
 }
+
+.bottom-save-report-btn img,
+.bottom-save-report-btn span {
+    vertical-align: middle;
+}
+
 .bottom-save-report-btn:hover{
     color: #fff;
     background-color: #354960;
