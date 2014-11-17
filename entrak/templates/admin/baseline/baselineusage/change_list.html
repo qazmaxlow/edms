@@ -6,13 +6,13 @@
 {{ block.super }}
 
 <link rel="stylesheet" type="text/css" href="{% static "css/baseline-usage-admin.css" %}" />
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
 {% endblock %}
 
 {% block extrahead %}
 {{ block.super }}
 
-<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-<script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
 <script src="{% static 'js/jquery.bpopup.min.js' %}"></script>
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
