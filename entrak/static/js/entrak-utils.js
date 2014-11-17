@@ -118,6 +118,9 @@ Utils.genLastStartEndDt = function (targetDt, rangeType) {
 
 Utils.setupUnitChoiceLayout = function (targetEleSel, unitCategorys, staticPrefix, unitClickedFunc) {
     var unitChoice = $(targetEleSel);
+    var last_b = null;
+    var last_c = null;
+
     $.each(unitCategorys, function(idx, unitCategory) {
         var unitLiDom = $("<li>"
             + "<img src='" + staticPrefix + "images/unit/" + unitCategory.imgOff + "'>"
@@ -125,7 +128,20 @@ Utils.setupUnitChoiceLayout = function (targetEleSel, unitCategorys, staticPrefi
         unitLiDom.find('img').hover(function() {
             $(this).attr("src", staticPrefix + "images/unit/" + unitCategory.imgOn);
         }, function() {
-            $(this).attr("src", staticPrefix + "images/unit/" + unitCategory.imgOff);
+            if(!$(this).hasClass('active')) {
+                $(this).attr("src", staticPrefix + "images/unit/" + unitCategory.imgOff);
+            }
+        });
+        unitLiDom.find('img').click(function() {
+            if(last_b && last_c) {
+                last_b.removeClass('active');
+                last_b.attr("src", staticPrefix + "images/unit/" + last_c.imgOff);
+            }
+            $(this).attr("src", staticPrefix + "images/unit/" + unitCategory.imgOn);
+            $(this).addClass('active');
+
+            last_b = $(this);
+            last_c = unitCategory;
         });
         unitChoice.append(unitLiDom);
     });
