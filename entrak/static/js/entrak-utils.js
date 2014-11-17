@@ -157,13 +157,20 @@ Utils.setupTimeChoiceLayout = function(targetEleSel, timeRangeClickedFunc) {
         Utils.RANGE_TYPE_WEEK, Utils.RANGE_TYPE_DAY,
         Utils.RANGE_TYPE_NIGHT, Utils.RANGE_TYPE_HOUR];
     var timeChoice = $(targetEleSel);
+    var last_b = null;
+
     $.each(timeRangeTypes, function(idx, rangeType) {
         var timeLiDom = $("<li id='time-choice-" + rangeType + "-icon' range_type='" + rangeType + "'></li>");
         timeLiDom.insertBefore("#select-dt-section");
     })
     timeChoice.find("li").click(function () {
+        if(last_b) {
+            last_b.removeClass('active');
+        }
+        $(this).addClass('active');
         var newRangeType = $(this).attr("range_type");
         timeRangeClickedFunc(newRangeType);
+        last_b = $(this);
     });
 }
 
