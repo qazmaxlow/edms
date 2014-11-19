@@ -111,17 +111,27 @@
     </div>
     {% endblock %}
 
-    <div class="detail-container">
-        <div class="detail-title">
-            <span>
-                {% trans "Usage Type" %}</span><span>
-                {% trans "Total Energy Consumed (kWh)" %}</span><span>
-                {% trans "Total CO<sub>2</sub> Emissions (kg)" %}</span><span>
-                {% trans "Total Money Spent ($)" %}</span>
-        </div>
+
+<div class="detail-container">
+    <h4>How did that break down by usage type?</h4>
+    <table>
+      <thead>
+        <tr class="detail-title">
+            <th>
+                {% trans "Usage Type" %}</th><th>
+                {% trans "Total Energy Consumed (kWh)" %}</th><th>
+                {% trans "Total CO<sub>2</sub> Emissions (kg)" %}</th><th>
+                {% trans "Total Money Spent ($)" %}</th>
+            <th>{% trans "% Change in kWh" %}</th>
+            <th>{% trans "Change in $" %}</th>
+        </tr>
+      </thead>
+      <tbody id="key-statistic-sub-data">
+      </tbody>
+    </table>
         <hr class="detail-container-separator-dark-grey">
         <hr class="detail-container-separator-light-grey">
-        <div id="key-statistic-sub-data"></div>
+
         <div class="detail-split-title">{% trans "HOW DOES THAT SPLIT BY PERCENTAGE?" %}</div>
         <hr class="detail-container-separator-dark-grey">
         <hr class="detail-container-separator-light-grey">

@@ -2,13 +2,15 @@
 {% load static %}
 
 <script id="key-statistics-row-template" type="x-tmpl-mustache">
-<div class="key-statistics-row {% templatetag openvariable %}extraClass{% templatetag closevariable %}">
-    <span class="usage-type-name">
-        {% templatetag openvariable %}usageTypeName{% templatetag closevariable %}</span><span>
-        {% templatetag openvariable %}energyVal{% templatetag closevariable %}</span><span>
-        {% templatetag openvariable %}co2Val{% templatetag closevariable %}</span><span>
-        {% templatetag openvariable %}moneyVal{% templatetag closevariable %}</span>
-</div>
+<tr class="key-statistics-row {% templatetag openvariable %}extraClass{% templatetag closevariable %}">
+    <td class="usage-type-name">
+        {% templatetag openvariable %}usageTypeName{% templatetag closevariable %}</td><td>
+        {% templatetag openvariable %}energyVal{% templatetag closevariable %}</td><td>
+        {% templatetag openvariable %}co2Val{% templatetag closevariable %}</td><td>
+        {% templatetag openvariable %}moneyVal{% templatetag closevariable %}</td>
+        <td>{% templatetag openvariable %}change_in_kwh{% templatetag closevariable %}</td>
+        <td>{% templatetag openvariable %}change_in_money{% templatetag closevariable %}</td>
+</tr>
 </script>
 
 <script id="key-percent-sub-info-template" type="x-tmpl-mustache">

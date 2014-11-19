@@ -880,15 +880,16 @@
     color: #9F9F9F;
 }
 
-.detail-container {
-    font-size: 0px;
+.detail-container h4 {
+    text-align: center;
 }
-.detail-container>div {
+
+.detail-container table {
     width: 100%;
 }
 .detail-title {
     overflow: hidden;
-    white-space: nowrap;
+    /* white-space: nowrap; */
 }
 .detail-title span{
     width: 242px;

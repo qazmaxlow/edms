@@ -443,7 +443,9 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
         var dataInfo = {
             totalEnergy: info.currentTotalEnergy,
             co2Val: info.currentTotalCo2,
-            moneyVal: info.currentTotalMoney
+            moneyVal: info.currentTotalMoney,
+            change_in_kwh: info.currentTotalEnergy-info.last_year_this_month.enegry,
+            change_in_money: info.currentTotalMoney-info.last_year_this_month.money
         };
         dataInfo.name = (info.systemCode === reportGenThis.systemTree.data.code) ? info.sourceNameInfo[reportGenThis.langCode] : info.system.data.nameInfo[reportGenThis.langCode];
         if (infoIdx < reportGenThis.groupedSourceInfos.length-1) {
@@ -468,7 +470,9 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
         var templateInfo = {
             energyVal: dataInfo.totalEnergy,
             co2Val: dataInfo.co2Val,
-            moneyVal: dataInfo.moneyVal
+            moneyVal: dataInfo.moneyVal,
+            change_in_kwh: dataInfo.change_in_kwh,
+            change_in_money: dataInfo.change_in_money
         };
         $.each(templateInfo, function(key, value) {
             templateInfo[key] = Utils.formatWithCommas(value.toFixed(0));
