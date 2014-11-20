@@ -478,6 +478,9 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
             templateInfo[key] = Utils.formatWithCommas(value.toFixed(0));
         });
 
+        if (dataInfo.change_in_kwh > 0) { templateInfo['change_in_kwh'] = '+' + templateInfo['change_in_kwh']; }
+        if (dataInfo.change_in_money > 0) { templateInfo['change_in_money'] = '+' + templateInfo['change_in_money']; }
+
         templateInfo.usageTypeName = dataInfo.name;
 
         if (dataInfo.energyPercent < ReportGenerator.MAX_PERCENTAGE_VALUE) {
