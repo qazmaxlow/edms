@@ -84,7 +84,8 @@ GraphChart.prototype._retrieveSourceReadings = function(groupedSourceInfos, star
         },
     }).done(function(data) {
         doneFunc(data);
-        graphChartThis.updatePaperTypeChoice();
+        if($('#sub-menu-source').hasClass('selected-tab'))
+            graphChartThis.updatePaperTypeChoice();
     });
 }
 
@@ -604,6 +605,14 @@ GraphChart.prototype.updateCompareChoice = function () {
     if (this.showCustom && graphChartThis.customSeries !== null) {
         willPlotSeries.push(graphChartThis.customSeries);
     }
+
+    $.each(willPlotSeries, function(i, e) {
+        e.data = $.map(e.data, function(o) {
+            var total = o[1].total;
+            o[1] = total;
+            return [o];
+        });
+    });
 
     willPlotSeries.splice(0, 0, this.totalSeries);
 
