@@ -538,6 +538,11 @@ $(function() {
 
     var last_b = null;
     $(".time-range-section span").each(function(btnIdx) {
+        if (btnIdx == 0) {
+            $(this).addClass('active');
+            last_b = $(this);
+        }
+
         $(this).click({btnIdx: btnIdx}, function(event) {
             if(last_b) {
                 last_b.removeClass('active');

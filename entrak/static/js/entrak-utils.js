@@ -125,6 +125,15 @@ Utils.setupUnitChoiceLayout = function (targetEleSel, unitCategorys, staticPrefi
         var unitLiDom = $("<li>"
             + "<img src='" + staticPrefix + "images/unit/" + unitCategory.imgOff + "'>"
             + "</li>");
+        if (unitCategory.code == 'kwh') {
+            var img_btn = unitLiDom.find('img:first');
+            img_btn.addClass('active');
+            img_btn.attr("src", staticPrefix + "images/unit/" + unitCategory.imgOn);
+
+            last_b = img_btn;
+            last_c = unitCategory;
+        }
+
         unitLiDom.find('img').hover(function() {
             $(this).attr("src", staticPrefix + "images/unit/" + unitCategory.imgOn);
         }, function() {
@@ -162,6 +171,11 @@ Utils.setupTimeChoiceLayout = function(targetEleSel, timeRangeClickedFunc) {
     $.each(timeRangeTypes, function(idx, rangeType) {
         var timeLiDom = $("<li id='time-choice-" + rangeType + "-icon' range_type='" + rangeType + "'></li>");
         timeLiDom.insertBefore("#select-dt-section");
+
+        if (rangeType == 'day') {
+            timeLiDom.addClass('active');
+            last_b = timeLiDom;
+        }
     })
     timeChoice.find("li").click(function () {
         if(last_b) {
