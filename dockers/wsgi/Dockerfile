@@ -1,4 +1,4 @@
-# Put this in the root folder of entrak git repo and run docker build -t entrak/dms .
+# Put this in the root folder of entrak git repo and run docker build -t entrak-dms/wsgi .
 FROM ubuntu:14.04.1
 
 RUN apt-get update && apt-get install -y python-pip
