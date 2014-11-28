@@ -4,10 +4,11 @@ from settings_common import *
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'entrak',
-        'USER': 'root',
-        'PASSWORD': '99924361',
+        'HOST': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
     }
 }
 
