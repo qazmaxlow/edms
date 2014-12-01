@@ -5,9 +5,9 @@ RUN apt-get update && apt-get install -y python-pip
 RUN apt-get install -y libmysqlclient-dev libpq-dev
 RUN apt-get install -y python-dev libxslt1-dev libxml2-dev
 
-ADD . /srv
-ADD dockers/wsgi/settings.py /srv/entrak/settings.py
-WORKDIR /srv
-
+ADD pip_requirements.txt pip_requirements.txt
 RUN pip install -r pip_requirements.txt
+RUN rm pip_requirements.txt
+
+WORKDIR /srv
 RUN mkdir -p /logs/entrak
