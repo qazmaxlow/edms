@@ -40,7 +40,7 @@ class System(models.Model):
     @staticmethod
     def get_systems_within_root(code):
         path = ',%s,'%code
-        systems = System.objects.filter(Q(code=code) | Q(path__contains=path)).order_by('path')
+        systems = System.objects.filter(Q(code=code) | Q(path__contains=path)).order_by('path', 'name')
 
         return systems
 
