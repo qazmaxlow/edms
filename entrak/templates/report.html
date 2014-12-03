@@ -729,20 +729,10 @@ $(function() {
                     <span>{{summary.money_usage|floatformat:"0"|intcomma}}</span>
                     {% endlanguage %}
 
-                    <a class="menu-target">
+                    <a href="{% url 'entrak.download_report' systems.0.code summary.timestamp 0 'month' %}">
                       <img class="pdf-icon" src="{% static 'images/report/pdf-icon.png' %}">
                       <span class="pdf-text">PDF</span>
                     </a>
-
-                    <ul class="menu-content">
-                      <li>
-                        <a href="{% url 'entrak.download_summary_report' systems.0.code summary.timestamp 0 'month' %}">Summary</a>
-                      </li>
-
-                      <li>
-                        <a href="{% url 'entrak.download_report' systems.0.code summary.timestamp 0 'month' %}">Detailed</a>
-                      </li>
-                    </ul>
                 </div>
                 {% endfor %}
             </div>
