@@ -602,7 +602,7 @@ $(function() {
             end_timestamp = moment(report.customMonthEndDt).add(1, 'd').unix();
         }
 
-        var url = 'http://{{ request.get_host }}/{{ systems.0.code }}/report/' + start_timestamp + '/' + end_timestamp + '/' + report_type + '/download/';
+        var url = 'https://{{ request.get_host }}/{{ systems.0.code }}/report/' + start_timestamp + '/' + end_timestamp + '/' + report_type + '/download/';
 
         document.getElementById('save-report-spinner').style.display='';
         var f = document.createElement('iframe');
