@@ -16,7 +16,7 @@ from utils.utils import Utils
 from user.models import EntrakUser
 from utils.auth import permission_required
 from utils import calculation
-from audits.decorators.trail import log_audit_trail
+from audit.decorators.trail import log_audit_trail
 from constants import audits as constants_audits
 
 

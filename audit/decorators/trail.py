@@ -2,7 +2,7 @@ from functools import wraps
 
 from django.utils.decorators import available_attrs
 
-from audits.models import Trail
+from audit.models import Trail
 
 
 def get_client_ip(request):

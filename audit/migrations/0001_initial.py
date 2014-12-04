@@ -9,7 +9,7 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         # Adding model 'Trail'
-        db.create_table(u'audits_trail', (
+        db.create_table(u'audit_trail', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('action_type', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['user.EntrakUser'])),
@@ -18,16 +18,16 @@ class Migration(SchemaMigration):
             ('ip_address', self.gf('django.db.models.fields.IPAddressField')(max_length=15)),
             ('url', self.gf('django.db.models.fields.URLField')(max_length=200)),
         ))
-        db.send_create_signal(u'audits', ['Trail'])
+        db.send_create_signal(u'audit', ['Trail'])
 
 
     def backwards(self, orm):
         # Deleting model 'Trail'
-        db.delete_table(u'audits_trail')
+        db.delete_table(u'audit_trail')
 
 
     models = {
-        u'audits.trail': {
+        u'audit.trail': {
             'Meta': {'object_name': 'Trail'},
             'action_type': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'created_time': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
@@ -102,4 +102,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['audits']
+    complete_apps = ['audit']

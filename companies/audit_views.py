@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic.list import ListView
 
-from audits.models import Trail
+from audit.models import Trail
 
 
 class CompanyAuditTrailListView(ListView):
