@@ -16,13 +16,18 @@
   <body>
     <div class="container">
 <h1>Trails</h1>
-<ul>
-{% for trail in object_list %}
-    <li>{{ trail.user }} - {{ trail.created_time }}</li>
-{% empty %}
-    <li>No trail yet.</li>
-{% endfor %}
-</ul>
+<div class="row">
+  <div class="col-md-12">
+    <table class="table">
+      <thead><tr><th>Account name</th><th>Date time</th></tr></thead>
+      <tbody>
+        {% for trail in object_list %}
+        <tr><td>{{ trail.user }}</td><td>{{ trail.created_time }}</td></tr>
+        {% empty %}
+        No trail yet.
+        {% endfor %}
+      </tbody>
+    </table>
 
 {% if is_paginated %}
 <div class="pagination">
@@ -41,6 +46,10 @@
     </span>
 </div>
 {% endif %}
+
+  </div>
+</div>
+
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="{% static 'assets/bootstrap/js/bootstrap.min.js' %}"></script>
