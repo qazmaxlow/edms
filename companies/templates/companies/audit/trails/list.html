@@ -1,0 +1,8 @@
+<h1>Trails</h1>
+<ul>
+{% for trail in object_list %}
+    <li>{{ trail.user }} - {{ trail.created_time }}</li>
+{% empty %}
+    <li>No trail yet.</li>
+{% endfor %}
+</ul>

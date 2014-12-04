@@ -63,6 +63,7 @@ urlpatterns = patterns('',
         url(r'^faq/$', 'entrak.static_page_views.faq_view', name='faq'),
         url(r'^disclaimer/$', 'entrak.static_page_views.disclaimer_view', name='disclaimer'),
     ))),
+    url(r'^(?P<system_code>[\w\-]+)/', include('companies.urls')),
 )
 
 if settings.DEBUG:
