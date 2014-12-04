@@ -4,5 +4,5 @@ from . import audit_views
 
 urlpatterns = patterns(
     '',
-    url('^audit/trails/$', audit_views.CompanyAuditTrailListView.as_view()),
+    url('^audit/trails/$', audit_views.CompanyAuditTrailsListView.as_view()),
 )

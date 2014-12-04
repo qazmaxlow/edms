@@ -4,6 +4,6 @@ from django.views.generic.list import ListView
 from audit.models import Trail
 
 
-class CompanyAuditTrailListView(ListView):
+class CompanyAuditTrailsListView(ListView):
     template_name = 'companies/audit/trails/list.html'
     model = Trail
