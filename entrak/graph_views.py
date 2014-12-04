@@ -16,7 +16,11 @@ from utils.utils import Utils
 from user.models import EntrakUser
 from utils.auth import permission_required
 from utils import calculation
+from audits.decorators.trail import log_audit_trail
+from constants import audits as constants_audits
 
+
+@log_audit_trail(action_type=constants_audits.ACTION_VIEW_GRAPH)
 @permission_required()
 @ensure_csrf_cookie
 def graph_view(request, system_code=None):
