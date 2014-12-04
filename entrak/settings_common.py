@@ -59,6 +59,7 @@ INSTALLED_APPS = (
     'alert',
     'printers',
     'entrak',
+    'audits',
 )
 
 MIDDLEWARE_CLASSES = (
