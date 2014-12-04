@@ -440,12 +440,13 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
     var transformedDatas = [];
     var energyPercentSum = 0;
     $.each(reportGenThis.groupedSourceInfos, function(infoIdx, info) {
+        var change_in_kwh = (info.last_year_this_month.money > 0) ? (info.currentTotalMoney-info.last_year_this_month.money)/info.last_year_this_month.money*100 : 'N/A';
         var dataInfo = {
             totalEnergy: info.currentTotalEnergy,
             co2Val: info.currentTotalCo2,
             moneyVal: info.currentTotalMoney,
-            change_in_kwh: info.currentTotalEnergy-info.last_year_this_month.enegry,
-            change_in_money: info.currentTotalMoney-info.last_year_this_month.money
+            change_in_kwh: change_in_kwh,
+            change_in_money: (info.last_year_this_month.money > 0) ? info.currentTotalMoney-info.last_year_this_month.money : 'N/A'
         };
         dataInfo.name = (info.systemCode === reportGenThis.systemTree.data.code) ? info.sourceNameInfo[reportGenThis.langCode] : info.system.data.nameInfo[reportGenThis.langCode];
         if (infoIdx < reportGenThis.groupedSourceInfos.length-1) {
@@ -475,7 +476,9 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
             change_in_money: dataInfo.change_in_money
         };
         $.each(templateInfo, function(key, value) {
-            templateInfo[key] = Utils.formatWithCommas(value.toFixed(0));
+            if (! isNaN(value)) {
+                templateInfo[key] = Utils.formatWithCommas(value.toFixed(0));
+            }
         });
 
         if (dataInfo.change_in_kwh > 0) { templateInfo['change_in_kwh'] = '+' + templateInfo['change_in_kwh']; }
