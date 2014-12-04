@@ -9,7 +9,7 @@ from audit.models import Trail
 class AuditTrailFilter(django_filters.FilterSet):
     class Meta:
         model = Trail
-        fields = ['user', 'created_time']
+        fields = ['user',]
 
 
 class CompanyAuditTrailsListView(ListView):
