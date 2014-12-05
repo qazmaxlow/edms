@@ -1,11 +1,14 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import render
 from django.views.generic.list import ListView
+from django.utils.decorators import method_decorator
 
 import django_filters
 
 from audit.models import Trail
 from system.models import System
+from user.models import USER_ROLE_ADMIN_LEVEL
+from utils.auth import permission_required
 
 
 class AuditTrailFilter(django_filters.FilterSet):
@@ -26,6 +29,10 @@ class AuditTrailFilter(django_filters.FilterSet):
 class CompanyAuditTrailsListView(ListView):
     template_name = 'companies/audit/trails/list.html'
     paginate_by = 30
+
+    @method_decorator(permission_required(required_level=USER_ROLE_ADMIN_LEVEL))
+    def dispatch(self, request, *args, **kwargs):
+        return super(CompanyAuditTrailsListView, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
         company_syscode = self.kwargs['system_code']
