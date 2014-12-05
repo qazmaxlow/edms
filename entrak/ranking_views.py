@@ -103,7 +103,7 @@ def ranking_data_view(request, system_code=None):
                 target_group['last'] = target_group.get('last', 0)
 
         for info in grouped_readings:
-            if sources_sum_info and info['last'] != 0:
+            if sources_sum_info and 'last' in info and info['last'] != 0:
                 info['value'] = (info['current']-info['last'])/info['last']*100.0
             else:
                 info['value'] = 0
