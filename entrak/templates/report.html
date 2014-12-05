@@ -885,12 +885,11 @@ $(function() {
 {% include "report_main_content.html" %}
 <!-- use table because the CSS code done not well -->
 <section id="download-reports" class="well">
-  <h2>Download Report</h2>
 <table class="centered-table" align="center">
 <tbody>
 <tr>
   <td>
-  <div class="bottom-save-report-btn"><img alt="detailed report" src="{% static 'images/report/download_detail_report.png' %}">{% trans "Detailed" %}</div>
+  <div class="bottom-save-report-btn"><img alt="detailed report" src="{% static 'images/report/download_detail_report.png' %}">{% trans "Download" %}</div>
   <div id="save-report-spinner" style="display:none;">
     <div class="load-container load-spinner"><div class="loader">Loading...</div></div>
     <span>Downloading</span>
