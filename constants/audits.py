@@ -1,1 +1,5 @@
 ACTION_VIEW_GRAPH = 10
+
+AUDIT_ACTIONS = {
+    ACTION_VIEW_GRAPH: 'View graph',
+}
