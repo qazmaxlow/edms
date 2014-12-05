@@ -22,7 +22,7 @@ class PseudoBuffer(object):
 def __result_generator(source_readings, source_id_map, unit_category_code, money_unit_rates, co2_unit_rates, system=None):
     # Generate CSV header
     sources = SourceManager.get_sources(system)
-    source_headers = [s.name for s in sources]
+    source_headers = [s.d_name for s in sources]
     csv_header = ["Date Time"] + source_headers
     yield csv_header
 
