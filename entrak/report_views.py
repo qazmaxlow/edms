@@ -27,6 +27,8 @@ from egauge.models import SourceReadingMonth, SourceReadingDay, SourceReadingHou
 from utils.auth import permission_required
 from utils.utils import Utils
 from utils import calculation
+from audit.decorators.trail import log_audit_trail
+from constants import audits as constants_audits
 
 TEMP_MEDIA_DIR = os.path.join(MEDIA_ROOT, 'temp')
 REPORT_TYPE_MONTH = 'month'
@@ -37,6 +39,7 @@ REPORT_TYPE_WEEK = 'week'
 
 CONSECUTIVE_LASTS_COUNT = 4
 
+@log_audit_trail(action_type=constants_audits.ACTION_VIEW_REPORTS)
 @permission_required()
 @ensure_csrf_cookie
 def report_view(request, system_code=None):
