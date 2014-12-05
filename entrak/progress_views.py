@@ -17,6 +17,8 @@ from egauge.manager import SourceManager
 from egauge.models import SourceReadingMonth
 from utils import calculation
 from utils.utils import Utils
+from audit.decorators.trail import log_audit_trail
+from constants import audits as constants_audits
 
 REDUCTION_LEVELS = [0, 5, 10, 15, 20, 25, 30, 40]
 HK_TAXI_TRIP = {'multiplicand': 0.0033, 'from': _('Hong Kong Airport'), 'to': _('Times Square')}
@@ -172,6 +174,8 @@ def __calculate_progress_data(systems):
 
     return result
 
+
+@log_audit_trail(action_type=constants_audits.ACTION_VIEW_PROGRESS)
 @permission_required()
 @ensure_csrf_cookie
 def progress_view(request, system_code=None):
