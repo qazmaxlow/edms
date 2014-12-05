@@ -13,7 +13,11 @@ from egauge.models import SourceReadingHour
 from egauge.manager import SourceManager
 from utils.utils import Utils
 from utils.auth import permission_required
+from audit.decorators.trail import log_audit_trail
+from constants import audits as constants_audits
 
+
+@log_audit_trail(action_type=constants_audits.ACTION_VIEW_DISPLAY)
 @permission_required()
 @ensure_csrf_cookie
 def display_view(request, system_code=None):
