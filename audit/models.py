@@ -9,3 +9,6 @@ class Trail(models.Model):
     session_key = models.CharField(max_length=40)
     ip_address = models.IPAddressField()
     url = models.URLField()
+
+    class Meta:
+        ordering = ['-pk']
