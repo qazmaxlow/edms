@@ -5,6 +5,7 @@ from django.views.generic.list import ListView
 import django_filters
 
 from audit.models import Trail
+from system.models import System
 
 
 class AuditTrailFilter(django_filters.FilterSet):
@@ -35,5 +36,9 @@ class CompanyAuditTrailsListView(ListView):
     def get_context_data(self, **kwargs):
         context = super(CompanyAuditTrailsListView, self).get_context_data(**kwargs)
         context['filter'] = self.filter
+
+        company_syscode = self.kwargs['system_code']
+        company_system = System.objects.get(code=company_syscode)
+        context['company_system'] = company_system
 
         return context
