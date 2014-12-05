@@ -14,7 +14,6 @@ class AuditTrailFilter(django_filters.FilterSet):
 
 class CompanyAuditTrailsListView(ListView):
     template_name = 'companies/audit/trails/list.html'
-    model = Trail
     paginate_by = 30
 
     def get_queryset(self):
@@ -23,7 +22,6 @@ class CompanyAuditTrailsListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(CompanyAuditTrailsListView, self).get_context_data(**kwargs)
-        # f = AuditTrailFilter(self.request.GET, queryset=Trail.objects.all())
         context['filter'] = self.filter
 
         return context
