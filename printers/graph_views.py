@@ -19,8 +19,11 @@ from entrak.settings import STATIC_URL
 from system.models import System, CITY_ALL
 from unit.models import UnitCategory, UnitRate, KWH_CATEGORY_CODE
 from utils import calculation
+from audit.decorators.trail import log_audit_trail
+from constants import audits as constants_audits
 
 
+@log_audit_trail(action_type=constants_audits.ACTION_VIEW_PRINTER)
 @permission_required()
 @ensure_csrf_cookie
 def graph_view(request, system_code=None):
