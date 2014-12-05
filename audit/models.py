@@ -13,7 +13,7 @@ class Trail(models.Model):
 
     @property
     def action_name(self):
-        return AUDIT_ACTIONS[self.action_type]
+        return AUDIT_ACTIONS.get(self.action_type)
 
     class Meta:
         ordering = ['-pk']

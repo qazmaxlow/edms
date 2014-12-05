@@ -10,11 +10,14 @@ from system.models import System, CITY_ALL
 from unit.models import UnitCategory, UnitRate, KWH_CATEGORY_CODE
 from egauge.models import Source
 from egauge.manager import SourceManager
+from audit.decorators.trail import log_audit_trail
+from constants import audits as constants_audits
 
 RANKING_TYPE_TOTAL = 'total'
 RANKING_TYPE_PER_PERSON = 'per_person'
 RANKING_TYPE_PERCENT = 'percent'
 
+@log_audit_trail(action_type=constants_audits.ACTION_VIEW_RANKING)
 @permission_required()
 @ensure_csrf_cookie
 def ranking_view(request, system_code=None):
