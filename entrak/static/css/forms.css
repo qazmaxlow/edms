@@ -1,0 +1,23 @@
+.bs-action {
+    border-style: solid;
+    padding: 45px 15px 15px;
+    position: relative;
+    background-color: #fff;
+    border-color: #ddd;
+    border-radius: 4px 4px 0 0;
+    border-width: 1px;
+    box-shadow: none;
+}
+
+
+.bs-action:after {
+    color: #959595;
+    content: "Action";
+    font-size: 12px;
+    font-weight: 700;
+    left: 15px;
+    letter-spacing: 1px;
+    position: absolute;
+    text-transform: uppercase;
+    top: 15px;
+}
