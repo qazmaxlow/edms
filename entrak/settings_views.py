@@ -16,9 +16,14 @@ from contact.models import Contact
 from user.models import EntrakUser, USER_ROLE_ADMIN_LEVEL, USER_ROLE_VIEWER_LEVEL
 from utils.auth import permission_required
 from utils.utils import Utils
+from audit.decorators.trail import log_audit_trail
+from constants import audits as constants_audits
+
 
 SHOW_HISTORY_DAY_MAX = 7
 
+
+@log_audit_trail(action_type=constants_audits.ACTION_VIEW_ALERT)
 @permission_required(USER_ROLE_ADMIN_LEVEL)
 @ensure_csrf_cookie
 def alert_settings_view(request, system_code=None):
