@@ -194,6 +194,7 @@ def progress_view(request, system_code=None):
         'from': taxi_trip_info['from'],
         'to': taxi_trip_info['to']
     }
+    m['saving_css_class'] = 'positive-saving' if m['percengate_change'] >= 0 else 'negative-saving'
     m.update(csrf(request))
 
     return render(request, 'progress.html', m)
