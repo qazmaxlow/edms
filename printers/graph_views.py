@@ -278,7 +278,7 @@ def get_most_readings(printer, range_type, tz_offset, sort_order, system, start_
     # check if have complete data for lowest
     if sort_order == 1:
         for result_data in result["result"]:
-            if SourceManager.is_reading_complete(range_type, objectlize_source_ids, result_data["_id"], tz_offset):
+            if is_reading_complete(range_type, printer, result_data["_id"], tz_offset):
                 result['result'] = [result_data]
                 break
 
@@ -294,6 +294,33 @@ def get_most_readings(printer, range_type, tz_offset, sort_order, system, start_
         info['readings'] = {}
 
     return info
+
+
+def is_reading_complete(range_type, printer, start_dt, tz_offset):
+    range_type_mapping = {
+        Utils.RANGE_TYPE_HOUR: {'check_collection': 'printer_reading_min', 'complete_count': 60},
+        Utils.RANGE_TYPE_DAY: {'check_collection': 'printer_reading_hour', 'complete_count': 24},
+        Utils.RANGE_TYPE_WEEK: {'check_collection': 'printer_reading_day', 'complete_count': 7},
+        Utils.RANGE_TYPE_MONTH: {'check_collection': 'printer_reading_day', 'complete_count': 28},
+        Utils.RANGE_TYPE_YEAR: {'check_collection': 'printer_reading_month', 'complete_count': 12},
+    }
+    end_dt = Utils.gen_end_dt(range_type, start_dt, tz_offset)
+
+    current_db_conn = connection.get_db()
+    mapped_info = range_type_mapping[range_type]
+    result = current_db_conn[mapped_info['check_collection']].aggregate([
+        {
+            "$match": {
+                'p_id': str(printer.id),
+                'datetime': {'$gte': start_dt, '$lt': end_dt},
+            }
+        },
+        {
+            "$group": {"_id": "$datetime"}
+        }
+    ])
+
+    return len(result["result"]) >= mapped_info['complete_count']
 
 
 def show_highest_and_lowest_view(request, system_code):
