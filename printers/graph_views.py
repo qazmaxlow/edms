@@ -330,9 +330,9 @@ def show_highest_and_lowest_view(request, system_code):
     for _, readings in printer_readings_info['readings'].items():
         for timestamp, val in readings.items():
             if timestamp in total_readings:
-                total_readings[timestamp] += val
+                total_readings[timestamp]['total'] += val
             else:
-                total_readings[timestamp] = val
+                total_readings[timestamp] = {'total': val}
     printer_readings_info['readings'] = total_readings
 
     return Utils.json_response(printer_readings_info)
