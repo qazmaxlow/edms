@@ -51,10 +51,10 @@ $(function() {
         <div class="saving-consumption">
             {% ifequal LANGUAGE_CODE 'zh-tw' %}
             <h2>過去12個月一共{% if percengate_change >= 0 %}減少消耗{% else %}多用了{% endif %}</h2>
-            <div class="{% if percengate_change >= 0 %}positive-saving{% else %}negative-saving{% endif %}"> {{percengate_change|abs_float|floatformat}}<span class="saving-percent-symbol">%</span> 電力能源</div>
+            <div class="{{ saving_css_class }}"> {{percengate_change|abs_float|floatformat}}<span class="saving-percent-symbol">%</span> 電力能源</div>
             {% else %}
             <h2>Over the past 12 months</h2>
-            <div class="{% if percengate_change >= 0 %}positive-saving{% else %}negative-saving{% endif %}"> {{percengate_change|abs_float|floatformat}}<span class="saving-percent-symbol">%</span> {% if percengate_change >= 0 %}Energy Reduction{% else %}More Energy{% endif %}</div>
+            <div class="{{ saving_css_class }}"> {{percengate_change|abs_float|floatformat}}<span class="saving-percent-symbol">%</span> {% if percengate_change >= 0 %}Energy Reduction{% else %}More Energy{% endif %}</div>
             {% endifequal %}
         </div>
 
@@ -87,7 +87,7 @@ $(function() {
         </video>
     </div>
 
-    <div class="cumulative-saving-container {% if total_co2_saving >= 0 %}positive-saving{% else %}negative-saving{% endif %}">
+    <div class="cumulative-saving-container {{ saving_css_class }}">
         <div class="cumulative-saving-title">{% if percengate_change >= 0 %}{% trans "Cumulative Savings" %}{% else %}{% trans "Extra Spending" %}{% endif %}</div>
         <hr>
         <div class="cumulative-saving-info">
