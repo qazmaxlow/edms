@@ -20,6 +20,8 @@
 <div class="bs-action">
     <form action="" method="get">
         {{ filter.form.user }}
+        {{ filter.form.created_time__gte }}
+        {{ filter.form.created_time__lte }}
         <button class="btn btn-default" type="submit">Submit</button>
     </form>
 </div>

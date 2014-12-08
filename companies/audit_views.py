@@ -14,7 +14,7 @@ from utils.auth import permission_required
 class AuditTrailFilter(django_filters.FilterSet):
     class Meta:
         model = Trail
-        fields = ['user',]
+        fields = {'user': ['exact'], 'created_time': ['gte', 'lte']}
 
     def __init__(self, company_syscode, *args, **kwargs):
         super(AuditTrailFilter, self).__init__(*args, **kwargs)
