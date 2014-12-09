@@ -65,7 +65,7 @@ class ExportCsvMixin(object):
         if self.csv_filename is None:
             raise Exception("ExportCsvMixin requires a definition of csv_filename")
         else:
-            return [self.csv_filename]
+            return self.csv_filename
 
     def post(self, request, *args, **kwargs):
         objects = self.get_queryset()
