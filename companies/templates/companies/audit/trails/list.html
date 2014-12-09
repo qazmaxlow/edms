@@ -32,12 +32,14 @@
                k-format="'yyyy-MM-dd'"
                name="{{ filter.form.created_time__gte.name }}"
                value="{{ filter.form.created_time__gte.value|default_if_none:'' }}"
+               placeholder="From"
         >
 
         <input kendo-date-picker
                k-format="'yyyy-MM-dd'"
                name="{{ filter.form.created_time__lte.name }}"
                value="{{ filter.form.created_time__lte.value|default_if_none:'' }}"
+               placeholder="To"
         >
         <button class="btn btn-default" type="submit">Update</button>
       </div>
