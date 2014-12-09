@@ -1,6 +1,10 @@
+import csv
+import StringIO
+
 from django.contrib.auth import get_user_model
 from django import forms
 from django.db import models
+from django import http
 from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.utils.decorators import method_decorator
@@ -48,7 +52,32 @@ class AuditTrailFilter(django_filters.FilterSet):
          })
 
 
-class CompanyAuditTrailsListView(ListView):
+class ExportCsvMixin(object):
+    def get_csv_filename(self):
+        if self.csv_filename is None:
+            raise Exception("ExportCsvMixin requires a definition of csv_filename")
+        else:
+            return [self.csv_filename]
+
+    def post(self, request, *args, **kwargs):
+        objects = self.get_queryset()
+        csv_io = StringIO.StringIO()
+        csv_wr = csv.writer(csv_io)
+
+        for obj in objects:
+            csv_vals = map(lambda f: getattr(obj, f), self.csv_fields)
+            csv_wr.writerow(csv_vals)
+
+        response = http.HttpResponse(mimetype='text/csv')
+        filename = self.get_csv_filename()
+        response['Content-Disposition'] = 'attachment; filename="{0}"'.format(filename)
+        response.write(csv_io.getvalue())
+        return response
+
+
+class CompanyAuditTrailsListView(ExportCsvMixin, ListView):
+    csv_filename = 'audit_trails.csv'
+    csv_fields = ['user', 'user_fullname', 'action_name', 'created_time']
     template_name = 'companies/audit/trails/list.html'
     paginate_by = 30
 
