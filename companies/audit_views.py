@@ -46,6 +46,14 @@ class AuditTrailFilter(django_filters.FilterSet):
         super(AuditTrailFilter, self).__init__(*args, **kwargs)
         User = get_user_model()
         user_queryset = User.objects.filter(system__code=company_syscode)
+
+        self.filters['created_time__gte'].field.widget.attrs.update({
+            'placeholder': 'From'
+        })
+        self.filters['created_time__lte'].field.widget.attrs.update({
+            'placeholder': 'To'
+        })
+
         self.filters['user'].extra.update(
             {'empty_label': 'All user',
              'queryset': user_queryset,
