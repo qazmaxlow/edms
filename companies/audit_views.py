@@ -2,7 +2,6 @@ import csv
 import StringIO
 
 from django.contrib.auth import get_user_model
-from django import forms
 from django.db import models
 from django import http
 from django.shortcuts import render
@@ -17,26 +16,7 @@ from user.models import USER_ROLE_ADMIN_LEVEL
 from utils.auth import permission_required
 
 
-class DateTimeField(forms.DateTimeField):
-    def widget_attrs(self, widget):
-        attrs = super(DateTimeField, self).widget_attrs(widget)
-        attrs.update({
-            'kendo-date-picker': 'kendo-date-picker',
-            'k-format': "'yyyy-MM-dd'",
-        })
-        return attrs
-
-
-class DateTimeFilter(django_filters.DateTimeFilter):
-    field_class = DateTimeField
-
-
 class AuditTrailFilter(django_filters.FilterSet):
-    filter_overrides = {
-        models.DateTimeField: {
-            'filter_class': DateTimeFilter,
-        }
-    }
 
     class Meta:
         model = Trail

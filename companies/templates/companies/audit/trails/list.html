@@ -28,8 +28,17 @@
     <form action="" method="get" class="pull-left">
       <div ng-app="EntrakUi">
         {{ filter.form.user }}
-        {{ filter.form.created_time__gte }}
-        {{ filter.form.created_time__lte }}
+        <input kendo-date-picker
+               k-format="'yyyy-MM-dd'"
+               name="{{ filter.form.created_time__gte.name }}"
+               value="{{ filter.form.created_time__gte.value }}"
+        >
+
+        <input kendo-date-picker
+               k-format="'yyyy-MM-dd'"
+               name="{{ filter.form.created_time__lte.name }}"
+               value="{{ filter.form.created_time__lte.value }}"
+        >
         <button class="btn btn-default" type="submit">Update</button>
       </div>
     </form>
