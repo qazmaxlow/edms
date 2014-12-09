@@ -34,6 +34,8 @@ class AuditTrailFilter(django_filters.FilterSet):
 
 
 class ExportCsvMixin(object):
+    csv_limited_record = 10000
+
     def get_csv_filename(self):
         if self.csv_filename is None:
             raise Exception("ExportCsvMixin requires a definition of csv_filename")
@@ -42,6 +44,9 @@ class ExportCsvMixin(object):
 
     def post(self, request, *args, **kwargs):
         objects = self.get_queryset()
+        if self.csv_limited_record:
+            objects = objects[:self.csv_limited_record]
+
         csv_io = StringIO.StringIO()
         csv_wr = csv.writer(csv_io)
 
