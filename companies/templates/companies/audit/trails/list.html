@@ -25,7 +25,7 @@
     <div class="container">
 <h1>{{ company_system.name }} audit trails</h1>
 <div class="bs-action">
-    <form action="" method="get" class="pull-left">
+    <form action="" method="get">
       <div ng-app="EntrakUi">
         {{ filter.form.user }}
         <input kendo-date-picker
@@ -42,13 +42,9 @@
                placeholder="To"
         >
         <button class="btn btn-default" type="submit">Update</button>
+        <button class="btn btn-default" name="download_csv" type="submit">Download CSV (limited to 10000 records)</button>
       </div>
     </form>
-    <form action="" method="post" class="pull-left">
-      {% csrf_token %}
-      <button class="btn btn-default" type="submit">Download CSV (limited to 10000 records)</button>
-    </form>
-    <div class="clearfix"></div>
 </div>
 <div class="row">
   <div class="col-md-12">

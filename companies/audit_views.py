@@ -35,6 +35,7 @@ class AuditTrailFilter(django_filters.FilterSet):
 
 class ExportCsvMixin(object):
     csv_limited_record = 10000
+    csv_download_button = 'download_csv'
 
     def get_csv_filename(self):
         if self.csv_filename is None:
@@ -42,23 +43,26 @@ class ExportCsvMixin(object):
         else:
             return self.csv_filename
 
-    def post(self, request, *args, **kwargs):
-        objects = self.get_queryset()
-        if self.csv_limited_record:
-            objects = objects[:self.csv_limited_record]
+    def get(self, request, *args, **kwargs):
+        if self.csv_download_button in self.request.GET:
+            objects = self.get_queryset()
+            if self.csv_limited_record:
+                objects = objects[:self.csv_limited_record]
 
-        csv_io = StringIO.StringIO()
-        csv_wr = csv.writer(csv_io)
+            csv_io = StringIO.StringIO()
+            csv_wr = csv.writer(csv_io)
 
-        for obj in objects:
-            csv_vals = map(lambda f: getattr(obj, f), self.csv_fields)
-            csv_wr.writerow(csv_vals)
+            for obj in objects:
+                csv_vals = map(lambda f: getattr(obj, f), self.csv_fields)
+                csv_wr.writerow(csv_vals)
 
-        response = http.HttpResponse(mimetype='text/csv')
-        filename = self.get_csv_filename()
-        response['Content-Disposition'] = 'attachment; filename="{0}"'.format(filename)
-        response.write(csv_io.getvalue())
-        return response
+            response = http.HttpResponse(mimetype='text/csv')
+            filename = self.get_csv_filename()
+            response['Content-Disposition'] = 'attachment; filename="{0}"'.format(filename)
+            response.write(csv_io.getvalue())
+            return response
+        else:
+            return super(ExportCsvMixin, self).get(request, *args, **kwargs)
 
 
 class CompanyAuditTrailsListView(ExportCsvMixin, ListView):
