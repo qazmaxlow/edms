@@ -79,6 +79,28 @@
 
     <div ng-app="Entrak">
     <div ng-controller="MyCtrl">
+<div class="bs-action">
+    <form action="" method="get">
+
+        {{ filter.form.user }}
+        <input kendo-date-picker
+               k-format="'yyyy-MM-dd'"
+               name="{{ filter.form.created_time__gte.name }}"
+               value="{{ filter.form.created_time__gte.value|default_if_none:'' }}"
+               placeholder="From"
+        >
+
+        <input kendo-date-picker
+               k-format="'yyyy-MM-dd'"
+               name="{{ filter.form.created_time__lte.name }}"
+               value="{{ filter.form.created_time__lte.value|default_if_none:'' }}"
+               placeholder="To"
+        >
+        <button class="btn btn-default" type="submit">Update</button>
+        <button class="btn btn-default" name="download_csv" type="submit">Download CSV (limited to 10000 records)</button>
+
+    </form>
+</div>
         <kendo-grid options="mainGridOptions">
         </kendo-grid>
     </div>
