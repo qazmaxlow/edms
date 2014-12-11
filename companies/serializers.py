@@ -17,4 +17,4 @@ class TrailSerializer(serializers.HyperlinkedModelSerializer):
     user = EntrakuserSerializer()
     class Meta:
         model = Trail
-        fields = ('action_type', 'user', 'created_time')
+        fields = ('action_name', 'user', 'created_time')
