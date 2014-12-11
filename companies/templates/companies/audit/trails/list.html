@@ -99,11 +99,15 @@
                             dataType: "json"
                         }
                     },
+                    pageSize: 10,
+                    serverPaging: true,
                     schema: {
-                        data: "results"
+                        data: "results",
+                        total: "count"
                     }
                 },
                 scrollable: false,
+                pageable: true,
                 columns: [{
                     field: "user.username",
                     title: "Account name",
