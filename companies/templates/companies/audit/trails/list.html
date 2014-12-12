@@ -80,7 +80,7 @@
     <div ng-app="Entrak">
     <div ng-controller="MyCtrl">
 <div class="bs-action">
-    <form ng-submit="refreshGrid()">
+    <form ng-submit="refreshGrid()" class="pull-left">
         <select kendo-drop-down-list="userFilter" ng-model="user">
           <option value="">All user</option>
         {% for u in users %}
@@ -105,12 +105,13 @@
         >
         <button class="btn btn-default" type="submit">Update</button>
     </form>
-    <form action="." method="get">
+    <form action="." method="get" class="pull-left">
       <input type="hidden" name="{{ filter.form.user.name }}" value="{% templatetag openvariable %} user {% templatetag closevariable %}">
       <input type="hidden" name="{{ filter.form.created_time__gte.name }}" value="{% templatetag openvariable %} dateFrom {% templatetag closevariable %}">
       <input type="hidden" name="{{ filter.form.created_time__lte.name }}" value="{% templatetag openvariable %} dateTo {% templatetag closevariable %}">
       <button class="btn btn-default" name="download_csv" type="submit">Download CSV (limited to 10000 records)</button>
     </form>
+    <div class="clearfix"></div>
 </div>
         <div kendo-grid="grid" k-options="mainGridOptions">
         </div>
