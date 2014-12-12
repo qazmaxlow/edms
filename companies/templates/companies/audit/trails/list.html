@@ -89,14 +89,15 @@
           <option value="{{ u.id }}">{{ u.username }}</option>
         {% endfor %}
         </select>
-        <input kendo-date-picker
+        <input kendo-date-picker="dateFromFilter"
                k-format="'yyyy-MM-dd'"
+               k-parse-format="'yyyy-MM-dd'"
                name="{{ filter.form.created_time__gte.name }}"
                value="{{ filter.form.created_time__gte.value|default_if_none:'' }}"
                placeholder="From"
         >
 
-        <input kendo-date-picker
+        <input kendo-date-picker="dateToFilter"
                k-format="'yyyy-MM-dd'"
                name="{{ filter.form.created_time__lte.name }}"
                value="{{ filter.form.created_time__lte.value|default_if_none:'' }}"
@@ -152,7 +153,11 @@
             };
 
             $scope.refreshGrid = function() {
-                var filters = { user: $scope.userFilter.value() };
+                var filters = {
+                    user: $scope.userFilter.value(),
+                    {{ filter.form.created_time__gte.name }}: $scope.dateFromFilter._oldText,
+                    {{ filter.form.created_time__lte.name }}: $scope.dateToFilter._oldText
+                };
                 $scope.mainGridOptions.dataSource.transport.read['data'] = filters;
                 $scope.grid.dataSource.page(1);
                 $scope.grid.dataSource.read();
