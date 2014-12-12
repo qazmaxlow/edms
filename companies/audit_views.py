@@ -84,6 +84,9 @@ class CompanyAuditTrailsListView(ExportCsvMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(CompanyAuditTrailsListView, self).get_context_data(**kwargs)
         context['filter'] = self.filter
+        company_syscode = self.kwargs['system_code']
+        User = get_user_model()
+        context['users'] = User.objects.filter(system__code=company_syscode)
 
         company_syscode = self.kwargs['system_code']
         company_system = System.objects.get(code=company_syscode)

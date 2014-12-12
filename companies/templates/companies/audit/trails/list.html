@@ -80,9 +80,15 @@
     <div ng-app="Entrak">
     <div ng-controller="MyCtrl">
 <div class="bs-action">
-    <form action="" method="get">
+    <form ng-submit="refreshGrid()">
 
         {{ filter.form.user }}
+        <select kendo-drop-down-list="userFilter">
+          <option value="">All user</option>
+        {% for u in users %}
+          <option value="{{ u.id }}">{{ u.username }}</option>
+        {% endfor %}
+        </select>
         <input kendo-date-picker
                k-format="'yyyy-MM-dd'"
                name="{{ filter.form.created_time__gte.name }}"
@@ -101,14 +107,14 @@
 
     </form>
 </div>
-        <kendo-grid options="mainGridOptions">
-        </kendo-grid>
+        <div kendo-grid="grid" k-options="mainGridOptions">
+        </div>
     </div>
 </div>
 
   </div>
-</div>
-
+</div
+>
 <script>
     angular.module("Entrak", [ "kendo.directives" ])
         .controller("MyCtrl", function($scope){
@@ -144,6 +150,13 @@
                     title: "Created time"
                 }]
             };
+
+            $scope.refreshGrid = function() {
+                var filters = { user: $scope.userFilter.value() };
+                $scope.mainGridOptions.dataSource.transport.read['data'] = filters;
+                $scope.grid.dataSource.page(1);
+                $scope.grid.dataSource.read();
+            }
         })
 </script>
     </div>
