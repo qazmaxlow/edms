@@ -11,3 +11,8 @@ class TrailViewSet(viewsets.ModelViewSet):
     paginate_by = 30
     filter_class = AuditTrailFilter
     filter_backends = (filters.DjangoFilterBackend,)
+
+    def get_queryset(self):
+        company_syscode = self.kwargs['system_code']
+        trail_queryset = Trail.objects.filter(user__system__code=company_syscode)
+        return trail_queryset
