@@ -1,4 +1,4 @@
-{% load static %}{% load url_params %}<!DOCTYPE html>
+{% load static %}<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -24,59 +24,6 @@
   <body>
     <div class="container">
 <h1>{{ company_system.name }} audit trails</h1>
-<div class="bs-action">
-    <form action="" method="get">
-
-        {{ filter.form.user }}
-        <input kendo-date-picker
-               k-format="'yyyy-MM-dd'"
-               name="{{ filter.form.created_time__gte.name }}"
-               value="{{ filter.form.created_time__gte.value|default_if_none:'' }}"
-               placeholder="From"
-        >
-
-        <input kendo-date-picker
-               k-format="'yyyy-MM-dd'"
-               name="{{ filter.form.created_time__lte.name }}"
-               value="{{ filter.form.created_time__lte.value|default_if_none:'' }}"
-               placeholder="To"
-        >
-        <button class="btn btn-default" type="submit">Update</button>
-        <button class="btn btn-default" name="download_csv" type="submit">Download CSV (limited to 10000 records)</button>
-
-    </form>
-</div>
-<div class="row">
-  <div class="col-md-12">
-    <table class="table">
-      <thead><tr><th>Account name</th><th>Username</th><th>Action</th><th>Date time</th></tr></thead>
-      <tbody>
-        {% for trail in object_list %}
-        <tr><td>{{ trail.user }}</td><td>{{ trail.user.first_name }} {{ trail.user.last_name }}</td><td>{{ trail.action_name }}</td><td>{{ trail.created_time }}</td></tr>
-        {% empty %}
-        No trail yet.
-        {% endfor %}
-      </tbody>
-    </table>
-
-{% if is_paginated %}
-<div class="pagination">
-    <span class="step-links">
-        {% if page_obj.has_previous %}
-            <a href="?{% url_params 'page' page_obj.previous_page_number %}">previous</a>
-        {% endif %}
-
-        <span class="current">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-        </span>
-
-        {% if page_obj.has_next %}
-            <a href="?{% url_params 'page' page_obj.next_page_number %}">next</a>
-        {% endif %}
-    </span>
-</div>
-{% endif %}
-
     <div ng-app="Entrak">
     <div ng-controller="MyCtrl">
 <div class="bs-action">
