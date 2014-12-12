@@ -75,7 +75,7 @@
                 dataSource: {
                     transport: {
                         read: {
-                            url: "/adidas/apis/audit/trails/",
+                            url: "{% url 'trail-list' company_system.code %}",
                             type: 'GET',
                             dataType: "json"
                         }
