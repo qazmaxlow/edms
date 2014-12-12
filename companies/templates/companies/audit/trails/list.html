@@ -81,7 +81,6 @@
     <div ng-controller="MyCtrl">
 <div class="bs-action">
     <form ng-submit="refreshGrid()">
-        {{ filter.form.user }}
         <select kendo-drop-down-list="userFilter" ng-model="user">
           <option value="">All user</option>
         {% for u in users %}
