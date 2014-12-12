@@ -81,9 +81,8 @@
     <div ng-controller="MyCtrl">
 <div class="bs-action">
     <form ng-submit="refreshGrid()">
-
         {{ filter.form.user }}
-        <select kendo-drop-down-list="userFilter">
+        <select kendo-drop-down-list="userFilter" ng-model="user">
           <option value="">All user</option>
         {% for u in users %}
           <option value="{{ u.id }}">{{ u.username }}</option>
@@ -95,6 +94,7 @@
                name="{{ filter.form.created_time__gte.name }}"
                value="{{ filter.form.created_time__gte.value|default_if_none:'' }}"
                placeholder="From"
+               ng-model="dateFrom"
         >
 
         <input kendo-date-picker="dateToFilter"
@@ -102,10 +102,15 @@
                name="{{ filter.form.created_time__lte.name }}"
                value="{{ filter.form.created_time__lte.value|default_if_none:'' }}"
                placeholder="To"
+               ng-model="dateTo"
         >
         <button class="btn btn-default" type="submit">Update</button>
-        <button class="btn btn-default" name="download_csv" type="submit">Download CSV (limited to 10000 records)</button>
-
+    </form>
+    <form action="." method="get">
+      <input type="hidden" name="{{ filter.form.user.name }}" value="{% templatetag openvariable %} user {% templatetag closevariable %}">
+      <input type="hidden" name="{{ filter.form.created_time__gte.name }}" value="{% templatetag openvariable %} dateFrom {% templatetag closevariable %}">
+      <input type="hidden" name="{{ filter.form.created_time__lte.name }}" value="{% templatetag openvariable %} dateTo {% templatetag closevariable %}">
+      <button class="btn btn-default" name="download_csv" type="submit">Download CSV (limited to 10000 records)</button>
     </form>
 </div>
         <div kendo-grid="grid" k-options="mainGridOptions">
