@@ -11,7 +11,6 @@ ADD pip_requirements.txt pip_requirements.txt
 RUN pip install -r pip_requirements.txt
 RUN rm pip_requirements.txt
 
-WORKDIR /srv
 RUN mkdir -p /logs/entrak
 
 EXPOSE 8080
