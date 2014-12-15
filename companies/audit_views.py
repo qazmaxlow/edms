@@ -1,4 +1,4 @@
-import csv
+import csv, datetime
 import StringIO
 
 from django.contrib.auth import get_user_model
@@ -7,6 +7,7 @@ from django import http
 from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.utils.decorators import method_decorator
+from django.utils.timezone import localtime
 
 import django_filters
 
@@ -41,8 +42,15 @@ class ExportCsvMixin(object):
             csv_io = StringIO.StringIO()
             csv_wr = csv.writer(csv_io)
 
+            def get_csv_val(o, f):
+                v = getattr(o, f)
+                if isinstance(v, datetime.date):
+                    v = localtime(v)
+
+                return v
+
             for obj in objects:
-                csv_vals = map(lambda f: getattr(obj, f), self.csv_fields)
+                csv_vals = map(lambda f: get_csv_val(obj, f), self.csv_fields)
                 csv_wr.writerow(csv_vals)
 
             response = http.HttpResponse(mimetype='text/csv')
