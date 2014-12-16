@@ -23,3 +23,56 @@ testserver:
   ports:
     - "80:80"
     - "443:443"
+
+rabbitmq:
+  image: dockerfile/rabbitmq
+
+cwcelery:
+  image: entrak_dms/celery
+  command: python -m celery worker --app=entrak --loglevel=INFO -Q celery
+  volumes:
+    - .:/srv
+  links:
+    - postgres
+    - mongo
+    - rabbitmq
+
+cwtaskstarter:
+  image: entrak_dms/celery
+  command: python -m celery worker --app=entrak --loglevel=INFO -Q task_starter
+  volumes:
+    - .:/srv
+  links:
+    - postgres
+    - mongo
+    - rabbitmq
+
+cwrecap:
+  image: entrak_dms/celery
+  command: python -m celery worker --app=entrak --loglevel=INFO -Q recap
+  volumes:
+    - .:/srv
+  links:
+    - postgres
+    - mongo
+    - rabbitmq
+
+cwrecover:
+  image: entrak_dms/celery
+  command: python -m celery worker --app=entrak --loglevel=INFO -Q recover
+  volumes:
+    - .:/srv
+  links:
+    - postgres
+    - mongo
+    - rabbitmq
+
+celerybeat:
+  image: entrak_dms/celery
+  command: celery beat --app=entrak
+  volumes:
+    - .:/srv
+  links:
+    - postgres
+    - mongo
+    - rabbitmq
