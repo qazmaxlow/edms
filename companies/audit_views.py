@@ -43,7 +43,10 @@ class ExportCsvMixin(object):
             csv_wr = csv.writer(csv_io)
 
             def get_csv_val(o, f):
-                v = getattr(o, f)
+                v = o
+                for subf in f.split('.'):
+                    v = getattr(v, subf)
+
                 if isinstance(v, datetime.date):
                     v = localtime(v)
 
@@ -64,7 +67,7 @@ class ExportCsvMixin(object):
 
 class CompanyAuditTrailsListView(ExportCsvMixin, ListView):
     csv_filename = 'audit_trails.csv'
-    csv_fields = ['user', 'user_fullname', 'action_name', 'created_time']
+    csv_fields = ['user', 'user.fullname', 'action_name', 'created_time']
     template_name = 'companies/audit/trails/list.html'
     paginate_by = 30
 
