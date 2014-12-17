@@ -12,10 +12,6 @@ class Trail(models.Model):
     url = models.URLField()
 
     @property
-    def user_fullname(self):
-        return '{0.first_name} {0.last_name}'.format(self.user)
-
-    @property
     def action_name(self):
         return AUDIT_ACTIONS.get(self.action_type)
 
