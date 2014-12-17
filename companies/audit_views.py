@@ -33,8 +33,8 @@ class ExportCsvMixin(object):
         else:
             return self.csv_filename
 
-    def get(self, request, *args, **kwargs):
-        if self.csv_download_button in self.request.GET:
+    def post(self, request, *args, **kwargs):
+        if self.csv_download_button in self.request.POST:
             objects = self.get_queryset()
             if self.csv_limited_record:
                 objects = objects[:self.csv_limited_record]
