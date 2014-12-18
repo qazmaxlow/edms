@@ -11,7 +11,7 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/graph.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/printers/summary.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'printers/css/summary.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'js/datetimepicker-master/jquery.datetimepicker.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/daneden-animate.css' %}">
 {% ifequal LANGUAGE_CODE 'zh-tw' %}
@@ -29,9 +29,9 @@
 <script src="{% static 'js/moment-with-locales.js' %}"></script>
 <script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
 <script src="{% static 'js/entrak-system.js' %}"></script>
-<script src="{% static 'js/printers/entrak-utils.js' %}"></script>
-<script src="{% static 'js/printers/graph-chart.js' %}"></script>
-<script src="{% static 'js/printers/energy-summary.js' %}"></script>
+<script src="{% static 'printers/js/entrak-utils.js' %}"></script>
+<script src="{% static 'printers/js/graph-chart.js' %}"></script>
+<script src="{% static 'printers/js/energy-summary.js' %}"></script>
 {% endblock %}
 
 {% block selected-menu-link-id %}menu-link-printer-graph{% endblock %}
