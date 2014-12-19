@@ -10,4 +10,4 @@ RUN rm pip_requirements.txt
 
 RUN mkdir -p /logs/entrak
 
-CD /srv
+WORKDIR /srv
