@@ -1130,7 +1130,7 @@ ReportGenerator.prototype.generateCalendarReport = function(targetSel, combinedR
     targetContainer.find(".average-usage").text(Utils.formatWithCommas(averageUsage.toFixed(0)));
     var beginningDateText = this.beginningStartDt.format(this.multiLangTexts.beginDtFormat) + " **";
     this._fillInComparePercent(targetSel+" .compare-beginning", beginningUsage, averageUsage, beginningDateText);
-    this._fillInComparePercent(targetSel+" .compare-last", lastUsage, averageUsage, this.multiLangTexts.lastMonth);
+    this._fillInComparePercent(targetSel+" .compare-last", lastUsage, averageUsage, this.multiLangTexts.last_week);
     this._fillInComparePercent(targetSel+" .compare-last-same-period", lastSamePeriodUsage, averageUsage, this.multiLangTexts.samePeriodLastYear);
 
     if (lowestDt !== null) {
