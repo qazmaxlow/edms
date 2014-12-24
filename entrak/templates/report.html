@@ -31,9 +31,9 @@
 <link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
 <link href="{% static 'assets/kendoui/styles/kendo.default.min.css' %}" rel="stylesheet">
 <!-- Because now using jquery v1.11 -->
-<!-- <script src="{% static 'kendoui/js/jquery.min.js' %}"></script> -->
+<script src="{% static 'assetskendoui/js/jquery.min.js' %}"></script>
 <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
-<script src="{% static 'assets/kendoui/js/kendo.ui.core.min.js' %}"></script>
+<script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
 
 
 <script type="text/javascript">
@@ -700,6 +700,14 @@ $(function() {
 
 {% block page_content %}
 
+    <div ng-app="Entrak">
+    <div ng-controller="ReportController">
+
+        <div kendo-window="win2" k-title="'Simple content'"
+            k-width="600" k-height="200" k-visible="false"
+            k-content="{ url: '../content/web/loremIpsum.html' }"
+            k-on-open="win2visible = true" k-on-close="win2visible = false"></div>
+
 <div class="panel-component">
     <div class="drop-down-panel-header">
         <div class="panel-header-left-menu">
@@ -720,6 +728,8 @@ $(function() {
             </div>
             <hr>
             <hr>
+
+
             <div id="monthly-report-content">
                 {% for summary in monthly_summary %}
                 <div>
@@ -727,9 +737,13 @@ $(function() {
                     {% language 'en' %}
                     <span>{{summary.energy_usage|floatformat:"0"|intcomma}}</span>
                     <span>{{summary.co2_usage|floatformat:"0"|intcomma}}</span>
-                    <span>{{summary.money_usage|floatformat:"0"|intcomma}}</span>
-                    {% endlanguage %}
+                    <span>{{summary.money_usage|floatformat:"0"|intcomma}}
+                              <div class="demo-section k-content">
 
+            <button class="k-button" ng-show="!win2visible" ng-click="win2.open()">Open AJAX content</button>
+        </div>
+                    </span>
+                    {% endlanguage %}
                     <a href="{% url 'entrak.download_report' systems.0.code summary.timestamp 0 'month' %}">
                       <img class="pdf-icon" src="{% static 'images/report/pdf-icon.png' %}">
                       <span class="pdf-text">PDF</span>
@@ -883,6 +897,7 @@ $(function() {
         <hr class="head-separator">
 </div>
 
+
 {% include "report_main_content.html" %}
 <!-- use table because the CSS code done not well -->
 <section id="download-reports">
@@ -918,7 +933,12 @@ $(function() {
         <input name="unit" value="">
 </form>
 
+</div></div>
+<!-- end ng-app -->
 <script>
+    angular.module("Entrak", [ "kendo.directives" ])
+        .controller("ReportController", function($scope){})
+
 $(document).ready(function()  {
     $('#monthly-report-content div').each(function() {
         var a = $(this).find('.menu-target:first');
