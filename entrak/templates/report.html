@@ -7,6 +7,8 @@
 
 {% block ga_page_title %}report{% endblock %}
 
+{% block body_class %}transparent-win{% endblock %}
+
 {% block extra_head %}
 {{block.super}}
 {% get_current_language as LANGUAGE_CODE %}
@@ -696,7 +698,6 @@ $(function() {
 });
 </script>
 
-{% block body_class %}transparent-win{% endblock %}
 <style type="text/css" media="screen">
   .transparent-win .k-window {
     -webkit-filter: blur(20px);
