@@ -696,6 +696,17 @@ $(function() {
 });
 </script>
 
+{% block body_class %}transparent-win{% endblock %}
+<style type="text/css" media="screen">
+  .transparent-win .k-window {
+    -webkit-filter: blur(20px);
+    -moz-filter: blur(20px);
+    -o-filter: blur(20px);
+    -ms-filter: blur(20px);
+    filter: blur(20px);
+    opacity: 0.4 !important;
+}
+</style>
 {% endblock %}
 
 {% block page_content %}
@@ -704,6 +715,7 @@ $(function() {
     <div ng-controller="ReportController">
 
         <div kendo-window="win2" k-title="'Simple content'"
+            k-modal="true"
             k-width="600" k-height="200" k-visible="false"
             k-content="{ url: '../content/web/loremIpsum.html' }"
             k-on-open="win2visible = true" k-on-close="win2visible = false"></div>
