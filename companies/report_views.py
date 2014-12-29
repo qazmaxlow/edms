@@ -12,7 +12,7 @@ from utils import calculation
 from utils.utils import Utils
 
 
-def popup_report_view(request, system_code=None):
+def popup_report_view(request, system_code, year, month):
     systems_info = System.get_systems_info(system_code, request.user.system.code)
     systems = systems_info['systems']
     current_system = systems[0]
