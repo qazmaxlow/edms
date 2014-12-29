@@ -3,6 +3,8 @@ import datetime
 import pytz
 import operator
 from django.db import models
+from django.utils import translation
+
 from entrak.settings import BASE_DIR, LANG_CODE_EN, LANG_CODE_TC
 from django.db.models import Q
 from holiday.models import CityHoliday, Holiday
@@ -102,6 +104,12 @@ class System(models.Model):
 
         all_holidays = set(city_holidays).union(holidays)
         return list(all_holidays)
+
+    @property
+    def fullname(self):
+        lang = translation.get_language()
+        fn = self.full_name_tc if lang == 'zh-tw' else self.full_name
+        return fn
 
 class SystemHomeImage(models.Model):
     image = models.ImageField(upload_to="system_home/%Y/%m")
