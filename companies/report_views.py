@@ -58,5 +58,5 @@ def popup_report_view(request, system_code=None):
     m["monthly_summary"] = sorted(monthly_summary, key=lambda x: x['timestamp'], reverse=True)
     m.update(csrf(request))
 
-    return render(request, 'report.html', m)
+    return render(request, 'companies/reports/popup_report.html', m)
 
