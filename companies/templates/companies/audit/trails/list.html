@@ -57,6 +57,7 @@
       <input type="hidden" name="{{ filter.form.created_time__gte.name }}" value="{% templatetag openvariable %} dateFrom {% templatetag closevariable %}">
       <input type="hidden" name="{{ filter.form.created_time__lte.name }}" value="{% templatetag openvariable %} dateTo {% templatetag closevariable %}">
       <button class="btn btn-default" name="download_csv" type="submit">Download CSV (limited to 10000 records)</button>
+      <button class="btn btn-default" name="download_csv_click_count" type="submit">Staff Click Count</button>
     </form>
     <div class="clearfix"></div>
 </div>
