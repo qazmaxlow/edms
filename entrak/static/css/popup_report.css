@@ -733,17 +733,13 @@ body {-webkit-print-color-adjust: exact;}
 }
 
 .report-component-header {
-    width: 972px;
     background-color: #FDE6AD;
-    height: 33px;
     font-size: 13pt;
     font-weight: bold;
     color: #DD931F;
     text-align: center;
-    vertical-align: middle;
-    padding-top: 15px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    padding: 15px 0;
+    border-radius: 10px 10px 0 0;
     border-bottom: 2px solid #93661f;
 }
 .report-component-header span {
