@@ -728,6 +728,10 @@
     color: #354960;
 }
 
+@media print {
+body {-webkit-print-color-adjust: exact;}
+}
+
 .report-component-header {
     width: 972px;
     background-color: #FDE6AD;
