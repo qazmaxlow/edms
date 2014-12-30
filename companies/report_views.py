@@ -59,6 +59,7 @@ def popup_report_view(request, system_code, year, month):
     m.update(csrf(request))
     # oops!
     m['company_system'] = systems.first()
+    m['report_date'] = datetime.datetime.strptime(year+month, '%Y%b')
 
     return render(request, 'companies/reports/popup_report.html', m)
 
