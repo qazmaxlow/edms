@@ -465,16 +465,6 @@ function updateDlRawBtnStatus() {
     }
 }
 
-function setDetailShow(isShow) {
-    if (isShow) {
-        $(".hide-details-btn").removeClass('btn-down');
-        $(".detail-container").show();
-    } else {
-        $(".hide-details-btn").addClass('btn-down');
-        $(".detail-container").hide();
-    }
-}
-
 $(function() {
     setupAjaxForCsrf($.cookie('csrftoken'));
     report.langCode = '{{LANGUAGE_CODE}}';
@@ -582,16 +572,6 @@ $(function() {
             $(".report-component").fadeTo(600, 1.0);
         });
         updateReportName();
-    });
-
-    $(".hide-details-btn").click(function() {
-        $(this).toggleClass('btn-down');
-        if ($(this).hasClass('btn-down')) {
-            $(this).text('{% trans "SHOW DETAILS" %}');
-        } else {
-            $(this).text('{% trans "HIDE DETAILS" %}');
-        }
-        $(this).parent().parent().find(".detail-container").slideToggle();
     });
 
     $(".save-report-btn, .bottom-save-report-btn").click(function() {
