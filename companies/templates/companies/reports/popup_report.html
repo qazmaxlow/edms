@@ -85,7 +85,7 @@
             <div>
                 <img src="{% static 'images/report/lightning-energy.png' %}">
                 <div class="basic-info-text-container">
-                    <span id="current-energy-usage"></span><span class="basic-info-col-unit"> kWh</span>
+                    <span id="current-energy-usage">{{ total_energy|floatformat:"0" }}</span><span class="basic-info-col-unit"> kWh</span>
                     <br>
                     <span class="basic-info-col-subtext">{% trans "of electricity" %}</span>
                 </div>
@@ -698,14 +698,14 @@
 
 <div class="bottom-space"></div>
 
-<form class="download-pdf-form" action="{% url 'report_pdf' system_code=systems.0.code %}" method="POST">{% csrf_token %}
+<form class="download-pdf-form" action="{% url 'report_pdf' system_code=company_system.code %}" method="POST">{% csrf_token %}
         <input name="start_timestamp" value="">
         <input name="end_timestamp" value="">
         <input name="report_type" value="">
         <input name="report_layout" value="">
 </form>
 
-<form class="download-raw-data-form" action="{% url 'export_data' system_code=systems.0.code %}" method="POST">{% csrf_token %}
+<form class="download-raw-data-form" action="{% url 'export_data' system_code=company_system.code %}" method="POST">{% csrf_token %}
         <input name="start_timestamp" value="">
         <input name="end_timestamp" value="">
         <input name="unit" value="">
