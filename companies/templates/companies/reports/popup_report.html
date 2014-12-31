@@ -74,11 +74,13 @@
         <hr class="head-separator">
 </div>
 
-
 <div class="report-component">
-    <div class="report-component-header">{% trans 'WHAT ARE OUR KEY STATISTICS FOR THIS <span class="report-type-name"></span>?' %}</div>
-    <div class="basic-info-container">
-        <div id="current-usage-col" class="basic-info-col">
+    <div class="row report-component-header">
+      <div class="col-xs-12">
+      {% trans 'WHAT ARE OUR KEY STATISTICS FOR THIS <span class="report-type-name"></span>?' %}</div>
+    </div>
+    <div class="row basic-info-container">
+        <div id="current-usage-col" class="col-xs-4 basic-info-col">
             <div>{% trans "HOW MUCH ENERGY<br>DID WE USE?" %}</div>
             <hr class="current-usage-separator-dark-grey">
             <hr class="current-usage-separator-light-grey">
@@ -112,7 +114,7 @@
             </div>
         </div>
 
-        <div id="save-usage-col" class="basic-info-col">
+        <div id="save-usage-col" class="col-xs-4 basic-info-col">
             <div>{% trans "HOW MUCH ENERGY<br>DID WE SAVE?" %}<br>
                 <span class="basic-info-col-subtext">{% trans "(year-on-year)" %}</span>
             </div>
@@ -142,7 +144,7 @@
             </div>
         </div>
 
-        <div id="impact-col" class="basic-info-col">
+        <div id="impact-col" class="col-xs-4 basic-info-col">
             <div>{% trans "HOW DID OUR<br>CARBON FOOTPRINT CHANGE?" %}</div>
             <hr class="current-usage-separator-dark-grey">
             <hr class="current-usage-separator-light-grey">
@@ -179,7 +181,7 @@
         </div>
     </div>
     {% block hide_detail_bar_1 %}
-    <div class="report-component-footer"></div>
+    <div class="row report-component-footer"></div>
     {% endblock %}
 
 
