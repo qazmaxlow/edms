@@ -11,7 +11,7 @@ from django.utils.timezone import localtime
 
 import django_filters
 from trail_table import *
-
+import unicodedata
 from audit.models import Trail
 from system.models import System
 from user.models import USER_ROLE_ADMIN_LEVEL
@@ -75,8 +75,17 @@ class ExportCsvMixin2(object):
 
     def post(self, request, *args, **kwargs):
         if self.csv_download_button2 in self.request.POST:
+            #filtering=(unicodedata.normalize('NFKD',self.request.POST.get(u'filterlist')).encode('ascii','ignore'))
+            #title=(unicodedata.normalize('NFKD',self.request.POST.get(u'user')).encode('ascii','ignore'))
+            #if title[:2]=='ex':
+            #    pass
+            #else:
             objects = self.get_queryset()
-
+            #new_objects=[]
+            #for obj in objects:
+            #    if filtering!=unicodedata.normalize('NFKD',obj.user.username).encode('ascii','ignore'):
+            #        new_objects.append(obj)
+            #if self.csv_limited_record2:
             if self.csv_limited_record2:
                 objects = objects[:self.csv_limited_record2]
 
@@ -98,26 +107,52 @@ class ExportCsvMixin2(object):
                 csv_vals = map(lambda f: get_csv_val(obj, f), self.csv_fields)
                 append = csv_vals_Append_Format(csv_vals)
                 c.csv_append([append.acc_name,append.full_name,append.action,append.trail_hour,append.trail_date])
-            for date in c.date:
+            min_date=min(c.date)
+            max_date=max(c.date)
+            date_range=max_date-min_date
+            if date_range.days<100:
+                total_day=[]
+                for day in range(0,date_range.days+1):
+                    total_day.append(min_date+datetime.timedelta(days=day))
+            else:
+                total_day=c.date
+            for date in total_day:
                 date_in_row=[]
                 date_in_row.append(date)
+                date_in_row.append("Views Count")
                 csv_wr.writerow(date_in_row)
                 time=[]
                 time.append("Time:")
-                time_range=range(22,3,-1)
+                time_range=range(8,20,+1)
                 for t in time_range:
                     time.append("%d:00"%t)
+                time.append("Grand Total")
                 csv_wr.writerow(time)
-
-                for user in c.user:
+                Sorted_User=c.sort_user_by_day(date,time_range)
+                for user in Sorted_User:
                     user_trail=[]
-                    user_trail.append(user)
+                    user_trail.append(user.name)
                     for t in time_range:
-                        user_trail.append(c.total_action(user,date,t))
+                        user_trail.append(user.total_action(date,t))
+                    user_trail.append(user.daily_total_action(date,time_range))
                     csv_wr.writerow(user_trail)
                 linespacing=[]
                 csv_wr.writerow(linespacing)
 
+            view_period=[]
+            view_period.append("Total Views from")
+            view_period.append(min_date)
+            view_period.append("to")
+            view_period.append(max_date)
+            user_total=[]
+            period_total=[]
+            Sorted_User_By_Period=c.sort_user_by_period(time_range,min_date,max_date)
+            for user in Sorted_User_By_Period:
+                user_total.append(user.name)
+                period_total.append(user.period_total_action(time_range,min_date,max_date))
+            csv_wr.writerow(view_period)
+            csv_wr.writerow(user_total)
+            csv_wr.writerow(period_total)
 
 
             response = http.HttpResponse(mimetype='text/csv')
@@ -150,7 +185,9 @@ class CompanyAuditTrailsListView(ExportCsvMixin, ExportCsvMixin2, ListView):
         company_syscode = self.kwargs['system_code']
         User = get_user_model()
         context['users'] = User.objects.filter(system__code=company_syscode)
-
+        context['user_ex'] = []
+        for u in context['users']:
+            context['user_ex'].append(User.objects.filter(system__code=company_syscode).exclude(username=u.username))
         company_syscode = self.kwargs['system_code']
         company_system = System.objects.get(code=company_syscode)
         context['company_system'] = company_system

@@ -20,9 +20,38 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+      <style>.logo-circle-bound {
+    width: 170px;
+    height: 170px;
+    position: relative;
+    top: 1px;
+    left: 1px;
+    background-size: 170px;
+    -webkit-border-radius: 90px;
+    -moz-border-radius: 90px;
+    border-radius: 90px;
+}
+          #user-logo{
+    width: 172px;
+    height: 172px;
+    margin-top: 15px;
+
+    margin-right: auto;
+    position: relative;
+}
+          #user-logo img{
+    position: absolute;
+    top: 0px;
+}
+      </style>
   </head>
   <body>
     <div class="container">
+    <div id="user-logo">
+            <div class="logo-circle-bound" style="background-image: url('{{company_system.logo.url}}');">
+            </div>
+         <img src="{% static 'images/user-logo-bg.png' %}">
+    </div>
 <h1>{{ company_system.name }} audit trails</h1>
     <div ng-app="Entrak">
     <div ng-controller="MyCtrl">
@@ -33,7 +62,8 @@
         {% for u in users %}
           <option value="{{ u.id }}">{{ u.username }}</option>
         {% endfor %}
-        </select>
+
+
         <input kendo-date-picker="dateFromFilter"
                k-format="'yyyy-MM-dd'"
                k-parse-format="'yyyy-MM-dd'"
@@ -57,7 +87,11 @@
       <input type="hidden" name="{{ filter.form.created_time__gte.name }}" value="{% templatetag openvariable %} dateFrom {% templatetag closevariable %}">
       <input type="hidden" name="{{ filter.form.created_time__lte.name }}" value="{% templatetag openvariable %} dateTo {% templatetag closevariable %}">
       <button class="btn btn-default" name="download_csv" type="submit">Download CSV (limited to 10000 records)</button>
-      <button class="btn btn-default" name="download_csv_click_count" type="submit">Staff Click Count</button>
+      <button class="btn btn-default" name="download_csv_click_count" type="submit">Download Views Table</button>
+                </select>
+
+        </select>
+        <input type="hidden" name="filterlist" value="{% templatetag openvariable %} user2 {% templatetag closevariable %}">
     </form>
     <div class="clearfix"></div>
 </div>
@@ -104,6 +138,7 @@
                     title: "Created time"
                 }]
             };
+
 
             $scope.refreshGrid = function() {
                 var filters = {

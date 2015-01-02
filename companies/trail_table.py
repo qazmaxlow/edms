@@ -1,3 +1,5 @@
+import datetime
+
 class Company:
     def __init__(self):
         self.date=[]
@@ -10,6 +12,18 @@ class Company:
             return self.User_list[user_index].total_action(day,timeslot)
         else:
             return 0
+    def user_daily_total_action(self,user,time_range,day):
+        if user in self.user:
+            user_index=self.user.index(user)
+            return self.User_list[user_index].daily_total_action(day,time_range)
+        else:
+            return 0
+    def user_period_total_action(self,user,time_range,start_date,end_date):
+        if user in self.user:
+            user_index=self.user.index(user)
+            return self.User_list[user_index].period_total_action(time_range,start_date,end_date)
+        else:
+            return 0
     def add_user(self,user):
         if user in self.user:#check duplicate
             return
@@ -17,11 +31,11 @@ class Company:
             self.user.append(user)
             self.User_list.append(User(user))
     def csv_append(self,record):
-        self.csv.append(record)
         user=record[1]
         action=record[2]
         timeslot=record[3]
         date=record[4]
+        self.csv.append(record)
         self.add_day(date)
         self.add_user(user)
         user_index=self.user.index(user)
@@ -29,9 +43,36 @@ class Company:
     def add_day(self,date):
         if date not in self.date:
             self.date.append(date)
+    def sort_user_by_day(self,day,time_range):
+        sort_action_by_day=[]
+        sorted_User_list=[]
+        for user in self.User_list:
+            sort_action_by_day.append(user.daily_total_action(day,time_range))
+        sort_action_by_day.sort(reverse=True)
+        for action in sort_action_by_day:
+            for user in self.User_list:
+                if (user.daily_total_action(day,time_range)==action):
+                    if user not in sorted_User_list:
+                        sorted_User_list.append(user)
+        return sorted_User_list
+    def sort_user_by_period(self,time_range,start,end):
+        sort_action_by_period=[]
+        sorted_User_list=[]
+        for user in self.User_list:
+            sort_action_by_period.append(user.period_total_action(time_range,start,end))
+        sort_action_by_period.sort(reverse=True)
+        for action in sort_action_by_period:
+            for user in self.User_list:
+                if (user.period_total_action(time_range,start,end)==action):
+                    if user not in sorted_User_list:
+                        sorted_User_list.append(user)
+        return sorted_User_list
+
+
 
 class User:
     def __init__(self,username):
+        self.sorted=0
         self.name=username
         self.trail_day=[]
         self.Trail_day=[]
@@ -50,6 +91,21 @@ class User:
             return 0
         day_index=self.trail_day.index(day)
         return self.Trail_day[day_index].total_action(timeslot)
+    def daily_total_action(self,day,time_range):
+        action=0
+        for time in time_range:
+            action += self.total_action(day,time)
+        return action
+    def period_total_action(self,time_range,start,end):
+        current=start
+        action=0
+        while current<=end:
+            action+=self.daily_total_action(current,time_range)
+            current+=datetime.timedelta(days=1)
+        return action
+
+
+
 class Day:
     def __init__(self,day):
         self.day=day
@@ -66,12 +122,16 @@ class Day:
     def total_action(self,timeslot):
         time_index=self.timeslot.index(timeslot)
         return self.Timeslot_list[time_index].total_action()
+
+
 class Timeslot:
     def __init__(self,timeslot):
         self.timeslot=timeslot
         self.action=[]
     def total_action(self):
         return len(self.action)
+
+
 class csv_vals_Append_Format:
     def __init__(self,csv_vals):
         self.trail_date = csv_vals[3].date()
