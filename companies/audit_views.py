@@ -106,7 +106,8 @@ class ExportCsvMixin2(object):
             for obj in objects:
                 csv_vals = map(lambda f: get_csv_val(obj, f), self.csv_fields)
                 append = csv_vals_Append_Format(csv_vals)
-                c.csv_append([append.acc_name,append.full_name,append.action,append.trail_hour,append.trail_date])
+                if append.trail_date.weekday() not in range(5,7):
+                    c.csv_append([append.acc_name,append.full_name,append.action,append.trail_hour,append.trail_date])
             min_date=min(c.date)
             max_date=max(c.date)
             date_range=max_date-min_date
@@ -117,27 +118,28 @@ class ExportCsvMixin2(object):
             else:
                 total_day=c.date
             for date in total_day:
-                date_in_row=[]
-                date_in_row.append(date)
-                date_in_row.append("Views Count")
-                csv_wr.writerow(date_in_row)
-                time=[]
-                time.append("Time:")
-                time_range=range(8,20,+1)
-                for t in time_range:
-                    time.append("%d:00"%t)
-                time.append("Grand Total")
-                csv_wr.writerow(time)
-                Sorted_User=c.sort_user_by_day(date,time_range)
-                for user in Sorted_User:
-                    user_trail=[]
-                    user_trail.append(user.name)
+                if date.weekday() not in range(5,7):
+                    date_in_row=[]
+                    date_in_row.append(date)
+                    date_in_row.append("Views Count")
+                    csv_wr.writerow(date_in_row)
+                    time=[]
+                    time.append("Time:")
+                    time_range=range(8,20,+1)
                     for t in time_range:
-                        user_trail.append(user.total_action(date,t))
-                    user_trail.append(user.daily_total_action(date,time_range))
-                    csv_wr.writerow(user_trail)
-                linespacing=[]
-                csv_wr.writerow(linespacing)
+                        time.append("%d:00"%t)
+                    time.append("Grand Total")
+                    csv_wr.writerow(time)
+                    Sorted_User=c.sort_user_by_day(date,time_range)
+                    for user in Sorted_User:
+                        user_trail=[]
+                        user_trail.append(user.name)
+                        for t in time_range:
+                            user_trail.append(user.total_action(date,t))
+                        user_trail.append(user.daily_total_action(date,time_range))
+                        csv_wr.writerow(user_trail)
+                    linespacing=[]
+                    csv_wr.writerow(linespacing)
 
             view_period=[]
             view_period.append("Total Views from")

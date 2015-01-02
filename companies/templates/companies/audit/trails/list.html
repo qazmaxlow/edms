@@ -62,8 +62,6 @@
         {% for u in users %}
           <option value="{{ u.id }}">{{ u.username }}</option>
         {% endfor %}
-
-
         <input kendo-date-picker="dateFromFilter"
                k-format="'yyyy-MM-dd'"
                k-parse-format="'yyyy-MM-dd'"
@@ -72,7 +70,6 @@
                placeholder="From"
                ng-model="dateFrom"
         >
-
         <input kendo-date-picker="dateToFilter"
                k-format="'yyyy-MM-dd'"
                name="{{ filter.form.created_time__lte.name }}"
@@ -88,10 +85,6 @@
       <input type="hidden" name="{{ filter.form.created_time__lte.name }}" value="{% templatetag openvariable %} dateTo {% templatetag closevariable %}">
       <button class="btn btn-default" name="download_csv" type="submit">Download CSV (limited to 10000 records)</button>
       <button class="btn btn-default" name="download_csv_click_count" type="submit">Download Views Table</button>
-                </select>
-
-        </select>
-        <input type="hidden" name="filterlist" value="{% templatetag openvariable %} user2 {% templatetag closevariable %}">
     </form>
     <div class="clearfix"></div>
 </div>
