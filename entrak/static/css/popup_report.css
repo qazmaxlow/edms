@@ -732,6 +732,14 @@
 body {-webkit-print-color-adjust: exact;}
 }
 
+/* hack */
+/* disable calender navigation */
+.k-calendar .k-header .k-link
+{
+    /* visibility: hidden; */
+}
+
+
 .report-component-header {
     background-color: #FDE6AD;
     font-size: 13pt;
@@ -751,7 +759,6 @@ body {-webkit-print-color-adjust: exact;}
     height: 2px;
     border: none;
 }
-
 .basic-info-container {
     background-color: #F5F5F5;
     color: #354960;
@@ -1585,15 +1592,13 @@ body {-webkit-print-color-adjust: exact;}
     margin-bottom: 5px;
     width: 483px;
 }
-.calendar-weekday-header>div {
+.calendar-weekday-header > div {
     display: inline-block;
-    width: 60px;
-    height: 15px;
-    padding-left: 8px;
+    width: 68px;
     font-size: 9pt;
     font-weight: bold;
     color: #fff;
-    padding-top: 3px;
+    padding: 3px 8px;
     border-left: 1px solid #fff;
 }
 .calendar-weekday-header>div:nth-child(odd) {
