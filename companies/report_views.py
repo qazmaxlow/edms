@@ -1,4 +1,5 @@
 import copy, datetime, pytz
+import json
 
 from django.db.models import Q
 from django.core.context_processors import csrf
@@ -86,6 +87,8 @@ def popup_report_view(request, system_code, year, month):
     total_energy = sum([ r.value for r in readings])
 
     m['total_energy'] = total_energy
+    m['report_start'] = report_date
+    m['report_end'] = next_month_date
 
     return render(request, 'companies/reports/popup_report.html', m)
 
