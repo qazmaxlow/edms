@@ -11,7 +11,6 @@ from django.utils.timezone import localtime
 
 import django_filters
 from trail_table import *
-import unicodedata
 from audit.models import Trail
 from system.models import System
 from user.models import USER_ROLE_ADMIN_LEVEL
@@ -75,17 +74,7 @@ class ExportCsvMixin2(object):
 
     def post(self, request, *args, **kwargs):
         if self.csv_download_button2 in self.request.POST:
-            #filtering=(unicodedata.normalize('NFKD',self.request.POST.get(u'filterlist')).encode('ascii','ignore'))
-            #title=(unicodedata.normalize('NFKD',self.request.POST.get(u'user')).encode('ascii','ignore'))
-            #if title[:2]=='ex':
-            #    pass
-            #else:
             objects = self.get_queryset()
-            #new_objects=[]
-            #for obj in objects:
-            #    if filtering!=unicodedata.normalize('NFKD',obj.user.username).encode('ascii','ignore'):
-            #        new_objects.append(obj)
-            #if self.csv_limited_record2:
             if self.csv_limited_record2:
                 objects = objects[:self.csv_limited_record2]
 
