@@ -29,7 +29,7 @@
 <link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
 <link href="{% static 'assets/kendoui/styles/kendo.default.min.css' %}" rel="stylesheet">
 <!-- Because now using jquery v1.11 -->
-<script src="{% static 'assetskendoui/js/jquery.min.js' %}"></script>
+<script src="{% static 'assets/kendoui/js/jquery.min.js' %}"></script>
 <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
 <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
 
@@ -722,7 +722,151 @@
     angular.module("Entrak", [ "kendo.directives" ])
         .controller("ReportController", function($scope){})
 
+setCalendar = function(currentDt, currentEndDt, eleSel, readings, averageUsage, isNotConcernFunc) {
+    // var reportGenThis = this;
+    var calendarInfoContainer = $(eleSel);
+    // calendarInfoContainer.find(".calendar-title").text(this.genDtText(this.currentDt));
+
+    var calendarContainer = calendarInfoContainer.find(".calendar-day-container");
+    calendarContainer.empty();
+
+    var calendarStartDt = moment(currentDt).startOf('w');
+    var calendarEndDt = moment(currentEndDt).subtract(1, 's').endOf('w');
+    for (var calendarNowDt=calendarStartDt; calendarNowDt.isBefore(calendarEndDt); calendarNowDt.add(1, 'd')) {
+        var calendarDayEle = $("<div class='calendar-day'></div>");
+        calendarDayEle.append("<div class='calendar-day-digit'>"+calendarNowDt.date()+"</div>");
+
+        if (calendarNowDt.isBefore(currentDt)
+            || calendarNowDt.isSame(currentEndDt)
+            || calendarNowDt.isAfter(currentEndDt)) {
+            calendarDayEle.addClass('calendar-day-out-range');
+        } else if (isNotConcernFunc(calendarNowDt)) {
+            calendarDayEle.addClass('calendar-day-not-concern');
+        } else {
+            var diffPercent;
+            if (calendarNowDt.unix() in readings) {
+                diffPercent = (readings[calendarNowDt.unix()]-averageUsage)/averageUsage*100;
+            } else {
+                diffPercent = 0;
+            }
+            diffPercent = parseFloat(Utils.fixedDecBaseOnVal(diffPercent));
+
+            var diffPercentText;
+            if (diffPercent >= 0) {
+                diffPercentText = "<span class='calendar-day-plus-symbol'>+</span> "+diffPercent;
+            } else {
+                diffPercentText = "<span class='calendar-day-minus-symbol'>-</span> "+Math.abs(diffPercent);
+            }
+            if (diffPercent >= 5) {
+                calendarDayEle.addClass('calendar-day-worse');
+            } else if (diffPercent <= -5) {
+                calendarDayEle.addClass('calendar-day-better');
+            }
+            calendarDayEle.append("<div class='calendar-day-percent'>"
+                +diffPercentText
+                +"<span class='calendar-day-percent-symbol'>%</span></div>");
+        }
+
+        calendarContainer.append(calendarDayEle);
+    }
+}
+
+
+getReportData = function() {
+    var report_data;
+    var requestData = {
+        report_type: 'month',
+        start_timestamp: {{ report_start|date:"U" }},
+        end_timestamp: {{ report_end|date:"U" }}
+    };
+
+    $.ajax({
+        type: "POST",
+        url: "/{{ company_system.code }}/report_data/",
+        data: requestData,
+        async: false
+    })
+    .done(function(data) {
+        report_data = data;
+    });
+
+    return report_data
+}
+
 $(document).ready(function()  {
+
+    // using jQuery
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+
+    var report_data = getReportData();
+
+    var report_readings = {};
+    $.each(report_data.groupedSourceInfos, function(groupIdx, info) {
+        $.each(info.currentReadings, function(timestamp, readingVal) {
+            report_readings[timestamp] = ((timestamp in report_readings) ? report_readings[timestamp] : 0) + readingVal;
+        });
+    });
+
+    //average uage
+    var average_usage = 0;
+    $.each(report_data.groupedSourceInfos, function(groupIdx, info) {
+        average_usage += info['currentWeekdayInfo'].average;
+    });
+
+    // for weekday report
+    var isNotConcernFunc = function(targetDt) {
+        return (targetDt.day() == 0
+            || targetDt.day() == 6)
+            // || ($.inArray(targetDt.format("YYYY-MM-DD"), reportGenThis.holidays) != -1))
+    }
+
+    var report_start = new Date("{{ report_start.isoformat }}");
+    var report_end = new Date("{{ report_end.isoformat }}");
+
+    setCalendar(
+        report_start, report_end,
+        '#weekday-info .calendar-info-container', report_readings, average_usage, isNotConcernFunc);
+
+    /*
+    var overnight_readings = {};
+    $.each(report_data.groupedSourceInfos, function(groupIdx, info) {
+        $.each(info.overnightcurrentReadings, function(timestamp, readingVal) {
+            overnight_readings[timestamp] =
+                ((timestamp in combinedOvernightCurrentReadings) ? overnight_readings[timestamp] : 0) + readingVal;
+        });
+    });
+    */
+
+
     $('#monthly-report-content div').each(function() {
         var a = $(this).find('.menu-target:first');
         var m = $(this).find('.menu-content:first').kendoContextMenu({
