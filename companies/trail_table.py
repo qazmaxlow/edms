@@ -31,7 +31,9 @@ class Company:
             self.user.append(user)
             self.User_list.append(User(user))
     def csv_append(self,record):
-        user=record[1]
+        user=record[1].strip()
+        if not user:
+            user=record[0]
         action=record[2]
         timeslot=record[3]
         date=record[4]
