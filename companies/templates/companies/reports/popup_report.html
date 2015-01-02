@@ -856,6 +856,8 @@ $(document).ready(function()  {
         report_start, report_end,
         '#weekday-info .calendar-info-container', report_readings, average_usage, isNotConcernFunc);
 
+    $('#weekday-info .average-usage').html(average_usage);
+
     /*
     var overnight_readings = {};
     $.each(report_data.groupedSourceInfos, function(groupIdx, info) {
