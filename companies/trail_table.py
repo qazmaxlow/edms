@@ -131,7 +131,10 @@ class Timeslot:
         self.timeslot=timeslot
         self.action=[]
     def total_action(self):
-        return len(self.action)
+        if len(self.action)>0:
+            return 1
+        else:
+            return 0
 
 
 class csv_vals_Append_Format:

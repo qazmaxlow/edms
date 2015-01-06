@@ -130,6 +130,32 @@ class ExportCsvMixin2(object):
                     linespacing=[]
                     csv_wr.writerow(linespacing)
 
+            #Day Count Table
+            desciption_day_count=[]
+            desciption_day_count.append("Day")
+            desciption_day_count.append("Counting")
+            all_date=[]
+            all_date.append("Date:")
+            if date_range.days<100:
+                total_day=[]
+                for day in range(0,date_range.days+1):
+                    total_day.append(min_date+datetime.timedelta(days=day))
+            else:
+                total_day=c.date
+            for date in total_day:
+                if date.weekday() not in range(5,7):
+                    all_date.append(date)
+            csv_wr.writerow(all_date)
+            all_date.pop(0)
+            for user in c.User_list:
+                user_month_record=[]
+                user_month_record.append(user.name)
+                for date in all_date:
+                    user_month_record.append(user.daily_total_action(date,time_range))
+                csv_wr.writerow(user_month_record)
+            blank_row=[]
+            csv_wr.writerow(blank_row)
+            #Total Count Table
             view_period=[]
             view_period.append("Total Views from")
             view_period.append(min_date)
