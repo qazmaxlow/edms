@@ -315,6 +315,7 @@
             <div class="calendar-average-cell">
                 <div>{% trans "Average<br>Weekday<br>Energy Use:" %}</div>
                 <div>
+                  {{ weekday_average|stringformat:"d" }}
                     <div class="average-usage"></div>
                     <div class="average-usage-unit">kWh</div>
                 </div>

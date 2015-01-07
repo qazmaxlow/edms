@@ -1,5 +1,6 @@
 import copy, datetime, pytz
 import json
+import time
 
 from django.db.models import Q
 from django.core.context_processors import csrf
@@ -12,6 +13,10 @@ from system.models import System
 from unit.models import UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
 from utils import calculation
 from utils.utils import Utils
+
+
+# oops! change to write better API later
+from entrak.report_views import __generate_report_data
 
 
 def popup_report_view(request, system_code, year, month):
@@ -89,6 +94,15 @@ def popup_report_view(request, system_code, year, month):
     m['total_energy'] = total_energy
     m['report_start'] = report_date
     m['report_end'] = next_month_date
+
+    # oops! monkey code
+    report_data = __generate_report_data(systems, 'month',
+                                  time.mktime(report_date.utctimetuple()),
+                                  time.mktime(next_month_date.utctimetuple())
+    )
+    group_data = report_data['groupedSourceInfos']
+    weekday_average = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
+    m['weekday_average'] = weekday_average
 
     return render(request, 'companies/reports/popup_report.html', m)
 
