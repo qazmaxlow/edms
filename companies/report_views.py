@@ -114,5 +114,24 @@ def popup_report_view(request, system_code, year, month):
 
     m['compare_to_last_month'] = compare_to_last_month
 
+    # _fillInComparePercent = function(eleSel, oldUsage, newUsage, compareToDateText)
+    # var usagePercent = (oldUsage-newUsage)/oldUsage*100;
+
+    # beginning is for last month
+    # this._fillInComparePercent(targetSel+" .compare-beginning", beginningUsage, averageUsage, beginningDateText);
+    # this._fillInComparePercent(targetSel+" .compare-last", lastUsage, averageUsage, this.multiLangTexts.last_week);
+    # this._fillInComparePercent(targetSel+" .compare-last-same-period", lastSamePeriodUsage, averageUsage, this.multiLangTexts.samePeriodLastYear);
+    beginning_usage = sum([ g['beginningWeekdayInfo']['average'] for g in group_data])
+    average_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
+    weekday_compare_last_month = (beginning_usage - average_usage)/beginning_usage*100
+    m['weekday_compare_last_month'] = weekday_compare_last_month
+
+    # this.generateCalendarReport('#weekday-info', combinedReadings,
+    #     'currentWeekdayInfo', 'beginningWeekdayInfo',
+    #     'lastWeekdayInfo', 'lastSamePeriodWeekdayInfo', lowestUsage, lowestDt, highestUsage, highestDt,
+    #     false, isNotConcernFunc, 'weekday-sub-calendar', this.multiLangTexts.calendarTypeWeekday,
+    #     this.multiLangTexts.calendarSplitWeekdays, this.multiLangTexts.calendarSplitWeekends);
+
+
     return render(request, 'companies/reports/popup_report.html', m)
 

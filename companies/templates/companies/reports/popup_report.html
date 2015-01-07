@@ -326,6 +326,11 @@
 
             <div class="calendar-left-compare-info compare-beginning">
                 <div>
+                  {% if weekday_compare_last_month > 0 %}
+                    {{ weekday_compare_last_month|floatformat:0 }}
+                  {% else %}
+                    {{ weekday_compare_last_month|floatformat:0|slice:"1:" }}
+                  {% endif %}
                     <span class="compare-percent"></span>
                     <span>%</span>
                 </div>
