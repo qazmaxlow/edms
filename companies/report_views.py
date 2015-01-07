@@ -104,5 +104,15 @@ def popup_report_view(request, system_code, year, month):
     weekday_average = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
     m['weekday_average'] = weekday_average
 
+    # useful?
+    current_total = report_data['sumUpUsages'][0]
+    last_total = report_data['sumUpUsages'][1]
+    compare_to_last_month = None
+
+    if last_total > 0:
+        compare_to_last_month = (current_total-last_total)/last_total*100
+
+    m['compare_to_last_month'] = compare_to_last_month
+
     return render(request, 'companies/reports/popup_report.html', m)
 
