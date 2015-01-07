@@ -345,6 +345,11 @@
             </div>
             <div class="calendar-left-compare-info compare-last-same-period">
                 <div>
+                  {% if weekday_compare_same_period > 0 %}
+                    {{ weekday_compare_same_period|floatformat:0 }}
+                  {% else %}
+                    {{ weekday_compare_same_period|floatformat:0|slice:"1:" }}
+                  {% endif %}
                     <span class="compare-percent"></span>
                     <span>%</span>
                 </div>
