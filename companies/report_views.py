@@ -104,6 +104,13 @@ def popup_report_view(request, system_code, year, month):
     weekday_average = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
     m['weekday_average'] = weekday_average
 
+    unit_infos = json.loads(m['company_system'].unit_info)
+    money_unit_code = unit_infos['money']
+    money_unit_rate = UnitRate.objects.get(category_code='money', code=unit_infos['money'])
+
+    m['weekday_bill'] = weekday_average * money_unit_rate.rate
+
+
     # useful?
     current_total = report_data['sumUpUsages'][0]
     last_total = report_data['sumUpUsages'][1]
