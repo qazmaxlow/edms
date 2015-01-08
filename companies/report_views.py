@@ -129,6 +129,12 @@ def popup_report_view(request, system_code, year, month):
     last_same_period = sum([ g['lastSamePeriodWeekdayInfo']['average'] for g in group_data])
     weekday_compare_same_period = (last_same_period - average_usage)/last_same_period*100
     m['weekday_compare_same_period'] = weekday_compare_same_period
+
+    for g in group_data:
+        g['system'] = System.objects.get(code=g['systemCode'])
+
+    m['weekday_details'] = group_data
+
     # lastSamePeriodUsage += info[lastSamePeriodUsageKey].average;
 
     # this.generateCalendarReport('#weekday-info', combinedReadings,

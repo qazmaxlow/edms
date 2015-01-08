@@ -407,6 +407,13 @@
             </div>
         </div>
     </div>
+    {% for wd in weekday_details %}
+      <div class="row">
+        <div class="col-xs-12">
+        {{ wd.system.fullname }}
+        </div>
+      </div>
+    {% endfor %}
     <hr class="bottom-info-separator">
     <div class="calendar-bottom-info">
         <div>
