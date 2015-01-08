@@ -413,6 +413,11 @@
         {{ wd.system.fullname }}
         </div>
       </div>
+      <div class="row">
+        <div class="col-xs-4">
+        {{ wd.usage|floatformat:0 }}
+        </div>
+      </div>
     {% endfor %}
     <hr class="bottom-info-separator">
     <div class="calendar-bottom-info">

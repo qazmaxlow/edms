@@ -132,6 +132,7 @@ def popup_report_view(request, system_code, year, month):
 
     for g in group_data:
         g['system'] = System.objects.get(code=g['systemCode'])
+        g['usage'] = g['currentWeekdayInfo']['average']
 
     m['weekday_details'] = group_data
 
