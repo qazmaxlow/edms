@@ -142,6 +142,13 @@ def popup_report_view(request, system_code, year, month):
 
         g['compare_last_month'] = compare_last_month
 
+        compare_same_period = None
+        last_same_period = g['lastSamePeriodWeekdayInfo']['average']
+        if last_same_period > 0:
+            compare_same_period = (last_same_period - average_usage)/last_same_period*100
+
+        g['compare_same_period'] = compare_same_period
+
     m['weekday_details'] = group_data
 
     # lastSamePeriodUsage += info[lastSamePeriodUsageKey].average;
