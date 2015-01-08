@@ -136,6 +136,13 @@ def popup_report_view(request, system_code, year, month):
         beginning_usage = g['beginningWeekdayInfo']['average']
         average_usage = g['currentWeekdayInfo']['average']
 
+        unit_infos = json.loads(g['system'].unit_info)
+        money_unit_code = unit_infos['money']
+        money_unit_rate = UnitRate.objects.get(category_code='money', code=unit_infos['money'])
+
+        g['usage_bill'] = g['usage'] * money_unit_rate.rate
+
+
         compare_last_month = None
         if beginning_usage > 0:
             compare_last_month = (beginning_usage - average_usage)/beginning_usage*100
