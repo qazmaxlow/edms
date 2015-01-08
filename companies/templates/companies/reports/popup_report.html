@@ -417,6 +417,9 @@
         <div class="col-xs-4">
         {{ wd.usage|floatformat:0 }}
         </div>
+        <div class="col-xs-4">
+        {{ wd.compare_last_month|floatformat:0 }}%
+        </div>
       </div>
     {% endfor %}
     <hr class="bottom-info-separator">
