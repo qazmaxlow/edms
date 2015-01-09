@@ -344,49 +344,6 @@
                 </div>
               </div>
           </div></div>
-            <div class="calendar-average-cell">
-                <div>{% trans "Average<br>Weekday<br>Energy Use:" %}</div>
-                <div>
-                  {{ weekday_average|stringformat:"d" }}
-                    <div class="average-usage"></div>
-                    <div class="average-usage-unit">kWh</div>
-                </div>
-            </div>
-
-            <hr class="separator-dark-grey">
-            <hr class="separator-light-grey">
-
-            <div class="calendar-left-compare-info compare-beginning">
-                <div>
-                  {% if weekday_compare_last_month > 0 %}
-                    {{ weekday_compare_last_month|floatformat:0 }}
-                  {% else %}
-                    {{ weekday_compare_last_month|floatformat:0|slice:"1:" }}
-                  {% endif %}
-                    <span class="compare-percent"></span>
-                    <span>%</span>
-                </div>
-                <div class="compare-subtext"></div>
-            </div>
-            <div class="calendar-left-compare-info compare-last">
-                <div>
-                    <span class="compare-percent"></span>
-                    <span>%</span>
-                </div>
-                <div class="compare-subtext"></div>
-            </div>
-            <div class="calendar-left-compare-info compare-last-same-period">
-                <div>
-                  {% if weekday_compare_same_period > 0 %}
-                    {{ weekday_compare_same_period|floatformat:0 }}
-                  {% else %}
-                    {{ weekday_compare_same_period|floatformat:0|slice:"1:" }}
-                  {% endif %}
-                    <span class="compare-percent"></span>
-                    <span>%</span>
-                </div>
-                <div class="compare-subtext"></div>
-            </div>
         </div>
         <div class="col-xs-8">
         <div class="calendar-info-container">
@@ -406,38 +363,6 @@
                 <div class="legend-label">{% trans "Average weekday" %}</div>
             </div>
         </div></div>
-        <div class="calendar-vertical-info">
-            <div class="calendar-title"></div>
-            <hr>
-            <div class="calendar-info-subtitle">{% trans "Lowest Weekday Energy Use:" %}</div>
-            <div>
-                <div class="usage-info-lowest-val-container">
-                    <span class="lowest-usage-val"></span><span class="usage-info-unit"> kWh</span>
-                </div>
-                <div class="lowest-usage-date"></div>
-            </div>
-            <hr>
-            <div class="calendar-info-subtitle">{% trans "Highest Weekday Energy Use:" %}</div>
-            <div>
-                <div class="usage-info-highest-val-container">
-                    <span class="highest-usage-val"></span><span class="usage-info-unit"> kWh</span>
-                </div>
-                <div class="highest-usage-date"></div>
-            </div>
-            <hr>
-            <div>
-                <div class="energy-split-by-text">{% trans "Energy Split by:" %}</div>
-                <div class="energy-split-pie"></div>
-                <div class="energy-split-by-info">
-                    <div>
-                        <span class="first-split-text">{% trans "Weekdays: " %}</span><span class="first-split-val"></span>
-                    </div>
-                    <div>
-                        <span class="second-split-text">{% trans "Weekends: " %}</span><span class="second-split-val"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
     {% for wd in weekday_details %}
       <div class="row">
