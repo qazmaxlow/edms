@@ -365,12 +365,12 @@
         </div></div>
     </div>
     {% for wd in weekday_details %}
-      <div class="row">
+      <div class="row report-detail-header">
         <div class="col-xs-12">
         {{ wd.system.fullname }}
         </div>
       </div>
-      <div class="row">
+      <div class="row report-detail-body">
         <div class="col-xs-4">
         {{ wd.usage_bill|floatformat:0 }}
         </div>
