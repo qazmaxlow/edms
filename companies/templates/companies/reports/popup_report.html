@@ -315,7 +315,19 @@
               </div>
           </div></div>
           <div class="row"><div class="col-xs-12">
-              r2
+              <div class="row">
+                <div class="col-xs-4">
+                  <img src="{% static 'images/reports/increase_engry.svg'  %}">
+                </div>
+                <div class="col-xs-8">
+                  <h3>{% if weekday_compare_last_month > 0 %}
+                    {{ weekday_compare_last_month|floatformat:0 }}
+                  {% else %}
+                    {{ weekday_compare_last_month|floatformat:0|slice:"1:" }}
+                  {% endif %}%</h3>
+                  <p>{% trans "Compare to Last Month" %}</p>
+                </div>
+              </div>
           </div></div>
           <div class="row"><div class="col-xs-12">
               r3
