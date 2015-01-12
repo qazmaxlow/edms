@@ -743,9 +743,21 @@ body {-webkit-print-color-adjust: exact;}
     border-right: 5px solid #e3e7e8;
 }
 
-.top-section .side-bar .row {
-    height: 100px;
+.top-section .side-bar .item {
+    height: 144px;
+}
+
+.top-section .side-bar .item:not(.end) {
     background: url("../images/reports/side_row_splitter.png") no-repeat scroll center bottom white;
+}
+
+.top-section .side-bar .end {
+    Background: white;
+    height: 143px;
+}
+
+.no-background-image {
+    background: none !important;
 }
 
 .report-detail-header {
