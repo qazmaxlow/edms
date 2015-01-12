@@ -163,6 +163,21 @@ def popup_report_view(request, system_code, year, month):
 
         g['compare_same_period'] = compare_same_period
 
+    combined_readings = {}
+    for g in group_data:
+        current_readings = g['currentReadings']
+        for ts, val in current_readings.items():
+            if ts in combined_readings:
+                combined_readings[ts] += val
+            else:
+                combined_readings[ts] = val
+
+
+    highest_datetime, highest_usage= sorted(combined_readings.items(), key=lambda x: x[1])[-1]
+    # m['highest_value']
+    m['weekday_highest_usage'] = highest_usage
+    m['weekday_highest_datetime'] = datetime.datetime.fromtimestamp(highest_datetime, pytz.utc)
+
     m['weekday_details'] = group_data
 
     # lastSamePeriodUsage += info[lastSamePeriodUsageKey].average;
