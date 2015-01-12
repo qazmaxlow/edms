@@ -775,6 +775,14 @@ body {-webkit-print-color-adjust: exact;}
 
 .report-detail-body .col-xs-4 {
     height: 119px;
+}
+
+.report-detail-body .col-xs-4 .row {
+    position: relative;
+    top: 15px;
+}
+
+.report-detail-body .col-xs-4:not(:first-child) {
     background: url("../images/reports/vertical_splitter.png") no-repeat scroll left center white;
 }
 
