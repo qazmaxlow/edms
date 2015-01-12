@@ -778,8 +778,13 @@ body {-webkit-print-color-adjust: exact;}
 }
 
 .report-detail-body .col-xs-4 .row {
+    width: 85%;
+    margin: 0 auto;
+}
+
+.report-detail-body .col-xs-4 .row img {
     position: relative;
-    top: 15px;
+    top: 26px;
 }
 
 .report-detail-body .col-xs-4:not(:first-child) {
