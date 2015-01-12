@@ -162,6 +162,7 @@ def popup_report_view(request, system_code, year, month):
             compare_same_period = (last_same_period - average_usage)/last_same_period*100
 
         g['compare_same_period'] = compare_same_period
+        g['diff_same_period'] = last_same_period - average_usage
 
     combined_readings = {}
     for g in group_data:
@@ -175,6 +176,10 @@ def popup_report_view(request, system_code, year, month):
 
     highest_datetime, highest_usage= sorted(combined_readings.items(), key=lambda x: x[1])[-1]
     # m['highest_value']
+    groupdata_sorted_by_diff = sorted(group_data, key=lambda x: x['diff_same_period'])
+    highest_diff_source = groupdata_sorted_by_diff[-1]
+    m['highest_diff_source'] = highest_diff_source
+
     m['weekday_highest_usage'] = highest_usage
     m['weekday_highest_datetime'] = datetime.datetime.fromtimestamp(highest_datetime, pytz.utc)
 
