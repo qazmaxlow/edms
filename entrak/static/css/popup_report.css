@@ -761,6 +761,36 @@ body {-webkit-print-color-adjust: exact;}
     background: url("../images/reports/vertical_splitter.png") no-repeat scroll left center white;
 }
 
+.better-mark {
+    color: #a5d26f;
+    font-weight: 600;
+}
+
+.better-mark:before {
+    content: "\25A0";
+    color: #a5d26f;
+}
+
+.worse-mark {
+    color: #e98264;
+    font-weight: 600;
+}
+
+.worse-mark:before {
+    content: "\25A0";
+    color: #e98264;
+}
+
+.average-mark {
+    color: #e4b563;
+    font-weight: 600;
+}
+
+.average-mark:before {
+    content: "\25A0";
+    color: #e4b563;
+}
+
 .report-component-header {
     background-color: #FDE6AD;
     font-size: 13pt;
