@@ -346,6 +346,9 @@
           </div></div>
         </div>
         <div class="col-xs-8">
+          <div class="row"><div class="col-xs-12">{{ report_date|date:"M Y" }}</div></div>
+
+          <div class="row"><div class="col-xs-12">
         <div class="calendar-info-container">
             <div class="calendar-title"></div>
             <hr>
@@ -362,7 +365,10 @@
                 <div class="legend-color-block legend-color-block-average"></div>
                 <div class="legend-label">{% trans "Average weekday" %}</div>
             </div>
-        </div></div>
+        </div>
+          </div></div>
+
+        </div>
     </div>
     {% for wd in weekday_details %}
       <div class="row report-detail-header">
