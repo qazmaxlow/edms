@@ -372,13 +372,37 @@
       </div>
       <div class="row report-detail-body">
         <div class="col-xs-4">
-        {{ wd.usage_bill|floatformat:0 }}
+          <div class="row">
+            <div class="col-xs-4">
+              <img src="{% static 'images/reports/icon_money.svg'  %}">
+            </div>
+            <div class="col-xs-8">
+              <h3>${{  wd.usage_bill|stringformat:"d" }}</h3>
+              <p>{% trans "Average Weekday Energy Use" %}</p>
+            </div>
+          </div>
         </div>
         <div class="col-xs-4">
-        {{ wd.compare_last_month|floatformat:0 }}%
+          <div class="row">
+            <div class="col-xs-4">
+              <img src="{% static 'images/reports/increase_engry.svg'  %}">
+            </div>
+            <div class="col-xs-8">
+              <h3>${{ wd.compare_last_month|stringformat:"d" }}</h3>
+              <p>{% trans "Average Weekday Energy Use" %}</p>
+            </div>
+          </div>
         </div>
         <div class="col-xs-4">
-        {{ wd.compare_same_period|floatformat:0 }}%
+          <div class="row">
+            <div class="col-xs-4">
+              <img src="{% static 'images/reports/decrease_engry.svg'  %}">
+            </div>
+            <div class="col-xs-8">
+              <h3>${{ wd.compare_same_period|stringformat:"d" }}</h3>
+              <p>{% trans "Average Weekday Energy Use" %}</p>
+            </div>
+          </div>
         </div>
       </div>
     {% endfor %}
