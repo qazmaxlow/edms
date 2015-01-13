@@ -545,10 +545,10 @@ $(function() {
     var system_code = '{{ systems.0.code }}';
     var company_units = graph.unitCategorys;
 
-    if ( -1 != $.inArray(system_code, [ 'searshk', 'searshk-49f', 'searshk-50f', 'searshk-51f', 'searshk-52f', 'searshk-53f', 'searshk-54f', 'searshk-56f'])) {
+    if ( -1 != $.inArray(system_code, [ 'adidas', 'searshk', 'searshk-49f', 'searshk-50f', 'searshk-51f', 'searshk-52f', 'searshk-53f', 'searshk-54f', 'searshk-56f'])) {
 
         company_units = $.grep(company_units, function( cu, i) {
-            if (cu.code === 'walkingtrip' || cu.code === 'biketrip' || cu.code === 'taxitrip' ) {
+            if (cu.code === 'walkingtrip' || cu.code === 'biketrip' || cu.code === 'taxitrip' || cu.code === 'icecream' || cu.code === 'noodle' || cu.code === 'burger' || cu.code === 'pineapplebuns' ) {
                 return false;
             }
 
