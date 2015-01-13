@@ -72,6 +72,7 @@ function getProgressData() {
         } else {
             aniLevel = 5;
         }
+
         var factoryAniFileName = 'progress-animation-' + aniLevel;
         $('.factory-animation source:eq(0)').attr('src', data.static_url + 'images/display/' + factoryAniFileName+'.webm');
         $('.factory-animation source:eq(1)').attr('src', data.static_url + 'images/display/' + factoryAniFileName+'.mp4');
@@ -164,6 +165,8 @@ $(function() {
     display.langCode = '{{LANGUAGE_CODE}}';
     moment.locale(display.langCode);
 
+    var system_code = '{{ system.code }}';
+
     var tipInfos = [
         {bgImg: "{% static 'images/tips/light-tube.jpg' %}", title: '{% trans "REMOVE A TUBE" %}', desc: '{% trans "If you have more light than you need in an area, you can remove one light tube to save energy!" %}', posStyle: 'top: 200px; left: 50px;'},
         {bgImg: "{% static 'images/tips/ac-temperature.jpg' %}", title: '{% trans "ADJUST AIRCON TEMPERATURE" %}', desc: '{% trans "30 minutes after turning on aircon, adjust the temperature to minimize energy wastage." %}', posStyle: 'top: 250px; right: 50px;'},
@@ -172,6 +175,10 @@ $(function() {
         {bgImg: "{% static 'images/tips/plugs.jpg' %}", title: '{% trans "TURN OFF THE SOCKET" %}', desc: '{% blocktrans %}Even if an appliance is off, it can still consume 10% of normal energy. Remember to turn off the socket switch too!{% endblocktrans %}', posStyle: 'top: 250px; left: 170px;'},
     ]
 
+    // oops, hack!
+    if ( -1 != $.inArray(system_code, [ 'searshk', 'searshk-49f', 'searshk-50f', 'searshk-51f', 'searshk-52f', 'searshk-53f', 'searshk-54f', 'searshk-56f'])) {
+        tipInfos.splice(2, 1); // remove aircon ribbon
+    }
 
     display.dynamicSlideIdxs = [2];
     display.usedDynamicSlideIdxs = [1];
