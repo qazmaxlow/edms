@@ -541,7 +541,23 @@ $(function() {
 
     Utils.setupDropDownPanelBtn();
 
-    Utils.setupUnitChoiceLayout('#unit-choice', graph.unitCategorys, '{% get_static_prefix %}', function(unitCategory) {
+    // oops, hack!
+    var system_code = '{{ systems.0.code }}';
+    var company_units = graph.unitCategorys;
+
+    if ( -1 != $.inArray(system_code, [ 'searshk', 'searshk-49f', 'searshk-50f', 'searshk-51f', 'searshk-52f', 'searshk-53f', 'searshk-54f', 'searshk-56f'])) {
+
+        company_units = $.grep(company_units, function( cu, i) {
+            if (cu.code === 'walkingtrip' || cu.code === 'biketrip' || cu.code === 'taxitrip' ) {
+                return false;
+            }
+
+            return true;
+        });
+    }
+    // end hack
+
+    Utils.setupUnitChoiceLayout('#unit-choice', company_units, '{% get_static_prefix %}', function(unitCategory) {
         graph.graphChart.updateUnit(unitCategory);
         $("#unit-label").html(unitCategory.shortDescInfo[graph.langCode]);
         $("#unit-bg").attr("src", "{% get_static_prefix %}images/unit/" + unitCategory.bgImg);
