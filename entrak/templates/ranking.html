@@ -423,7 +423,24 @@ $(function() {
 
     ranking.unitCategorys = JSON.parse('{{unit_categorys|jsonifyUnitCategorys}}');
     ranking.currentUnit = ranking.unitCategorys[0];
-    Utils.setupUnitChoiceLayout('#unit-choice', ranking.unitCategorys, '{% get_static_prefix %}', function(unitCategory) {
+
+    // oops, hack!
+    var system_code = '{{ systems.0.code }}';
+    var company_units = ranking.unitCategorys;
+
+    if ( -1 != $.inArray(system_code, [ 'adidas', 'searshk', 'searshk-49f', 'searshk-50f', 'searshk-51f', 'searshk-52f', 'searshk-53f', 'searshk-54f', 'searshk-56f'])) {
+
+        company_units = $.grep(company_units, function( cu, i) {
+            if (cu.code === 'walkingtrip' || cu.code === 'biketrip' || cu.code === 'taxitrip' || cu.code === 'icecream' || cu.code === 'noodle' || cu.code === 'burger' || cu.code === 'pineapplebuns' ) {
+                return false;
+            }
+
+            return true;
+        });
+    }
+    // end hack
+
+    Utils.setupUnitChoiceLayout('#unit-choice', company_units, '{% get_static_prefix %}', function(unitCategory) {
         if (ranking.currentUnit.code !== unitCategory.code) {
             ranking.currentUnit = unitCategory;
             getRankingData();
