@@ -191,6 +191,7 @@ def popup_report_view(request, system_code, year, month):
     m['saving_energy'] = -1 * report_data['savingInfo']['energy']
     # in tons
     m['saving_co2'] = -1 * report_data['savingInfo']['co2'] / 1000.0
+    m['saving_money'] = -1 * report_data['savingInfo']['money']
 
     # lastSamePeriodUsage += info[lastSamePeriodUsageKey].average;
 
