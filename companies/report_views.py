@@ -194,6 +194,7 @@ def popup_report_view(request, system_code, year, month):
     m['saving_money'] = -1 * report_data['savingInfo']['money']
 
     m['co2_in_car'] = abs(report_data['savingInfo']['co2']*0.003)
+    m['co2_in_forest'] = abs(report_data['savingInfo']['co2']*0.016)
     # var co2InCar = Utils.formatWithCommas(Math.abs((reportGenThis.savingInfo.co2*0.003).toFixed(0)));
 
     # lastSamePeriodUsage += info[lastSamePeriodUsageKey].average;

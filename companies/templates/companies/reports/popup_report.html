@@ -155,9 +155,9 @@
                 <div class="basic-info-text-container">
                     {% ifequal LANGUAGE_CODE 'zh-tw' %}
                     <span id="forest-impact-subtext" class="basic-info-col-subtext"></span><br>
-                    <span id="forest-impact"></span>
+                    <span id="forest-impact">{{ co2_in_forest|floatformat:"0" }}</span>
                     {% else %}
-                    <span id="forest-impact"></span><br>
+                    <span id="forest-impact">{{ co2_in_forest|floatformat:"0" }}</span>m^2<br>
                     <span id="forest-impact-subtext" class="basic-info-col-subtext"></span>
                     {% endifequal %}
                 </div>
