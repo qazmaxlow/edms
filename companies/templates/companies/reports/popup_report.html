@@ -75,9 +75,10 @@
 </div>
 
 <div class="report-component">
-    <div class="row report-component-header">
+    <div class="row">
       <div class="col-xs-12">
-      {% trans 'WHAT ARE OUR KEY STATISTICS FOR THIS <span class="report-type-name"></span>?' %}</div>
+        <div class="report-component-header">{% trans 'WHAT ARE OUR KEY STATISTICS FOR THIS <span class="report-type-name"></span>?' %}</div>
+      </div>
     </div>
     <div class="row basic-info-container">
         <div id="current-usage-col" class="col-xs-4 basic-info-col">
@@ -176,6 +177,9 @@
     {% endblock %}
 
 
+
+    <div class="row">
+      <div class="col-xs-12">
 <div class="detail-container">
     <h4>{% trans "How did that break down by usage type?" %}</h4>
     <table>
@@ -210,6 +214,7 @@
             {% endblock %}
         </div>
     </div>
+    </div></div>
 </div>
 
 <div id="compare-past" class="report-component">
