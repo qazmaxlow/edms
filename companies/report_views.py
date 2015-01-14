@@ -187,6 +187,8 @@ def popup_report_view(request, system_code, year, month):
     m['weekday_highest_datetime'] = datetime.datetime.fromtimestamp(highest_datetime, pytz.utc)
 
     m['weekday_details'] = group_data
+    m['saving_info'] = report_data['savingInfo']
+    m['saving_energy'] = -1 * report_data['savingInfo']['energy']
 
     # lastSamePeriodUsage += info[lastSamePeriodUsageKey].average;
 
