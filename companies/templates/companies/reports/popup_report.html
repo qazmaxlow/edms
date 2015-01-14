@@ -105,7 +105,7 @@
             <div>
                 <img src="{% static 'images/report/piggy.png' %}">
                 <div class="basic-info-text-container">
-                    <span id="current-money-usage"></span>
+                    <span id="current-money-usage">${{ total_money|floatformat:"0" }}</span>
                     <br>
                     <span class="basic-info-col-subtext">{% trans "in energy costs" %}</span>
                 </div>

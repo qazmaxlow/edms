@@ -111,6 +111,7 @@ def popup_report_view(request, system_code, year, month):
     m['weekday_bill'] = weekday_average * money_unit_rate.rate
 
     m['total_co2'] = sum([g['currentTotalCo2'] for g in group_data])/1000.0
+    m['total_money'] = sum([g['currentTotalMoney'] for g in group_data])
 
 
     # useful?
