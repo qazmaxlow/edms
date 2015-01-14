@@ -127,7 +127,7 @@
             <div>
                 <img src="{% static 'images/report/factory-co2.png' %}">
                 <div class="basic-info-text-container">
-                    <span id="save-co2-usage"></span>
+                    <span id="save-co2-usage">{{ saving_co2|floatformat:"0" }} tons</span><span class="basic-info-col-unit"> CO<sub>2</sub></span>
                 </div>
             </div>
             <hr class="current-usage-separator-dark-grey">
