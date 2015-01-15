@@ -713,13 +713,14 @@ $(function() {
 {% block page_content %}
 
     <div ng-app="Entrak">
-    <div ng-controller="ReportController">
+    <div ng-controller="ReportController" class="container">
         <button ng-click="win2.close()" ng-show="win2visible">close</button>
         <div kendo-window="win2"
             k-title="false"
             k-width="600" k-height="200" k-visible="false"
             k-on-open="win2visible = true" k-on-close="win2visible = false">
         </div>
+
 
 <div class="panel-component">
     <div class="drop-down-panel-header">
@@ -732,16 +733,6 @@ $(function() {
 
     <div id="panel-content">
         <div id="monthly-report">
-            <div id="monthly-report-header">
-                <span>{% trans "Monthly Reports" %}</span>
-                <span>{% trans "Energy Consumption (kWh)" %}</span>
-                <span>{% trans "CO<sub>2</sub> Emissions (kg)" %}</span>
-                <span>{% trans "Energy Cost ($)" %}</span>
-                <span>{% trans "Download" %}</span>
-            </div>
-            <hr>
-            <hr>
-
 
             <div id="monthly-report-content">
                 {% for summary in monthly_summary %}
@@ -900,6 +891,30 @@ $(function() {
         </div>
     </div>
 </div>
+
+<div class="panel-component text-center">
+  <div class="row">
+    <div class="col-xs-3">
+      <div class="row"><div class="col-xs-12">
+          Monthly
+      </div></div>
+    </div>
+    <div class="col-xs-3">
+      <div class="row"><div class="col-xs-12">
+          Weekdays
+      </div></div>
+    </div>
+    <div class="col-xs-3">
+      <div class="row"><div class="col-xs-12">
+          Overnight
+      </div></div>
+    </div>
+    <div class="col-xs-3">
+      test
+    </div>
+  </div>
+</div>
+
 
 <div class="report-head">
         <div class="system-name">{{systems.0|get_system_full_name:LANGUAGE_CODE}}</div>

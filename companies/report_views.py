@@ -67,7 +67,7 @@ def report_view(request, system_code=None):
     start_dt = previous_month(start_dt)
 
     # end_dt = pytz.utc.localize(datetime.datetime.utcnow()).astimezone(current_system_tz)
-    end_dt = timezone.now()
+    end_dt = datetime.datetime.now(current_system_tz)
     end_dt = end_dt.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
 
     source_ids = [str(source.id) for source in sources]
