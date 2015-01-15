@@ -72,6 +72,11 @@ def report_view(request, system_code=None):
 
     source_ids = [str(source.id) for source in sources]
     source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingMonth, start_dt, end_dt)
+
+    last_month_start_dt = previous_month(start_dt)
+    last_month_end_dt = previous_month(end_dt)
+    last_month_source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingMonth, last_month_start_dt, last_month_end_dt)
+
     energy_usages = calculation.combine_readings_by_timestamp(source_readings)
 
     unit_rates = UnitRate.objects.filter(Q(category_code=CO2_CATEGORY_CODE) | Q(category_code=MONEY_CATEGORY_CODE))
@@ -98,6 +103,14 @@ def report_view(request, system_code=None):
     m["monthly_summary"] = sorted(monthly_summary, key=lambda x: x['timestamp'], reverse=True)
     m['month_summary'] = monthly_summary[0]
     m.update(csrf(request))
+
+    current_month_money = m['month_summary']['money_usage']
+    calculation.transform_source_readings(last_month_source_readings, systems, sources, money_unit_rates, MONEY_CATEGORY_CODE)
+    last_month_money_usages = calculation.combine_readings_by_timestamp(last_month_source_readings)
+    last_month_money_usage = last_month_money_usages.values()[0] if last_month_money_usages else 0
+
+    compare_last_month_money = (current_month_money - last_month_money_usage)/ current_month_money * 100
+    m['compare_last_month_money'] = compare_last_month_money
 
     return render(request, 'companies/reports/summary.html', m)
 
