@@ -96,6 +96,7 @@ def report_view(request, system_code=None):
 
     m = systems_info
     m["monthly_summary"] = sorted(monthly_summary, key=lambda x: x['timestamp'], reverse=True)
+    m['month_summary'] = monthly_summary[0]
     m.update(csrf(request))
 
     return render(request, 'companies/reports/summary.html', m)
