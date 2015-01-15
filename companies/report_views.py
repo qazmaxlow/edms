@@ -206,6 +206,51 @@ def popup_report_view(request, system_code, year, month):
     #     false, isNotConcernFunc, 'weekday-sub-calendar', this.multiLangTexts.calendarTypeWeekday,
     #     this.multiLangTexts.calendarSplitWeekdays, this.multiLangTexts.calendarSplitWeekends);
 
+    transformed_datas = []
+    energy_percentsum = 0
+
+    for g in group_data:
+        change_in_kwh = (g['currentTotalMoney'] - g['last_year_this_month']['money'])/g['last_year_this_month']['money'] * 100 if g['last_year_this_month']['money'] > 0 else None
+        data_info = {
+            'total_energy': g['currentTotalEnergy'],
+            'co2_val': g['currentTotalCo2'],
+            'money_val': g['currentTotalMoney'],
+            'change_in_kwh': change_in_kwh,
+            'change_in_money': g['currentTotalMoney']- g['last_year_this_month']['money'] if g['last_year_this_month']['money'] else None
+        }
+
+        data_info['name'] = g['sourceNameInfo']['en'] if g['systemCode'] == m['company_system'].code else g['system'].fullname
+
+        if g is not group_data[-1]:
+            data_info['energy_percent'] = g['currentTotalEnergy']/total_energy*100
+            energy_percentsum += data_info['energy_percent']
+        else:
+            data_info['energy_percent'] = 100 - energy_percentsum
+
+        transformed_datas.append(data_info)
+
+    m['transformed_datas'] = transformed_datas
+    # var transformedDatas = [];
+    # var energyPercentSum = 0;
+    # $.each(reportGenThis.groupedSourceInfos, function(infoIdx, info) {
+    #     var change_in_kwh = (info.last_year_this_month.money > 0) ? (info.currentTotalMoney-info.last_year_this_month.money)/info.last_year_this_month.money*100 : 'N/A';
+    #     var dataInfo = {
+    #         totalEnergy: info.currentTotalEnergy,
+    #         co2Val: info.currentTotalCo2,
+    #         moneyVal: info.currentTotalMoney,
+    #         change_in_kwh: change_in_kwh,
+    #         change_in_money: (info.last_year_this_month.money > 0) ? info.currentTotalMoney-info.last_year_this_month.money : 'N/A'
+    #     };
+    #     dataInfo.name = (info.systemCode === reportGenThis.systemTree.data.code) ? info.sourceNameInfo[reportGenThis.langCode] : info.system.data.nameInfo[reportGenThis.langCode];
+    #     if (infoIdx < reportGenThis.groupedSourceInfos.length-1) {
+    #         dataInfo.energyPercent = parseFloat(Utils.fixedDecBaseOnVal((info.currentTotalEnergy/totalEnergyUsage)*100));
+    #         energyPercentSum += dataInfo.energyPercent;
+    #     } else {
+    #         dataInfo.energyPercent = parseFloat(Utils.fixedDecBaseOnVal(100-energyPercentSum));
+    #     }
+    #     transformedDatas.push(dataInfo);
+    # });
+
 
     return render(request, 'companies/reports/popup_report.html', m)
 

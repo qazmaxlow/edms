@@ -195,6 +195,17 @@
         </tr>
       </thead>
       <tbody id="key-statistic-sub-data">
+        {% for td in transformed_datas %}
+        <tr class="key-statistics-row ">
+          <td class="usage-type-name">
+            {{ td.name }}</td><td>
+            {{ td.total_energy }}</td><td>
+            {{ td.co2_val }}</td><td>
+            {{ td.money_val }}</td>
+          <td>{{ td.change_in_kwh }}</td>
+          <td>{{ td.change_in_money }}</td>
+        </tr>
+        {% endfor %}
       </tbody>
     </table>
         <hr class="detail-container-separator-dark-grey">
