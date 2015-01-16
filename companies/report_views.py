@@ -231,7 +231,8 @@ def popup_report_view(request, system_code, year, month):
 
     unit_infos = json.loads(m['company_system'].unit_info)
     money_unit_code = unit_infos['money']
-    money_unit_rate = UnitRate.objects.get(category_code='money', code=unit_infos['money'])
+    # oops, wrong?
+    money_unit_rate = UnitRate.objects.filter(category_code='money', code=unit_infos['money']).first()
 
     m['weekday_bill'] = weekday_average * money_unit_rate.rate
 
@@ -273,7 +274,7 @@ def popup_report_view(request, system_code, year, month):
 
         unit_infos = json.loads(g['system'].unit_info)
         money_unit_code = unit_infos['money']
-        money_unit_rate = UnitRate.objects.get(category_code='money', code=unit_infos['money'])
+        money_unit_rate = UnitRate.objects.filter(category_code='money', code=unit_infos['money']).first()
 
         g['usage_bill'] = g['usage'] * money_unit_rate.rate
 
