@@ -925,6 +925,19 @@ $(function() {
       </div></div>
       <div class="row content"><div class="col-xs-12">
           <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
+          <h3>${{ monthly_money_sum|floatformat:3 }}</h3>
+      </div></div>
+      <div class="row content"><div class="col-xs-12">
+          <img alt="decrease enegry" class="icon" src="{% static 'images/reports/decrease_engry.svg'  %}">
+          <h3>{{ compare_last_month_money|floatformat:0 }}%</h3>
+      </div></div>
+    </div>
+    <div class="col-xs-3">
+      <div class="row time-type"><div class="col-xs-12">
+          Weekdays
+      </div></div>
+      <div class="row content"><div class="col-xs-12">
+          <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
           <h3>${{ month_summary.money_usage|floatformat:3 }}</h3>
       </div></div>
       <div class="row content"><div class="col-xs-12">
@@ -933,13 +946,16 @@ $(function() {
       </div></div>
     </div>
     <div class="col-xs-3">
-      <div class="row"><div class="col-xs-12">
-          Weekdays
-      </div></div>
-    </div>
-    <div class="col-xs-3">
-      <div class="row"><div class="col-xs-12">
+      <div class="row time-type"><div class="col-xs-12">
           Overnight
+      </div></div>
+      <div class="row content"><div class="col-xs-12">
+          <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
+          <h3>${{ month_summary.money_usage|floatformat:3 }}</h3>
+      </div></div>
+      <div class="row content"><div class="col-xs-12">
+          <img alt="decrease enegry" class="icon" src="{% static 'images/reports/decrease_engry.svg'  %}">
+          <h3>{{ compare_last_month_money|floatformat:0 }}%</h3>
       </div></div>
     </div>
     <div class="col-xs-3">

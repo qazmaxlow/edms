@@ -8,7 +8,7 @@ from django.shortcuts import render
 from django.utils import timezone
 
 from egauge.manager import SourceManager
-from egauge.models import SourceReadingMonth, SourceReadingDay, SourceReadingHour
+from egauge.models import SourceReadingMonth, SourceReadingDay, SourceReadingHour, Source
 from system.models import System
 from unit.models import UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
 from utils import calculation
@@ -83,13 +83,41 @@ def report_view(request, system_code=None):
     co2_unit_rates = [unit_rate for unit_rate in unit_rates if unit_rate.category_code == CO2_CATEGORY_CODE]
     money_unit_rates = [unit_rate for unit_rate in unit_rates if unit_rate.category_code == MONEY_CATEGORY_CODE]
 
+    monthly_energy_sum = sum([sr.values()[0] for sr in source_readings.values()])
+
+    # unit_infos = json.loads(current_system.unit_info)
+    # money_unit_code = unit_infos['money']
+    # _money_unit_rates = UnitRate.objects.filter(category_code='money', code=unit_infos['money'])
+
+    source_timestamp_energy = [(source_id, ) + sr.items()[0] for source_id, sr in source_readings.items()]
+    # assert False
+
+    def get_unit_rate(source_id, timestamp):
+        source = Source.objects(id=str(source_id)).first()
+        # assert False
+        system = System.objects.get(code=source.system_code)
+        unit_infos = json.loads(system.unit_info)
+        money_unit_code = unit_infos['money']
+        money_unit_rates = UnitRate.objects.filter(category_code='money', code=unit_infos['money'])
+        dt = datetime.datetime.fromtimestamp(timestamp, pytz.utc)
+        ur = money_unit_rates.filter(effective_date__lte=dt).order_by('-effective_date').first()
+        return ur
+
+    monthly_money_sum = sum([ get_unit_rate(s, t).rate*e for s, t, e in source_timestamp_energy])
+
+    # ds = [ datetime.datetime.fromtimestamp(t) for t, e in timestamp_energy]
+
     co2_usages = copy.deepcopy(source_readings)
     calculation.transform_source_readings(co2_usages, systems, sources, co2_unit_rates, CO2_CATEGORY_CODE)
     co2_usages = calculation.combine_readings_by_timestamp(co2_usages)
 
     money_usages = copy.deepcopy(source_readings)
+    # [63.25035888888888, 82.13227444444445, 194.7879794444444, 16.041575555555553, 245.49638694444442, 1085.012150833333]
     calculation.transform_source_readings(money_usages, systems, sources, money_unit_rates, MONEY_CATEGORY_CODE)
+    # assert False
     money_usages = calculation.combine_readings_by_timestamp(money_usages)
+
+
 
     monthly_summary = []
     for timestamp, usage in energy_usages.items():
@@ -111,6 +139,7 @@ def report_view(request, system_code=None):
 
     compare_last_month_money = (current_month_money - last_month_money_usage)/ current_month_money * 100
     m['compare_last_month_money'] = compare_last_month_money
+    m['monthly_money_sum'] = monthly_money_sum
 
     return render(request, 'companies/reports/summary.html', m)
 
