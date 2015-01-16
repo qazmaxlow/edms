@@ -58,6 +58,10 @@
     border-bottom: #e8ebeb solid 3px;
   }
 
+  .report-summary .content {
+    background-color: #eff2f2;
+  }
+
   .report-summary .col-xs-3 {
     background-color: white;
     border-left: #e8ebeb solid 3px;
@@ -65,6 +69,8 @@
 
   .report-summary img.icon {
     padding: 20px;
+    height: 120px;
+    width: 120px;
   }
 </style>
 
@@ -917,12 +923,12 @@ $(function() {
       <div class="row time-type"><div class="col-xs-12">
           Monthly
       </div></div>
-      <div class="row"><div class="col-xs-12">
+      <div class="row content"><div class="col-xs-12">
           <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
           <h3>${{ month_summary.money_usage|floatformat:3 }}</h3>
       </div></div>
-      <div class="row"><div class="col-xs-12">
-          <img src="{% static 'images/reports/decrease_engry.svg'  %}">
+      <div class="row content"><div class="col-xs-12">
+          <img alt="decrease enegry" class="icon" src="{% static 'images/reports/decrease_engry.svg'  %}">
           <h3>{{ compare_last_month_money|floatformat:0 }}%</h3>
       </div></div>
     </div>
