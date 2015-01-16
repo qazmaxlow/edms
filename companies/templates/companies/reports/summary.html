@@ -49,6 +49,16 @@
 
 </style>
 
+<style>
+  .report-summary .time-type {
+    color: #44586a;
+    font-weight: 600;
+    font-size: 3 rem;
+    padding: 25px 0;
+    border-bottom: #e8ebeb solid 3px;
+  }
+</style>
+
 <script type="text/javascript">
 // put here to share with extended template
 var report = {};
@@ -892,10 +902,10 @@ $(function() {
     </div>
 </div>
 
-<div class="panel-component text-center">
+<div class="panel-component report-summary text-center">
   <div class="row">
     <div class="col-xs-3">
-      <div class="row"><div class="col-xs-12">
+      <div class="row time-type"><div class="col-xs-12">
           Monthly
       </div></div>
       <div class="row"><div class="col-xs-12">
