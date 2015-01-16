@@ -62,6 +62,10 @@
     background-color: white;
     border-left: #e8ebeb solid 3px;
   }
+
+  .report-summary img.icon {
+    padding: 20px;
+  }
 </style>
 
 <script type="text/javascript">
@@ -914,7 +918,7 @@ $(function() {
           Monthly
       </div></div>
       <div class="row"><div class="col-xs-12">
-          <img alt="power" src="{% static 'images/report/lightning-energy.png' %}">
+          <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
           <h3>${{ month_summary.money_usage|floatformat:3 }}</h3>
       </div></div>
       <div class="row"><div class="col-xs-12">
