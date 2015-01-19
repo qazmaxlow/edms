@@ -168,6 +168,10 @@ class CompareTplHepler:
 
         return path
 
+    @property
+    def text_desc(self):
+        return "{self.compared_percent_abs:.0f}% {self.change_desc}".format(self=self)
+
 
 def popup_report_view(request, system_code, year, month):
     systems_info = System.get_systems_info(system_code, request.user.system.code)
@@ -323,6 +327,7 @@ def popup_report_view(request, system_code, year, month):
     combined_readings = {}
     for g in group_data:
         current_readings = g['currentReadings']
+        g['compare_last_month_helper'] = CompareTplHepler(g['compare_last_month'])
         for ts, val in current_readings.items():
             if ts in combined_readings:
                 combined_readings[ts] += val
