@@ -763,6 +763,16 @@ body {-webkit-print-color-adjust: exact;}
     font-weight: 600;
 }
 
+.top-section .side-bar .item .more-usage {
+    color: #e98264;
+    font-weight: 600;
+}
+
+.top-section .side-bar .item .less-usage {
+    color: #81d51d;
+    font-weight: 600;
+}
+
 .top-section .side-bar .item:not(.end) {
     background: url("../images/reports/side_row_splitter.png") no-repeat scroll center bottom white;
 }
@@ -783,6 +793,9 @@ body {-webkit-print-color-adjust: exact;}
 
 .report-detail-header {
     background-color: #6bc0d4;
+    color: white;
+    padding: 5px 0;
+    font-weight: 600;
 }
 
 .report-detail-body {
