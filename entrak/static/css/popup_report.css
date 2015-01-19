@@ -733,6 +733,12 @@ body {-webkit-print-color-adjust: exact;}
 }
 
 /* hack */
+.row-no-padding .col-xs-12  {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* hack */
 /* disable calender navigation */
 .k-calendar .k-header .k-link
 {
