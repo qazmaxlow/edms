@@ -285,12 +285,13 @@ def popup_report_view(request, system_code, year, month):
     beginning_usage = sum([ g['beginningWeekdayInfo']['average'] for g in group_data])
     average_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
     weekday_compare_last_month = (beginning_usage - average_usage)/beginning_usage*100
-    m['weekday_compare_last_month'] = weekday_compare_last_month
-    m['weekday_compare_helper'] = CompareTplHepler(weekday_compare_last_month)
+    # m['weekday_compare_last_month'] = weekday_compare_last_month
+    m['weekday_month_compare_helper'] = CompareTplHepler(weekday_compare_last_month)
 
     last_same_period = sum([ g['lastSamePeriodWeekdayInfo']['average'] for g in group_data])
     weekday_compare_same_period = (last_same_period - average_usage)/last_same_period*100
     m['weekday_compare_same_period'] = weekday_compare_same_period
+    m['weekday_same_period_compare_helper'] = CompareTplHepler(weekday_compare_same_period)
 
     for g in group_data:
         g['system'] = System.objects.get(code=g['systemCode'])
