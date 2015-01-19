@@ -144,6 +144,31 @@ def report_view(request, system_code=None):
     return render(request, 'companies/reports/summary.html', m)
 
 
+class CompareTplHepler:
+    def __init__(self, compared_percent):
+        self.compared_percent = compared_percent
+
+    @property
+    def compared_percent_abs(self):
+        return abs(self.compared_percent)
+
+    @property
+    def change_desc(self):
+        return 'more' if self.compared_percent >=0 else 'less'
+
+    @property
+    def change_css_class(self):
+        return 'more-usage' if self.compared_percent >=0 else 'less-usage'
+
+    @property
+    def change_icon_path(self):
+        path = 'images/reports/decrease_engry.svg'
+        if self.compared_percent >=0:
+            path = 'images/reports/increase_engry.svg'
+
+        return path
+
+
 def popup_report_view(request, system_code, year, month):
     systems_info = System.get_systems_info(system_code, request.user.system.code)
     systems = systems_info['systems']
@@ -261,6 +286,7 @@ def popup_report_view(request, system_code, year, month):
     average_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
     weekday_compare_last_month = (beginning_usage - average_usage)/beginning_usage*100
     m['weekday_compare_last_month'] = weekday_compare_last_month
+    m['weekday_compare_helper'] = CompareTplHepler(weekday_compare_last_month)
 
     last_same_period = sum([ g['lastSamePeriodWeekdayInfo']['average'] for g in group_data])
     weekday_compare_same_period = (last_same_period - average_usage)/last_same_period*100

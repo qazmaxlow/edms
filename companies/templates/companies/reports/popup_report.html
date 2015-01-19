@@ -311,14 +311,13 @@
           <div class="row item"><div class="col-xs-12">
               <div class="row inner">
                 <div class="col-xs-4">
-                  <img src="{% static 'images/reports/increase_engry.svg'  %}">
+                  <img src="{% static weekday_compare_helper.change_icon_path  %}">
                 </div>
                 <div class="col-xs-8">
-                  <h3>{% if weekday_compare_last_month > 0 %}
-                    {{ weekday_compare_last_month|floatformat:0 }}
-                  {% else %}
-                    {{ weekday_compare_last_month|floatformat:0|slice:"1:" }}
-                  {% endif %}%</h3>
+                  <h3 class="{{ weekday_compare_helper.change_css_class }}">
+                    {{ weekday_compare_helper.compared_percent_abs|floatformat:0 }}%
+                    {{ weekday_compare_helper.change_desc }}
+                  </h3>
                   <p>{% trans "Compare to Last Month" %}</p>
                 </div>
               </div>
