@@ -732,6 +732,11 @@
 body {-webkit-print-color-adjust: exact;}
 }
 
+.used-money {
+    color: #415368;
+    font-weight: 600;
+}
+
 /* hack */
 .row-no-padding .col-xs-12  {
     padding-left: 0 !important;
@@ -751,6 +756,11 @@ body {-webkit-print-color-adjust: exact;}
 
 .top-section .side-bar .item {
     height: 144px;
+}
+
+.top-section .side-bar .item p {
+    color: #778491;
+    font-weight: 600;
 }
 
 .top-section .side-bar .item:not(.end) {
