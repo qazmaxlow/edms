@@ -315,6 +315,7 @@ def popup_report_view(request, system_code, year, month):
     m['weekday_details'] = group_data
     m['saving_info'] = report_data['savingInfo']
     m['saving_energy'] = -1 * report_data['savingInfo']['energy']
+    m['css_class_energy_saving'] = 'positive-saving' if report_data['savingInfo']['energy'] >=0 else 'negative-saving'
     # in tons
     m['saving_co2'] = -1 * report_data['savingInfo']['co2'] / 1000.0
     m['saving_money'] = -1 * report_data['savingInfo']['money']
