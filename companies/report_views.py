@@ -328,6 +328,7 @@ def popup_report_view(request, system_code, year, month):
     for g in group_data:
         current_readings = g['currentReadings']
         g['compare_last_month_helper'] = CompareTplHepler(g['compare_last_month'])
+        g['compare_same_period_helper'] = CompareTplHepler(g['compare_same_period'])
         for ts, val in current_readings.items():
             if ts in combined_readings:
                 combined_readings[ts] += val
