@@ -763,12 +763,12 @@ body {-webkit-print-color-adjust: exact;}
     font-weight: 600;
 }
 
-.top-section .side-bar .item .more-usage {
+.more-usage {
     color: #e98264;
     font-weight: 600;
 }
 
-.top-section .side-bar .item .less-usage {
+.less-usage {
     color: #81d51d;
     font-weight: 600;
 }
@@ -818,6 +818,11 @@ body {-webkit-print-color-adjust: exact;}
 
 .report-detail-body .col-xs-4:not(:first-child) {
     background: url("../images/reports/vertical_splitter.png") no-repeat scroll left center white;
+}
+
+.report-detail-body p {
+    color: #778491;
+    font-weight: 600;
 }
 
 .report-date {
