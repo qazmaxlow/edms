@@ -254,6 +254,7 @@ def popup_report_view(request, system_code, year, month):
                                   time.mktime(report_date.utctimetuple()),
                                   time.mktime(next_month_date.utctimetuple())
     )
+
     group_data = report_data['groupedSourceInfos']
     weekday_average = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
     m['weekday_average'] = weekday_average
@@ -410,6 +411,16 @@ def popup_report_view(request, system_code, year, month):
     #     }
     #     transformedDatas.push(dataInfo);
     # });
+    m['sum_up_usages'] = report_data['sumUpUsages']
+    # max_sum_up = max(report_data['sumUpUsages'])
+    sumup_usages = reversed(report_data['sumUpUsages'])
+
+    compare_past_datasource = []
+    for su in sumup_usages:
+        compare_past_datasource.append({'value': su, 'year': "2001", 'country': "us"})
+
+    # oops, hack?
+    m['compare_past_datasource_json'] = json.dumps(compare_past_datasource)
 
 
     return render(request, 'companies/reports/popup_report.html', m)

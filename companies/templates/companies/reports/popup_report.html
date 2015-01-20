@@ -259,6 +259,13 @@
                     <div class="compare-past-bar"></div>
                 </div>
             </div>
+
+            <div>
+              {% for su in sum_up_usages %}
+                {{ su }},
+              {% endfor %}
+            <div>
+            <div kendo-chart k-options="barOptions" ></div>
         </div>
         <hr>
         <div class="compare-past-bar-name-container">
@@ -746,7 +753,47 @@
 <!-- end ng-app -->
 <script>
     angular.module("Entrak", [ "kendo.directives" ])
-        .controller("ReportController", function($scope){})
+        .controller("ReportController", function($scope){
+            $scope.barOptions = {
+        dataSource: {{ compare_past_datasource_json|safe }},
+        title: {
+            text: "Gross domestic product growth /GDP annual %/"
+        },
+        legend: {
+            position: "top"
+        },
+        seriesDefaults: {
+            type: "column",
+            labels: {
+                visible: true,
+                format: "{0}%",
+                template: "# if ( value > 0) { # #= value # # } else { # Nan # } #"
+            }
+        },
+        series: [{
+            field: "value",
+            colorField: "color"
+        }],
+
+        valueAxis: {
+            labels: {
+                format: "{0}%"
+            },
+            line: {
+                visible: false
+            },
+            axisCrossingValue: 0
+        },
+        categoryAxis: {
+            field: "year"
+        },
+        tooltip: {
+            visible: true,
+            format: "{0}%",
+            template: "#= series.name #: #= value #"
+        }
+    };
+        })
 
 setCalendar = function(currentDt, currentEndDt, eleSel, readings, averageUsage, isNotConcernFunc) {
     // var reportGenThis = this;
