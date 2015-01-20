@@ -229,36 +229,11 @@
         </div>
         {% endblocktrans %}
         <div class="compare-past-chart-info">
-            <div class="compare-past-chart-title">{% trans 'Total energy consumption for the last 6 <span class="report-type-name-lower-plural"></span>' %}</div>
+            
             <hr>
             <div class="compare-past-chart-subtitle">(kWh)</div>
             <hr>
-            <div class="compare-past-chart">
-                <div class="compare-past-bar-container">
-                    <div class="compare-past-bar-val"></div>
-                    <div class="compare-past-bar"></div>
-                </div>
-                <div class="compare-past-bar-container">
-                    <div class="compare-past-bar-val"></div>
-                    <div class="compare-past-bar"></div>
-                </div>
-                <div class="compare-past-bar-container">
-                    <div class="compare-past-bar-val"></div>
-                    <div class="compare-past-bar"></div>
-                </div>
-                <div class="compare-past-bar-container">
-                    <div class="compare-past-bar-val"></div>
-                    <div class="compare-past-bar"></div>
-                </div>
-                <div class="compare-past-bar-container">
-                    <div class="compare-past-bar-val"></div>
-                    <div class="compare-past-bar"></div>
-                </div>
-                <div class="compare-past-bar-container">
-                    <div class="compare-past-bar-val"></div>
-                    <div class="compare-past-bar"></div>
-                </div>
-            </div>
+            
 
             <div>
               {% for su in sum_up_usages %}
@@ -757,10 +732,11 @@
             $scope.barOptions = {
         dataSource: {{ compare_past_datasource_json|safe }},
         title: {
-            text: "Gross domestic product growth /GDP annual %/"
+            text: "Total energy consumption for the last 6 months"
         },
         legend: {
-            position: "top"
+            // position: "top"
+            visible: false
         },
         seriesDefaults: {
             type: "column",
@@ -776,21 +752,24 @@
         }],
 
         valueAxis: {
-            labels: {
-                format: "{0}%"
-            },
+            visible: false,
             line: {
                 visible: false
             },
-            axisCrossingValue: 0
+            minorGridLines: {
+                visible: false
+            }
         },
         categoryAxis: {
-            field: "month"
+            field: "month",
+            majorGridLines: {
+                visible: false
+            }
         },
         tooltip: {
             visible: true,
             format: "{0}%",
-            template: "#= series.name #: #= value #"
+            template: "#= dataItem.month #: #= value #"
         }
     };
         })
