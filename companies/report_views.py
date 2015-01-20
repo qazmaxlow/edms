@@ -415,9 +415,18 @@ def popup_report_view(request, system_code, year, month):
     # max_sum_up = max(report_data['sumUpUsages'])
     sumup_usages = reversed(report_data['sumUpUsages'])
 
+    # make 6 months
+    # report_date
+    # compare_past
+    compare_past_date = report_date
+    # for i in range(6):
+
     compare_past_datasource = []
     for su in sumup_usages:
-        compare_past_datasource.append({'value': su, 'year': "2001", 'country': "us"})
+        compare_past_datasource.append({
+            'value': su, 'year': "2001",
+            'month': compare_past_date.strftime('%b'), 'country': "us"})
+        compare_past_date = previous_month(compare_past_date)
 
     # oops, hack?
     m['compare_past_datasource_json'] = json.dumps(compare_past_datasource)
