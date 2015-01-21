@@ -83,7 +83,7 @@
       </div>
     </div>
 
-    <div class="row basic-info-container {{ css_class_energy_saving }}">
+    <div class="row top-content {{ css_class_energy_saving }}">
         <div id="current-usage-col" class="col-xs-4 basic-info-col">
             <div>{% trans "HOW MUCH ENERGY<br>DID WE USE?" %}</div>
             <hr class="current-usage-separator-dark-grey">
@@ -176,11 +176,6 @@
         </div>
     </div>
 
-    {% block hide_detail_bar_1 %}
-    <div class="row report-component-footer"></div>
-    {% endblock %}
-
-
 
     <div class="row xrow-no-padding">
       <div class="col-xs-12">
@@ -226,7 +221,8 @@
       </div>
     </div>
 
-    <div class="row compare-past-basic-info">
+    <div class="row top-content">
+      <div class="col-xs-4">
         {% blocktrans %}
         <div class="compare-past-desc">Your energy consumption this<br><span class="report-type-name-lower"></span> was
             <span>
@@ -237,10 +233,11 @@
             than<br> it was last <span class="report-type-name-lower"></span>. <span class="footnote-sybmol">*</span>
         </div>
         {% endblocktrans %}
-        <div class="compare-past-chart-info">
-            <div kendo-chart k-options="barOptions" ></div>
-            <div class="asterisk-text single-asterisk-text">{% trans "* Data not available or incomplete for this period" %}</div>
-        </div>
+      </div>
+      <div class="col-xs-8">
+        <div kendo-chart k-options="barOptions" ></div>
+        <div class="asterisk-text single-asterisk-text">{% trans "* Data not available or incomplete for this period" %}</div>
+      </div>
     </div>
 
     <div class="row detail-container">
