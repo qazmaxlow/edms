@@ -297,7 +297,11 @@ def popup_report_view(request, system_code, year, month):
     m['weekday_month_compare_helper'] = CompareTplHepler(weekday_compare_last_month)
 
     last_same_period = sum([ g['lastSamePeriodWeekdayInfo']['average'] for g in group_data])
-    weekday_compare_same_period = (last_same_period - average_usage)/last_same_period*100
+
+    weekday_compare_same_period = None
+    if last_same_period > 0 :
+        weekday_compare_same_period = (last_same_period - average_usage)/last_same_period*100
+
     m['weekday_compare_same_period'] = weekday_compare_same_period
     m['weekday_same_period_compare_helper'] = CompareTplHepler(weekday_compare_same_period)
 
