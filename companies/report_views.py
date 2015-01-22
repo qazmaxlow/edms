@@ -290,7 +290,9 @@ def popup_report_view(request, system_code, year, month):
     # this._fillInComparePercent(targetSel+" .compare-last-same-period", lastSamePeriodUsage, averageUsage, this.multiLangTexts.samePeriodLastYear);
     beginning_usage = sum([ g['beginningWeekdayInfo']['average'] for g in group_data])
     average_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
-    weekday_compare_last_month = (beginning_usage - average_usage)/beginning_usage*100
+    weekday_compare_last_month = None
+    if average_usage > 0:
+        weekday_compare_last_month = (beginning_usage - average_usage)/beginning_usage*100
     # m['weekday_compare_last_month'] = weekday_compare_last_month
     m['weekday_month_compare_helper'] = CompareTplHepler(weekday_compare_last_month)
 
@@ -463,6 +465,10 @@ def popup_report_view(request, system_code, year, month):
 
     # oops, hack?
     m['compare_past_datasource_json'] = json.dumps(compare_past_datasource)
+
+    # weekends
+    m['weekends'] = {}
+    m['weekends']['a'] = 1
 
 
     return render(request, 'companies/reports/popup_report.html', m)
