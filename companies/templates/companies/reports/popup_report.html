@@ -237,32 +237,21 @@
         {% endblocktrans %}
         <div class="compare-past-chart-info">
             <div kendo-chart k-options="barOptions" ></div>
+            <div class="asterisk-text single-asterisk-text">{% trans "* Data not available or incomplete for this period" %}</div>
         </div>
-
-        <div class="asterisk-text single-asterisk-text">{% trans "* Data not available or incomplete for this period" %}</div>
     </div>
- 
 
-    <div class="detail-container">
-        <div class="detail-split-title">{% trans "WHEN DID WE ACHIEVE OUR SAVINGS?" %}</div>
-        <hr>
-        <div class="line-chart-title-container">
-            <span class="line-chart-title">{% trans "Total consumption by days" %}</span>
-        </div>
-        <div class="compare-past-line-chart"></div>
-        <span class="y-axis-title">kWh</span>
-        <div class="x-axis-title">{% trans 'Day of the <span class="report-type-name-lower"></span>' %}</div>
-        <hr>
-        <div class="compare-past-sub-info-container"></div>
-        <div style="clear: both;"></div>
-    </div>
-</div>
-</div>
-    <div class="row">
+    <div class="row detail-container">
       <div class="col-xs-12">
-        <div kendo-chart k-options="linOptions" ></div>
+        <div class="detail-split-title">{% trans "WHEN DID WE ACHIEVE OUR SAVINGS?" %}</div>
       </div>
     </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <div kendo-chart k-options="lineOptions" ></div>
+      </div>
+    </div>
+</div>
 </div>
 
 <div id="weekday-info" class="report-component xcalendar-component">
@@ -722,6 +711,7 @@
 <script>
     angular.module("Entrak", [ "kendo.directives" ])
         .controller("ReportController", function($scope){
+
             $scope.barOptions = {
         dataSource: {{ compare_past_datasource_json|safe }},
         title: {
