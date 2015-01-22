@@ -4,6 +4,7 @@ import time
 
 from django.db.models import Q
 from django.core.context_processors import csrf
+from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import render
 from django.utils import timezone
 
@@ -325,7 +326,11 @@ def popup_report_view(request, system_code, year, month):
         g['compare_same_period'] = compare_same_period
         g['diff_same_period'] = last_same_period - average_usage
 
+    # this is combined current readings
     combined_readings = {}
+
+    # combined_current_readings = {};
+    combined_last_readings = {};
     for g in group_data:
         current_readings = g['currentReadings']
         g['compare_last_month_helper'] = CompareTplHepler(g['compare_last_month'])
@@ -335,6 +340,28 @@ def popup_report_view(request, system_code, year, month):
                 combined_readings[ts] += val
             else:
                 combined_readings[ts] = val
+
+        last_readings = g['lastReadings']
+        for ts, val in last_readings.items():
+            if ts in combined_last_readings:
+                combined_last_readings[ts] += val
+            else:
+                combined_last_readings[ts] = val
+
+    # m['combined_current_readings'] = combined_readings
+    # m['combined_last_readings'] = combined_last_readings
+    # compare current series
+    # compare_current_readings_series = []
+    # for ts, val in combined_readings.items():
+    #     compare_current_readings_series.append(
+    #         {
+    #             'date': datetime.datetime.fromtimestamp(ts, pytz.utc),
+    #             'value': val
+    #         }
+    #     )
+
+    m['compare_current_readings_series']= json.dumps(combined_readings.values(), cls=DjangoJSONEncoder)
+    # assert False
 
 
     highest_datetime, highest_usage= sorted(combined_readings.items(), key=lambda x: x[1])[-1]
@@ -413,7 +440,7 @@ def popup_report_view(request, system_code, year, month):
     # });
     m['sum_up_usages'] = report_data['sumUpUsages']
     # max_sum_up = max(report_data['sumUpUsages'])
-    sumup_usages = reversed(report_data['sumUpUsages'])
+    sumup_usages = report_data['sumUpUsages']
 
     # make 6 months
     # report_date
@@ -424,9 +451,10 @@ def popup_report_view(request, system_code, year, month):
     compare_past_datasource = []
     for su in sumup_usages:
         compare_past_datasource.append({
-            'value': su, 'year': "2001",
+            'value': su,
             'month': compare_past_date.strftime('%b'), 'country': "us"})
         compare_past_date = previous_month(compare_past_date)
+    compare_past_datasource.reverse()
 
     # oops, hack?
     m['compare_past_datasource_json'] = json.dumps(compare_past_datasource)
