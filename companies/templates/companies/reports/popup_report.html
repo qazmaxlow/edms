@@ -777,13 +777,26 @@
                     visible: true,
                     format: "{0:n0}"
                 }
-                // axis: "temp"
+            },
+            {
+                type: "line",
+                data: {{ compare_last_readings_series|safe }},
+                name: '{{ compare_last_readings_month }}',
+                color: "#edba3c",
+                format: "{0:n0}",
+                labels: {
+                    visible: true,
+                    format: "{0:n0}"
+                }
             }
         ],
 
         valueAxis: {
             line: {
                 visible: false
+            },
+            title: {
+                text: "kWh"
             },
             minorGridLines: {
                 visible: false
