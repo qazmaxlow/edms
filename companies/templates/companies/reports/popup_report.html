@@ -28,6 +28,8 @@
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
 <link href="{% static 'assets/kendoui/styles/kendo.default.min.css' %}" rel="stylesheet">
+<link href="{% static 'assets/kendoui/styles/kendo.dataviz.min.css' %}" rel="stylesheet">
+<link href="{% static 'assets/kendoui/styles/kendo.dataviz.default.min.css' %}" rel="stylesheet">
 <!-- Because now using jquery v1.11 -->
 <script src="{% static 'assets/kendoui/js/jquery.min.js' %}"></script>
 <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
@@ -217,7 +219,7 @@
     </div></div>
 </div>
 
-<div id="compare-past" class="report-component">
+<div id="xcompare-past" class="xreport-component">
     <div class="row report-component-header">
       <div class="col-xs-12">
       {% trans 'HOW MUCH MORE / LESS DID WE USE COMPARED TO LAST <span class="report-type-name"></span>?' %}
@@ -771,26 +773,22 @@
         legend: {
             position: "top"
         },
-        seriesDefaults: {
-            type: "line",
-            labels: {
-                visible: true,
-                format: "{0}%",
-                template: "# if ( value > 0) { # #= value # # } else { # Nan # } #"
-            }
-        },
         series: [
             {
                 type: "line",
                 data: {{ compare_current_readings_series|safe }},
                 name: "Max. Temperature [&deg;C]",
-                color: "#ff1c1c"
+                color: "#047fa1",
+                format: "{0:n0}",
+                labels: {
+                    visible: true,
+                    format: "{0:n0}"
+                }
                 // axis: "temp"
             }
         ],
 
         valueAxis: {
-            visible: false,
             line: {
                 visible: false
             },
@@ -803,11 +801,6 @@
             majorGridLines: {
                 visible: false
             }
-        },
-        tooltip: {
-            visible: true,
-            format: "{0}%",
-            template: "#= dataItem.month #: #= value #"
         }
     };
         })
