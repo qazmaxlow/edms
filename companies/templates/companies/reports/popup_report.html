@@ -240,11 +240,6 @@
       </div>
     </div>
 
-    <div class="row detail-container">
-      <div class="col-xs-12">
-        <div class="detail-split-title">{% trans "WHEN DID WE ACHIEVE OUR SAVINGS?" %}</div>
-      </div>
-    </div>
     <div class="row">
       <div class="col-xs-12">
         <div kendo-chart k-options="lineOptions" ></div>
@@ -765,7 +760,8 @@
 
             $scope.lineOptions = {
         title: {
-            text: "Total energy consumption for the last 6 months"
+            text: "WHEN DID WE ACHIEVE OUR SAVINGS?",
+            color: "#354960"
         },
         legend: {
             position: "top"
@@ -774,7 +770,7 @@
             {
                 type: "line",
                 data: {{ compare_current_readings_series|safe }},
-                name: "Max. Temperature [&deg;C]",
+                name: '{{ compare_current_readings_month }}',
                 color: "#047fa1",
                 format: "{0:n0}",
                 labels: {

@@ -361,6 +361,8 @@ def popup_report_view(request, system_code, year, month):
     #     )
 
     m['compare_current_readings_series']= json.dumps(combined_readings.values(), cls=DjangoJSONEncoder)
+    m['compare_current_readings_month'] = report_date.strftime('%b')
+
     # assert False
 
 
