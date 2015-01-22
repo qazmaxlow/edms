@@ -291,7 +291,7 @@ def popup_report_view(request, system_code, year, month):
     beginning_usage = sum([ g['beginningWeekdayInfo']['average'] for g in group_data])
     average_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
     weekday_compare_last_month = None
-    if average_usage > 0:
+    if beginning_usage > 0:
         weekday_compare_last_month = (beginning_usage - average_usage)/beginning_usage*100
     # m['weekday_compare_last_month'] = weekday_compare_last_month
     m['weekday_month_compare_helper'] = CompareTplHepler(weekday_compare_last_month)
