@@ -472,7 +472,7 @@ def popup_report_view(request, system_code, year, month):
 
     # weekends
     m['weekends'] = {}
-    m['weekends']['a'] = 1
+    m['weekends']['total_bill'] = sum([ g['currentWeekendInfo']['average'] for g in group_data]);
 
 
     return render(request, 'companies/reports/popup_report.html', m)
