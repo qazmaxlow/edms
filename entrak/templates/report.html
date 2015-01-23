@@ -593,7 +593,8 @@ $(function() {
         var report_type = report.currentReportType;
 
         if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-            end_timestamp = moment(report.customMonthEndDt).add(1, 'd').unix();
+            //end_timestamp = moment(report.customMonthEndDt).add(1, 'd').unix();
+            end_timestamp = moment(report.customMonthEndDt).unix();
         }
 
         var url = 'https://{{ request.get_host }}/{{ systems.0.code }}/report/' + start_timestamp + '/' + end_timestamp + '/' + report_type + '/download/';
