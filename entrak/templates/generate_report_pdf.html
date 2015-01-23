@@ -37,7 +37,7 @@ $(function() {
     report.timezone = '{{systems.0.timezone}}';
     report.currentDt =  moment.unix({{start_timestamp}}).tz(report.timezone);
     {% ifequal report_type "custom-month" %}
-    report.customMonthEndDt = moment.unix({{end_timestamp}}).tz(report.timezone);
+    report.customMonthEndDt = moment.unix({{end_timestamp}}).tz(report.timezone).add(-1, 'd');
     {% else %}
     report.customMonthEndDt = null;
     {% endifequal %}
