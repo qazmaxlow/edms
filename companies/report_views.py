@@ -484,6 +484,8 @@ def popup_report_view(request, system_code, year, month):
         weekends_compare_last_month = (weekends_average_usage - weekends_beginning_usage)/weekends_beginning_usage*100
 
     weekends_usage['compare_last_month'] = weekends_compare_last_month
+    weekends_usage['month_compare_helper'] = CompareTplHepler(weekends_compare_last_month)
+
 
     m['weekends'] = weekends_usage
 
