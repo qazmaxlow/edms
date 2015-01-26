@@ -498,6 +498,131 @@
     {% endfor %}
 </div>
 
+<div id="overnight-info" class="xreport-component xcalendar-component">
+    <div class="row report-component-header">
+      <div class="col-xs-12">
+        {% trans "HOW MUCH ENERGY DID WE USE <span>OVERNIGHT***?</span>" %}</div>
+    </div>
+    <div class="row top-section">
+        <div class="col-xs-4 side-bar">
+          <div class="row item"><div class="col-xs-12">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static 'images/reports/icon_money.svg'  %}">
+                </div>
+                <div class="col-xs-8">
+                  <h3 class="used-money">${{ weekends.total_bill|floatformat:0 }}</h3>
+                  <p>{% trans "Average Weekday Energy Use" %}</p>
+                </div>
+              </div>
+          </div></div>
+          <div class="row item"><div class="col-xs-12">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static weekends.month_compare_helper.change_icon_path  %}">
+                </div>
+                <div class="col-xs-8">
+                  <h3 class="{{ weekends.month_compare_helper.change_css_class }}">
+                    {{ weekends.month_compare_helper.compared_percent_abs|floatformat:0 }}%
+                    {{ weekends.month_compare_helper.change_desc }}
+                  </h3>
+                  <p>{% trans "Compare to Last Month" %}</p>
+                </div>
+              </div>
+          </div></div>
+          <div class="row item end"><div class="col-xs-12">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static weekday_same_period_compare_helper.change_icon_path %}">
+                </div>
+                <div class="col-xs-8">
+                  <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
+                    {{ weekends_compare_same_period|floatformat:0 }}%
+                    {{ weekday_same_period_compare_helper.change_desc }}
+                  </h3>
+                  <p>{% trans "compare to same period year" %}</p>
+                </div>
+              </div>
+          </div></div>
+        </div>
+        <div class="col-xs-8 calendar-content">
+          <div class="row text-center report-date"><div class="col-xs-12">{{ report_date|date:"M Y" }}</div></div>
+          <div class="row text-center">
+            <div class="col-xs-4 border-right"><h9 class="better-mark">better</h9><p>than average weekday</p></div>
+            <div class="col-xs-4 border-right"><h9 class="worse-mark">worse</h9><p>than average weekday</p></div>
+            <div class="col-xs-4"><h9 class="average-mark">average</h9><p>weekday</p></div>
+          </div>
+
+          <div class="row"><div class="col-xs-12">
+        <div class="calendar-info-container">
+            <div class='calendar-weekday-header'>
+                {% trans "<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>" %}
+            </div>
+            <div class="calendar-day-container"></div>
+            <div></div>
+        </div>
+          </div></div>
+
+          <div class="row text-center">
+            <div class="col-xs-offset-2 col-xs-4 highest-weekday-enegry">
+              <h6><img src="{% static 'images/reports/electricity.png' %}">highest weekday enegry</h6>
+              <h5>${{ weekday_highest_usage|stringformat:"d" }}</h5>
+              <p>{{ weekday_highest_datetime|date:"d M Y" }}</p>
+            </div>
+            <div class="col-xs-4 most-increase-from"><h6>most increase from</h6>
+              <p>{{ highest_diff_source.system.fullname }}</p></div>
+          </div>
+
+        </div>
+    </div>
+    {% for d in weekday_details %}
+      <div class="row report-detail-header">
+        <div class="col-xs-12">
+        {{ d.system.fullname }}
+        </div>
+      </div>
+      <div class="row report-detail-body {% if forloop.last %}content-footer{% endif %} ">
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <img src="{% static 'images/reports/icon_money.svg'  %}">
+            </div>
+            <div class="col-xs-8">
+              <h3 class="used-money">${{  d.weekend.bill|stringformat:"d" }}</h3>
+              <p>{% trans "Average Weekday Energy Use" %}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <img src="{% static d.compare_last_month_helper.change_icon_path %}">
+            </div>
+            <div class="col-xs-8">
+              <h3 class="{{ d.compare_last_month_helper.change_css_class }}">
+                {{ d.compare_last_month_helper.text_desc }}
+              </h3>
+              <p>{% trans "Average Weekend Energy Use" %}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <img src="{% static d.compare_same_period_helper.change_icon_path %}">
+            </div>
+            <div class="col-xs-8">
+              <h3 class="{{ d.compare_same_period_helper.change_css_class }}">
+                {{ d.compare_same_period_helper.text_desc }}
+              </h3>
+              <p>{% trans "Average Weekend Energy Use" %}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+</div>
+
 <div id="xweekend-info" class="report-component calendar-component">
     <div class="report-component-header">{% trans "HOW MUCH ENERGY DID WE USE ON <span>WEEKENDS AND HOLIDAYS?</span>" %}</div>
     <div>
@@ -623,7 +748,7 @@
     <div style="clear:both;"></div>
 </div>
 
-<div id="overnight-info" class="report-component calendar-component">
+<div id="xovernight-info" class="report-component calendar-component">
     <div class="report-component-header">{% trans "HOW MUCH ENERGY DID WE USE <span>OVERNIGHT***?</span>" %}</div>
     <div>
         <div class="calendar-left-info">
