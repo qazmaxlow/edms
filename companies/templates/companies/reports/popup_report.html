@@ -450,10 +450,10 @@
 
         </div>
     </div>
-    {% for wd in weekday_details %}
+    {% for d in weekday_details %}
       <div class="row report-detail-header">
         <div class="col-xs-12">
-        {{ wd.system.fullname }}
+        {{ d.system.fullname }}
         </div>
       </div>
       <div class="row report-detail-body {% if forloop.last %}content-footer{% endif %} ">
@@ -463,7 +463,7 @@
               <img src="{% static 'images/reports/icon_money.svg'  %}">
             </div>
             <div class="col-xs-8">
-              <h3 class="used-money">${{  wd.usage_bill|stringformat:"d" }}</h3>
+              <h3 class="used-money">${{  d.weekend.bill|stringformat:"d" }}</h3>
               <p>{% trans "Average Weekday Energy Use" %}</p>
             </div>
           </div>
@@ -471,26 +471,26 @@
         <div class="col-xs-4">
           <div class="row">
             <div class="col-xs-4">
-              <img src="{% static wd.compare_last_month_helper.change_icon_path %}">
+              <img src="{% static d.compare_last_month_helper.change_icon_path %}">
             </div>
             <div class="col-xs-8">
-              <h3 class="{{ wd.compare_last_month_helper.change_css_class }}">
-                {{ wd.compare_last_month_helper.text_desc }}
+              <h3 class="{{ d.compare_last_month_helper.change_css_class }}">
+                {{ d.compare_last_month_helper.text_desc }}
               </h3>
-              <p>{% trans "Average Weekday Energy Use" %}</p>
+              <p>{% trans "Average Weekend Energy Use" %}</p>
             </div>
           </div>
         </div>
         <div class="col-xs-4">
           <div class="row">
             <div class="col-xs-4">
-              <img src="{% static wd.compare_same_period_helper.change_icon_path %}">
+              <img src="{% static d.compare_same_period_helper.change_icon_path %}">
             </div>
             <div class="col-xs-8">
-              <h3 class="{{ wd.compare_same_period_helper.change_css_class }}">
-                {{ wd.compare_same_period_helper.text_desc }}
+              <h3 class="{{ d.compare_same_period_helper.change_css_class }}">
+                {{ d.compare_same_period_helper.text_desc }}
               </h3>
-              <p>{% trans "Average Weekday Energy Use" %}</p>
+              <p>{% trans "Average Weekend Energy Use" %}</p>
             </div>
           </div>
         </div>

@@ -332,6 +332,18 @@ def popup_report_view(request, system_code, year, month):
         g['compare_same_period'] = compare_same_period
         g['diff_same_period'] = last_same_period - average_usage
 
+        weekend = {'bill': g['currentWeekendInfo']['average'] * money_unit_rate.rate}
+        weekend_beginning_usage = g['beginningWeekendInfo']['average']
+        weekend_average_usage = g['currentWeekendInfo']['average']
+
+        weekend_compare_last_month = None
+        if weekend_beginning_usage > 0:
+            weekend_compare_last_month = (weekend_average_usage - weekend_beginning_usage)/weekend_beginning_usage*100
+
+        weekend['compare_last_month_helper'] = CompareTplHepler(weekend_compare_last_month)
+
+        g['weekend'] = weekend
+
     # this is combined current readings
     combined_readings = {}
 
