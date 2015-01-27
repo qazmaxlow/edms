@@ -508,6 +508,22 @@ def popup_report_view(request, system_code, year, month):
 
     m['weekends'] = weekends_usage
 
+    # weekends
+    overnight_usage = {}
+    overnight_bill = sum([ g['currentOvernightInfo']['average'] for g in group_data])
+    overnight_usage['bill'] = overnight_bill * money_unit_rate.rate
+
+    overnight_beginning_usage = sum([ g['beginningOvernightInfo']['average'] for g in group_data])
+    overnight_average_usage = sum([ g['currentOvernightInfo']['average'] for g in group_data])
+
+    # average_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
+    overnight_compare_last_month = None
+    if overnight_beginning_usage > 0:
+        overnight_compare_last_month = (overnight_average_usage - overnight_beginning_usage)/overnight_beginning_usage*100
+
+    overnight_usage['month_compare_helper'] = CompareTplHepler(overnight_compare_last_month)
+    m['overnight'] = overnight_usage
+
     return render(request, 'companies/reports/popup_report.html', m)
 
 
