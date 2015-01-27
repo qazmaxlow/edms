@@ -533,12 +533,12 @@
           <div class="row item end"><div class="col-xs-12">
               <div class="row inner">
                 <div class="col-xs-4">
-                  <img src="{% static weekday_same_period_compare_helper.change_icon_path %}">
+                  <img src="{% static overnight.compare_same_period_helper.change_icon_path %}">
                 </div>
                 <div class="col-xs-8">
-                  <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
-                    {{ weekends_compare_same_period|floatformat:0 }}%
-                    {{ weekday_same_period_compare_helper.change_desc }}
+                  <h3 class="{{ overnight.compare_same_period_helper.change_css_class }}">
+                    {{ overnight.compare_same_period_helper.compared_percent_abs|floatformat:0 }}%
+                    {{ overnight.compare_same_period_helper.change_desc }}
                   </h3>
                   <p>{% trans "compare to same period year" %}</p>
                 </div>

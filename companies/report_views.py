@@ -522,6 +522,14 @@ def popup_report_view(request, system_code, year, month):
         overnight_compare_last_month = (overnight_average_usage - overnight_beginning_usage)/overnight_beginning_usage*100
 
     overnight_usage['month_compare_helper'] = CompareTplHepler(overnight_compare_last_month)
+
+    overnight_last_same_period = sum([ g['lastSamePeriodOvernightInfo']['average'] for g in group_data])
+    overnight_compare_same_period = None
+    if overnight_last_same_period > 0 :
+        overnight_compare_same_period = (overnight_average_usage - overnight_last_same_period)/overnight_last_same_period*100
+
+    overnight_usage['compare_same_period_helper'] = CompareTplHepler(overnight_compare_same_period)
+
     m['overnight'] = overnight_usage
 
     return render(request, 'companies/reports/popup_report.html', m)
