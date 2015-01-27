@@ -142,7 +142,8 @@ def report_view(request, system_code=None):
     m['compare_last_month_money'] = compare_last_month_money
     m['monthly_money_sum'] = monthly_money_sum
 
-    return render(request, 'companies/reports/summary.html', m)
+    return render(request, 'testing_code.html', m)
+    # return render(request, 'companies/reports/summary.html', m)
 
 
 class CompareTplHepler:
