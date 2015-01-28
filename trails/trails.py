@@ -53,7 +53,10 @@ class ExportCsvMixin(object):
 
             for obj in objects:
                 csv_vals = map(lambda f: get_csv_val(obj, f), self.csv_fields)
-                csv_vals.insert(0, csv_vals[0].system.name)
+                if obj.user.system!=None:
+                    csv_vals.insert(0, obj.user.system.name)
+                else:
+                    csv_vals.insert(0,"")
                 csv_wr.writerow(csv_vals)
                 
                 
