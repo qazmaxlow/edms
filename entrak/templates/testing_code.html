@@ -3,6 +3,8 @@
 {% load i18n %}
 {% load static %}
 
+{% load humanize %}
+
 {% block ga_page_title %}report{% endblock %}
 
 {% block extra_head %}
@@ -44,69 +46,65 @@
 
 <!-- </head> -->
 <!-- <body> -->
-<div xng-app="app" ng-controller="MyCtrl">
-    <div kendo-grid
-         k-data-source="gridData"
-         k-columns="gridColumns"
-         k-selectable="true"
-         k-on-change="selected = data"></div>
-
-    <p ng-show="selected">
-      <label>Artist: <input ng-model="selected.artist" /></label>
-      <br />
-      <label>Track: <input ng-model="selected.track" /></label>
-    </p>
-
-    <span>{% templatetag openvariable %} gridData[0] {% templatetag closevariable %}</span>
-    <button kendo-button ng-click="update()">
-      Update from code
-    </button>
-</div>
-<script>
-    /*
-angular.module("app", ["kendo.directives"]).controller("MyCtrl", function($scope) {
-  $scope.gridData = [
-    { artist: "Pink Floyd", track: "The dark side of the Moon" },
-    { artist: "The Beatles", track: "I've just seen a face" },
-    { artist: "Queen", track: "Innuendo" }
-  ];
-  $scope.gridColumns = [
-    { field: "artist", title: "Artist" },
-    { field: "track", title: "Track" }
-  ];
-  $scope.update = function() {
-    $scope.gridData[0].track = "Hey you";
-    console.log($scope.gridData);
-  };
-});
-  */
-</script>
-
-    <div id="example" ng-app="KendoDemos">
+<div id="example" ng-app="KendoDemos">
     <div ng-controller="MyCtrl">
-        <div class="demo-section k-content">
-            <button class="k-button" ng-show="!win1visible" ng-click="win1.open()">Open Calendar</button>
-            <button class="k-button" ng-show="!win2visible" ng-click="win2.open()">Open AJAX content</button>
+
+      <div class="xpanel-component xreport-summary text-center">
+        <div class="row">
+          <div class="col-xs-3">
+            <div class="row time-type"><div class="col-xs-12">
+                Monthly
+            </div></div>
+            <div class="row content"><div class="col-xs-12">
+                <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
+                <h3>${{ monthly_money_sum|floatformat:3 }}</h3>
+            </div></div>
+            <div class="row content"><div class="col-xs-12">
+                <img alt="decrease enegry" class="icon" src="{% static 'images/reports/decrease_engry.svg'  %}">
+                <h3>{{ compare_last_month_money|floatformat:0 }}%</h3>
+            </div></div>
+          </div>
+          <div class="col-xs-3">
+            <div class="row time-type"><div class="col-xs-12">
+                Weekdays
+            </div></div>
+            <div class="row content"><div class="col-xs-12">
+                <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
+                <h3>${{ month_summary.money_usage|floatformat:3 }}</h3>
+            </div></div>
+            <div class="row content"><div class="col-xs-12">
+                <img alt="decrease enegry" class="icon" src="{% static 'images/reports/decrease_engry.svg'  %}">
+                <h3>{{ compare_last_month_money|floatformat:0 }}%</h3>
+            </div></div>
+          </div>
+          <div class="col-xs-3">
+            <div class="row time-type"><div class="col-xs-12">
+                Overnight
+            </div></div>
+            <div class="row content"><div class="col-xs-12">
+                <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
+                <h3>${{ month_summary.money_usage|floatformat:3 }}</h3>
+            </div></div>
+            <div class="row content"><div class="col-xs-12">
+                <img alt="decrease enegry" class="icon" src="{% static 'images/reports/decrease_engry.svg'  %}">
+                <h3>{{ compare_last_month_money|floatformat:0 }}%</h3>
+            </div></div>
+          </div>
+          <div class="col-xs-3">
+            <button class="k-button" ng-click="win_report.center().open()">Open AJAX content</button>
+          </div>
         </div>
-        <div kendo-window="win1" k-title="'Calendar'" k-on-open="win1visible = true" k-on-close="win1visible = false">
-            <div kendo-calendar></div>
-        </div>
-      
-        <div kendo-window="win2" k-title="'AJAX content'"
-            k-width="600" k-height="200" k-visible="false"
+      </div>
+
+        <div kendo-window="win_report" k-title="'AJAX content'"
+            k-width="1000" k-height="1200" k-visible="false"
             k-content="{ url: 'http://127.0.0.1:8000/adidas/report/popup-report/2014/dec/' }"
             k-on-open="win2visible = true" k-on-close="win2visible = false"></div>
-      
+
     </div>
-    <style scoped>
-        .example {
-            min-height: 400px;
-        }
-    </style>
 </div>
 
 <script>
-      
 
   angular.module("KendoDemos", [ "kendo.directives" ])
       .controller("MyCtrl", function($scope){
