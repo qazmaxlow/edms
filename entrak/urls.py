@@ -6,12 +6,14 @@ from django.views.generic.base import RedirectView
 from entrak import settings
 
 from django.contrib import admin
+from trails import trails
 admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'entrak.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
+    url(r'^trails/', trails.CompanyAuditTrailsListView.as_view()),
 
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/', include(admin.site.urls)),
