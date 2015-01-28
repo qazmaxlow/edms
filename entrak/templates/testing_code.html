@@ -2,6 +2,8 @@
 
 {% load static %}
 {% block extra_head %}
+{{block.super}}
+
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
 <link href="{% static 'assets/kendoui/styles/kendo.default.min.css' %}" rel="stylesheet">
