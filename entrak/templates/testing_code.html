@@ -1,17 +1,35 @@
 {% extends "page_base.html" %}
 
+{% load i18n %}
 {% load static %}
+
+{% block ga_page_title %}report{% endblock %}
+
 {% block extra_head %}
 {{block.super}}
+{% get_current_language as LANGUAGE_CODE %}
 
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
 <link href="{% static 'assets/kendoui/styles/kendo.default.min.css' %}" rel="stylesheet">
 <!-- Because now using jquery v1.11 -->
-<script src="{% static 'assets/kendoui/js/jquery.min.js' %}"></script>
+<!-- <script src="{% static 'assets/kendoui/js/jquery.min.js' %}"></script> -->
 <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
 <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
 {% endblock %}
+
+{% block selected-menu-link-id %}menu-link-report{% endblock %}
+{% block system_menu_target_view %}report{% endblock %}
+{% block breadcrumb_target_view %}report{% endblock %}
+
+{% block page_title %}{% trans "THE REPORTS PAGE" %}{% endblock %}
+{% block page_subtitle %}{% trans "Get all your information here at the" %}{% endblock %}
+
+{% block extra_script %}
+{{block.super}}
+
+{% endblock %}
+
 {% block page_content %}
 <!-- <!DOCTYPE html> -->
 <!-- <html> -->
