@@ -69,7 +69,7 @@ class ExportCsvMixin(object):
 class CompanyAuditTrailsListView(ExportCsvMixin, ListView):
     csv_filename = 'audit_trails.csv'
     csv_fields = ['user', 'user.fullname', 'action_name', 'created_time']
-    template_name = 'companies/audit/trails/list.html'
+    template_name = 'companies/list.html'
     paginate_by = 30
     
    # @method_decorator(permission_required(required_level=USER_ROLE_ADMIN_LEVEL))
@@ -95,7 +95,7 @@ class CompanyAuditTrailsListView(ExportCsvMixin, ListView):
             context['user_ex'].append(User.objects.filter(system__code=company_syscode).exclude(username=u.username))
         company_syscode = '124'
         #company_syscode = self.kwargs['system_code']
-        company_system = System.objects.get(code=company_syscode)
-        context['company_system'] = company_system
+        #company_system = System.objects.get(code=company_syscode)
+        #context['company_system'] = company_system
 
         return context
