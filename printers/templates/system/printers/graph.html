@@ -57,7 +57,7 @@ function updateDonutChart(data, total, org_data) {
         ],
         colors: ['#FFAE20', '#EF7C56', '#35BC99', '#C94CD7', '#587EFF'],
         labelColors: ['#FFAE20', '#EF7C56', '#35BC99', '#C94CD7', '#587EFF'],
-        formatter: function (x) { return x + "%"}
+        formatter: function (x) { return x/org_data[0].value*100 + "%"}
     });
     donutChart.on('select', function(i, row){
         $("#selection-summary-value").text(Utils.formatWithCommas(Utils.fixedDecBaseOnVal(row.value)));
