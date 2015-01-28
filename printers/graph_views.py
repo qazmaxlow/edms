@@ -92,16 +92,20 @@ def show_measures_view(request, system_code):
         printer_readings[dt_key] = getattr(printer_measure, measure_field)
 
     # convert to another units
-    if unit_category_code != 'paper':
-        if has_detail_rate:
-            systems = System.get_systems_within_root(system_code)
-            sources = Source.objects(id__in=all_source_ids)
-            unit_rates = UnitRate.objects.filter(category_code=unit_category_code)
+    # if unit_category_code != 'paper':
+    #     if has_detail_rate:
+    #         systems = System.get_systems_within_root(system_code)
+    #         sources = Source.objects(id__in=all_source_ids)
+    #         unit_rates = UnitRate.objects.filter(category_code=unit_category_code)
 
-            calculation.transform_source_readings(source_readings, systems, sources, unit_rates, unit_category_code)
-        else:
-            for timestamp, val in printer_readings.items():
-                printer_readings[timestamp] *= global_rate
+    #         calculation.transform_source_readings(source_readings, systems, sources, unit_rates, unit_category_code)
+    #     else:
+    #         for timestamp, val in printer_readings.items():
+    #             printer_readings[timestamp] *= global_rate
+
+    for timestamp, readings in printer_readings.items():
+        for k, v in readings.items():
+            readings[k] = v * global_rate
 
     printers_response[0]['readings'] = printer_readings
     printers_response[0]['paper_type'] = paper_type
@@ -163,6 +167,10 @@ def show_measures_with_types_view(request, system_code):
             'b_n_w': printer_measure.one_side, 'one_side': printer_measure.one_side,
             'duplex': printer_measure.duplex,
             'papersize_a4': printer_measure.papersize_a4, 'papersize_non_a4': printer_measure.papersize_non_a4}
+
+    for timestamp, readings in printer_readings.items():
+        for k, v in readings.items():
+            readings[k] = v * global_rate
 
     # convert to another units
     # if unit_category_code != 'paper':
