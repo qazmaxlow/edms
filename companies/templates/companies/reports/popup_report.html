@@ -936,6 +936,27 @@ $(document).ready(function()  {
         report_start, report_end,
         '#weekend-info .calendar-info-container', report_readings, weekend_average_usage, isNotConcernFunc);
 
+    var combinedOvernightCurrentReadings = {};
+    $.each(report_data.groupedSourceInfos, function(groupIdx, info) {
+        $.each(info.overnightcurrentReadings, function(timestamp, readingVal) {
+            combinedOvernightCurrentReadings[timestamp] =
+                ((timestamp in combinedOvernightCurrentReadings) ? combinedOvernightCurrentReadings[timestamp] : 0) + readingVal;
+        });
+    });
+
+    var isNotConcernFunc = function(targetDt) {
+        return false;
+    }
+
+    var overnight_average_usage = 0;
+    $.each(report_data.groupedSourceInfos, function(groupIdx, info) {
+        overnight_average_usage += info['currentOvernightInfo'].average;
+    });
+
+    setCalendar(
+        report_start, report_end,
+        '#overnight-info .calendar-info-container', combinedOvernightCurrentReadings, overnight_average_usage, isNotConcernFunc);
+
     // $('#weekday-info .average-usage').html(average_usage);
 
     /*
