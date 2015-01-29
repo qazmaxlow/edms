@@ -741,7 +741,7 @@ $(function() {
     <div ng-controller="ReportController" class="container">
         <button ng-click="win2.close()" ng-show="win2visible">close</button>
         <div kendo-window="win_report"
-             k-width="1000" k-height="1200" k-visible="false" k-iframe="true"
+             k-width="1100" k-height="1400" k-visible="false" k-iframe="true"
              >
         </div>
 
@@ -925,10 +925,12 @@ $(function() {
       <div class="row content"><div class="col-xs-12">
           <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
           <h3>${{ monthly_money_sum|floatformat:3 }}</h3>
+          <p>total energy cost</p>
       </div></div>
       <div class="row content"><div class="col-xs-12">
           <img alt="decrease enegry" class="icon" src="{% static 'images/reports/decrease_engry.svg'  %}">
           <h3>{{ compare_last_month_money|floatformat:0 }}%</h3>
+          <p>compared to last month</p>
       </div></div>
     </div>
     <div class="col-xs-3">
