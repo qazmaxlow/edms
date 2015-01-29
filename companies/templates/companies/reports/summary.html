@@ -13,9 +13,9 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/report.css' %}">
-{% ifequal LANGUAGE_CODE 'zh-tw' %}
+
 <link rel="stylesheet" type="text/css" href="{% static 'css/report-zh-tw.css' %}">
-{% endifequal %}
+
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
 <script src="{% static 'js/moment-with-locales.js' %}"></script>
@@ -30,9 +30,9 @@
 
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
-<link href="{% static 'assets/kendoui/styles/kendo.default.min.css' %}" rel="stylesheet">
+<!-- <link href="{% static 'assets/kendoui/styles/kendo.default.min.css' %}" rel="stylesheet"> -->
 <!-- Because now using jquery v1.11 -->
-<script src="{% static 'assetskendoui/js/jquery.min.js' %}"></script>
+<!-- <script src="{% static 'assets/kendoui/js/jquery.min.js' %}"></script> -->
 <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
 <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
 
@@ -74,46 +74,46 @@
   }
 </style>
 
-<script type="text/javascript">
-// put here to share with extended template
-var report = {};
-report.reportGeneratorMultiLangTexts = {
-    'reportTypeMonthDtFormat': '{% trans "MMM YYYY" %}',
-    'reportTypeYearDtFormat': '{% trans "YYYY" %}',
-    'reportTypeCustomMonthDtFormat': '{% trans "D MMM YYYY, ddd" %}',
-    'reportTypeWeekDtFormat': '{% trans "D MMM YYYY, ddd" %}',
-    'genDtTo': '{% trans " to " %}',
-    'tons': '{% trans " tons" %}',
-    'tonsCo2': '{% blocktrans %} tons<span class="basic-info-col-unit"> CO<sub>2</sub></span>{% endblocktrans %}',
-    'reportTypeNameMonth': '{% trans "report_type_name_month" %}',
-    'reportTypeNameYear': '{% trans "report_type_name_year" %}',
-    'reportTypeNameQuarter': '{% trans "report_type_name_quarter" %}',
-    'reportTypeNameWeek': '{% trans "report_type_name_week" %}',
-    'more': '{% trans "more" %}',
-    'less': '{% trans "less" %}',
-    'overall': '{% trans "Overall: " %}',
-    'calendarMore': '{% trans "calendar_more" %}',
-    'calendarLess': '{% trans "calendar_less" %}',
-    'comparedTo': '{% trans "compared<br>to " %}',
-    'mSquare': '{% trans " m²" %}',
-    'pandas': '{% trans " pandas" %}',
-    'beginDtFormat': '{% trans "MMMM YYYY" %}',
-    'lastMonth': '{% trans "last month" %}',
-    'last_week': '{% trans "last week" %}',
-    'samePeriodLastYear': '{% trans "same period last year" %}',
-    'calendarUsageDtFormat': '{% trans "D MMM YYYY" %}',
-    'calendarTypeWeekday': '{% trans "Weekday" %}',
-    'calendarTypeWeekend': '{% trans "Weekend" %}',
-    'calendarTypeOvernight': '{% trans "Overnight" %}',
-    'calendarSplitWeekdays': '{% trans "Weekdays" %}',
-    'calendarSplitWeekends': '{% trans "Weekends" %}',
-    'calendarSplitDaytime': '{% trans "Daytime" %}',
-    'calendarSplitOvernight': '{% trans "Overnight" %}',
-    'overnightFootnoteFormat': '{% trans "hh:mmA" %}',
-    'comparePastLabelFormat': '{% trans "MMM D" %}',
-};
+<!-- <script type="text/javascript"> -->
+<!-- // put here to share with extended template -->
+<!-- var report = {}; -->
+<!-- report.reportGeneratorMultiLangTexts = { -->
+<!--     'reportTypeMonthDtFormat': '{% trans "MMM YYYY" %}', -->
+<!--     'reportTypeYearDtFormat': '{% trans "YYYY" %}', -->
+<!--     'reportTypeCustomMonthDtFormat': '{% trans "D MMM YYYY, ddd" %}', -->
+<!--     'reportTypeWeekDtFormat': '{% trans "D MMM YYYY, ddd" %}', -->
+<!--     'genDtTo': '{% trans " to " %}', -->
+<!--     'tons': '{% trans " tons" %}', -->
+<!--     'tonsCo2': '{% blocktrans %} tons<span class="basic-info-col-unit"> CO<sub>2</sub></span>{% endblocktrans %}', -->
+<!--     'reportTypeNameMonth': '{% trans "report_type_name_month" %}', -->
+<!--     'reportTypeNameYear': '{% trans "report_type_name_year" %}', -->
+<!--     'reportTypeNameQuarter': '{% trans "report_type_name_quarter" %}', -->
+<!--     'reportTypeNameWeek': '{% trans "report_type_name_week" %}', -->
+<!--     'more': '{% trans "more" %}', -->
+<!--     'less': '{% trans "less" %}', -->
+<!--     'overall': '{% trans "Overall: " %}', -->
+<!--     'calendarMore': '{% trans "calendar_more" %}', -->
+<!--     'calendarLess': '{% trans "calendar_less" %}', -->
+<!--     'comparedTo': '{% trans "compared<br>to " %}', -->
+<!--     'mSquare': '{% trans " m²" %}', -->
+<!--     'pandas': '{% trans " pandas" %}', -->
+<!--     'beginDtFormat': '{% trans "MMMM YYYY" %}', -->
+<!--     'lastMonth': '{% trans "last month" %}', -->
+<!--     'last_week': '{% trans "last week" %}', -->
+<!--     'samePeriodLastYear': '{% trans "same period last year" %}', -->
+<!--     'calendarUsageDtFormat': '{% trans "D MMM YYYY" %}', -->
+<!--     'calendarTypeWeekday': '{% trans "Weekday" %}', -->
+<!--     'calendarTypeWeekend': '{% trans "Weekend" %}', -->
+<!--     'calendarTypeOvernight': '{% trans "Overnight" %}', -->
+<!--     'calendarSplitWeekdays': '{% trans "Weekdays" %}', -->
+<!--     'calendarSplitWeekends': '{% trans "Weekends" %}', -->
+<!--     'calendarSplitDaytime': '{% trans "Daytime" %}', -->
+<!--     'calendarSplitOvernight': '{% trans "Overnight" %}', -->
+<!--     'overnightFootnoteFormat': '{% trans "hh:mmA" %}', -->
+<!--     'comparePastLabelFormat': '{% trans "MMM D" %}', -->
+<!-- }; -->
 
-</script>
+<!-- </script> -->
 {% endblock %}
 
 {% block selected-menu-link-id %}menu-link-report{% endblock %}
@@ -127,611 +127,8 @@ report.reportGeneratorMultiLangTexts = {
 {{block.super}}
 {% get_current_language as LANGUAGE_CODE %}
 
-{% include "report_inner_template.html" %}
-
 <script>
 
-function updateReportName() {
-    $(".report-name").text(report.reportGenerator.genReportName());
-}
-
-function updateBoundDt() {
-    if (report.currentReportType === ReportGenerator.REPORT_TYPE_YEAR) {
-        if (report.firstRecord.month() === 0 && report.firstRecord.date() === 1) {
-            report.boundStartDt = moment(report.firstRecord).startOf('year');
-        } else {
-            report.boundStartDt = moment(report.firstRecord).add(1, 'y').startOf('year');
-        }
-
-        report.boundEndDt = moment().tz(report.timezone).startOf('year');
-    } else if (report.currentReportType === ReportGenerator.REPORT_TYPE_QUARTER) {
-        if (report.firstRecord.date() === 1
-            && (report.firstRecord.month() === 0 || report.firstRecord.month() === 3
-                || report.firstRecord.month() === 6 || report.firstRecord.month() === 9)) {
-            report.boundStartDt = moment(report.firstRecord).startOf('quarter');
-        } else {
-            report.boundStartDt = moment(report.firstRecord).add(3, 'M').startOf('quarter');
-        }
-
-        report.boundEndDt = moment().tz(report.timezone).startOf('quarter');
-    } else if (report.currentReportType === ReportGenerator.REPORT_TYPE_WEEK) {
-        if (report.firstRecord.day() === 0) {
-            report.boundStartDt = moment(report.firstRecord).startOf('week');
-        } else {
-            report.boundStartDt = moment(report.firstRecord).add(1, 'w').startOf('week');
-        }
-
-        report.boundEndDt = moment().tz(report.timezone).startOf('week');
-    }
-}
-
-function isTargetDtValid(targetDt) {
-    return ( (targetDt.isAfter(report.boundStartDt) || targetDt.isSame(report.boundStartDt))
-        && targetDt.isBefore(report.boundEndDt));
-}
-
-function isCustomMonthDtValid(targetStartDt, targetEndDt) {
-    if (targetStartDt === undefined || targetEndDt === undefined
-        || targetStartDt === null || targetEndDt === null) {
-        return false;
-    }
-
-    var endBound = moment().tz(report.timezone).startOf('day');
-    var dtDiff = targetEndDt.diff(targetStartDt, 'days');
-    return ( (targetStartDt.isAfter(report.firstRecord) || targetStartDt.isSame(report.firstRecord))
-        && (targetStartDt.isBefore(endBound) || targetStartDt.isSame(endBound))
-        && (targetEndDt.isAfter(report.firstRecord) || targetEndDt.isSame(report.firstRecord))
-        && (targetEndDt.isBefore(endBound)|| targetEndDt.isSame(endBound))
-        && (dtDiff >= 25 && dtDiff <= 34) )
-}
-
-function canCreateCustomReport() {
-    var canCreate = true;
-    if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-        if (!(isCustomMonthDtValid(report.currentDt, report.customMonthEndDt))) {
-            canCreate = false;
-        }
-    } else {
-        if (!(isTargetDtValid(report.currentDt))) {
-            canCreate = false;
-        }
-    }
-
-    return canCreate;
-}
-
-function updateReportType(targetReportType) {
-    if (targetReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-        $("#panel-content").css('height', '723px');
-
-        $(".customize-detail-section .three-column-section").fadeIn();
-        $(".customize-detail-section .two-column-section").hide();
-    } else {
-        if (targetReportType === ReportGenerator.REPORT_TYPE_WEEK) {
-            $("#panel-content").css('height', '406px');
-            $("#customize-report .two-column-section").addClass('custom-week');
-        } else {
-            $("#panel-content").css('height', '362px');
-            $("#customize-report .two-column-section").removeClass('custom-week');
-        }
-
-        $(".customize-detail-section .two-column-section").fadeIn();
-        $(".customize-detail-section .three-column-section").hide();
-
-        if (targetReportType === ReportGenerator.REPORT_TYPE_WEEK) {
-            $(".two-column-section #week-datepicker").fadeIn();
-            $(".two-column-section .year-quarter-calendar").hide();
-        } else {
-            $(".two-column-section .year-quarter-calendar").fadeIn();
-            $(".two-column-section #week-datepicker").hide();
-        }
-    }
-
-    report.currentReportType = targetReportType;
-    updateBoundDt();
-
-    $(".datetime-result .from-date").text('');
-    $(".datetime-result .to-date").text('');
-    $(".create-report-btn").addClass("btn-disable");
-
-    if (targetReportType === ReportGenerator.REPORT_TYPE_YEAR) {
-        timeRangeYearSelected();
-    } else if (targetReportType === ReportGenerator.REPORT_TYPE_QUARTER) {
-        timeRangeQuarterSelected();
-    } else if (targetReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-        timeRangeCustomMonthSelected();
-    } else if (targetReportType === ReportGenerator.REPORT_TYPE_WEEK) {
-        timeRangeWeekSelected();
-    }
-}
-
-function timeRangeYearSelected() {
-    report.currentDt = moment(report.boundEndDt).subtract(1, 'y');
-
-    var targetYearEle = $(".year-quarter-calendar-head .target-year");
-    targetYearEle.text(report.currentDt.format('YYYY'));
-
-    $(".year-quarter-calendar-content").addClass("quarter-content-disable");
-
-    $(".year-quarter-calendar-head .prev-btn").off('click').click(function() {
-        var targetDt = moment(report.currentDt).subtract(1, 'y');
-        if (isTargetDtValid(targetDt)) {
-            report.currentDt.subtract(1, 'y');
-            targetYearEle.text(report.currentDt.format('YYYY'));
-            updateGenReportSection();
-        }
-    });
-    $(".year-quarter-calendar-head .next-btn").off('click').click(function() {
-        var targetDt = moment(report.currentDt).add(1, 'y');
-        if (isTargetDtValid(targetDt)) {
-            report.currentDt.add(1, 'y');
-            targetYearEle.text(report.currentDt.format('YYYY'));
-            updateGenReportSection();
-        }
-    });
-
-    updateGenReportSection();
-}
-
-function updateSelectedQuarter() {
-    $(".year-quarter-calendar-content>div").removeClass('selected-quarter');
-    var quarterIdx = report.currentDt.month()/3;
-    $($(".year-quarter-calendar-content>div")[quarterIdx]).addClass('selected-quarter');
-
-    $(".year-quarter-calendar-content>div").each(function(btnIdx) {
-        var btnDt = moment(report.currentDt).month(btnIdx*3);
-        if (isTargetDtValid(btnDt)) {
-            $(this).removeClass('invalid-quarter');
-        } else {
-            $(this).addClass('invalid-quarter');
-        }
-    });
-}
-
-function timeRangeQuarterSelected() {
-    report.currentDt = moment(report.boundEndDt).subtract(3, 'M');
-
-    var targetYearEle = $(".year-quarter-calendar-head .target-year");
-    targetYearEle.text(report.currentDt.format('YYYY'));
-    updateSelectedQuarter();
-
-    $(".year-quarter-calendar-content").removeClass("quarter-content-disable");
-
-    $(".year-quarter-calendar-head .prev-btn").off('click').click(function() {
-        var targetDt = moment(report.currentDt).subtract(1, 'y');
-        if (targetDt.year() >= report.boundStartDt.year()) {
-            report.currentDt.subtract(1, 'y');
-            while(report.currentDt.isBefore(report.boundStartDt)) {
-                report.currentDt.add(3, 'M');
-            }
-            targetYearEle.text(report.currentDt.format('YYYY'));
-            updateSelectedQuarter();
-            updateGenReportSection();
-        }
-    });
-    $(".year-quarter-calendar-head .next-btn").off('click').click(function() {
-        var targetDt = moment(report.currentDt).add(1, 'y');
-        if (targetDt.year() < report.boundEndDt.year()
-            || (targetDt.year() === report.boundEndDt.year() && report.boundEndDt.month() !== 0) ) {
-            report.currentDt.add(1, 'y');
-            while(!(report.currentDt.isBefore(report.boundEndDt))) {
-                report.currentDt.subtract(3, 'M');
-            }
-            targetYearEle.text(report.currentDt.format('YYYY'));
-            updateSelectedQuarter();
-            updateGenReportSection();
-        }
-    });
-
-    updateGenReportSection();
-}
-
-function timeRangeCustomMonthSelected() {
-    $(".three-column-section .report-datepicker").datepicker("destroy");
-    var datepickerOptions = {
-    };
-    $("#month-start-datepicker").datepicker($.extend({
-        minDate: report.firstRecord.toDate(),
-        maxDate: "-26d",
-        onSelect: function(dateText, inst) {
-            var selectDt = moment($(this).datepicker('getDate'));
-            var boundMinDate = moment(selectDt).add(25, 'd');
-            if (boundMinDate.isAfter(moment(), 'day')) {
-                boundMinDate = moment().startOf('day');
-            }
-            var boundMaxDate = moment(selectDt).add(34, 'd');
-            if (boundMaxDate.isAfter(moment(), 'day')) {
-                boundMaxDate = moment().startOf('day');
-            }
-            $("#month-end-datepicker").datepicker("option", "minDate", boundMinDate.toDate());
-            $("#month-end-datepicker").datepicker("option", "maxDate", boundMaxDate.toDate());
-
-            report.currentDt = selectDt;
-            updateGenReportSection();
-        },
-    }, datepickerOptions));
-    $("#month-end-datepicker").datepicker($.extend({
-        minDate: moment(report.firstRecord).add(25, 'd').toDate(),
-        maxDate: "-0d",
-        onSelect: function(dateText, inst) {
-            report.customMonthEndDt = moment($(this).datepicker('getDate'));
-            updateGenReportSection();
-        },
-    }, datepickerOptions));
-}
-
-function selectWholeWeek() {
-    window.setTimeout(function () {
-        $('#week-datepicker').find('.ui-datepicker-current-day a').addClass('ui-state-active')
-    }, 1);
-}
-
-function setWeekHoverEffect() {
-    window.setTimeout(function () {
-        $('#week-datepicker .ui-datepicker-calendar tr').on("mousemove", function() {
-            $(this).find('td a').addClass('ui-state-hover');
-        });
-        $('#week-datepicker .ui-datepicker-calendar tr').on("mouseleave", function() {
-            $(this).find('td a').removeClass('ui-state-hover');
-        });
-    }, 1);
-}
-
-function timeRangeWeekSelected() {
-    var weekStartDate, weekEndDate;
-    $("#week-datepicker").datepicker('destroy');
-    $("#week-datepicker").datepicker({
-        showOtherMonths: true,
-        selectOtherMonths: true,
-        minDate: report.boundStartDt.toDate(),
-        maxDate: moment(report.boundEndDt).subtract(1, 'd').toDate(),
-        onSelect: function(dateText, inst) {
-            var selectDt = moment($(this).datepicker('getDate')).startOf('week');
-            weekStartDate = selectDt.toDate();
-            weekEndDate = moment(selectDt).endOf('week').toDate();
-            selectWholeWeek();
-
-            report.currentDt = selectDt;
-            updateGenReportSection();
-            setWeekHoverEffect();
-        },
-        beforeShowDay: function(date) {
-            var cssClass = '';
-            if(date >= weekStartDate && date <= weekEndDate) {
-                cssClass = 'ui-datepicker-current-day';
-            }
-            return [true, cssClass];
-        },
-        onChangeMonthYear: function(year, month, inst) {
-            selectWholeWeek();
-            setWeekHoverEffect();
-        }
-    });
-
-    setWeekHoverEffect();
-}
-
-function updateGenReportSection() {
-    var fromText, toText;
-    if (report.currentReportType === ReportGenerator.REPORT_TYPE_YEAR) {
-        fromText = report.currentDt.format('{% trans "YYYY" %}');
-        toText = report.reportGenerator.genEndDt(report.currentDt, report.currentReportType).format('{% trans "YYYY" %}');
-    } else if (report.currentReportType === ReportGenerator.REPORT_TYPE_QUARTER) {
-        fromText = report.currentDt.format('{% trans "YYYY MMMM" %}');
-        toText = report.reportGenerator.genEndDt(report.currentDt, report.currentReportType).format('{% trans "YYYY MMMM" %}');
-    } else if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-        fromText = moment($("#month-start-datepicker").datepicker("getDate")).format('{% trans "D MMM YYYY, ddd" %}');
-        toText = moment($("#month-end-datepicker").datepicker("getDate")).format('{% trans "D MMM YYYY, ddd" %}');
-    } else if (report.currentReportType === ReportGenerator.REPORT_TYPE_WEEK) {
-        fromText = report.currentDt.format('{% trans "D MMM YYYY, ddd" %}');
-        toText = moment(report.currentDt).add(1, 'w').format('{% trans "D MMM YYYY, ddd" %}');
-    }
-    $(".datetime-result .from-date").text(fromText);
-    $(".datetime-result .to-date").text(toText);
-
-    updateCreateBtnStatus();
-}
-
-function updateCreateBtnStatus() {
-    var createBtnEnable = canCreateCustomReport();
-
-    if (createBtnEnable) {
-        $(".create-report-btn").removeClass("btn-disable");
-    } else {
-        $(".create-report-btn").addClass("btn-disable");
-    }
-}
-
-function dlRawDataSelected() {
-    $(".datetime-result .from-date").text('');
-    $(".datetime-result .to-date").text('');
-    $(".create-report-btn").addClass("btn-disable");
-
-    $('.unit-container>span').removeClass('selected-unit')
-    $('.unit-container>span:eq(0)').addClass('selected-unit');
-
-    report.dlRawDataStartDt = null;
-    report.dlRawDataEndDt = null;
-    report.dlRawDataUnit = 'kwh';
-
-    $("#download-raw-data .report-datepicker").datepicker('destroy');
-    $("#dl-data-start-datepicker").datepicker({
-        minDate: report.firstRecord.toDate(),
-        maxDate: '-1d',
-        onSelect: function(dateText, inst) {
-            var selectDt = moment($(this).datepicker('getDate')).tz(report.timezone);
-            var boundMinDate = moment(selectDt).add(1, 'd').toDate();
-            $("#dl-data-end-datepicker").datepicker("option", "minDate", boundMinDate);
-
-            if (report.dlRawDataEndDt !== null
-                && (selectDt.isSame(report.dlRawDataEndDt)) || selectDt.isAfter(report.dlRawDataEndDt)) {
-                var endDt = moment($("#dl-data-end-datepicker").datepicker('getDate')).tz(report.timezone);
-                report.dlRawDataEndDt = endDt;
-                $(".datetime-result .to-date").text(endDt.format('{% trans "D MMM YYYY, ddd" %}'));
-            }
-
-            report.dlRawDataStartDt = selectDt;
-            $(".datetime-result .from-date").text(selectDt.format('{% trans "D MMM YYYY, ddd" %}'));
-
-            updateDlRawBtnStatus();
-        },
-    });
-    $("#dl-data-end-datepicker").datepicker({
-        minDate: report.firstRecord.toDate(),
-        maxDate: '0d',
-        onSelect: function(dateText, inst) {
-            var selectDt = moment($(this).datepicker('getDate')).tz(report.timezone);
-            report.dlRawDataEndDt = selectDt;
-            $(".datetime-result .to-date").text(selectDt.format('{% trans "D MMM YYYY, ddd" %}'));
-
-            updateDlRawBtnStatus();
-        },
-    });
-}
-
-function canDlRawData() {
-    return (report.dlRawDataStartDt !== null
-        && report.dlRawDataEndDt !== null
-        && report.dlRawDataEndDt.isAfter(report.dlRawDataStartDt))
-}
-
-function updateDlRawBtnStatus() {
-    if (canDlRawData()) {
-        $(".create-report-btn").removeClass("btn-disable");
-    } else {
-        $(".create-report-btn").addClass("btn-disable");
-    }
-}
-
-function setDetailShow(isShow) {
-    if (isShow) {
-        $(".hide-details-btn").removeClass('btn-down');
-        $(".detail-container").show();
-    } else {
-        $(".hide-details-btn").addClass('btn-down');
-        $(".detail-container").hide();
-    }
-}
-
-$(function() {
-    setupAjaxForCsrf($.cookie('csrftoken'));
-    report.langCode = '{{LANGUAGE_CODE}}';
-    moment.locale(report.langCode);
-
-    report.entrakSystem = new EntrakSystem();
-    report.entrakSystem.langCode = report.langCode;
-    report.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
-
-    report.currentReportType = ReportGenerator.REPORT_TYPE_MONTH;
-    report.timezone = '{{systems.0.timezone}}';
-    report.firstRecord = moment.unix(report.entrakSystem.systemTree.data.firstRecord).tz(report.timezone);
-    {% if monthly_summary|length >= 1 %}
-    report.currentDt =  moment.unix({{monthly_summary.0.timestamp}}).tz(report.timezone);
-    {% endif %}
-
-    $(".report-component").css("opacity", 0.0);
-
-    report.reportGenerator = new ReportGenerator(report.entrakSystem.systemTree, report.timezone,
-        ReportGenerator.REPORT_TYPE_MONTH, report.reportGeneratorMultiLangTexts);
-    report.reportGenerator.langCode = '{{LANGUAGE_CODE}}';
-    if ("currentDt" in report) {
-        report.reportGenerator.updateDtInfo(report.currentDt, null);
-        updateReportName();
-
-        report.reportGenerator.getReportData(function(data) {
-            report.reportGenerator.assignData(data);
-            setDetailShow(true);
-            report.reportGenerator.generateFullReport();
-            setDetailShow(false);
-            $(".report-component").fadeTo(600, 1.0);
-        });
-    }
-
-    $(".panel-header-left-menu h3").each(function(btnIdx) {
-        $(this).click({btnIdx: btnIdx}, function(event) {
-            var btnIdx = event.data.btnIdx;
-
-            $(".panel-header-left-menu h3").removeClass('selected-tab');
-            $(this).addClass('selected-tab');
-
-            var panelContentHeight;
-            if (btnIdx === 0) {
-                panelContentHeight = '162px';
-            } else if (btnIdx === 1) {
-                panelContentHeight = '362px';
-                updateReportType(ReportGenerator.REPORT_TYPE_YEAR);
-            } else if (btnIdx === 2) {
-                panelContentHeight = '608px';
-                dlRawDataSelected();
-            }
-            $("#panel-content").css("height", panelContentHeight);
-
-            var targetPanel = $($('#panel-content>div')[btnIdx]);
-            if (targetPanel.css("display") == 'none') {
-                $('#panel-content>div').fadeOut();
-                targetPanel.fadeIn();
-            }
-        });
-    });
-    $(".panel-header-left-menu h3:eq(0)").click();
-
-    var last_b = null;
-    $(".time-range-section span").each(function(btnIdx) {
-        if (btnIdx == 0) {
-            $(this).addClass('active');
-            last_b = $(this);
-        }
-
-        $(this).click({btnIdx: btnIdx}, function(event) {
-            if(last_b) {
-                last_b.removeClass('active');
-            }
-            $(this).addClass('active');
-            last_b = $(this);
-            var btnIdx = event.data.btnIdx;
-            var targetReportType;
-            if (btnIdx === 0) {
-                targetReportType = ReportGenerator.REPORT_TYPE_YEAR;
-            } else if(btnIdx === 1) {
-                targetReportType = ReportGenerator.REPORT_TYPE_QUARTER;
-            } else if(btnIdx === 2) {
-                targetReportType = ReportGenerator.REPORT_TYPE_CUSTOM_MONTH;
-            } else if(btnIdx===3) {
-                targetReportType = ReportGenerator.REPORT_TYPE_WEEK;
-            }
-
-            if (targetReportType !== report.currentReportType) {
-                updateReportType(targetReportType);
-            }
-        });
-    });
-
-    $(".summary-date-col").click(function() {
-        $(".report-component").fadeTo(600, 0.0);
-        var targetDt = moment.unix(parseInt($(this).attr("dt_timestamp")));
-        report.reportGenerator.reportType = report.currentReportType = ReportGenerator.REPORT_TYPE_MONTH;
-        report.currentDt = targetDt;
-        report.reportGenerator.updateDtInfo(report.currentDt, null);
-        report.reportGenerator.getReportData(function(data) {
-            report.reportGenerator.assignData(data);
-            setDetailShow(true);
-            report.reportGenerator.generateFullReport();
-            setDetailShow(false);
-            $(".report-component").fadeTo(600, 1.0);
-        });
-        updateReportName();
-    });
-
-    $(".hide-details-btn").click(function() {
-        $(this).toggleClass('btn-down');
-        if ($(this).hasClass('btn-down')) {
-            $(this).text('{% trans "SHOW DETAILS" %}');
-        } else {
-            $(this).text('{% trans "HIDE DETAILS" %}');
-        }
-        $(this).parent().parent().find(".detail-container").slideToggle();
-    });
-
-    $(".save-report-btn, .bottom-save-report-btn").click(function() {
-        var start_timestamp = report.currentDt.unix();
-        var end_timestamp = 0;
-        var report_type = report.currentReportType;
-
-        if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-            end_timestamp = moment(report.customMonthEndDt).add(1, 'd').unix();
-        }
-
-        var url = 'https://{{ request.get_host }}/{{ systems.0.code }}/report/' + start_timestamp + '/' + end_timestamp + '/' + report_type + '/download/';
-
-        document.getElementById('save-report-spinner').style.display='';
-        var f = document.createElement('iframe');
-        f.onload=function(){document.getElementById('save-report-spinner').style.display='none';}
-        f.src = url;
-        document.body.appendChild(f);
-    });
-
-    $(".bottom-save-summary-report-btn").click(function() {
-        var start_timestamp = report.currentDt.unix();
-        var end_timestamp = 0;
-        var report_type = report.currentReportType;
-
-        if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-            end_timestamp = moment(report.customMonthEndDt).add(1, 'd').unix();
-        }
-
-        var url = 'http://{{ request.get_host }}/{{ systems.0.code }}/summary-report/' + start_timestamp + '/' + end_timestamp + '/' + report_type + '/download/';
-
-        document.getElementById('save-summary-report-spinner').style.display='';
-        var f = document.createElement('iframe');
-        f.onload=function(){document.getElementById('save-summary-report-spinner').style.display='none';}
-        f.src = url;
-        document.body.appendChild(f);
-    });
-
-
-    $("#customize-report .create-report-btn").click(function() {
-        if (!(canCreateCustomReport())) {
-            return;
-        }
-
-        report.reportGenerator.reportType = report.currentReportType;
-        if (report.currentReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-            report.reportGenerator.updateDtInfo(report.currentDt, report.customMonthEndDt);
-        } else {
-            report.reportGenerator.updateDtInfo(report.currentDt, null);
-        }
-
-        $(".report-component").fadeTo(600, 0.0);
-        updateReportName();
-        report.reportGenerator.getReportData(function(data) {
-            report.reportGenerator.assignData(data);
-            setDetailShow(true);
-            report.reportGenerator.generateFullReport();
-            setDetailShow(false);
-            $(".report-component").fadeTo(600, 1.0);
-        });
-    });
-
-    $(".year-quarter-calendar-content>div").each(function(btnIdx) {
-        $(this).click({btnIdx: btnIdx}, function(event) {
-            var btnIdx = event.data.btnIdx;
-            var targetDt = moment(report.currentDt).month(btnIdx*3);
-            if (isTargetDtValid(targetDt)) {
-                $(".year-quarter-calendar-content>div").removeClass('selected-quarter');
-                $(this).addClass('selected-quarter');
-                report.currentDt = targetDt;
-                updateGenReportSection();
-            }
-        });
-    });
-
-    $(".unit-container>span").each(function(btnIdx) {
-        $(this).click({btnIdx: btnIdx}, function(event) {
-            var btnIdx = event.data.btnIdx;
-            if (btnIdx === 0) {
-                report.dlRawDataUnit = 'kwh';
-            } else if (btnIdx === 1) {
-                report.dlRawDataUnit = 'money';
-            } else if (btnIdx === 2) {
-                report.dlRawDataUnit = 'co2';
-            } else if (btnIdx === 3) {
-                report.dlRawDataUnit = 'all';
-            }
-
-            $(".unit-container>span").removeClass('selected-unit');
-            $(this).addClass('selected-unit');
-        });
-    });
-
-    $("#download-raw-data .create-report-btn").click(function() {
-        if (canDlRawData()) {
-            $(".download-raw-data-form input[name='start_timestamp']").attr("value", report.dlRawDataStartDt.unix());
-            $(".download-raw-data-form input[name='end_timestamp']").attr("value", report.dlRawDataEndDt.unix());
-            $(".download-raw-data-form input[name='unit']").attr("value", report.dlRawDataUnit);
-            $(".download-raw-data-form").submit();
-        }
-    });
-});
 </script>
 {% endblock %}
 
@@ -739,13 +136,10 @@ $(function() {
 
     <div ng-app="Entrak">
     <div ng-controller="ReportController" class="container">
-        <button ng-click="win2.close()" ng-show="win2visible">close</button>
-        <div kendo-window="win2"
-            k-title="false"
-            k-width="600" k-height="200" k-visible="false"
-            k-on-open="win2visible = true" k-on-close="win2visible = false">
+        <div kendo-window="win_report"
+             k-width="1600" k-height="800" k-visible="false" k-iframe="true"
+             >
         </div>
-
 
 <div class="panel-component">
     <div class="drop-down-panel-header">
@@ -756,7 +150,7 @@ $(function() {
         </div>
     </div>
 
-    <div id="panel-content">
+    <div id="xpanel-content">
         <div id="monthly-report">
 
             <div id="monthly-report-content">
@@ -782,97 +176,7 @@ $(function() {
             </div>
         </div>
 
-        <div id="customize-report">
-            <div class="customize-section-title"><span>1</span>{% trans "Select your time range" %}</div>
-            <hr>
-            <div class="time-range-section">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <div class="customize-detail-section">
-                <div class="two-column-section">
-                    <div>
-                        <div class="customize-section-title"><span>2</span>{% trans "Select your time period" %}</div>
-                        <hr>
-                        <div class="customize-calendar-section">
-                            <div class="year-quarter-calendar">
-                                <div class="year-quarter-calendar-head">
-                                    <span class="prev-btn">◀</span><span class="target-year"></span><span class="next-btn">▶</span>
-                                </div>
-                                <div class="year-quarter-calendar-content">
-                                    <div>
-                                        <div class="quarter-idx">Q1</div>
-                                        <div class="quarter-month"><span>Jan</span><span>Feb</span><span>Mar</span></div>
-                                    </div>
-                                    <div>
-                                        <div class="quarter-idx">Q2</div>
-                                        <div class="quarter-month"><span>Apr</span><span>May</span><span>Jun</span></div>
-                                    </div>
-                                    <div>
-                                        <div class="quarter-idx">Q3</div>
-                                        <div class="quarter-month"><span>Jul</span><span>Aug</span><span>Sep</span></div>
-                                    </div>
-                                    <div>
-                                        <div class="quarter-idx">Q4</div>
-                                        <div class="quarter-month"><span>Oct</span><span>Nov</span><span>Dec</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="week-datepicker" class="report-datepicker"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="customize-section-title section-three-title"><span>3</span>{% trans "Create your report" %}</div>
-                        <hr>
-                        <div class="create-report-section">
-                            <div class="datetime-result">
-                                <div class="datetime-result-title">{% trans "Energy data - kWh" %}</div>
-                                <div class="datetime-result-from-to">
-                                    <div><span>{% trans "From:" %}</span><span class="from-date"></span></div>
-                                    <div><span>{% trans "To:" %}</span><span class="to-date"></span></div>
-                                </div>
-                                <hr>
-                                <div class="create-report-btn">{% trans "Create Report" %}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="three-column-section">
-                    <div class="customize-section-title"><span>2</span>{% trans "Select your time period" %}</div>
-                    <hr>
-                    <div class="select-time-period-section">
-                        <div>{% trans "Select the start and end date of your monthly electricity bill." %}</div>
-                        <div>{% trans "If you wish to view a standard calendar month, click on the Monthly Report tab at the top of the page" %}</div>
-                        <hr>
-                        <div>
-                            <div class="report-datepicker-container">
-                                <div>{% trans "Choose your start date" %}</div>
-                                <div id="month-start-datepicker" class="report-datepicker"></div>
-                            </div>
-                            <div class="report-datepicker-container">
-                                <div>{% trans "Choose your end date" %}</div>
-                                <div id="month-end-datepicker" class="report-datepicker"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="customize-section-title"><span>3</span>{% trans "Create your report" %}</div>
-                    <hr>
-                    <div class="create-report-section">
-                        <div class="datetime-result">
-                            <div class="datetime-result-title">{% trans "Energy data - kWh" %}</div>
-                            <div class="datetime-result-from-to">
-                                <div><span>{% trans "From:" %}</span><span class="from-date"></span></div>
-                                <div><span>{% trans "To:" %}</span><span class="to-date"></span></div>
-                            </div>
-                            <hr>
-                            <div class="create-report-btn">{% trans "Create Report" %}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
 
         <div id="download-raw-data">
             <div class="dl-data-title">{% trans "Here you can download your energy use data to files in .csv format." %}</div>
@@ -917,7 +221,7 @@ $(function() {
     </div>
 </div>
 
-<div class="panel-component report-summary text-center">
+<div class="report-summary text-center">
   <div class="row">
     <div class="col-xs-3">
       <div class="row time-type"><div class="col-xs-12">
@@ -965,71 +269,15 @@ $(function() {
 </div>
 
 
-<div class="report-head">
-        <div class="system-name">{{systems.0|get_system_full_name:LANGUAGE_CODE}}</div>
-        <hr class="title-separator">
-        <div class="report-name"></div>
-        <div class="save-report-btn">{% trans "Save Report" %}</div>
-        <div class="save-summary-report-btn">{% trans "Save Summary Report" %}</div>
-        <hr class="head-separator">
-</div>
-
-
-{% include "report_main_content.html" %}
-<!-- use table because the CSS code done not well -->
-<section id="download-reports">
-<table class="centered-table" align="center">
-<tbody>
-<tr>
-  <td>
-  <div class="bottom-save-report-btn">
-    <img alt="detailed report" src="{% static 'images/report/download_detail_report.png' %}">
-    <span>{% trans "Download" %}</span></div>
-  <div id="save-report-spinner" style="display:none;">
-    <div class="load-container load-spinner"><div class="loader">Loading...</div></div>
-    <span>Downloading</span>
-  </div>
-  </td>
-</tr>
-</tbody>
-</table>
-</section>
-
-<div class="bottom-space"></div>
-
-<form class="download-pdf-form" action="{% url 'report_pdf' system_code=systems.0.code %}" method="POST">{% csrf_token %}
-        <input name="start_timestamp" value="">
-        <input name="end_timestamp" value="">
-        <input name="report_type" value="">
-        <input name="report_layout" value="">
-</form>
-
-<form class="download-raw-data-form" action="{% url 'export_data' system_code=systems.0.code %}" method="POST">{% csrf_token %}
-        <input name="start_timestamp" value="">
-        <input name="end_timestamp" value="">
-        <input name="unit" value="">
-</form>
-
 </div></div>
 <!-- end ng-app -->
 <script>
     angular.module("Entrak", [ "kendo.directives" ])
         .controller("ReportController", function($scope){
             $scope.viewReport = function(year, month) {
-                $scope.win2.refresh({ url: '../report/popup-report/' + year + '/' + month + '/'});
-                $scope.win2.open();
+                $scope.win_report.refresh({ url: '../report/popup-report/' + year + '/' + month + '/'});
+                $scope.win_report.open();
             }
         })
-
-$(document).ready(function()  {
-    $('#monthly-report-content div').each(function() {
-        var a = $(this).find('.menu-target:first');
-        var m = $(this).find('.menu-content:first').kendoContextMenu({
-            orientation: 'horizontal',
-            target: a,
-            showOn: 'click'
-        });
-    });
-});
 </script>
 {% endblock %}
