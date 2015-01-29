@@ -18,6 +18,44 @@
 <!-- <script src="{% static 'assets/kendoui/js/jquery.min.js' %}"></script> -->
 <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
 <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
+
+<!-- hack for combining bootstrap -->
+<style>
+  #menu-links li:hover, #menu-links li.menu-links-selected {
+     height: auto;
+  }
+
+  .panel-header-left-menu h3 {
+    margin: 0;
+    height: 33px;
+  }
+
+</style>
+
+<style>
+  .report-summary .time-type {
+    color: #44586a;
+    font-weight: 600;
+    font-size: 3 rem;
+    padding: 25px 0;
+    border-bottom: #e8ebeb solid 3px;
+  }
+
+  .report-summary .content {
+    background-color: #eff2f2;
+  }
+
+  .report-summary .col-xs-3 {
+    background-color: white;
+    border-left: #e8ebeb solid 3px;
+  }
+
+  .report-summary img.icon {
+    padding: 20px;
+    height: 120px;
+    width: 120px;
+  }
+</style>
 {% endblock %}
 
 {% block selected-menu-link-id %}menu-link-report{% endblock %}
@@ -37,7 +75,7 @@
 <div id="example" ng-app="KendoDemos">
     <div ng-controller="MyCtrl">
 
-      <div class="xpanel-component xreport-summary text-center">
+      <div class="report-summary text-center">
         <div class="row">
           <div class="col-xs-3">
             <div class="row time-type"><div class="col-xs-12">
