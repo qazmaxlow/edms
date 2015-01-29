@@ -533,6 +533,9 @@ def popup_report_view(request, system_code, year, month):
 
     m['overnight'] = overnight_usage
 
+    # holidays
+    m['holidays_json'] = json.dumps(report_data['holidays'])
+
     return render(request, 'companies/reports/popup_report.html', m)
 
 

@@ -901,7 +901,7 @@ $(document).ready(function()  {
         average_usage += info['currentWeekdayInfo'].average;
     });
 
-    var holidays = {{ holidays_json|safe }}
+    var holidays = {{ holidays_json|safe }};
 
     // for weekday report
     var isNotConcernFunc = function(targetDt) {
@@ -919,6 +919,24 @@ $(document).ready(function()  {
         '#weekday-info .calendar-info-container', report_readings, average_usage, isNotConcernFunc);
 
     $('#weekday-info .average-usage').html(average_usage);
+
+
+    var weekend_average_usage = 0;
+    $.each(report_data.groupedSourceInfos, function(groupIdx, info) {
+        weekend_average_usage += info['currentWeekendInfo'].average;
+    });
+
+    var isNotConcernFunc = function(targetDt) {
+        return (targetDt.day() >= 1
+            && targetDt.day() <= 5
+            && ($.inArray(targetDt.format("YYYY-MM-DD"), holidays) == -1))
+    }
+
+    setCalendar(
+        report_start, report_end,
+        '#weekend-info .calendar-info-container', report_readings, weekend_average_usage, isNotConcernFunc);
+
+    // $('#weekday-info .average-usage').html(average_usage);
 
     /*
     var overnight_readings = {};
