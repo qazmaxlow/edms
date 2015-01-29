@@ -722,6 +722,7 @@
     };
 
             $scope.lineOptions = {
+                width: 1000,
         title: {
             text: "WHEN DID WE ACHIEVE OUR SAVINGS?",
             color: "#354960"
@@ -900,10 +901,13 @@ $(document).ready(function()  {
         average_usage += info['currentWeekdayInfo'].average;
     });
 
+    var holidays = {{ holidays_json|safe }}
+
     // for weekday report
     var isNotConcernFunc = function(targetDt) {
         return (targetDt.day() == 0
-            || targetDt.day() == 6)
+            || targetDt.day() == 6
+            || ($.inArray(targetDt.format("YYYY-MM-DD"), holidays) != -1))
             // || ($.inArray(targetDt.format("YYYY-MM-DD"), reportGenThis.holidays) != -1))
     }
 
