@@ -12,10 +12,8 @@
 {% get_current_language as LANGUAGE_CODE %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/report.css' %}">
-{% ifequal LANGUAGE_CODE 'zh-tw' %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/report-zh-tw.css' %}">
-{% endifequal %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/summary_report.css' %}">
+
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
 <script src="{% static 'js/moment-with-locales.js' %}"></script>
@@ -747,16 +745,74 @@ $(function() {
 
 
 <div class="panel-component">
-    <div class="drop-down-panel-header">
+    <div class="row drop-down-panel-header">
         <div class="panel-header-left-menu">
             <h3 panel="monthly-report">
                 {% trans "Monthly Report" %}</h3><h3 panel="customize-report">
                 {% trans "Customize Report" %}</h3><h3 panel="download-data">{% trans "Download Data" %}</h3>
         </div>
     </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <p>
+          <kendo-button sprite-css-class="'k-icon k-i-funnel'">Week</kendo-button>
+          <kendo-button icon="'funnel-clear'">Month</kendo-button>
+          <kendo-button sprite-css-class="'k-icon k-i-refresh'">Quarter</kendo-button>
+          <kendo-button sprite-css-class="'k-icon k-i-refresh'">Year</kendo-button>
+        </p>
+      </div>
+    </div>
 
     <div id="panel-content">
         <div id="monthly-report">
+          <div class="report-summary text-center">
+  <div class="row">
+    <div class="col-xs-3">
+      <div class="row time-type"><div class="col-xs-12">
+          Monthly
+      </div></div>
+      <div class="row content"><div class="col-xs-12">
+          <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
+          <h3>${{ monthly_money_sum|floatformat:3 }}</h3>
+          <p>total energy cost</p>
+      </div></div>
+      <div class="row content"><div class="col-xs-12">
+          <img alt="decrease enegry" class="icon" src="{% static 'images/reports/decrease_engry.svg'  %}">
+          <h3>{{ compare_last_month_money|floatformat:0 }}%</h3>
+          <p>compared to last month</p>
+      </div></div>
+    </div>
+    <div class="col-xs-3">
+      <div class="row time-type"><div class="col-xs-12">
+          Weekdays
+      </div></div>
+      <div class="row content"><div class="col-xs-12">
+          <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
+          <h3>${{ month_summary.money_usage|floatformat:3 }}</h3>
+      </div></div>
+      <div class="row content"><div class="col-xs-12">
+          <img alt="decrease enegry" class="icon" src="{% static 'images/reports/decrease_engry.svg'  %}">
+          <h3>{{ compare_last_month_money|floatformat:0 }}%</h3>
+      </div></div>
+    </div>
+    <div class="col-xs-3">
+      <div class="row time-type"><div class="col-xs-12">
+          Overnight
+      </div></div>
+      <div class="row content"><div class="col-xs-12">
+          <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
+          <h3>${{ month_summary.money_usage|floatformat:3 }}</h3>
+      </div></div>
+      <div class="row content"><div class="col-xs-12">
+          <img alt="decrease enegry" class="icon" src="{% static 'images/reports/decrease_engry.svg'  %}">
+          <h3>{{ compare_last_month_money|floatformat:0 }}%</h3>
+      </div></div>
+    </div>
+    <div class="col-xs-3">
+      <button class="k-button" ng-click="viewReport(2014, 'dec')">Open AJAX content</button>
+    </div>
+  </div>
+</div>
 
             <div id="monthly-report-content">
                 {% for summary in monthly_summary %}
@@ -916,54 +972,7 @@ $(function() {
     </div>
 </div>
 
-<div class="panel-component report-summary text-center">
-  <div class="row">
-    <div class="col-xs-3">
-      <div class="row time-type"><div class="col-xs-12">
-          Monthly
-      </div></div>
-      <div class="row content"><div class="col-xs-12">
-          <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
-          <h3>${{ monthly_money_sum|floatformat:3 }}</h3>
-          <p>total energy cost</p>
-      </div></div>
-      <div class="row content"><div class="col-xs-12">
-          <img alt="decrease enegry" class="icon" src="{% static 'images/reports/decrease_engry.svg'  %}">
-          <h3>{{ compare_last_month_money|floatformat:0 }}%</h3>
-          <p>compared to last month</p>
-      </div></div>
-    </div>
-    <div class="col-xs-3">
-      <div class="row time-type"><div class="col-xs-12">
-          Weekdays
-      </div></div>
-      <div class="row content"><div class="col-xs-12">
-          <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
-          <h3>${{ month_summary.money_usage|floatformat:3 }}</h3>
-      </div></div>
-      <div class="row content"><div class="col-xs-12">
-          <img alt="decrease enegry" class="icon" src="{% static 'images/reports/decrease_engry.svg'  %}">
-          <h3>{{ compare_last_month_money|floatformat:0 }}%</h3>
-      </div></div>
-    </div>
-    <div class="col-xs-3">
-      <div class="row time-type"><div class="col-xs-12">
-          Overnight
-      </div></div>
-      <div class="row content"><div class="col-xs-12">
-          <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
-          <h3>${{ month_summary.money_usage|floatformat:3 }}</h3>
-      </div></div>
-      <div class="row content"><div class="col-xs-12">
-          <img alt="decrease enegry" class="icon" src="{% static 'images/reports/decrease_engry.svg'  %}">
-          <h3>{{ compare_last_month_money|floatformat:0 }}%</h3>
-      </div></div>
-    </div>
-    <div class="col-xs-3">
-      <button class="k-button" ng-click="viewReport(2014, 'dec')">Open AJAX content</button>
-    </div>
-  </div>
-</div>
+
 
 
 <div class="report-head">
@@ -1022,15 +1031,6 @@ $(function() {
             }
         })
 
-$(document).ready(function()  {
-    $('#monthly-report-content div').each(function() {
-        var a = $(this).find('.menu-target:first');
-        var m = $(this).find('.menu-content:first').kendoContextMenu({
-            orientation: 'horizontal',
-            target: a,
-            showOn: 'click'
-        });
-    });
-});
+
 </script>
 {% endblock %}
