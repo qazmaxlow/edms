@@ -8,6 +8,8 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import render
 from django.utils import timezone
 
+from wkhtmltopdf.views import PDFTemplateResponse
+
 from egauge.manager import SourceManager
 from egauge.models import SourceReadingMonth, SourceReadingDay, SourceReadingHour, Source
 from system.models import System
@@ -175,7 +177,7 @@ class CompareTplHepler:
         return "{self.compared_percent_abs:.0f}% {self.change_desc}".format(self=self)
 
 
-def popup_report_view(request, system_code, year, month):
+def popup_report_view(request, system_code, year, month, to_pdf=False):
     systems_info = System.get_systems_info(system_code, request.user.system.code)
     systems = systems_info['systems']
     current_system = System.objects.get(code=system_code)
@@ -256,6 +258,8 @@ def popup_report_view(request, system_code, year, month):
                                   time.mktime(report_date.utctimetuple()),
                                   time.mktime(next_month_date.utctimetuple())
     )
+
+    m['report_data_json'] = json.dumps(report_data)
 
     group_data = report_data['groupedSourceInfos']
     weekday_average = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
@@ -536,7 +540,33 @@ def popup_report_view(request, system_code, year, month):
     # holidays
     m['holidays_json'] = json.dumps(report_data['holidays'])
 
+
+    if to_pdf:
+        return PDFTemplateResponse(
+            request=request,
+            template='companies/reports/popup_report.html',
+            # template='foo.html',
+            filename='hello.pdf',
+            context=m,
+            # show_content_in_browser=False,
+            cmd_options={
+                "javascript-delay": '5000',
+                # 'quiet': '',
+                # 'margin-left': '18mm',
+                # 'page-size': 'A3',
+                # 'margin-top': 50,
+                # 'quiet': '',
+                # 'load-media-error-handling': 'ignore',
+                # 'load-error-handling': 'ignore'
+            },
+        )
+
+
     return render(request, 'companies/reports/popup_report.html', m)
+
+
+def download_popup_report_view(request, system_code, year, month):
+    return popup_report_view(request, system_code, year, month, to_pdf=True)
 
 
 # @permission_required()
