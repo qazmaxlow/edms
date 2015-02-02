@@ -7,7 +7,7 @@ from django.core.context_processors import csrf
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.utils import timezone
+from django.utils import timezone, dateparse
 
 from wkhtmltopdf.views import PDFTemplateResponse
 
@@ -69,8 +69,15 @@ def summary_ajax(request, system_code):
     # should use system timezone
     start_dt = datetime.datetime.now(current_system_tz)
     start_dt = start_dt.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+
+    sd = request.GET.get('start_date')
+    if sd:
+        start_dt = dateparse.parse_date(request.GET.get('start_date'))
+
     # start_dt = previous_month(start_dt)
     start_dt = previous_month(start_dt)
+
+    end_date = request.GET.get('end_date')
 
     # end_dt = pytz.utc.localize(datetime.datetime.utcnow()).astimezone(current_system_tz)
     end_dt = datetime.datetime.now(current_system_tz)
