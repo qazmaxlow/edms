@@ -5,6 +5,7 @@ import time
 from django.db.models import Q
 from django.core.context_processors import csrf
 from django.core.serializers.json import DjangoJSONEncoder
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
 
@@ -46,6 +47,113 @@ def next_month(datetime):
             raise
 
     return next_month_date
+
+
+def summary_ajax(request, system_code):
+    # data = [{'hello': 3.2}]
+    # data['hello'] = 3.2
+    systems_info = System.get_systems_info(system_code, request.user.system.code)
+    systems = systems_info['systems']
+    current_system = systems[0]
+    sources = SourceManager.get_sources(current_system)
+
+    current_system_tz = pytz.timezone(current_system.timezone)
+    first_record = min([system.first_record for system in systems])
+    first_record = first_record.astimezone(current_system_tz).replace(
+        hour=0, minute=0, second=0, microsecond=0)
+    if first_record.day == 1:
+        start_dt = first_record
+    else:
+        start_dt = Utils.add_month(first_record, 1).replace(day=1)
+
+    # should use system timezone
+    start_dt = datetime.datetime.now(current_system_tz)
+    start_dt = start_dt.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    # start_dt = previous_month(start_dt)
+    start_dt = previous_month(start_dt)
+
+    # end_dt = pytz.utc.localize(datetime.datetime.utcnow()).astimezone(current_system_tz)
+    end_dt = datetime.datetime.now(current_system_tz)
+    end_dt = end_dt.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+
+    source_ids = [str(source.id) for source in sources]
+    source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingMonth, start_dt, end_dt)
+
+    last_month_start_dt = previous_month(start_dt)
+    last_month_end_dt = previous_month(end_dt)
+    last_month_source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingMonth, last_month_start_dt, last_month_end_dt)
+
+    energy_usages = calculation.combine_readings_by_timestamp(source_readings)
+
+    unit_rates = UnitRate.objects.filter(Q(category_code=CO2_CATEGORY_CODE) | Q(category_code=MONEY_CATEGORY_CODE))
+    co2_unit_rates = [unit_rate for unit_rate in unit_rates if unit_rate.category_code == CO2_CATEGORY_CODE]
+    money_unit_rates = [unit_rate for unit_rate in unit_rates if unit_rate.category_code == MONEY_CATEGORY_CODE]
+
+    monthly_energy_sum = sum([sr.values()[0] for sr in source_readings.values()])
+
+    # unit_infos = json.loads(current_system.unit_info)
+    # money_unit_code = unit_infos['money']
+    # _money_unit_rates = UnitRate.objects.filter(category_code='money', code=unit_infos['money'])
+
+    source_timestamp_energy = [(source_id, ) + sr.items()[0] for source_id, sr in source_readings.items()]
+    # assert False
+
+    def get_unit_rate(source_id, timestamp):
+        source = Source.objects(id=str(source_id)).first()
+        # assert False
+        system = System.objects.get(code=source.system_code)
+        unit_infos = json.loads(system.unit_info)
+        money_unit_code = unit_infos['money']
+        money_unit_rates = UnitRate.objects.filter(category_code='money', code=unit_infos['money'])
+        dt = datetime.datetime.fromtimestamp(timestamp, pytz.utc)
+        ur = money_unit_rates.filter(effective_date__lte=dt).order_by('-effective_date').first()
+        return ur
+
+    monthly_money_sum = sum([ get_unit_rate(s, t).rate*e for s, t, e in source_timestamp_energy])
+
+    # ds = [ datetime.datetime.fromtimestamp(t) for t, e in timestamp_energy]
+
+    co2_usages = copy.deepcopy(source_readings)
+    calculation.transform_source_readings(co2_usages, systems, sources, co2_unit_rates, CO2_CATEGORY_CODE)
+    co2_usages = calculation.combine_readings_by_timestamp(co2_usages)
+
+    money_usages = copy.deepcopy(source_readings)
+
+    calculation.transform_source_readings(money_usages, systems, sources, money_unit_rates, MONEY_CATEGORY_CODE)
+    # assert False
+    money_usages = calculation.combine_readings_by_timestamp(money_usages)
+
+
+
+    monthly_summary = []
+    for timestamp, usage in energy_usages.items():
+        monthly_summary.append({
+            'dt': Utils.utc_dt_from_utc_timestamp(timestamp).astimezone(current_system_tz),
+            'timestamp': timestamp,
+            'energy_usage': usage, 'co2_usage': co2_usages[timestamp],
+            'money_usage': money_usages[timestamp]})
+
+    # m = systems_info
+    m = {}
+    # m["monthly_summary"] = sorted(monthly_summary, key=lambda x: x['timestamp'], reverse=True)
+    m['month_summary'] = monthly_summary[0]
+    # assert False
+    # m.update(csrf(request))
+
+    current_month_money = m['month_summary']['money_usage']
+    calculation.transform_source_readings(last_month_source_readings, systems, sources, money_unit_rates, MONEY_CATEGORY_CODE)
+    last_month_money_usages = calculation.combine_readings_by_timestamp(last_month_source_readings)
+    last_month_money_usage = last_month_money_usages.values()[0] if last_month_money_usages else 0
+
+    compare_last_month_money = (current_month_money - last_month_money_usage)/ current_month_money * 100
+    # m['compare_last_month_money'] = compare_last_month_money
+    m['monthly_money_sum'] = monthly_money_sum
+
+    # data = [{'hello': 3.2}]
+    # data = [{'month_summary': monthly_summary[0]}]
+    data = [m]
+
+    return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type="application/json")
 
 
 def report_view(request, system_code=None):

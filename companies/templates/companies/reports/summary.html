@@ -767,6 +767,7 @@ $(function() {
 
 
           <input kendo-date-picker
+             k-on-change="on_date_selected(kendoEvent)"
              k-options="monthSelectorOptions"
              k-format="'MMMM yyyy'" />
         </p>
@@ -778,13 +779,13 @@ $(function() {
     <div class="col-xs-3">
       <div class="row time-type"><div class="col-xs-12">
           <div>
-            <input type="text"  value="{% templatetag openvariable %} summary_report[0].action_name {% templatetag closevariable %}">
+            <input type="text"  value="{% templatetag openvariable %} summary_report[0].month_summary {% templatetag closevariable %}">
           </div>
           Monthly
       </div></div>
       <div class="row content"><div class="col-xs-12">
           <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
-          <h3>${{ monthly_money_sum|floatformat:3 }}</h3>
+          <h3>${% templatetag openvariable %} summary_report[0].monthly_money_sum {% templatetag closevariable %}</h3>
           <p>total energy cost</p>
       </div></div>
       <div class="row content"><div class="col-xs-12">
@@ -1045,7 +1046,7 @@ $(function() {
                 transport: {
                     read: {
                         async: false,
-                        url: "{% url 'trail-list' systems.0.code %}",
+                        url: "{% url 'companies.reports.summary.ajax' systems.0.code %}",
                         type: 'GET',
                         dataType: "json"
                     }
@@ -1053,8 +1054,8 @@ $(function() {
                 pageSize: 30,
                 serverPaging: true,
                 schema: {
-                    data: "results",
-                    total: "count"
+                    // data: "results",
+                    // total: "count"
                 }
             });
 
@@ -1067,6 +1068,10 @@ $(function() {
                 return summary_report_ds.data();
 
             }*/
+            $scope.on_date_selected = function(e) {
+                // alert('xxxxxx');
+                $scope.summary_data = {};
+            }
 
         })
 
