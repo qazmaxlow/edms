@@ -766,7 +766,7 @@ $(function() {
 
 
 
-          <input kendo-date-picker
+          <input kendo-date-picker="report_date"
              k-on-change="on_date_selected(kendoEvent)"
              k-options="monthSelectorOptions"
              k-format="'MMMM yyyy'" />
@@ -1069,8 +1069,12 @@ $(function() {
 
             }*/
             $scope.on_date_selected = function(e) {
-                // alert('xxxxxx');
-                $scope.summary_data = {};
+                var dp = e.sender;
+                summary_report_ds.transport.options.read['data'] = {
+                    start_date: kendo.toString(dp.value(), 'yyyy-MM-dd')
+                };
+                summary_report_ds.read();
+                $scope.summary_report = summary_report_ds.data();
             }
 
         })
