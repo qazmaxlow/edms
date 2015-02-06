@@ -818,7 +818,11 @@ $(function() {
       </div></div>
     </div>
     <div class="col-xs-3">
-      <button class="k-button" ng-click="viewReport(2014, 'dec')">Open AJAX content</button>
+
+      <div class="view-report">
+        <img class="img-button" src="{% static "images/reports/view_report.svg" %}" ng-click="viewReport(2014, 'dec')">
+        <button class="k-button" ng-click="viewReport(2014, 'dec')">View Full Report</button>
+      </div>
     </div>
   </div>
 </div>
