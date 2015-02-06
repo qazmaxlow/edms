@@ -778,9 +778,6 @@ $(function() {
   <div class="row">
     <div class="col-xs-3">
       <div class="row time-type"><div class="col-xs-12">
-          <div>
-            <input type="text"  value="{% templatetag openvariable %} summary_report[0].month_summary {% templatetag closevariable %}">
-          </div>
           Monthly
       </div></div>
       <div class="row content"><div class="col-xs-12">
@@ -942,11 +939,11 @@ $(function() {
         </div>
 
         <div id="download-raw-data">
-            <div class="dl-data-title">{% trans "Here you can download your energy use data to files in .csv format." %}</div>
-            <div class="dl-data-title">{% trans "Simply select the start date, end date and the units that you would like to obtain from the system." %}</div>
-            <div class="customize-section-title"><span>1</span>{% trans "Choose your date" %}</div>
-            <hr>
-            <div class="dl-choose-date-section">
+            <div class="row dl-data-title">{% trans "Here you can download your energy use data to files in .csv format." %}</div>
+            <div class="row dl-data-title">{% trans "Simply select the start date, end date and the units that you would like to obtain from the system." %}</div>
+            <div class="row customize-section-title"><span>1</span>{% trans "Choose your date" %}</div>
+
+            <div class="row dl-choose-date-section">
                 <div class="report-datepicker-container">
                     <div>{% trans "Choose your start date" %}</div>
                     <div id="dl-data-start-datepicker" class="report-datepicker"></div>
@@ -956,17 +953,15 @@ $(function() {
                     <div id="dl-data-end-datepicker" class="report-datepicker"></div>
                 </div>
             </div>
-            <div class="two-column-section">
-                <div class="choose-unit-section">
+            <div class="two-column-section row">
+                <div class="choose-unit-section pull-left">
                     <div class="customize-section-title"><span>2</span>{% trans "Select your units" %}</div>
-                    <hr>
                     <div class="unit-container">
                         <span></span><span></span><span></span>
                     </div>
                 </div>
-                <div>
+                <div class="pull-left">
                     <div class="customize-section-title"><span>3</span>{% trans "Download your file" %}</div>
-                    <hr>
                     <div class="create-report-section">
                         <div class="datetime-result">
                             <div class="datetime-result-title">{% trans "Energy data - kWh" %}</div>
