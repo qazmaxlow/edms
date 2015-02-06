@@ -56,10 +56,6 @@
     border-bottom: #e8ebeb solid 3px;
   }
 
-  .report-summary .content {
-    background-color: #eff2f2;
-  }
-
   .report-summary .col-xs-3 {
     background-color: white;
     border-left: #e8ebeb solid 3px;
@@ -785,7 +781,7 @@ $(function() {
           <h3>${% templatetag openvariable %} summary_report[0].monthly_money_sum {% templatetag closevariable %}</h3>
           <p>total energy cost</p>
       </div></div>
-      <div class="row content"><div class="col-xs-12">
+      <div class="row content end"><div class="col-xs-12">
           <img alt="decrease enegry" class="icon" src="{% static 'images/reports/decrease_engry.svg'  %}">
           <h3>{{ compare_last_month_money|floatformat:0 }}%</h3>
           <p>compared to last month</p>

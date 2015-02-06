@@ -29,8 +29,9 @@
 }
 
 .view-report {
-    top: 30%;
-    position: relative;
+    /* top: 30%; */
+    /* position: relative; */
+    /* mirgate-top: 30%; */
 }
 
 .view-report img {
@@ -39,7 +40,16 @@
 }
 
 .report-summary .col-xs-3 {
-    height: 486px;
+    /* height: 486px; */
+}
+
+.report-summary .content {
+    padding: 15px 0;
+    background-color: #f6f6f6;
+}
+
+.report-summary .content:not(.end) {
+    background: url("../images/reports/arrow_separator.svg") no-repeat scroll center bottom #f6f6f6;
 }
 
 .drop-down-panel-header {
