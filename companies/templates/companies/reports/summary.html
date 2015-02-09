@@ -758,7 +758,7 @@ $(function() {
           <kendo-button>Month</kendo-button>
           <kendo-button>Quarter</kendo-button>
           <kendo-button>Year</kendo-button>
-          <kendo-button>Custom day</kendo-button>
+          <kendo-button>Match my bills</kendo-button>
 
 
 
@@ -778,7 +778,7 @@ $(function() {
       </div></div>
       <div class="row content"><div class="col-xs-12">
           <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
-          <h3>${% templatetag openvariable %} summary_report[0].monthly_money_sum | number:0 {% templatetag closevariable %}</h3>
+          <h3>${% templatetag openvariable %} summary_report.monthly_money_sum | number:0 {% templatetag closevariable %}</h3>
           <p>total energy cost</p>
       </div></div>
       <div class="row content end"><div class="col-xs-12">
@@ -794,10 +794,12 @@ $(function() {
       <div class="row content"><div class="col-xs-12">
           <img alt="power" class="icon" src="{% static 'images/reports/calendar_energy_icon.svg' %}">
           <h3>${{ month_summary.money_usage|floatformat:3 }}</h3>
+          <p>Average Weekdays Cost</p>
       </div></div>
       <div class="row content"><div class="col-xs-12">
           <img alt="decrease enegry" class="icon" src="{% static 'images/reports/decrease_engry.svg'  %}">
           <h3>{{ compare_last_month_money|floatformat:0 }}%</h3>
+          <p>Compared to last month</p>
       </div></div>
     </div>
     <div class="col-xs-3">
@@ -807,10 +809,12 @@ $(function() {
       <div class="row content"><div class="col-xs-12">
           <img alt="power" class="icon" src="{% static 'images/reports/calendar_energy_icon.svg' %}">
           <h3>${{ month_summary.money_usage|floatformat:3 }}</h3>
+          <p>Average Overnight Cost</p>
       </div></div>
       <div class="row content"><div class="col-xs-12">
           <img alt="decrease enegry" class="icon" src="{% static 'images/reports/decrease_engry.svg'  %}">
           <h3>{{ compare_last_month_money|floatformat:0 }}%</h3>
+          <p>Compared to last month</p>
       </div></div>
     </div>
     <div class="col-xs-3">
@@ -1059,7 +1063,7 @@ $(function() {
             });
 
             summary_report_ds.read();
-            $scope.summary_report = summary_report_ds.data();
+            $scope.summary_report = summary_report_ds.data()[0];
 
             /*
             $scope.wtf = function() {
