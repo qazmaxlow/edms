@@ -778,7 +778,7 @@ $(function() {
       </div></div>
       <div class="row content"><div class="col-xs-12">
           <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
-          <h3>${% templatetag openvariable %} summary_report[0].monthly_money_sum {% templatetag closevariable %}</h3>
+          <h3>${% templatetag openvariable %} summary_report[0].monthly_money_sum | number:0 {% templatetag closevariable %}</h3>
           <p>total energy cost</p>
       </div></div>
       <div class="row content end"><div class="col-xs-12">
