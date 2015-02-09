@@ -816,8 +816,8 @@ $(function() {
     <div class="col-xs-3">
 
       <div class="view-report">
-        <img class="img-button" src="{% static "images/reports/view_report.svg" %}" ng-click="viewReport(2014, 'dec')">
-        <button class="k-button" ng-click="viewReport(2014, 'dec')">View Full Report</button>
+        <img class="img-button" src="{% static "images/reports/view_report.svg" %}" ng-click="view_report()">
+        <button class="k-button" ng-click="view_report()">View Full Report</button>
       </div>
     </div>
   </div>
@@ -1032,10 +1032,14 @@ $(function() {
 <script>
     angular.module("Entrak", [ "kendo.directives" ])
         .controller("ReportController", function($scope){
-            $scope.viewReport = function(year, month) {
-                $scope.win_report.refresh({ url: '../report/popup-report/' + year + '/' + month + '/'});
+            $scope.view_report = function() {
+                var date = $scope.report_date.value();
+                var month_shortnames = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+                var month_shortname = month_shortnames[date.getMonth()];
+                var year = date.getFullYear();
+                $scope.win_report.refresh({ url: '../report/popup-report/' + year + '/' + month_shortname + '/'});
                 $scope.win_report.open();
-            };
+            }
 
             var summary_report_ds = new kendo.data.DataSource({
                 transport: {
