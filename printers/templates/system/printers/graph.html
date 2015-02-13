@@ -57,7 +57,7 @@ function updateDonutChart(data, total, org_data) {
         ],
         colors: ['#FFAE20', '#EF7C56', '#35BC99', '#C94CD7', '#587EFF'],
         labelColors: ['#FFAE20', '#EF7C56', '#35BC99', '#C94CD7', '#587EFF'],
-        formatter: function (x) { return Math.floor(x/org_data[0].value*100) + "%"}
+        formatter: function (x) { return Math.round(x/org_data[0].value*100) + "%"}
     });
     donutChart.on('select', function(i, row){
         $("#selection-summary-value").text(Utils.formatWithCommas(Utils.fixedDecBaseOnVal(row.value)));
@@ -508,7 +508,7 @@ $(function() {
         $(this).click({connectedPanel: subMenuPanel[eleIdx]}, function (event) {
             $(".panel-header-left-menu h3").removeClass('selected-tab');
             $(this).addClass('selected-tab');
-            
+
             var connectedPanel = $(event.data.connectedPanel);
             if (!(connectedPanel.hasClass('selected-submenu'))) {
                 subMenuPanel.filter(".selected-submenu").removeClass('selected-submenu').hide();
@@ -679,7 +679,7 @@ $(function() {
         <p class='trip-unit-desc'></p>
         <ul id="source-choice">
             <div class="choice-panel">
-                <div class="choice-header">{% trans "Compare between end-use types" %} 
+                <div class="choice-header">{% trans "Compare between end-use types" %}
                     <span>{% trans "(Max 5)" %}</span>
                     <span id="source-choice-clear" class="choice-clear">{% trans "Clear all" %}</span>
                 </div>

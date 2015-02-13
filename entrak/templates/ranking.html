@@ -181,7 +181,7 @@ function getRankingData() {
     if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
         requestData.last_start_dt = startEndDtInfo.lastStartEndDt.startDt.unix();
         requestData.last_end_dt = startEndDtInfo.lastStartEndDt.endDt.unix();
-        ranking.lastStartDt = startEndDtInfo.lastStartEndDt.startDt;
+        ranking.lastStartDt = startEndDtInfo.lastStartEndDt.endDt;
     }
 
     $.ajax({
