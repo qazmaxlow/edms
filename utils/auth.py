@@ -43,3 +43,24 @@ def permission_required(required_level=USER_ROLE_VIEWER_LEVEL):
         return wrapper
 
     return permission_required_decorator
+
+def permission_required_trails(required_level=USER_ROLE_VIEWER_LEVEL):
+    def permission_required_decorator(view_func):
+        @wraps(view_func)
+        def wrapper(request, *args, **kwargs):
+
+            if required_level == USER_ROLE_VIEWER_LEVEL:
+                return view_func(request, *args, **kwargs)
+
+            if request.user.is_authenticated():
+                if request.user.role_level >= required_level and request.user.is_superuser:
+                    return view_func(request, *args, **kwargs)
+                else:
+                    request.session['login_warning_msg'] = _("User is not permitted to access the system.")
+            else:
+                request.session['login_warning_msg'] = _('Please enter username and password.')
+
+            return redirect('/login/')
+        return wrapper
+
+    return permission_required_decorator
