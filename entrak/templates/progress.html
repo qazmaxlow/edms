@@ -98,8 +98,17 @@ $(function() {
             <img class="equal-symbol" src="{% static 'images/progress/equal-symbol.png' %}">
             <div class="cumulative-saving-block">
                 <img src="{% static 'images/progress/elephant.png' %}">
-                <div class="cumulative-text"><span class="cumulative-val">{% language 'en' %}{{elephant_num|abs_int|intcomma}}{% endlanguage %}</span>{% trans " elephants" %}</div>
-            </div>
+                <div class="cumulative-text">
+                	<span class="cumulative-val">{% language 'en' %}{{elephant_num|abs_int|intcomma}}{% endlanguage %}</span>{% trans " elephants" %}
+                	<div class="taxi-desc">
+                		            {% ifequal LANGUAGE_CODE 'zh-tw' %}
+						           		的重量
+						           	{% else %}
+						            	in weight
+						            {% endifequal %}
+                	</div>
+                </div>            
+			</div>
             <div class="cumulative-separator"></div>
             <div class="cumulative-saving-block">
                 <img src="{% static 'images/progress/money.png' %}">
