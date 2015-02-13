@@ -8,7 +8,7 @@ from utils.auth import permission_required_trails
 from user.models import USER_ROLE_ADMIN_LEVEL
 
 class TrailViewSet(viewsets.ModelViewSet):
-    queryset = Trail.objects.all()
+    queryset = Trail.objects.values('user__system__code','user__system__name').filter(~Q(user__system__code = None)).annotate(Max('created_time')).order_by('user__system__code')
     serializer_class = LastAccessSerializer
     
     @method_decorator(permission_required_trails(required_level=USER_ROLE_ADMIN_LEVEL))
