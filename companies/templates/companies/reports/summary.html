@@ -765,7 +765,9 @@ $(function() {
           <input kendo-date-picker="report_date"
              k-on-change="on_date_selected(kendoEvent)"
              k-options="monthSelectorOptions"
-             k-format="'MMMM yyyy'" />
+             k-format="'MMMM yyyy'"
+             k-value="default_date"
+                 />
         </p>
       </div>
 
@@ -1079,6 +1081,9 @@ $(function() {
                 summary_report_ds.read();
                 $scope.summary_report = summary_report_ds.data();
             }
+
+            $scope.default_date = new Date("{{ default_date.isoformat }}");
+            // $scope.report_date
 
         })
 
