@@ -3,17 +3,22 @@ from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
 from django.contrib.staticfiles import views
 from django.views.generic.base import RedirectView
+from rest_framework import routers
 from entrak import settings
 
 from django.contrib import admin
-from trails import trails
+from trails import trails, apis, apis_last_access, apis_hourly
 admin.autodiscover()
-
+router = routers.SimpleRouter()
+router.register(r'audit/trails', apis.TrailViewSet, base_name='trail')
+router.register(r'audit/last_access', apis_last_access.TrailViewSet, base_name='last-access')
+router.register(r'audit/hourly', apis_hourly.TrailViewSet, base_name='hourly')
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'entrak.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
-
+    url('^audit/trails/$', trails.CompanyAuditTrailsListView.as_view()),
+    url(r'^apis/', include(router.urls)),
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^invalid_readings/$', 'entrak.admin_customize_views.invalid_readings_view', name='invalid_readings'),

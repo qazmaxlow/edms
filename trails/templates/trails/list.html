@@ -1,0 +1,219 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Audit trails</title>
+
+    <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/kendoui/styles/kendo.common-bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/kendoui/styles/kendo.default.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/forms.css' %}" rel="stylesheet">
+
+    <script src="{% static 'assets/kendoui/js/jquery.min.js' %}"></script>
+    <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
+    <script src="{% static 'assets/kendoui/js/jszip.min.js' %}"></script>
+    <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
+    
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <style>
+    	body
+    	{
+    		font-size:12px;
+    	}
+    </style>
+    
+  </head>
+  <body>
+    <div class="container">
+<h1>Audit Trails - Monthly</h1>
+<h4>Up to recent 3 months</h4>
+    <div ng-app="Entrak">
+    <div ng-controller="MyCtrl">
+
+
+
+    <div class="clearfix"></div>
+
+        <div kendo-grid="grid" k-options="mainGridOptions">
+        </div>
+    </div>
+</div>
+
+  </div>
+</div>
+<script>
+    angular.module("Entrak", [ "kendo.directives" ])
+        .controller("MyCtrl", function($scope){
+            $scope.mainGridOptions = {
+		        toolbar: ["excel"],
+		        excel: {
+		            allPages: true
+		        },
+                dataSource: {
+                    transport: {
+                        read: {
+                            url: "{% url 'trail-list' %}",
+                            type: 'GET',
+                            dataType: "json"
+                        }
+                    },
+                    pageSize: 25,
+                },
+                sortable: true,
+                reorderable: true,
+                groupable: true,
+                resizable: true,
+                filterable: true,
+                columnMenu: true,
+                pageable: true,
+                
+                columns: [{
+                    field: "code",
+                    title: "Code",
+                    locked: true,
+                    lockable: false,
+                    width: 100
+                },{
+                    field: "name",
+                    title: "Company name",
+                    locked: true,
+                    width: 250
+                },{
+                    field: "month",
+                    title: "Month",
+                    locked: true,
+                    width: 200
+                },{
+                    field: "count",
+                    title: "Actions",
+                    locked: true,
+                    width: 100
+                },{
+                    field: "graph_count",
+                    title: "Graph",
+                    width: 100
+                },{
+                    field: "ranking_count",
+                    title: "Ranking",
+                    width: 100
+                },{
+                    field: "progress_count",
+                    title: "Progress",
+                    width: 100
+                },{
+                    field: "report_count",
+                    title: "Report",
+                    width: 100
+                },{
+                    field: "display_count",
+                    title: "Display",
+                    width: 100
+                },{
+                    field: "alert_count",
+                    title: "Alert",
+                    width: 100
+                },{
+                    field: "printer_count",
+                    title: "Printer",
+                    width: 100
+                }]
+            };
+
+
+
+        })
+</script>
+    </div>
+		<br><br><br>
+
+        
+                <div class="container">
+            <h1>Audit Trails - Hourly</h1>
+            <h4>Up to recent 1 month</h4>
+            <div id="grid2"></div>
+            <script>
+                $(document).ready(function () {
+                    $("#grid2").kendoGrid({
+    			        toolbar: ["excel"],
+				        excel: {
+				            allPages: true
+				        },
+		                dataSource: {
+		                    transport: {
+		                        read: {
+		                            url: "{% url 'hourly-list' %}",
+		                            type: 'GET',
+		                            dataType: "json"
+		                        }
+		                    },
+		                    pageSize: 24,
+		                },
+                        sortable: true,
+                        pageable: true,
+                        filterable: true,
+                        columns: [{
+                            field: "hour",
+                            title: "Hour",
+                            width: 100
+                        },{
+                            field: "count",
+                            title: "Actions"
+                        }]
+                    });
+                });
+            </script>
+        </div>
+        
+        
+    	<br><br><br>
+		
+		        <div class="container">
+            <h1> Last Access</h1>
+            <div id="grid"></div>
+            <script>
+                $(document).ready(function () {
+                    $("#grid").kendoGrid({
+    			        toolbar: ["excel"],
+				        excel: {
+				            allPages: true
+				        },
+		                dataSource: {
+		                    transport: {
+		                        read: {
+		                            url: "{% url 'last-access-list' %}",
+		                            type: 'GET',
+		                            dataType: "json"
+		                        }
+		                    },
+		                    pageSize: 25,
+		                },
+                        sortable: true,
+                        pageable: true,
+                        filterable: true,
+                        columns: [{
+                            field: "user__system__code",
+                            title: "Code",
+                            width: 100
+                        }, {
+                            field: "user__system__name",
+                            title: "Company name",
+                            width: 250
+                        }, {
+                            field: "created_time__max",
+                            title: "Last Access"
+                        }]
+                    });
+                });
+            </script>
+        </div>
+		
+  </body>
+</html>
