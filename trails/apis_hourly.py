@@ -19,7 +19,8 @@ class TrailViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         currentYear=timezone.now().year
         currentMonth=timezone.now().month
-        listOfTrail=list(Trail.objects.filter(created_time__year = currentYear, created_time__month = currentMonth))
+        # listOfTrail=list(Trail.objects.filter(created_time__year = currentYear, created_time__month = currentMonth))
+        listOfTrail=list(Trail.objects.extra(where=["Year(created_time)=%s" % currentYear, "Month(created_time)=%s" % currentMonth]))
         hourlyCount=[]
         hourlyList=[]
         startHour=0
