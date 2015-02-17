@@ -34,6 +34,8 @@
 <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
 <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
 
+<script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
+
 <!-- hack for combining bootstrap -->
 <style>
   #menu-links li:hover, #menu-links li.menu-links-selected {
@@ -758,7 +760,7 @@ $(function() {
 
 
 
-          <input kendo-date-picker="report_date"
+          <input kendo-et-date-picker="report_date"
              k-on-change="on_date_selected(kendoEvent)"
              k-options="monthSelectorOptions"
              k-format="'MMMM yyyy'"
@@ -1076,6 +1078,10 @@ $(function() {
                       ]
                     },
                 ]
+            };
+
+            $scope.monthSelectorOptions = {
+                // select: "quarter"
             }
 
             /*
