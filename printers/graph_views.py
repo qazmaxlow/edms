@@ -13,6 +13,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from utils.auth import permission_required
 from utils.utils import Utils
 
+from printers.models import Printer
 from printers.models import (PrinterReadingHour, PrinterReadingDay, PrinterReadingWeek, PrinterReadingMonth, PrinterReadingYear)
 from egauge.manager import SourceManager
 from entrak.settings import STATIC_URL
@@ -56,6 +57,12 @@ def show_measures_view(request, system_code):
     # only one printer per one system
     system = System.get_systems_within_root(system_code)[0]
     printer = system.printers.first()
+
+    # hack
+    if system_code == 'fxsg':
+        printer = Printer.objects.get(code="TL200014123456")
+    # end hack
+
     printers_response = [{'name': printer.name}]
 
     range_type_mapping = {
@@ -124,6 +131,12 @@ def show_measures_with_types_view(request, system_code):
     # only one printer per one system
     system = System.get_systems_within_root(system_code)[0]
     printer = system.printers.first()
+
+    # hack
+    if system_code == 'fxsg':
+        printer = Printer.objects.get(code="TL200014123456")
+    # end hack
+
     printers_response = [{'name': printer.name}]
 
     range_type_mapping = {
@@ -341,6 +354,12 @@ def show_highest_and_lowest_view(request, system_code):
     current_system = systems[0]
 
     printer = current_system.printers.first()
+
+    # hack
+    if system_code == 'fxsg':
+        printer = Printer.objects.get(code="TL200014123456")
+    # end hack
+
     printers_response = [{'name': printer.name}]
 
     printer_readings_info = get_most_readings(
@@ -372,6 +391,11 @@ def show_highest_and_lowest_view(request, system_code):
 def show_summary_view(request, system_code):
     system = System.get_systems_within_root(system_code)[0]
     printer = system.printers.first()
+
+    # hack
+    if system_code == 'fxsg':
+        printer = Printer.objects.get(code="TL200014123456")
+    # end hack
 
     start_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('start_dt'))))
     end_dt = Utils.utc_dt_from_utc_timestamp(int(decimal.Decimal(request.POST.get('end_dt'))))
