@@ -732,7 +732,7 @@ $(function() {
 {% block page_content %}
 
     <div ng-app="Entrak">
-    <div ng-controller="ReportController" class="container">
+    <div ng-controller="ReportController" xng-init="init()" class="container">
         <button ng-click="win2.close()" ng-show="win2visible">close</button>
         <div kendo-window="win_report"
              k-width="1100" k-height="1400" k-visible="false" k-iframe="true"
@@ -754,11 +754,7 @@ $(function() {
     <div class="time-bar row text-left">
       <div class="col-xs-12">
         <p>
-          <kendo-button>Week</kendo-button>
-          <kendo-button>Month</kendo-button>
-          <kendo-button>Quarter</kendo-button>
-          <kendo-button>Year</kendo-button>
-          <kendo-button>Match my bills</kendo-button>
+          <div kendo-toolbar k-options="timeToolbarOptions"></div>
 
 
 
@@ -1066,6 +1062,21 @@ $(function() {
 
             summary_report_ds.read();
             $scope.summary_report = summary_report_ds.data()[0];
+
+            $scope.timeToolbarOptions = {
+                items: [
+                    {
+                      type: "buttonGroup",
+                      buttons: [
+                          { text: "Week", togglable: true, group: "time" },
+                          { text: "Month", togglable: true, group: "time", selected: true},
+                          { text: "Quarter", togglable: true, group: "time" },
+                          { text: "Year", togglable: true, group: "time" },
+                          { text: "Match my bills", togglable: true, group: "time" }
+                      ]
+                    },
+                ]
+            }
 
             /*
             $scope.wtf = function() {
