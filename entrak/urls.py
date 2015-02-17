@@ -7,12 +7,12 @@ from rest_framework import routers
 from entrak import settings
 
 from django.contrib import admin
-from trails import trails, apis, apis_last_access, apis_hourly
+from trails import trails, apis
 admin.autodiscover()
 router = routers.SimpleRouter()
-router.register(r'audit/trails', apis.TrailViewSet, base_name='trail')
-router.register(r'audit/last_access', apis_last_access.TrailViewSet, base_name='last-access')
-router.register(r'audit/hourly', apis_hourly.TrailViewSet, base_name='hourly')
+router.register(r'audit/trails', apis.MonthlySet, base_name='trail')
+router.register(r'audit/last_access', apis.LastAccessSet, base_name='last-access')
+router.register(r'audit/hourly', apis.HourlySet, base_name='hourly')
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'entrak.views.home', name='home'),
