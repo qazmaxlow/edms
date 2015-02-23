@@ -158,7 +158,13 @@ $(function() {
         <!-- Header -->
         <div id="header">
 
+          {% if 'fujixerox' in systems.0.code %}
+            <img class="image-carousel" src="{% static 'images/fujixerox/fujixerox_banner.jpeg' %}">
+          {% else %}
             <img class="image-carousel" src="{% static 'images/banner-animation.gif' %}">
+          {% endif %}
+
+
             
             <!-- Header Wording -->
             <div id="heading"><h1>{% block page_title %}{% endblock %}</h1></div>
