@@ -113,37 +113,8 @@
             CHANGE,
             NAVIGATE
         ],
-        navigateUp: function() {
-            var that = this,
-                index = that._index;
 
-            if (that._title.hasClass(DISABLED)) {
-                return;
-            }
-
-            that.navigate(that._current, ++index,false);
-        },
-
-        navigateDown: function(value) {
-            var that = this,
-            index = that._index,
-            depth = that.options.depth;
-
-            if (!value) {
-                return;
-            }
-
-            if (index === views[depth]) {
-                if (+that._value != +value) {
-                    that.value(value);
-                    that.trigger(CHANGE);
-                }
-                return;
-            }
-
-            that.navigate(value, --index,false);
-        },
-        navigate: function(value, view,action) {
+        navigate: function(value, view) {
             view = isNaN(view) ? views[view] : view;
 
             var that = this,
@@ -175,12 +146,6 @@
 
             that._view = currentView = calendar.views[view];
             compare = currentView.compare;
-            //remove the style highted issues in other depth of view
-            if(action==false){
-                var element = that.wrapper = that.element;
-                options.index = currentView.name;
-                element.on(MOUSEENTER_WITH_NS + " " + MOUSELEAVE, CELLSELECTOR, {options: options},  mousetoggle);
-            }
 
             disabled = view === views[CENTURY];
             title.toggleClass(DISABLED, disabled).attr(ARIA_DISABLED, disabled);
@@ -220,34 +185,15 @@
                     vertical: vertical,
                     future: future
                 });
-                //remove the focuse cell style in week and quarter
-                if(options.select == "week"){
-                    if(currentView.name=="month"){
-                        that._class(null, currentView.toDateString(that._current));
-                        var row = $(that._cell).parent();
-                        row.addClass("k-state-focused");
-                    }else{
-                        that._focus(value);
-                    } 
-                }else if(options.select == "quarter"){
-                    if(currentView.name=="year"){
-                        that._class(null, currentView.toDateString(that._current));
-                        var row = $(that._cell).parent();
-                        row.addClass("k-state-focused");
-                    }else{
-                        that._focus(value);
-                    }
-                }
-                else{
-                    that._focus(value);
-                }
+
+                that._focus(value);
                 that.trigger(NAVIGATE);
             }
 
             if (view === views[options.depth] && selectedValue) {
                 if (options.select == "week"||options.select == "quarter") {
                     var row = $(that._cell).parent();
-                    row.removeClass("k-state-selected k-state-focused");
+                    row.removeClass("k-state-selected");
 
                     // set currect cell to seleted value without css style
                     that._class(null, currentView.toDateString(selectedValue));
@@ -271,8 +217,7 @@
             }
 
             that._changeView = true;
-        },
-
+        }
     });
 
     ui.plugin(EtCalendar);
@@ -721,15 +666,14 @@
         date.setFullYear(value);
     }
 
-     function mousetoggle(e) {
-        if (e.data && (e.data.options.select == 'week'||e.data.options.select == "quarter")&&e.data.options.index!=="decade"&&e.data.options.index!=="century") {
-                var days_row = $(this).parent(); 
-                if($(days_row).attr('class')=="k-state-selected"){
-                    //highlighted a row not for a cell
-                    $(this).removeClass('k-state-hover');
-                }else{
-                    $(days_row).toggleClass(HOVER);
-                }   
+    function mousetoggle(e) {
+        if (e.data && (e.data.options.select == 'week'|| e.data.options.select == "quarter")) {
+            var days_row = $(this).parent();
+            if ($(days_row).attr('class')=="k-state-selected"){
+                $(this).removeClass('k-state-hover');
+            } else {
+                $(days_row).toggleClass(HOVER);
+            }
         }
         else {
             $(this).toggleClass(HOVER, MOUSEENTER.indexOf(e.type) > -1 || e.type == FOCUS);
@@ -900,7 +844,7 @@
             var options = that.options;
             var div;
             //for quartor
-            if(options.select&&options.select=="quarter"){
+            if (options.select && (options.select=="quarter" || options.select=="month")) {
                 options.start = "year";
                 options.depth = "year";
             }
@@ -912,7 +856,7 @@
 
                 that.calendar = calendar = new ui.EtCalendar(div);
 
-                if (options.select == 'quarter'||options.select=="week") {
+                if (options.select == 'quarter') {
                     options.footer = false;
                 }
 
@@ -1287,6 +1231,52 @@
             that._updateARIA(date);
 
             return date;
+        },
+
+        getSelectedStartDate: function() {
+            var that = this,
+                options = that.options,
+                date = this.value();
+
+            if (date && options.select == 'week') {
+                function getSunday(d) {
+                    var sunday = new Date(d);
+                    var day = d.getDay(),
+                        diff = d.getDate() - day;
+
+                    sunday.setDate(diff);
+                    return sunday;
+                }
+
+                return getSunday(date);
+            }
+            else if (date && options.select == 'month') {
+                return new Date(date.getFullYear(), date.getMonth(), 1);
+            }
+            else if (date && options.select == 'quarter') {
+                return new Date(date.getFullYear(), 3*Math.floor(date.getMonth()/3), 1);
+            }
+
+            return date;
+        },
+
+        getSelectedEndDate: function() {
+            var that = this,
+                options = that.options;
+                start_date = this.getSelectedStartDate();
+
+            if (start_date && options.select == 'week') {
+                var end_date = new Date(start_date);
+                end_date.setDate(start_date.getDate() + 6);
+
+                return end_date;
+            }
+            else if (start_date && options.select == 'month') {
+                return new Date(start_date.getFullYear(), start_date.getMonth() + 1, 0);
+            }
+            else if (start_date && options.select == 'quarter') {
+                return new Date(start_date.getFullYear(), start_date.getMonth() + 3, 0);
+            }
         }
     });
 

@@ -756,14 +756,12 @@ $(function() {
     <div class="time-bar row text-left">
       <div class="col-xs-12">
         <p>
-          <div kendo-toolbar k-options="timeToolbarOptions"></div>
-
-
+          <div kendo-toolbar k-options="timeToolbarOptions" k-on-toggle="selectTimeType(kendoEvent)"></div>
 
           <input kendo-et-date-picker="report_date"
              k-on-change="on_date_selected(kendoEvent)"
              k-options="monthSelectorOptions"
-             k-format="'MMMM yyyy'"
+             k-rebind="monthSelectorOptions"
              k-value="default_date"
                  />
         </p>
@@ -1036,6 +1034,10 @@ $(function() {
 <script>
     angular.module("Entrak", [ "kendo.directives" ])
         .controller("ReportController", function($scope){
+            // var selected_time_type = "month";
+            // var start_time;
+            // var end_time;
+
             $scope.view_report = function() {
                 var date = $scope.report_date.value();
                 var month_shortnames = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
@@ -1065,23 +1067,30 @@ $(function() {
             summary_report_ds.read();
             $scope.summary_report = summary_report_ds.data()[0];
 
+            $scope.selectTimeType = function (e) {
+                var tb = e.sender;
+                var selected = tb.getSelectedFromGroup('time');
+                $scope.monthSelectorOptions.select = selected.attr('id');
+            };
+
             $scope.timeToolbarOptions = {
                 items: [
                     {
                       type: "buttonGroup",
                       buttons: [
-                          { text: "Week", togglable: true, group: "time" },
-                          { text: "Month", togglable: true, group: "time", selected: true},
-                          { text: "Quarter", togglable: true, group: "time" },
-                          { text: "Year", togglable: true, group: "time" },
-                          { text: "Match my bills", togglable: true, group: "time" }
+                          { text: "Week", id: "week", togglable: true, group: "time"},
+                          { text: "Month", id: "month", togglable: true, group: "time", selected: true },
+                          { text: "Quarter", id: "quarter", togglable: true, group: "time" },
+                          { text: "Year", id: "year", togglable: true, group: "time" },
+                          { text: "Match my bills", id: "custom", togglable: true, group: "time" }
                       ]
                     },
                 ]
             };
 
             $scope.monthSelectorOptions = {
-                // select: "quarter"
+                format: 'MMMM yyyy',
+                select: "month"
             }
 
             /*
