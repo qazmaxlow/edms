@@ -1098,11 +1098,12 @@ $(function() {
             }*/
             $scope.on_date_selected = function(e) {
                 var dp = e.sender;
+                var start_date = dp.getSelectedStartDate();
                 summary_report_ds.transport.options.read['data'] = {
-                    start_date: kendo.toString(dp.value(), 'yyyy-MM-dd')
+                    start_date: kendo.toString(start_date, 'yyyy-MM-dd')
                 };
                 summary_report_ds.read();
-                $scope.summary_report = summary_report_ds.data();
+                $scope.summary_report = summary_report_ds.data()[0];
             }
 
             $scope.default_date = new Date("{{ default_date.isoformat }}");
