@@ -148,22 +148,26 @@ def summary_ajax(request, system_code):
     money_usages = calculation.combine_readings_by_timestamp(money_usages)
 
     # weekday
-    def weekday_avg(source_reading):
+    def weekday_cost_avg(source_id, source_reading):
         total_day = 0
         total_val = 0
 
         for t, v in source_reading.items():
             dt = datetime.datetime.fromtimestamp(t, current_system_tz)
             if dt.weekday() <= 4 or dt.date() in all_holidays:
-                total_val += v
+                total_val += get_unit_rate(source_id, t).rate * v
                 total_day += 1
 
         if total_day > 0:
             return total_val / float(total_day)
 
-    weekday_timestamp_energy = [(source_id, weekday_avg(sr) ) for source_id, sr in day_source_readings.items()]
-    # weekday_money_sum = sum([ get_unit_rate(s, t).rate*e for s, t, e in weekend_timestamp_energy])
-    weekday_money_sum = sum([ e for s, e in weekday_timestamp_energy if e is not None])
+    weekday_readings = SourceReadingDay.objects(
+        source_id__in=source_ids,
+        datetime__gte=start_dt,
+        datetime__lt=end_dt)
+
+    weekday_costs = [(source_id, weekday_cost_avg(source_id, sr) ) for source_id, sr in day_source_readings.items()]
+    weekday_money_sum = sum([ c for s, c in weekday_costs if c is not None])
 
 
     monthly_summary = []
