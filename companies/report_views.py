@@ -196,6 +196,35 @@ def summary_ajax(request, system_code):
     m['weekend_money_sum'] = weekend_money_sum
     m['weekday_money_sum'] = weekday_money_sum
 
+    # overnight
+    def overnight_cost(source_id, source_reading):
+        # current_system.night_time_start, current_system.night_time_end
+        total_day = 0
+        total_val = 0
+
+        for t, v in source_reading.items():
+            dt = datetime.datetime.fromtimestamp(t, current_system_tz)
+            if dt.time() >= current_system.night_time_start or \
+               dt.time() <= current_system.night_time_end:
+                total_val += get_unit_rate(source_id, t).rate * v
+
+        return total_val
+
+    # plus one day and the night time end?
+    overnight_end = end_dt
+    overnight_readings = SourceReadingHour.objects(
+        source_id__in=source_ids,
+        datetime__gte=start_dt,
+        datetime__lt=end_dt)
+
+    total_days = (end_dt - start_dt).days
+
+    group_overnight_readings = SourceManager.group_readings_with_source_id(overnight_readings)
+    overnight_costs = [(source_id, overnight_cost(source_id, sr)) for source_id, sr in group_overnight_readings.items()]
+    overnight_money_avg = sum([ c for s, c in overnight_costs if c is not None])/total_days
+
+    m['overnight_money_avg'] = overnight_money_avg
+
     data = [m]
 
     return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type="application/json")
@@ -272,8 +301,6 @@ def report_view(request, system_code=None):
     calculation.transform_source_readings(money_usages, systems, sources, money_unit_rates, MONEY_CATEGORY_CODE)
     # assert False
     money_usages = calculation.combine_readings_by_timestamp(money_usages)
-
-
 
     monthly_summary = []
     for timestamp, usage in energy_usages.items():
