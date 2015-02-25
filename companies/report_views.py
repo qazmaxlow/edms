@@ -25,14 +25,13 @@ from utils.utils import Utils
 from entrak.report_views import __generate_report_data
 
 
-def previous_month(datetime):
-    try:
-        previous_month_date = datetime.replace(month=datetime.month-1)
-    except ValueError:
-        if datetime.month == 1:
-            previous_month_date = datetime.replace(year=datetime.year-1, month=12)
-        else:
-            raise
+def previous_month(dt):
+    previous_year = dt.year -1 if dt.month == 1 else dt.year
+    previous_month_last = dt.replace(day=1) - datetime.timedelta(days=1)
+    previous_month = 12 if dt.month == 1 else dt.month-1
+    previous_day = dt.day if dt.day < previous_month_last.day else previous_month_last.day
+
+    previous_month_date = dt.replace(year=previous_year, month=previous_month, day=previous_day)
 
     return previous_month_date
 
@@ -74,10 +73,16 @@ def summary_ajax(request, system_code):
     sd = request.GET.get('start_date')
     if sd:
         start_dt = dateparse.parse_date(request.GET.get('start_date'))
-
-    end_date = request.GET.get('end_date')
+        start_dt = datetime.datetime.combine(start_dt, datetime.datetime.min.time())
+        start_dt = current_system_tz.localize(start_dt)
 
     end_dt = next_month(start_dt)
+
+    ed = request.GET.get('end_date')
+    if ed:
+        end_dt = dateparse.parse_date(ed)
+        end_dt = datetime.datetime.combine(end_dt, datetime.datetime.min.time())
+        end_dt = current_system_tz.localize(end_dt)
 
     source_ids = [str(source.id) for source in sources]
 

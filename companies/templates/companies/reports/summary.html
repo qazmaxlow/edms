@@ -1055,12 +1055,6 @@ $(function() {
                         type: 'GET',
                         dataType: "json"
                     }
-                },
-                pageSize: 30,
-                serverPaging: true,
-                schema: {
-                    // data: "results",
-                    // total: "count"
                 }
             });
 
@@ -1106,8 +1100,10 @@ $(function() {
             $scope.on_date_selected = function(e) {
                 var dp = e.sender;
                 var start_date = dp.getSelectedStartDate();
+                var end_date = dp.getSelectedEndDate();
                 summary_report_ds.transport.options.read['data'] = {
-                    start_date: kendo.toString(start_date, 'yyyy-MM-dd')
+                    start_date: kendo.toString(start_date, 'yyyy-MM-dd'),
+                    end_date: kendo.toString(end_date, 'yyyy-MM-dd')
                 };
                 summary_report_ds.read();
                 $scope.summary_report = summary_report_ds.data()[0];
