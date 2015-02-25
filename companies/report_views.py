@@ -123,7 +123,6 @@ def summary_ajax(request, system_code):
 
     def get_unit_rate(source_id, timestamp):
         source = Source.objects(id=str(source_id)).first()
-        # assert False
         system = System.objects.get(code=source.system_code)
         unit_infos = json.loads(system.unit_info)
         money_unit_code = unit_infos['money']
