@@ -7,6 +7,7 @@ from django.core.context_processors import csrf
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.templatetags.static import static
 from django.utils import timezone, dateparse
 
 from wkhtmltopdf.views import PDFTemplateResponse
@@ -154,6 +155,16 @@ def summary_ajax(request, system_code):
         return sum([get_unitrate(r.source_id, r.datetime).rate*r.value for r in month_readings])
 
     monthly_money_sum = get_total_cost(source_ids, start_dt, end_dt)
+    last_start_dt = previous_month(start_dt)
+    last_end_dt = previous_month(end_dt)
+    last_total_cost = get_total_cost(source_ids, last_start_dt, last_end_dt)
+
+    compare_to_last_total = None
+
+    if last_total_cost > 0:
+        compare_to_last_total = float(monthly_money_sum-last_total_cost)/last_total_cost*100
+
+
 
     weekend_money_sum = sum([ e for s, e in weekend_timestamp_energy if e is not None])
 
@@ -215,6 +226,8 @@ def summary_ajax(request, system_code):
     m['monthly_money_sum'] = monthly_money_sum
     m['weekend_money_sum'] = weekend_money_sum
     m['weekday_money_sum'] = weekday_money_sum
+
+    m['compare_to_last_total'] = CompareTplHepler(compare_to_last_total).to_dict()
 
     # overnight
     def overnight_cost(reading):
@@ -387,6 +400,16 @@ class CompareTplHepler:
     @property
     def text_desc(self):
         return "{self.compared_percent_abs:.0f}% {self.change_desc}".format(self=self)
+
+    def to_dict(self):
+        return {
+            'percent': self.compared_percent,
+            'percent_abs': self.compared_percent_abs,
+            'desc': self.change_desc,
+            'css_class': self.change_css_class,
+            'icon_path': static(self.change_icon_path)
+        }
+
 
 
 def popup_report_view(request, system_code, year, month, to_pdf=False):
