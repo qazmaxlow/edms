@@ -261,32 +261,33 @@ def summary_ajax(request, system_code):
             return reading.value
 
 
-    overnight_start = datetime.datetime.combine(start_dt, datetime.datetime.min.time())
-    overnight_start= current_system_tz.localize(overnight_start)
-    # overnight_start = datetime.datetime(2014, 6, 1, 20, 0, 0, 0, current_system_tz)
+    def get_overnight_avg_cost(source_ids, start_dt, end_dt):
+        overnight_start = datetime.datetime.combine(start_dt, datetime.datetime.min.time())
+        overnight_start= current_system_tz.localize(overnight_start)
+        # overnight_start = datetime.datetime(2014, 6, 1, 20, 0, 0, 0, current_system_tz)
 
-    # overnight_start = datetime.datetime(2014, 6, 1, 20, 0, 0, 0)
-    # the last day will count cross to the next day, already did?
-    # overnight_end = end_dt + datetime.timedelta(days=1)
-    overnight_end =  datetime.datetime.combine(end_dt, current_system.night_time_start)
-    overnight_end = current_system_tz.localize(overnight_end)
+        # overnight_start = datetime.datetime(2014, 6, 1, 20, 0, 0, 0)
+        # the last day will count cross to the next day, already did?
+        # overnight_end = end_dt + datetime.timedelta(days=1)
+        overnight_end =  datetime.datetime.combine(end_dt, current_system.night_time_start)
+        overnight_end = current_system_tz.localize(overnight_end)
 
-    # overnight_end = datetime.datetime(2014, 6, 2, 0, 0, 0, 0)
-    overnight_readings = SourceReadingHour.objects(
-        source_id__in=source_ids,
-        datetime__gte=overnight_start,
-        datetime__lt=overnight_end)
+        # overnight_end = datetime.datetime(2014, 6, 2, 0, 0, 0, 0)
+        overnight_readings = SourceReadingHour.objects(
+            source_id__in=source_ids,
+            datetime__gte=overnight_start,
+            datetime__lt=overnight_end)
 
 
-    total_days = (end_dt - start_dt).days
-    # group might get issue?
-    # group_overnight_readings = SourceManager.group_readings_with_source_id(overnight_readings)
+        total_days = (end_dt - start_dt).days
+        # group might get issue?
+        # group_overnight_readings = SourceManager.group_readings_with_source_id(overnight_readings)
 
-    overnight_costs = [overnight_cost(r) for r in overnight_readings]
-    overnight_money_avg = sum([ c for c in overnight_costs if c is not None])/total_days
-    # overnight_money_avg = sum([ c for c in overnight_costs if c is not None])
+        overnight_costs = [overnight_cost(r) for r in overnight_readings]
+        return sum([ c for c in overnight_costs if c is not None])/total_days
 
-    m['overnight_money_avg'] = overnight_money_avg
+
+    m['overnight_money_avg'] = get_overnight_avg_cost(source_ids, start_dt, end_dt)
 
     data = [m]
 
