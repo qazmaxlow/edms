@@ -186,7 +186,8 @@ def summary_ajax(request, system_code):
         for t, v in source_reading.items():
             dt = datetime.datetime.fromtimestamp(t, current_system_tz)
             if dt.weekday() <= 4 or dt.date() in all_holidays:
-                total_val += get_unit_rate(source_id, t).rate * v
+                # total_val += get_unit_rate(source_id, t).rate * v
+                total_val += v
                 total_day += 1
 
         if total_day > 0:
@@ -200,10 +201,11 @@ def summary_ajax(request, system_code):
     # weekday_costs = [(source_id, weekday_cost_avg(source_id, sr) ) for source_id, sr in day_source_readings.items()]
 
     def get_weekdays_cost(source_ids, start_dt, end_dt):
-        weekday_readings = SourceReadingDay.objects(
-            source_id__in=source_ids,
-            datetime__gte=start_dt,
-            datetime__lt=end_dt)
+        # weekday_readings = SourceReadingDay.objects(
+        #     source_id__in=source_ids,
+        #     datetime__gte=start_date,
+        #     datetime__lt=end_date)
+        day_source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingDay, start_dt, end_dt)
         weekday_costs = [(source_id, weekday_cost_avg(source_id, sr) ) for source_id, sr in day_source_readings.items()]
         return sum([ c for s, c in weekday_costs if c is not None])
 
