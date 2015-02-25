@@ -116,7 +116,6 @@ def summary_ajax(request, system_code):
             return total_val / float(total_day)
 
 
-
     day_source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingDay, start_dt, end_dt)
 
     weekend_timestamp_energy = [(source_id, weekend_avg(sr) ) for source_id, sr in day_source_readings.items()]
@@ -131,7 +130,23 @@ def summary_ajax(request, system_code):
         ur = money_unit_rates.filter(effective_date__lte=dt).order_by('-effective_date').first()
         return ur
 
-    monthly_money_sum = sum([ get_unit_rate(s, t).rate*e for s, t, e in source_timestamp_energy])
+    def get_unitrate(source_id, datetime):
+        source = Source.objects(id=str(source_id)).first()
+        system = System.objects.get(code=source.system_code)
+        unit_infos = json.loads(system.unit_info)
+        money_unit_code = unit_infos['money']
+        money_unit_rates = UnitRate.objects.filter(category_code='money', code=unit_infos['money'])
+        dt = datetime
+        ur = money_unit_rates.filter(effective_date__lte=dt).order_by('-effective_date').first()
+        return ur
+
+    month_readings = SourceReadingMonth.objects(
+        source_id__in=source_ids,
+        datetime__gte=start_dt,
+        datetime__lt=end_dt)
+
+    monthly_money_sum = sum([get_unitrate(r.source_id, r.datetime).rate*r.value for r in month_readings])
+    # monthly_money_sum = sum([ get_unit_rate(s, t).rate*e for s, t, e in source_timestamp_energy])
 
     # weekend_money_sum = sum([ get_unit_rate(s, t).rate*e for s, t, e in weekend_timestamp_energy])
     weekend_money_sum = sum([ e for s, e in weekend_timestamp_energy if e is not None])
