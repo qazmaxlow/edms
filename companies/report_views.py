@@ -140,15 +140,21 @@ def summary_ajax(request, system_code):
         ur = money_unit_rates.filter(effective_date__lte=dt).order_by('-effective_date').first()
         return ur
 
-    month_readings = SourceReadingMonth.objects(
-        source_id__in=source_ids,
-        datetime__gte=start_dt,
-        datetime__lt=end_dt)
+    # month_readings = SourceReadingMonth.objects(
+    #     source_id__in=source_ids,
+    #     datetime__gte=start_dt,
+    #     datetime__lt=end_dt)
 
-    monthly_money_sum = sum([get_unitrate(r.source_id, r.datetime).rate*r.value for r in month_readings])
-    # monthly_money_sum = sum([ get_unit_rate(s, t).rate*e for s, t, e in source_timestamp_energy])
+    def get_total_cost(source_ids, start_dt, end_dt):
+        month_readings = SourceReadingMonth.objects(
+            source_id__in=source_ids,
+            datetime__gte=start_dt,
+            datetime__lt=end_dt)
 
-    # weekend_money_sum = sum([ get_unit_rate(s, t).rate*e for s, t, e in weekend_timestamp_energy])
+        return sum([get_unitrate(r.source_id, r.datetime).rate*r.value for r in month_readings])
+
+    monthly_money_sum = get_total_cost(source_ids, start_dt, end_dt)
+
     weekend_money_sum = sum([ e for s, e in weekend_timestamp_energy if e is not None])
 
     co2_usages = copy.deepcopy(source_readings)
