@@ -287,7 +287,14 @@ def summary_ajax(request, system_code):
         return sum([ c for c in overnight_costs if c is not None])/total_days
 
 
-    m['overnight_money_avg'] = get_overnight_avg_cost(source_ids, start_dt, end_dt)
+    overnight_avg_cost = get_overnight_avg_cost(source_ids, start_dt, end_dt)
+    m['overnight_money_avg'] = overnight_avg_cost
+
+    compare_to_last_overnight_avg_cost = None
+    last_overnight_avg_cost = get_overnight_avg_cost(source_ids, last_start_dt, last_end_dt)
+    if last_overnight_avg_cost > 0:
+        compare_to_last_overnight_avg_cost = float(overnight_avg_cost-last_overnight_avg_cost)/last_overnight_avg_cost*100
+    m['compare_to_last_overnight_avg_cost'] = CompareTplHepler(compare_to_last_overnight_avg_cost).to_dict()
 
     data = [m]
 
