@@ -192,13 +192,23 @@ def summary_ajax(request, system_code):
         if total_day > 0:
             return total_val / float(total_day)
 
-    weekday_readings = SourceReadingDay.objects(
-        source_id__in=source_ids,
-        datetime__gte=start_dt,
-        datetime__lt=end_dt)
+    # weekday_readings = SourceReadingDay.objects(
+    #     source_id__in=source_ids,
+    #     datetime__gte=start_dt,
+    #     datetime__lt=end_dt)
 
-    weekday_costs = [(source_id, weekday_cost_avg(source_id, sr) ) for source_id, sr in day_source_readings.items()]
-    weekday_money_sum = sum([ c for s, c in weekday_costs if c is not None])
+    # weekday_costs = [(source_id, weekday_cost_avg(source_id, sr) ) for source_id, sr in day_source_readings.items()]
+
+    def get_weekday_cost(source_ids, start_dt, end_dt):
+        weekday_readings = SourceReadingDay.objects(
+            source_id__in=source_ids,
+            datetime__gte=start_dt,
+            datetime__lt=end_dt)
+        weekday_costs = [(source_id, weekday_cost_avg(source_id, sr) ) for source_id, sr in day_source_readings.items()]
+        return sum([ c for s, c in weekday_costs if c is not None])
+
+    weekday_money_sum = get_weekday_cost(source_ids, start_dt, end_dt)
+    # weekday_money_sum = sum([ c for s, c in weekday_costs if c is not None])
 
 
     monthly_summary = []
