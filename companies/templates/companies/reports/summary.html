@@ -789,11 +789,13 @@ $(function() {
           <h3>${% templatetag openvariable %} summary_report.weekend_money_sum | number:0 {% templatetag closevariable %}</h3>
           <p>Average Weekdays Cost</p>
       </div></div>
+      {% verbatim %}
       <div class="row content"><div class="col-xs-12">
-          <img alt="decrease enegry" class="icon" src="{% static 'images/reports/decrease_engry.svg'  %}">
-          <h3>{{ compare_last_month_money|floatformat:0 }}%</h3>
+          <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_weekdays.icon_path }}">
+          <h3>{{ summary_report.compare_to_last_weekdays.percent_abs | number:0 }}%</h3>
           <p>Compared to last month</p>
       </div></div>
+      {% endverbatim %}
     </div>
     <div class="col-xs-3">
       <div class="row time-type"><div class="col-xs-12">

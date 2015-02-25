@@ -199,7 +199,7 @@ def summary_ajax(request, system_code):
 
     # weekday_costs = [(source_id, weekday_cost_avg(source_id, sr) ) for source_id, sr in day_source_readings.items()]
 
-    def get_weekday_cost(source_ids, start_dt, end_dt):
+    def get_weekdays_cost(source_ids, start_dt, end_dt):
         weekday_readings = SourceReadingDay.objects(
             source_id__in=source_ids,
             datetime__gte=start_dt,
@@ -207,9 +207,15 @@ def summary_ajax(request, system_code):
         weekday_costs = [(source_id, weekday_cost_avg(source_id, sr) ) for source_id, sr in day_source_readings.items()]
         return sum([ c for s, c in weekday_costs if c is not None])
 
-    weekday_money_sum = get_weekday_cost(source_ids, start_dt, end_dt)
+    weekday_money_sum = get_weekdays_cost(source_ids, start_dt, end_dt)
     # weekday_money_sum = sum([ c for s, c in weekday_costs if c is not None])
 
+    compare_to_last_weekdays = None
+
+    last_weekdays_cost = get_weekdays_cost(source_ids, last_start_dt, last_end_dt)
+
+    if last_weekdays_cost > 0:
+        compare_to_last_weekdays = float(weekday_money_sum-last_weekdays_cost)/last_weekdays_cost*100
 
     monthly_summary = []
     for timestamp, usage in energy_usages.items():
@@ -238,6 +244,7 @@ def summary_ajax(request, system_code):
     m['weekday_money_sum'] = weekday_money_sum
 
     m['compare_to_last_total'] = CompareTplHepler(compare_to_last_total).to_dict()
+    m['compare_to_last_weekdays'] = CompareTplHepler(compare_to_last_weekdays).to_dict()
 
     # overnight
     def overnight_cost(reading):
