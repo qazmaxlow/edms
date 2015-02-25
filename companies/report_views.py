@@ -16,6 +16,7 @@ from egauge.manager import SourceManager
 from egauge.models import SourceReadingMonth, SourceReadingDay, SourceReadingHour, Source
 from system.models import System
 from unit.models import UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
+from utils.auth import permission_required
 from utils import calculation
 from utils.utils import Utils
 
@@ -301,6 +302,7 @@ def summary_ajax(request, system_code):
     return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type="application/json")
 
 
+@permission_required()
 def report_view(request, system_code=None):
     systems_info = System.get_systems_info(system_code, request.user.system.code)
     systems = systems_info['systems']
