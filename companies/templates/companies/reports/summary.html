@@ -790,7 +790,7 @@ $(function() {
           <p>Average Weekdays Cost</p>
       </div></div>
       {% verbatim %}
-      <div class="row content"><div class="col-xs-12">
+      <div class="row content end"><div class="col-xs-12">
           <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_weekdays.icon_path }}">
           <h3>{{ summary_report.compare_to_last_weekdays.percent_abs | number:0 }}%</h3>
           <p>Compared to last month</p>
@@ -807,7 +807,7 @@ $(function() {
           <p>Average Overnight Cost</p>
       </div></div>
       {% verbatim %}
-      <div class="row content"><div class="col-xs-12">
+      <div class="row content end"><div class="col-xs-12">
           <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_overnight_avg_cost.icon_path }}">
           <h3>{{ summary_report.compare_to_last_overnight_avg_cost.percent_abs | number:0 }}%</h3>
           <p>Compared to last month</p>
