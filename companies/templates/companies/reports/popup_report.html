@@ -722,8 +722,7 @@
                 color: "#047fa1",
                 format: "{0:n0}",
                 labels: {
-                    visible: true,
-                    format: "{0:n0}"
+                    visible: false
                 }
             },
             {
@@ -733,11 +732,16 @@
                 color: "#edba3c",
                 format: "{0:n0}",
                 labels: {
-                    visible: true,
-                    format: "{0:n0}"
+                    visible: false
+                    // format: "{0:n0}"
                 }
             }
         ],
+
+        tooltip: {
+            visible: true,
+            format: "{0} kWh"
+        },
 
         valueAxis: {
             line: {
