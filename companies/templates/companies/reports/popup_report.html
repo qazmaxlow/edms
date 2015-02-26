@@ -93,9 +93,9 @@
             <div>
                 <img src="{% static 'images/report/factory-co2.png' %}">
                 <div class="basic-info-text-container">
-                    <span id="current-co2-usage">{{ total_co2|floatformat:"0" }}</span>tons{% blocktrans %}<span class="basic-info-col-unit"> CO<sub>2</sub></span>
+                    <span id="current-co2-usage">{{ total_co2|floatformat:"0" }} tons</span><span class="basic-info-col-unit"> CO<sub>2</sub></span>
                     <br>
-                    <span class="basic-info-col-subtext">emitted</span>{% endblocktrans %}
+                    <span class="basic-info-col-subtext">emitted</span>
                 </div>
             </div>
             <hr class="current-usage-separator-dark-grey">
