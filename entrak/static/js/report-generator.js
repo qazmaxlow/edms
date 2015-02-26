@@ -1133,7 +1133,19 @@ ReportGenerator.prototype.generateCalendarReport = function(targetSel, combinedR
     targetContainer.find(".average-usage").text(Utils.formatWithCommas(averageUsage.toFixed(0)));
     var beginningDateText = this.beginningStartDt.format(this.multiLangTexts.beginDtFormat) + " **";
     this._fillInComparePercent(targetSel+" .compare-beginning", beginningUsage, averageUsage, beginningDateText);
-    this._fillInComparePercent(targetSel+" .compare-last", lastUsage, averageUsage, this.multiLangTexts.last_week);
+
+    var compare_last_text;
+    if (this.reportType == ReportGenerator.REPORT_TYPE_MONTH || this.reportType == ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
+        compare_last_text = this.multiLangTexts.lastMonth;
+    } else if (this.reportType == ReportGenerator.REPORT_TYPE_YEAR) {
+        compare_last_text = this.multiLangTexts.last_year;
+    } else if (this.reportType == ReportGenerator.REPORT_TYPE_QUARTER) {
+        compare_last_text = this.multiLangTexts.last_quarter;
+    } else if (this.reportType == ReportGenerator.REPORT_TYPE_WEEK) {
+        compare_last_text = this.multiLangTexts.last_week;
+    }
+
+    this._fillInComparePercent(targetSel+" .compare-last", lastUsage, averageUsage, compare_last_text);
     this._fillInComparePercent(targetSel+" .compare-last-same-period", lastSamePeriodUsage, averageUsage, this.multiLangTexts.samePeriodLastYear);
 
     if (lowestDt !== null) {
