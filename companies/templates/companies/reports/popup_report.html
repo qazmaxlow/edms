@@ -143,7 +143,7 @@
                 <img src="{% static 'images/report/car.png' %}">
                 <div class="basic-info-text-container">
                     <span id="car-impact">{{ co2_in_car|floatformat:"0" }} cars</span><br>
-                    <span id="car-impact-subtext" class="basic-info-col-subtext"></span>
+                    <span id="car-impact-subtext" class="basic-info-col-subtext">more on the road for a month</span>
                 </div>
             </div>
             <hr class="current-usage-separator-dark-grey">
@@ -154,8 +154,8 @@
                     <span id="forest-impact-subtext" class="basic-info-col-subtext"></span><br>
                     <span id="forest-impact">{{ co2_in_forest|floatformat:"0" }}</span>
                     {% else %}
-                    <span id="forest-impact">{{ co2_in_forest|floatformat:"0" }}</span>m^2<br>
-                    <span id="forest-impact-subtext" class="basic-info-col-subtext"></span>
+                    <span id="forest-impact">{{ co2_in_forest|floatformat:"0" }} m<sup>2</sup></span><br>
+                    <span id="forest-impact-subtext" class="basic-info-col-subtext">of tropical rainforest cut down</span>
                     {% endifequal %}
                 </div>
             </div>
@@ -163,8 +163,8 @@
             <div>
                 <img src="{% static 'images/report/panda.png' %}">
                 <div class="basic-info-text-container">
-                    <span id="panda-impact-subtext" class="basic-info-col-subtext"></span><br>
-                    <span id="panda-impact">{{ co2_in_elephant|floatformat:"0" }}pandas</span>
+                    <span id="panda-impact-subtext" class="basic-info-col-subtext">Extra CO2 emissions equal to the weight of</span><br>
+                    <span id="panda-impact">{{ co2_in_elephant|floatformat:"0" }} pandas</span>
                 </div>
             </div>
         </div>
