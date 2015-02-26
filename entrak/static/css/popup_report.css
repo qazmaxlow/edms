@@ -652,17 +652,16 @@
 .report-head {
     position: relative;
 }
+
 .system-name {
-    height: 30px;
     padding-top: 45px;
     padding-bottom: 3px;
     text-align:center;
-    vertical-align: middle;
     font-weight: bold;
     font-size: 18pt;
     color: #354960;
-    font-family: 'ITCAvantGardeStd-Bk', "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
+
 .title-separator {
     width: 300px;
     height: 1px;
@@ -676,6 +675,9 @@
     font-weight: lighter;
     font-size: 14pt;
     color: #354960;
+    border-top: 1px #354960 solid;
+    width: 300px;
+    margin: 0 auto;
 }
 
 .head-separator {
@@ -940,7 +942,7 @@ body {-webkit-print-color-adjust: exact;}
 .basic-info-col .basic-info-text-container {
     display: inline-block;
     width: 178px;
-    height: 100%;
+    padding-left: 14px;
     vertical-align: middle;
 }
 .basic-info-col div:first-child{
@@ -970,7 +972,6 @@ body {-webkit-print-color-adjust: exact;}
 .basic-info-col span{
     font-size: 20pt;
     font-weight: bold;
-    margin-left: 14px;
     vertical-align: middle;
 }
 .positive-saving .basic-info-col span {
@@ -988,17 +989,13 @@ body {-webkit-print-color-adjust: exact;}
 #save-co2-usage .basic-info-col-unit {
     vertical-align: middle;
 }
-.basic-info-col span sub{
-    font-size: 9pt;
-}
+
 .basic-info-col .basic-info-col-subtext{
-    /* display: inline-block; */
     color: #626060 !important;
     font-weight: lighter;
     font-size: 11pt;
-    /* padding-top: 3px; */
-    /* margin-left: 14px; */
 }
+
 #save-usage-col {
     box-shadow: 6px 0px 12px -5px #a0a0a0, -6px 0px 12px -5px #a0a0a0;
 }
