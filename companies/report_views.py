@@ -413,7 +413,7 @@ class CompareTplHepler:
 
     @property
     def compared_percent_abs(self):
-        return abs(self.compared_percent)
+        return abs(self.compared_percent) if self.compared_percent else None
 
     @property
     def change_desc(self):
