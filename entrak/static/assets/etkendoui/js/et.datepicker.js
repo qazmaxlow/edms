@@ -1217,13 +1217,18 @@
                 var end_date = new Date(date);
                 end_date.setDate(start_date.getDate() + 6);
 
-                date_text = kendo.toString(start_date, options.format, options.culture) + ' - ' +
-                    kendo.toString(end_date, options.format, options.culture);
+                var week_format = 'yyyy MMM d';
+
+                date_text = kendo.toString(start_date, week_format, options.culture) + ' - ' +
+                    kendo.toString(end_date, week_format, options.culture);
             } else if(date && options.select == 'quarter'){
                 var quarter_start = new Date(date.getFullYear(), 3*Math.floor(date.getMonth()/3), 1);
                 var quarter_end = new Date(date.getFullYear(), 3*Math.floor(1+date.getMonth()/3), 0);
-                date_text = kendo.toString(quarter_start, options.format, options.culture) + ' - ' +
-                    kendo.toString(quarter_end, options.format, options.culture);
+
+                var quarter_format = 'yyyy MMM';
+
+                date_text = kendo.toString(quarter_start, quarter_format, options.culture) + ' - ' +
+                    kendo.toString(quarter_end, quarter_format, options.culture);
             }
 
             that.element.val(date_text);
