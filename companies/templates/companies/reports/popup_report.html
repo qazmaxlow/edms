@@ -69,7 +69,7 @@
         <hr class="head-separator">
 </div>
 
-<div class="xreport-component page-break">
+<div class="xreport-component page-break-after">
     <div class="row report-component-header">
       <div class="col-xs-12">
         {% trans 'WHAT ARE OUR KEY STATISTICS FOR THIS <span class="report-type-name"></span>?' %}
@@ -207,7 +207,7 @@
     </div></div>
 </div>
 
-<div id="xcompare-past" class="xreport-component page-break">
+<div id="xcompare-past" class="xreport-component page-break-after">
     <div class="row report-component-header">
       <div class="col-xs-12">
       {% trans 'HOW MUCH MORE / LESS DID WE USE COMPARED TO LAST <span class="report-type-name"></span>?' %}
@@ -235,13 +235,13 @@
 
     <div class="row detail-content">
       <div class="col-xs-12">
-        <div kendo-chart k-options="lineOptions" ></div>
+        <div kendo-chart style="width:1000px;" k-options="lineOptions" ></div>
       </div>
     </div>
 </div>
 </div>
 
-<div id="weekday-info" class="xreport-component xcalendar-component page-break">
+<div id="weekday-info" class="xreport-component xcalendar-component page-break-after">
     <div class="row report-component-header">
       <div class="col-xs-12">
         {% trans "HOW MUCH ENERGY DID WE USE ON <span>WEEKDAYS?</span>" %}</div>
@@ -366,7 +366,7 @@
     {% endfor %}
 </div>
 
-<div id="weekend-info" class="xreport-component xcalendar-component">
+<div id="weekend-info" class="xreport-component xcalendar-component page-break-after">
     <div class="row report-component-header">
       <div class="col-xs-12">
         {% trans "HOW MUCH ENERGY DID WE USE ON <span>WEEKENDS?</span>" %}</div>
@@ -491,7 +491,7 @@
     {% endfor %}
 </div>
 
-<div id="overnight-info" class="xreport-component xcalendar-component">
+<div id="overnight-info" class="xreport-component xcalendar-component page-break-after">
     <div class="row report-component-header">
       <div class="col-xs-12">
         {% trans "HOW MUCH ENERGY DID WE USE <span>OVERNIGHT***?</span>" %}</div>

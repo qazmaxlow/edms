@@ -814,13 +814,14 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
     if to_pdf:
         return PDFTemplateResponse(
             request=request,
-            template='companies/reports/popup_report_pdf.html',
+            # template='companies/reports/popup_report_pdf.html',
+            template='companies/reports/popup_report.html',
             # template='foo.html',
             filename='hello.pdf',
             context=m,
             # show_content_in_browser=False,
             cmd_options={
-                # "javascript-delay": '5000',
+                "javascript-delay": '5000',
                 # 'quiet': '',
                 # 'margin-left': '18mm',
                 # 'page-size': 'A3',
