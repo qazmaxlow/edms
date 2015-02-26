@@ -191,11 +191,11 @@
         <tr class="key-statistics-row ">
           <td class="usage-type-name">
             {{ td.name }}</td><td>
-            {{ td.total_energy }}</td><td>
-            {{ td.co2_val }}</td><td>
-            {{ td.money_val }}</td>
-          <td>{{ td.change_in_kwh }}</td>
-          <td>{{ td.change_in_money }}</td>
+            {{ td.total_energy|floatformat:"0"|intcomma }}</td><td>
+            {{ td.co2_val|floatformat:"0"|intcomma }}</td><td>
+            {{ td.money_val|floatformat:"0"|intcomma }}</td>
+          <td>{{ td.change_in_kwh|floatformat:"0"|intcomma }}</td>
+          <td>{{ td.change_in_money|floatformat:"0"|intcomma }}</td>
         </tr>
         {% endfor %}
       </tbody>
