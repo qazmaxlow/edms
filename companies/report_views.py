@@ -393,14 +393,15 @@ def report_view(request, system_code=None):
     m['month_summary'] = monthly_summary[0] if monthly_summary else None
     m.update(csrf(request))
 
-    current_month_money = m['month_summary']['money_usage']
-    calculation.transform_source_readings(last_month_source_readings, systems, sources, money_unit_rates, MONEY_CATEGORY_CODE)
-    last_month_money_usages = calculation.combine_readings_by_timestamp(last_month_source_readings)
-    last_month_money_usage = last_month_money_usages.values()[0] if last_month_money_usages else 0
+    if m['month_summary']:
+        current_month_money = m['month_summary']['money_usage']
+        calculation.transform_source_readings(last_month_source_readings, systems, sources, money_unit_rates, MONEY_CATEGORY_CODE)
+        last_month_money_usages = calculation.combine_readings_by_timestamp(last_month_source_readings)
+        last_month_money_usage = last_month_money_usages.values()[0] if last_month_money_usages else 0
 
-    compare_last_month_money = (current_month_money - last_month_money_usage)/ current_month_money * 100
-    m['compare_last_month_money'] = compare_last_month_money
-    m['monthly_money_sum'] = monthly_money_sum
+        compare_last_month_money = (current_month_money - last_month_money_usage)/ current_month_money * 100
+        m['compare_last_month_money'] = compare_last_month_money
+        m['monthly_money_sum'] = monthly_money_sum
 
     m['default_date'] = start_dt
     # return render(request, 'testing_code.html', m)
