@@ -1055,6 +1055,12 @@ $(function() {
                         type: 'GET',
                         dataType: "json"
                     }
+                },
+                schema: {
+                    // Fix for single result
+                    data: function(response) {
+                        return [response];
+                    }
                 }
             });
 

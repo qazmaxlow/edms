@@ -302,7 +302,7 @@ def summary_ajax(request, system_code):
         compare_to_last_overnight_avg_cost = float(overnight_avg_cost-last_overnight_avg_cost)/last_overnight_avg_cost*100
     m['compare_to_last_overnight_avg_cost'] = CompareTplHepler(compare_to_last_overnight_avg_cost).to_dict()
 
-    data = [m]
+    data = m
 
     return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type="application/json")
 
