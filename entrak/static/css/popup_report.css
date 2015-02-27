@@ -956,6 +956,16 @@ body {-webkit-print-color-adjust: exact;}
     font-size: 11pt;
 }
 
+.basic-info-col h4 {
+    margin: 0 auto;
+    padding-top: 15px;
+    height: 73px;
+    width: 178px;
+    font-size: 11pt;
+    font-weight: 600;
+    text-align: center;
+}
+
 .current-usage-separator-dark-grey{
     width: 80%;
     height: 1px;
@@ -993,10 +1003,12 @@ body {-webkit-print-color-adjust: exact;}
     vertical-align: middle;
 }
 
-.basic-info-col .basic-info-col-subtext{
+.basic-info-col .basic-info-col-subtext {
     color: #626060 !important;
     font-weight: lighter;
     font-size: 11pt;
+    margin-top: 2px;
+    display: block;
 }
 
 #save-usage-col {

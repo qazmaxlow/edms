@@ -78,7 +78,7 @@
 
     <div class="row top-content {{ css_class_energy_saving }}">
         <div id="current-usage-col" class="col-xs-4 basic-info-col">
-            <div>{% trans "HOW MUCH ENERGY<br>DID WE USE?" %}</div>
+            <h4>{% trans "HOW MUCH ENERGY<br>DID WE USE?" %}</h4>
             <hr class="current-usage-separator-dark-grey">
             <div>
                 <img src="{% static 'images/report/lightning-energy.png' %}">
@@ -109,9 +109,9 @@
         </div>
 
         <div id="save-usage-col" class="col-xs-4 basic-info-col">
-            <div>{% trans "HOW MUCH ENERGY<br>DID WE SAVE?" %}<br>
+            <h4>{% trans "HOW MUCH ENERGY<br>DID WE SAVE?" %}
                 <span class="basic-info-col-subtext">{% trans "(year-on-year)" %}</span>
-            </div>
+            </h4>
             <hr class="current-usage-separator-dark-grey">
             <div>
                 <img src="{% static 'images/report/lightning-energy.png' %}">
@@ -136,7 +136,7 @@
         </div>
 
         <div id="impact-col" class="col-xs-4 basic-info-col">
-            <div>{% trans "HOW DID OUR<br>CARBON FOOTPRINT CHANGE?" %}</div>
+            <h4>{% trans "HOW DID OUR<br>CARBON FOOTPRINT CHANGE?" %}</h4>
             <hr class="current-usage-separator-dark-grey">
             <div>
                 <img src="{% static 'images/report/car.png' %}">
