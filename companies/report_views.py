@@ -390,7 +390,7 @@ def report_view(request, system_code=None):
 
     m = systems_info
     m["monthly_summary"] = sorted(monthly_summary, key=lambda x: x['timestamp'], reverse=True)
-    m['month_summary'] = monthly_summary[0]
+    m['month_summary'] = monthly_summary[0] if monthly_summary else None
     m.update(csrf(request))
 
     current_month_money = m['month_summary']['money_usage']
