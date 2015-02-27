@@ -676,11 +676,12 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
 
     # oops!!! have to rewrite
     p_or_n = -1 if report_data['savingInfo']['energy'] >=0 else 0
-    m['saving_energy'] = p_or_n * report_data['savingInfo']['energy']
+
+    m['saving_energy'] = p_or_n * abs(report_data['savingInfo']['energy'])
     m['css_class_energy_saving'] = 'positive-saving' if report_data['savingInfo']['energy'] >=0 else 'negative-saving'
     # in tons
-    m['saving_co2'] = p_or_n * report_data['savingInfo']['co2'] / 1000.0
-    m['saving_money'] = p_or_n * report_data['savingInfo']['money']
+    m['saving_co2'] = p_or_n * abs(report_data['savingInfo']['co2'] / 1000.0)
+    m['saving_money'] = p_or_n * abs(report_data['savingInfo']['money'])
 
     m['co2_in_car'] = abs(report_data['savingInfo']['co2']*0.003)
     m['co2_in_forest'] = abs(report_data['savingInfo']['co2']*0.016)
