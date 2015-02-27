@@ -142,7 +142,12 @@
                 <img src="{% static 'images/report/car.png' %}">
                 <div class="basic-info-text-container">
                     <span id="car-impact">{{ co2_in_car|floatformat:"0" }} cars</span><br>
-                    <span id="car-impact-subtext" class="basic-info-col-subtext">more on the road for a month</span>
+                    <span id="car-impact-subtext" class="basic-info-col-subtext">
+                      {% if is_saving %}
+                      taken off the road for a month
+                      {% else %}
+                      more on the road for a month
+                      {% endif %}</span>
                 </div>
             </div>
             <hr class="current-usage-separator-dark-grey">
@@ -154,7 +159,13 @@
                     <span id="forest-impact">{{ co2_in_forest|floatformat:"0" }}</span>
                     {% else %}
                     <span id="forest-impact">{{ co2_in_forest|floatformat:"0" }} m<sup>2</sup></span><br>
-                    <span id="forest-impact-subtext" class="basic-info-col-subtext">of tropical rainforest cut down</span>
+                    <span id="forest-impact-subtext" class="basic-info-col-subtext">
+                      {% if is_saving %}
+                      of tropical rainforest protected
+                      {% else %}
+                      of tropical rainforest cut down
+                      {% endif %}
+                    </span>
                     {% endifequal %}
                 </div>
             </div>
@@ -162,7 +173,13 @@
             <div>
                 <img src="{% static 'images/report/panda.png' %}">
                 <div class="basic-info-text-container">
-                    <span id="panda-impact-subtext" class="basic-info-col-subtext">Extra CO2 emissions equal to the weight of</span>
+                    <span id="panda-impact-subtext" class="basic-info-col-subtext">
+                      {% if is_saving %}
+                      Reduced CO2 emissions equal to the weight of
+                      {% else %}
+                      Extra CO2 emissions equal to the weight of
+                      {% endif %}
+                    </span>
                     <span id="panda-impact">{{ co2_in_elephant|floatformat:"0" }} pandas</span>
                 </div>
             </div>
