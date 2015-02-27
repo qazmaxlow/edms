@@ -116,21 +116,21 @@
             <div>
                 <img src="{% static 'images/report/lightning-energy.png' %}">
                 <div class="basic-info-text-container">
-                    <span id="save-energy-usage">{{ saving_energy|stringformat:"+.0f" }}%</span>
+                    <span id="save-energy-usage">{{ saving_sign }}{{ saving_energy|stringformat:".0f" }}%</span>
                 </div>
             </div>
             <hr class="current-usage-separator-dark-grey">
             <div>
                 <img src="{% static 'images/report/factory-co2.png' %}">
                 <div class="basic-info-text-container">
-                    <span id="save-co2-usage">{{ saving_co2|stringformat:"+.0f" }} tons</span><span class="basic-info-col-unit"> CO<sub>2</sub></span>
+                    <span id="save-co2-usage">{{ saving_sign }}{{ saving_co2|stringformat:".0f" }} tons</span><span class="basic-info-col-unit"> CO<sub>2</sub></span>
                 </div>
             </div>
             <hr class="current-usage-separator-dark-grey">
             <div>
                 <img src="{% static 'images/report/piggy.png' %}">
                 <div class="basic-info-text-container">
-                    <span id="save-money-usage">{% if saving_money > 0 %}+{% else %}-{% endif %}${{ saving_money|stringformat:".0f" }}</span>
+                    <span id="save-money-usage">{{ saving_sign }}${{ saving_money|stringformat:".0f" }}</span>
                 </div>
             </div>
         </div>
