@@ -184,7 +184,7 @@ def summary_ajax(request, system_code):
     # m = systems_info
     m = {}
 
-    m['formated_total_cost'] = '${0:.0f}'.format(total_cost) if total_cost else 'N/A'
+    m['formated_total_cost'] = '${0:.0f}'.format(total_cost) if total_cost else None
     m['weekend_money_sum'] = weekend_money_sum
     m['weekday_money_sum'] = weekday_money_sum
 
