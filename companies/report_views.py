@@ -87,23 +87,8 @@ def summary_ajax(request, system_code):
     source_ids = [str(source.id) for source in sources]
     all_holidays = current_system.get_all_holidays()
 
-    def weekend_avg(source_reading):
-        total_day = 0
-        total_val = 0
-
-        for t, v in source_reading.items():
-            dt = datetime.datetime.fromtimestamp(t, current_system_tz)
-            if dt.weekday() >= 5 or dt.date() in all_holidays:
-                total_val += v
-                total_day += 1
-
-        if total_day > 0:
-            return total_val / float(total_day)
-
-
     day_source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingDay, start_dt, end_dt)
 
-    weekend_timestamp_energy = [(source_id, weekend_avg(sr) ) for source_id, sr in day_source_readings.items()]
 
     def get_unit_rate(source_id, timestamp):
         source = Source.objects(id=str(source_id)).first()
@@ -144,9 +129,6 @@ def summary_ajax(request, system_code):
         compare_to_last_total = float(total_cost-last_total_cost)/last_total_cost*100
 
 
-
-    weekend_money_sum = sum([ e for s, e in weekend_timestamp_energy if e is not None])
-
     # weekday
     def weekday_cost_avg(source_id, source_reading):
         total_day = 0
@@ -185,7 +167,6 @@ def summary_ajax(request, system_code):
     m = {}
 
     m['formated_total_cost'] = '${0:.0f}'.format(total_cost) if total_cost else None
-    m['weekend_money_sum'] = weekend_money_sum
     m['weekday_money_sum'] = weekday_money_sum
 
     m['compare_to_last_total'] = CompareTplHepler(compare_to_last_total).to_dict()
