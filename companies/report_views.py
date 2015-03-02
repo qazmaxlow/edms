@@ -174,10 +174,8 @@ def summary_ajax(request, system_code):
 
     # overnight
     def overnight_cost(reading):
-        # found ubuntu mongodb will return timezone datetime but in docker it return native time
-        # now just force to set UTC
-        dt = reading.datetime.replace(tzinfo=pytz.UTC)
-        dt = dt.astimezone(current_system_tz)
+        # just ensure tz_aware=true in mongo connect
+        dt = reading.datetime.astimezone(current_system_tz)
 
         if dt.time() >= current_system.night_time_start or \
            dt.time() < current_system.night_time_end:
