@@ -164,7 +164,7 @@ def summary_ajax(request, system_code):
     m = {}
 
     m['formated_total_cost'] = '${0:.0f}'.format(total_cost) if total_cost else None
-    m['weekday_money_sum'] = weekday_cost
+    m['formated_weekday_cost'] = '${0:.0f}'.format(weekday_cost) if weekday_cost else None
 
     m['compare_to_last_total'] = CompareTplHepler(compare_to_last_total).to_dict()
     m['compare_to_last_weekdays'] = CompareTplHepler(compare_to_last_weekdays).to_dict()
