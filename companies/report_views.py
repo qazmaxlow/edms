@@ -202,7 +202,7 @@ def summary_ajax(request, system_code):
 
 
     overnight_avg_cost = get_overnight_avg_cost(source_ids, start_dt, end_dt)
-    m['overnight_money_avg'] = overnight_avg_cost
+    m['formated_overnight_avg_cost'] = '${0:.0f}'.format(overnight_avg_cost) if overnight_avg_cost else None
 
     compare_to_last_overnight_avg_cost = None
     last_overnight_avg_cost = get_overnight_avg_cost(source_ids, last_start_dt, last_end_dt)
