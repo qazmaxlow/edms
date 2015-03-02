@@ -89,24 +89,6 @@ def summary_ajax(request, system_code):
     # read by month!!!
     source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingMonth, start_dt, end_dt)
 
-    last_month_start_dt = previous_month(start_dt)
-    last_month_end_dt = previous_month(end_dt)
-    last_month_source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingMonth, last_month_start_dt, last_month_end_dt)
-
-    energy_usages = calculation.combine_readings_by_timestamp(source_readings)
-
-    unit_rates = UnitRate.objects.filter(Q(category_code=CO2_CATEGORY_CODE) | Q(category_code=MONEY_CATEGORY_CODE))
-    co2_unit_rates = [unit_rate for unit_rate in unit_rates if unit_rate.category_code == CO2_CATEGORY_CODE]
-    money_unit_rates = [unit_rate for unit_rate in unit_rates if unit_rate.category_code == MONEY_CATEGORY_CODE]
-
-    monthly_energy_sum = sum([sr.values()[0] for sr in source_readings.values()])
-
-    # unit_infos = json.loads(current_system.unit_info)
-    # money_unit_code = unit_infos['money']
-    # _money_unit_rates = UnitRate.objects.filter(category_code='money', code=unit_infos['money'])
-
-    source_timestamp_energy = [(source_id, ) + sr.items()[0] for source_id, sr in source_readings.items()]
-
     all_holidays = current_system.get_all_holidays()
 
     def weekend_avg(source_reading):
@@ -147,11 +129,6 @@ def summary_ajax(request, system_code):
         ur = money_unit_rates.filter(effective_date__lte=dt).order_by('-effective_date').first()
         return ur
 
-    # month_readings = SourceReadingMonth.objects(
-    #     source_id__in=source_ids,
-    #     datetime__gte=start_dt,
-    #     datetime__lt=end_dt)
-
     def get_total_cost(source_ids, start_dt, end_dt):
         month_readings = SourceReadingMonth.objects(
             source_id__in=source_ids,
@@ -160,7 +137,7 @@ def summary_ajax(request, system_code):
 
         return sum([get_unitrate(r.source_id, r.datetime).rate*r.value for r in month_readings])
 
-    monthly_money_sum = get_total_cost(source_ids, start_dt, end_dt)
+    total_cost = get_total_cost(source_ids, start_dt, end_dt)
     last_start_dt = previous_month(start_dt)
     last_end_dt = previous_month(end_dt)
     last_total_cost = get_total_cost(source_ids, last_start_dt, last_end_dt)
@@ -168,21 +145,11 @@ def summary_ajax(request, system_code):
     compare_to_last_total = None
 
     if last_total_cost > 0:
-        compare_to_last_total = float(monthly_money_sum-last_total_cost)/last_total_cost*100
+        compare_to_last_total = float(total_cost-last_total_cost)/last_total_cost*100
 
 
 
     weekend_money_sum = sum([ e for s, e in weekend_timestamp_energy if e is not None])
-
-    co2_usages = copy.deepcopy(source_readings)
-    calculation.transform_source_readings(co2_usages, systems, sources, co2_unit_rates, CO2_CATEGORY_CODE)
-    co2_usages = calculation.combine_readings_by_timestamp(co2_usages)
-
-    money_usages = copy.deepcopy(source_readings)
-
-    calculation.transform_source_readings(money_usages, systems, sources, money_unit_rates, MONEY_CATEGORY_CODE)
-    # assert False
-    money_usages = calculation.combine_readings_by_timestamp(money_usages)
 
     # weekday
     def weekday_cost_avg(source_id, source_reading):
@@ -198,13 +165,6 @@ def summary_ajax(request, system_code):
 
         if total_day > 0:
             return total_val / float(total_day)
-
-    # weekday_readings = SourceReadingDay.objects(
-    #     source_id__in=source_ids,
-    #     datetime__gte=start_dt,
-    #     datetime__lt=end_dt)
-
-    # weekday_costs = [(source_id, weekday_cost_avg(source_id, sr) ) for source_id, sr in day_source_readings.items()]
 
     def get_weekdays_cost(source_ids, start_dt, end_dt):
         # weekday_readings = SourceReadingDay.objects(
@@ -225,29 +185,10 @@ def summary_ajax(request, system_code):
     if last_weekdays_cost > 0:
         compare_to_last_weekdays = float(weekday_money_sum-last_weekdays_cost)/last_weekdays_cost*100
 
-    monthly_summary = []
-    for timestamp, usage in energy_usages.items():
-        monthly_summary.append({
-            'dt': Utils.utc_dt_from_utc_timestamp(timestamp).astimezone(current_system_tz),
-            'timestamp': timestamp,
-            'energy_usage': usage, 'co2_usage': co2_usages[timestamp],
-            'money_usage': money_usages[timestamp]})
-
     # m = systems_info
     m = {}
-    # m["monthly_summary"] = sorted(monthly_summary, key=lambda x: x['timestamp'], reverse=True)
-    m['month_summary'] = monthly_summary[0]
-    # assert False
-    # m.update(csrf(request))
 
-    current_month_money = m['month_summary']['money_usage']
-    calculation.transform_source_readings(last_month_source_readings, systems, sources, money_unit_rates, MONEY_CATEGORY_CODE)
-    last_month_money_usages = calculation.combine_readings_by_timestamp(last_month_source_readings)
-    last_month_money_usage = last_month_money_usages.values()[0] if last_month_money_usages else 0
-
-    compare_last_month_money = (current_month_money - last_month_money_usage)/ current_month_money * 100
-    # m['compare_last_month_money'] = compare_last_month_money
-    m['monthly_money_sum'] = monthly_money_sum
+    m['formated_total_cost'] = '${0:.0f}'.format(total_cost) if total_cost else 'N/A'
     m['weekend_money_sum'] = weekend_money_sum
     m['weekday_money_sum'] = weekday_money_sum
 
