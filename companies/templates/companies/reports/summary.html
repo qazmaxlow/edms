@@ -775,7 +775,7 @@ $(function() {
       {% verbatim %}
       <div class="row content end"><div class="col-xs-12">
           <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_total.icon_path }}">
-          <h3>{{ summary_report.compare_to_last_total.percent_abs | number:0 }}%</h3>
+          <h3>{{ summary_report.compare_to_last_total.formated_percent_change }}</h3>
           <p>compared to last month</p>
       </div></div>
       {% endverbatim %}

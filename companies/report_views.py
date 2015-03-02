@@ -325,6 +325,10 @@ class CompareTplHepler:
         return abs(self.compared_percent) if self.compared_percent else None
 
     @property
+    def formated_percent_change(self):
+        return '{0:.0f}%'.format(self.compared_percent_abs) if self.compared_percent is not None else None
+
+    @property
     def change_desc(self):
         return 'more' if self.compared_percent >=0 else 'less'
 
@@ -349,6 +353,7 @@ class CompareTplHepler:
         return {
             'percent': self.compared_percent,
             'percent_abs': self.compared_percent_abs,
+            'formated_percent_change': self.formated_percent_change,
             'desc': self.change_desc,
             'css_class': self.change_css_class,
             'icon_path': static(self.change_icon_path)
