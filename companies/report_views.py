@@ -145,29 +145,26 @@ def summary_ajax(request, system_code):
             return total_val / float(total_day)
 
     def get_weekdays_cost(source_ids, start_dt, end_dt):
-        # weekday_readings = SourceReadingDay.objects(
-        #     source_id__in=source_ids,
-        #     datetime__gte=start_date,
-        #     datetime__lt=end_date)
         day_source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingDay, start_dt, end_dt)
-        weekday_costs = [(source_id, weekday_cost_avg(source_id, sr) ) for source_id, sr in day_source_readings.items()]
-        return sum([ c for s, c in weekday_costs if c is not None])
+        if day_source_readings:
+            weekday_costs = [(source_id, weekday_cost_avg(source_id, sr) ) for source_id, sr in day_source_readings.items()]
+            return sum([ c for s, c in weekday_costs if c is not None])
 
-    weekday_money_sum = get_weekdays_cost(source_ids, start_dt, end_dt)
+    weekday_cost = get_weekdays_cost(source_ids, start_dt, end_dt)
     # weekday_money_sum = sum([ c for s, c in weekday_costs if c is not None])
 
     compare_to_last_weekdays = None
 
     last_weekdays_cost = get_weekdays_cost(source_ids, last_start_dt, last_end_dt)
 
-    if last_weekdays_cost > 0:
-        compare_to_last_weekdays = float(weekday_money_sum-last_weekdays_cost)/last_weekdays_cost*100
+    if last_weekdays_cost > 0 and weekday_cost:
+        compare_to_last_weekdays = float(weekday_cost-last_weekdays_cost)/last_weekdays_cost*100
 
     # m = systems_info
     m = {}
 
     m['formated_total_cost'] = '${0:.0f}'.format(total_cost) if total_cost else None
-    m['weekday_money_sum'] = weekday_money_sum
+    m['weekday_money_sum'] = weekday_cost
 
     m['compare_to_last_total'] = CompareTplHepler(compare_to_last_total).to_dict()
     m['compare_to_last_weekdays'] = CompareTplHepler(compare_to_last_weekdays).to_dict()
