@@ -69,7 +69,6 @@ $(function() {
     {% ifequal archived_level 0 %}
     <div class="medal-block work-harder-medal">
         <img src="{% static 'images/progress/empty-medal.png' %}">
-        <div id="archived_percentage">{{archived_level}}<span class="saving-percent-symbol">%</span></div>
         <div class="medal-text">{% trans "Keep<br>Saving!" %}</div>
     </div>
     {% else %}
