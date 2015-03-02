@@ -338,6 +338,9 @@ class CompareTplHepler:
 
     @property
     def change_icon_path(self):
+        if self.compared_percent is None:
+            return 'images/reports/na.svg'
+
         path = 'images/reports/decrease_engry.svg'
         if self.compared_percent >=0:
             path = 'images/reports/increase_engry.svg'
