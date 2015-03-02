@@ -115,8 +115,8 @@ def summary_ajax(request, system_code):
             source_id__in=source_ids,
             datetime__gte=start_dt,
             datetime__lt=end_dt)
-
-        return sum([get_unitrate(r.source_id, r.datetime).rate*r.value for r in month_readings])
+        if month_readings:
+            return sum([get_unitrate(r.source_id, r.datetime).rate*r.value for r in month_readings])
 
     total_cost = get_total_cost(source_ids, start_dt, end_dt)
     last_start_dt = previous_month(start_dt)
@@ -125,7 +125,7 @@ def summary_ajax(request, system_code):
 
     compare_to_last_total = None
 
-    if last_total_cost > 0:
+    if last_total_cost > 0 and total_cost:
         compare_to_last_total = float(total_cost-last_total_cost)/last_total_cost*100
 
 
@@ -163,7 +163,7 @@ def summary_ajax(request, system_code):
     # m = systems_info
     m = {}
 
-    m['formated_total_cost'] = '${0:.0f}'.format(total_cost) if total_cost else None
+    m['formated_total_cost'] = '${0:.0f}'.format(total_cost) if total_cost is not None else None
     m['formated_weekday_cost'] = '${0:.0f}'.format(weekday_cost) if weekday_cost else None
 
     m['compare_to_last_total'] = CompareTplHepler(compare_to_last_total).to_dict()
