@@ -177,7 +177,7 @@ def summary_ajax(request, system_code):
         if dt.time() >= current_system.night_time_start or \
            dt.time() < current_system.night_time_end:
             # total_val += get_unit_rate(source_id, t).rate * v
-            return reading.value
+            return get_unitrate(reading.source_id, reading.datetime).rate * reading.value
 
 
     def get_overnight_avg_cost(source_ids, start_dt, end_dt):
