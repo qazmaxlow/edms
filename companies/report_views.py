@@ -186,15 +186,10 @@ def summary_ajax(request, system_code):
     def get_overnight_avg_cost(source_ids, start_dt, end_dt):
         overnight_start = datetime.datetime.combine(start_dt, datetime.datetime.min.time())
         overnight_start= current_system_tz.localize(overnight_start)
-        # overnight_start = datetime.datetime(2014, 6, 1, 20, 0, 0, 0, current_system_tz)
 
-        # overnight_start = datetime.datetime(2014, 6, 1, 20, 0, 0, 0)
-        # the last day will count cross to the next day, already did?
-        # overnight_end = end_dt + datetime.timedelta(days=1)
         overnight_end =  datetime.datetime.combine(end_dt, current_system.night_time_start)
         overnight_end = current_system_tz.localize(overnight_end)
 
-        # overnight_end = datetime.datetime(2014, 6, 2, 0, 0, 0, 0)
         overnight_readings = SourceReadingHour.objects(
             source_id__in=source_ids,
             datetime__gte=overnight_start,
