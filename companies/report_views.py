@@ -85,10 +85,6 @@ def summary_ajax(request, system_code):
         end_dt = current_system_tz.localize(end_dt)
 
     source_ids = [str(source.id) for source in sources]
-
-    # read by month!!!
-    source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingMonth, start_dt, end_dt)
-
     all_holidays = current_system.get_all_holidays()
 
     def weekend_avg(source_reading):
