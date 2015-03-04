@@ -465,6 +465,8 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
         compare_to_last_month = (current_total-last_total)/last_total*100
 
     m['compare_to_last_month'] = compare_to_last_month
+    m['compare_to_last_month_abs'] = abs(compare_to_last_month)
+
 
     # _fillInComparePercent = function(eleSel, oldUsage, newUsage, compareToDateText)
     # var usagePercent = (oldUsage-newUsage)/oldUsage*100;
