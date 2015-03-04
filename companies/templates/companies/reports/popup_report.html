@@ -211,8 +211,8 @@
             {{ td.total_energy|floatformat:"0"|intcomma }}</td><td>
             {{ td.co2_val|floatformat:"0"|intcomma }}</td><td>
             {{ td.money_val|floatformat:"0"|intcomma }}</td>
-          <td>{{ td.change_in_kwh|floatformat:"0"|intcomma }}</td>
-          <td>{{ td.change_in_money|floatformat:"0"|intcomma }}</td>
+          <td>{% if not td.change_in_kwh == None %} {{ td.change_in_kwh|floatformat:"0"|intcomma }} {% else %} N/A {% endif %}</td>
+          <td>{% if not td.change_in_money == None %} {{ td.change_in_money|floatformat:"0"|intcomma }} {% else %} N/A {% endif %}</td>
         </tr>
         {% endfor %}
       </tbody>
