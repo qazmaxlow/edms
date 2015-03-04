@@ -89,17 +89,6 @@ def summary_ajax(request, system_code):
 
     day_source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingDay, start_dt, end_dt)
 
-
-    def get_unit_rate(source_id, timestamp):
-        source = Source.objects(id=str(source_id)).first()
-        system = System.objects.get(code=source.system_code)
-        unit_infos = json.loads(system.unit_info)
-        money_unit_code = unit_infos['money']
-        money_unit_rates = UnitRate.objects.filter(category_code='money', code=unit_infos['money'])
-        dt = datetime.datetime.fromtimestamp(timestamp, pytz.utc)
-        ur = money_unit_rates.filter(effective_date__lte=dt).order_by('-effective_date').first()
-        return ur
-
     def get_unitrate(source_id, datetime):
         source = Source.objects(id=str(source_id)).first()
         system = System.objects.get(code=source.system_code)
