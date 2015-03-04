@@ -485,7 +485,7 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
     average_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
     weekday_compare_last_month = None
     if beginning_usage > 0:
-        weekday_compare_last_month = (beginning_usage - average_usage)/beginning_usage*100
+        weekday_compare_last_month = (average_usage - beginning_usage)/beginning_usage*100
     # m['weekday_compare_last_month'] = weekday_compare_last_month
     m['weekday_month_compare_helper'] = CompareTplHepler(weekday_compare_last_month)
 
@@ -493,7 +493,7 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
 
     weekday_compare_same_period = None
     if last_same_period > 0 :
-        weekday_compare_same_period = (last_same_period - average_usage)/last_same_period*100
+        weekday_compare_same_period = (average_usage - last_same_period)/last_same_period*100
 
     m['weekday_compare_same_period'] = weekday_compare_same_period
     m['weekday_same_period_compare_helper'] = CompareTplHepler(weekday_compare_same_period)
@@ -513,14 +513,14 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
 
         compare_last_month = None
         if beginning_usage > 0:
-            compare_last_month = (beginning_usage - average_usage)/beginning_usage*100
+            compare_last_month = (average_usage - beginning_usage)/beginning_usage*100
 
         g['compare_last_month'] = compare_last_month
 
         compare_same_period = None
         last_same_period = g['lastSamePeriodWeekdayInfo']['average']
         if last_same_period > 0:
-            compare_same_period = (last_same_period - average_usage)/last_same_period*100
+            compare_same_period = (average_usage - last_same_period)/last_same_period*100
 
         g['compare_same_period'] = compare_same_period
         g['diff_same_period'] = last_same_period - average_usage
