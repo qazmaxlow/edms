@@ -1101,6 +1101,7 @@
             value: null,
             footer: "",
             format: "",
+            clickPopup: false,
             culture: "",
             parseFormats: [],
             min: new Date(1900, 0, 1),
@@ -1157,6 +1158,9 @@
                        .on("focusout" + ns, proxy(that._blur, that))
                        .on("focus" + ns, function() {
                            that._inputWrapper.addClass(FOCUSED);
+                           if (that.options.clickPopup ) {
+                               that.open();
+                           }
                        });
 
                icon.on(CLICK, proxy(that._click, that))
