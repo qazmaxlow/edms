@@ -197,8 +197,9 @@ def summary_ajax(request, system_code):
         # group might get issue?
         # group_overnight_readings = SourceManager.group_readings_with_source_id(overnight_readings)
 
-        overnight_costs = [overnight_cost(r) for r in overnight_readings]
-        return sum([ c for c in overnight_costs if c is not None])/total_days
+        overnight_costs = [overnight_cost(r) for r in overnight_readings if overnight_cost(r) is not None]
+        if overnight_costs:
+            return sum([ c for c in overnight_costs if c is not None])/total_days
 
 
     overnight_avg_cost = get_overnight_avg_cost(source_ids, start_dt, end_dt)
@@ -206,7 +207,7 @@ def summary_ajax(request, system_code):
 
     compare_to_last_overnight_avg_cost = None
     last_overnight_avg_cost = get_overnight_avg_cost(source_ids, last_start_dt, last_end_dt)
-    if last_overnight_avg_cost > 0:
+    if last_overnight_avg_cost > 0 and overnight_avg_cost is not None:
         compare_to_last_overnight_avg_cost = float(overnight_avg_cost-last_overnight_avg_cost)/last_overnight_avg_cost*100
     m['compare_to_last_overnight_avg_cost'] = CompareTplHepler(compare_to_last_overnight_avg_cost).to_dict()
 
