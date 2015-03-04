@@ -50,6 +50,26 @@ def next_month(datetime):
     return next_month_date
 
 
+def get_unitrate(source_id, datetime):
+    source = Source.objects(id=str(source_id)).first()
+    system = System.objects.get(code=source.system_code)
+    unit_infos = json.loads(system.unit_info)
+    money_unit_code = unit_infos['money']
+    money_unit_rates = UnitRate.objects.filter(category_code='money', code=unit_infos['money'])
+    dt = datetime
+    ur = money_unit_rates.filter(effective_date__lte=dt).order_by('-effective_date').first()
+    return ur
+
+
+def get_total_cost(source_ids, start_dt, end_dt):
+    month_readings = SourceReadingMonth.objects(
+        source_id__in=source_ids,
+        datetime__gte=start_dt,
+        datetime__lt=end_dt)
+    if month_readings:
+        return sum([get_unitrate(r.source_id, r.datetime).rate*r.value for r in month_readings])
+
+
 def summary_ajax(request, system_code):
     systems_info = System.get_systems_info(system_code, request.user.system.code)
     systems = systems_info['systems']
@@ -89,23 +109,6 @@ def summary_ajax(request, system_code):
 
     day_source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingDay, start_dt, end_dt)
 
-    def get_unitrate(source_id, datetime):
-        source = Source.objects(id=str(source_id)).first()
-        system = System.objects.get(code=source.system_code)
-        unit_infos = json.loads(system.unit_info)
-        money_unit_code = unit_infos['money']
-        money_unit_rates = UnitRate.objects.filter(category_code='money', code=unit_infos['money'])
-        dt = datetime
-        ur = money_unit_rates.filter(effective_date__lte=dt).order_by('-effective_date').first()
-        return ur
-
-    def get_total_cost(source_ids, start_dt, end_dt):
-        month_readings = SourceReadingMonth.objects(
-            source_id__in=source_ids,
-            datetime__gte=start_dt,
-            datetime__lt=end_dt)
-        if month_readings:
-            return sum([get_unitrate(r.source_id, r.datetime).rate*r.value for r in month_readings])
 
     total_cost = get_total_cost(source_ids, start_dt, end_dt)
     last_start_dt = previous_month(start_dt)
