@@ -13,17 +13,8 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/popup_report.css' %}">
-<!-- <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script> -->
-<!-- <script src="{% static 'js/csrf_ajax.js' %}"></script> -->
 <script src="{% static 'js/moment-with-locales.js' %}"></script>
-<!-- <script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script> -->
-<!-- <script src="{% static 'js/mustache.js-master/mustache.js' %}"></script> -->
-<!-- <script src="{% static 'js/jquery.tinysort.min.js' %}"></script> -->
-<!-- <script src="{% static 'js/flot/jquery.flot.min.js' %}"></script> -->
-<!-- <script src="{% static 'js/flot/jquery.flot.pie.min.js' %}"></script> -->
-<!-- <script src="{% static 'js/entrak-system.js' %}"></script> -->
 <script src="{% static 'js/entrak-utils.js' %}"></script>
-<!-- <script src="{% static 'js/report-generator.js' %}"></script> -->
 
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
@@ -47,8 +38,6 @@
 {% block extra_script %}
 {{block.super}}
 {% get_current_language as LANGUAGE_CODE %}
-
-
 
 
 {% endblock %}
