@@ -733,7 +733,7 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
         return PDFTemplateResponse(
             request=request,
             # template='companies/reports/popup_report_pdf.html',
-            template='companies/reports/popup_report.html',
+            template='companies/reports/report.html',
             # template='foo.html',
             filename='hello.pdf',
             context=m,
@@ -752,7 +752,7 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
         )
 
 
-    return render(request, 'companies/reports/popup_report.html', m)
+    return render(request, 'companies/reports/report.html', m)
 
 
 def download_popup_report_view(request, system_code, year, month):
