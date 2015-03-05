@@ -752,7 +752,7 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
         )
 
 
-    return render(request, 'companies/reports/report.html', m)
+    return render(request, 'companies/reports/popup_report.html', m)
 
 
 def download_popup_report_view(request, system_code, year, month):

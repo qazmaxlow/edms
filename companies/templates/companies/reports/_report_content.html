@@ -1,0 +1,972 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load entrak_extras %}
+{% load static %}
+{% load humanize %}
+
+{% block ga_page_title %}report{% endblock %}
+
+{% block extra_head %}
+{{block.super}}
+{% get_current_language as LANGUAGE_CODE %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/popup_report.css' %}">
+<script src="{% static 'js/moment-with-locales.js' %}"></script>
+<script src="{% static 'js/entrak-utils.js' %}"></script>
+
+<link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
+<link href="{% static 'assets/kendoui/styles/kendo.default.min.css' %}" rel="stylesheet">
+<link href="{% static 'assets/kendoui/styles/kendo.dataviz.min.css' %}" rel="stylesheet">
+<link href="{% static 'assets/kendoui/styles/kendo.dataviz.default.min.css' %}" rel="stylesheet">
+<!-- Because now using jquery v1.11 -->
+<script src="{% static 'assets/kendoui/js/jquery.min.js' %}"></script>
+<script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
+<script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
+
+{% endblock %}
+
+{% block selected-menu-link-id %}menu-link-report{% endblock %}
+{% block system_menu_target_view %}report{% endblock %}
+{% block breadcrumb_target_view %}report{% endblock %}
+
+{% block page_title %}{% trans "THE REPORTS PAGE" %}{% endblock %}
+{% block page_subtitle %}{% trans "Get all your information here at the" %}{% endblock %}
+
+{% block extra_script %}
+{{block.super}}
+{% get_current_language as LANGUAGE_CODE %}
+
+
+{% endblock %}
+
+{% block content %}
+
+    <div ng-app="Entrak" class="container">
+    <div ng-controller="ReportController">
+        <button ng-click="win2.close()" ng-show="win2visible">close</button>
+
+
+
+<div class="report-head">
+        <div class="system-name">{{ company_system.fullname }}</div>
+        <div class="report-name text-center">{{ report_date|date:"M Y" }} - Monthly Energry Report</div>
+        <a class="btn btn-save-report" href="download" role="button">Save Report</a>
+        <div class="save-summary-report-btn">{% trans "Save Summary Report" %}</div>
+        <hr class="head-separator">
+</div>
+
+<div class="xreport-component page-break-after">
+    <div class="row report-component-header">
+      <div class="col-xs-12">
+        {% trans 'WHAT ARE OUR KEY STATISTICS FOR THIS <span class="report-type-name"></span>?' %}
+      </div>
+    </div>
+
+    <div class="row top-content {{ css_class_energy_saving }}">
+        <div id="current-usage-col" class="col-xs-4 basic-info-col">
+            <h4>{% trans "HOW MUCH ENERGY<br>DID WE USE?" %}</h4>
+            <hr class="current-usage-separator-dark-grey">
+            <div>
+                <img src="{% static 'images/report/lightning-energy.png' %}">
+                <div class="basic-info-text-container">
+                    <span id="current-energy-usage">{{ total_energy|floatformat:"0" }}</span><span class="basic-info-col-unit"> kWh</span>
+                    <br>
+                    <span class="basic-info-col-subtext">{% trans "of electricity" %}</span>
+                </div>
+            </div>
+            <hr class="current-usage-separator-dark-grey">
+            <div>
+                <img src="{% static 'images/report/factory-co2.png' %}">
+                <div class="basic-info-text-container">
+                    <span id="current-co2-usage">{{ total_co2|floatformat:"0" }} tons</span><span class="basic-info-col-unit"> CO<sub>2</sub></span>
+                    <br>
+                    <span class="basic-info-col-subtext">emitted</span>
+                </div>
+            </div>
+            <hr class="current-usage-separator-dark-grey">
+            <div>
+                <img src="{% static 'images/report/piggy.png' %}">
+                <div class="basic-info-text-container">
+                    <span id="current-money-usage">${{ total_money|floatformat:"0" }}</span>
+                    <br>
+                    <span class="basic-info-col-subtext">{% trans "in energy costs" %}</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="save-usage-col" class="col-xs-4 basic-info-col">
+            <h4>{% trans "HOW MUCH ENERGY<br>DID WE SAVE?" %}
+                <span class="basic-info-col-subtext">{% trans "(year-on-year)" %}</span>
+            </h4>
+            <hr class="current-usage-separator-dark-grey">
+            <div>
+                <img src="{% static 'images/report/lightning-energy.png' %}">
+                <div class="basic-info-text-container">
+                    <span id="save-energy-usage">{{ saving_sign }}{{ saving_energy|stringformat:".0f" }}%</span>
+                </div>
+            </div>
+            <hr class="current-usage-separator-dark-grey">
+            <div>
+                <img src="{% static 'images/report/factory-co2.png' %}">
+                <div class="basic-info-text-container">
+                    <span id="save-co2-usage">{{ saving_sign }}{{ saving_co2|stringformat:".0f" }} tons</span><span class="basic-info-col-unit"> CO<sub>2</sub></span>
+                </div>
+            </div>
+            <hr class="current-usage-separator-dark-grey">
+            <div>
+                <img src="{% static 'images/report/piggy.png' %}">
+                <div class="basic-info-text-container">
+                    <span id="save-money-usage">{{ saving_sign }}${{ saving_money|stringformat:".0f" }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="impact-col" class="col-xs-4 basic-info-col">
+            <h4>{% trans "HOW DID OUR<br>CARBON FOOTPRINT CHANGE?" %}</h4>
+            <hr class="current-usage-separator-dark-grey">
+            <div>
+                <img src="{% static 'images/report/car.png' %}">
+                <div class="basic-info-text-container">
+                    <span id="car-impact">{{ co2_in_car|floatformat:"0" }} cars</span><br>
+                    <span id="car-impact-subtext" class="basic-info-col-subtext">
+                      {% if is_saving %}
+                      taken off the road for a month
+                      {% else %}
+                      more on the road for a month
+                      {% endif %}</span>
+                </div>
+            </div>
+            <hr class="current-usage-separator-dark-grey">
+            <div>
+                <img src="{% static 'images/report/trees.png' %}">
+                <div class="basic-info-text-container">
+                    {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                    <span id="forest-impact-subtext" class="basic-info-col-subtext"></span><br>
+                    <span id="forest-impact">{{ co2_in_forest|floatformat:"0" }}</span>
+                    {% else %}
+                    <span id="forest-impact">{{ co2_in_forest|floatformat:"0" }} m<sup>2</sup></span><br>
+                    <span id="forest-impact-subtext" class="basic-info-col-subtext">
+                      {% if is_saving %}
+                      of tropical rainforest protected
+                      {% else %}
+                      of tropical rainforest cut down
+                      {% endif %}
+                    </span>
+                    {% endifequal %}
+                </div>
+            </div>
+            <hr class="current-usage-separator-dark-grey">
+            <div>
+                <img src="{% static 'images/report/panda.png' %}">
+                <div class="basic-info-text-container">
+                    <span id="panda-impact-subtext" class="basic-info-col-subtext">
+                      {% if is_saving %}
+                      Reduced CO2 emissions equal to the weight of
+                      {% else %}
+                      Extra CO2 emissions equal to the weight of
+                      {% endif %}
+                    </span>
+                    <span id="panda-impact">{{ co2_in_elephant|floatformat:"0" }} pandas</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row xrow-no-padding">
+      <div class="col-xs-12">
+<div class="detail-container">
+    <h4>{% trans "How did that break down by usage type?" %}</h4>
+    <table>
+      <thead>
+        <tr class="detail-title">
+            <th>
+                {% trans "Usage Type" %}</th><th>
+                {% trans "Total Energy (kWh)" %}</th><th>
+                {% trans "Total CO<sub>2</sub> (kg)" %}</th><th>
+                {% trans "Total Money ($)" %}</th>
+            <th>{% trans "% Change in kWh" %}<br>{% trans "Year-on-year" %}</th>
+            <th>{% trans "Change in Money" %}<br>{% trans "Year-on-year" %}</th>
+        </tr>
+      </thead>
+      <tbody id="key-statistic-sub-data">
+        {% for td in transformed_datas %}
+        <tr class="key-statistics-row ">
+          <td class="usage-type-name">
+            {{ td.name }}</td><td>
+            {{ td.total_energy|floatformat:"0"|intcomma }}</td><td>
+            {{ td.co2_val|floatformat:"0"|intcomma }}</td><td>
+            {{ td.money_val|floatformat:"0"|intcomma }}</td>
+          <td>{% if not td.change_in_kwh == None %} {{ td.change_in_kwh|floatformat:"0"|intcomma }} {% else %} N/A {% endif %}</td>
+          <td>{% if not td.change_in_money == None %} {{ td.change_in_money|floatformat:"0"|intcomma }} {% else %} N/A {% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+        <hr class="detail-container-separator-dark-grey">
+        <hr class="detail-container-separator-light-grey">
+
+    </div>
+    </div></div>
+</div>
+
+<div id="xcompare-past" class="xreport-component page-break-after">
+    <div class="row report-component-header">
+      <div class="col-xs-12">
+      {% trans 'HOW MUCH MORE / LESS DID WE USE COMPARED TO LAST <span class="report-type-name"></span>?' %}
+      </div>
+    </div>
+
+    <div class="row top-content">
+      <div class="col-xs-4">
+        <div class="compare-past-desc">Your energy consumption this<br><span class="report-type-name-lower"></span> was
+            <span>
+                <span class="compare-past-percent"></span>
+                <span class="percent-symbol">{{ compare_to_last_month_abs|floatformat:0 }} %</span>
+                <span class="compare-past-percent-suffix">{% if compare_to_last_month > 0 %}more{% else %}less{% endif %}</span>
+            </span>
+            than<br> it was last <span class="report-type-name-lower"></span>. <span class="footnote-sybmol">*</span>
+        </div>
+      </div>
+      <div class="col-xs-8">
+        <div kendo-chart k-options="barOptions" ></div>
+        <div class="asterisk-text single-asterisk-text">{% trans "* Data not available or incomplete for this period" %}</div>
+      </div>
+    </div>
+
+    <div class="row detail-content">
+      <div class="col-xs-12">
+        <div kendo-chart style="width:1000px;" k-options="lineOptions" ></div>
+      </div>
+    </div>
+</div>
+</div>
+
+<div id="weekday-info" class="xreport-component xcalendar-component page-break-after">
+    <div class="row report-component-header">
+      <div class="col-xs-12">
+        {% trans "HOW MUCH ENERGY DID WE USE ON <span>WEEKDAYS?</span>" %}</div>
+    </div>
+    <div class="row top-section">
+        <div class="col-xs-4 side-bar">
+          <div class="row item"><div class="col-xs-12">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static 'images/reports/icon_money.svg'  %}">
+                </div>
+                <div class="col-xs-8">
+                  <h3 class="used-money">${{ weekday_bill|stringformat:"d" }}</h3>
+                  <p>{% trans "Average Weekday Energy Use" %}</p>
+                </div>
+              </div>
+          </div></div>
+          <div class="row item"><div class="col-xs-12">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static weekday_month_compare_helper.change_icon_path  %}">
+                </div>
+                <div class="col-xs-8">
+                  <h3 class="{{ weekday_month_compare_helper.change_css_class }}">
+                    {{ weekday_month_compare_helper.compared_percent_abs|floatformat:0 }}%
+                    {{ weekday_month_compare_helper.change_desc }}
+                  </h3>
+                  <p>{% trans "Compare to Last Month" %}</p>
+                </div>
+              </div>
+          </div></div>
+          <div class="row item end"><div class="col-xs-12">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static weekday_same_period_compare_helper.change_icon_path %}">
+                </div>
+                <div class="col-xs-8">
+                  <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
+                    {{ weekday_same_period_compare_helper.compared_percent_abs|floatformat:0 }}%
+                    {{ weekday_same_period_compare_helper.change_desc }}
+                  </h3>
+                  <p>{% trans "compare to same period year" %}</p>
+                </div>
+              </div>
+          </div></div>
+        </div>
+        <div class="col-xs-8 calendar-content">
+          <div class="row text-center report-date"><div class="col-xs-12">{{ report_date|date:"M Y" }}</div></div>
+          <div class="row text-center">
+            <div class="col-xs-4 border-right"><h9 class="better-mark">better</h9><p>than average weekday</p></div>
+            <div class="col-xs-4 border-right"><h9 class="worse-mark">worse</h9><p>than average weekday</p></div>
+            <div class="col-xs-4"><h9 class="average-mark">average</h9><p>weekday</p></div>
+          </div>
+
+          <div class="row"><div class="col-xs-12">
+        <div class="calendar-info-container">
+            <div class='calendar-weekday-header'>
+                {% trans "<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>" %}
+            </div>
+            <div class="calendar-day-container"></div>
+            <div></div>
+        </div>
+          </div></div>
+
+          <div class="row text-center">
+            <div class="col-xs-offset-2 col-xs-4 highest-weekday-enegry">
+              <h6><img src="{% static 'images/reports/electricity.png' %}"> highest weekday enegry</h6>
+              <h5>${{ weekday_highest_usage|stringformat:"d" }}</h5>
+              <p>{{ weekday_highest_datetime|date:"d M Y" }}</p>
+            </div>
+            <div class="col-xs-4 most-increase-from"><h6>most increase from</h6>
+              <p>{{ highest_diff_source.system.fullname }}</p></div>
+          </div>
+
+        </div>
+    </div>
+    {% for wd in weekday_details %}
+      <div class="row report-detail-header">
+        <div class="col-xs-12">
+        {{ wd.system.fullname }}
+        </div>
+      </div>
+      <div class="row report-detail-body {% if forloop.last %}content-footer{% endif %} ">
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <img src="{% static 'images/reports/icon_money.svg'  %}">
+            </div>
+            <div class="col-xs-8">
+              <h3 class="used-money">${{  wd.usage_bill|stringformat:"d" }}</h3>
+              <p>{% trans "Average Weekday Energy Use" %}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <img src="{% static wd.compare_last_month_helper.change_icon_path %}">
+            </div>
+            <div class="col-xs-8">
+              <h3 class="{{ wd.compare_last_month_helper.change_css_class }}">
+                {{ wd.compare_last_month_helper.text_desc }}
+              </h3>
+              <p>{% trans "Average Weekday Energy Use" %}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <img src="{% static wd.compare_same_period_helper.change_icon_path %}">
+            </div>
+            <div class="col-xs-8">
+              <h3 class="{{ wd.compare_same_period_helper.change_css_class }}">
+                {{ wd.compare_same_period_helper.text_desc }}
+              </h3>
+              <p>{% trans "Average Weekday Energy Use" %}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+</div>
+
+<div id="weekend-info" class="xreport-component xcalendar-component page-break-after">
+    <div class="row report-component-header">
+      <div class="col-xs-12">
+        {% trans "HOW MUCH ENERGY DID WE USE ON <span>WEEKENDS?</span>" %}</div>
+    </div>
+    <div class="row top-section">
+        <div class="col-xs-4 side-bar">
+          <div class="row item"><div class="col-xs-12">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static 'images/reports/icon_money.svg'  %}">
+                </div>
+                <div class="col-xs-8">
+                  <h3 class="used-money">${{ weekends.total_bill|floatformat:0 }}</h3>
+                  <p>{% trans "Average Weekday Energy Use" %}</p>
+                </div>
+              </div>
+          </div></div>
+          <div class="row item"><div class="col-xs-12">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static weekends.month_compare_helper.change_icon_path  %}">
+                </div>
+                <div class="col-xs-8">
+                  <h3 class="{{ weekends.month_compare_helper.change_css_class }}">
+                    {{ weekends.month_compare_helper.compared_percent_abs|floatformat:0 }}%
+                    {{ weekends.month_compare_helper.change_desc }}
+                  </h3>
+                  <p>{% trans "Compare to Last Month" %}</p>
+                </div>
+              </div>
+          </div></div>
+          <div class="row item end"><div class="col-xs-12">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static weekday_same_period_compare_helper.change_icon_path %}">
+                </div>
+                <div class="col-xs-8">
+                  <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
+                    {{ weekends_compare_same_period|floatformat:0 }}%
+                    {{ weekday_same_period_compare_helper.change_desc }}
+                  </h3>
+                  <p>{% trans "compare to same period year" %}</p>
+                </div>
+              </div>
+          </div></div>
+        </div>
+        <div class="col-xs-8 calendar-content">
+          <div class="row text-center report-date"><div class="col-xs-12">{{ report_date|date:"M Y" }}</div></div>
+          <div class="row text-center">
+            <div class="col-xs-4 border-right"><h9 class="better-mark">better</h9><p>than average weekday</p></div>
+            <div class="col-xs-4 border-right"><h9 class="worse-mark">worse</h9><p>than average weekday</p></div>
+            <div class="col-xs-4"><h9 class="average-mark">average</h9><p>weekday</p></div>
+          </div>
+
+          <div class="row"><div class="col-xs-12">
+        <div class="calendar-info-container">
+            <div class='calendar-weekday-header'>
+                {% trans "<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>" %}
+            </div>
+            <div class="calendar-day-container"></div>
+            <div></div>
+        </div>
+          </div></div>
+
+          <div class="row text-center">
+            <div class="col-xs-offset-2 col-xs-4 highest-weekday-enegry">
+              <h6><img src="{% static 'images/reports/electricity.png' %}"> highest weekday enegry</h6>
+              <h5>${{ weekday_highest_usage|stringformat:"d" }}</h5>
+              <p>{{ weekday_highest_datetime|date:"d M Y" }}</p>
+            </div>
+            <div class="col-xs-4 most-increase-from"><h6>most increase from</h6>
+              <p>{{ highest_diff_source.system.fullname }}</p></div>
+          </div>
+
+        </div>
+    </div>
+    {% for d in weekday_details %}
+      <div class="row report-detail-header">
+        <div class="col-xs-12">
+        {{ d.system.fullname }}
+        </div>
+      </div>
+      <div class="row report-detail-body {% if forloop.last %}content-footer{% endif %} ">
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <img src="{% static 'images/reports/icon_money.svg'  %}">
+            </div>
+            <div class="col-xs-8">
+              <h3 class="used-money">${{  d.weekend.bill|stringformat:"d" }}</h3>
+              <p>{% trans "Average Weekday Energy Use" %}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <img src="{% static d.compare_last_month_helper.change_icon_path %}">
+            </div>
+            <div class="col-xs-8">
+              <h3 class="{{ d.compare_last_month_helper.change_css_class }}">
+                {{ d.compare_last_month_helper.text_desc }}
+              </h3>
+              <p>{% trans "Average Weekend Energy Use" %}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <img src="{% static d.compare_same_period_helper.change_icon_path %}">
+            </div>
+            <div class="col-xs-8">
+              <h3 class="{{ d.compare_same_period_helper.change_css_class }}">
+                {{ d.compare_same_period_helper.text_desc }}
+              </h3>
+              <p>{% trans "Average Weekend Energy Use" %}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+</div>
+
+<div id="overnight-info" class="xreport-component xcalendar-component page-break-after">
+    <div class="row report-component-header">
+      <div class="col-xs-12">
+        {% trans "HOW MUCH ENERGY DID WE USE <span>OVERNIGHT***?</span>" %}</div>
+    </div>
+    <div class="row top-section">
+        <div class="col-xs-4 side-bar">
+          <div class="row item"><div class="col-xs-12">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static 'images/reports/icon_money.svg'  %}">
+                </div>
+                <div class="col-xs-8">
+                  <h3 class="used-money">${{ overnight.bill|floatformat:0 }}</h3>
+                  <p>{% trans "Average Weekday Energy Use" %}</p>
+                </div>
+              </div>
+          </div></div>
+          <div class="row item"><div class="col-xs-12">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static overnight.month_compare_helper.change_icon_path  %}">
+                </div>
+                <div class="col-xs-8">
+                  <h3 class="{{ overnight.month_compare_helper.change_css_class }}">
+                    {{ overnight.month_compare_helper.compared_percent_abs|floatformat:0 }}%
+                    {{ overnight.month_compare_helper.change_desc }}
+                  </h3>
+                  <p>{% trans "Compare to Last Month" %}</p>
+                </div>
+              </div>
+          </div></div>
+          <div class="row item end"><div class="col-xs-12">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static overnight.compare_same_period_helper.change_icon_path %}">
+                </div>
+                <div class="col-xs-8">
+                  <h3 class="{{ overnight.compare_same_period_helper.change_css_class }}">
+                    {{ overnight.compare_same_period_helper.compared_percent_abs|floatformat:0 }}%
+                    {{ overnight.compare_same_period_helper.change_desc }}
+                  </h3>
+                  <p>{% trans "compare to same period year" %}</p>
+                </div>
+              </div>
+          </div></div>
+        </div>
+        <div class="col-xs-8 calendar-content">
+          <div class="row text-center report-date"><div class="col-xs-12">{{ report_date|date:"M Y" }}</div></div>
+          <div class="row text-center">
+            <div class="col-xs-4 border-right"><h9 class="better-mark">better</h9><p>than average weekday</p></div>
+            <div class="col-xs-4 border-right"><h9 class="worse-mark">worse</h9><p>than average weekday</p></div>
+            <div class="col-xs-4"><h9 class="average-mark">average</h9><p>weekday</p></div>
+          </div>
+
+          <div class="row"><div class="col-xs-12">
+        <div class="calendar-info-container">
+            <div class='calendar-weekday-header'>
+                {% trans "<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>" %}
+            </div>
+            <div class="calendar-day-container"></div>
+            <div></div>
+        </div>
+          </div></div>
+
+          <div class="row text-center">
+            <div class="col-xs-offset-2 col-xs-4 highest-weekday-enegry">
+              <h6><img src="{% static 'images/reports/electricity.png' %}"> highest weekday enegry</h6>
+              <h5>${{ weekday_highest_usage|stringformat:"d" }}</h5>
+              <p>{{ weekday_highest_datetime|date:"d M Y" }}</p>
+            </div>
+            <div class="col-xs-4 most-increase-from"><h6>most increase from</h6>
+              <p>{{ highest_diff_source.system.fullname }}</p></div>
+          </div>
+
+        </div>
+    </div>
+    {% for d in weekday_details %}
+      <div class="row report-detail-header">
+        <div class="col-xs-12">
+        {{ d.system.fullname }}
+        </div>
+      </div>
+      <div class="row report-detail-body {% if forloop.last %}content-footer{% endif %} ">
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <img src="{% static 'images/reports/icon_money.svg'  %}">
+            </div>
+            <div class="col-xs-8">
+              <h3 class="used-money">${{  d.weekend.bill|stringformat:"d" }}</h3>
+              <p>{% trans "Average Weekday Energy Use" %}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <img src="{% static d.compare_last_month_helper.change_icon_path %}">
+            </div>
+            <div class="col-xs-8">
+              <h3 class="{{ d.compare_last_month_helper.change_css_class }}">
+                {{ d.compare_last_month_helper.text_desc }}
+              </h3>
+              <p>{% trans "Average Weekend Energy Use" %}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <img src="{% static d.compare_same_period_helper.change_icon_path %}">
+            </div>
+            <div class="col-xs-8">
+              <h3 class="{{ d.compare_same_period_helper.change_css_class }}">
+                {{ d.compare_same_period_helper.text_desc }}
+              </h3>
+              <p>{% trans "Average Weekend Energy Use" %}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+</div>
+
+
+
+{% block report_footnote %}
+<div class="not-accurate-note">{% trans "Cost values are for general reference only and should not be treated as accurate for accounting purposes." %}</div>
+{% endblock %}
+
+<!-- use table because the CSS code done not well -->
+<section id="download-reports">
+<table class="centered-table" align="center">
+<tbody>
+<tr>
+  <td>
+  <div class="bottom-save-report-btn">
+    <img alt="detailed report" src="{% static 'images/report/download_detail_report.png' %}">
+    <span>{% trans "Download" %}</span></div>
+  <div id="save-report-spinner" style="display:none;">
+    <div class="load-container load-spinner"><div class="loader">Loading...</div></div>
+    <span>Downloading</span>
+  </div>
+  </td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+
+</div></div>
+<!-- end ng-app -->
+<script>
+    angular.module("Entrak", [ "kendo.directives" ])
+        .controller("ReportController", function($scope){
+
+            $scope.barOptions = {
+        dataSource: {{ compare_past_datasource_json|safe }},
+        title: {
+            text: "Total energy consumption for the last 6 months (kWh)",
+            color: "#edbe4a"
+        },
+        legend: {
+            visible: false
+        },
+        chartArea: {
+            background: ""
+        },
+        seriesDefaults: {
+            type: "column",
+            labels: {
+                visible: true,
+                template: "# if ( value > 0) { # #= kendo.toString(value, 'n0') # # } else { # Nan # } #"
+            }
+        },
+        series: [{
+            field: "value",
+            color: "#eab541",
+            border: {
+                width: 0
+            },
+            overlay: {
+                gradient: "none"
+            }
+        }],
+
+        valueAxis: {
+            visible: false,
+            line: {
+                visible: false
+            },
+            minorGridLines: {
+                visible: false
+            }
+        },
+        categoryAxis: {
+            field: "month",
+            majorGridLines: {
+                visible: false
+            }
+        },
+        tooltip: {
+            visible: true,
+            format: "{0}%",
+            template: "#= dataItem.month #: #= value #"
+        }
+    };
+
+            $scope.lineOptions = {
+                width: 1000,
+        title: {
+            text: "WHEN DID WE ACHIEVE OUR SAVINGS?",
+            color: "#354960"
+        },
+        legend: {
+            position: "top"
+        },
+        chartArea: {
+            background: ""
+        },
+        series: [
+            {
+                type: "line",
+                data: {{ compare_current_readings_series|safe }},
+                name: '{{ compare_current_readings_month }}',
+                color: "#047fa1",
+                format: "{0:n0}",
+                labels: {
+                    visible: false
+                }
+            },
+            {
+                type: "line",
+                data: {{ compare_last_readings_series|safe }},
+                name: '{{ compare_last_readings_month }}',
+                color: "#edba3c",
+                format: "{0:n0}",
+                labels: {
+                    visible: false
+                    // format: "{0:n0}"
+                }
+            }
+        ],
+
+        tooltip: {
+            visible: true,
+            format: "{0} kWh"
+        },
+
+        valueAxis: {
+            line: {
+                visible: false
+            },
+            title: {
+                text: "kWh"
+            },
+            minorGridLines: {
+                visible: false
+            }
+        },
+        categoryAxis: {
+            categories: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"],
+            majorGridLines: {
+                visible: false
+            },
+            labels: {
+                step: 2
+            }
+        }
+    };
+        })
+
+setCalendar = function(currentDt, currentEndDt, eleSel, readings, averageUsage, isNotConcernFunc) {
+    // var reportGenThis = this;
+    var calendarInfoContainer = $(eleSel);
+    // calendarInfoContainer.find(".calendar-title").text(this.genDtText(this.currentDt));
+
+    var calendarContainer = calendarInfoContainer.find(".calendar-day-container");
+    calendarContainer.empty();
+
+    var calendarStartDt = moment(currentDt).startOf('w');
+    var calendarEndDt = moment(currentEndDt).subtract(1, 's').endOf('w');
+    for (var calendarNowDt=calendarStartDt; calendarNowDt.isBefore(calendarEndDt); calendarNowDt.add(1, 'd')) {
+        var calendarDayEle = $("<div class='calendar-day'></div>");
+        calendarDayEle.append("<div class='calendar-day-digit'>"+calendarNowDt.date()+"</div>");
+
+        if (calendarNowDt.isBefore(currentDt)
+            || calendarNowDt.isSame(currentEndDt)
+            || calendarNowDt.isAfter(currentEndDt)) {
+            calendarDayEle.addClass('calendar-day-out-range');
+        } else if (isNotConcernFunc(calendarNowDt)) {
+            calendarDayEle.addClass('calendar-day-not-concern');
+        } else {
+            var diffPercent;
+            if (calendarNowDt.unix() in readings) {
+                diffPercent = (readings[calendarNowDt.unix()]-averageUsage)/averageUsage*100;
+            } else {
+                diffPercent = 0;
+            }
+            diffPercent = parseFloat(Utils.fixedDecBaseOnVal(diffPercent));
+
+            var diffPercentText;
+            if (diffPercent >= 0) {
+                diffPercentText = "<span class='calendar-day-plus-symbol'>+</span> "+diffPercent;
+            } else {
+                diffPercentText = "<span class='calendar-day-minus-symbol'>-</span> "+Math.abs(diffPercent);
+            }
+            if (diffPercent >= 5) {
+                calendarDayEle.addClass('calendar-day-worse');
+            } else if (diffPercent <= -5) {
+                calendarDayEle.addClass('calendar-day-better');
+            }
+            calendarDayEle.append("<div class='calendar-day-percent'>"
+                +diffPercentText
+                +"<span class='calendar-day-percent-symbol'>%</span></div>");
+        }
+
+        calendarContainer.append(calendarDayEle);
+    }
+}
+
+
+getReportData = function() {
+    var report_data;
+    var requestData = {
+        report_type: 'month',
+        start_timestamp: {{ report_start|date:"U" }},
+        end_timestamp: {{ report_end|date:"U" }}
+    };
+
+    $.ajax({
+        type: "POST",
+        url: "/{{ company_system.code }}/report_data/",
+        data: requestData,
+        async: false
+    })
+    .done(function(data) {
+        report_data = data;
+    });
+
+    return report_data
+}
+
+$(document).ready(function()  {
+
+    // using jQuery
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+
+    // var report_data = getReportData();
+    var report_data = {{ report_data_json|safe }};
+
+    var report_readings = {};
+    $.each(report_data.groupedSourceInfos, function(groupIdx, info) {
+        $.each(info.currentReadings, function(timestamp, readingVal) {
+            report_readings[timestamp] = ((timestamp in report_readings) ? report_readings[timestamp] : 0) + readingVal;
+        });
+    });
+
+    //average uage
+    var average_usage = 0;
+    $.each(report_data.groupedSourceInfos, function(groupIdx, info) {
+        average_usage += info['currentWeekdayInfo'].average;
+    });
+
+    var holidays = {{ holidays_json|safe }};
+
+    // for weekday report
+    var isNotConcernFunc = function(targetDt) {
+        return (targetDt.day() == 0
+            || targetDt.day() == 6
+            || ($.inArray(targetDt.format("YYYY-MM-DD"), holidays) != -1))
+            // || ($.inArray(targetDt.format("YYYY-MM-DD"), reportGenThis.holidays) != -1))
+    }
+
+    var report_start = new Date("{{ report_start.isoformat }}");
+    var report_end = new Date("{{ report_end.isoformat }}");
+
+    setCalendar(
+        report_start, report_end,
+        '#weekday-info .calendar-info-container', report_readings, average_usage, isNotConcernFunc);
+
+    $('#weekday-info .average-usage').html(average_usage);
+
+
+    var weekend_average_usage = 0;
+    $.each(report_data.groupedSourceInfos, function(groupIdx, info) {
+        weekend_average_usage += info['currentWeekendInfo'].average;
+    });
+
+    var isNotConcernFunc = function(targetDt) {
+        return (targetDt.day() >= 1
+            && targetDt.day() <= 5
+            && ($.inArray(targetDt.format("YYYY-MM-DD"), holidays) == -1))
+    }
+
+    setCalendar(
+        report_start, report_end,
+        '#weekend-info .calendar-info-container', report_readings, weekend_average_usage, isNotConcernFunc);
+
+    var combinedOvernightCurrentReadings = {};
+    $.each(report_data.groupedSourceInfos, function(groupIdx, info) {
+        $.each(info.overnightcurrentReadings, function(timestamp, readingVal) {
+            combinedOvernightCurrentReadings[timestamp] =
+                ((timestamp in combinedOvernightCurrentReadings) ? combinedOvernightCurrentReadings[timestamp] : 0) + readingVal;
+        });
+    });
+
+    var isNotConcernFunc = function(targetDt) {
+        return false;
+    }
+
+    var overnight_average_usage = 0;
+    $.each(report_data.groupedSourceInfos, function(groupIdx, info) {
+        overnight_average_usage += info['currentOvernightInfo'].average;
+    });
+
+    setCalendar(
+        report_start, report_end,
+        '#overnight-info .calendar-info-container', combinedOvernightCurrentReadings, overnight_average_usage, isNotConcernFunc);
+
+    // $('#weekday-info .average-usage').html(average_usage);
+
+    /*
+    var overnight_readings = {};
+    $.each(report_data.groupedSourceInfos, function(groupIdx, info) {
+        $.each(info.overnightcurrentReadings, function(timestamp, readingVal) {
+            overnight_readings[timestamp] =
+                ((timestamp in combinedOvernightCurrentReadings) ? overnight_readings[timestamp] : 0) + readingVal;
+        });
+    });
+    */
+
+
+    // $('#monthly-report-content div').each(function() {
+    //     var a = $(this).find('.menu-target:first');
+    //     var m = $(this).find('.menu-content:first').kendoContextMenu({
+    //         orientation: 'horizontal',
+    //         target: a,
+    //         showOn: 'click'
+    //     });
+    // });
+});
+</script>
+{% endblock %}
