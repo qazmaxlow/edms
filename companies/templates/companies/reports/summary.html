@@ -736,8 +736,7 @@ $(function() {
     <div ng-app="Entrak">
     <div ng-controller="ReportController" xng-init="init()" class="container">
         <button ng-click="win2.close()" ng-show="win2visible">close</button>
-        <div kendo-window="win_report"
-             k-width="1100" k-height="1400" k-visible="false" k-iframe="true"
+        <div kendo-window="win_report" k-visible="false" k-iframe="true"
              >
         </div>
 
@@ -1045,7 +1044,7 @@ $(function() {
                 var month_shortname = month_shortnames[date.getMonth()];
                 var year = date.getFullYear();
                 $scope.win_report.refresh({ url: '../report/popup-report/' + year + '/' + month_shortname + '/'});
-                $scope.win_report.open();
+                $scope.win_report.maximize().open();
             }
 
             var summary_report_ds = new kendo.data.DataSource({
