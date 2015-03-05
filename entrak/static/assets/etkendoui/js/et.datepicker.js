@@ -848,6 +848,11 @@
                 options.start = "year";
                 options.depth = "year";
             }
+            else if (options.select=="year") {
+                options.start = "decade";
+                options.depth = "decade";
+            }
+
             if (!calendar) {
                 div = $(DIV).attr(ID, kendo.guid())
                             .appendTo(that.popup.element)
@@ -1225,7 +1230,11 @@
 
                 date_text = kendo.toString(start_date, week_format, options.culture) + ' - ' +
                     kendo.toString(end_date, week_format, options.culture);
-            } else if(date && options.select == 'quarter'){
+            } else if (date && options.select == 'month') {
+                var month_format = 'yyyy MMM';
+                date_text = kendo.toString(date, month_format, options.culture);
+            }
+            else if(date && options.select == 'quarter'){
                 var quarter_start = new Date(date.getFullYear(), 3*Math.floor(date.getMonth()/3), 1);
                 var quarter_end = new Date(date.getFullYear(), 3*Math.floor(1+date.getMonth()/3), 0);
 
@@ -1233,6 +1242,8 @@
 
                 date_text = kendo.toString(quarter_start, quarter_format, options.culture) + ' - ' +
                     kendo.toString(quarter_end, quarter_format, options.culture);
+            }  else if (date && options.select == 'year') {
+                date_text = date.getFullYear();
             }
 
             that.element.val(date_text);
@@ -1265,6 +1276,9 @@
             else if (date && options.select == 'quarter') {
                 return new Date(date.getFullYear(), 3*Math.floor(date.getMonth()/3), 1);
             }
+            else if (date && options.select == 'year') {
+                return new Date(date.getFullYear(), 0, 1);
+            }
 
             return date;
         },
@@ -1285,6 +1299,9 @@
             }
             else if (start_date && options.select == 'quarter') {
                 return new Date(start_date.getFullYear(), start_date.getMonth() + 3, 0);
+            }
+            else if (start_date && options.select == 'year') {
+                return new Date(start_date.getFullYear(), 11, 31);
             }
         }
     });
