@@ -579,33 +579,4 @@
       </div>
     {% endfor %}
 </div>
-
-
-
-{% block report_footnote %}
-<div class="not-accurate-note">{% trans "Cost values are for general reference only and should not be treated as accurate for accounting purposes." %}</div>
-{% endblock %}
-
-<!-- use table because the CSS code done not well -->
-<section id="download-reports">
-<table class="centered-table" align="center">
-<tbody>
-<tr>
-  <td>
-  <div class="bottom-save-report-btn">
-    <img alt="detailed report" src="{% static 'images/report/download_detail_report.png' %}">
-    <span>{% trans "Download" %}</span></div>
-  <div id="save-report-spinner" style="display:none;">
-    <div class="load-container load-spinner"><div class="loader">Loading...</div></div>
-    <span>Downloading</span>
-  </div>
-  </td>
-</tr>
-</tbody>
-</table>
-</section>
-
-
-
 </div></div>
-
