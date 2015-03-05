@@ -6,8 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bootstrap 101 Template</title>
 
-    <!-- Bootstrap -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/popup_report.css' %}">
+    <script src="{% static 'js/moment-with-locales.js' %}"></script>
+    <script src="{% static 'js/entrak-utils.js' %}"></script>
+
     <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/kendoui/styles/kendo.default.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/kendoui/styles/kendo.dataviz.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/kendoui/styles/kendo.dataviz.default.min.css' %}" rel="stylesheet">
+    <!-- Because now using jquery v1.11 -->
+    <script src="{% static 'assets/kendoui/js/jquery.min.js' %}"></script>
+    <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
+    <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
