@@ -196,50 +196,6 @@ function canCreateCustomReport() {
     return canCreate;
 }
 
-function updateReportType(targetReportType) {
-    if (targetReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-        $("#panel-content").css('height', '723px');
-
-        $(".customize-detail-section .three-column-section").fadeIn();
-        $(".customize-detail-section .two-column-section").hide();
-    } else {
-        if (targetReportType === ReportGenerator.REPORT_TYPE_WEEK) {
-            $("#panel-content").css('height', '406px');
-            // $("#customize-report .two-column-section").addClass('custom-week');
-        } else {
-            $("#panel-content").css('height', '362px');
-            // $("#customize-report .two-column-section").removeClass('custom-week');
-        }
-
-        $(".customize-detail-section .two-column-section").fadeIn();
-        $(".customize-detail-section .three-column-section").hide();
-
-        if (targetReportType === ReportGenerator.REPORT_TYPE_WEEK) {
-            $(".two-column-section #week-datepicker").fadeIn();
-            $(".two-column-section .year-quarter-calendar").hide();
-        } else {
-            $(".two-column-section .year-quarter-calendar").fadeIn();
-            $(".two-column-section #week-datepicker").hide();
-        }
-    }
-
-    report.currentReportType = targetReportType;
-    updateBoundDt();
-
-    $(".datetime-result .from-date").text('');
-    $(".datetime-result .to-date").text('');
-    $(".create-report-btn").addClass("btn-disable");
-
-    if (targetReportType === ReportGenerator.REPORT_TYPE_YEAR) {
-        timeRangeYearSelected();
-    } else if (targetReportType === ReportGenerator.REPORT_TYPE_QUARTER) {
-        timeRangeQuarterSelected();
-    } else if (targetReportType === ReportGenerator.REPORT_TYPE_CUSTOM_MONTH) {
-        timeRangeCustomMonthSelected();
-    } else if (targetReportType === ReportGenerator.REPORT_TYPE_WEEK) {
-        timeRangeWeekSelected();
-    }
-}
 
 function timeRangeYearSelected() {
     report.currentDt = moment(report.boundEndDt).subtract(1, 'y');
@@ -553,9 +509,6 @@ $(function() {
             var panelContentHeight;
             if (btnIdx === 0) {
                 panelContentHeight = '162px';
-            } else if (btnIdx === 2) {
-                panelContentHeight = '362px';
-                updateReportType(ReportGenerator.REPORT_TYPE_YEAR);
             } else if (btnIdx === 1) {
                 panelContentHeight = '608px';
                 dlRawDataSelected();
