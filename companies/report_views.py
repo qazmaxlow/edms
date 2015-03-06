@@ -634,7 +634,11 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
         transformed_datas.append(data_info)
 
     m['transformed_datas'] = transformed_datas
-    transformed_bars = [{'name': td['name'], 'data': [td['total_energy']]} for td in transformed_datas]
+
+    type_colors = ['#68c0d4', '#8c526f', '#d5c050', '#8B8250', '#5759A7', '#6EC395', '#ee9646', '#ee5351', '#178943', '#ba1e6a', '#045a6f', '#0298bb']
+
+    transformed_bars = [{'name': td['name'], 'data': [td['total_energy']], 'color': type_colors[i]} for i, td in enumerate(transformed_datas)]
+
     m['transformed_bars_json'] = json.dumps(transformed_bars)
     # var transformedDatas = [];
     # var energyPercentSum = 0;
