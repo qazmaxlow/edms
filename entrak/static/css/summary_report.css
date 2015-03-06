@@ -4,7 +4,21 @@ iframe {
 
 .k-window-iframecontent {
     background: transparent !important;
+    -webkit-box-shadow: none !important;
+    bow-shadow: none !important;
+    border: 0 !important;
 }
+
+.k-header {
+    background-image: none !important;
+    background-color: transparent !important;
+    border-bottom: 0 !important;
+}
+
+.k-window-action {
+    background-color: white !important;
+}
+
 
 .summary-date-col, .save-report-btn, .hide-details-btn, .bottom-save-report-btn,
 .year-quarter-calendar-content>div, .create-report-btn, .time-range-section>span,
