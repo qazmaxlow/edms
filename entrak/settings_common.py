@@ -51,6 +51,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'rest_framework',
+    'rest_framework.authtoken',
     'south',
     'egauge',
     'system',
@@ -64,7 +65,8 @@ INSTALLED_APPS = (
     'entrak',
     'audit',
     'companies',
-    'trails'
+    'trails',
+    'apis'
 )
 
 MIDDLEWARE_CLASSES = (

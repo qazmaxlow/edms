@@ -3,6 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib import admin
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import forms
+from rest_framework.authtoken.models import Token
 from .models import EntrakUser
 
 class EntrakUserCreationForm(UserCreationForm):
@@ -20,9 +21,13 @@ class EntrakUserCreationForm(UserCreationForm):
         model = EntrakUser
 
 class EntrakUserAdmin(UserAdmin):
-    UserAdmin.list_display += ('label', 'system', 'role_level')
+    list_display = UserAdmin.list_display + ('label', 'system', 'role_level', 'api_token')
     list_editable = ('label', 'system', 'role_level')
 
     add_form = EntrakUserCreationForm
+
+    def api_token(self, obj):
+        # Example here, you can use any expression.
+        return Token.objects.get_or_create(user=obj)[0]
 
 admin.site.register(EntrakUser, EntrakUserAdmin)
