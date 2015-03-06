@@ -121,42 +121,6 @@ report.reportGeneratorMultiLangTexts = {
 {% include "report_inner_template.html" %}
 
 <script>
-
-function updateReportName() {
-    $(".report-name").text(report.reportGenerator.genReportName());
-}
-
-function updateBoundDt() {
-    if (report.currentReportType === ReportGenerator.REPORT_TYPE_YEAR) {
-        if (report.firstRecord.month() === 0 && report.firstRecord.date() === 1) {
-            report.boundStartDt = moment(report.firstRecord).startOf('year');
-        } else {
-            report.boundStartDt = moment(report.firstRecord).add(1, 'y').startOf('year');
-        }
-
-        report.boundEndDt = moment().tz(report.timezone).startOf('year');
-    } else if (report.currentReportType === ReportGenerator.REPORT_TYPE_QUARTER) {
-        if (report.firstRecord.date() === 1
-            && (report.firstRecord.month() === 0 || report.firstRecord.month() === 3
-                || report.firstRecord.month() === 6 || report.firstRecord.month() === 9)) {
-            report.boundStartDt = moment(report.firstRecord).startOf('quarter');
-        } else {
-            report.boundStartDt = moment(report.firstRecord).add(3, 'M').startOf('quarter');
-        }
-
-        report.boundEndDt = moment().tz(report.timezone).startOf('quarter');
-    } else if (report.currentReportType === ReportGenerator.REPORT_TYPE_WEEK) {
-        if (report.firstRecord.day() === 0) {
-            report.boundStartDt = moment(report.firstRecord).startOf('week');
-        } else {
-            report.boundStartDt = moment(report.firstRecord).add(1, 'w').startOf('week');
-        }
-
-        report.boundEndDt = moment().tz(report.timezone).startOf('week');
-    }
-}
-
-
 function dlRawDataSelected() {
     $(".datetime-result .from-date").text('');
     $(".datetime-result .to-date").text('');
@@ -218,15 +182,6 @@ function updateDlRawBtnStatus() {
     }
 }
 
-function setDetailShow(isShow) {
-    if (isShow) {
-        $(".hide-details-btn").removeClass('btn-down');
-        $(".detail-container").show();
-    } else {
-        $(".hide-details-btn").addClass('btn-down');
-        $(".detail-container").hide();
-    }
-}
 
 $(function() {
     setupAjaxForCsrf($.cookie('csrftoken'));
