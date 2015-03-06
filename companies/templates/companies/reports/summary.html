@@ -961,9 +961,6 @@ $(function() {
     </div>
 </div>
 
-
-<div class="bottom-space"></div>
-
 <form class="download-pdf-form" action="{% url 'report_pdf' system_code=systems.0.code %}" method="POST">{% csrf_token %}
         <input name="start_timestamp" value="">
         <input name="end_timestamp" value="">
