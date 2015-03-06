@@ -634,6 +634,8 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
         transformed_datas.append(data_info)
 
     m['transformed_datas'] = transformed_datas
+    transformed_bars = [{'name': td['name'], 'data': [td['total_energy']]} for td in transformed_datas]
+    m['transformed_bars_json'] = json.dumps(transformed_bars)
     # var transformedDatas = [];
     # var energyPercentSum = 0;
     # $.each(reportGenThis.groupedSourceInfos, function(infoIdx, info) {
