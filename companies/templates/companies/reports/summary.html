@@ -249,18 +249,6 @@ $(function() {
     report.reportGenerator = new ReportGenerator(report.entrakSystem.systemTree, report.timezone,
         ReportGenerator.REPORT_TYPE_MONTH, report.reportGeneratorMultiLangTexts);
     report.reportGenerator.langCode = '{{LANGUAGE_CODE}}';
-    if ("currentDt" in report) {
-        report.reportGenerator.updateDtInfo(report.currentDt, null);
-        updateReportName();
-
-        report.reportGenerator.getReportData(function(data) {
-            report.reportGenerator.assignData(data);
-            setDetailShow(true);
-            report.reportGenerator.generateFullReport();
-            setDetailShow(false);
-            $(".report-component").fadeTo(600, 1.0);
-        });
-    }
 
     $(".panel-header-left-menu h3").each(function(btnIdx) {
         $(this).click({btnIdx: btnIdx}, function(event) {
