@@ -640,6 +640,10 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
     transformed_bars = [{'name': td['name'], 'data': [td['total_energy']], 'color': type_colors[i]} for i, td in enumerate(transformed_datas)]
 
     m['transformed_bars_json'] = json.dumps(transformed_bars)
+
+    transformed_pie = [{'category': td['name'], 'value': td['total_energy'], 'color': type_colors[i]} for i, td in enumerate(transformed_datas)]
+
+    m['transformed_pie_json'] = json.dumps(transformed_pie)
     # var transformedDatas = [];
     # var energyPercentSum = 0;
     # $.each(reportGenThis.groupedSourceInfos, function(infoIdx, info) {

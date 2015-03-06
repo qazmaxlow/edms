@@ -95,6 +95,38 @@
 
             };
 
+            $scope.transformedPieOptions = {
+                title: {
+                    text: "HOW DOES THAT SPLIT BY PERCENTAGE?"
+                },
+                legend: {
+                    position: "top"
+                },
+                seriesDefaults: {
+                    type: "pie"
+                },
+                series: [{
+                    type: "pie",
+                    startAngle: 150,
+                    data: {{ transformed_pie_json|safe }}
+                }],
+                 valueAxis: {
+                    labels: {
+                        format: "{0}%"
+                    },
+                    line: {
+                        visible: false
+                    },
+                    axisCrossingValue: 0
+                },
+                tooltip: {
+                    visible: true,
+                    format: "{0}%",
+                    template: "#= series.name #: #= value #"
+                }
+
+            };
+
             $scope.barOptions = {
         dataSource: {{ compare_past_datasource_json|safe }},
         title: {
