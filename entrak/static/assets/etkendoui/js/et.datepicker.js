@@ -1226,22 +1226,17 @@
                 var end_date = new Date(date);
                 end_date.setDate(start_date.getDate() + 6);
 
-                var week_format = 'yyyy MMM d';
+                var week_format = 'd MMM yyyy, ddd';
 
-                date_text = kendo.toString(start_date, week_format, options.culture) + ' - ' +
-                    kendo.toString(end_date, week_format, options.culture);
+                date_text = 'Week starting ' + kendo.toString(start_date, week_format, options.culture);
             } else if (date && options.select == 'month') {
-                var month_format = 'yyyy MMM';
+                var month_format = 'MMM yyyy';
                 date_text = kendo.toString(date, month_format, options.culture);
             }
             else if(date && options.select == 'quarter'){
-                var quarter_start = new Date(date.getFullYear(), 3*Math.floor(date.getMonth()/3), 1);
-                var quarter_end = new Date(date.getFullYear(), 3*Math.floor(1+date.getMonth()/3), 0);
+                var quarter_ix = Math.floor(1+date.getMonth()/3);
 
-                var quarter_format = 'yyyy MMM';
-
-                date_text = kendo.toString(quarter_start, quarter_format, options.culture) + ' - ' +
-                    kendo.toString(quarter_end, quarter_format, options.culture);
+                date_text = 'Q' + quarter_ix + ' ' + date.getFullYear();
             }  else if (date && options.select == 'year') {
                 date_text = date.getFullYear();
             }
