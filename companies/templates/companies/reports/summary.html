@@ -306,7 +306,7 @@ $(function() {
       <div class="row content end"><div class="col-xs-12">
           <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_total.icon_path }}">
           <h3>{{ summary_report.compare_to_last_total.formated_percent_change || default_null }}</h3>
-          <p>compared to last month</p>
+          <p>{{ compare_to_text }}</p>
       </div></div>
       {% endverbatim %}
     </div>
@@ -423,6 +423,8 @@ $(function() {
             // var end_time;
             $scope.default_null = "N/A";
 
+            $scope.compare_to_text = "Compared to last month";
+
             $scope.view_report = function() {
                 var date = $scope.report_date.value();
                 var month_shortnames = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
@@ -464,6 +466,20 @@ $(function() {
                     $scope.custom_time = false;
                     $scope.monthSelectorOptions.select = selected.attr('id');
                 }
+
+                // for the compare texts
+                if (toolbar_item == 'week') {
+                    $scope.compare_to_text = "Compare to last week";
+                }
+                else if (toolbar_item == 'month') {
+                    $scope.compare_to_text = "Compare to last month";
+                }
+                else if (toolbar_item == 'quarter') {
+                    $scope.compare_to_text = "Compare to last quarter";
+                }
+                else if (toolbar_item == 'year') {
+                    $scope.compare_to_text = "Compare to last year";
+                }
             };
 
             $scope.timeToolbarOptions = {
@@ -483,11 +499,11 @@ $(function() {
                         ovefrlow: "never"
                     },
                     {
-                        template: '<div ng-show="custom_time"><input kendo-date-picker="report_date_start" style="width: 220px;" k-on-change="on_custom_date_selected(kendoEvent)" k-value="default_date" ></div>',
+                        template: '<div ng-show="custom_time"><input kendo-date-picker="report_date_start" style="width: 220px;" k-on-change="on_custom_date_selected(kendoEvent)" k-options="customDateOptions" k-value="default_date" ></div>',
                         overflow: "never"
                     },
                     {
-                        template: '<div ng-show="custom_time"><input kendo-date-picker="report_date_end" style="width: 220px;" k-on-change="on_custom_date_selected(kendoEvent)" k-value="default_date" ></div>',
+                        template: '<div ng-show="custom_time"><input kendo-date-picker="report_date_end" style="width: 220px;" k-on-change="on_custom_date_selected(kendoEvent)" k-options="customDateOptions" k-value="default_date" ></div>',
                         overflow: "never"
                     }
 
@@ -498,7 +514,11 @@ $(function() {
                 format: 'MMMM yyyy',
                 select: "month",
                 clickPopup: true
-            }
+            };
+
+            $scope.customDateOptions = {
+                format: 'MMMM d, yyyy'
+            };
 
             $scope.on_date_selected = function(e) {
                 var dp = e.sender;
