@@ -113,6 +113,15 @@ def summary_ajax(request, system_code):
     total_cost = get_total_cost(source_ids, start_dt, end_dt)
     last_start_dt = previous_month(start_dt)
     last_end_dt = previous_month(end_dt)
+    compare_type = request.GET.get('compare_type')
+
+    if compare_type == 'month':
+        last_start_dt = previous_month(start_dt)
+        last_end_dt = previous_month(end_dt)
+    elif compare_type == 'week':
+        last_start_dt = start_dt - datetime.timedelta(days=7)
+        last_end_dt = end_dt - datetime.timedelta(days=7)
+
     last_total_cost = get_total_cost(source_ids, last_start_dt, last_end_dt)
 
     compare_to_last_total = None
