@@ -128,6 +128,10 @@ def summary_ajax(request, system_code):
     elif compare_type == 'year':
         last_start_dt = start_dt - relativedelta(years=1)
         last_end_dt = end_dt - relativedelta(years=1)
+    elif compare_type == 'custom':
+        date_delta = end_dt - start_dt
+        last_end_dt = start_dt - datetime.timedelta(days=1)
+        last_start_dt = last_end_dt - date_delta
 
     last_total_cost = get_total_cost(source_ids, last_start_dt, last_end_dt)
 

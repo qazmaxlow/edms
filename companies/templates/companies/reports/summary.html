@@ -542,7 +542,8 @@ $(function() {
 
                 summary_report_ds.transport.options.read['data'] = {
                     start_date: kendo.toString(start_date, 'yyyy-MM-dd'),
-                    end_date: kendo.toString(end_date, 'yyyy-MM-dd')
+                    end_date: kendo.toString(end_date, 'yyyy-MM-dd'),
+                    compare_type: 'custom'
                 };
                 summary_report_ds.read();
                 $scope.summary_report = summary_report_ds.data()[0];
