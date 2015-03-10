@@ -1191,6 +1191,7 @@
                 isSameType = (date === null && current === null) || (date instanceof Date && current instanceof Date),
                 formattedValue;
 
+            /* Force update again because the select option might be changed
             if (+date === +current && isSameType) {
                 formattedValue = kendo.toString(date, options.format, options.culture);
 
@@ -1200,6 +1201,7 @@
 
                 return date;
             }
+            */
 
             if (date !== null && isEqualDatePart(date, min)) {
                 date = restrictValue(date, min, max);
