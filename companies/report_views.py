@@ -1,6 +1,7 @@
 import copy, datetime, pytz
 import json
 import time
+from dateutil.relativedelta import relativedelta
 
 from django.db.models import Q
 from django.core.context_processors import csrf
@@ -121,6 +122,9 @@ def summary_ajax(request, system_code):
     elif compare_type == 'week':
         last_start_dt = start_dt - datetime.timedelta(days=7)
         last_end_dt = end_dt - datetime.timedelta(days=7)
+    elif compare_type == 'quarter':
+        last_start_dt = start_dt - relativedelta(months=3)
+        last_end_dt = end_dt - relativedelta(months=3)
 
     last_total_cost = get_total_cost(source_ids, last_start_dt, last_end_dt)
 
