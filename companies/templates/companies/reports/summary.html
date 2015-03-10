@@ -323,7 +323,7 @@ $(function() {
       <div class="row content end"><div class="col-xs-12">
           <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_weekdays.icon_path }}">
           <h3>{{ summary_report.compare_to_last_weekdays.formated_percent_change || default_null }}</h3>
-          <p>Compared to last month</p>
+          <p>{{ compare_to_text }}</p>
       </div></div>
       {% endverbatim %}
     </div>
@@ -340,7 +340,7 @@ $(function() {
       <div class="row content end"><div class="col-xs-12">
           <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_overnight_avg_cost.icon_path }}">
           <h3>{{ summary_report.compare_to_last_overnight_avg_cost.formated_percent_change || default_null }}</h3>
-          <p>Compared to last month</p>
+          <p>{{ compare_to_text }}</p>
       </div></div>
       {% endverbatim %}
     </div>
