@@ -125,6 +125,9 @@ def summary_ajax(request, system_code):
     elif compare_type == 'quarter':
         last_start_dt = start_dt - relativedelta(months=3)
         last_end_dt = end_dt - relativedelta(months=3)
+    elif compare_type == 'year':
+        last_start_dt = start_dt - relativedelta(years=1)
+        last_end_dt = end_dt - relativedelta(years=1)
 
     last_total_cost = get_total_cost(source_ids, last_start_dt, last_end_dt)
 
