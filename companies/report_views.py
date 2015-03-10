@@ -339,7 +339,7 @@ class CompareTplHepler:
 
     @property
     def formated_percent_change(self):
-        return '{0:.0f}%'.format(self.compared_percent_abs) if self.compared_percent is not None else None
+        return '{0:.0f}% {1}'.format(self.compared_percent_abs, self.change_desc) if self.compared_percent is not None else None
 
     @property
     def change_desc(self):
