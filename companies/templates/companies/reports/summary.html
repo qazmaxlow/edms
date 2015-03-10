@@ -547,6 +547,8 @@ $(function() {
                 };
                 summary_report_ds.read();
                 $scope.summary_report = summary_report_ds.data()[0];
+
+                $scope.compare_to_text = "Compare to last peroid";
             }
 
             $scope.default_date = new Date("{{ default_date.isoformat }}");
