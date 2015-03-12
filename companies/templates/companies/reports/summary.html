@@ -299,9 +299,11 @@ $(function() {
 
   <div class="row">
     <div class="col-xs-3">
+      {% verbatim %}
       <div class="row time-type"><div class="col-xs-12">
-          Monthly
+          {{ report_type_name }}
       </div></div>
+      {% endverbatim %}
       <div class="row content"><div class="col-xs-12">
           <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
           <h3>{% templatetag openvariable %} summary_report.formated_total_cost || default_null {% templatetag closevariable %}</h3>
@@ -434,6 +436,7 @@ $(function() {
             $scope.default_null = "N/A";
 
             $scope.compare_to_text = "Compared to last month";
+            $scope.report_type_name = "Monthly";
 
             $scope.view_report = function() {
                 var date = $scope.report_date.value();
@@ -494,15 +497,19 @@ $(function() {
                 // for the compare texts
                 if (toolbar_item == 'week') {
                     $scope.compare_to_text = "Compare to last week";
+                    $scope.report_type_name = 'Weekdays';
                 }
                 else if (toolbar_item == 'month') {
                     $scope.compare_to_text = "Compare to last month";
+                    $scope.report_type_name = 'Monthly';
                 }
                 else if (toolbar_item == 'quarter') {
                     $scope.compare_to_text = "Compare to last quarter";
+                    $scope.report_type_name = 'Quarter';
                 }
                 else if (toolbar_item == 'year') {
                     $scope.compare_to_text = "Compare to last year";
+                    $scope.report_type_name = 'Year';
                 }
             };
 
