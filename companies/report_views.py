@@ -238,6 +238,17 @@ def summary_ajax(request, system_code):
                     date_range = (c_rate_date, end_dt, mr)
                     date_ranges.append(date_range)
 
+        # if no date ranges use the first rate as the default money rate
+        # else if first date range has gap between the start date
+        # use the first money_unit_rate as the default unit rate
+        if not date_ranges:
+            default_rate = money_unit_rates.first()
+            date_range = (start_dt, end_dt, default_rate)
+            date_ranges.append(date_range)
+        elif start_dt < date_ranges[0][0]:
+            default_rate = money_unit_rates.first()
+            date_range = (start_dt, date_ranges[0][0], default_rate)
+            date_ranges.append(date_range)
 
         total_on_sum = 0
         for date_range in date_ranges:
