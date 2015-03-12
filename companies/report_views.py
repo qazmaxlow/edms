@@ -631,6 +631,7 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
         current_readings = g['currentReadings']
         g['compare_last_month_helper'] = CompareTplHepler(g['compare_last_month'])
         g['compare_same_period_helper'] = CompareTplHepler(g['compare_same_period'])
+
         for ts, val in current_readings.items():
             if ts in combined_readings:
                 combined_readings[ts] += val
@@ -655,10 +656,29 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
         if total_compare:
             chart_title = 'Overall: {0.compared_percent_abs:.0f}% {0.change_desc} energy than last month'.format(CompareTplHepler(total_compare))
 
+        current_day_readings = {}
+        for day in range(1, 32):
+            current_day_readings[day] = None
+
+        for ts, v in current_readings.items():
+            dt = datetime.datetime.fromtimestamp(ts, pytz.utc)
+            dt = dt.astimezone(current_system_tz)
+            current_day_readings[dt.day] = v
+
+        last_day_readings = {}
+        for day in range(1, 32):
+            last_day_readings[day] = None
+
+        for ts, v in last_readings.items():
+            dt = datetime.datetime.fromtimestamp(ts, pytz.utc)
+            dt = dt.astimezone(current_system_tz)
+            last_day_readings[dt.day] = v
+
+
         sub_graph = {
             'system': g['system'],
-            'current_reading_serie': json.dumps(current_readings.values()),
-            'last_reading_serie': json.dumps(last_readings.values()),
+            'current_reading_serie': json.dumps(current_day_readings.values()),
+            'last_reading_serie': json.dumps(last_day_readings.values()),
             'chart_title': chart_title
         }
         sub_compare_graphs.append(sub_graph)
