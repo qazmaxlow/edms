@@ -1,5 +1,8 @@
+from bson.objectid import ObjectId
 import copy, datetime, pytz
 import json
+from mongoengine import connection, Q as MQ
+import operator
 import time
 from dateutil.relativedelta import relativedelta
 
@@ -14,7 +17,7 @@ from django.utils import timezone, dateparse
 from wkhtmltopdf.views import PDFTemplateResponse
 
 from egauge.manager import SourceManager
-from egauge.models import SourceReadingMonth, SourceReadingDay, SourceReadingHour, Source
+from egauge.models import SourceReadingMonth, SourceReadingDay, SourceReadingHour, SourceReadingMin, Source
 from system.models import System
 from unit.models import UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
 from utils.auth import permission_required
@@ -213,8 +216,69 @@ def summary_ajax(request, system_code):
         if overnight_costs:
             return sum([ c for c in overnight_costs if c is not None])/total_days
 
+    # source = Source.objects(id=str(source_id)).first()
+    # system = System.objects.get(code=source.system_code)
+    unit_infos = json.loads(current_system.unit_info)
+    money_unit_code = unit_infos['money']
+    money_unit_rates = UnitRate.objects.filter(category_code='money', code=unit_infos['money']).order_by('effective_date')
 
-    overnight_avg_cost = get_overnight_avg_cost(source_ids, start_dt, end_dt)
+    date_ranges = []
+    for ix, mr in enumerate(money_unit_rates):
+        c_rate_date = mr.effective_date.astimezone(current_system_tz)
+        if c_rate_date >= start_dt and c_rate_date <= end_dt:
+            try:
+                n_rate_date = money_unit_rates[ix+1].effective_date.astimezone(current_system_tz)
+                if n_rate_date > end_dt:
+                    n_rate_date = end_dt
+
+                date_range = (c_rate_date, n_rate_date, mr)
+                date_ranges.append(date_range)
+            except IndexError:
+                date_range = (c_rate_date, end_dt, mr)
+                date_ranges.append(date_range)
+
+
+    total_on_sum = 0
+    for date_range in date_ranges:
+        sd, ed, r = date_range
+        mqs = []
+        num_day = (ed - sd).days
+        rdays = [sd+datetime.timedelta(days=n) for n in range(num_day)]
+        for rday in rdays:
+            on_sd = datetime.datetime.combine(rday, current_system.night_time_start)
+            on_sd = on_sd.replace(tzinfo=current_system_tz)
+
+            on_ed = datetime.datetime.combine(
+                rday + datetime.timedelta(days=1), current_system.night_time_end)
+            on_ed = on_ed.replace(tzinfo=current_system_tz)
+
+            q = MQ(datetime__gte=on_sd, datetime__lt=on_ed)
+            mqs.append(q)
+
+        conds = reduce(
+            operator.or_,
+            mqs
+        )
+
+        dr_sum = r.rate * SourceReadingHour.objects(conds, source_id__in=source_ids).sum('value')
+        total_on_sum += dr_sum
+
+        # Time zone issue could not be used!!!
+        # mg_conn = connection.get_db()
+        # # must wrap ObjectID...
+        # mg_reading = mg_conn.source_reading_hour.aggregate([
+        #     { "$match": {"source_id": {"$in": [ObjectId(s) for s in source_ids]}, "datetime": {"$gte": sd, "$lte": ed }}},
+        #     { "$group": {"_id" : {"source_id": "$source_id", "hour": {"$hour": "$datetime"}}, "total": {"$sum": "$value"}}},
+        # ])
+        # # time zone issue
+        # # in_range = lambda h: h >= current_system.night_time_start.hour or h < current_system.night_time_end.hour
+        # in_range = lambda h: h >= 12 and h < 22
+        # on_sum = sum([ r['total'] for r in mg_reading['result'] if in_range(r['_id']['hour'])])
+        # total_on_sum += on_sum
+
+
+    overnight_avg_cost = total_on_sum / (end_dt - start_dt).days
+    # overnight_avg_cost = get_overnight_avg_cost(source_ids, start_dt, end_dt)
     m['formated_overnight_avg_cost'] = '${0:.0f}'.format(overnight_avg_cost) if overnight_avg_cost else None
 
     compare_to_last_overnight_avg_cost = None
