@@ -218,7 +218,9 @@
         </div>
         <div class="row detail-content">
           <div class="col-xs-12">
-          <div kendo-chart k-options="lineOptions" k-series="[
+          <div kendo-chart k-options="lineOptions"
+               k-title="{text: '{{ subgraph.chart_title }}' }"
+               k-series="[
             {
                 type: 'line',
                 data: {{ subgraph.current_reading_serie|safe }},

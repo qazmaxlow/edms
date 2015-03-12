@@ -645,10 +645,15 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
                 combined_last_readings[ts] = val
 
 
+        chart_title = 'N/A'
+        if g['compare_last_month']:
+            chart_title = 'Overall: {0.compared_percent_abs:.0f}% {0.change_desc} energy than lash month'.format(CompareTplHepler(g['compare_last_month']))
+
         sub_graph = {
             'system': g['system'],
             'current_reading_serie': json.dumps(current_readings.values()),
-            'last_reading_serie': json.dumps(last_readings.values())
+            'last_reading_serie': json.dumps(last_readings.values()),
+            'chart_title': chart_title
         }
         sub_compare_graphs.append(sub_graph)
 
