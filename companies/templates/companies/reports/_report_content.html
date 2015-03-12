@@ -206,6 +206,35 @@
       <div class="col-xs-12">
         <div kendo-chart k-options="lineOptions" ></div>
       </div>
+
+
+      {% for subgraph in sub_compare_graphs %}
+      <div class="col-xs-12">
+        <div kendo-chart k-options="lineOptions" k-series="[
+            {
+                type: 'line',
+                data: {{ subgraph.current_reading_serie|safe }},
+                name: '{{ compare_current_readings_month }}',
+                color: '#047fa1',
+                format: '{0:n0}',
+                labels: {
+                    visible: false
+                }
+            },
+            {
+                type: 'line',
+                data: {{ subgraph.last_reading_serie|safe }},
+                name: '{{ compare_last_readings_month }}',
+                color: '#edba3c',
+                format: '{0:n0}',
+                labels: {
+                    visible: false
+                }
+            }
+        ]" ></div>
+      </div>
+      {% endfor %}
+
     </div>
 </div>
 </div>

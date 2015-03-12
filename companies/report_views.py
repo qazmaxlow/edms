@@ -618,6 +618,10 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
 
         g['weekend'] = weekend
 
+
+    # sub compare graphs
+    sub_compare_graphs = []
+
     # this is combined current readings
     combined_readings = {}
 
@@ -640,6 +644,14 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
             else:
                 combined_last_readings[ts] = val
 
+
+        sub_graph = {
+            'system': g['system'],
+            'current_reading_serie': json.dumps(current_readings.values()),
+            'last_reading_serie': json.dumps(last_readings.values())
+        }
+        sub_compare_graphs.append(sub_graph)
+
     # m['combined_current_readings'] = combined_readings
     # m['combined_last_readings'] = combined_last_readings
     # compare current series
@@ -659,6 +671,8 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
 
     m['compare_last_readings_month'] = previous_month(report_date).strftime('%b')
     # assert False
+
+    m['sub_compare_graphs'] = sub_compare_graphs
 
 
     highest_datetime, highest_usage= sorted(combined_readings.items(), key=lambda x: x[1])[-1]
