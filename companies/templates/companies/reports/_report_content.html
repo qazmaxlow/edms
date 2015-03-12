@@ -211,7 +211,14 @@
     <div class="row">
       {% for subgraph in sub_compare_graphs %}
       <div class="col-xs-6">
-        <div kendo-chart k-options="lineOptions" k-series="[
+        <div class="row">
+          <div class="col-xs-12 sub-graph-title">
+            {{ subgraph.system.name }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+          <div kendo-chart k-options="lineOptions" k-series="[
             {
                 type: 'line',
                 data: {{ subgraph.current_reading_serie|safe }},
@@ -232,7 +239,9 @@
                     visible: false
                 }
             }
-        ]" ></div>
+        ]" ></div></div>
+
+        </div>
       </div>
       {% if forloop.counter|divisibleby:3 %}
         </div><div class="row">
