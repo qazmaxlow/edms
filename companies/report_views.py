@@ -647,7 +647,7 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
 
         chart_title = 'N/A'
         if g['compare_last_month']:
-            chart_title = 'Overall: {0.compared_percent_abs:.0f}% {0.change_desc} energy than lash month'.format(CompareTplHepler(g['compare_last_month']))
+            chart_title = 'Overall: {0.compared_percent_abs:.0f}% {0.change_desc} energy than last month'.format(CompareTplHepler(g['compare_last_month']))
 
         sub_graph = {
             'system': g['system'],
