@@ -264,7 +264,7 @@ $(function() {
 {% block page_content %}
 
     <div ng-app="Entrak">
-    <div ng-controller="ReportController" xng-init="init()" class="container">
+    <div ng-controller="ReportController">
         <button ng-click="win2.close()" ng-show="win2visible">close</button>
         <div kendo-window="win_report" k-visible="false" k-iframe="true"
              k-width="1200" k-height="5000" k-modal="true"
