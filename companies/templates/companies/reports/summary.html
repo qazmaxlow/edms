@@ -582,4 +582,14 @@ $(function() {
 
 
 </script>
+<script>
+    // hack for close window when click outside
+    $(document).on('click', '.k-overlay', function () {
+        var kendoWindow = $('.k-window-content.k-content', $(this).next('div.k-widget.k-window'));
+        if (kendoWindow == null || kendoWindow.length == 0) {
+            return;
+        }
+        kendoWindow.data('kendoWindow').close();
+    });
+</script>
 {% endblock %}
