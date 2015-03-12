@@ -223,6 +223,9 @@
                k-series="[
             {
                 type: 'line',
+                markers: {
+                  visible: false
+                },
                 data: {{ subgraph.current_reading_serie|safe }},
                 name: '{{ compare_current_readings_month }}',
                 color: '#047fa1',
@@ -233,6 +236,9 @@
             },
             {
                 type: 'line',
+                markers: {
+                  visible: false,
+                },
                 data: {{ subgraph.last_reading_serie|safe }},
                 name: '{{ compare_last_readings_month }}',
                 color: '#edba3c',
