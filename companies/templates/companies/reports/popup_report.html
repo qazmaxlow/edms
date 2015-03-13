@@ -72,34 +72,6 @@
       });
 
         ngapp.controller("ReportController", function($scope) {
-            $scope.transformedBarOptions = {
-                title: {
-                    text: "HOW DOES THAT SPLIT BY PERCENTAGE?"
-                },
-                legend: {
-                    position: "top"
-                },
-                seriesDefaults: {
-                    type: "bar"
-                },
-                series: {{ transformed_bars_json|safe }},
-                valueAxis: {
-                    labels: {
-                        format: "{0}%"
-                    },
-                    line: {
-                        visible: false
-                    },
-                    axisCrossingValue: 0
-                },
-                tooltip: {
-                    visible: true,
-                    format: "{0}%",
-                    template: "#= series.name #: #= value #"
-                }
-
-            };
-
             $scope.transformedPieOptions = {
                 title: {
                     text: "HOW DOES THAT SPLIT BY PERCENTAGE?"
