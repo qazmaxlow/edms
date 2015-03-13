@@ -498,15 +498,7 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
         report_date = timezone.make_aware(report_date, timezone.get_current_timezone())
         m['report_date'] = datetime.datetime.strptime(year+month, '%Y%b')
 
-        try:
-            next_month_date = report_date.replace(month=report_date.month+1)
-        except ValueError:
-            if report_date.month == 12:
-                next_month_date = report_date.replace(year=report_date.year+1, month=1)
-            else:
-                # next month is too short to have "same date"
-                # pick your own heuristic, or re-raise the exception:
-                raise
+        next_month_date = report_date + relativedelta(months=1)
 
     sd = request.GET.get('start_date')
     if sd:
