@@ -790,13 +790,6 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
         }
 
         data_info['name'] = g['sourceNameInfo']['en'] if g['systemCode'] == m['company_system'].code else g['system'].fullname
-
-        if g is not group_data[-1]:
-            data_info['energy_percent'] = g['currentTotalEnergy']/total_energy*100
-            energy_percentsum += data_info['energy_percent']
-        else:
-            data_info['energy_percent'] = 100 - energy_percentsum
-
         transformed_datas.append(data_info)
 
     m['transformed_datas'] = transformed_datas
