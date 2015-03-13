@@ -179,7 +179,7 @@ def summary_ajax(request, system_code):
     m = {}
 
     m['formated_total_cost'] = '${0:,.0f}'.format(total_cost) if total_cost is not None else None
-    m['formated_weekday_cost'] = '${0:.0f}'.format(weekday_cost) if weekday_cost is not None else None
+    m['formated_weekday_cost'] = '${0:,.0f}'.format(weekday_cost) if weekday_cost is not None else None
 
     m['compare_to_last_total'] = CompareTplHepler(compare_to_last_total).to_dict()
     m['compare_to_last_weekdays'] = CompareTplHepler(compare_to_last_weekdays).to_dict()
@@ -281,7 +281,7 @@ def summary_ajax(request, system_code):
     overnight_avg_cost = get_new_overnight_avg_cost(source_ids, start_dt, end_dt)
     # overnight_avg_cost = total_on_sum / (end_dt - start_dt).days
     # overnight_avg_cost = get_overnight_avg_cost(source_ids, start_dt, end_dt)
-    m['formated_overnight_avg_cost'] = '${0:.0f}'.format(overnight_avg_cost) if overnight_avg_cost else None
+    m['formated_overnight_avg_cost'] = '${0:,.0f}'.format(overnight_avg_cost) if overnight_avg_cost else None
 
     compare_to_last_overnight_avg_cost = None
     last_overnight_avg_cost = get_new_overnight_avg_cost(source_ids, last_start_dt, last_end_dt)
