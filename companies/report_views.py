@@ -444,7 +444,7 @@ class CompareTplHepler:
 
 
 
-def popup_report_view(request, system_code, year, month, to_pdf=False):
+def popup_report_view(request, system_code, year=None, month=None, report_type=None, to_pdf=False):
     systems_info = System.get_systems_info(system_code, request.user.system.code)
     systems = systems_info['systems']
     current_system = System.objects.get(code=system_code)
@@ -493,20 +493,35 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
     m.update(csrf(request))
     # oops!
     m['company_system'] = systems.first()
-    report_date = datetime.datetime.strptime(year+month, '%Y%b')
-    report_date = timezone.make_aware(report_date, timezone.get_current_timezone())
+    if year and month:
+        report_date = datetime.datetime.strptime(year+month, '%Y%b')
+        report_date = timezone.make_aware(report_date, timezone.get_current_timezone())
+        m['report_date'] = datetime.datetime.strptime(year+month, '%Y%b')
 
-    try:
-        next_month_date = report_date.replace(month=report_date.month+1)
-    except ValueError:
-        if report_date.month == 12:
-            next_month_date = report_date.replace(year=report_date.year+1, month=1)
-        else:
-            # next month is too short to have "same date"
-            # pick your own heuristic, or re-raise the exception:
-            raise
+        try:
+            next_month_date = report_date.replace(month=report_date.month+1)
+        except ValueError:
+            if report_date.month == 12:
+                next_month_date = report_date.replace(year=report_date.year+1, month=1)
+            else:
+                # next month is too short to have "same date"
+                # pick your own heuristic, or re-raise the exception:
+                raise
 
-    m['report_date'] = datetime.datetime.strptime(year+month, '%Y%b')
+    sd = request.GET.get('start_date')
+    if sd:
+        report_date = dateparse.parse_date(sd)
+        report_date = datetime.datetime.combine(report_date, datetime.datetime.min.time())
+        report_date = current_system_tz.localize(report_date)
+
+    end_dt = next_month(start_dt)
+
+    ed = request.GET.get('end_date')
+    if ed:
+        next_month_date = dateparse.parse_date(ed)
+        next_month_date = datetime.datetime.combine(next_month_date, datetime.datetime.min.time())
+        next_month_date = current_system_tz.localize(next_month_date)
+
     sources = SourceManager.get_sources(current_system)
     source_ids = [str(source.id) for source in sources]
 

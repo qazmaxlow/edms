@@ -444,7 +444,9 @@ $(function() {
                 var month_shortnames = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
                 var month_shortname = month_shortnames[date.getMonth()];
                 var year = date.getFullYear();
-                $scope.win_report.refresh({ url: '../report/popup-report/' + year + '/' + month_shortname + '/'});
+                var start_date = kendo.toString($scope.report_date.getSelectedStartDate(), 'yyyy-MM-dd')
+                var end_date = kendo.toString($scope.report_date.getSelectedEndDate(), 'yyyy-MM-dd')
+                $scope.win_report.refresh({ url: '../report/popup-report/?start_date=' + start_date + '&end_date=' + end_date});
                 $scope.win_report.open().center();
             }
 
