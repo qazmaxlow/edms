@@ -92,7 +92,7 @@ def summary_ajax(request, system_code):
     # should use system timezone
     start_dt = datetime.datetime.now(current_system_tz)
     start_dt = start_dt.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    start_dt = previous_month(start_dt)
+    start_dt = start_dt - relativedelta(months=1)
 
     sd = request.GET.get('start_date')
     if sd:
