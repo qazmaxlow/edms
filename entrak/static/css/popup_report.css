@@ -6,6 +6,29 @@ body {
     background-color: transparent !important;
 }
 
+.transformed-bar-chart {
+    width:100%;
+    border-spacing: 2px;
+    border-collapse: separate;
+}
+
+.transformed-name {
+    width: 220px;
+    color: white;
+    text-align: left;
+    padding-left: 22px;
+    font-weight: 600;
+}
+
+.transformed-bar {
+    height: 44px;
+    background-color: blue;
+}
+
+.transformed-bar-chart tr {
+    height: 60px;
+}
+
 .container {
     width: 100% !important;
     padding: 10px 0;

@@ -134,11 +134,10 @@
 
       <div class="row detail-container">
         <div class="col-xs-6">
-              <table style="width:100%">
+              <table class="transformed-bar-chart">
                 {% for td in transformed_datas %}
-                <tr class="key-statistics-row ">
-                  <td class="usage-type-name">
-                    {{ td.name }}</td><td>
+                <tr>
+                  <td class="transformed-name" style="background-color:{{ td.color }};">{{ td.name }}</td><td>
                     <div class="transformed-bar" style="width:{{ td.percent_in_total }}%;background-color:{{ td.color }}"></div>
                   </td>
                 </tr>
