@@ -178,8 +178,8 @@ def summary_ajax(request, system_code):
     # m = systems_info
     m = {}
 
-    m['formated_total_cost'] = '${0:.0f}'.format(total_cost) if total_cost is not None else None
-    m['formated_weekday_cost'] = '${0:.0f}'.format(weekday_cost) if weekday_cost is not None else None
+    m['formated_total_cost'] = '${0:,.0f}'.format(total_cost) if total_cost is not None else None
+    m['formated_weekday_cost'] = '${0:,.0f}'.format(weekday_cost) if weekday_cost is not None else None
 
     m['compare_to_last_total'] = CompareTplHepler(compare_to_last_total).to_dict()
     m['compare_to_last_weekdays'] = CompareTplHepler(compare_to_last_weekdays).to_dict()
@@ -281,7 +281,7 @@ def summary_ajax(request, system_code):
     overnight_avg_cost = get_new_overnight_avg_cost(source_ids, start_dt, end_dt)
     # overnight_avg_cost = total_on_sum / (end_dt - start_dt).days
     # overnight_avg_cost = get_overnight_avg_cost(source_ids, start_dt, end_dt)
-    m['formated_overnight_avg_cost'] = '${0:.0f}'.format(overnight_avg_cost) if overnight_avg_cost else None
+    m['formated_overnight_avg_cost'] = '${0:,.0f}'.format(overnight_avg_cost) if overnight_avg_cost else None
 
     compare_to_last_overnight_avg_cost = None
     last_overnight_avg_cost = get_new_overnight_avg_cost(source_ids, last_start_dt, last_end_dt)
@@ -790,13 +790,6 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
         }
 
         data_info['name'] = g['sourceNameInfo']['en'] if g['systemCode'] == m['company_system'].code else g['system'].fullname
-
-        if g is not group_data[-1]:
-            data_info['energy_percent'] = g['currentTotalEnergy']/total_energy*100
-            energy_percentsum += data_info['energy_percent']
-        else:
-            data_info['energy_percent'] = 100 - energy_percentsum
-
         transformed_datas.append(data_info)
 
     m['transformed_datas'] = transformed_datas
