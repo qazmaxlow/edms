@@ -35,8 +35,11 @@
 
     <div class="sidebar-left" ng-controller="MyCtrl">
       <div class="section">
-              <a class="btn btn-save-report" href="download" role="button">Save Report</a>
+              <a class="btn btn-save-report" href="download" role="button">
+                <img src="{% static 'images/reports/popup_download.png' %}" alt="logo">
+                Save Report</a>
       </div>
+      <div class="section">
               <ul kendo-menu style="display: inline-block; min-width: 150px;"
                 k-orientation="'vertical'"
                 k-on-select="onSelect(kendoEvent)">
@@ -46,6 +49,8 @@
               <li data-anchor="weekend-info">Weekend and holiday Energy Use</li>
               <li data-anchor="overnight-info">Overnight Energy Use</li>
             </ul>
+      </div>
+      <img src="{% static 'images/reports/popup_logo.png' %}" alt="logo">
     </div>
 
       </div>
@@ -67,30 +72,27 @@
       });
 
         ngapp.controller("ReportController", function($scope) {
-            $scope.transformedBarOptions = {
-                title: {
-                    text: "HOW DOES THAT SPLIT BY PERCENTAGE?"
-                },
+            $scope.transformedPieOptions = {
                 legend: {
-                    position: "top"
+                    visible: false
                 },
                 seriesDefaults: {
-                    type: "bar"
-                },
-                series: {{ transformed_bars_json|safe }},
-                valueAxis: {
+                    type: "donut",
                     labels: {
-                        format: "{0}%"
-                    },
-                    line: {
-                        visible: false
-                    },
-                    axisCrossingValue: 0
+                        template: "#= kendo.format('{0:p0}', percentage)#",
+                        position: "outsideEnd",
+                        visible: true,
+                        background: "transparent"
+                    }
                 },
+                series: [{
+                    startAngle: 150,
+                    data: {{ transformed_pie_json|safe }}
+                }],
                 tooltip: {
                     visible: true,
                     format: "{0}%",
-                    template: "#= series.name #: #= value #"
+                    template: "#= category #: #= kendo.format('{0:n0}',value) #"
                 }
 
             };

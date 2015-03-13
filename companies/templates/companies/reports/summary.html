@@ -42,6 +42,10 @@
     height: 33px;
   }
 
+  #sub-heading-facilities h3 {
+    font-size: 20px;
+  }
+
 </style>
 
 <style>
@@ -264,10 +268,12 @@ $(function() {
 {% block page_content %}
 
     <div ng-app="Entrak">
-    <div ng-controller="ReportController" xng-init="init()" class="container">
+    <div ng-controller="ReportController">
         <button ng-click="win2.close()" ng-show="win2visible">close</button>
+        <!-- extra height for sub graphs -->
         <div kendo-window="win_report" k-visible="false" k-iframe="true"
-             k-width="1200" k-height="5000" k-modal="true"
+             k-width="1200" k-height="5000 + 1000" k-modal="true"
+             k-resizable="false" k-draggable="false"
              >
         </div>
 
@@ -286,7 +292,7 @@ $(function() {
     <div class="time-bar row text-left">
       <div class="col-xs-12">
         <p>
-          <div kendo-toolbar k-options="timeToolbarOptions" k-on-toggle="selectTimeType(kendoEvent)"></div>
+          <div kendo-toolbar="dateToolbar" k-options="timeToolbarOptions" k-on-toggle="selectTimeType(kendoEvent)"></div>
         </p>
       </div>
 
@@ -294,19 +300,21 @@ $(function() {
 
   <div class="row">
     <div class="col-xs-3">
+      {% verbatim %}
       <div class="row time-type"><div class="col-xs-12">
-          Monthly
+          {{ report_type_name }}
       </div></div>
+      {% endverbatim %}
       <div class="row content"><div class="col-xs-12">
           <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
           <h3>{% templatetag openvariable %} summary_report.formated_total_cost || default_null {% templatetag closevariable %}</h3>
-          <p>total energy cost</p>
+          <p>Total energy cost</p>
       </div></div>
       {% verbatim %}
       <div class="row content end"><div class="col-xs-12">
           <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_total.icon_path }}">
           <h3>{{ summary_report.compare_to_last_total.formated_percent_change || default_null }}</h3>
-          <p>compared to last month</p>
+          <p>{{ compare_to_text }}</p>
       </div></div>
       {% endverbatim %}
     </div>
@@ -317,13 +325,13 @@ $(function() {
       <div class="row content"><div class="col-xs-12">
           <img alt="power" class="icon" src="{% static 'images/reports/calendar_energy_icon.svg' %}">
           <h3>{% templatetag openvariable %} summary_report.formated_weekday_cost || default_null {% templatetag closevariable %}</h3>
-          <p>Average Weekdays Cost</p>
+          <p>Average weekdays cost</p>
       </div></div>
       {% verbatim %}
       <div class="row content end"><div class="col-xs-12">
           <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_weekdays.icon_path }}">
           <h3>{{ summary_report.compare_to_last_weekdays.formated_percent_change || default_null }}</h3>
-          <p>Compared to last month</p>
+          <p>{{ compare_to_text }}</p>
       </div></div>
       {% endverbatim %}
     </div>
@@ -334,25 +342,30 @@ $(function() {
       <div class="row content"><div class="col-xs-12">
           <img alt="power" class="icon" src="{% static 'images/reports/calendar_energy_icon.svg' %}">
           <h3>{% templatetag openvariable %} summary_report.formated_overnight_avg_cost || default_null {% templatetag closevariable %}</h3>
-          <p>Average Overnight Cost</p>
+          <p>Average overnight cost</p>
       </div></div>
       {% verbatim %}
       <div class="row content end"><div class="col-xs-12">
           <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_overnight_avg_cost.icon_path }}">
           <h3>{{ summary_report.compare_to_last_overnight_avg_cost.formated_percent_change || default_null }}</h3>
-          <p>Compared to last month</p>
+          <p>{{ compare_to_text }}</p>
       </div></div>
       {% endverbatim %}
     </div>
     <div class="col-xs-3">
 
+      <div class="sky-bg">
+        <img src="{% static "images/reports/sky.png" %}">
+      </div>
       <div class="view-report">
         <img class="img-button" src="{% static "images/reports/view_report.svg" %}" ng-click="view_report()">
         <button class="k-button" ng-click="view_report()">View Full Report</button>
       </div>
+      <div class="flower-bg">
+        <img src="{% static "images/reports/flower.png" %}">
+      </div>
     </div>
   </div>
-  
 </div>
 
 
@@ -423,12 +436,26 @@ $(function() {
             // var end_time;
             $scope.default_null = "N/A";
 
+            $scope.compare_to_text = "Compared to last month";
+            $scope.report_type_name = "Monthly";
+
             $scope.view_report = function() {
                 var date = $scope.report_date.value();
                 var month_shortnames = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
                 var month_shortname = month_shortnames[date.getMonth()];
                 var year = date.getFullYear();
-                $scope.win_report.refresh({ url: '../report/popup-report/' + year + '/' + month_shortname + '/'});
+
+                var report_type = $scope.dateToolbar.getSelectedFromGroup('time').attr('id');
+                if (report_type=='custom') {
+                    var start_date = kendo.toString($scope.report_date_start.value(), 'yyyy-MM-dd')
+                    var end_date = kendo.toString($scope.report_date_end.value(), 'yyyy-MM-dd')
+                }
+                else {
+                    var start_date = kendo.toString($scope.report_date.getSelectedStartDate(), 'yyyy-MM-dd')
+                    var end_date = kendo.toString($scope.report_date.getSelectedEndDate(), 'yyyy-MM-dd')
+                }
+
+                $scope.win_report.refresh({ url: '../report/popup-report/?start_date=' + start_date + '&end_date=' + end_date + '&report_type='+report_type});
                 $scope.win_report.open().center();
             }
 
@@ -452,10 +479,50 @@ $(function() {
             summary_report_ds.read();
             $scope.summary_report = summary_report_ds.data()[0];
 
+            $scope.custom_time = false;
             $scope.selectTimeType = function (e) {
                 var tb = e.sender;
-                var selected = tb.getSelectedFromGroup('time');
-                $scope.monthSelectorOptions.select = selected.attr('id');
+                var selected = $scope.dateToolbar.getSelectedFromGroup('time');
+                var toolbar_item = selected.attr('id');
+                if (toolbar_item == 'custom') {
+                    $scope.custom_time = true;
+                }
+                else {
+                    $scope.custom_time = false;
+                    $scope.monthSelectorOptions.select = selected.attr('id');
+                }
+
+                // hack? or can bind this?
+                $scope.report_date.options.select = selected.attr('id');
+                var start_date = $scope.report_date.getSelectedStartDate();
+                var end_date = $scope.report_date.getSelectedEndDate();
+
+                // refreash datasource
+                summary_report_ds.transport.options.read['data'] = {
+                    start_date: kendo.toString(start_date, 'yyyy-MM-dd'),
+                    end_date: kendo.toString(end_date, 'yyyy-MM-dd'),
+                    compare_type: selected.attr('id')
+                };
+                summary_report_ds.read();
+                $scope.summary_report = summary_report_ds.data()[0];
+
+                // for the compare texts
+                if (toolbar_item == 'week') {
+                    $scope.compare_to_text = "Compared to last week";
+                    $scope.report_type_name = 'Weekdays';
+                }
+                else if (toolbar_item == 'month') {
+                    $scope.compare_to_text = "Compared to last month";
+                    $scope.report_type_name = 'Monthly';
+                }
+                else if (toolbar_item == 'quarter') {
+                    $scope.compare_to_text = "Compared to last quarter";
+                    $scope.report_type_name = 'Quarter';
+                }
+                else if (toolbar_item == 'year') {
+                    $scope.compare_to_text = "Compared to last year";
+                    $scope.report_type_name = 'Year';
+                }
             };
 
             $scope.timeToolbarOptions = {
@@ -466,13 +533,23 @@ $(function() {
                           { text: "Week", id: "week", togglable: true, group: "time"},
                           { text: "Month", id: "month", togglable: true, group: "time", selected: true },
                           { text: "Quarter", id: "quarter", togglable: true, group: "time" },
-                          { text: "Year", id: "year", togglable: true, group: "time" }
+                          { text: "Year", id: "year", togglable: true, group: "time" },
+                          { text: "Match my bills", id: "custom", togglable: true, group: "time" }
                       ]
                     },
                     {
-                        template: '<input kendo-et-date-picker="report_date" style="width: 220px;" k-on-change="on_date_selected(kendoEvent)" k-options="monthSelectorOptions" k-rebind="monthSelectorOptions" k-value="default_date" >',
+                        template: '<div ng-show="!custom_time"><input kendo-et-date-picker="report_date" style="width: 220px;" k-on-change="on_date_selected(kendoEvent)" k-options="monthSelectorOptions" k-rebind="monthSelectorOptions" k-value="default_date" ></div>',
+                        ovefrlow: "never"
+                    },
+                    {
+                        template: '<div ng-show="custom_time"><input kendo-date-picker="report_date_start" style="width: 220px;" k-on-change="on_custom_date_selected(kendoEvent)" k-options="customDateOptions" k-value="default_date" ></div>',
+                        overflow: "never"
+                    },
+                    {
+                        template: '<div ng-show="custom_time"><input kendo-date-picker="report_date_end" style="width: 220px;" k-on-change="on_custom_date_selected(kendoEvent)" k-options="customDateOptions" k-value="default_date" ></div>',
                         overflow: "never"
                     }
+
                 ]
             };
 
@@ -480,24 +557,41 @@ $(function() {
                 format: 'MMMM yyyy',
                 select: "month",
                 clickPopup: true
-            }
+            };
 
-            /*
-            $scope.wtf = function() {
-                summary_report_ds.read();
-                return summary_report_ds.data();
+            $scope.customDateOptions = {
+                format: 'MMMM d, yyyy'
+            };
 
-            }*/
             $scope.on_date_selected = function(e) {
                 var dp = e.sender;
                 var start_date = dp.getSelectedStartDate();
                 var end_date = dp.getSelectedEndDate();
+
+                var selected = $scope.dateToolbar.getSelectedFromGroup('time');
+                // selected.attr('id')
                 summary_report_ds.transport.options.read['data'] = {
                     start_date: kendo.toString(start_date, 'yyyy-MM-dd'),
-                    end_date: kendo.toString(end_date, 'yyyy-MM-dd')
+                    end_date: kendo.toString(end_date, 'yyyy-MM-dd'),
+                    compare_type: selected.attr('id')
                 };
                 summary_report_ds.read();
                 $scope.summary_report = summary_report_ds.data()[0];
+            }
+
+            $scope.on_custom_date_selected = function(e) {
+                var start_date = $scope.report_date_start.value();
+                var end_date = $scope.report_date_end.value();
+
+                summary_report_ds.transport.options.read['data'] = {
+                    start_date: kendo.toString(start_date, 'yyyy-MM-dd'),
+                    end_date: kendo.toString(end_date, 'yyyy-MM-dd'),
+                    compare_type: 'custom'
+                };
+                summary_report_ds.read();
+                $scope.summary_report = summary_report_ds.data()[0];
+
+                $scope.compare_to_text = "Compare to last peroid";
             }
 
             $scope.default_date = new Date("{{ default_date.isoformat }}");
@@ -506,5 +600,15 @@ $(function() {
         })
 
 
+</script>
+<script>
+    // hack for close window when click outside
+    $(document).on('click', '.k-overlay', function () {
+        var kendoWindow = $('.k-window-content.k-content', $(this).next('div.k-widget.k-window'));
+        if (kendoWindow == null || kendoWindow.length == 0) {
+            return;
+        }
+        kendoWindow.data('kendoWindow').close();
+    });
 </script>
 {% endblock %}

@@ -1,6 +1,10 @@
+from bson.objectid import ObjectId
 import copy, datetime, pytz
 import json
+from mongoengine import connection, Q as MQ
+import operator
 import time
+from dateutil.relativedelta import relativedelta
 
 from django.db.models import Q
 from django.core.context_processors import csrf
@@ -13,7 +17,7 @@ from django.utils import timezone, dateparse
 from wkhtmltopdf.views import PDFTemplateResponse
 
 from egauge.manager import SourceManager
-from egauge.models import SourceReadingMonth, SourceReadingDay, SourceReadingHour, Source
+from egauge.models import SourceReadingMonth, SourceReadingDay, SourceReadingHour, SourceReadingMin, Source
 from system.models import System
 from unit.models import UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
 from utils.auth import permission_required
@@ -113,6 +117,25 @@ def summary_ajax(request, system_code):
     total_cost = get_total_cost(source_ids, start_dt, end_dt)
     last_start_dt = previous_month(start_dt)
     last_end_dt = previous_month(end_dt)
+    compare_type = request.GET.get('compare_type')
+
+    if compare_type == 'month':
+        last_start_dt = previous_month(start_dt)
+        last_end_dt = previous_month(end_dt)
+    elif compare_type == 'week':
+        last_start_dt = start_dt - datetime.timedelta(days=7)
+        last_end_dt = end_dt - datetime.timedelta(days=7)
+    elif compare_type == 'quarter':
+        last_start_dt = start_dt - relativedelta(months=3)
+        last_end_dt = end_dt - relativedelta(months=3)
+    elif compare_type == 'year':
+        last_start_dt = start_dt - relativedelta(years=1)
+        last_end_dt = end_dt - relativedelta(years=1)
+    elif compare_type == 'custom':
+        date_delta = end_dt - start_dt
+        last_end_dt = start_dt - datetime.timedelta(days=1)
+        last_start_dt = last_end_dt - date_delta
+
     last_total_cost = get_total_cost(source_ids, last_start_dt, last_end_dt)
 
     compare_to_last_total = None
@@ -193,12 +216,76 @@ def summary_ajax(request, system_code):
         if overnight_costs:
             return sum([ c for c in overnight_costs if c is not None])/total_days
 
+    # source = Source.objects(id=str(source_id)).first()
+    # system = System.objects.get(code=source.system_code)
+    unit_infos = json.loads(current_system.unit_info)
+    money_unit_code = unit_infos['money']
+    money_unit_rates = UnitRate.objects.filter(category_code='money', code=unit_infos['money']).order_by('effective_date')
 
-    overnight_avg_cost = get_overnight_avg_cost(source_ids, start_dt, end_dt)
+    def get_new_overnight_avg_cost(source_ids, start_dt, end_dt):
+        date_ranges = []
+        for ix, mr in enumerate(money_unit_rates):
+            c_rate_date = mr.effective_date.astimezone(current_system_tz)
+            if c_rate_date >= start_dt and c_rate_date <= end_dt:
+                try:
+                    n_rate_date = money_unit_rates[ix+1].effective_date.astimezone(current_system_tz)
+                    if n_rate_date > end_dt:
+                        n_rate_date = end_dt
+
+                    date_range = (c_rate_date, n_rate_date, mr)
+                    date_ranges.append(date_range)
+                except IndexError:
+                    date_range = (c_rate_date, end_dt, mr)
+                    date_ranges.append(date_range)
+
+        # if no date ranges use the first rate as the default money rate
+        # else if first date range has gap between the start date
+        # use the first money_unit_rate as the default unit rate
+        if not date_ranges:
+            default_rate = money_unit_rates.first()
+            date_range = (start_dt, end_dt, default_rate)
+            date_ranges.append(date_range)
+        elif start_dt < date_ranges[0][0]:
+            default_rate = money_unit_rates.first()
+            date_range = (start_dt, date_ranges[0][0], default_rate)
+            date_ranges.append(date_range)
+
+        total_on_sum = 0
+        for date_range in date_ranges:
+            sd, ed, r = date_range
+            mqs = []
+            num_day = (ed - sd).days
+            rdays = [sd+datetime.timedelta(days=n) for n in range(num_day)]
+            for rday in rdays:
+                on_sd = datetime.datetime.combine(rday, current_system.night_time_start)
+                on_sd = on_sd.replace(tzinfo=current_system_tz)
+
+                on_ed = datetime.datetime.combine(
+                    rday + datetime.timedelta(days=1), current_system.night_time_end)
+                on_ed = on_ed.replace(tzinfo=current_system_tz)
+
+                q = MQ(datetime__gte=on_sd, datetime__lt=on_ed)
+                mqs.append(q)
+
+            conds = reduce(
+                operator.or_,
+                mqs
+            )
+
+            dr_sum = r.rate * SourceReadingHour.objects(conds, source_id__in=source_ids).sum('value')
+            total_on_sum += dr_sum
+
+        return total_on_sum / (end_dt - start_dt).days
+
+
+    overnight_avg_cost = get_new_overnight_avg_cost(source_ids, start_dt, end_dt)
+    # overnight_avg_cost = total_on_sum / (end_dt - start_dt).days
+    # overnight_avg_cost = get_overnight_avg_cost(source_ids, start_dt, end_dt)
     m['formated_overnight_avg_cost'] = '${0:.0f}'.format(overnight_avg_cost) if overnight_avg_cost else None
 
     compare_to_last_overnight_avg_cost = None
-    last_overnight_avg_cost = get_overnight_avg_cost(source_ids, last_start_dt, last_end_dt)
+    last_overnight_avg_cost = get_new_overnight_avg_cost(source_ids, last_start_dt, last_end_dt)
+
     if last_overnight_avg_cost > 0 and overnight_avg_cost is not None:
         compare_to_last_overnight_avg_cost = float(overnight_avg_cost-last_overnight_avg_cost)/last_overnight_avg_cost*100
     m['compare_to_last_overnight_avg_cost'] = CompareTplHepler(compare_to_last_overnight_avg_cost).to_dict()
@@ -319,7 +406,7 @@ class CompareTplHepler:
 
     @property
     def formated_percent_change(self):
-        return '{0:.0f}%'.format(self.compared_percent_abs) if self.compared_percent is not None else None
+        return '{0:.0f}% {1}'.format(self.compared_percent_abs, self.change_desc) if self.compared_percent is not None else None
 
     @property
     def change_desc(self):
@@ -357,11 +444,13 @@ class CompareTplHepler:
 
 
 
-def popup_report_view(request, system_code, year, month, to_pdf=False):
+def popup_report_view(request, system_code, year=None, month=None, report_type=None, to_pdf=False):
     systems_info = System.get_systems_info(system_code, request.user.system.code)
     systems = systems_info['systems']
     current_system = System.objects.get(code=system_code)
     sources = SourceManager.get_sources(current_system)
+
+    type_colors = ['#68c0d4', '#8c526f', '#d5c050', '#8B8250', '#5759A7', '#6EC395', '#ee9646', '#ee5351', '#178943', '#ba1e6a', '#045a6f', '#0298bb']
 
     current_system_tz = pytz.timezone(current_system.timezone)
     first_record = min([system.first_record for system in systems])
@@ -404,20 +493,46 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
     m.update(csrf(request))
     # oops!
     m['company_system'] = systems.first()
-    report_date = datetime.datetime.strptime(year+month, '%Y%b')
-    report_date = timezone.make_aware(report_date, timezone.get_current_timezone())
+    if year and month:
+        report_date = datetime.datetime.strptime(year+month, '%Y%b')
+        report_date = timezone.make_aware(report_date, timezone.get_current_timezone())
+        m['report_date'] = datetime.datetime.strptime(year+month, '%Y%b')
 
-    try:
-        next_month_date = report_date.replace(month=report_date.month+1)
-    except ValueError:
-        if report_date.month == 12:
-            next_month_date = report_date.replace(year=report_date.year+1, month=1)
-        else:
-            # next month is too short to have "same date"
-            # pick your own heuristic, or re-raise the exception:
-            raise
+        try:
+            next_month_date = report_date.replace(month=report_date.month+1)
+        except ValueError:
+            if report_date.month == 12:
+                next_month_date = report_date.replace(year=report_date.year+1, month=1)
+            else:
+                # next month is too short to have "same date"
+                # pick your own heuristic, or re-raise the exception:
+                raise
 
-    m['report_date'] = datetime.datetime.strptime(year+month, '%Y%b')
+    sd = request.GET.get('start_date')
+    if sd:
+        report_date = dateparse.parse_date(sd)
+        report_date = datetime.datetime.combine(report_date, datetime.datetime.min.time())
+        report_date = current_system_tz.localize(report_date)
+
+    end_dt = next_month(start_dt)
+
+    ed = request.GET.get('end_date')
+    if ed:
+        next_month_date = dateparse.parse_date(ed)
+        next_month_date = datetime.datetime.combine(next_month_date, datetime.datetime.min.time())
+        next_month_date = current_system_tz.localize(next_month_date)
+
+    report_type = request.GET.get('report_type')
+    report_date_text = "{0} - {1}".format(
+        report_date.strftime("%d %b %Y"),
+        next_month_date.strftime("%d %b %Y")
+    )
+
+    if report_type == 'month':
+        report_date_text = "{0} - Monthly Energry Report".format(report_date.strftime("%b %Y"))
+
+    m['report_date_text'] = report_date_text
+
     sources = SourceManager.get_sources(current_system)
     source_ids = [str(source.id) for source in sources]
 
@@ -531,6 +646,10 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
 
         g['weekend'] = weekend
 
+
+    # sub compare graphs
+    sub_compare_graphs = []
+
     # this is combined current readings
     combined_readings = {}
 
@@ -540,6 +659,7 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
         current_readings = g['currentReadings']
         g['compare_last_month_helper'] = CompareTplHepler(g['compare_last_month'])
         g['compare_same_period_helper'] = CompareTplHepler(g['compare_same_period'])
+
         for ts, val in current_readings.items():
             if ts in combined_readings:
                 combined_readings[ts] += val
@@ -552,6 +672,44 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
                 combined_last_readings[ts] += val
             else:
                 combined_last_readings[ts] = val
+
+        last_total = sum(last_readings.values())
+        current_total = sum(current_readings.values())
+
+        total_compare = None
+        if last_total:
+            total_compare = float(current_total- last_total)/last_total*100
+
+        chart_title = 'N/A'
+        if total_compare:
+            chart_title = 'Overall: {0.compared_percent_abs:.0f}% {0.change_desc} energy than last month'.format(CompareTplHepler(total_compare))
+
+        current_day_readings = {}
+        for day in range(1, 32):
+            current_day_readings[day] = None
+
+        for ts, v in current_readings.items():
+            dt = datetime.datetime.fromtimestamp(ts, pytz.utc)
+            dt = dt.astimezone(current_system_tz)
+            current_day_readings[dt.day] = v
+
+        last_day_readings = {}
+        for day in range(1, 32):
+            last_day_readings[day] = None
+
+        for ts, v in last_readings.items():
+            dt = datetime.datetime.fromtimestamp(ts, pytz.utc)
+            dt = dt.astimezone(current_system_tz)
+            last_day_readings[dt.day] = v
+
+
+        sub_graph = {
+            'system': g['system'],
+            'current_reading_serie': json.dumps(current_day_readings.values()),
+            'last_reading_serie': json.dumps(last_day_readings.values()),
+            'chart_title': chart_title
+        }
+        sub_compare_graphs.append(sub_graph)
 
     # m['combined_current_readings'] = combined_readings
     # m['combined_last_readings'] = combined_last_readings
@@ -572,6 +730,8 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
 
     m['compare_last_readings_month'] = previous_month(report_date).strftime('%b')
     # assert False
+
+    m['sub_compare_graphs'] = sub_compare_graphs
 
 
     highest_datetime, highest_usage= sorted(combined_readings.items(), key=lambda x: x[1])[-1]
@@ -613,14 +773,20 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
     transformed_datas = []
     energy_percentsum = 0
 
-    for g in group_data:
+    transformed_total_energy = sum([ g['currentTotalEnergy'] for g in group_data])
+    for ix, g in enumerate(group_data):
         change_in_kwh = (g['currentTotalMoney'] - g['last_year_this_month']['money'])/g['last_year_this_month']['money'] * 100 if g['last_year_this_month']['money'] > 0 else None
+
+        percent_in_total = float(g['currentTotalEnergy']/transformed_total_energy) * 100
+
         data_info = {
             'total_energy': g['currentTotalEnergy'],
             'co2_val': g['currentTotalCo2'],
             'money_val': g['currentTotalMoney'],
             'change_in_kwh': change_in_kwh,
-            'change_in_money': g['currentTotalMoney']- g['last_year_this_month']['money'] if g['last_year_this_month']['money'] else None
+            'change_in_money': g['currentTotalMoney']- g['last_year_this_month']['money'] if g['last_year_this_month']['money'] else None,
+            'percent_in_total': percent_in_total,
+            'color': type_colors[ix]
         }
 
         data_info['name'] = g['sourceNameInfo']['en'] if g['systemCode'] == m['company_system'].code else g['system'].fullname
@@ -634,8 +800,15 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
         transformed_datas.append(data_info)
 
     m['transformed_datas'] = transformed_datas
-    transformed_bars = [{'name': td['name'], 'data': [td['total_energy']]} for td in transformed_datas]
+
+
+    transformed_bars = [{'name': td['name'], 'data': [td['total_energy']], 'color': type_colors[i]} for i, td in enumerate(transformed_datas)]
+
     m['transformed_bars_json'] = json.dumps(transformed_bars)
+
+    transformed_pie = [{'category': td['name'], 'value': td['total_energy'], 'color': type_colors[i]} for i, td in enumerate(transformed_datas)]
+
+    m['transformed_pie_json'] = json.dumps(transformed_pie)
     # var transformedDatas = [];
     # var energyPercentSum = 0;
     # $.each(reportGenThis.groupedSourceInfos, function(infoIdx, info) {

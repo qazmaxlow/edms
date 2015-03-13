@@ -6,6 +6,31 @@ body {
     background-color: transparent !important;
 }
 
+.transformed-bar-chart {
+    width:100%;
+    border-spacing: 2px;
+    border-collapse: separate;
+}
+
+.transformed-name {
+    width: 220px;
+    color: white;
+    text-align: left;
+    padding-left: 22px;
+    font-weight: 600;
+}
+
+.transformed-bar {
+    height: 44px;
+    background-color: blue;
+    border-top-right-radius: 22px;
+    border-bottom-right-radius: 22px;
+}
+
+.transformed-bar-chart tr {
+    height: 60px;
+}
+
 .container {
     width: 100% !important;
     padding: 10px 0;
@@ -19,7 +44,8 @@ body {
 
 .sidebar-left .section {
     border-bottom: #E2E2E2 2px solid;
-    padding: 10px 0;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .report-head {
@@ -67,6 +93,7 @@ body {
     background-color: #96ced8;
     border: 1px solid #90b4bb !important;
     color: #fff;
+    width: 100%;
 }
 
 
@@ -88,6 +115,12 @@ body {
 body {-webkit-print-color-adjust: exact;}
 }
 
+.sub-graph-title {
+    background-color: #68C0D4;
+    color: white;
+    font-weight: 600;
+    padding: 2px;
+}
 
 /* hack */
 .row-no-padding .col-xs-12  {
@@ -648,8 +681,9 @@ body {-webkit-print-color-adjust: exact;}
     float: left;
     width: 68px;
     height: 40px;
-    background-color: #F2C433;
-    color: #FFF;
+    background-color: #e2e2e2;
+    color: #e4b563;
+    font-weight: 600;
     border-bottom: 1px solid #fff;
     border-left: 1px solid #fff;
 }
@@ -688,9 +722,11 @@ body {-webkit-print-color-adjust: exact;}
 }
 .calendar-day-better {
     background-color: #85C92D;
+    color: white;
 }
 .calendar-day-worse {
     background-color: #D85341;
+    color: white;
 }
 .calendar-day-container + div {
     clear: both;
