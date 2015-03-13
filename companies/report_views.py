@@ -522,6 +522,13 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
         next_month_date = datetime.datetime.combine(next_month_date, datetime.datetime.min.time())
         next_month_date = current_system_tz.localize(next_month_date)
 
+    report_type = request.GET.get('report_type')
+    report_date_text = ""
+    if report_type == 'month':
+        report_date_text = "{0} - Monthly Energry Report".format(report_date.strftime("%b %Y"))
+
+    m['report_date_text'] = report_date_text
+
     sources = SourceManager.get_sources(current_system)
     source_ids = [str(source.id) for source in sources]
 
