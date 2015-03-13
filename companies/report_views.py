@@ -450,6 +450,8 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
     current_system = System.objects.get(code=system_code)
     sources = SourceManager.get_sources(current_system)
 
+    type_colors = ['#68c0d4', '#8c526f', '#d5c050', '#8B8250', '#5759A7', '#6EC395', '#ee9646', '#ee5351', '#178943', '#ba1e6a', '#045a6f', '#0298bb']
+
     current_system_tz = pytz.timezone(current_system.timezone)
     first_record = min([system.first_record for system in systems])
     first_record = first_record.astimezone(current_system_tz).replace(
@@ -745,14 +747,20 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
     transformed_datas = []
     energy_percentsum = 0
 
-    for g in group_data:
+    transformed_total_energy = sum([ g['currentTotalEnergy'] for g in group_data])
+    for ix, g in enumerate(group_data):
         change_in_kwh = (g['currentTotalMoney'] - g['last_year_this_month']['money'])/g['last_year_this_month']['money'] * 100 if g['last_year_this_month']['money'] > 0 else None
+
+        percent_in_total = float(g['currentTotalEnergy']/transformed_total_energy) * 100
+
         data_info = {
             'total_energy': g['currentTotalEnergy'],
             'co2_val': g['currentTotalCo2'],
             'money_val': g['currentTotalMoney'],
             'change_in_kwh': change_in_kwh,
-            'change_in_money': g['currentTotalMoney']- g['last_year_this_month']['money'] if g['last_year_this_month']['money'] else None
+            'change_in_money': g['currentTotalMoney']- g['last_year_this_month']['money'] if g['last_year_this_month']['money'] else None,
+            'percent_in_total': percent_in_total,
+            'color': type_colors[ix]
         }
 
         data_info['name'] = g['sourceNameInfo']['en'] if g['systemCode'] == m['company_system'].code else g['system'].fullname
@@ -767,7 +775,6 @@ def popup_report_view(request, system_code, year, month, to_pdf=False):
 
     m['transformed_datas'] = transformed_datas
 
-    type_colors = ['#68c0d4', '#8c526f', '#d5c050', '#8B8250', '#5759A7', '#6EC395', '#ee9646', '#ee5351', '#178943', '#ba1e6a', '#045a6f', '#0298bb']
 
     transformed_bars = [{'name': td['name'], 'data': [td['total_energy']], 'color': type_colors[i]} for i, td in enumerate(transformed_datas)]
 

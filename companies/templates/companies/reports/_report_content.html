@@ -132,7 +132,23 @@
         </div>
     </div>
 
-
+      <div class="row detail-container">
+        <div class="col-xs-6">
+              <table style="width:100%">
+                {% for td in transformed_datas %}
+                <tr class="key-statistics-row ">
+                  <td class="usage-type-name">
+                    {{ td.name }}</td><td>
+                    <div class="transformed-bar" style="width:{{ td.percent_in_total }}%;background-color:{{ td.color }}"></div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </table>
+        </div>
+        <div class="col-xs-6">
+          <div kendo-chart k-options="transformedPieOptions" ></div>
+        </div>
+    </div>
     <div class="row detail-container xrow-no-padding">
       <div class="col-xs-12">
 <div>
