@@ -476,8 +476,10 @@ $(function() {
                 }
             });
 
-            summary_report_ds.read();
-            $scope.summary_report = summary_report_ds.data()[0];
+            $scope.$on("kendoRendered", function(e) {
+                $scope.report_date.trigger('change');
+            });
+
 
             $scope.custom_time = false;
             $scope.selectTimeType = function (e) {
