@@ -73,29 +73,22 @@
 
         ngapp.controller("ReportController", function($scope) {
             $scope.transformedPieOptions = {
-                title: {
-                    text: "HOW DOES THAT SPLIT BY PERCENTAGE?"
-                },
                 legend: {
-                    position: "top"
+                    visible: false
                 },
                 seriesDefaults: {
-                    type: "pie"
+                    type: "donut",
+                    labels: {
+                        template: "#= category # - #= kendo.format('{0:P}', percentage)#",
+                        position: "outsideEnd",
+                        visible: true,
+                        background: "transparent"
+                    }
                 },
                 series: [{
-                    type: "pie",
                     startAngle: 150,
                     data: {{ transformed_pie_json|safe }}
                 }],
-                 valueAxis: {
-                    labels: {
-                        format: "{0}%"
-                    },
-                    line: {
-                        visible: false
-                    },
-                    axisCrossingValue: 0
-                },
                 tooltip: {
                     visible: true,
                     format: "{0}%",
