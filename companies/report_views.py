@@ -89,10 +89,6 @@ def summary_ajax(request, system_code):
     else:
         start_dt = Utils.add_month(first_record, 1).replace(day=1)
 
-    # should use system timezone
-    start_dt = datetime.datetime.now(current_system_tz)
-    start_dt = start_dt.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    start_dt = start_dt - relativedelta(months=1)
 
     sd = request.GET.get('start_date')
     if sd:
@@ -100,7 +96,6 @@ def summary_ajax(request, system_code):
         start_dt = datetime.datetime.combine(start_dt, datetime.datetime.min.time())
         start_dt = current_system_tz.localize(start_dt)
 
-    end_dt = next_month(start_dt)
 
     ed = request.GET.get('end_date')
     if ed:
