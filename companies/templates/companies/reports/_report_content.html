@@ -135,7 +135,7 @@
     <div class="row detail-container"><h4>{% trans "How did that break down by usage type?" %}</h4></div>
       <div class="row detail-container">
         <div class="col-xs-6">
-              <table class="transformed-bar-chart">
+              <table class="transformed-bar-chart table-striped">
                 {% for td in transformed_datas %}
                 <tr>
                   <td class="transformed-name" style="background-color:{{ td.color }};">{{ td.name }}</td><td>
