@@ -107,7 +107,16 @@ iframe {
     background-color: #f6f6f6;
     /*padding: 15px 0;*/
 }
-
+/*this selector was not accessible to me on my local, css changed: was border-bottom, border-top and background-color */
+.report-summary .time-type {
+  color: #44586a;
+  font-weight: 600;
+  font-size: 3 rem;
+  padding: 25px 0;
+  border-bottom: #e8ebeb solid 1px;
+  border-top: #E8EBE8 solid 2px;
+  background-color: #fff;
+}
 /* #panel-content>div { */
 /*     position: absolute; */
 /*     top: 0px; */
