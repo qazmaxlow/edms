@@ -536,7 +536,11 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     m['report_end'] = next_month_date
 
     # oops! monkey code
-    report_data = __generate_report_data(systems, 'month',
+    report_data_type = report_type
+    if report_type == 'custom':
+        report_data_type = 'custom-month'
+
+    report_data = __generate_report_data(systems, report_data_type,
                                   time.mktime(report_date.utctimetuple()),
                                   time.mktime(next_month_date.utctimetuple())
     )
