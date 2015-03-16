@@ -273,8 +273,9 @@
       <div class="col-xs-12">
         {% trans "HOW MUCH ENERGY DID WE USE ON <span>WEEKDAYS?</span>" %}</div>
     </div>
-    <div class="row top-section">
+
       {% if report_type != 'quarter' and report_type != 'year' %}
+        <div class="row top-section">
         <div class="col-xs-4 side-bar">
           <div class="row item"><div class="col-xs-12">
               <div class="row inner">
@@ -345,7 +346,9 @@
           </div>
 
         </div>
+        </div>
         {% else %}
+        <div class="row report-detail-body">
           <div class="col-xs-4">
               <div class="row inner">
                 <div class="col-xs-4">
@@ -385,8 +388,9 @@
                 </div>
               </div>
           </div>
+        </div>
         {% endif %}
-    </div>
+
     {% for wd in weekday_details %}
       <div class="row report-detail-header">
         <div class="col-xs-12">
@@ -440,8 +444,8 @@
       <div class="col-xs-12">
         {% trans "HOW MUCH ENERGY DID WE USE ON <span>WEEKENDS?</span>" %}</div>
     </div>
-    <div class="row top-section">
       {% if report_type != 'quarter' and report_type != 'year' %}
+        <div class="row top-section">
         <div class="col-xs-4 side-bar">
           <div class="row item"><div class="col-xs-12">
               <div class="row inner">
@@ -512,7 +516,9 @@
           </div>
 
         </div>
+        </div>
         {% else %}
+        <div class="row report-detail-body">
         <div class="col-xs-4">
               <div class="row inner">
                 <div class="col-xs-4">
@@ -552,8 +558,9 @@
                 </div>
               </div>
           </div>
+          </div>
         {% endif %}
-    </div>
+
     {% for d in weekday_details %}
       <div class="row report-detail-header">
         <div class="col-xs-12">
@@ -607,8 +614,9 @@
       <div class="col-xs-12">
         {% trans "HOW MUCH ENERGY DID WE USE <span>OVERNIGHT***?</span>" %}</div>
     </div>
-    <div class="row top-section">
+
       {% if report_type != 'quarter' and report_type != 'year' %}
+        <div class="row top-section">
         <div class="col-xs-4 side-bar">
           <div class="row item"><div class="col-xs-12">
               <div class="row inner">
@@ -679,7 +687,9 @@
           </div>
 
         </div>
+        </div>
         {% else %}
+        <div class="row report-detail-body">
           <div class="col-xs-4">
               <div class="row inner">
                 <div class="col-xs-4">
@@ -719,8 +729,9 @@
                 </div>
               </div>
           </div>
+        </div>
         {% endif %}
-    </div>
+
     {% for d in weekday_details %}
       <div class="row report-detail-header">
         <div class="col-xs-12">
