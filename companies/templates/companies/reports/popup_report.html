@@ -82,7 +82,11 @@
                         template: "#= kendo.format('{0:p0}', percentage)#",
                         position: "outsideEnd",
                         visible: true,
-                        background: "transparent"
+                        background: "transparent",
+                        font: "bold 18px Arial",
+                        color: function(e) {
+                            return e.dataItem.color;
+                        }
                     }
                 },
                 series: [{
