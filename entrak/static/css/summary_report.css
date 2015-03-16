@@ -33,10 +33,12 @@ iframe {
 
 .sky-bg {
     padding-top: 30px;
+    margin-left: -5px;
 }
 
 .flower-bg {
     padding-top: 100px;
+    margin-left: -5px;
 }
 
 .summary {
@@ -62,18 +64,23 @@ iframe {
     height: 140px;
 }
 
-.view-report .k-button, .view-report .k-button:hover {
-    margin-top: 20px;
-    background-color: #96ced8;
-    background-image: none;
-    border-color: #90b4bb;
-    box-shadow: none;
-    color: #fff;
+.view-report .k-button, .view-report {
+  margin-top: 20px;
+  background-color: #9bceda;
+  background-image: none;
+  border-color: #9bceda;
+  box-shadow: 0px 2px 0px #6b9aa5;
+  color: #fff;
+}
+.k-button:hover {
+  background-color: #74c62b;
+  border-color: #74c62b;
+  box-shadow: 0px 2px 0px #404040;
 }
 
 .report-summary .col-xs-3 {
-    /* height: 486px; */
-    background-color: #f4f4f4;
+    height: 508px;
+    background-color: #fbfbfb;
 }
 
 .report-summary .content {
@@ -83,12 +90,13 @@ iframe {
 
 .report-summary h3 {
     margin: 0;
-    color: #637383;
+    color: #354960;
     font-weight: 600;
+    font-size: 20px;
 }
 
 .report-summary p {
-    color: #637383;
+    color: #354960;
     padding-bottom: 15px;
 }
 
@@ -102,10 +110,19 @@ iframe {
 }
 
 .time-bar {
-    background-color: #eff2f2;
-    padding: 15px 0;
+    background-color: #f6f6f6;
+    /*padding: 15px 0;*/
 }
-
+/*this selector was not accessible to me on my local, css changed: was border-bottom, border-top and background-color */
+.report-summary .time-type {
+  color: #354960;
+  font-weight: 600;
+  font-size: 11pt;
+  padding: 25px 0;
+  border-bottom: #e8ebeb solid 1px;
+  border-top: #E8EBE8 solid 2px;
+  background-color: #fff;
+}
 /* #panel-content>div { */
 /*     position: absolute; */
 /*     top: 0px; */
