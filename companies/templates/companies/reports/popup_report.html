@@ -156,7 +156,9 @@
         }
     };
 
-            $scope.lineOptions = {
+      var powers = {{ compare_last_readings_series|safe }};
+
+      $scope.lineOptions = {
                 width: 1000,
         title: {
             text: "WHEN DID WE ACHIEVE OUR SAVINGS?",
@@ -167,6 +169,19 @@
         },
         chartArea: {
             background: ""
+        },
+        dataSource: {
+            data: powers,
+            schema:{
+                parse:function (response) {
+                $.each(response, function (idx, elem) {
+                    if (elem.datetime && typeof elem.datetime === "string") {
+                        elem.datetime = kendo.parseDate(elem.datetime, "yyyy-MM-ddTHH:mm:ssZ");
+                    }
+                });
+                return response;
+                }
+           }
         },
         series: [
             {
@@ -180,15 +195,12 @@
                 }
             },
             {
-                type: "line",
-                data: {{ compare_last_readings_series|safe }},
-                name: '{{ compare_last_readings_month }}',
-                color: "#edba3c",
-                format: "{0:n0}",
-                labels: {
-                    visible: false
-                    // format: "{0:n0}"
-                }
+                 type: "line",
+                 // aggregate: "avg",
+                 name: '{{ compare_last_readings_month }}',
+                 color: "#edba3c",
+                 field: "value",
+                 categoryField: "datetime"
             }
         ],
 
@@ -209,14 +221,18 @@
             }
         },
         categoryAxis: {
-            categories: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"],
-            majorGridLines: {
-                visible: false
-            },
-            labels: {
-                step: 2
-            }
+           baseUnit: "days",
+           majorGridLines: {
+              visible: false
+           },
+           majorTicks: {
+              step: 30
+           },
+           labels: {
+              step: 30
+           }
         }
+
     };
         })
 

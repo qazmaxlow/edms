@@ -443,6 +443,8 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     current_system = System.objects.get(code=system_code)
     sources = SourceManager.get_sources(current_system)
 
+    report_type = request.GET.get('report_type')
+
     type_colors = ['#68c0d4', '#8c526f', '#d5c050', '#8B8250', '#5759A7', '#6EC395', '#ee9646', '#ee5351', '#178943', '#ba1e6a', '#045a6f', '#0298bb']
 
     current_system_tz = pytz.timezone(current_system.timezone)
@@ -507,7 +509,6 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
         next_month_date = datetime.datetime.combine(next_month_date, datetime.datetime.min.time())
         next_month_date = current_system_tz.localize(next_month_date)
 
-    report_type = request.GET.get('report_type')
     m['report_type'] = report_type
 
     report_date_text = "{0} - {1}".format(
@@ -717,10 +718,20 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     m['compare_current_readings_series']= json.dumps(combined_readings.values(), cls=DjangoJSONEncoder)
     m['compare_current_readings_month'] = report_date.strftime('%b')
 
-    m['compare_last_readings_series']= json.dumps(combined_last_readings.values(), cls=DjangoJSONEncoder)
+    last_series = [{'value': v, 'datetime': datetime.datetime.fromtimestamp(t, pytz.utc) } for t, v in combined_last_readings.items()]
+    # m['compare_last_readings_series']= json.dumps(combined_last_readings.values(), cls=DjangoJSONEncoder)
+    m['compare_last_readings_series']= json.dumps(last_series, cls=DjangoJSONEncoder)
 
-    m['compare_last_readings_month'] = previous_month(report_date).strftime('%b')
-    # assert False
+    m['compare_last_readings_month'] = previous_month(report_date).strftime('%b'
+)
+
+    # m['compare_last_categories'] = json.dumps(map(str, range(1, 32)))
+    m['compare_last_categories'] = json.dumps(range(1, 32))
+    m['compare_last_label_step'] = 2
+
+    if report_type == 'year':
+        m['compare_last_categories'] = range(366)
+        m['compare_last_label_step'] = 29
 
     m['sub_compare_graphs'] = sub_compare_graphs
 
