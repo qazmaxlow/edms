@@ -274,7 +274,7 @@
         {% trans "HOW MUCH ENERGY DID WE USE ON <span>WEEKDAYS?</span>" %}</div>
     </div>
 
-      {% if report_type != 'quarter' and report_type != 'year' %}
+      {% if report_type != 'quarter' and report_type != 'year' and report_type != 'custom' %}
         <div class="row top-section">
         <div class="col-xs-4 side-bar">
           <div class="row item"><div class="col-xs-12">
@@ -444,7 +444,7 @@
       <div class="col-xs-12">
         {% trans "HOW MUCH ENERGY DID WE USE ON <span>WEEKENDS?</span>" %}</div>
     </div>
-      {% if report_type != 'quarter' and report_type != 'year' %}
+      {% if report_type != 'quarter' and report_type != 'year' and report_type != 'custom' %}
         <div class="row top-section">
         <div class="col-xs-4 side-bar">
           <div class="row item"><div class="col-xs-12">
@@ -615,7 +615,7 @@
         {% trans "HOW MUCH ENERGY DID WE USE <span>OVERNIGHT***?</span>" %}</div>
     </div>
 
-      {% if report_type != 'quarter' and report_type != 'year' %}
+      {% if report_type != 'quarter' and report_type != 'year' and report_type != 'custom' %}
         <div class="row top-section">
         <div class="col-xs-4 side-bar">
           <div class="row item"><div class="col-xs-12">
