@@ -274,6 +274,7 @@
         {% trans "HOW MUCH ENERGY DID WE USE ON <span>WEEKDAYS?</span>" %}</div>
     </div>
     <div class="row top-section">
+      {% if report_type != 'quarter' and report_type != 'year' %}
         <div class="col-xs-4 side-bar">
           <div class="row item"><div class="col-xs-12">
               <div class="row inner">
@@ -344,6 +345,47 @@
           </div>
 
         </div>
+        {% else %}
+          <div class="col-xs-4">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static 'images/reports/icon_money.svg'  %}">
+                </div>
+                <div class="col-xs-8">
+                  <h3 class="used-money">${{ weekday_bill|stringformat:"d" }}</h3>
+                  <p>{% trans "Average Weekday Energy Use" %}</p>
+                </div>
+              </div>
+          </div>
+          <div class="col-xs-4">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static weekday_month_compare_helper.change_icon_path  %}">
+                </div>
+                <div class="col-xs-8">
+                  <h3 class="{{ weekday_month_compare_helper.change_css_class }}">
+                    {{ weekday_month_compare_helper.compared_percent_abs|floatformat:0 }}%
+                    {{ weekday_month_compare_helper.change_desc }}
+                  </h3>
+                  <p>{% trans "Compare to Last Month" %}</p>
+                </div>
+              </div>
+          </div>
+          <div class="col-xs-4">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static weekday_same_period_compare_helper.change_icon_path %}">
+                </div>
+                <div class="col-xs-8">
+                  <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
+                    {{ weekday_same_period_compare_helper.compared_percent_abs|floatformat:0 }}%
+                    {{ weekday_same_period_compare_helper.change_desc }}
+                  </h3>
+                  <p>{% trans "compare to same period year" %}</p>
+                </div>
+              </div>
+          </div>
+        {% endif %}
     </div>
     {% for wd in weekday_details %}
       <div class="row report-detail-header">
@@ -399,6 +441,7 @@
         {% trans "HOW MUCH ENERGY DID WE USE ON <span>WEEKENDS?</span>" %}</div>
     </div>
     <div class="row top-section">
+      {% if report_type != 'quarter' and report_type != 'year' %}
         <div class="col-xs-4 side-bar">
           <div class="row item"><div class="col-xs-12">
               <div class="row inner">
@@ -469,6 +512,47 @@
           </div>
 
         </div>
+        {% else %}
+        <div class="col-xs-4">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static 'images/reports/icon_money.svg'  %}">
+                </div>
+                <div class="col-xs-8">
+                  <h3 class="used-money">${{ weekends.total_bill|floatformat:0 }}</h3>
+                  <p>{% trans "Average Weekday Energy Use" %}</p>
+                </div>
+              </div>
+          </div>
+          <div class="col-xs-4">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static weekends.month_compare_helper.change_icon_path  %}">
+                </div>
+                <div class="col-xs-8">
+                  <h3 class="{{ weekends.month_compare_helper.change_css_class }}">
+                    {{ weekends.month_compare_helper.compared_percent_abs|floatformat:0 }}%
+                    {{ weekends.month_compare_helper.change_desc }}
+                  </h3>
+                  <p>{% trans "Compare to Last Month" %}</p>
+                </div>
+              </div>
+          </div>
+          <div class="col-xs-4">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static weekday_same_period_compare_helper.change_icon_path %}">
+                </div>
+                <div class="col-xs-8">
+                  <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
+                    {{ weekends_compare_same_period|floatformat:0 }}%
+                    {{ weekday_same_period_compare_helper.change_desc }}
+                  </h3>
+                  <p>{% trans "compare to same period year" %}</p>
+                </div>
+              </div>
+          </div>
+        {% endif %}
     </div>
     {% for d in weekday_details %}
       <div class="row report-detail-header">
@@ -524,6 +608,7 @@
         {% trans "HOW MUCH ENERGY DID WE USE <span>OVERNIGHT***?</span>" %}</div>
     </div>
     <div class="row top-section">
+      {% if report_type != 'quarter' and report_type != 'year' %}
         <div class="col-xs-4 side-bar">
           <div class="row item"><div class="col-xs-12">
               <div class="row inner">
@@ -594,6 +679,47 @@
           </div>
 
         </div>
+        {% else %}
+          <div class="col-xs-4">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static 'images/reports/icon_money.svg'  %}">
+                </div>
+                <div class="col-xs-8">
+                  <h3 class="used-money">${{ overnight.bill|floatformat:0 }}</h3>
+                  <p>{% trans "Average Weekday Energy Use" %}</p>
+                </div>
+              </div>
+          </div>
+          <div class="col-xs-4">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static overnight.month_compare_helper.change_icon_path  %}">
+                </div>
+                <div class="col-xs-8">
+                  <h3 class="{{ overnight.month_compare_helper.change_css_class }}">
+                    {{ overnight.month_compare_helper.compared_percent_abs|floatformat:0 }}%
+                    {{ overnight.month_compare_helper.change_desc }}
+                  </h3>
+                  <p>{% trans "Compare to Last Month" %}</p>
+                </div>
+              </div>
+          </div>
+          <div class="col-xs-4">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static overnight.compare_same_period_helper.change_icon_path %}">
+                </div>
+                <div class="col-xs-8">
+                  <h3 class="{{ overnight.compare_same_period_helper.change_css_class }}">
+                    {{ overnight.compare_same_period_helper.compared_percent_abs|floatformat:0 }}%
+                    {{ overnight.compare_same_period_helper.change_desc }}
+                  </h3>
+                  <p>{% trans "compare to same period year" %}</p>
+                </div>
+              </div>
+          </div>
+        {% endif %}
     </div>
     {% for d in weekday_details %}
       <div class="row report-detail-header">
