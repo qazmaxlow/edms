@@ -580,7 +580,7 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
         compare_to_last_month = (current_total-last_total)/last_total*100
 
     m['compare_to_last_month'] = compare_to_last_month
-    m['compare_to_last_month_abs'] = abs(compare_to_last_month)
+    m['compare_to_last_month_abs'] = abs(compare_to_last_month) if compare_to_last_month else None
 
 
     # _fillInComparePercent = function(eleSel, oldUsage, newUsage, compareToDateText)
