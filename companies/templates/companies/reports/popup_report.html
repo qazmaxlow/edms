@@ -279,20 +279,20 @@
         },
 
 
-        seriesColors: ["#047fa1", "#edba3c"],
-        series: [
+        // seriesColors: ["#047fa1", "#edba3c"],
+        seriesDefaults:
             {
-                 type: "line",
-                 markers: {
-                     visible: false
-                 },
-                 // aggregate: "avg",
-                 name: '{{ compare_last_reading_name }}',
-                 color: "#edba3c",
-                 field: "value",
-                 categoryField: "datetime"
-            }
-        ],
+                type: 'line',
+                format: '{0:n0}',
+                labels: {
+                    visible: false
+                },
+                field: 'value',
+                categoryField: 'datetime',
+                markers: {
+                  visible: false
+                }
+            },
 
         tooltip: {
             visible: true,

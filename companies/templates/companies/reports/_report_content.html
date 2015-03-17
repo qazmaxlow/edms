@@ -230,34 +230,14 @@
 
                k-series="[
             {
-                type: 'line',
-                markers: {
-                  visible: false
-                },
                 data: cgDatas[{{ forloop.counter }}].current,
                 name: '{{ compare_current_readings_month }}',
-                color: '#047fa1',
-                format: '{0:n0}',
-                labels: {
-                    visible: false
-                },
-                field: 'value',
-                categoryField: 'datetime'
+                color: '#047fa1'
             },
             {
-                type: 'line',
-                markers: {
-                  visible: false,
-                },
                 data: cgDatas[{{ forloop.counter }}].last,
-                name: '{{ compare_last_readings_month }}',
-                color: '#edba3c',
-                format: '{0:n0}',
-                labels: {
-                    visible: false
-                },
-                field: 'value',
-                categoryField: 'datetime'
+                name: 'a{{ compare_last_readings_month }}',
+                color: '#edba3c'
             }
         ]" ></div></div>
 
