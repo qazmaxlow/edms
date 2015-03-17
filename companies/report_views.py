@@ -722,8 +722,10 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     # m['compare_last_readings_series']= json.dumps(combined_last_readings.values(), cls=DjangoJSONEncoder)
     m['compare_last_readings_series']= json.dumps(last_series, cls=DjangoJSONEncoder)
 
-    m['compare_last_readings_month'] = previous_month(report_date).strftime('%b'
-)
+    m['compare_last_reading_name'] = previous_month(report_date).strftime('%b')
+
+    if report_type == 'year':
+        m['compare_last_reading_name'] = previous_month(report_date).strftime('%Y')
 
     # m['compare_last_categories'] = json.dumps(map(str, range(1, 32)))
     m['compare_last_categories'] = json.dumps(range(1, 32))
