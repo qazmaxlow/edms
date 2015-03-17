@@ -733,7 +733,7 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     m['compare_last_reading_name'] = previous_month(report_date).strftime('%b')
 
     if report_type == 'year':
-        m['compare_last_reading_name'] = previous_month(report_date).strftime('%Y')
+        m['compare_last_reading_name'] = (report_date-relativedelta(years=1)).strftime('%Y')
 
     # m['compare_last_categories'] = json.dumps(map(str, range(1, 32)))
     m['compare_last_categories'] = json.dumps(range(1, 32))
