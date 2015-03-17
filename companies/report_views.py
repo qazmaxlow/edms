@@ -525,11 +525,19 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     source_ids = [str(source.id) for source in sources]
 
     energy_usages = calculation.combine_readings_by_timestamp(source_readings)
-    readings = SourceReadingMonth.objects(
-        source_id__in=source_ids,
-        datetime__gte=report_date,
-        datetime__lt=report_end_date
-    )
+
+    if report_type == 'week' or report_date == 'custom':
+        readings = SourceReadingHour.objects(
+            source_id__in=source_ids,
+            datetime__gte=report_date,
+            datetime__lt=report_end_date
+        )
+    else:
+        readings = SourceReadingMonth.objects(
+            source_id__in=source_ids,
+            datetime__gte=report_date,
+            datetime__lt=report_end_date
+        )
     total_energy = sum([ r.value for r in readings])
 
     m['total_energy'] = total_energy
