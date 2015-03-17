@@ -723,10 +723,15 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     #         }
     #     )
 
-    m['compare_current_readings_series']= json.dumps(combined_readings.values(), cls=DjangoJSONEncoder)
+    # m['compare_current_readings_series']= json.dumps(combined_readings.values(), cls=DjangoJSONEncoder)
     m['compare_current_readings_month'] = report_date.strftime('%b')
 
-    last_series = [{'value': v, 'datetime': datetime.datetime.fromtimestamp(t, pytz.utc) } for t, v in combined_last_readings.items()]
+    current_series = [{'name': 'current', 'value': v, 'datetime': datetime.datetime.fromtimestamp(t, pytz.utc) } for t, v in combined_readings.items()]
+
+    m['compare_current_readings_series']= json.dumps(current_series, cls=DjangoJSONEncoder)
+
+    last_series = [{'name': 'last', 'value': v, 'datetime': datetime.datetime.fromtimestamp(t, pytz.utc) } for t, v in combined_last_readings.items()] + current_series
+
     # m['compare_last_readings_series']= json.dumps(combined_last_readings.values(), cls=DjangoJSONEncoder)
     m['compare_last_readings_series']= json.dumps(last_series, cls=DjangoJSONEncoder)
 

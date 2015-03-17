@@ -172,6 +172,7 @@
         },
         dataSource: {
             data: powers,
+            group: {field: "name"},
             schema:{
                 parse:function (response) {
                 $.each(response, function (idx, elem) {
@@ -183,6 +184,7 @@
                 }
            }
         },
+        seriesColors: ["#edba3c", "#047fa1"],
         series: [
             {
                 type: "line",
