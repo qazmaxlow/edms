@@ -493,7 +493,7 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
         report_date = timezone.make_aware(report_date, timezone.get_current_timezone())
         m['report_date'] = datetime.datetime.strptime(year+month, '%Y%b')
 
-        next_month_date = report_date + relativedelta(months=1)
+        report_end_date = report_date + relativedelta(months=1)
 
     sd = request.GET.get('start_date')
     if sd:
@@ -505,15 +505,15 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
 
     ed = request.GET.get('end_date')
     if ed:
-        next_month_date = dateparse.parse_date(ed)
-        next_month_date = datetime.datetime.combine(next_month_date, datetime.datetime.min.time())
-        next_month_date = current_system_tz.localize(next_month_date)
+        report_end_date = dateparse.parse_date(ed)
+        report_end_date = datetime.datetime.combine(report_end_date, datetime.datetime.min.time())
+        report_end_date = current_system_tz.localize(report_end_date)
 
     m['report_type'] = report_type
 
     report_date_text = "{0} - {1}".format(
         report_date.strftime("%d %b %Y"),
-        next_month_date.strftime("%d %b %Y")
+        report_end_date.strftime("%d %b %Y")
     )
 
     if report_type == 'month':
@@ -528,13 +528,13 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     readings = SourceReadingMonth.objects(
         source_id__in=source_ids,
         datetime__gte=report_date,
-        datetime__lt=next_month_date
+        datetime__lt=report_end_date
     )
     total_energy = sum([ r.value for r in readings])
 
     m['total_energy'] = total_energy
     m['report_start'] = report_date
-    m['report_end'] = next_month_date
+    m['report_end'] = report_end_date
 
     # oops! monkey code
     report_data_type = report_type
@@ -543,7 +543,7 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
 
     report_data = __generate_report_data(systems, report_data_type,
                                   time.mktime(report_date.utctimetuple()),
-                                  time.mktime(next_month_date.utctimetuple())
+                                  time.mktime(report_end_date.utctimetuple())
     )
 
     m['report_data_json'] = json.dumps(report_data)
