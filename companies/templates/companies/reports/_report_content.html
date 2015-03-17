@@ -225,34 +225,39 @@
         </div>
         <div class="row detail-content">
           <div class="col-xs-12">
-          <div kendo-chart k-options="lineOptions"
+          <div kendo-chart k-options="subLineOptions"
                k-title="{text: '{{ subgraph.chart_title }}' }"
+
                k-series="[
             {
                 type: 'line',
                 markers: {
                   visible: false
                 },
-                data: {{ subgraph.current_reading_serie|safe }},
+                data: cgDatas[{{ forloop.counter }}].current,
                 name: '{{ compare_current_readings_month }}',
                 color: '#047fa1',
                 format: '{0:n0}',
                 labels: {
                     visible: false
-                }
+                },
+                field: 'value',
+                categoryField: 'datetime'
             },
             {
                 type: 'line',
                 markers: {
                   visible: false,
                 },
-                data: {{ subgraph.last_reading_serie|safe }},
+                data: cgDatas[{{ forloop.counter }}].last,
                 name: '{{ compare_last_readings_month }}',
                 color: '#edba3c',
                 format: '{0:n0}',
                 labels: {
                     visible: false
-                }
+                },
+                field: 'value',
+                categoryField: 'datetime'
             }
         ]" ></div></div>
 

@@ -72,7 +72,35 @@
           };
       });
 
+      function set_serie_date(s) {
+          $.each(s, function(idx, elem) {
+              elem.datetime = kendo.parseDate(elem.datetime);
+              if (report_type == "year" && elem.name == "current") {
+                  elem.datetime.setYear(elem.datetime.getFullYear()-1);
+              }
+          });
+      }
+
+
         ngapp.controller("ReportController", function($scope) {
+            $scope.testdata  = [{'name': 'last', 'value': 9.66, 'datetime': new Date('2011/12/30')}, {'name': 'last', 'value': 606.71, 'datetime': new Date('2012/01/01')}];
+            var cg_ds = {};
+            // compare graph datasources... should use APIs
+            {% for cg in sub_compare_graphs  %}
+            cg_ds[{{ forloop.counter }}] = {
+              last: {{cg.last_reading_serie|safe}},
+              current: {{cg.last_reading_serie|safe}},
+            };
+            {% endfor %}
+
+
+            $.each(cg_ds, function(idx, ds) {
+               set_serie_date(ds.current);
+               set_serie_date(ds.last);
+            });
+            $scope.cgDatas = cg_ds;
+
+
             $scope.transformedPieOptions = {
                 legend: {
                     visible: false
@@ -171,6 +199,8 @@
         chartArea: {
             background: ""
         },
+
+
         dataSource: {
             data: powers,
             group: {field: "name"},
@@ -188,6 +218,67 @@
                 }
            }
         },
+
+
+        seriesColors: ["#047fa1", "#edba3c"],
+        series: [
+            {
+                 type: "line",
+                 markers: {
+                     visible: false
+                 },
+                 // aggregate: "avg",
+                 name: '{{ compare_last_reading_name }}',
+                 color: "#edba3c",
+                 field: "value",
+                 categoryField: "datetime"
+            }
+        ],
+
+        tooltip: {
+            visible: true,
+            format: "{0:n0} kWh"
+        },
+
+        valueAxis: {
+            line: {
+                visible: false
+            },
+            title: {
+                text: "kWh"
+            },
+            minorGridLines: {
+                visible: false
+            }
+        },
+        categoryAxis: {
+           baseUnit: "days",
+           majorGridLines: {
+              visible: false
+           },
+           majorTicks: {
+              step: 30
+           },
+           labels: {
+              step: 30
+           }
+        }
+
+    };
+
+      $scope.subLineOptions = {
+        title: {
+            text: "WHEN DID WE ACHIEVE OUR SAVINGS?",
+            color: "#354960"
+        },
+        legend: {
+            position: "top"
+        },
+        chartArea: {
+            background: ""
+        },
+
+
         seriesColors: ["#047fa1", "#edba3c"],
         series: [
             {

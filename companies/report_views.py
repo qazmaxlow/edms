@@ -694,19 +694,20 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
             current_day_readings[dt.day] = v
 
         last_day_readings = {}
-        for day in range(1, 32):
-            last_day_readings[day] = None
+        # for day in range(1, 32):
+        #     last_day_readings[day] = None
 
         for ts, v in last_readings.items():
             dt = datetime.datetime.fromtimestamp(ts, pytz.utc)
             dt = dt.astimezone(current_system_tz)
-            last_day_readings[dt.day] = v
+            last_day_readings[dt] = v
 
 
+        # [{'name': 'last', 'value': v, 'datetime': datetime.datetime.fromtimestamp(t, pytz.utc) } for t, v in combined_last_readings.items()]
         sub_graph = {
             'system': g['system'],
             'current_reading_serie': json.dumps(current_day_readings.values()),
-            'last_reading_serie': json.dumps(last_day_readings.values()),
+            'last_reading_serie': json.dumps([{'name': 'last', 'value': v, 'datetime': t} for t, v in last_day_readings.items()], cls=DjangoJSONEncoder),
             'chart_title': chart_title
         }
         sub_compare_graphs.append(sub_graph)
