@@ -184,18 +184,8 @@
                 }
            }
         },
-        seriesColors: ["#edba3c", "#047fa1"],
+        seriesColors: ["#047fa1", "#edba3c"],
         series: [
-            {
-                type: "line",
-                data: {{ compare_current_readings_series|safe }},
-                name: '{{ compare_current_readings_month }}',
-                color: "#047fa1",
-                format: "{0:n0}",
-                labels: {
-                    visible: false
-                }
-            },
             {
                  type: "line",
                  markers: {
@@ -211,7 +201,7 @@
 
         tooltip: {
             visible: true,
-            format: "{0} kWh"
+            format: "{0:n0} kWh"
         },
 
         valueAxis: {
