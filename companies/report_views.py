@@ -956,8 +956,8 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     return render(request, 'companies/reports/popup_report.html', m)
 
 
-def download_popup_report_view(request, system_code, year, month):
-    return popup_report_view(request, system_code, year, month, to_pdf=True)
+def download_popup_report_view(request, system_code):
+    return popup_report_view(request, system_code, to_pdf=True)
 
 
 # @permission_required()
