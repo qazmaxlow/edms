@@ -15,7 +15,7 @@
         <div class="report-name text-center">{{ report_date_text }}</div>
 </div>
 
-<div id="report_key_statistics" class="xreport-component page-break-after">
+<div id="report_key_statistics" class="page-break-after">
     <div class="row report-component-header">
       <div class="col-xs-12">
         {% trans 'WHAT ARE OUR KEY STATISTICS FOR THIS <span class="report-type-name"></span>?' %}
@@ -185,6 +185,9 @@
     </div>
 </div>
 
+</div>
+
+<div class="page-break-after">
 <div id="report_compared_to_last" class="xreport-component page-break-after">
     <div class="row report-component-header">
       <div class="col-xs-12">
@@ -253,7 +256,7 @@
 </div>
 </div>
 
-<div id="weekday-info" class="xreport-component xcalendar-component page-break-after">
+<div id="weekday-info" class="page-break-after">
     <div class="row report-component-header">
       <div class="col-xs-12">
         {% trans "HOW MUCH ENERGY DID WE USE ON <span>WEEKDAYS?</span>" %}</div>
@@ -594,7 +597,7 @@
     {% endfor %}
 </div>
 
-<div id="overnight-info" class="xreport-component xcalendar-component page-break-after">
+<div id="overnight-info">
     <div class="row report-component-header">
       <div class="col-xs-12">
         {% trans "HOW MUCH ENERGY DID WE USE <span>OVERNIGHT***?</span>" %}</div>
