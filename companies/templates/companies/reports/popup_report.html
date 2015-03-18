@@ -215,7 +215,7 @@
                 $.each(response, function (idx, elem) {
                     if (elem.datetime && typeof elem.datetime === "string") {
                         elem.datetime = kendo.parseDate(elem.datetime, "yyyy-MM-ddTHH:mm:ssZ");
-                        if (report_type == "year" && elem.name == "current") {
+                        if (report_type == "year" && elem.type == "current") {
                             elem.datetime.setYear(elem.datetime.getFullYear()-1);
                         }
                     }
