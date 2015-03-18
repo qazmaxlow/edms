@@ -54,6 +54,11 @@ def next_month(datetime):
     return next_month_date
 
 
+def get_source_name(source_id):
+    source = Source.objects(id=str(source_id)).first()
+    return source.d_name
+
+
 def get_unitrate(source_id, datetime):
     source = Source.objects(id=str(source_id)).first()
     system = System.objects.get(code=source.system_code)
@@ -715,9 +720,12 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
             last_day_readings[dt] = v
 
 
+        graph_title = get_source_name(g['sourceIds'][0]) if g['system'].code == m['company_system'].code else g['system'].fullname
+
         # [{'name': 'last', 'value': v, 'datetime': datetime.datetime.fromtimestamp(t, pytz.utc) } for t, v in combined_last_readings.items()]
         sub_graph = {
             'system': g['system'],
+            'title': graph_title,
             'current_reading_serie': json.dumps([{'name': compare_current_name, 'value': v, 'datetime': t} for t, v in current_day_readings.items()], cls=DjangoJSONEncoder),
             'last_reading_serie': json.dumps([{'name': compare_last_name, 'value': v, 'datetime': t} for t, v in last_day_readings.items()], cls=DjangoJSONEncoder),
             'chart_title': chart_title
