@@ -75,7 +75,12 @@
       function set_serie_date(s) {
           $.each(s, function(idx, elem) {
               elem.datetime = kendo.parseDate(elem.datetime);
-              if (report_type == "year" && elem.name == "current") {
+          });
+      }
+
+      function shift_series_date(s) {
+          $.each(s, function(idx, elem) {
+              if (report_type == "year") {
                   elem.datetime.setYear(elem.datetime.getFullYear()-1);
               }
           });
@@ -97,6 +102,7 @@
             $.each(cg_ds, function(idx, ds) {
                set_serie_date(ds.current);
                set_serie_date(ds.last);
+               shift_series_date(ds.current);
             });
             $scope.cgDatas = cg_ds;
 
