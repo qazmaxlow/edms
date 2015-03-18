@@ -808,12 +808,16 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
 
         percent_in_total = float(g['currentTotalEnergy']/transformed_total_energy) * 100
 
+        change_in_money = None
+        if 'last_year_this_month' in g and g['last_year_this_month']['money']:
+            change_in_money = g['currentTotalMoney']- g['last_year_this_month']['money']
+
         data_info = {
             'total_energy': g['currentTotalEnergy'],
             'co2_val': g['currentTotalCo2'],
             'money_val': g['currentTotalMoney'],
             'change_in_kwh': change_in_kwh,
-            'change_in_money': g['currentTotalMoney']- g['last_year_this_month']['money'] if g['last_year_this_month']['money'] else None,
+            'change_in_money': change_in_money,
             'percent_in_total': percent_in_total,
             'color': type_colors[ix]
         }
