@@ -79,7 +79,10 @@
       }
 
       function shift_series_date(elem) {
-          if (report_type == "year") {
+          if (report_type == "month") {
+              elem.datetime.setMonth(elem.datetime.getMonth()-1);
+          }
+          else if (report_type == "year") {
               elem.datetime.setYear(elem.datetime.getFullYear()-1);
           }
       }
@@ -218,8 +221,7 @@
                 $.each(response, function (idx, elem) {
                     if (elem.datetime && typeof elem.datetime === "string") {
                         elem.datetime = kendo.parseDate(elem.datetime, "yyyy-MM-ddTHH:mm:ssZ");
-                        if (report_type == "year" && elem.type == "current") {
-                            // elem.datetime.setYear(elem.datetime.getFullYear()-1);
+                        if (elem.type == "current") {
                             shift_series_date(elem);
                         }
                     }
