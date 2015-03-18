@@ -193,6 +193,11 @@
 
       var powers = {{ compare_series|safe }};
 
+      var line_step = 2;
+      if (report_type == 'year') {
+          line_step = 30;
+      }
+
       $scope.lineOptions = {
                 width: 1000,
         title: {
@@ -263,10 +268,10 @@
               visible: false
            },
            majorTicks: {
-              step: 30
+              step: line_step
            },
            labels: {
-              step: 30
+              step: line_step
            }
         }
 
@@ -322,10 +327,10 @@
               visible: false
            },
            majorTicks: {
-              step: 30
+              step: line_step
            },
            labels: {
-              step: 30
+              step: line_step
            }
         }
 
