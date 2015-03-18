@@ -199,6 +199,12 @@
           line_step = 30;
       }
 
+      var line_date_formats = { days: 'dd'};
+      if (report_type == 'year') {
+          line_date_formats = { days: 'M/d'};
+      }
+
+
       $scope.lineOptions = {
                 width: 1000,
         title: {
@@ -272,7 +278,8 @@
               step: line_step
            },
            labels: {
-              step: line_step
+              step: line_step,
+              dateFormats: line_date_formats
            }
         }
 
@@ -331,7 +338,8 @@
               step: line_step
            },
            labels: {
-              step: line_step
+              step: line_step,
+              dateFormats: line_date_formats
            }
         }
 
