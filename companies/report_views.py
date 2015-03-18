@@ -802,7 +802,9 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
 
     transformed_total_energy = sum([ g['currentTotalEnergy'] for g in group_data])
     for ix, g in enumerate(group_data):
-        change_in_kwh = (g['currentTotalMoney'] - g['last_year_this_month']['money'])/g['last_year_this_month']['money'] * 100 if g['last_year_this_month']['money'] > 0 else None
+        change_in_kwh = None
+        if 'last_year_this_month' in g and g['last_year_this_month']['money'] > 0:
+            change_in_kwh = (g['currentTotalMoney'] - g['last_year_this_month']['money'])/g['last_year_this_month']['money'] * 100
 
         percent_in_total = float(g['currentTotalEnergy']/transformed_total_energy) * 100
 
