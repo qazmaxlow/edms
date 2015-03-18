@@ -231,12 +231,12 @@
                k-series="[
             {
                 data: cgDatas[{{ forloop.counter }}].current,
-                name: '{{ compare_current_readings_month }}',
+                name: '{{ compare_current_name }}',
                 color: '#047fa1'
             },
             {
                 data: cgDatas[{{ forloop.counter }}].last,
-                name: 'a{{ compare_last_readings_month }}',
+                name: '{{ compare_last_name }}',
                 color: '#edba3c'
             }
         ]" ></div></div>
