@@ -647,11 +647,23 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
         g['weekend'] = weekend
 
 
+    compare_current_name = report_date.strftime('%b')
+    compare_last_name = previous_month(report_date).strftime('%b')
+
+    if report_type == 'year':
+        compare_current_name = report_date.strftime('%Y')
+        compare_last_name = (report_date-relativedelta(years=1)).strftime('%Y')
+
+
+    m['compare_current_name'] = compare_current_name
+    m['compare_last_name'] = compare_last_name
+
     # sub compare graphs
     sub_compare_graphs = []
 
     # this is combined current readings
     combined_readings = {}
+
 
     # combined_current_readings = {};
     combined_last_readings = {};
@@ -706,8 +718,8 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
         # [{'name': 'last', 'value': v, 'datetime': datetime.datetime.fromtimestamp(t, pytz.utc) } for t, v in combined_last_readings.items()]
         sub_graph = {
             'system': g['system'],
-            'current_reading_serie': json.dumps([{'name': 'last', 'value': v, 'datetime': t} for t, v in current_day_readings.items()], cls=DjangoJSONEncoder),
-            'last_reading_serie': json.dumps([{'name': 'last', 'value': v, 'datetime': t} for t, v in last_day_readings.items()], cls=DjangoJSONEncoder),
+            'current_reading_serie': json.dumps([{'name': compare_current_name, 'value': v, 'datetime': t} for t, v in current_day_readings.items()], cls=DjangoJSONEncoder),
+            'last_reading_serie': json.dumps([{'name': compare_last_name, 'value': v, 'datetime': t} for t, v in last_day_readings.items()], cls=DjangoJSONEncoder),
             'chart_title': chart_title
         }
         sub_compare_graphs.append(sub_graph)
@@ -725,24 +737,18 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     #     )
 
     # m['compare_current_readings_series']= json.dumps(combined_readings.values(), cls=DjangoJSONEncoder)
-    m['compare_current_name'] = report_date.strftime('%b')
 
-    if report_type == 'year':
-        m['compare_current_name'] = report_date.strftime('%Y')
-
-    current_series = [{'name': 'current', 'value': v, 'datetime': datetime.datetime.fromtimestamp(t, pytz.utc) } for t, v in combined_readings.items()]
+    current_series = [{'name': compare_current_name, 'value': v, 'datetime': datetime.datetime.fromtimestamp(t, pytz.utc) } for t, v in combined_readings.items()]
 
     m['compare_current_readings_series']= json.dumps(current_series, cls=DjangoJSONEncoder)
 
-    last_series = [{'name': 'last', 'value': v, 'datetime': datetime.datetime.fromtimestamp(t, pytz.utc) } for t, v in combined_last_readings.items()] + current_series
+    last_series = [{'name': compare_last_name, 'value': v, 'datetime': datetime.datetime.fromtimestamp(t, pytz.utc) } for t, v in combined_last_readings.items()]
+
+    compare_series = current_series + last_series
 
     # m['compare_last_readings_series']= json.dumps(combined_last_readings.values(), cls=DjangoJSONEncoder)
-    m['compare_last_readings_series']= json.dumps(last_series, cls=DjangoJSONEncoder)
+    m['compare_series']= json.dumps(compare_series, cls=DjangoJSONEncoder)
 
-    m['compare_last_name'] = previous_month(report_date).strftime('%b')
-
-    if report_type == 'year':
-        m['compare_last_name'] = (report_date-relativedelta(years=1)).strftime('%Y')
 
     # m['compare_last_categories'] = json.dumps(map(str, range(1, 32)))
     m['compare_last_categories'] = json.dumps(range(1, 32))
