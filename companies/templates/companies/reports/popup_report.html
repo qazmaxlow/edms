@@ -89,7 +89,7 @@
             {% for cg in sub_compare_graphs  %}
             cg_ds[{{ forloop.counter }}] = {
               last: {{cg.last_reading_serie|safe}},
-              current: {{cg.last_reading_serie|safe}},
+              current: {{cg.current_reading_serie|safe}},
             };
             {% endfor %}
 
