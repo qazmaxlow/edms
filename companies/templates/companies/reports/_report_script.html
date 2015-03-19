@@ -1,83 +1,83 @@
-         var ngapp = angular.module("Entrak", [ "kendo.directives" ]);
-      var report_type = "{{ report_type }}";
+var ngapp = angular.module("Entrak", [ "kendo.directives" ]);
+var report_type = "{{ report_type }}";
 
 
-      ngapp.controller("MyCtrl", function($scope) {
-          $scope.onSelect = function(ev) {
-              var anchor = $(ev.item).data('anchor');
-              location.href = "#"+anchor;
-          };
-      });
+ngapp.controller("MyCtrl", function($scope) {
+    $scope.onSelect = function(ev) {
+        var anchor = $(ev.item).data('anchor');
+        location.href = "#"+anchor;
+    };
+});
 
-      function set_serie_date(s) {
-          $.each(s, function(idx, elem) {
-              elem.datetime = kendo.parseDate(elem.datetime);
-          });
-      }
+function set_serie_date(s) {
+    $.each(s, function(idx, elem) {
+        elem.datetime = kendo.parseDate(elem.datetime);
+    });
+}
 
-      function shift_series_date(elem) {
-          if (report_type == "month") {
-              elem.datetime.setMonth(elem.datetime.getMonth()-1);
-          }
-          else if (report_type == "year") {
-              elem.datetime.setYear(elem.datetime.getFullYear()-1);
-          }
-      }
-
-
-        ngapp.controller("ReportController", function($scope) {
-            $scope.testdata  = [{'name': 'last', 'value': 9.66, 'datetime': new Date('2011/12/30')}, {'name': 'last', 'value': 606.71, 'datetime': new Date('2012/01/01')}];
-            var cg_ds = {};
-            // compare graph datasources... should use APIs
-            {% for cg in sub_compare_graphs  %}
-            cg_ds[{{ forloop.counter }}] = {
-              last: {{cg.last_reading_serie|safe}},
-              current: {{cg.current_reading_serie|safe}},
-            };
-            {% endfor %}
+function shift_series_date(elem) {
+    if (report_type == "month") {
+        elem.datetime.setMonth(elem.datetime.getMonth()-1);
+    }
+    else if (report_type == "year") {
+        elem.datetime.setYear(elem.datetime.getFullYear()-1);
+    }
+}
 
 
-            $.each(cg_ds, function(idx, ds) {
-               set_serie_date(ds.current);
-               set_serie_date(ds.last);
-               $.each(ds.current, function(idx, elem) {shift_series_date(elem)});
-            });
-            $scope.cgDatas = cg_ds;
+ngapp.controller("ReportController", function($scope) {
+    $scope.testdata  = [{'name': 'last', 'value': 9.66, 'datetime': new Date('2011/12/30')}, {'name': 'last', 'value': 606.71, 'datetime': new Date('2012/01/01')}];
+    var cg_ds = {};
+    // compare graph datasources... should use APIs
+    {% for cg in sub_compare_graphs  %}
+    cg_ds[{{ forloop.counter }}] = {
+        last: {{cg.last_reading_serie|safe}},
+        current: {{cg.current_reading_serie|safe}},
+    };
+    {% endfor %}
 
 
-            $scope.transformedPieOptions = {
-                legend: {
-                    visible: false
-                },
-                seriesDefaults: {
-                    type: "donut",
-                    labels: {
-                        template: "#= kendo.format('{0:p0}', percentage)#",
-                        position: "Center",
-                        visible: true,
-                        background: "transparent",
-                        font: "bold 18px Arial",
-                        color: function(e) {
-                            return e.dataItem.color;
-                        }
-                    },
-                    overlay: {
-                        gradient: "none"
-                    }
-                },
-                series: [{
-                    startAngle: 150,
-                    data: {{ transformed_pie_json|safe }}
-                }],
-                tooltip: {
-                    visible: true,
-                    format: "{0}%",
-                    template: "#= category #: #= kendo.format('{0:n0}',value) #"
+    $.each(cg_ds, function(idx, ds) {
+        set_serie_date(ds.current);
+        set_serie_date(ds.last);
+        $.each(ds.current, function(idx, elem) {shift_series_date(elem)});
+    });
+    $scope.cgDatas = cg_ds;
+
+
+    $scope.transformedPieOptions = {
+        legend: {
+            visible: false
+        },
+        seriesDefaults: {
+            type: "donut",
+            labels: {
+                template: "#= kendo.format('{0:p0}', percentage)#",
+                position: "Center",
+                visible: true,
+                background: "transparent",
+                font: "bold 18px Arial",
+                color: function(e) {
+                    return e.dataItem.color;
                 }
+            },
+            overlay: {
+                gradient: "none"
+            }
+        },
+        series: [{
+            startAngle: 150,
+            data: {{ transformed_pie_json|safe }}
+        }],
+        tooltip: {
+            visible: true,
+            format: "{0}%",
+            template: "#= category #: #= kendo.format('{0:n0}',value) #"
+        }
 
-            };
+    };
 
-            $scope.barOptions = {
+    $scope.barOptions = {
         dataSource: {{ compare_past_datasource_json|safe }},
         title: {
             text: "Total energy consumption for the last 6 months (kWh)",
@@ -129,21 +129,21 @@
         }
     };
 
-      var powers = {{ compare_series|safe }};
+    var powers = {{ compare_series|safe }};
 
-      var line_step = 2;
-      if (report_type == 'year') {
-          line_step = 30;
-      }
+    var line_step = 2;
+    if (report_type == 'year') {
+        line_step = 30;
+    }
 
-      var line_date_formats = { days: 'dd'};
-      if (report_type == 'year') {
-          line_date_formats = { days: 'M/d'};
-      }
+    var line_date_formats = { days: 'dd'};
+    if (report_type == 'year') {
+        line_date_formats = { days: 'M/d'};
+    }
 
 
-      $scope.lineOptions = {
-                width: 1000,
+    $scope.lineOptions = {
+        width: 1000,
         title: {
             text: "WHEN DID WE ACHIEVE OUR SAVINGS?",
             color: "#354960"
@@ -161,32 +161,32 @@
             group: [{field: "type", dir: "desc"}],
             schema:{
                 parse:function (response) {
-                $.each(response, function (idx, elem) {
-                    if (elem.datetime && typeof elem.datetime === "string") {
-                        elem.datetime = kendo.parseDate(elem.datetime, "yyyy-MM-ddTHH:mm:ssZ");
-                        if (elem.type == "current") {
-                            shift_series_date(elem);
+                    $.each(response, function (idx, elem) {
+                        if (elem.datetime && typeof elem.datetime === "string") {
+                            elem.datetime = kendo.parseDate(elem.datetime, "yyyy-MM-ddTHH:mm:ssZ");
+                            if (elem.type == "current") {
+                                shift_series_date(elem);
+                            }
                         }
-                    }
-                });
-                return response;
+                    });
+                    return response;
                 }
-           }
+            }
         },
 
 
         seriesColors: ["#edba3c", "#047fa1"],
         series: [
             {
-                 type: "line",
-                 markers: {
-                     visible: false
-                 },
-                 // aggregate: "avg",
-                 name: '# if (group.value == "last") { # {{ compare_last_name }} # } else { # {{ compare_current_name }} # } #',
-                 color: "#edba3c",
-                 field: "value",
-                 categoryField: "datetime"
+                type: "line",
+                markers: {
+                    visible: false
+                },
+                // aggregate: "avg",
+                name: '# if (group.value == "last") { # {{ compare_last_name }} # } else { # {{ compare_current_name }} # } #',
+                color: "#edba3c",
+                field: "value",
+                categoryField: "datetime"
             }
         ],
 
@@ -207,22 +207,22 @@
             }
         },
         categoryAxis: {
-           baseUnit: "days",
-           majorGridLines: {
-              visible: false
-           },
-           majorTicks: {
-              step: line_step
-           },
-           labels: {
-              step: line_step,
-              dateFormats: line_date_formats
-           }
+            baseUnit: "days",
+            majorGridLines: {
+                visible: false
+            },
+            majorTicks: {
+                step: line_step
+            },
+            labels: {
+                step: line_step,
+                dateFormats: line_date_formats
+            }
         }
 
     };
 
-      $scope.subLineOptions = {
+    $scope.subLineOptions = {
         title: {
             text: "WHEN DID WE ACHIEVE OUR SAVINGS?",
             color: "#354960"
@@ -237,18 +237,18 @@
 
         // seriesColors: ["#047fa1", "#edba3c"],
         seriesDefaults:
-            {
-                type: 'line',
-                format: '{0:n0}',
-                labels: {
-                    visible: false
-                },
-                field: 'value',
-                categoryField: 'datetime',
-                markers: {
-                  visible: false
-                }
+        {
+            type: 'line',
+            format: '{0:n0}',
+            labels: {
+                visible: false
             },
+            field: 'value',
+            categoryField: 'datetime',
+            markers: {
+                visible: false
+            }
+        },
 
         tooltip: {
             visible: true,
@@ -267,21 +267,21 @@
             }
         },
         categoryAxis: {
-           baseUnit: "days",
-           majorGridLines: {
-              visible: false
-           },
-           majorTicks: {
-              step: line_step
-           },
-           labels: {
-              step: line_step,
-              dateFormats: line_date_formats
-           }
+            baseUnit: "days",
+            majorGridLines: {
+                visible: false
+            },
+            majorTicks: {
+                step: line_step
+            },
+            labels: {
+                step: line_step,
+                dateFormats: line_date_formats
+            }
         }
 
     };
-        })
+})
 
 setCalendar = function(currentDt, currentEndDt, eleSel, readings, averageUsage, isNotConcernFunc) {
     // var reportGenThis = this;
@@ -324,8 +324,8 @@ setCalendar = function(currentDt, currentEndDt, eleSel, readings, averageUsage, 
                 calendarDayEle.addClass('calendar-day-better');
             }
             calendarDayEle.append("<div class='calendar-day-percent'>"
-                +diffPercentText
-                +"<span class='calendar-day-percent-symbol'>%</span></div>");
+                                  +diffPercentText
+                                  +"<span class='calendar-day-percent-symbol'>%</span></div>");
         }
 
         calendarContainer.append(calendarDayEle);
@@ -347,9 +347,9 @@ getReportData = function() {
         data: requestData,
         async: false
     })
-    .done(function(data) {
-        report_data = data;
-    });
+        .done(function(data) {
+            report_data = data;
+        });
 
     return report_data
 }
@@ -409,9 +409,9 @@ $(document).ready(function()  {
     // for weekday report
     var isNotConcernFunc = function(targetDt) {
         return (targetDt.day() == 0
-            || targetDt.day() == 6
-            || ($.inArray(targetDt.format("YYYY-MM-DD"), holidays) != -1))
-            // || ($.inArray(targetDt.format("YYYY-MM-DD"), reportGenThis.holidays) != -1))
+                || targetDt.day() == 6
+                || ($.inArray(targetDt.format("YYYY-MM-DD"), holidays) != -1))
+        // || ($.inArray(targetDt.format("YYYY-MM-DD"), reportGenThis.holidays) != -1))
     }
 
     var report_start = new Date("{{ report_start.isoformat }}");
@@ -431,8 +431,8 @@ $(document).ready(function()  {
 
     var isNotConcernFunc = function(targetDt) {
         return (targetDt.day() >= 1
-            && targetDt.day() <= 5
-            && ($.inArray(targetDt.format("YYYY-MM-DD"), holidays) == -1))
+                && targetDt.day() <= 5
+                && ($.inArray(targetDt.format("YYYY-MM-DD"), holidays) == -1))
     }
 
     setCalendar(
@@ -463,13 +463,13 @@ $(document).ready(function()  {
     // $('#weekday-info .average-usage').html(average_usage);
 
     /*
-    var overnight_readings = {};
-    $.each(report_data.groupedSourceInfos, function(groupIdx, info) {
-        $.each(info.overnightcurrentReadings, function(timestamp, readingVal) {
-            overnight_readings[timestamp] =
-                ((timestamp in combinedOvernightCurrentReadings) ? overnight_readings[timestamp] : 0) + readingVal;
-        });
-    });
+      var overnight_readings = {};
+      $.each(report_data.groupedSourceInfos, function(groupIdx, info) {
+      $.each(info.overnightcurrentReadings, function(timestamp, readingVal) {
+      overnight_readings[timestamp] =
+      ((timestamp in combinedOvernightCurrentReadings) ? overnight_readings[timestamp] : 0) + readingVal;
+      });
+      });
     */
 
 
