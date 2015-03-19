@@ -653,8 +653,10 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
 
     compare_current_name = report_date.strftime('%b')
     compare_last_name = previous_month(report_date).strftime('%b')
-
-    if report_type == 'year':
+    if report_type == 'week':
+        compare_current_name = 'this week'
+        compare_last_name = 'last week'
+    elif report_type == 'year':
         compare_current_name = report_date.strftime('%Y')
         compare_last_name = (report_date-relativedelta(years=1)).strftime('%Y')
 
