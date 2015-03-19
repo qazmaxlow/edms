@@ -31,7 +31,7 @@ ngapp.controller("ReportController", function($scope) {
             elem.datetime.setYear(elem.datetime.getFullYear()-1);
         }
         else if (report_type == "custom") {
-            var diff = Math.round(($scope.report_date_end - $scope.report_date_start)/1000/60/60/24); //Difference in days
+            var diff = {{ report_day_diff }};
             elem.datetime.setDate(elem.datetime.getDate()-diff);
         }
     }
