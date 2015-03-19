@@ -22,6 +22,9 @@ function shift_series_date(elem) {
     else if (report_type == "week") {
         elem.datetime.setDate(elem.datetime.getDate()-7);
     }
+    else if (report_type == "quarter") {
+        elem.datetime.setMonth(elem.datetime.getMonth()-3);
+    }
     else if (report_type == "year") {
         elem.datetime.setYear(elem.datetime.getFullYear()-1);
     }
