@@ -312,8 +312,7 @@ def report_view(request, system_code=None):
     # should use system timezone
     start_dt = datetime.datetime.now(current_system_tz)
     start_dt = start_dt.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    # start_dt = previous_month(start_dt)
-    start_dt = previous_month(start_dt)
+    start_dt = start_dt - relativedelta(months=1)
 
     # end_dt = pytz.utc.localize(datetime.datetime.utcnow()).astimezone(current_system_tz)
     end_dt = datetime.datetime.now(current_system_tz)
@@ -672,7 +671,7 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
 
     # combined_current_readings = {};
     combined_last_readings = {};
-    for g in group_data:
+    for ix, g in enumerate(group_data):
         current_readings = g['currentReadings']
         g['compare_last_month_helper'] = CompareTplHepler(g['compare_last_month'])
         g['compare_same_period_helper'] = CompareTplHepler(g['compare_same_period'])
@@ -725,6 +724,7 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
         # [{'name': 'last', 'value': v, 'datetime': datetime.datetime.fromtimestamp(t, pytz.utc) } for t, v in combined_last_readings.items()]
         sub_graph = {
             'system': g['system'],
+            'color': type_colors[ix],
             'title': graph_title,
             'current_reading_serie': json.dumps([{'name': compare_current_name, 'value': v, 'datetime': t} for t, v in current_day_readings.items()], cls=DjangoJSONEncoder),
             'last_reading_serie': json.dumps([{'name': compare_last_name, 'value': v, 'datetime': t} for t, v in last_day_readings.items()], cls=DjangoJSONEncoder),
