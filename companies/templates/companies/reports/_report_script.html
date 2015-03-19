@@ -15,23 +15,27 @@ function set_serie_date(s) {
     });
 }
 
-function shift_series_date(elem) {
-    if (report_type == "month") {
-        elem.datetime.setMonth(elem.datetime.getMonth()-1);
-    }
-    else if (report_type == "week") {
-        elem.datetime.setDate(elem.datetime.getDate()-7);
-    }
-    else if (report_type == "quarter") {
-        elem.datetime.setMonth(elem.datetime.getMonth()-3);
-    }
-    else if (report_type == "year") {
-        elem.datetime.setYear(elem.datetime.getFullYear()-1);
-    }
-}
-
 
 ngapp.controller("ReportController", function($scope) {
+    function shift_series_date(elem) {
+        if (report_type == "month") {
+            elem.datetime.setMonth(elem.datetime.getMonth()-1);
+        }
+        else if (report_type == "week") {
+            elem.datetime.setDate(elem.datetime.getDate()-7);
+        }
+        else if (report_type == "quarter") {
+            elem.datetime.setMonth(elem.datetime.getMonth()-3);
+        }
+        else if (report_type == "year") {
+            elem.datetime.setYear(elem.datetime.getFullYear()-1);
+        }
+        else if (report_type == "custom") {
+            var diff = Math.round(($scope.report_date_end - $scope.report_date_start)/1000/60/60/24); //Difference in days
+            elem.datetime.setDate(elem.datetime.getDate()-diff);
+        }
+    }
+
     $scope.testdata  = [{'name': 'last', 'value': 9.66, 'datetime': new Date('2011/12/30')}, {'name': 'last', 'value': 606.71, 'datetime': new Date('2012/01/01')}];
     var cg_ds = {};
     // compare graph datasources... should use APIs

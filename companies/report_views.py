@@ -662,6 +662,11 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     elif report_type == 'year':
         compare_current_name = report_date.strftime('%Y')
         compare_last_name = (report_date-relativedelta(years=1)).strftime('%Y')
+    elif report_type == 'custom':
+        compare_current_name = 'this peroid'
+        compare_last_name = 'last same peroid'
+
+
 
 
     m['compare_current_name'] = compare_current_name
