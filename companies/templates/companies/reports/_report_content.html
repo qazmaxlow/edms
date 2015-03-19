@@ -263,19 +263,16 @@
       {% if report_type != 'quarter' and report_type != 'year' and report_type != 'custom' %}
         <div class="row top-section">
         <div class="col-xs-4 side-bar">
-          <div class="row item"><div class="col-xs-12">
-              <div class="row inner">
+          <div class="row item">
                 <div class="col-xs-4">
-                  <img src="{% static 'images/reports/icon_money.svg'  %}">
+                  <img src="{% static 'images/reports/icon_money.svg' %}">
                 </div>
                 <div class="col-xs-8">
                   <h3 class="used-money">${{ weekday_bill|stringformat:"d" }}</h3>
                   <p>{% trans "Average Weekday Energy Use" %}</p>
                 </div>
-              </div>
-          </div></div>
-          <div class="row item"><div class="col-xs-12">
-              <div class="row inner">
+          </div>
+          <div class="row item">
                 <div class="col-xs-4">
                   <img src="{% static weekday_month_compare_helper.change_icon_path  %}">
                 </div>
@@ -286,10 +283,8 @@
                   </h3>
                   <p>{% trans "Compare to Last Month" %}</p>
                 </div>
-              </div>
-          </div></div>
-          <div class="row item end"><div class="col-xs-12">
-              <div class="row inner">
+          </div>
+          <div class="row item end">
                 <div class="col-xs-4">
                   <img src="{% static weekday_same_period_compare_helper.change_icon_path %}">
                 </div>
@@ -301,7 +296,6 @@
                   <p>{% trans "compare to same period year" %}</p>
                 </div>
               </div>
-          </div></div>
         </div>
         <div class="col-xs-8 calendar-content">
           <div class="row text-center report-date"><div class="col-xs-12">{{ report_date|date:"M Y" }}</div></div>

@@ -116,7 +116,7 @@ body {
 
 .calendar-content {
     background-color: #F5F5F5;
-    height: 431px;
+    /* height: 431px; */
 }
 
 @media print {
@@ -144,8 +144,15 @@ body {-webkit-print-color-adjust: exact;}
     border-right: 5px solid #e3e7e8;
 }
 
+.top-section .side-bar img {
+    /* width: 80px !important; */
+    /* height: 80px !important; */
+}
+
+
 .top-section .side-bar .item {
-    height: 144px;
+    /* height: 144px; */
+    padding: 13px 0;
 }
 
 .top-section .side-bar .item p {
@@ -168,13 +175,13 @@ body {-webkit-print-color-adjust: exact;}
 }
 
 .top-section .side-bar .inner {
-    top: 20px;
-    position: relative;
+    /* top: 20px; */
+    /* position: relative; */
 }
 
 .top-section .side-bar .end {
     Background: white;
-    height: 143px;
+    /* height: 143px; */
 }
 
 .no-background-image {
