@@ -306,7 +306,9 @@ $(function() {
       <div class="row content"><div class="col-xs-12">
           <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
           <h3>{% templatetag openvariable %} summary_report.formated_total_cost || default_null {% templatetag closevariable %}</h3>
-          <p>Total energy cost</p>
+          {% verbatim %}
+          <p>{{ get_total_energy_cost_text() }}</p>
+          {% endverbatim %}
       </div></div>
       {% verbatim %}
       <div class="row content end"><div class="col-xs-12">
@@ -479,6 +481,23 @@ $(function() {
                 return compare_to_text
             }
 
+            $scope.get_total_energy_cost_text = function() {
+                var text;
+                if ($scope.report_type == 'week') {
+                    text = 'Total week cost';
+                }
+                else if ($scope.report_type == 'month') {
+                    text = 'Total month cost';
+                }
+                else if ($scope.report_type == 'quarter') {
+                    text = 'Total quarter cost';
+                }
+                else if ($scope.report_type == 'year') {
+                    text = 'Total year cost';
+                }
+
+                return text;
+            }
 
             $scope.view_report = function() {
                 if (!$scope.summary_report.formated_total_cost) {
