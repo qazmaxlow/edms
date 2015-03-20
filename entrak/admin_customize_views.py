@@ -87,6 +87,7 @@ def edit_sources_view(request, system_code=None):
 
         will_insert_sources = []
         for info in source_infos:
+            
             if info['system_path'] == '':
                 info['system_path'] = None
 
@@ -104,6 +105,7 @@ def edit_sources_view(request, system_code=None):
                     d_name=info['d_name'],
                     d_name_tc=info['d_name_tc'],
                     order=info['order'],
+                    source_members=info['source_members'],
                     active=info['active']))
             else:
                 original_source = source_id_map[info['source_id']]
