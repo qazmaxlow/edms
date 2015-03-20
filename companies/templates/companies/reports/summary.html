@@ -355,7 +355,7 @@ $(function() {
       <div class="sky-bg">
         <img src="{% static "images/reports/sky.png" %}">
       </div>
-      <div class="view-report">
+      <div id="view_report_btn" class="view-report">
         <img class="img-button" src="{% static "images/reports/view_report.svg" %}" ng-click="view_report()">
         <button class="k-button" ng-click="view_report()">View Full Report</button>
       </div>
@@ -411,6 +411,9 @@ $(function() {
     </div>
 </div>
 
+<span kendo-notification="notf" k-append-to="'#view_report_btn'"></span>
+
+
 <form class="download-pdf-form" action="{% url 'report_pdf' system_code=systems.0.code %}" method="POST">{% csrf_token %}
         <input name="start_timestamp" value="">
         <input name="end_timestamp" value="">
@@ -438,6 +441,11 @@ $(function() {
             $scope.report_type_name = "Monthly";
 
             $scope.view_report = function() {
+                if (!$scope.summary_report.formated_total_cost) {
+                    $scope.notf.show('No data', 'error');
+                    return false;
+                }
+
                 var date = $scope.report_date.value();
                 var year = date.getFullYear();
 
