@@ -300,7 +300,7 @@ $(function() {
     <div class="col-xs-3">
       {% verbatim %}
       <div class="row time-type"><div class="col-xs-12">
-          {{ report_type_name }}
+          {{ get_report_type_name() }}
       </div></div>
       {% endverbatim %}
       <div class="row content"><div class="col-xs-12">
@@ -438,8 +438,29 @@ $(function() {
             $scope.default_null = "N/A";
 
             $scope.compare_to_text = "Compared to last month";
-            $scope.report_type_name = "Month Total";
             $scope.report_type = "month";
+
+            $scope.get_report_type_name = function() {
+                var report_type_name;
+                if ($scope.report_type == 'week') {
+                    $scope.compare_to_text = "Compared to last week";
+                    report_type_name = 'Week total';
+                }
+                else if ($scope.report_type == 'month') {
+                    $scope.compare_to_text = "Compared to last month";
+                    report_type_name = 'Month total';
+                }
+                else if ($scope.report_type == 'quarter') {
+                    $scope.compare_to_text = "Compared to last quarter";
+                    report_type_name = 'Quarter total';
+                }
+                else if ($scope.report_type == 'year') {
+                    $scope.compare_to_text = "Compared to last year";
+                    report_type_name = 'Year total';
+                }
+
+                return report_type_name
+            }
 
             $scope.view_report = function() {
                 if (!$scope.summary_report.formated_total_cost) {
@@ -513,24 +534,6 @@ $(function() {
                 };
                 summary_report_ds.read();
                 $scope.summary_report = summary_report_ds.data()[0];
-
-                // for the compare texts
-                if ($scope.report_type == 'week') {
-                    $scope.compare_to_text = "Compared to last week";
-                    $scope.report_type_name = 'Week total';
-                }
-                else if ($scope.report_type == 'month') {
-                    $scope.compare_to_text = "Compared to last month";
-                    $scope.report_type_name = 'Month total';
-                }
-                else if ($scope.report_type == 'quarter') {
-                    $scope.compare_to_text = "Compared to last quarter";
-                    $scope.report_type_name = 'Quarter total';
-                }
-                else if ($scope.report_type == 'year') {
-                    $scope.compare_to_text = "Compared to last year";
-                    $scope.report_type_name = 'Year total';
-                }
             };
 
             $scope.timeToolbarOptions = {
