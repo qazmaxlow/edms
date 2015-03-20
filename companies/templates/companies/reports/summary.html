@@ -439,6 +439,7 @@ $(function() {
 
             $scope.compare_to_text = "Compared to last month";
             $scope.report_type_name = "Month Total";
+            $scope.report_type = "month";
 
             $scope.view_report = function() {
                 if (!$scope.summary_report.formated_total_cost) {
@@ -489,13 +490,14 @@ $(function() {
             $scope.selectTimeType = function (e) {
                 var tb = e.sender;
                 var selected = $scope.dateToolbar.getSelectedFromGroup('time');
-                var toolbar_item = selected.attr('id');
-                if (toolbar_item == 'custom') {
+                $scope.report_type = selected.attr('id');
+
+                if ($scope.report_type == 'custom') {
                     $scope.custom_time = true;
                 }
                 else {
                     $scope.custom_time = false;
-                    $scope.monthSelectorOptions.select = selected.attr('id');
+                    $scope.monthSelectorOptions.select = $scope.report_type; // could bind?
                 }
 
                 // hack? or can bind this?
@@ -513,19 +515,19 @@ $(function() {
                 $scope.summary_report = summary_report_ds.data()[0];
 
                 // for the compare texts
-                if (toolbar_item == 'week') {
+                if ($scope.report_type == 'week') {
                     $scope.compare_to_text = "Compared to last week";
                     $scope.report_type_name = 'Week total';
                 }
-                else if (toolbar_item == 'month') {
+                else if ($scope.report_type == 'month') {
                     $scope.compare_to_text = "Compared to last month";
                     $scope.report_type_name = 'Month total';
                 }
-                else if (toolbar_item == 'quarter') {
+                else if ($scope.report_type == 'quarter') {
                     $scope.compare_to_text = "Compared to last quarter";
                     $scope.report_type_name = 'Quarter total';
                 }
-                else if (toolbar_item == 'year') {
+                else if ($scope.report_type == 'year') {
                     $scope.compare_to_text = "Compared to last year";
                     $scope.report_type_name = 'Year total';
                 }
