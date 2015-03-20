@@ -312,7 +312,7 @@ $(function() {
       <div class="row content end"><div class="col-xs-12">
           <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_total.icon_path }}">
           <h3>{{ summary_report.compare_to_last_total.formated_percent_change || default_null }}</h3>
-          <p>{{ compare_to_text }}</p>
+          <p>{{ get_compare_to_text() }}</p>
       </div></div>
       {% endverbatim %}
     </div>
@@ -437,7 +437,6 @@ $(function() {
             // var end_time;
             $scope.default_null = "N/A";
 
-            $scope.compare_to_text = "Compared to last month";
             $scope.report_type = "month";
 
             $scope.get_report_type_name = function() {
@@ -461,6 +460,25 @@ $(function() {
 
                 return report_type_name
             }
+
+            $scope.get_compare_to_text = function() {
+                var compare_to_text;
+                if ($scope.report_type == 'week') {
+                    compare_to_text = "Compared to last week";
+                }
+                else if ($scope.report_type == 'month') {
+                    compare_to_text = "Compared to last month";
+                }
+                else if ($scope.report_type == 'quarter') {
+                    compare_to_text = "Compared to last quarter";
+                }
+                else if ($scope.report_type == 'year') {
+                    compare_to_text = "Compared to last year";
+                }
+
+                return compare_to_text
+            }
+
 
             $scope.view_report = function() {
                 if (!$scope.summary_report.formated_total_cost) {
