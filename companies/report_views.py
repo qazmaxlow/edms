@@ -17,7 +17,7 @@ from django.utils import timezone, dateparse
 from wkhtmltopdf.views import PDFTemplateResponse
 
 from egauge.manager import SourceManager
-from egauge.models import SourceReadingMonth, SourceReadingDay, SourceReadingHour, SourceReadingMin, Source
+from egauge.models import SourceReadingYear, SourceReadingMonth, SourceReadingDay, SourceReadingHour, SourceReadingMin, Source
 from system.models import System
 from unit.models import UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
 from utils.auth import permission_required
@@ -70,8 +70,18 @@ def get_unitrate(source_id, datetime):
     return ur
 
 
-def get_total_cost(source_ids, start_dt, end_dt):
-    month_readings = SourceReadingMonth.objects(
+def get_total_cost(source_ids, start_dt, end_dt, date_type):
+    reading_map = {
+        'week': SourceReadingDay,
+        'month': SourceReadingMonth,
+        'quarter': SourceReadingMonth,
+        'year': SourceReadingYear,
+        'custom': SourceReadingDay
+    }
+
+    reading_cls = reading_map[date_type]
+
+    month_readings = reading_cls.objects(
         source_id__in=source_ids,
         datetime__gte=start_dt,
         datetime__lt=end_dt)
@@ -114,8 +124,8 @@ def summary_ajax(request, system_code):
     day_source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingDay, start_dt, end_dt)
 
 
-    total_cost = get_total_cost(source_ids, start_dt, end_dt)
     compare_type = request.GET.get('compare_type')
+    total_cost = get_total_cost(source_ids, start_dt, end_dt, compare_type)
 
     if compare_type == 'month':
         last_start_dt = start_dt - relativedelta(months=1)
@@ -134,7 +144,7 @@ def summary_ajax(request, system_code):
         last_end_dt = start_dt - datetime.timedelta(days=1)
         last_start_dt = last_end_dt - date_delta
 
-    last_total_cost = get_total_cost(source_ids, last_start_dt, last_end_dt)
+    last_total_cost = get_total_cost(source_ids, last_start_dt, last_end_dt, compare_type)
 
     compare_to_last_total = None
 
