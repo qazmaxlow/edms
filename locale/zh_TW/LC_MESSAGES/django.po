@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-20 09:21+0000\n"
+"POT-Creation-Date: 2015-03-20 10:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,6 +37,19 @@ msgstr "我們消耗了多少電力?"
 msgid "of electricity"
 msgstr "電力"
 
+#: companies/templates/companies/reports/_report_content.html:41
+#: companies/templates/companies/reports/_report_content.html:72
+msgid "tons"
+msgstr "噸"
+
+#: companies/templates/companies/reports/_report_content.html:41
+msgid "CO<sub>2</sub>"
+msgstr "二氧化碳"
+
+#: companies/templates/companies/reports/_report_content.html:43
+msgid "emitted"
+msgstr "排放"
+
 #: companies/templates/companies/reports/_report_content.html:52
 #: companies/templates/companies/reports/popup_report_pdf.html:104
 #: entrak/templates/report_main_content.html:37
@@ -55,51 +68,90 @@ msgstr "我們節省了多少電力?"
 msgid "(year-on-year)"
 msgstr "(與去年同期比較)"
 
+#: companies/templates/companies/reports/_report_content.html:72
+#, fuzzy
+msgid "CO<sub>2"
+msgstr "二氧化碳"
+
 #: companies/templates/companies/reports/_report_content.html:85
 #: companies/templates/companies/reports/popup_report_pdf.html:137
 #: entrak/templates/report_main_content.html:73
 msgid "HOW DID OUR<br>CARBON FOOTPRINT CHANGE?"
 msgstr "我們的碳足跡怎樣改變了?"
 
-#: companies/templates/companies/reports/_report_content.html:135
+#: companies/templates/companies/reports/_report_content.html:91
+msgid " "
+msgstr "減少"
+
+#: companies/templates/companies/reports/_report_content.html:93
+msgid "  "
+msgstr "增加"
+
+#: companies/templates/companies/reports/_report_content.html:95
+msgid "cars"
+msgstr "輛車"
+
+#: companies/templates/companies/reports/_report_content.html:98
+msgid "taken off the road for a month"
+msgstr "在馬路上不停行走一個月"
+
+#: companies/templates/companies/reports/_report_content.html:100
+msgid "more on the road for a month"
+msgstr "在馬路上不停行走一個月"
+
+#: companies/templates/companies/reports/_report_content.html:129
+msgid "Reduced CO2 emissions equal to the weight of"
+msgstr "減少排放二氧化碳的重量，等於"
+
+#: companies/templates/companies/reports/_report_content.html:131
+msgid "Extra CO2 emissions equal to the weight of"
+msgstr "增加排放二氧化碳的重量，等於"
+
+#: companies/templates/companies/reports/_report_content.html:134
+#: companies/templates/companies/reports/summary.html:94
+#: entrak/templates/report.html:74
+msgid " pandas"
+msgstr "隻大熊貓"
+
+#: companies/templates/companies/reports/_report_content.html:140
 #: companies/templates/companies/reports/popup_report_pdf.html:174
 #: entrak/templates/report_main_content.html:116
 msgid "How did that break down by usage type?"
 msgstr "按使用項目的用電情況細分"
 
-#: companies/templates/companies/reports/_report_content.html:159
+#: companies/templates/companies/reports/_report_content.html:164
 #: companies/templates/companies/reports/popup_report_pdf.html:179
 #: entrak/templates/report_main_content.html:121
 msgid "Usage Type"
 msgstr "使用項目"
 
-#: companies/templates/companies/reports/_report_content.html:160
+#: companies/templates/companies/reports/_report_content.html:165
 #: companies/templates/companies/reports/popup_report_pdf.html:180
 #: entrak/templates/report_main_content.html:122
 msgid "Total Energy (kWh)"
 msgstr "耗電量 (kWh)"
 
-#: companies/templates/companies/reports/_report_content.html:161
+#: companies/templates/companies/reports/_report_content.html:166
 #: companies/templates/companies/reports/popup_report_pdf.html:181
 #: entrak/templates/report_main_content.html:123
 msgid "Total CO<sub>2</sub> (kg)"
 msgstr "碳排放量 (公斤)"
 
-#: companies/templates/companies/reports/_report_content.html:162
+#: companies/templates/companies/reports/_report_content.html:167
 #: companies/templates/companies/reports/popup_report_pdf.html:182
 #: entrak/templates/report_main_content.html:124
 msgid "Total Money ($)"
 msgstr "電費 ($)"
 
-#: companies/templates/companies/reports/_report_content.html:163
+#: companies/templates/companies/reports/_report_content.html:168
 #: companies/templates/companies/reports/popup_report_pdf.html:183
 #: entrak/templates/report_main_content.html:125
 #, fuzzy, python-format
 msgid "%% Change in kWh"
 msgstr "耗電量變化 (%)"
 
-#: companies/templates/companies/reports/_report_content.html:163
-#: companies/templates/companies/reports/_report_content.html:164
+#: companies/templates/companies/reports/_report_content.html:168
+#: companies/templates/companies/reports/_report_content.html:169
 #: companies/templates/companies/reports/popup_report_pdf.html:183
 #: companies/templates/companies/reports/popup_report_pdf.html:184
 #: entrak/templates/report_main_content.html:125
@@ -107,13 +159,13 @@ msgstr "耗電量變化 (%)"
 msgid "Year-on-year"
 msgstr "與去年同期比較"
 
-#: companies/templates/companies/reports/_report_content.html:164
+#: companies/templates/companies/reports/_report_content.html:169
 #: companies/templates/companies/reports/popup_report_pdf.html:184
 #: entrak/templates/report_main_content.html:126
 msgid "Change in Money"
 msgstr "電費差額 ($)"
 
-#: companies/templates/companies/reports/_report_content.html:192
+#: companies/templates/companies/reports/_report_content.html:197
 #: companies/templates/companies/reports/popup_report_pdf.html:213
 #: entrak/templates/report_main_content.html:152
 msgid ""
@@ -122,7 +174,27 @@ msgid ""
 msgstr ""
 "相比上個<span class=\"report-type-name\"></span>，我們的用電增加 / 減少了？"
 
-#: companies/templates/companies/reports/_report_content.html:200
+#: companies/templates/companies/reports/_report_content.html:203
+msgid "Your energy consumption this  was"
+msgstr "你本月的電力消耗比起上月："
+
+#: companies/templates/companies/reports/_report_content.html:203
+#: companies/templates/companies/reports/summary.html:87
+#: entrak/templates/report.html:67
+msgid "more"
+msgstr "多了"
+
+#: companies/templates/companies/reports/_report_content.html:203
+#: companies/templates/companies/reports/summary.html:88
+#: entrak/templates/report.html:68
+msgid "less"
+msgstr "少了"
+
+#: companies/templates/companies/reports/_report_content.html:203
+msgid " than it was last."
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:205
 #: companies/templates/companies/reports/popup_report_pdf.html:232
 #: entrak/templates/report_main_content.html:206
 #: entrak/templates/report_main_content.html:346
@@ -131,23 +203,23 @@ msgstr ""
 msgid "* Data not available or incomplete for this period"
 msgstr "*在這期間數據是不可用及不完整"
 
-#: companies/templates/companies/reports/_report_content.html:251
+#: companies/templates/companies/reports/_report_content.html:256
 #: companies/templates/companies/reports/popup_report_pdf.html:247
 #: entrak/templates/report_main_content.html:230
 msgid "HOW MUCH ENERGY DID WE USE ON <span>WEEKDAYS?</span>"
 msgstr "在<span>平日</span>，我們平均消耗多少能源？"
 
-#: companies/templates/companies/reports/_report_content.html:263
-#: companies/templates/companies/reports/_report_content.html:330
-#: companies/templates/companies/reports/_report_content.html:379
-#: companies/templates/companies/reports/_report_content.html:392
-#: companies/templates/companies/reports/_report_content.html:405
-#: companies/templates/companies/reports/_report_content.html:427
-#: companies/templates/companies/reports/_report_content.html:494
-#: companies/templates/companies/reports/_report_content.html:543
-#: companies/templates/companies/reports/_report_content.html:592
-#: companies/templates/companies/reports/_report_content.html:659
-#: companies/templates/companies/reports/_report_content.html:708
+#: companies/templates/companies/reports/_report_content.html:268
+#: companies/templates/companies/reports/_report_content.html:335
+#: companies/templates/companies/reports/_report_content.html:384
+#: companies/templates/companies/reports/_report_content.html:397
+#: companies/templates/companies/reports/_report_content.html:410
+#: companies/templates/companies/reports/_report_content.html:432
+#: companies/templates/companies/reports/_report_content.html:499
+#: companies/templates/companies/reports/_report_content.html:548
+#: companies/templates/companies/reports/_report_content.html:597
+#: companies/templates/companies/reports/_report_content.html:664
+#: companies/templates/companies/reports/_report_content.html:713
 #: companies/templates/companies/reports/popup_report_pdf.html:258
 #: companies/templates/companies/reports/popup_report_pdf.html:335
 #: companies/templates/companies/reports/popup_report_pdf.html:348
@@ -160,24 +232,24 @@ msgstr "在<span>平日</span>，我們平均消耗多少能源？"
 msgid "Average Weekday Energy Use"
 msgstr "平日<br>電力消耗<br>平均值"
 
-#: companies/templates/companies/reports/_report_content.html:275
-#: companies/templates/companies/reports/_report_content.html:344
-#: companies/templates/companies/reports/_report_content.html:439
-#: companies/templates/companies/reports/_report_content.html:508
-#: companies/templates/companies/reports/_report_content.html:604
-#: companies/templates/companies/reports/_report_content.html:673
+#: companies/templates/companies/reports/_report_content.html:280
+#: companies/templates/companies/reports/_report_content.html:349
+#: companies/templates/companies/reports/_report_content.html:444
+#: companies/templates/companies/reports/_report_content.html:513
+#: companies/templates/companies/reports/_report_content.html:609
+#: companies/templates/companies/reports/_report_content.html:678
 #: companies/templates/companies/reports/popup_report_pdf.html:272
 #: companies/templates/companies/reports/popup_report_pdf.html:397
 #: companies/templates/companies/reports/popup_report_pdf.html:522
 msgid "Compare to Last Month"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:287
-#: companies/templates/companies/reports/_report_content.html:358
-#: companies/templates/companies/reports/_report_content.html:451
-#: companies/templates/companies/reports/_report_content.html:522
-#: companies/templates/companies/reports/_report_content.html:616
-#: companies/templates/companies/reports/_report_content.html:687
+#: companies/templates/companies/reports/_report_content.html:292
+#: companies/templates/companies/reports/_report_content.html:363
+#: companies/templates/companies/reports/_report_content.html:456
+#: companies/templates/companies/reports/_report_content.html:527
+#: companies/templates/companies/reports/_report_content.html:621
+#: companies/templates/companies/reports/_report_content.html:692
 #: companies/templates/companies/reports/popup_report_pdf.html:286
 #: companies/templates/companies/reports/popup_report_pdf.html:411
 #: companies/templates/companies/reports/popup_report_pdf.html:536
@@ -185,9 +257,9 @@ msgstr ""
 msgid "compare to same period year"
 msgstr "去年同期"
 
-#: companies/templates/companies/reports/_report_content.html:302
-#: companies/templates/companies/reports/_report_content.html:466
-#: companies/templates/companies/reports/_report_content.html:631
+#: companies/templates/companies/reports/_report_content.html:307
+#: companies/templates/companies/reports/_report_content.html:471
+#: companies/templates/companies/reports/_report_content.html:636
 #: companies/templates/companies/reports/popup_report_pdf.html:302
 #: companies/templates/companies/reports/popup_report_pdf.html:427
 #: companies/templates/companies/reports/popup_report_pdf.html:552
@@ -201,16 +273,16 @@ msgstr ""
 "<div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</"
 "div><div>六</div>"
 
-#: companies/templates/companies/reports/_report_content.html:416
+#: companies/templates/companies/reports/_report_content.html:421
 #: companies/templates/companies/reports/popup_report_pdf.html:372
 #, fuzzy
 msgid "HOW MUCH ENERGY DID WE USE ON <span>WEEKENDS?</span>"
 msgstr "在<span>平日</span>，我們平均消耗多少能源？"
 
-#: companies/templates/companies/reports/_report_content.html:556
-#: companies/templates/companies/reports/_report_content.html:569
-#: companies/templates/companies/reports/_report_content.html:721
-#: companies/templates/companies/reports/_report_content.html:734
+#: companies/templates/companies/reports/_report_content.html:561
+#: companies/templates/companies/reports/_report_content.html:574
+#: companies/templates/companies/reports/_report_content.html:726
+#: companies/templates/companies/reports/_report_content.html:739
 #: companies/templates/companies/reports/popup_report_pdf.html:473
 #: companies/templates/companies/reports/popup_report_pdf.html:486
 #: companies/templates/companies/reports/popup_report_pdf.html:598
@@ -219,35 +291,35 @@ msgstr "在<span>平日</span>，我們平均消耗多少能源？"
 msgid "Average Weekend Energy Use"
 msgstr "週末及假期<br>電力消耗<br>平均值"
 
-#: companies/templates/companies/reports/_report_content.html:580
+#: companies/templates/companies/reports/_report_content.html:585
 #: companies/templates/companies/reports/popup_report_pdf.html:497
 #: entrak/templates/report_main_content.html:488
 msgid "HOW MUCH ENERGY DID WE USE <span>OVERNIGHT***?</span>"
 msgstr "在<span>晚間</span>***，我們平均消耗多少能源？"
 
-#: companies/templates/companies/reports/popup_report.html:40
+#: companies/templates/companies/reports/popup_report.html:41
 #: companies/templates/companies/reports/popup_report_pdf.html:65
 #: entrak/templates/report.html:908
 msgid "Save Report"
 msgstr "下載報告"
 
-#: companies/templates/companies/reports/popup_report.html:46
+#: companies/templates/companies/reports/popup_report.html:47
 msgid "Key Statistics"
 msgstr "主要數據"
 
-#: companies/templates/companies/reports/popup_report.html:47
+#: companies/templates/companies/reports/popup_report.html:48
 msgid "Compared to Last Month"
 msgstr "相比上個月"
 
-#: companies/templates/companies/reports/popup_report.html:48
+#: companies/templates/companies/reports/popup_report.html:49
 msgid "Weekdays Energy Use"
 msgstr "平日能源使用"
 
-#: companies/templates/companies/reports/popup_report.html:49
+#: companies/templates/companies/reports/popup_report.html:50
 msgid "Weekend and holiday Energy Use"
 msgstr "週末及假期能源使用"
 
-#: companies/templates/companies/reports/popup_report.html:50
+#: companies/templates/companies/reports/popup_report.html:51
 msgid "Overnight Energy Use"
 msgstr "晚間能源使用"
 
@@ -386,16 +458,6 @@ msgstr "季"
 msgid "report_type_name_week"
 msgstr "星期"
 
-#: companies/templates/companies/reports/summary.html:87
-#: entrak/templates/report.html:67
-msgid "more"
-msgstr "多了"
-
-#: companies/templates/companies/reports/summary.html:88
-#: entrak/templates/report.html:68
-msgid "less"
-msgstr "少了"
-
 #: companies/templates/companies/reports/summary.html:89
 #: entrak/templates/report.html:69
 msgid "Overall: "
@@ -420,11 +482,6 @@ msgstr " "
 #: entrak/templates/report.html:73
 msgid " m²"
 msgstr "平方米"
-
-#: companies/templates/companies/reports/summary.html:94
-#: entrak/templates/report.html:74
-msgid " pandas"
-msgstr "隻大熊貓"
 
 #: companies/templates/companies/reports/summary.html:95
 #: entrak/templates/report.html:75
@@ -2004,6 +2061,9 @@ msgstr "用戶沒有訪問這部份的權限。"
 #: utils/auth.py:40
 msgid "Please enter username and password."
 msgstr "請輸入用戶名稱和密碼"
+
+#~ msgid "pandas"
+#~ msgstr "隻大熊貓"
 
 #~ msgid "Remove a tube"
 #~ msgstr "移除光管"
