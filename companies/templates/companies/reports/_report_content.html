@@ -194,17 +194,8 @@
     </div>
 
     <div class="row top-content">
-      <div class="col-xs-4">
-        <div class="compare-past-desc">Your energy consumption this<br><span class="report-type-name-lower"></span> was
-            <span>
-                <span class="compare-past-percent"></span>
-                <span class="percent-symbol">{{ compare_to_last_month_abs|floatformat:0 }} %</span>
-                <span class="compare-past-percent-suffix">{% if compare_to_last_month > 0 %}more{% else %}less{% endif %}</span>
-            </span>
-            than<br> it was last <span class="report-type-name-lower"></span>. <span class="footnote-sybmol">*</span>
-        </div>
-      </div>
-      <div class="col-xs-8">
+      <div class="col-xs-12 text-center">
+        <h4>Your energy consumption this  was {{ compare_to_last_month_abs|floatformat:0 }} {% if compare_to_last_month > 0 %}more{% else %}less{% endif %} than it was last. </h4>
         <div kendo-chart k-options="barOptions" ></div>
         <div class="asterisk-text single-asterisk-text">{% trans "* Data not available or incomplete for this period" %}</div>
       </div>
