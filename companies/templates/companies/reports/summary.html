@@ -439,8 +439,6 @@ $(function() {
 
             $scope.view_report = function() {
                 var date = $scope.report_date.value();
-                var month_shortnames = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
-                var month_shortname = month_shortnames[date.getMonth()];
                 var year = date.getFullYear();
 
                 var report_type = $scope.dateToolbar.getSelectedFromGroup('time').attr('id');
