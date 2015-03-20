@@ -438,7 +438,7 @@ $(function() {
             $scope.default_null = "N/A";
 
             $scope.compare_to_text = "Compared to last month";
-            $scope.report_type_name = "Monthly";
+            $scope.report_type_name = "Month Total";
 
             $scope.view_report = function() {
                 if (!$scope.summary_report.formated_total_cost) {
@@ -515,19 +515,19 @@ $(function() {
                 // for the compare texts
                 if (toolbar_item == 'week') {
                     $scope.compare_to_text = "Compared to last week";
-                    $scope.report_type_name = 'Weekdays';
+                    $scope.report_type_name = 'Week total';
                 }
                 else if (toolbar_item == 'month') {
                     $scope.compare_to_text = "Compared to last month";
-                    $scope.report_type_name = 'Monthly';
+                    $scope.report_type_name = 'Month total';
                 }
                 else if (toolbar_item == 'quarter') {
                     $scope.compare_to_text = "Compared to last quarter";
-                    $scope.report_type_name = 'Quarter';
+                    $scope.report_type_name = 'Quarter total';
                 }
                 else if (toolbar_item == 'year') {
                     $scope.compare_to_text = "Compared to last year";
-                    $scope.report_type_name = 'Year';
+                    $scope.report_type_name = 'Year total';
                 }
             };
 
