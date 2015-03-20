@@ -1322,6 +1322,8 @@ html .km-pane-wrapper .km-widget,
 }
 .k-state-default > .k-select {
   border-color: #c5c5c5;
+  padding-top: 3px;
+  border: none;
 }
 .k-state-hover > .k-select {
   border-color: #bcb4b0;
@@ -1709,4 +1711,12 @@ html .km-pane-wrapper .km-widget,
 
 .k-toolbar .k-button-group .k-button #week{
   border-left: none;
+}
+
+.k-toolbar .k-input{
+  padding-top: 6px;
+  padding-bottom: 5px;
+  font-weight: bolder;
+  border-right: 1px solid #C7C7C7;
+  color: #354960;
 }
