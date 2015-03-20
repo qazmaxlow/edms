@@ -282,7 +282,7 @@ $(function() {
     <div class="row drop-down-panel-header">
         <div class="panel-header-left-menu">
             <h3 panel="monthly-report">
-                {% trans "Monthly Report" %}</h3>
+                {% trans "View Report" %}</h3>
             <h3 panel="download-data">{% trans "Download Data" %}</h3>
         </div>
     </div>
@@ -300,19 +300,21 @@ $(function() {
     <div class="col-xs-3">
       {% verbatim %}
       <div class="row time-type"><div class="col-xs-12">
-          {{ report_type_name }}
+          {{ get_report_type_name() }}
       </div></div>
       {% endverbatim %}
       <div class="row content"><div class="col-xs-12">
           <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
           <h3>{% templatetag openvariable %} summary_report.formated_total_cost || default_null {% templatetag closevariable %}</h3>
-          <p>Total energy cost</p>
+          {% verbatim %}
+          <p>{{ get_total_energy_cost_text() }}</p>
+          {% endverbatim %}
       </div></div>
       {% verbatim %}
       <div class="row content end"><div class="col-xs-12">
           <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_total.icon_path }}">
           <h3>{{ summary_report.compare_to_last_total.formated_percent_change || default_null }}</h3>
-          <p>{{ compare_to_text }}</p>
+          <p>{{ get_compare_to_text() }}</p>
       </div></div>
       {% endverbatim %}
     </div>
@@ -437,8 +439,65 @@ $(function() {
             // var end_time;
             $scope.default_null = "N/A";
 
-            $scope.compare_to_text = "Compared to last month";
-            $scope.report_type_name = "Monthly";
+            $scope.report_type = "month";
+
+            $scope.get_report_type_name = function() {
+                var report_type_name;
+                if ($scope.report_type == 'week') {
+                    $scope.compare_to_text = "Compared to last week";
+                    report_type_name = 'Week total';
+                }
+                else if ($scope.report_type == 'month') {
+                    $scope.compare_to_text = "Compared to last month";
+                    report_type_name = 'Month total';
+                }
+                else if ($scope.report_type == 'quarter') {
+                    $scope.compare_to_text = "Compared to last quarter";
+                    report_type_name = 'Quarter total';
+                }
+                else if ($scope.report_type == 'year') {
+                    $scope.compare_to_text = "Compared to last year";
+                    report_type_name = 'Year total';
+                }
+
+                return report_type_name
+            }
+
+            $scope.get_compare_to_text = function() {
+                var compare_to_text;
+                if ($scope.report_type == 'week') {
+                    compare_to_text = "Compared to last week";
+                }
+                else if ($scope.report_type == 'month') {
+                    compare_to_text = "Compared to last month";
+                }
+                else if ($scope.report_type == 'quarter') {
+                    compare_to_text = "Compared to last quarter";
+                }
+                else if ($scope.report_type == 'year') {
+                    compare_to_text = "Compared to last year";
+                }
+
+                return compare_to_text
+            }
+
+            $scope.get_total_energy_cost_text = function() {
+                var text;
+                if ($scope.report_type == 'week') {
+                    text = 'Total week cost';
+                }
+                else if ($scope.report_type == 'month') {
+                    text = 'Total month cost';
+                }
+                else if ($scope.report_type == 'quarter') {
+                    text = 'Total quarter cost';
+                }
+                else if ($scope.report_type == 'year') {
+                    text = 'Total year cost';
+                }
+
+                return text;
+            }
 
             $scope.view_report = function() {
                 if (!$scope.summary_report.formated_total_cost) {
@@ -489,13 +548,14 @@ $(function() {
             $scope.selectTimeType = function (e) {
                 var tb = e.sender;
                 var selected = $scope.dateToolbar.getSelectedFromGroup('time');
-                var toolbar_item = selected.attr('id');
-                if (toolbar_item == 'custom') {
+                $scope.report_type = selected.attr('id');
+
+                if ($scope.report_type == 'custom') {
                     $scope.custom_time = true;
                 }
                 else {
                     $scope.custom_time = false;
-                    $scope.monthSelectorOptions.select = selected.attr('id');
+                    $scope.monthSelectorOptions.select = $scope.report_type; // could bind?
                 }
 
                 // hack? or can bind this?
@@ -511,24 +571,6 @@ $(function() {
                 };
                 summary_report_ds.read();
                 $scope.summary_report = summary_report_ds.data()[0];
-
-                // for the compare texts
-                if (toolbar_item == 'week') {
-                    $scope.compare_to_text = "Compared to last week";
-                    $scope.report_type_name = 'Weekdays';
-                }
-                else if (toolbar_item == 'month') {
-                    $scope.compare_to_text = "Compared to last month";
-                    $scope.report_type_name = 'Monthly';
-                }
-                else if (toolbar_item == 'quarter') {
-                    $scope.compare_to_text = "Compared to last quarter";
-                    $scope.report_type_name = 'Quarter';
-                }
-                else if (toolbar_item == 'year') {
-                    $scope.compare_to_text = "Compared to last year";
-                    $scope.report_type_name = 'Year';
-                }
             };
 
             $scope.timeToolbarOptions = {
