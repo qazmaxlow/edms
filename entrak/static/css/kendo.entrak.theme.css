@@ -1704,4 +1704,9 @@ html .km-pane-wrapper .km-widget,
 /*Added CSS on top of kendo.common.min.css - Richard*/
 .k-toolbar .k-button-group .k-button{
   box-shadow: 0px 2px 0px #6b9aa5;
+  border-left: 1px solid #fff;
+}
+
+.k-toolbar .k-button-group .k-button #week{
+  border-left: none;
 }
