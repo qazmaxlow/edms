@@ -36,7 +36,6 @@ ngapp.controller("ReportController", function($scope) {
         }
     }
 
-    $scope.testdata  = [{'name': 'last', 'value': 9.66, 'datetime': new Date('2011/12/30')}, {'name': 'last', 'value': 606.71, 'datetime': new Date('2012/01/01')}];
     var cg_ds = {};
     // compare graph datasources... should use APIs
     {% for cg in sub_compare_graphs  %}
