@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load static %}<!DOCTYPE html>
 <html lang="en">
   <head>
@@ -37,17 +38,17 @@
       <div class="section btn-section">
               <a class="btn btn-save-report" href="download/?{{ request.GET.urlencode }}" role="button">
                 <img src="{% static 'images/reports/popup_download.png' %}" alt="logo">
-                Save Report</a>
+                {% trans "Save Report" %}</a>
       </div>
       <div class="section">
               <ul kendo-menu style="display: inline-block; min-width: 150px;"
                 k-orientation="'vertical'"
                 k-on-select="onSelect(kendoEvent)">
-              <li data-anchor="report_key_statistics">Key Statistics</li>
-              <li data-anchor="report_compared_to_last">Compared to Last Month</li>
-              <li data-anchor="weekday-info">Weekdays Energy Use</li>
-              <li data-anchor="weekend-info">Weekend and holiday Energy Use</li>
-              <li data-anchor="overnight-info">Overnight Energy Use</li>
+              <li data-anchor="report_key_statistics">{% trans "Key Statistics" %}</li>
+              <li data-anchor="report_compared_to_last">{% trans "Compared to Last Month" %}</li>
+              <li data-anchor="weekday-info">{% trans "Weekdays Energy Use" %}</li>
+              <li data-anchor="weekend-info">{% trans "Weekend and holiday Energy Use" %}</li>
+              <li data-anchor="overnight-info">{% trans "Overnight Energy Use" %}</li>
             </ul>
       </div>
       <img src="{% static 'images/reports/popup_logo.png' %}" alt="logo">
