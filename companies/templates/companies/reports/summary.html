@@ -320,12 +320,12 @@ $(function() {
     </div>
     <div class="col-xs-3">
       <div class="row time-type"><div class="col-xs-12">
-          Weekdays
+          {% trans "Weekdays" %}
       </div></div>
       <div class="row content"><div class="col-xs-12">
           <img alt="power" class="icon" src="{% static 'images/reports/calendar_energy_icon.svg' %}">
           <h3>{% templatetag openvariable %} summary_report.formated_weekday_cost || default_null {% templatetag closevariable %}</h3>
-          <p>Average weekdays cost</p>
+          <p>{% trans "Average weekdays cost" %}</p>
       </div></div>
       {% verbatim %}
       <div class="row content end"><div class="col-xs-12">
@@ -337,12 +337,12 @@ $(function() {
     </div>
     <div class="col-xs-3">
       <div class="row time-type"><div class="col-xs-12">
-          Overnight
+          {% trans "Overnight" %}
       </div></div>
       <div class="row content"><div class="col-xs-12">
           <img alt="power" class="icon" src="{% static 'images/reports/calendar_energy_icon.svg' %}">
           <h3>{% templatetag openvariable %} summary_report.formated_overnight_avg_cost || default_null {% templatetag closevariable %}</h3>
-          <p>Average overnight cost</p>
+          <p>{% trans "Average overnight cost" %}</p>
       </div></div>
       {% verbatim %}
       <div class="row content end"><div class="col-xs-12">
@@ -359,7 +359,7 @@ $(function() {
       </div>
       <div id="view_report_btn" class="view-report">
         <img class="img-button" src="{% static "images/reports/view_report.svg" %}" ng-click="view_report()">
-        <button class="k-button" ng-click="view_report()">View Full Report</button>
+        <button class="k-button" ng-click="view_report()">{% trans "View Full Report" %}</button>
       </div>
       <div class="flower-bg">
         <img src="{% static "images/reports/flower.png" %}">
@@ -444,20 +444,20 @@ $(function() {
             $scope.get_report_type_name = function() {
                 var report_type_name;
                 if ($scope.report_type == 'week') {
-                    $scope.compare_to_text = "Compared to last week";
-                    report_type_name = 'Week total';
+                    $scope.compare_to_text = "{% trans "Compared to last week" %}";
+                    report_type_name = '{% trans "Week total" %}';
                 }
                 else if ($scope.report_type == 'month') {
-                    $scope.compare_to_text = "Compared to last month";
-                    report_type_name = 'Month total';
+                    $scope.compare_to_text = "{% trans "Compared to last month" %}";
+                    report_type_name = '{% trans "Month total" %}';
                 }
                 else if ($scope.report_type == 'quarter') {
-                    $scope.compare_to_text = "Compared to last quarter";
-                    report_type_name = 'Quarter total';
+                    $scope.compare_to_text = "{% trans "Compared to last quarter" %}";
+                    report_type_name = '{% trans "Quarter total" %}';
                 }
                 else if ($scope.report_type == 'year') {
-                    $scope.compare_to_text = "Compared to last year";
-                    report_type_name = 'Year total';
+                    $scope.compare_to_text = "{% trans "Compared to last year" %}";
+                    report_type_name = '{% trans "Year total" %}';
                 }
 
                 return report_type_name
@@ -466,16 +466,16 @@ $(function() {
             $scope.get_compare_to_text = function() {
                 var compare_to_text;
                 if ($scope.report_type == 'week') {
-                    compare_to_text = "Compared to last week";
+                    compare_to_text = "{% trans "Compared to last week" %}";
                 }
                 else if ($scope.report_type == 'month') {
-                    compare_to_text = "Compared to last month";
+                    compare_to_text = "{% trans "Compared to last month" %}";
                 }
                 else if ($scope.report_type == 'quarter') {
-                    compare_to_text = "Compared to last quarter";
+                    compare_to_text = "{% trans "Compared to last quarter" %}";
                 }
                 else if ($scope.report_type == 'year') {
-                    compare_to_text = "Compared to last year";
+                    compare_to_text = "{% trans "Compared to last year" %}";
                 }
 
                 return compare_to_text
@@ -484,16 +484,16 @@ $(function() {
             $scope.get_total_energy_cost_text = function() {
                 var text;
                 if ($scope.report_type == 'week') {
-                    text = 'Total week cost';
+                    text = '{% trans "Total week cost" %}';
                 }
                 else if ($scope.report_type == 'month') {
-                    text = 'Total month cost';
+                    text = '{% trans "Total month cost" %}';
                 }
                 else if ($scope.report_type == 'quarter') {
-                    text = 'Total quarter cost';
+                    text = '{% trans "Total quarter cost" %}';
                 }
                 else if ($scope.report_type == 'year') {
-                    text = 'Total year cost';
+                    text = '{% trans "Total year cost" %}';
                 }
 
                 return text;
@@ -578,11 +578,11 @@ $(function() {
                     {
                       type: "buttonGroup",
                       buttons: [
-                          { text: "Week", id: "week", togglable: true, group: "time"},
-                          { text: "Month", id: "month", togglable: true, group: "time", selected: true },
-                          { text: "Quarter", id: "quarter", togglable: true, group: "time" },
-                          { text: "Year", id: "year", togglable: true, group: "time" },
-                          { text: "Match my bills", id: "custom", togglable: true, group: "time" }
+                          { text: "{% trans "Week" %}", id: "week", togglable: true, group: "time"},
+                          { text: "{% trans "Month" %}", id: "month", togglable: true, group: "time", selected: true },
+                          { text: "{% trans "Quarter" %}", id: "quarter", togglable: true, group: "time" },
+                          { text: "{% trans "Year" %}", id: "year", togglable: true, group: "time" },
+                          { text: "{% trans "Match my bills" %}", id: "custom", togglable: true, group: "time" }
                       ]
                     },
                     {

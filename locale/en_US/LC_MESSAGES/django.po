@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-08 08:54+0000\n"
+"POT-Creation-Date: 2015-03-20 09:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,624 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: companies/templates/companies/reports/_report_content.html:21
+#: companies/templates/companies/reports/popup_report_pdf.html:73
+#: entrak/templates/report_main_content.html:5
+msgid ""
+"WHAT ARE OUR KEY STATISTICS FOR THIS <span class=\"report-type-name\"></"
+"span>?"
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:27
+#: companies/templates/companies/reports/popup_report_pdf.html:79
+#: entrak/templates/report_main_content.html:9
+msgid "HOW MUCH ENERGY<br>DID WE USE?"
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:34
+#: companies/templates/companies/reports/popup_report_pdf.html:86
+#: entrak/templates/report_main_content.html:17
+msgid "of electricity"
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:52
+#: companies/templates/companies/reports/popup_report_pdf.html:104
+#: entrak/templates/report_main_content.html:37
+msgid "in energy costs"
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:58
+#: companies/templates/companies/reports/popup_report_pdf.html:110
+#: entrak/templates/report_main_content.html:43
+msgid "HOW MUCH ENERGY<br>DID WE SAVE?"
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:59
+#: companies/templates/companies/reports/popup_report_pdf.html:111
+#: entrak/templates/report_main_content.html:44
+msgid "(year-on-year)"
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:85
+#: companies/templates/companies/reports/popup_report_pdf.html:137
+#: entrak/templates/report_main_content.html:73
+msgid "HOW DID OUR<br>CARBON FOOTPRINT CHANGE?"
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:135
+#: companies/templates/companies/reports/popup_report_pdf.html:174
+#: entrak/templates/report_main_content.html:116
+msgid "How did that break down by usage type?"
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:159
+#: companies/templates/companies/reports/popup_report_pdf.html:179
+#: entrak/templates/report_main_content.html:121
+msgid "Usage Type"
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:160
+#: companies/templates/companies/reports/popup_report_pdf.html:180
+#: entrak/templates/report_main_content.html:122
+msgid "Total Energy (kWh)"
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:161
+#: companies/templates/companies/reports/popup_report_pdf.html:181
+#: entrak/templates/report_main_content.html:123
+msgid "Total CO<sub>2</sub> (kg)"
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:162
+#: companies/templates/companies/reports/popup_report_pdf.html:182
+#: entrak/templates/report_main_content.html:124
+msgid "Total Money ($)"
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:163
+#: companies/templates/companies/reports/popup_report_pdf.html:183
+#: entrak/templates/report_main_content.html:125
+#, python-format
+msgid "%% Change in kWh"
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:163
+#: companies/templates/companies/reports/_report_content.html:164
+#: companies/templates/companies/reports/popup_report_pdf.html:183
+#: companies/templates/companies/reports/popup_report_pdf.html:184
+#: entrak/templates/report_main_content.html:125
+#: entrak/templates/report_main_content.html:126
+msgid "Year-on-year"
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:164
+#: companies/templates/companies/reports/popup_report_pdf.html:184
+#: entrak/templates/report_main_content.html:126
+msgid "Change in Money"
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:192
+#: companies/templates/companies/reports/popup_report_pdf.html:213
+#: entrak/templates/report_main_content.html:152
+msgid ""
+"HOW MUCH MORE / LESS DID WE USE COMPARED TO LAST <span class=\"report-type-"
+"name\"></span>?"
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:200
+#: companies/templates/companies/reports/popup_report_pdf.html:232
+#: entrak/templates/report_main_content.html:206
+#: entrak/templates/report_main_content.html:346
+#: entrak/templates/report_main_content.html:475
+#: entrak/templates/report_main_content.html:604
+msgid "* Data not available or incomplete for this period"
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:251
+#: companies/templates/companies/reports/popup_report_pdf.html:247
+#: entrak/templates/report_main_content.html:230
+msgid "HOW MUCH ENERGY DID WE USE ON <span>WEEKDAYS?</span>"
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:263
+#: companies/templates/companies/reports/_report_content.html:330
+#: companies/templates/companies/reports/_report_content.html:379
+#: companies/templates/companies/reports/_report_content.html:392
+#: companies/templates/companies/reports/_report_content.html:405
+#: companies/templates/companies/reports/_report_content.html:427
+#: companies/templates/companies/reports/_report_content.html:494
+#: companies/templates/companies/reports/_report_content.html:543
+#: companies/templates/companies/reports/_report_content.html:592
+#: companies/templates/companies/reports/_report_content.html:659
+#: companies/templates/companies/reports/_report_content.html:708
+#: companies/templates/companies/reports/popup_report_pdf.html:258
+#: companies/templates/companies/reports/popup_report_pdf.html:335
+#: companies/templates/companies/reports/popup_report_pdf.html:348
+#: companies/templates/companies/reports/popup_report_pdf.html:361
+#: companies/templates/companies/reports/popup_report_pdf.html:383
+#: companies/templates/companies/reports/popup_report_pdf.html:460
+#: companies/templates/companies/reports/popup_report_pdf.html:508
+#: companies/templates/companies/reports/popup_report_pdf.html:585
+msgid "Average Weekday Energy Use"
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:275
+#: companies/templates/companies/reports/_report_content.html:344
+#: companies/templates/companies/reports/_report_content.html:439
+#: companies/templates/companies/reports/_report_content.html:508
+#: companies/templates/companies/reports/_report_content.html:604
+#: companies/templates/companies/reports/_report_content.html:673
+#: companies/templates/companies/reports/popup_report_pdf.html:272
+#: companies/templates/companies/reports/popup_report_pdf.html:397
+#: companies/templates/companies/reports/popup_report_pdf.html:522
+msgid "Compare to Last Month"
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:287
+#: companies/templates/companies/reports/_report_content.html:358
+#: companies/templates/companies/reports/_report_content.html:451
+#: companies/templates/companies/reports/_report_content.html:522
+#: companies/templates/companies/reports/_report_content.html:616
+#: companies/templates/companies/reports/_report_content.html:687
+#: companies/templates/companies/reports/popup_report_pdf.html:286
+#: companies/templates/companies/reports/popup_report_pdf.html:411
+#: companies/templates/companies/reports/popup_report_pdf.html:536
+msgid "compare to same period year"
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:302
+#: companies/templates/companies/reports/_report_content.html:466
+#: companies/templates/companies/reports/_report_content.html:631
+#: companies/templates/companies/reports/popup_report_pdf.html:302
+#: companies/templates/companies/reports/popup_report_pdf.html:427
+#: companies/templates/companies/reports/popup_report_pdf.html:552
+#: entrak/templates/report_main_content.html:271
+#: entrak/templates/report_main_content.html:400
+#: entrak/templates/report_main_content.html:529
+msgid ""
+"<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</"
+"div><div>FRI</div><div>SAT</div>"
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:416
+#: companies/templates/companies/reports/popup_report_pdf.html:372
+msgid "HOW MUCH ENERGY DID WE USE ON <span>WEEKENDS?</span>"
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:556
+#: companies/templates/companies/reports/_report_content.html:569
+#: companies/templates/companies/reports/_report_content.html:721
+#: companies/templates/companies/reports/_report_content.html:734
+#: companies/templates/companies/reports/popup_report_pdf.html:473
+#: companies/templates/companies/reports/popup_report_pdf.html:486
+#: companies/templates/companies/reports/popup_report_pdf.html:598
+#: companies/templates/companies/reports/popup_report_pdf.html:611
+msgid "Average Weekend Energy Use"
+msgstr ""
+
+#: companies/templates/companies/reports/_report_content.html:580
+#: companies/templates/companies/reports/popup_report_pdf.html:497
+#: entrak/templates/report_main_content.html:488
+msgid "HOW MUCH ENERGY DID WE USE <span>OVERNIGHT***?</span>"
+msgstr ""
+
+#: companies/templates/companies/reports/popup_report.html:40
+#: companies/templates/companies/reports/popup_report_pdf.html:65
+#: entrak/templates/report.html:908
+msgid "Save Report"
+msgstr ""
+
+#: companies/templates/companies/reports/popup_report.html:46
+msgid "Key Statistics"
+msgstr ""
+
+#: companies/templates/companies/reports/popup_report.html:47
+msgid "Compared to Last Month"
+msgstr ""
+
+#: companies/templates/companies/reports/popup_report.html:48
+msgid "Weekdays Energy Use"
+msgstr ""
+
+#: companies/templates/companies/reports/popup_report.html:49
+msgid "Weekend and holiday Energy Use"
+msgstr ""
+
+#: companies/templates/companies/reports/popup_report.html:50
+msgid "Overnight Energy Use"
+msgstr ""
+
+#: companies/templates/companies/reports/popup_report_pdf.html:44
+#: companies/templates/companies/reports/summary.html:118
+#: entrak/templates/report.html:98 entrak/templates/testing_code.html:65
+msgid "THE REPORTS PAGE"
+msgstr ""
+
+#: companies/templates/companies/reports/popup_report_pdf.html:45
+#: companies/templates/companies/reports/summary.html:119
+#: entrak/templates/report.html:99 entrak/templates/testing_code.html:66
+msgid "Get all your information here at the"
+msgstr ""
+
+#: companies/templates/companies/reports/popup_report_pdf.html:66
+#: entrak/templates/report.html:909
+msgid "Save Summary Report"
+msgstr ""
+
+#: companies/templates/companies/reports/popup_report_pdf.html:93
+#: entrak/templates/report_main_content.html:25
+msgid ""
+"<span class=\"basic-info-col-unit\"> CO<sub>2</sub></span>\n"
+"                    <br>\n"
+"                    <span class=\"basic-info-col-subtext\">emitted</span>"
+msgstr ""
+
+#: companies/templates/companies/reports/popup_report_pdf.html:219
+#, python-format
+msgid ""
+"\n"
+"        <div class=\"compare-past-desc\">Your energy consumption "
+"this<br><span class=\"report-type-name-lower\"></span> was\n"
+"            <span>\n"
+"                <span class=\"compare-past-percent\"></span>\n"
+"                <span class=\"percent-symbol\">%%</span>\n"
+"                <span class=\"compare-past-percent-suffix\"></span>\n"
+"            </span>\n"
+"            than<br> it was last <span class=\"report-type-name-lower\"></"
+"span>. <span class=\"footnote-sybmol\">*</span>\n"
+"        </div>\n"
+"        "
+msgstr ""
+
+#: companies/templates/companies/reports/popup_report_pdf.html:622
+#: entrak/templates/report_main_content.html:618
+msgid ""
+"Cost values are for general reference only and should not be treated as "
+"accurate for accounting purposes."
+msgstr ""
+
+#: companies/templates/companies/reports/popup_report_pdf.html:633
+#: entrak/templates/report.html:740 entrak/templates/report.html.py:923
+msgid "Download"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:76
+#: entrak/templates/graph.html:90 entrak/templates/graph.html.py:106
+#: entrak/templates/graph.html:132 entrak/templates/ranking.html:344
+#: entrak/templates/report.html:56
+#: printers/templates/system/printers/graph.html:91
+#: printers/templates/system/printers/graph.html:107
+#: printers/templates/system/printers/graph.html:133
+msgid "MMM YYYY"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:77
+#: entrak/templates/graph.html:108 entrak/templates/graph.html.py:134
+#: entrak/templates/ranking.html:346 entrak/templates/report.html:57
+#: entrak/templates/report.html.py:392 entrak/templates/report.html:393
+#: printers/templates/system/printers/graph.html:109
+#: printers/templates/system/printers/graph.html:135
+msgid "YYYY"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:78
+#: companies/templates/companies/reports/summary.html:79
+#: companies/templates/companies/reports/summary.html:153
+#: companies/templates/companies/reports/summary.html:157
+#: companies/templates/companies/reports/summary.html:168
+#: entrak/templates/display.html:49 entrak/templates/graph.html:86
+#: entrak/templates/graph.html.py:102 entrak/templates/graph.html:130
+#: entrak/templates/report.html:58 entrak/templates/report.html.py:59
+#: entrak/templates/report.html:398 entrak/templates/report.html.py:399
+#: entrak/templates/report.html:401 entrak/templates/report.html.py:402
+#: entrak/templates/report.html:445 entrak/templates/report.html.py:449
+#: entrak/templates/report.html:460
+#: printers/templates/system/printers/graph.html:87
+#: printers/templates/system/printers/graph.html:103
+#: printers/templates/system/printers/graph.html:131
+msgid "D MMM YYYY, ddd"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:80
+#: entrak/templates/progress.html:113 entrak/templates/report.html:60
+msgid " to "
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:81
+#: entrak/templates/display.html:112 entrak/templates/report.html:61
+msgid " tons"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:82
+#: entrak/templates/report.html:62
+msgid " tons<span class=\"basic-info-col-unit\"> CO<sub>2</sub></span>"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:83
+#: entrak/templates/report.html:63
+msgid "report_type_name_month"
+msgstr "month"
+
+#: companies/templates/companies/reports/summary.html:84
+#: entrak/templates/report.html:64
+msgid "report_type_name_year"
+msgstr "year"
+
+#: companies/templates/companies/reports/summary.html:85
+#: entrak/templates/report.html:65
+msgid "report_type_name_quarter"
+msgstr "quarter"
+
+#: companies/templates/companies/reports/summary.html:86
+#: entrak/templates/report.html:66
+msgid "report_type_name_week"
+msgstr "week"
+
+#: companies/templates/companies/reports/summary.html:87
+#: entrak/templates/report.html:67
+msgid "more"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:88
+#: entrak/templates/report.html:68
+msgid "less"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:89
+#: entrak/templates/report.html:69
+msgid "Overall: "
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:90
+#: entrak/templates/report.html:70
+msgid "calendar_more"
+msgstr "more"
+
+#: companies/templates/companies/reports/summary.html:91
+#: entrak/templates/report.html:71
+msgid "calendar_less"
+msgstr "less"
+
+#: companies/templates/companies/reports/summary.html:92
+#: entrak/templates/report.html:72
+msgid "compared<br>to "
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:93
+#: entrak/templates/report.html:73
+msgid " m²"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:94
+#: entrak/templates/report.html:74
+msgid " pandas"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:95
+#: entrak/templates/report.html:75
+msgid "MMMM YYYY"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:96
+#: entrak/templates/report.html:76
+msgid "last month"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:97
+#: entrak/templates/report.html:77
+msgid "last week"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:98
+#: entrak/templates/report.html:78
+msgid "same period last year"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:99
+#: entrak/templates/graph.html:88 entrak/templates/report.html:79
+#: printers/templates/system/printers/graph.html:89
+msgid "D MMM YYYY"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:100
+#: entrak/templates/report.html:80
+msgid "Weekday"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:101
+#: entrak/templates/report.html:81
+msgid "Weekend"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:102
+#: companies/templates/companies/reports/summary.html:106
+#: companies/templates/companies/reports/summary.html:340
+#: entrak/templates/report.html:82 entrak/templates/report.html.py:86
+msgid "Overnight"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:103
+#: companies/templates/companies/reports/summary.html:323
+#: entrak/templates/report.html:83
+msgid "Weekdays"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:104
+#: entrak/templates/report.html:84
+msgid "Weekends"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:105
+#: entrak/templates/report.html:85
+msgid "Daytime"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:107
+#: entrak/templates/alert_settings.html:824
+#: entrak/templates/alert_settings.html:826
+#: entrak/templates/alert_settings.html:828 entrak/templates/report.html:87
+msgid "hh:mmA"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:108
+#: entrak/templates/graph.html:149 entrak/templates/report.html:88
+#: printers/templates/system/printers/graph.html:150
+msgid "MMM D"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:285
+msgid "View Report"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:286
+#: entrak/templates/report.html:729
+msgid "Download Data"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:328
+msgid "Average weekdays cost"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:345
+msgid "Average overnight cost"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:362
+msgid "View Full Report"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:376
+#: entrak/templates/report.html:862
+msgid "Here you can download your energy use data to files in .csv format."
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:377
+#: entrak/templates/report.html:863
+msgid ""
+"Simply select the start date, end date and the units that you would like to "
+"obtain from the system."
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:378
+#: entrak/templates/report.html:864
+msgid "Choose your date"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:382
+#: entrak/templates/report.html:835 entrak/templates/report.html.py:868
+msgid "Choose your start date"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:386
+#: entrak/templates/report.html:839 entrak/templates/report.html.py:872
+msgid "Choose your end date"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:392
+#: entrak/templates/report.html:878
+msgid "Select your units"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:398
+#: entrak/templates/report.html:885
+msgid "Download your file"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:401
+#: entrak/templates/report.html:815 entrak/templates/report.html.py:848
+#: entrak/templates/report.html:889
+msgid "Energy data - kWh"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:403
+#: entrak/templates/report.html:817 entrak/templates/report.html.py:850
+#: entrak/templates/report.html:891
+msgid "From:"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:404
+#: entrak/templates/report.html:818 entrak/templates/report.html.py:851
+#: entrak/templates/report.html:892
+msgid "To:"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:407
+#: entrak/templates/report.html:895
+msgid "Download File"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:447
+#: companies/templates/companies/reports/summary.html:469
+msgid "Compared to last week"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:448
+msgid "Week total"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:451
+#: companies/templates/companies/reports/summary.html:472
+msgid "Compared to last month"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:452
+msgid "Month total"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:455
+#: companies/templates/companies/reports/summary.html:475
+msgid "Compared to last quarter"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:456
+msgid "Quarter total"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:459
+#: companies/templates/companies/reports/summary.html:478
+msgid "Compared to last year"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:460
+msgid "Year total"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:487
+msgid "Total week cost"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:490
+msgid "Total month cost"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:493
+msgid "Total quarter cost"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:496
+msgid "Total year cost"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:581
+msgid "Week"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:582
+msgid "Month"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:583
+msgid "Quarter"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:584
+msgid "Year"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:585
+msgid "Match my bills"
+msgstr ""
 
 #: entrak/auth_views.py:23 entrak/auth_views.py:50
 msgid "Username or password incorrect"
@@ -37,11 +655,11 @@ msgstr ""
 msgid "Marina Bay Sands"
 msgstr ""
 
-#: entrak/settings_common.py:102
+#: entrak/settings_common.py:105
 msgid "English"
 msgstr ""
 
-#: entrak/settings_common.py:103
+#: entrak/settings_common.py:106
 msgid "Traditional Chinese"
 msgstr ""
 
@@ -156,12 +774,6 @@ msgstr " used"
 #: entrak/templates/alert_settings.html:820
 msgid "alert_history_on"
 msgstr "on "
-
-#: entrak/templates/alert_settings.html:824
-#: entrak/templates/alert_settings.html:826
-#: entrak/templates/alert_settings.html:828 entrak/templates/report.html:73
-msgid "hh:mmA"
-msgstr ""
 
 #: entrak/templates/alert_settings.html:834
 msgid "hh:mmA DD MMM YYYY,ddd"
@@ -318,19 +930,6 @@ msgstr ""
 msgid "See Details"
 msgstr ""
 
-#: entrak/templates/display.html:49 entrak/templates/graph.html:86
-#: entrak/templates/graph.html.py:102 entrak/templates/graph.html:130
-#: entrak/templates/report.html:45 entrak/templates/report.html.py:46
-#: entrak/templates/report.html:384 entrak/templates/report.html.py:385
-#: entrak/templates/report.html:387 entrak/templates/report.html.py:388
-#: entrak/templates/report.html:431 entrak/templates/report.html.py:435
-#: entrak/templates/report.html:446
-#: printers/templates/system/printers/graph.html:87
-#: printers/templates/system/printers/graph.html:103
-#: printers/templates/system/printers/graph.html:131
-msgid "D MMM YYYY, ddd"
-msgstr ""
-
 #: entrak/templates/display.html:52
 msgid "Last "
 msgstr ""
@@ -353,10 +952,6 @@ msgstr ""
 
 #: entrak/templates/display.html:99 entrak/templates/display.html.py:101
 msgid "Over the past 12 months"
-msgstr ""
-
-#: entrak/templates/display.html:112 entrak/templates/report.html:48
-msgid " tons"
 msgstr ""
 
 #: entrak/templates/display.html:168
@@ -736,20 +1331,6 @@ msgstr ""
 msgid "Are you sure you want to delete"
 msgstr ""
 
-#: entrak/templates/graph.html:88 entrak/templates/report.html:65
-#: printers/templates/system/printers/graph.html:89
-msgid "D MMM YYYY"
-msgstr ""
-
-#: entrak/templates/graph.html:90 entrak/templates/graph.html.py:106
-#: entrak/templates/graph.html:132 entrak/templates/ranking.html:344
-#: entrak/templates/report.html:43
-#: printers/templates/system/printers/graph.html:91
-#: printers/templates/system/printers/graph.html:107
-#: printers/templates/system/printers/graph.html:133
-msgid "MMM YYYY"
-msgstr ""
-
 #: entrak/templates/graph.html:99
 #: printers/templates/system/printers/graph.html:100
 msgid "h a, D MMM YYYY, ddd"
@@ -760,14 +1341,6 @@ msgstr ""
 msgid "[Night of] D MMM YYYY, ddd"
 msgstr ""
 
-#: entrak/templates/graph.html:108 entrak/templates/graph.html.py:134
-#: entrak/templates/ranking.html:346 entrak/templates/report.html:44
-#: entrak/templates/report.html.py:378 entrak/templates/report.html:379
-#: printers/templates/system/printers/graph.html:109
-#: printers/templates/system/printers/graph.html:135
-msgid "YYYY"
-msgstr ""
-
 #: entrak/templates/graph.html:126
 #: printers/templates/system/printers/graph.html:127
 msgid "HH:mm D MMM YYYY, ddd"
@@ -776,11 +1349,6 @@ msgstr ""
 #: entrak/templates/graph.html:147
 #: printers/templates/system/printers/graph.html:148
 msgid "ddd"
-msgstr ""
-
-#: entrak/templates/graph.html:149 entrak/templates/report.html:74
-#: printers/templates/system/printers/graph.html:150
-msgid "MMM D"
 msgstr ""
 
 #: entrak/templates/graph.html:151
@@ -1021,10 +1589,6 @@ msgstr ""
 msgid "from "
 msgstr ""
 
-#: entrak/templates/progress.html:113 entrak/templates/report.html:47
-msgid " to "
-msgstr ""
-
 #: entrak/templates/ranking.html:34
 msgid "THE RANKING PAGE"
 msgstr ""
@@ -1090,107 +1654,11 @@ msgstr ""
 msgid "Compared with"
 msgstr ""
 
-#: entrak/templates/report.html:49
-msgid " tons<span class=\"basic-info-col-unit\"> CO<sub>2</sub></span>"
-msgstr ""
-
-#: entrak/templates/report.html:50
-msgid "report_type_name_month"
-msgstr "month"
-
-#: entrak/templates/report.html:51
-msgid "report_type_name_year"
-msgstr "year"
-
-#: entrak/templates/report.html:52
-msgid "report_type_name_quarter"
-msgstr "quarter"
-
-#: entrak/templates/report.html:53
-msgid "report_type_name_week"
-msgstr "week"
-
-#: entrak/templates/report.html:54
-msgid "more"
-msgstr ""
-
-#: entrak/templates/report.html:55
-msgid "less"
-msgstr ""
-
-#: entrak/templates/report.html:56
-msgid "Overall: "
-msgstr ""
-
-#: entrak/templates/report.html:57
-msgid "calendar_more"
-msgstr "more"
-
-#: entrak/templates/report.html:58
-msgid "calendar_less"
-msgstr "less"
-
-#: entrak/templates/report.html:59
-msgid "compared<br>to "
-msgstr ""
-
-#: entrak/templates/report.html:60
-msgid " m²"
-msgstr ""
-
-#: entrak/templates/report.html:61
-msgid " pandas"
-msgstr ""
-
-#: entrak/templates/report.html:62
-msgid "MMMM YYYY"
-msgstr ""
-
-#: entrak/templates/report.html:63
-msgid "last month"
-msgstr ""
-
-#: entrak/templates/report.html:64
-msgid "same period last year"
-msgstr ""
-
-#: entrak/templates/report.html:66
-msgid "Weekday"
-msgstr ""
-
-#: entrak/templates/report.html:67
-msgid "Weekend"
-msgstr ""
-
-#: entrak/templates/report.html:68 entrak/templates/report.html.py:72
-msgid "Overnight"
-msgstr ""
-
-#: entrak/templates/report.html:69
-msgid "Weekdays"
-msgstr ""
-
-#: entrak/templates/report.html:70
-msgid "Weekends"
-msgstr ""
-
-#: entrak/templates/report.html:71
-msgid "Daytime"
-msgstr ""
-
-#: entrak/templates/report.html:84
-msgid "THE REPORTS PAGE"
-msgstr ""
-
-#: entrak/templates/report.html:85
-msgid "Get all your information here at the"
-msgstr ""
-
-#: entrak/templates/report.html:381 entrak/templates/report.html.py:382
+#: entrak/templates/report.html:395 entrak/templates/report.html.py:396
 msgid "YYYY MMMM"
 msgstr ""
 
-#: entrak/templates/report.html:589
+#: entrak/templates/report.html:603
 #: entrak/templates/report_main_content.html:110
 #: entrak/templates/report_main_content.html:210
 #: entrak/templates/report_main_content.html:350
@@ -1199,123 +1667,58 @@ msgstr ""
 msgid "SHOW DETAILS"
 msgstr ""
 
-#: entrak/templates/report.html:591
+#: entrak/templates/report.html:605
 msgid "HIDE DETAILS"
 msgstr ""
 
-#: entrak/templates/report.html:706
+#: entrak/templates/report.html:728
 msgid "Monthly Report"
 msgstr ""
 
-#: entrak/templates/report.html:707
+#: entrak/templates/report.html:729
 msgid "Customize Report"
 msgstr ""
 
-#: entrak/templates/report.html:707
-msgid "Download Data"
-msgstr ""
-
-#: entrak/templates/report.html:714
+#: entrak/templates/report.html:736
 msgid "Monthly Reports"
 msgstr ""
 
-#: entrak/templates/report.html:715
+#: entrak/templates/report.html:737
 msgid "Energy Consumption (kWh)"
 msgstr ""
 
-#: entrak/templates/report.html:716
+#: entrak/templates/report.html:738
 msgid "CO<sub>2</sub> Emissions (kg)"
 msgstr ""
 
-#: entrak/templates/report.html:717
+#: entrak/templates/report.html:739
 msgid "Energy Cost ($)"
 msgstr ""
 
-#: entrak/templates/report.html:718 entrak/templates/report.html.py:894
-msgid "Download"
-msgstr ""
-
-#: entrak/templates/report.html:742
+#: entrak/templates/report.html:770
 msgid "Select your time range"
 msgstr ""
 
-#: entrak/templates/report.html:753 entrak/templates/report.html.py:799
+#: entrak/templates/report.html:781 entrak/templates/report.html.py:827
 msgid "Select your time period"
 msgstr ""
 
-#: entrak/templates/report.html:783 entrak/templates/report.html.py:816
+#: entrak/templates/report.html:811 entrak/templates/report.html.py:844
 msgid "Create your report"
 msgstr ""
 
-#: entrak/templates/report.html:787 entrak/templates/report.html.py:820
-#: entrak/templates/report.html:861
-msgid "Energy data - kWh"
-msgstr ""
-
-#: entrak/templates/report.html:789 entrak/templates/report.html.py:822
-#: entrak/templates/report.html:863
-msgid "From:"
-msgstr ""
-
-#: entrak/templates/report.html:790 entrak/templates/report.html.py:823
-#: entrak/templates/report.html:864
-msgid "To:"
-msgstr ""
-
-#: entrak/templates/report.html:793 entrak/templates/report.html.py:826
+#: entrak/templates/report.html:821 entrak/templates/report.html.py:854
 msgid "Create Report"
 msgstr ""
 
-#: entrak/templates/report.html:802
+#: entrak/templates/report.html:830
 msgid "Select the start and end date of your monthly electricity bill."
 msgstr ""
 
-#: entrak/templates/report.html:803
+#: entrak/templates/report.html:831
 msgid ""
 "If you wish to view a standard calendar month, click on the Monthly Report "
 "tab at the top of the page"
-msgstr ""
-
-#: entrak/templates/report.html:807 entrak/templates/report.html.py:840
-msgid "Choose your start date"
-msgstr ""
-
-#: entrak/templates/report.html:811 entrak/templates/report.html.py:844
-msgid "Choose your end date"
-msgstr ""
-
-#: entrak/templates/report.html:834
-msgid "Here you can download your energy use data to files in .csv format."
-msgstr ""
-
-#: entrak/templates/report.html:835
-msgid ""
-"Simply select the start date, end date and the units that you would like to "
-"obtain from the system."
-msgstr ""
-
-#: entrak/templates/report.html:836
-msgid "Choose your date"
-msgstr ""
-
-#: entrak/templates/report.html:850
-msgid "Select your units"
-msgstr ""
-
-#: entrak/templates/report.html:857
-msgid "Download your file"
-msgstr ""
-
-#: entrak/templates/report.html:867
-msgid "Download File"
-msgstr ""
-
-#: entrak/templates/report.html:880
-msgid "Save Report"
-msgstr ""
-
-#: entrak/templates/report.html:881
-msgid "Save Summary Report"
 msgstr ""
 
 #: entrak/templates/report_inner_template.html:65
@@ -1328,85 +1731,8 @@ msgstr ""
 msgid "Energy Split by:"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:5
-msgid ""
-"WHAT ARE OUR KEY STATISTICS FOR THIS <span class=\"report-type-name\"></"
-"span>?"
-msgstr ""
-
-#: entrak/templates/report_main_content.html:9
-msgid "HOW MUCH ENERGY<br>DID WE USE?"
-msgstr ""
-
-#: entrak/templates/report_main_content.html:17
-msgid "of electricity"
-msgstr ""
-
-#: entrak/templates/report_main_content.html:25
-msgid ""
-"<span class=\"basic-info-col-unit\"> CO<sub>2</sub></span>\n"
-"                    <br>\n"
-"                    <span class=\"basic-info-col-subtext\">emitted</span>"
-msgstr ""
-
-#: entrak/templates/report_main_content.html:37
-msgid "in energy costs"
-msgstr ""
-
-#: entrak/templates/report_main_content.html:43
-msgid "HOW MUCH ENERGY<br>DID WE SAVE?"
-msgstr ""
-
-#: entrak/templates/report_main_content.html:44
-msgid "(year-on-year)"
-msgstr ""
-
-#: entrak/templates/report_main_content.html:73
-msgid "HOW DID OUR<br>CARBON FOOTPRINT CHANGE?"
-msgstr ""
-
-#: entrak/templates/report_main_content.html:116
-msgid "How did that break down by usage type?"
-msgstr ""
-
-#: entrak/templates/report_main_content.html:121
-msgid "Usage Type"
-msgstr ""
-
-#: entrak/templates/report_main_content.html:122
-msgid "Total Energy (kWh)"
-msgstr ""
-
-#: entrak/templates/report_main_content.html:123
-msgid "Total CO<sub>2</sub> (kg)"
-msgstr ""
-
-#: entrak/templates/report_main_content.html:124
-msgid "Total Money ($)"
-msgstr ""
-
-#: entrak/templates/report_main_content.html:125
-#, python-format
-msgid "%% Change in kWh"
-msgstr ""
-
-#: entrak/templates/report_main_content.html:125
-#: entrak/templates/report_main_content.html:126
-msgid "Year-on-year"
-msgstr ""
-
-#: entrak/templates/report_main_content.html:126
-msgid "Change in Money"
-msgstr ""
-
 #: entrak/templates/report_main_content.html:135
 msgid "HOW DOES THAT SPLIT BY PERCENTAGE?"
-msgstr ""
-
-#: entrak/templates/report_main_content.html:152
-msgid ""
-"HOW MUCH MORE / LESS DID WE USE COMPARED TO LAST <span class=\"report-type-"
-"name\"></span>?"
 msgstr ""
 
 #: entrak/templates/report_main_content.html:155
@@ -1432,13 +1758,6 @@ msgid ""
 "plural\"></span>"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:206
-#: entrak/templates/report_main_content.html:346
-#: entrak/templates/report_main_content.html:475
-#: entrak/templates/report_main_content.html:604
-msgid "* Data not available or incomplete for this period"
-msgstr ""
-
 #: entrak/templates/report_main_content.html:215
 msgid "WHEN DID WE ACHIEVE OUR SAVINGS?"
 msgstr ""
@@ -1451,20 +1770,8 @@ msgstr ""
 msgid "Day of the <span class=\"report-type-name-lower\"></span>"
 msgstr ""
 
-#: entrak/templates/report_main_content.html:230
-msgid "HOW MUCH ENERGY DID WE USE ON <span>WEEKDAYS?</span>"
-msgstr ""
-
 #: entrak/templates/report_main_content.html:235
 msgid "Average<br>Weekday<br>Energy Use:"
-msgstr ""
-
-#: entrak/templates/report_main_content.html:271
-#: entrak/templates/report_main_content.html:400
-#: entrak/templates/report_main_content.html:529
-msgid ""
-"<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</"
-"div><div>FRI</div><div>SAT</div>"
 msgstr ""
 
 #: entrak/templates/report_main_content.html:277
@@ -1533,18 +1840,12 @@ msgstr ""
 
 #: entrak/templates/report_main_content.html:416
 #: entrak/templates/report_main_content.html:449
-#: entrak/templates/report_main_content.html:545
 msgid "Lowest Weekend Energy Use:"
 msgstr ""
 
 #: entrak/templates/report_main_content.html:424
 #: entrak/templates/report_main_content.html:456
-#: entrak/templates/report_main_content.html:553
 msgid "Highest Weekend Energy Use:"
-msgstr ""
-
-#: entrak/templates/report_main_content.html:488
-msgid "HOW MUCH ENERGY DID WE USE <span>OVERNIGHT***?</span>"
 msgstr ""
 
 #: entrak/templates/report_main_content.html:493
@@ -1563,10 +1864,12 @@ msgstr ""
 msgid "Average overnight"
 msgstr ""
 
+#: entrak/templates/report_main_content.html:545
 #: entrak/templates/report_main_content.html:578
 msgid "Lowest Overnight Energy Use:"
 msgstr ""
 
+#: entrak/templates/report_main_content.html:553
 #: entrak/templates/report_main_content.html:585
 msgid "Highest Overnight Energy Use:"
 msgstr ""
@@ -1577,12 +1880,6 @@ msgstr ""
 
 #: entrak/templates/report_main_content.html:599
 msgid "Overnight: "
-msgstr ""
-
-#: entrak/templates/report_main_content.html:618
-msgid ""
-"Cost values are for general reference only and should not be treated as "
-"accurate for accounting purposes."
 msgstr ""
 
 #: printers/templates/system/printers/graph.html:651
