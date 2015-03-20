@@ -447,7 +447,7 @@ $(function() {
                     $scope.compare_to_text = "{% trans "Compared to last week" %}";
                     report_type_name = '{% trans "Week total" %}';
                 }
-                else if ($scope.report_type == 'month') {
+                else if ($scope.report_type == 'month' || $scope.report_type == 'custom') {
                     $scope.compare_to_text = "{% trans "Compared to last month" %}";
                     report_type_name = '{% trans "Month total" %}';
                 }
@@ -468,7 +468,7 @@ $(function() {
                 if ($scope.report_type == 'week') {
                     compare_to_text = "{% trans "Compared to last week" %}";
                 }
-                else if ($scope.report_type == 'month') {
+                else if ($scope.report_type == 'month' || $scope.report_type == 'custom') {
                     compare_to_text = "{% trans "Compared to last month" %}";
                 }
                 else if ($scope.report_type == 'quarter') {
@@ -486,7 +486,7 @@ $(function() {
                 if ($scope.report_type == 'week') {
                     text = '{% trans "Total week cost" %}';
                 }
-                else if ($scope.report_type == 'month') {
+                else if ($scope.report_type == 'month' || $scope.report_type == 'custom') {
                     text = '{% trans "Total month cost" %}';
                 }
                 else if ($scope.report_type == 'quarter') {
