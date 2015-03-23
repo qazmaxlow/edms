@@ -102,7 +102,7 @@ ngapp.controller("ReportController", function($scope) {
             type: "column",
             labels: {
                 visible: true,
-                template: "# if ( value > 0) { # #= kendo.toString(value, 'n0') # # } else { # Nan # } #"
+                template: "# if ( value > 0) { # #= kendo.toString(value, 'n0') # # } else { # N/A # } #"
             }
         },
         series: [{
