@@ -533,7 +533,7 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     )
 
     if report_type == 'month':
-        report_date_text = "{0} - Monthly Energry Report".format(report_date.strftime("%b %Y"))
+        report_date_text = "{0} - Monthly Energy Report".format(report_date.strftime("%b %Y"))
 
     m['report_date_text'] = report_date_text
     m['report_day_diff'] = (report_end_date - report_date).days
