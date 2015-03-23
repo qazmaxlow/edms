@@ -441,6 +441,9 @@ $(function() {
 
             $scope.report_type = "month";
 
+            $scope.default_date = new Date("{{ default_date.isoformat }}");
+            $scope.default_custom_end_date = new Date("{{ default_custom_end_date.isoformat }}");
+            $scope.default_custom_start_date = new Date("{{ default_custom_start_date.isoformat }}");
             $scope.get_report_type_name = function() {
                 var report_type_name;
                 if ($scope.report_type == 'week') {
@@ -546,18 +549,24 @@ $(function() {
                 var selected = $scope.dateToolbar.getSelectedFromGroup('time');
                 $scope.report_type = selected.attr('id');
 
+                var start_date, end_date;
+
                 if ($scope.report_type == 'custom') {
                     $scope.custom_time = true;
+
+                    start_date = $scope.report_date_start.value();
+                    end_date = $scope.report_date_end.value();
                 }
                 else {
                     $scope.custom_time = false;
                     $scope.monthSelectorOptions.select = $scope.report_type; // could bind?
+
+                    start_date = $scope.report_date.getSelectedStartDate();
+                    end_date = $scope.report_date.getSelectedEndDate();
                 }
 
                 // hack? or can bind this?
                 $scope.report_date.options.select = selected.attr('id');
-                var start_date = $scope.report_date.getSelectedStartDate();
-                var end_date = $scope.report_date.getSelectedEndDate();
 
                 // refreash datasource
                 summary_report_ds.transport.options.read['data'] = {
@@ -586,11 +595,11 @@ $(function() {
                         ovefrlow: "never"
                     },
                     {
-                        template: '<div ng-show="custom_time"><input kendo-date-picker="report_date_start" style="width: 220px;" k-on-change="on_custom_date_selected(kendoEvent)" k-options="customDateOptions" k-value="default_date" ></div>',
+                        template: '<div ng-show="custom_time"><input kendo-date-picker="report_date_start" style="width: 220px;" k-on-change="on_start_date_selected(kendoEvent);on_custom_date_selected(kendoEvent)" k-options="customStartDateOptions" k-value="default_custom_start_date" ></div>',
                         overflow: "never"
                     },
                     {
-                        template: '<div ng-show="custom_time"><input kendo-date-picker="report_date_end" style="width: 220px;" k-on-change="on_custom_date_selected(kendoEvent)" k-options="customDateOptions" k-value="default_date" ></div>',
+                        template: '<div ng-show="custom_time"><input kendo-date-picker="report_date_end" style="width: 220px;" k-on-change="on_end_date_selected(kendoEvent);on_custom_date_selected(kendoEvent)" k-options="customEndDateOptions" k-value="default_custom_end_date" ></div>',
                         overflow: "never"
                     }
 
@@ -603,9 +612,26 @@ $(function() {
                 clickPopup: true
             };
 
-            $scope.customDateOptions = {
-                format: 'MMMM d, yyyy'
+            $scope.customStartDateOptions = {
+                format: 'MMMM d, yyyy',
+                max: $scope.default_custom_end_date
             };
+
+            $scope.customEndDateOptions = {
+                format: 'MMMM d, yyyy',
+                min: $scope.default_custom_start_date
+            };
+
+            $scope.on_start_date_selected = function(e) {
+                var startDate = $scope.report_date_start.value();
+                $scope.report_date_end.min(startDate);
+            };
+
+            $scope.on_end_date_selected = function(e) {
+                var endDate = $scope.report_date_end.value();
+                $scope.report_date_start.max(endDate);
+            };
+
 
             $scope.on_date_selected = function(e) {
                 var dp = e.sender;
@@ -637,8 +663,6 @@ $(function() {
 
                 $scope.compare_to_text = "Compare to last peroid";
             }
-
-            $scope.default_date = new Date("{{ default_date.isoformat }}");
         })
 
 

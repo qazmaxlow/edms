@@ -1378,7 +1378,9 @@ html .km-pane-wrapper .km-widget,
 .k-menu.k-header,
 .k-menu .k-item {
   border-color: #c5c5c5;
-  min-width: 0px;
+  min-width: 0px !important;
+  border-style: none;
+  border-bottom: 2px solid #c9c9c9;
 }
 .k-column-menu,
 .k-column-menu .k-item,

@@ -400,6 +400,8 @@ def report_view(request, system_code=None):
         m['monthly_money_sum'] = monthly_money_sum
 
     m['default_date'] = start_dt
+    m['default_custom_end_date'] = datetime.datetime.now(pytz.utc) - datetime.timedelta(days=1)
+    m['default_custom_start_date'] = m['default_custom_end_date'] - datetime.timedelta(days=30)
     # return render(request, 'testing_code.html', m)
     return render(request, 'companies/reports/summary.html', m)
 
@@ -535,7 +537,19 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     )
 
     if report_type == 'month':
+<<<<<<< HEAD
         report_date_text = _("{0} - Monthly Energy Report").format(report_date.strftime("%b %Y"))
+=======
+        report_date_text = "{0} - Monthly Energy Report".format(report_date.strftime("%b %Y"))
+    elif report_type == 'week':
+        report_date_text = "{0} - Weekly Energy Report".format(report_date_text)
+    elif report_type == 'quarter':
+        quarter_text =  '{0} Q{1}'.format(report_date.strftime("%Y"), report_end_date.month/3)
+        report_date_text = "{0} - Quarterly Energy Report".format(quarter_text)
+    elif report_type == 'year':
+        report_date_text = "{0} - Yearly Energy Report".format(report_date.strftime("%Y"))
+
+>>>>>>> 4ccaf042264b2baf06460def6f62041fc545b5f2
 
     m['report_date_text'] = report_date_text
     m['report_day_diff'] = (report_end_date - report_date).days
