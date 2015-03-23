@@ -38,7 +38,7 @@
             <div>
                 <img src="{% static 'images/report/factory-co2.png' %}">
                 <div class="basic-info-text-container">
-                    <span id="current-co2-usage">{{ total_co2|floatformat:"0"|intcomma }} {% trans "tons" %}</span><span class="basic-info-col-unit">{% trans "CO<sub>2</sub>" %}</span>
+                    <span id="current-co2-usage">{{ total_co2|floatformat:"0"|intcomma }} {% trans "tons" %}</span><span class="basic-info-col-unit"> {% trans "CO<sub>2</sub>" %}</span>
                     <br>
                     <span class="basic-info-col-subtext">{% trans "emitted" %}</span>
                 </div>
@@ -69,7 +69,7 @@
             <div>
                 <img src="{% static 'images/report/factory-co2.png' %}">
                 <div class="basic-info-text-container">
-                    <span id="save-co2-usage">{{ saving_sign }}{{ saving_co2|stringformat:".0f"|intcomma }} {% trans "tons" %}</span><span class="basic-info-col-unit">{% trans "CO<sub>2" %}</sub></span>
+                    <span id="save-co2-usage">{{ saving_sign }}{{ saving_co2|stringformat:".0f"|intcomma }} {% trans "tons" %}</span><span class="basic-info-col-unit"> {% trans "CO<sub>2" %}</sub></span>
                 </div>
             </div>
             <hr class="current-usage-separator-dark-grey">
@@ -87,16 +87,15 @@
             <div>
                 <img src="{% static 'images/report/car.png' %}">
                 <div class="basic-info-text-container">
-                	<span id="car-impact">
-                	{% ifequal LANGUAGE_CODE 'zh-tw' %}
-                	{% if is_saving %}
-                	{% trans "reduce" %}
-                	{% else %}
-                	{% trans "increase" %}
-                	{% endif %}
-                	{% else %}
-                	{% endifequal %}
-    				{{ co2_in_car|floatformat:"0"|intcomma }} {% trans "cars" %}</span><br>
+                  <span id="car-impact">
+                    {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                      {% if is_saving %}
+                         {% trans "reduce" %}
+                      {% else %}
+                         {% trans "increase" %}
+                      {% endif %}
+                    {% endifequal %}
+                    {{ co2_in_car|floatformat:"0"|intcomma }} {% trans "cars" %}</span><br>
                     <span id="car-impact-subtext" class="basic-info-col-subtext">
                       {% if is_saving %}
                       {% trans "taken off the road for a month" %}
@@ -130,9 +129,9 @@
                 <div class="basic-info-text-container">
                     <span id="panda-impact-subtext" class="basic-info-col-subtext">
                       {% if is_saving %}
-                      {% trans "Reduced CO2 emissions equal to the weight of" %}
+                      {% trans "Reduced CO<sub>2</sub> emissions equal to the weight of" %}
                       {% else %}
-                      {% trans "Extra CO2 emissions equal to the weight of" %}
+                      {% trans "Extra CO<sub>2</sub> emissions equal to the weight of" %}
                       {% endif %}
                     </span>
                     <span id="panda-impact">{{ co2_in_elephant|floatformat:"0"|intcomma }}{% trans " pandas" %}</span>
