@@ -441,6 +441,9 @@ $(function() {
 
             $scope.report_type = "month";
 
+            $scope.default_date = new Date("{{ default_date.isoformat }}");
+            $scope.default_custom_end_date = new Date("{{ default_custom_end_date.isoformat }}");
+            $scope.default_custom_start_date = new Date("{{ default_custom_start_date.isoformat }}");
             $scope.get_report_type_name = function() {
                 var report_type_name;
                 if ($scope.report_type == 'week') {
@@ -586,11 +589,11 @@ $(function() {
                         ovefrlow: "never"
                     },
                     {
-                        template: '<div ng-show="custom_time"><input kendo-date-picker="report_date_start" style="width: 220px;" k-on-change="on_custom_date_selected(kendoEvent)" k-options="customDateOptions" k-value="default_date" ></div>',
+                        template: '<div ng-show="custom_time"><input kendo-date-picker="report_date_start" style="width: 220px;" k-on-change="on_custom_date_selected(kendoEvent)" k-options="customDateOptions" k-value="default_custom_start_date" ></div>',
                         overflow: "never"
                     },
                     {
-                        template: '<div ng-show="custom_time"><input kendo-date-picker="report_date_end" style="width: 220px;" k-on-change="on_custom_date_selected(kendoEvent)" k-options="customDateOptions" k-value="default_date" ></div>',
+                        template: '<div ng-show="custom_time"><input kendo-date-picker="report_date_end" style="width: 220px;" k-on-change="on_custom_date_selected(kendoEvent)" k-options="customDateOptions" k-value="default_custom_end_date" ></div>',
                         overflow: "never"
                     }
 
@@ -637,8 +640,6 @@ $(function() {
 
                 $scope.compare_to_text = "Compare to last peroid";
             }
-
-            $scope.default_date = new Date("{{ default_date.isoformat }}");
         })
 
 

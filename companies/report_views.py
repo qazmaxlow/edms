@@ -399,6 +399,8 @@ def report_view(request, system_code=None):
         m['monthly_money_sum'] = monthly_money_sum
 
     m['default_date'] = start_dt
+    m['default_custom_end_date'] = datetime.datetime.now(pytz.utc) - datetime.timedelta(days=1)
+    m['default_custom_start_date'] = m['default_custom_end_date'] - datetime.timedelta(days=30)
     # return render(request, 'testing_code.html', m)
     return render(request, 'companies/reports/summary.html', m)
 
