@@ -970,6 +970,10 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
 
     m['overnight'] = overnight_usage
 
+    m['overnight_timerange_text'] = "{0} ~ {1}".format(
+        current_system.night_time_start.strftime('%l%p'),
+        current_system.night_time_end.strftime('%l%p'))
+
     # holidays
     m['holidays_json'] = json.dumps(report_data['holidays'])
 
