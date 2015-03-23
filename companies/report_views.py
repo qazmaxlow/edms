@@ -13,6 +13,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.templatetags.static import static
 from django.utils import timezone, dateparse
+from django.utils.translation import ugettext_lazy as _
 
 from wkhtmltopdf.views import PDFTemplateResponse
 
@@ -422,6 +423,9 @@ class CompareTplHepler:
         return 'more' if self.compared_percent >=0 else 'less'
 
     @property
+    def change_desc_wording(self):
+        return _('more') if self.compared_percent >=0 else _('less')
+    @property
     def change_css_class(self):
         return 'more-usage' if self.compared_percent >=0 else 'less-usage'
 
@@ -533,6 +537,9 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     )
 
     if report_type == 'month':
+<<<<<<< HEAD
+        report_date_text = _("{0} - Monthly Energy Report").format(report_date.strftime("%b %Y"))
+=======
         report_date_text = "{0} - Monthly Energy Report".format(report_date.strftime("%b %Y"))
     elif report_type == 'week':
         report_date_text = "{0} - Weekly Energy Report".format(report_date_text)
@@ -542,6 +549,7 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     elif report_type == 'year':
         report_date_text = "{0} - Yearly Energy Report".format(report_date.strftime("%Y"))
 
+>>>>>>> 4ccaf042264b2baf06460def6f62041fc545b5f2
 
     m['report_date_text'] = report_date_text
     m['report_day_diff'] = (report_end_date - report_date).days
@@ -729,8 +737,10 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
 
         chart_title = 'N/A'
         if total_compare:
-            chart_title = 'Overall: {0.compared_percent_abs:.0f}% {0.change_desc} energy than last month'.format(CompareTplHepler(total_compare))
-
+            if(CompareTplHepler(total_compare).change_desc=='more'):
+                chart_title = _('Overall: {0.compared_percent_abs:.0f}% more energy than last month').format(CompareTplHepler(total_compare))
+            else:
+                chart_title = _('Overall: {0.compared_percent_abs:.0f}% less energy than last month').format(CompareTplHepler(total_compare))
         current_day_readings = {}
         # for day in range(1, 32):
         #     current_day_readings[day] = None
