@@ -202,7 +202,6 @@
       <div class="col-xs-12 text-center">
         <h4>{% trans "Your energy consumption this  was" %} {{ compare_to_last_month_abs|floatformat:0 }} {% if compare_to_last_month > 0 %}{% trans "more" %}{% else %}{% trans "less" %}{% endif %}{% trans " than it was last." %} </h4>
         <div kendo-chart k-options="barOptions" ></div>
-        <div class="asterisk-text single-asterisk-text">{% trans "* Data not available or incomplete for this period" %}</div>
       </div>
     </div>
 
