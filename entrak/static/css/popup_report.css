@@ -433,6 +433,10 @@ body {-webkit-print-color-adjust: exact;}
     border: 1px solid #f5f5f5;
     padding: 8px;
     color: #354960;
+    text-align: center;
+}
+.detail-container:first-child{
+    text-align: left;
 }
 
 .detail-container td {
@@ -441,12 +445,12 @@ body {-webkit-print-color-adjust: exact;}
 
 .detail-title {
     overflow: hidden;
+    text-align: center;
 }
 
 .detail-title span {
     width: 242px;
     display: inline-block;
-    text-align: center;
     font-weight: bold;
     font-size: 11pt;
     color: #354960;
@@ -922,3 +926,5 @@ body {-webkit-print-color-adjust: exact;}
 .calendar-bottom-info>div:nth-child(2)>div:first-child {
     margin-top: 20px;
 }
+
+/* CSS by Richard*/
