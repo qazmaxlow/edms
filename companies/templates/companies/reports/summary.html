@@ -549,18 +549,24 @@ $(function() {
                 var selected = $scope.dateToolbar.getSelectedFromGroup('time');
                 $scope.report_type = selected.attr('id');
 
+                var start_date, end_date;
+
                 if ($scope.report_type == 'custom') {
                     $scope.custom_time = true;
+
+                    start_date = $scope.report_date_start.value();
+                    end_date = $scope.report_date_end.value();
                 }
                 else {
                     $scope.custom_time = false;
                     $scope.monthSelectorOptions.select = $scope.report_type; // could bind?
+
+                    start_date = $scope.report_date.getSelectedStartDate();
+                    end_date = $scope.report_date.getSelectedEndDate();
                 }
 
                 // hack? or can bind this?
                 $scope.report_date.options.select = selected.attr('id');
-                var start_date = $scope.report_date.getSelectedStartDate();
-                var end_date = $scope.report_date.getSelectedEndDate();
 
                 // refreash datasource
                 summary_report_ds.transport.options.read['data'] = {
