@@ -595,11 +595,11 @@ $(function() {
                         ovefrlow: "never"
                     },
                     {
-                        template: '<div ng-show="custom_time"><input kendo-date-picker="report_date_start" style="width: 220px;" k-on-change="on_custom_date_selected(kendoEvent)" k-options="customDateOptions" k-value="default_custom_start_date" ></div>',
+                        template: '<div ng-show="custom_time"><input kendo-date-picker="report_date_start" style="width: 220px;" k-on-change="on_start_date_selected(kendoEvent);on_custom_date_selected(kendoEvent)" k-options="customDateOptions" k-value="default_custom_start_date" ></div>',
                         overflow: "never"
                     },
                     {
-                        template: '<div ng-show="custom_time"><input kendo-date-picker="report_date_end" style="width: 220px;" k-on-change="on_custom_date_selected(kendoEvent)" k-options="customDateOptions" k-value="default_custom_end_date" ></div>',
+                        template: '<div ng-show="custom_time"><input kendo-date-picker="report_date_end" style="width: 220px;" k-on-change="on_end_date_selected(kendoEvent);on_custom_date_selected(kendoEvent)" k-options="customDateOptions" k-value="default_custom_end_date" ></div>',
                         overflow: "never"
                     }
 
@@ -615,6 +615,17 @@ $(function() {
             $scope.customDateOptions = {
                 format: 'MMMM d, yyyy'
             };
+
+            $scope.on_start_date_selected = function(e) {
+                var startDate = $scope.report_date_start.value();
+                $scope.report_date_end.min(startDate);
+            };
+
+            $scope.on_end_date_selected = function(e) {
+                var endDate = $scope.report_date_end.value();
+                $scope.report_date_start.max(endDate);
+            };
+
 
             $scope.on_date_selected = function(e) {
                 var dp = e.sender;
