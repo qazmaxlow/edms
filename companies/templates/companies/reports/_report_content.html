@@ -38,7 +38,7 @@
             <div>
                 <img src="{% static 'images/report/factory-co2.png' %}">
                 <div class="basic-info-text-container">
-                    <span id="current-co2-usage">{{ total_co2|floatformat:"0" }} {% trans "tons" %}</span><span class="basic-info-col-unit">{% trans "CO<sub>2</sub>" %}</span>
+                    <span id="current-co2-usage">{{ total_co2|floatformat:"0" }} {% trans "tons" %}</span><span class="basic-info-col-unit"> {% trans "CO<sub>2</sub>" %}</span>
                     <br>
                     <span class="basic-info-col-subtext">{% trans "emitted" %}</span>
                 </div>
@@ -69,7 +69,7 @@
             <div>
                 <img src="{% static 'images/report/factory-co2.png' %}">
                 <div class="basic-info-text-container">
-                    <span id="save-co2-usage">{{ saving_sign }}{{ saving_co2|stringformat:".0f" }} {% trans "tons" %}</span><span class="basic-info-col-unit">{% trans "CO<sub>2" %}</sub></span>
+                    <span id="save-co2-usage">{{ saving_sign }}{{ saving_co2|stringformat:".0f" }} {% trans "tons" %}</span><span class="basic-info-col-unit"> {% trans "CO<sub>2</sub>" %}</span>
                 </div>
             </div>
             <hr class="current-usage-separator-dark-grey">
@@ -87,12 +87,17 @@
             <div>
                 <img src="{% static 'images/report/car.png' %}">
                 <div class="basic-info-text-container">
+                	<span id="car-impact">
+                	{% ifequal LANGUAGE_CODE 'zh-tw' %}
                 	{% if is_saving %}
-                	{% trans " " %}
+                	{% trans "reduce" %}
                 	{% else %}
-                	{% trans "  " %}
+                	{% trans "increase" %}
                 	{% endif %}
-                    <span id="car-impact">{{ co2_in_car|floatformat:"0" }} {% trans "cars" %}</span><br>
+                	{% else %}
+                	{% endifequal %}
+                    {{ co2_in_car|floatformat:"0" }} {% trans "cars" %}
+                    </span><br>
                     <span id="car-impact-subtext" class="basic-info-col-subtext">
                       {% if is_saving %}
                       {% trans "taken off the road for a month" %}
@@ -200,7 +205,12 @@
 
     <div class="row top-content">
       <div class="col-xs-12 text-center">
-        <h4>{% trans "Your energy consumption this  was" %} {{ compare_to_last_month_abs|floatformat:0 }} {% if compare_to_last_month > 0 %}{% trans "more" %}{% else %}{% trans "less" %}{% endif %}{% trans " than it was last." %} </h4>
+        <h4>
+        {% trans "Your energy consumption this  was" %}{% ifequal LANGUAGE_CODE 'zh-tw' %}{% if compare_to_last_month > 0 %}{% trans "more" %}{% else %}{% trans "less" %}{% endif %} {{ compare_to_last_month_abs|floatformat:0 }}%
+       	{% else %}
+       	{{ compare_to_last_month_abs|floatformat:0 }}% {% if compare_to_last_month > 0 %}{% trans "more" %}{% else %}{% trans "less" %}{% endif %}{% trans " than it was last." %} 
+       	{% endifequal %}
+        </h4>
         <div kendo-chart k-options="barOptions" ></div>
         <div class="asterisk-text single-asterisk-text">{% trans "* Data not available or incomplete for this period" %}</div>
       </div>
@@ -274,8 +284,13 @@
                 </div>
                 <div class="col-xs-8">
                   <h3 class="{{ weekday_month_compare_helper.change_css_class }}">
-                    {{ weekday_month_compare_helper.compared_percent_abs|floatformat:0 }}%
-                    {{ weekday_month_compare_helper.change_desc }}
+         	        {% ifequal LANGUAGE_CODE 'zh-tw' %}
+         	          {{ weekday_month_compare_helper.change_desc_wording }}
+         	          {{ weekday_month_compare_helper.compared_percent_abs|floatformat:0 }}%
+         	        {% else %}
+                      {{ weekday_month_compare_helper.compared_percent_abs|floatformat:0 }}%
+                      {{ weekday_month_compare_helper.change_desc_wording }}
+         	        {% endifequal %}
                   </h3>
                   <p>{% trans "Compare to Last Month" %}</p>
                 </div>
@@ -286,8 +301,13 @@
                 </div>
                 <div class="col-xs-8">
                   <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
-                    {{ weekday_same_period_compare_helper.compared_percent_abs|floatformat:0 }}%
-                    {{ weekday_same_period_compare_helper.change_desc }}
+                	{% ifequal LANGUAGE_CODE 'zh-tw' %}
+                	  {{ weekday_same_period_compare_helper.change_desc_wording }}
+                	  {{ weekday_same_period_compare_helper.compared_percent_abs|floatformat:0 }}%
+                	{% else %}
+					  {{ weekday_same_period_compare_helper.compared_percent_abs|floatformat:0 }}%
+                      {{ weekday_same_period_compare_helper.change_desc_wording }}
+                	{% endifequal %}
                   </h3>
                   <p>{% trans "compare to same period year" %}</p>
                 </div>
@@ -296,9 +316,9 @@
         <div class="col-xs-8 calendar-content">
           <div class="row text-center report-date"><div class="col-xs-12">{{ report_date|date:"M Y" }}</div></div>
           <div class="row text-center">
-            <div class="col-xs-4 border-right"><h9 class="better-mark">better</h9><p>than average weekday</p></div>
-            <div class="col-xs-4 border-right"><h9 class="worse-mark">worse</h9><p>than average weekday</p></div>
-            <div class="col-xs-4"><h9 class="average-mark">average</h9><p>weekday</p></div>
+            <div class="col-xs-4 border-right"><h9 class="better-mark">{% trans "better" %}</h9><p>{% trans "than average weekday" %}</p></div>
+            <div class="col-xs-4 border-right"><h9 class="worse-mark">{% trans "worse" %}</h9><p>{% trans "than average weekday" %}</p></div>
+            <div class="col-xs-4"><h9 class="average-mark">{% trans "average" %}</h9><p>{% trans "weekday" %}</p></div>
           </div>
 
           <div class="row"><div class="col-xs-12">
@@ -313,11 +333,11 @@
 
           <div class="row text-center">
             <div class="col-xs-offset-2 col-xs-4 highest-weekday-enegry">
-              <h6><img src="{% static 'images/reports/electricity.png' %}"> highest weekday enegry</h6>
+              <h6><img src="{% static 'images/reports/electricity.png' %}"> {% trans "highest weekday energy" %}</h6>
               <h5>${{ weekday_highest_usage|stringformat:"d" }}</h5>
               <p>{{ weekday_highest_datetime|date:"d M Y" }}</p>
             </div>
-            <div class="col-xs-4 most-increase-from"><h6>most increase from</h6>
+            <div class="col-xs-4 most-increase-from"><h6>{% trans "most increase from" %}</h6>
               <p>{{ highest_diff_source.system.fullname }}</p></div>
           </div>
 
@@ -343,8 +363,13 @@
                 </div>
                 <div class="col-xs-8">
                   <h3 class="{{ weekday_month_compare_helper.change_css_class }}">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                    {{ weekday_month_compare_helper.change_desc_wording }}
                     {{ weekday_month_compare_helper.compared_percent_abs|floatformat:0 }}%
-                    {{ weekday_month_compare_helper.change_desc }}
+                  {% else %}
+                    {{ weekday_month_compare_helper.compared_percent_abs|floatformat:0 }}%
+                    {{ weekday_month_compare_helper.change_desc_wording }}
+                  {% endifequal %}
                   </h3>
                   <p>{% trans "Compare to Last Month" %}</p>
                 </div>
@@ -356,9 +381,13 @@
                   <img src="{% static weekday_same_period_compare_helper.change_icon_path %}">
                 </div>
                 <div class="col-xs-8">
-                  <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                    {{ weekday_same_period_compare_helper.change_desc_wording }}
                     {{ weekday_same_period_compare_helper.compared_percent_abs|floatformat:0 }}%
-                    {{ weekday_same_period_compare_helper.change_desc }}
+                  {% else %}
+                    {{ weekday_same_period_compare_helper.compared_percent_abs|floatformat:0 }}%
+                    {{ weekday_same_period_compare_helper.change_desc_wording }}
+                  {% endifequal %}
                   </h3>
                   <p>{% trans "compare to same period year" %}</p>
                 </div>
@@ -438,8 +467,13 @@
                 </div>
                 <div class="col-xs-8">
                   <h3 class="{{ weekends.month_compare_helper.change_css_class }}">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                    {{ weekends.month_compare_helper.change_desc_wording }}
                     {{ weekends.month_compare_helper.compared_percent_abs|floatformat:0 }}%
-                    {{ weekends.month_compare_helper.change_desc }}
+                  {% else %}
+                    {{ weekends.month_compare_helper.compared_percent_abs|floatformat:0 }}%
+                    {{ weekends.month_compare_helper.change_desc_wording }}
+                  {% endifequal %}
                   </h3>
                   <p>{% trans "Compare to Last Month" %}</p>
                 </div>
@@ -450,8 +484,13 @@
                 </div>
                 <div class="col-xs-8">
                   <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                    {{ weekday_same_period_compare_helper.change_desc_wording }}
                     {{ weekends_compare_same_period|floatformat:0 }}%
-                    {{ weekday_same_period_compare_helper.change_desc }}
+                  {% else %}
+                    {{ weekends_compare_same_period|floatformat:0 }}%
+                    {{ weekday_same_period_compare_helper.change_desc_wording }}
+                  {% endifequal %}
                   </h3>
                   <p>{% trans "compare to same period year" %}</p>
                 </div>
@@ -460,9 +499,9 @@
         <div class="col-xs-8 calendar-content">
           <div class="row text-center report-date"><div class="col-xs-12">{{ report_date|date:"M Y" }}</div></div>
           <div class="row text-center">
-            <div class="col-xs-4 border-right"><h9 class="better-mark">better</h9><p>than average weekday</p></div>
-            <div class="col-xs-4 border-right"><h9 class="worse-mark">worse</h9><p>than average weekday</p></div>
-            <div class="col-xs-4"><h9 class="average-mark">average</h9><p>weekday</p></div>
+            <div class="col-xs-4 border-right"><h9 class="better-mark">{% trans "better" %}</h9><p>{% trans "than average weekday" %}</p></div>
+            <div class="col-xs-4 border-right"><h9 class="worse-mark">{% trans "worse" %}</h9><p>{% trans "than average weekday" %}</p></div>
+            <div class="col-xs-4"><h9 class="average-mark">{% trans "average" %}</h9><p>{% trans "weekday" %}</p></div>
           </div>
 
           <div class="row"><div class="col-xs-12">
@@ -477,11 +516,11 @@
 
           <div class="row text-center">
             <div class="col-xs-offset-2 col-xs-4 highest-weekday-enegry">
-              <h6><img src="{% static 'images/reports/electricity.png' %}"> highest weekday enegry</h6>
+              <h6><img src="{% static 'images/reports/electricity.png' %}"> {% trans "highest weekday energy" %}</h6>
               <h5>${{ weekday_highest_usage|stringformat:"d" }}</h5>
               <p>{{ weekday_highest_datetime|date:"d M Y" }}</p>
             </div>
-            <div class="col-xs-4 most-increase-from"><h6>most increase from</h6>
+            <div class="col-xs-4 most-increase-from"><h6>{% trans "most increase from" %}</h6>
               <p>{{ highest_diff_source.system.fullname }}</p></div>
           </div>
 
@@ -507,8 +546,13 @@
                 </div>
                 <div class="col-xs-8">
                   <h3 class="{{ weekends.month_compare_helper.change_css_class }}">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                    {{ weekends.month_compare_helper.change_desc_wording }}
                     {{ weekends.month_compare_helper.compared_percent_abs|floatformat:0 }}%
-                    {{ weekends.month_compare_helper.change_desc }}
+                  {% else %}
+                    {{ weekends.month_compare_helper.compared_percent_abs|floatformat:0 }}%
+                    {{ weekends.month_compare_helper.change_desc_wording }}
+                  {% endifequal %}
                   </h3>
                   <p>{% trans "Compare to Last Month" %}</p>
                 </div>
@@ -521,8 +565,13 @@
                 </div>
                 <div class="col-xs-8">
                   <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                    {{ weekday_same_period_compare_helper.change_desc_wording }}
                     {{ weekends_compare_same_period|floatformat:0 }}%
-                    {{ weekday_same_period_compare_helper.change_desc }}
+				  {% else %}
+                    {{ weekends_compare_same_period|floatformat:0 }}%
+                    {{ weekday_same_period_compare_helper.change_desc_wording }}
+				  {% endifequal %}
                   </h3>
                   <p>{% trans "compare to same period year" %}</p>
                 </div>
@@ -603,8 +652,13 @@
                 </div>
                 <div class="col-xs-8">
                   <h3 class="{{ overnight.month_compare_helper.change_css_class }}">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                    {{ overnight.month_compare_helper.change_desc_wording }}
                     {{ overnight.month_compare_helper.compared_percent_abs|floatformat:0 }}%
-                    {{ overnight.month_compare_helper.change_desc }}
+                  {% else %}
+                    {{ overnight.month_compare_helper.compared_percent_abs|floatformat:0 }}%
+                    {{ overnight.month_compare_helper.change_desc_wording }}
+                  {% endifequal %}
                   </h3>
                   <p>{% trans "Compare to Last Month" %}</p>
                 </div>
@@ -615,8 +669,13 @@
                 </div>
                 <div class="col-xs-8">
                   <h3 class="{{ overnight.compare_same_period_helper.change_css_class }}">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                    {{ overnight.compare_same_period_helper.change_desc_wording }}
                     {{ overnight.compare_same_period_helper.compared_percent_abs|floatformat:0 }}%
-                    {{ overnight.compare_same_period_helper.change_desc }}
+                  {% else %}
+                    {{ overnight.compare_same_period_helper.compared_percent_abs|floatformat:0 }}%
+                    {{ overnight.compare_same_period_helper.change_desc_wording }}
+                  {% endifequal %}
                   </h3>
                   <p>{% trans "compare to same period year" %}</p>
                 </div>
@@ -625,9 +684,9 @@
         <div class="col-xs-8 calendar-content">
           <div class="row text-center report-date"><div class="col-xs-12">{{ report_date|date:"M Y" }}</div></div>
           <div class="row text-center">
-            <div class="col-xs-4 border-right"><h9 class="better-mark">better</h9><p>than average weekday</p></div>
-            <div class="col-xs-4 border-right"><h9 class="worse-mark">worse</h9><p>than average weekday</p></div>
-            <div class="col-xs-4"><h9 class="average-mark">average</h9><p>weekday</p></div>
+            <div class="col-xs-4 border-right"><h9 class="better-mark">{% trans "better" %}</h9><p>{% trans "than average weekday" %}</p></div>
+            <div class="col-xs-4 border-right"><h9 class="worse-mark">{% trans "worse" %}</h9><p>{% trans "than average weekday" %}</p></div>
+            <div class="col-xs-4"><h9 class="average-mark">{% trans "average" %}</h9><p>{% trans "weekday" %}</p></div>
           </div>
 
           <div class="row"><div class="col-xs-12">
@@ -642,11 +701,11 @@
 
           <div class="row text-center">
             <div class="col-xs-offset-2 col-xs-4 highest-weekday-enegry">
-              <h6><img src="{% static 'images/reports/electricity.png' %}"> highest weekday enegry</h6>
+              <h6><img src="{% static 'images/reports/electricity.png' %}"> {% trans "highest weekday energy" %}</h6>
               <h5>${{ weekday_highest_usage|stringformat:"d" }}</h5>
               <p>{{ weekday_highest_datetime|date:"d M Y" }}</p>
             </div>
-            <div class="col-xs-4 most-increase-from"><h6>most increase from</h6>
+            <div class="col-xs-4 most-increase-from"><h6>{% trans "most increase from" %}</h6>
               <p>{{ highest_diff_source.system.fullname }}</p></div>
           </div>
 
@@ -672,8 +731,13 @@
                 </div>
                 <div class="col-xs-8">
                   <h3 class="{{ overnight.month_compare_helper.change_css_class }}">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                    {{ overnight.month_compare_helper.change_desc_wording }}
                     {{ overnight.month_compare_helper.compared_percent_abs|floatformat:0 }}%
-                    {{ overnight.month_compare_helper.change_desc }}
+                  {% else %}
+                    {{ overnight.month_compare_helper.compared_percent_abs|floatformat:0 }}%
+                    {{ overnight.month_compare_helper.change_desc_wording }}
+                  {% endifequal %}
                   </h3>
                   <p>{% trans "Compare to Last Month" %}</p>
                 </div>
@@ -686,8 +750,13 @@
                 </div>
                 <div class="col-xs-8">
                   <h3 class="{{ overnight.compare_same_period_helper.change_css_class }}">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                    {{ overnight.compare_same_period_helper.change_desc_wording }}
                     {{ overnight.compare_same_period_helper.compared_percent_abs|floatformat:0 }}%
-                    {{ overnight.compare_same_period_helper.change_desc }}
+                  {% else %}
+                    {{ overnight.compare_same_period_helper.compared_percent_abs|floatformat:0 }}%
+                    {{ overnight.compare_same_period_helper.change_desc_wording }}
+                  {% endifequal %}
                   </h3>
                   <p>{% trans "compare to same period year" %}</p>
                 </div>

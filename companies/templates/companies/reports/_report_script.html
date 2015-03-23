@@ -1,3 +1,5 @@
+{% load i18n %}
+
 var ngapp = angular.module("Entrak", [ "kendo.directives" ]);
 var report_type = "{{ report_type }}";
 
@@ -89,7 +91,7 @@ ngapp.controller("ReportController", function($scope) {
     $scope.barOptions = {
         dataSource: {{ compare_past_datasource_json|safe }},
         title: {
-            text: "Total energy consumption for the last 6 months (kWh)",
+            text: "{% trans "Total energy consumption for the last 6 months (kWh)" %}",
             color: "#edbe4a"
         },
         legend: {
@@ -154,7 +156,7 @@ ngapp.controller("ReportController", function($scope) {
     $scope.lineOptions = {
         width: 1000,
         title: {
-            text: "WHEN DID WE ACHIEVE OUR SAVINGS?",
+            text: "{% trans "WHEN DID WE ACHIEVE OUR SAVINGS?" %}",
             color: "#354960"
         },
         legend: {
