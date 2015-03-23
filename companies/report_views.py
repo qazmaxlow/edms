@@ -537,10 +537,7 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     )
 
     if report_type == 'month':
-<<<<<<< HEAD
         report_date_text = _("{0} - Monthly Energy Report").format(report_date.strftime("%b %Y"))
-=======
-        report_date_text = "{0} - Monthly Energy Report".format(report_date.strftime("%b %Y"))
     elif report_type == 'week':
         report_date_text = "{0} - Weekly Energy Report".format(report_date_text)
     elif report_type == 'quarter':
@@ -548,8 +545,6 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
         report_date_text = "{0} - Quarterly Energy Report".format(quarter_text)
     elif report_type == 'year':
         report_date_text = "{0} - Yearly Energy Report".format(report_date.strftime("%Y"))
-
->>>>>>> 4ccaf042264b2baf06460def6f62041fc545b5f2
 
     m['report_date_text'] = report_date_text
     m['report_day_diff'] = (report_end_date - report_date).days

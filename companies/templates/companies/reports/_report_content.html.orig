@@ -38,7 +38,11 @@
             <div>
                 <img src="{% static 'images/report/factory-co2.png' %}">
                 <div class="basic-info-text-container">
+<<<<<<< HEAD
+                    <span id="current-co2-usage">{{ total_co2|floatformat:"0" }} {% trans "tons" %}</span><span class="basic-info-col-unit"> {% trans "CO<sub>2</sub>" %}</span>
+=======
                     <span id="current-co2-usage">{{ total_co2|floatformat:"0"|intcomma }} {% trans "tons" %}</span><span class="basic-info-col-unit">{% trans "CO<sub>2</sub>" %}</span>
+>>>>>>> 2c4b8afb11fd63823150804e991db4310e945310
                     <br>
                     <span class="basic-info-col-subtext">{% trans "emitted" %}</span>
                 </div>
@@ -69,7 +73,11 @@
             <div>
                 <img src="{% static 'images/report/factory-co2.png' %}">
                 <div class="basic-info-text-container">
+<<<<<<< HEAD
+                    <span id="save-co2-usage">{{ saving_sign }}{{ saving_co2|stringformat:".0f" }} {% trans "tons" %}</span><span class="basic-info-col-unit"> {% trans "CO<sub>2</sub>" %}</span>
+=======
                     <span id="save-co2-usage">{{ saving_sign }}{{ saving_co2|stringformat:".0f"|intcomma }} {% trans "tons" %}</span><span class="basic-info-col-unit">{% trans "CO<sub>2" %}</sub></span>
+>>>>>>> 2c4b8afb11fd63823150804e991db4310e945310
                 </div>
             </div>
             <hr class="current-usage-separator-dark-grey">
@@ -94,9 +102,14 @@
                 	{% else %}
                 	{% trans "increase" %}
                 	{% endif %}
+<<<<<<< HEAD
                 	{% else %}
                 	{% endifequal %}
-    				{{ co2_in_car|floatformat:"0"|intcomma }} {% trans "cars" %}</span><br>
+                    {{ co2_in_car|floatformat:"0" }} {% trans "cars" %}
+                    </span><br>
+=======
+                    <span id="car-impact">{{ co2_in_car|floatformat:"0"|intcomma }} {% trans "cars" %}</span><br>
+>>>>>>> 2c4b8afb11fd63823150804e991db4310e945310
                     <span id="car-impact-subtext" class="basic-info-col-subtext">
                       {% if is_saving %}
                       {% trans "taken off the road for a month" %}
