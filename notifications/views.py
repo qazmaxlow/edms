@@ -7,5 +7,5 @@ from .serializers import MessageSerializer
 
 
 class MessageList(generics.ListAPIView):
-    queryset = Message.objects.all()
+    queryset = Message.objects.published()
     serializer_class = MessageSerializer
