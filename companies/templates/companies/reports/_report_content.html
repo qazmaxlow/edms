@@ -394,7 +394,7 @@
         {% endif %}
 
     {% for wd in weekday_details %}
-      <div class="row report-detail-header">
+      <div class="row report-detail-header" style="background-color: {{ wd.color }};">
         <div class="col-xs-12">
         {{ wd.system.fullname }}
         </div>
@@ -578,7 +578,7 @@
         {% endif %}
 
     {% for d in weekday_details %}
-      <div class="row report-detail-header">
+      <div class="row report-detail-header" style="background-color: {{ d.color }};">
         <div class="col-xs-12">
         {{ d.system.fullname }}
         </div>
@@ -763,7 +763,7 @@
         {% endif %}
 
     {% for d in weekday_details %}
-      <div class="row report-detail-header">
+      <div class="row report-detail-header" style="background-color: {{ d.color }};">
         <div class="col-xs-12">
         {{ d.system.fullname }}
         </div>

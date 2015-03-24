@@ -635,7 +635,8 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     m['weekday_compare_same_period'] = weekday_compare_same_period
     m['weekday_same_period_compare_helper'] = CompareTplHepler(weekday_compare_same_period)
 
-    for g in group_data:
+    for ix, g in enumerate(group_data):
+        g['color'] = type_colors[ix]
         g['system'] = System.objects.get(code=g['systemCode'])
         g['usage'] = g['currentWeekdayInfo']['average']
         beginning_usage = g['beginningWeekdayInfo']['average']
