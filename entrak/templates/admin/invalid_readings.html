@@ -5,7 +5,7 @@
 {{ block.super }}
 <link rel="stylesheet" type="text/css" href="{% static "css/invalid-readings.css" %}" />
 
-<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="{% static 'assets/jquery/jquery-1.11.0.min.js' %}"></script>
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
 {% endblock %}
