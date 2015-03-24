@@ -11,5 +11,5 @@ from .views import MessageList
 
 urlpatterns = patterns(
     '',
-    url('^notifications/messages/$', MessageList.as_view()),
+    url('^notifications/messages/$', MessageList.as_view(), name='companies.notifications.messages'),
 )

@@ -94,15 +94,35 @@ $(function() {
     });
 
     // notifications
-    var notiwin = $('#notifications');
-    notiwin.kendoWindow(
+    $('#notifications').kendoWindow(
         {
             width: "600px",
             title: false,
             modal: true
         }
     );
-    notiwin.data('kendoWindow').open().center();
+
+    var notiwin = $('#notifications').data('kendoWindow');
+
+    // create datasource for notifications api
+    var noti_datasource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: "{% url 'companies.notifications.messages' system_code=systems.0.code %}",
+                dataType: "json"
+            }
+        },
+        change: function() {
+            var data = this.view();
+            if (data) {
+                notiwin.content(data[0].body);
+                notiwin.open().center();
+            }
+        }
+    });
+
+
+    noti_datasource.read();
 
 });
 </script>
