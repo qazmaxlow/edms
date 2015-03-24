@@ -565,10 +565,10 @@
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
                     {{ weekday_same_period_compare_helper.change_desc_wording }}
                     {{ weekends_compare_same_period|floatformat:0 }}%
-				  {% else %}
+                  {% else %}
                     {{ weekends_compare_same_period|floatformat:0 }}%
                     {{ weekday_same_period_compare_helper.change_desc_wording }}
-				  {% endifequal %}
+                  {% endifequal %}
                   </h3>
                   <p>{% trans "compare to same period year" %}</p>
                 </div>
