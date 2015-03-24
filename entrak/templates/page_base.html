@@ -115,7 +115,8 @@ $(function() {
         change: function() {
             var data = this.view();
             if (data) {
-                notiwin.content(data[0].body);
+                var tpl = kendo.template($('#notificationsTemplate').html());
+                notiwin.content(tpl(data[0]));
                 notiwin.open().center();
             }
         }
@@ -259,6 +260,10 @@ $(function() {
 </footer>
 {% endblock %}
 
-<div id="notifications"><button onclick="$('#notifications').data('kendoWindow').close();">X</button><p>text only</p></div>
+<script type="text/x-kendo-template" id="notificationsTemplate">
+  <button onclick="$('\\#notifications').data('kendoWindow').close();">X</button>
+  <div>#:body#</div>
+</script>
+<div id="notifications"></div>
 
 {% endblock %}
