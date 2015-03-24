@@ -30,6 +30,7 @@
 
 var page = {};
 
+var noti_datasource;
 $(function() {
     {% for system in user_systems %}
         var system = {};
@@ -106,7 +107,7 @@ $(function() {
     var notiwin = $('#notifications').data('kendoWindow');
 
     // create datasource for notifications api
-    var noti_datasource = new kendo.data.DataSource({
+    noti_datasource = new kendo.data.DataSource({
         transport: {
             read: {
                 url: "{% url 'companies.notifications.messages' system_code=systems.0.code %}",
@@ -122,10 +123,6 @@ $(function() {
             }
         }
     });
-
-
-    noti_datasource.read();
-
 });
 </script>
 

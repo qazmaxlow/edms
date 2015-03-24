@@ -120,6 +120,9 @@ report.reportGeneratorMultiLangTexts = {
 
 {% block extra_script %}
 {{block.super}}
+<script>
+    $(function() {noti_datasource.read();});
+</script>
 {% get_current_language as LANGUAGE_CODE %}
 
 {% include "report_inner_template.html" %}
