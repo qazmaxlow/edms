@@ -203,12 +203,7 @@
 
     <div class="row top-content">
       <div class="col-xs-12 text-center">
-        <h4>
-        {% trans "Your energy consumption this  was" %}{% ifequal LANGUAGE_CODE 'zh-tw' %}{% if compare_to_last_month > 0 %}{% trans "more" %}{% else %}{% trans "less" %}{% endif %} {{ compare_to_last_month_abs|floatformat:0 }}%
-       	{% else %}
-       	{{ compare_to_last_month_abs|floatformat:0 }}% {% if compare_to_last_month > 0 %}{% trans "more" %}{% else %}{% trans "less" %}{% endif %}{% trans " than it was last." %} 
-       	{% endifequal %}
-        </h4>
+        <h4>{{ barchart_compare_text }}</h4>
         <div kendo-chart k-options="barOptions" ></div>
       </div>
     </div>

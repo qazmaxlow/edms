@@ -880,6 +880,12 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     transformed_pie = [{'category': td['name'], 'value': td['total_energy'], 'color': type_colors[i]} for i, td in enumerate(transformed_datas)]
 
     m['transformed_pie_json'] = json.dumps(transformed_pie)
+
+    compare_last_month_helper = CompareTplHepler(compare_to_last_month)
+    m['barchart_compare_text'] = "Your energy consumption this  was {0} than it was last {1}".format(
+        compare_last_month_helper.formated_percent_change,
+        report_type
+    )
     # var transformedDatas = [];
     # var energyPercentSum = 0;
     # $.each(reportGenThis.groupedSourceInfos, function(infoIdx, info) {
