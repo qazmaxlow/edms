@@ -92,6 +92,18 @@ $(function() {
         $('.change-lang-form input[name=language]').val($(this).attr('lang_code'));
         $('.change-lang-form').submit();
     });
+
+    // notifications
+    var notiwin = $('#notifications');
+    notiwin.kendoWindow(
+        {
+            width: "600px",
+            title: false,
+            modal: true
+        }
+    );
+    notiwin.data('kendoWindow').open().center();
+
 });
 </script>
 
@@ -226,5 +238,7 @@ $(function() {
     <p style="clear: both;"></p>
 </footer>
 {% endblock %}
+
+<div id="notifications"><button onclick="$('#notifications').data('kendoWindow').close();">X</button><p>text only</p></div>
 
 {% endblock %}
