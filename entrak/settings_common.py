@@ -64,6 +64,7 @@ INSTALLED_APPS = (
     'entrak',
     'audit',
     'companies',
+    'notifications',
 )
 
 MIDDLEWARE_CLASSES = (
