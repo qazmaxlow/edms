@@ -98,7 +98,8 @@ $(function() {
         {
             width: "600px",
             title: false,
-            modal: true
+            modal: true,
+            visible: false
         }
     );
 
@@ -114,7 +115,7 @@ $(function() {
         },
         change: function() {
             var data = this.view();
-            if (data) {
+            if (this.total() != 0) {
                 var tpl = kendo.template($('#notificationsTemplate').html());
                 notiwin.content(tpl(data[0]));
                 notiwin.open().center();
