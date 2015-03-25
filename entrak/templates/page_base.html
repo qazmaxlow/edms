@@ -103,6 +103,7 @@ $(function() {
             visible: false
         }
     );
+    $('#notifications').parent().addClass("notification-wrapper");
 
     var notiwin = $('#notifications').data('kendoWindow');
 
@@ -258,9 +259,61 @@ $(function() {
 </footer>
 {% endblock %}
 
+<style>
+    .notification-wrapper {
+        background: transparent !important;
+        -webkit-box-shadow: none !important;
+        bow-shadow: none !important;
+        border: 0 !important;
+    }
+
+    #notifications {
+        padding: 0;
+        background: transparent !important;
+    }
+
+    .notification-wrapper .body {
+        background-color: #f4f4f4;
+        color: #8c94a2 !important;
+        padding: 25px;
+        font-size: 2.2rem;
+    }
+
+    .notification-wrapper .title-bar {
+        text-align: right;
+    }
+
+    .notification-wrapper .actions {
+        background-color: #4a8c9b;
+        padding: 10px;
+    }
+
+    .notification-wrapper .actions button {
+        color: #ffffff;
+        border: 0;
+        background-color: #9bceda;
+        padding: 4px 12px;
+        box-shadow: 0px 2px 0px #6b9aa5 !important;
+        border-radius: 4px;
+    }
+
+    .notification-wrapper .actions button:hover {
+        color: #ffffff;
+        border-color: rgba(0, 0, 0, 0);
+        background-color: #74c62b;
+    }
+
+</style>
 <script type="text/x-kendo-template" id="notificationsTemplate">
-  <button onclick="$('\\#notifications').data('kendoWindow').close();">X</button>
-  <div>#:body#</div>
+    <div class="text-center">
+    <div class="body">
+      <div class="title-bar">
+          <button onclick="$('\\#notifications').data('kendoWindow').close();">X</button>
+      </div>
+      #:body#
+    </div>
+    <div class="actions"><button class="xk-button" onclick="$('\\#notifications').data('kendoWindow').close();">OK</div>
+    </div>
 </script>
 <div id="notifications"></div>
 
