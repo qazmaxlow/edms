@@ -16,6 +16,11 @@
 <script src="{% static 'js/arboreal-customized.js' %}"></script>
 <script src="{% static 'js/moment.min.js' %}"></script>
 <script src="{% static 'js/superfish-master/dist/js/superfish.min.js' %}"></script>
+
+<link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/kendo.entrak.theme.css' %}" rel="stylesheet">
+<script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
+<script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
 {% endblock %}
 
 {% block extra_script %}
@@ -25,6 +30,7 @@
 
 var page = {};
 
+var noti_datasource;
 $(function() {
     {% for system in user_systems %}
         var system = {};
@@ -86,6 +92,36 @@ $(function() {
         event.preventDefault();
         $('.change-lang-form input[name=language]').val($(this).attr('lang_code'));
         $('.change-lang-form').submit();
+    });
+
+    // notifications
+    $('#notifications').kendoWindow(
+        {
+            width: "600px",
+            title: false,
+            modal: true,
+            visible: false
+        }
+    );
+
+    var notiwin = $('#notifications').data('kendoWindow');
+
+    // create datasource for notifications api
+    noti_datasource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: "{% url 'companies.notifications.messages' system_code=systems.0.code %}",
+                dataType: "json"
+            }
+        },
+        change: function() {
+            var data = this.view();
+            if (this.total() != 0) {
+                var tpl = kendo.template($('#notificationsTemplate').html());
+                notiwin.content(tpl(data[0]));
+                notiwin.open().center();
+            }
+        }
     });
 });
 </script>
@@ -221,5 +257,11 @@ $(function() {
     <p style="clear: both;"></p>
 </footer>
 {% endblock %}
+
+<script type="text/x-kendo-template" id="notificationsTemplate">
+  <button onclick="$('\\#notifications').data('kendoWindow').close();">X</button>
+  <div>#:body#</div>
+</script>
+<div id="notifications"></div>
 
 {% endblock %}
