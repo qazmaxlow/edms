@@ -259,7 +259,7 @@
     </div>
 
       {% if report_type != 'quarter' and report_type != 'year' and report_type != 'custom' %}
-        <div class="row top-section">
+        <div class="row top-section border-bottom-5px">
         <div class="col-xs-4 side-bar">
           <div class="row item">
                 <div class="col-xs-4">
@@ -307,6 +307,9 @@
         </div>
         <div class="col-xs-8 calendar-content">
           <div class="row text-center report-date"><div class="col-xs-12">{{ report_date|date:"M Y" }}</div></div>
+          <div class="row text-center date-header border-bottom-2px">
+            Jul 2014
+          </div>
           <div class="row text-center">
             <div class="col-xs-4 border-right"><h9 class="better-mark">{% trans "Better" %}</h9><p>{% trans "than average weekday" %}</p></div>
             <div class="col-xs-4 border-right"><h9 class="worse-mark">{% trans "Worse" %}</h9><p>{% trans "than average weekday" %}</p></div>
@@ -314,7 +317,7 @@
           </div>
 
           <div class="row"><div class="col-xs-12">
-        <div class="calendar-info-container">
+        <div class="calendar-info-container calendar-width">
             <div class='calendar-weekday-header'>
                 {% trans "<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>" %}
             </div>
@@ -323,13 +326,13 @@
         </div>
           </div></div>
 
-          <div class="row text-center">
-            <div class="col-xs-offset-2 col-xs-4 highest-weekday-enegry">
-              <h6><img src="{% static 'images/reports/electricity.png' %}"> {% trans "Highest Weekday Energy" %}</h6>
+          <div class="text-center calendar-width">
+            <div class="highest-weekday-enegry">
+              <h6><img src="{% static 'images/reports/electricity.png' %}"> {% trans "Highest Weekday Energy Use" %}</h6>
               <h5>${{ weekday_highest_usage|floatformat:"0"|intcomma }}</h5>
               <p>{{ weekday_highest_datetime|date:"d M Y" }}</p>
             </div>
-            <div class="col-xs-4 most-increase-from"><h6>{% trans "Most of the increase was from" %}</h6>
+            <div class="most-increase-from"><h6>{% trans "Most of the increase was from" %}</h6>
               <p>{{ highest_diff_source.system.fullname }}</p></div>
           </div>
 
@@ -373,6 +376,7 @@
                   <img src="{% static weekday_same_period_compare_helper.change_icon_path %}">
                 </div>
                 <div class="col-xs-8">
+                  <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
                     {{ weekday_same_period_compare_helper.change_desc_wording }}
                     {{ weekday_same_period_compare_helper.compared_percent_abs|floatformat:0 }}%
@@ -442,7 +446,7 @@
         {% trans "HOW MUCH ENERGY DID WE USE ON <span>WEEKENDS</span> AND <span>HOLIDAYS?</span>" %}</div>
     </div>
       {% if report_type != 'quarter' and report_type != 'year' and report_type != 'custom' %}
-        <div class="row top-section">
+        <div class="row top-section border-bottom-5px">
         <div class="col-xs-4 side-bar">
           <div class="row item">
                 <div class="col-xs-4">
@@ -490,6 +494,9 @@
         </div>
         <div class="col-xs-8 calendar-content">
           <div class="row text-center report-date"><div class="col-xs-12">{{ report_date|date:"M Y" }}</div></div>
+          <div class="row text-center date-header border-bottom-2px">
+            Jul 2014
+          </div>
           <div class="row text-center">
             <div class="col-xs-4 border-right"><h9 class="better-mark">{% trans "Better" %}</h9><p>{% trans "than average weekend" %}</p></div>
             <div class="col-xs-4 border-right"><h9 class="worse-mark">{% trans "Worse" %}</h9><p>{% trans "than average weekend" %}</p></div>
@@ -497,7 +504,7 @@
           </div>
 
           <div class="row"><div class="col-xs-12">
-        <div class="calendar-info-container">
+        <div class="calendar-info-container calendar-width">
             <div class='calendar-weekday-header'>
                 {% trans "<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>" %}
             </div>
@@ -506,13 +513,13 @@
         </div>
           </div></div>
 
-          <div class="row text-center">
-            <div class="col-xs-offset-2 col-xs-4 highest-weekday-enegry">
-              <h6><img src="{% static 'images/reports/electricity.png' %}"> {% trans "Highest Weekend/Holiday Energy" %}</h6>
+          <div class="text-center calendar-width">
+            <div class="highest-weekday-enegry">
+              <h6><img src="{% static 'images/reports/electricity.png' %}"> {% trans "Highest Weekend/Holiday Energy Use" %}</h6>
               <h5>${{ weekday_highest_usage|floatformat:"0"|intcomma }}</h5>
               <p>{{ weekday_highest_datetime|date:"d M Y" }}</p>
             </div>
-            <div class="col-xs-4 most-increase-from"><h6>{% trans "Most of the increase was from" %}</h6>
+            <div class="most-increase-from"><h6>{% trans "Most of the increase was from" %}</h6>
               <p>{{ highest_diff_source.system.fullname }}</p></div>
           </div>
 
@@ -627,7 +634,7 @@
     </div>
 
       {% if report_type != 'quarter' and report_type != 'year' and report_type != 'custom' %}
-        <div class="row top-section">
+        <div class="row top-section border-bottom-5px">
         <div class="col-xs-4 side-bar">
           <div class="row item">
                 <div class="col-xs-4">
@@ -675,6 +682,9 @@
         </div>
         <div class="col-xs-8 calendar-content">
           <div class="row text-center report-date"><div class="col-xs-12">{{ report_date|date:"M Y" }}</div></div>
+          <div class="row text-center date-header border-bottom-2px">
+            Jul 2014
+          </div>
           <div class="row text-center">
             <div class="col-xs-4 border-right"><h9 class="better-mark">{% trans "Better" %}</h9><p>{% trans "than average night" %}</p></div>
             <div class="col-xs-4 border-right"><h9 class="worse-mark">{% trans "Worse" %}</h9><p>{% trans "than average night" %}</p></div>
@@ -682,7 +692,7 @@
           </div>
 
           <div class="row"><div class="col-xs-12">
-        <div class="calendar-info-container">
+        <div class="calendar-info-container calendar-width">
             <div class='calendar-weekday-header'>
                 {% trans "<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>" %}
             </div>
@@ -691,13 +701,13 @@
         </div>
           </div></div>
 
-          <div class="row text-center">
-            <div class="col-xs-offset-2 col-xs-4 highest-weekday-enegry">
-              <h6><img src="{% static 'images/reports/electricity.png' %}"> {% trans "Highest Overnight Energy" %}</h6>
+          <div class="text-center calendar-width">
+            <div class="highest-weekday-enegry">
+              <h6><img src="{% static 'images/reports/electricity.png' %}"> {% trans "Highest Overnight Energy Use" %}</h6>
               <h5>${{ weekday_highest_usage|floatformat:"0"|intcomma }}</h5>
               <p>{{ weekday_highest_datetime|date:"d M Y" }}</p>
             </div>
-            <div class="col-xs-4 most-increase-from"><h6>{% trans "Most of the increase was from" %}</h6>
+            <div class="most-increase-from"><h6>{% trans "Most of the increase was from" %}</h6>
               <p>{{ highest_diff_source.system.fullname }}</p></div>
           </div>
 
