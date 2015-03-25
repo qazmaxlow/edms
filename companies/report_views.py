@@ -332,8 +332,8 @@ def report_view(request, system_code=None):
     source_ids = [str(source.id) for source in sources]
     source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingMonth, start_dt, end_dt)
 
-    last_month_start_dt = previous_month(start_dt)
-    last_month_end_dt = previous_month(end_dt)
+    last_month_start_dt = start_dt - relativedelta(months=1)
+    last_month_end_dt = end_dt - relativedelta(months=1)
     last_month_source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingMonth, last_month_start_dt, last_month_end_dt)
 
     energy_usages = calculation.combine_readings_by_timestamp(source_readings)
