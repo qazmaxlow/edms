@@ -196,8 +196,8 @@
 <div class="page-break-after">
 <div id="report_compared_to_last" class="xreport-component page-break-after">
     <div class="row report-component-header">
-      <div class="col-xs-12">
-      {% trans 'HOW MUCH MORE / LESS DID WE USE COMPARED TO LAST <span class="report-type-name"></span>?' %}
+      <div class="col-xs-12 section-title">
+        {%blocktrans%}How much more / less did we use compared to last {{ report_type }}?{%endblocktrans%}
       </div>
     </div>
 
@@ -284,7 +284,7 @@
                       {{ weekday_month_compare_helper.change_desc_wording }}
          	        {% endifequal %}
                   </h3>
-                  <p>{% trans "Compared to last month" %}</p>
+                  <p>{%blocktrans%}Compared to last {{ report_type }}{%endblocktrans%}</p>
                 </div>
           </div>
           <div class="row item end">
@@ -363,7 +363,7 @@
                     {{ weekday_month_compare_helper.change_desc_wording }}
                   {% endifequal %}
                   </h3>
-                  <p>{% trans "Compared to last month" %}</p>
+                  <p>{%blocktrans%}Compared to last {{ report_type }}{%endblocktrans%}</p>
                 </div>
               </div>
           </div>
@@ -395,36 +395,36 @@
         </div>
       </div>
       <div class="row report-detail-body {% if forloop.last %}content-footer{% endif %} ">
-        <div class="col-xs-4">
+        <div class="col-xs-4 no-x-padding">
           <div class="row">
             <div class="col-xs-4">
               <img src="{% static 'images/reports/icon_money.svg'  %}">
             </div>
-            <div class="col-xs-8">
+            <div class="col-xs-8 no-x-padding">
               <h3 class="used-money">${{  wd.usage_bill|floatformat:"0"|intcomma }}</h3>
               <p>{% trans "Average Weekday Energy Use" %}</p>
             </div>
           </div>
         </div>
-        <div class="col-xs-4">
+        <div class="col-xs-4 no-x-padding">
           <div class="row">
             <div class="col-xs-4">
               <img src="{% static wd.compare_last_month_helper.change_icon_path %}">
             </div>
-            <div class="col-xs-8">
+            <div class="col-xs-8 no-x-padding">
               <h3 class="{{ wd.compare_last_month_helper.change_css_class }}">
                 {{ wd.compare_last_month_helper.text_desc }}
               </h3>
-              <p>{% trans "Compared to last month" %}</p>
+              <p>{%blocktrans%}Compared to last {{ report_type }}{%endblocktrans%}</p>
             </div>
           </div>
         </div>
-        <div class="col-xs-4">
+        <div class="col-xs-4 no-x-padding">
           <div class="row">
             <div class="col-xs-4">
               <img src="{% static wd.compare_same_period_helper.change_icon_path %}">
             </div>
-            <div class="col-xs-8">
+            <div class="col-xs-8 no-x-padding">
               <h3 class="{{ wd.compare_same_period_helper.change_css_class }}">
                 {{ wd.compare_same_period_helper.text_desc }}
               </h3>
@@ -467,7 +467,7 @@
                     {{ weekends.month_compare_helper.change_desc_wording }}
                   {% endifequal %}
                   </h3>
-                  <p>{% trans "Compared to last month" %}</p>
+                  <p>{%blocktrans%}Compared to last {{ report_type }}{%endblocktrans%}</p>
                 </div>
           </div>
           <div class="row item end">
@@ -546,7 +546,7 @@
                     {{ weekends.month_compare_helper.change_desc_wording }}
                   {% endifequal %}
                   </h3>
-                  <p>{% trans "Compared to last month" %}</p>
+                  <p>{%blocktrans%}Compared to last {{ report_type }}{%endblocktrans%}</p>
                 </div>
               </div>
           </div>
@@ -579,36 +579,36 @@
         </div>
       </div>
       <div class="row report-detail-body {% if forloop.last %}content-footer{% endif %} ">
-        <div class="col-xs-4">
+        <div class="col-xs-4 no-x-padding">
           <div class="row">
             <div class="col-xs-4">
               <img src="{% static 'images/reports/icon_money.svg'  %}">
             </div>
-            <div class="col-xs-8">
+            <div class="col-xs-8 no-x-padding">
               <h3 class="used-money">${{  d.weekend.bill|floatformat:"0"|intcomma }}</h3>
               <p>{% trans "Average Weekend/Holiday Energy Use" %}</p>
             </div>
           </div>
         </div>
-        <div class="col-xs-4">
+        <div class="col-xs-4 no-x-padding">
           <div class="row">
             <div class="col-xs-4">
               <img src="{% static d.compare_last_month_helper.change_icon_path %}">
             </div>
-            <div class="col-xs-8">
+            <div class="col-xs-8 no-x-padding">
               <h3 class="{{ d.compare_last_month_helper.change_css_class }}">
                 {{ d.compare_last_month_helper.text_desc }}
               </h3>
-              <p>{% trans "Compared to last month" %}</p>
+              <p>{%blocktrans%}Compared to last {{ report_type }}{%endblocktrans%}</p>
             </div>
           </div>
         </div>
-        <div class="col-xs-4">
+        <div class="col-xs-4 no-x-padding">
           <div class="row">
             <div class="col-xs-4">
               <img src="{% static d.compare_same_period_helper.change_icon_path %}">
             </div>
-            <div class="col-xs-8">
+            <div class="col-xs-8 no-x-padding">
               <h3 class="{{ d.compare_same_period_helper.change_css_class }}">
                 {{ d.compare_same_period_helper.text_desc }}
               </h3>
@@ -652,7 +652,7 @@
                     {{ overnight.month_compare_helper.change_desc_wording }}
                   {% endifequal %}
                   </h3>
-                  <p>{% trans "Compared to last month" %}</p>
+                  <p>{%blocktrans%}Compared to last {{ report_type }}{%endblocktrans%}</p>
                 </div>
           </div>
           <div class="row item end">
@@ -731,7 +731,7 @@
                     {{ overnight.month_compare_helper.change_desc_wording }}
                   {% endifequal %}
                   </h3>
-                  <p>{% trans "Compared to last month" %}</p>
+                  <p>{%blocktrans%}Compared to last {{ report_type }}{%endblocktrans%}</p>
                 </div>
               </div>
           </div>
@@ -764,36 +764,36 @@
         </div>
       </div>
       <div class="row report-detail-body {% if forloop.last %}content-footer{% endif %} ">
-        <div class="col-xs-4">
+        <div class="col-xs-4 no-x-padding">
           <div class="row">
             <div class="col-xs-4">
               <img src="{% static 'images/reports/icon_money.svg'  %}">
             </div>
-            <div class="col-xs-8">
+            <div class="col-xs-8 no-x-padding">
               <h3 class="used-money">${{  d.weekend.bill|floatformat:"0"|intcomma }}</h3>
               <p>{% trans "Average Overnight Energy Use" %}</p>
             </div>
           </div>
         </div>
-        <div class="col-xs-4">
+        <div class="col-xs-4 no-x-padding">
           <div class="row">
             <div class="col-xs-4">
               <img src="{% static d.compare_last_month_helper.change_icon_path %}">
             </div>
-            <div class="col-xs-8">
+            <div class="col-xs-8 no-x-padding">
               <h3 class="{{ d.compare_last_month_helper.change_css_class }}">
                 {{ d.compare_last_month_helper.text_desc }}
               </h3>
-              <p>{% trans "Compared to last month" %}</p>
+              <p>{%blocktrans%}Compared to last {{ report_type }}{%endblocktrans%}</p>
             </div>
           </div>
         </div>
-        <div class="col-xs-4">
+        <div class="col-xs-4 no-x-padding">
           <div class="row">
             <div class="col-xs-4">
               <img src="{% static d.compare_same_period_helper.change_icon_path %}">
             </div>
-            <div class="col-xs-8">
+            <div class="col-xs-8 no-x-padding">
               <h3 class="{{ d.compare_same_period_helper.change_css_class }}">
                 {{ d.compare_same_period_helper.text_desc }}
               </h3>
