@@ -521,7 +521,7 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
         report_date = datetime.datetime.combine(report_date, datetime.datetime.min.time())
         report_date = current_system_tz.localize(report_date)
 
-    end_dt = next_month(start_dt)
+    end_dt = start_dt + relativedelta(months=1)
 
     ed = request.GET.get('end_date')
     if ed:
