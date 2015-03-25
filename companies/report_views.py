@@ -30,31 +30,6 @@ from utils.utils import Utils
 from entrak.report_views import __generate_report_data
 
 
-def previous_month(dt):
-    previous_year = dt.year -1 if dt.month == 1 else dt.year
-    previous_month_last = dt.replace(day=1) - datetime.timedelta(days=1)
-    previous_month = 12 if dt.month == 1 else dt.month-1
-    previous_day = dt.day if dt.day < previous_month_last.day else previous_month_last.day
-
-    previous_month_date = dt.replace(year=previous_year, month=previous_month, day=previous_day)
-
-    return previous_month_date
-
-
-def next_month(datetime):
-    try:
-        next_month_date = datetime.replace(month=datetime.month+1)
-    except ValueError:
-        if datetime.month == 12:
-            next_month_date = datetime.replace(year=datetime.year+1, month=1)
-        else:
-            # next month is too short to have "same date"
-            # pick your own heuristic, or re-raise the exception:
-            raise
-
-    return next_month_date
-
-
 def get_source_name(source_id):
     source = Source.objects(id=str(source_id)).first()
     return source.d_name
