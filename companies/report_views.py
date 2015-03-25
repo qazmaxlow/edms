@@ -30,31 +30,6 @@ from utils.utils import Utils
 from entrak.report_views import __generate_report_data
 
 
-def previous_month(dt):
-    previous_year = dt.year -1 if dt.month == 1 else dt.year
-    previous_month_last = dt.replace(day=1) - datetime.timedelta(days=1)
-    previous_month = 12 if dt.month == 1 else dt.month-1
-    previous_day = dt.day if dt.day < previous_month_last.day else previous_month_last.day
-
-    previous_month_date = dt.replace(year=previous_year, month=previous_month, day=previous_day)
-
-    return previous_month_date
-
-
-def next_month(datetime):
-    try:
-        next_month_date = datetime.replace(month=datetime.month+1)
-    except ValueError:
-        if datetime.month == 12:
-            next_month_date = datetime.replace(year=datetime.year+1, month=1)
-        else:
-            # next month is too short to have "same date"
-            # pick your own heuristic, or re-raise the exception:
-            raise
-
-    return next_month_date
-
-
 def get_source_name(source_id):
     source = Source.objects(id=str(source_id)).first()
     return source.d_name
@@ -332,8 +307,8 @@ def report_view(request, system_code=None):
     source_ids = [str(source.id) for source in sources]
     source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingMonth, start_dt, end_dt)
 
-    last_month_start_dt = previous_month(start_dt)
-    last_month_end_dt = previous_month(end_dt)
+    last_month_start_dt = start_dt - relativedelta(months=1)
+    last_month_end_dt = end_dt - relativedelta(months=1)
     last_month_source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingMonth, last_month_start_dt, last_month_end_dt)
 
     energy_usages = calculation.combine_readings_by_timestamp(source_readings)
@@ -521,7 +496,7 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
         report_date = datetime.datetime.combine(report_date, datetime.datetime.min.time())
         report_date = current_system_tz.localize(report_date)
 
-    end_dt = next_month(start_dt)
+    end_dt = start_dt + relativedelta(months=1)
 
     ed = request.GET.get('end_date')
     if ed:
@@ -677,7 +652,7 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
 
 
     compare_current_name = report_date.strftime('%b')
-    compare_last_name = previous_month(report_date).strftime('%b')
+    compare_last_name = (report_date - relativedelta(months=1)).strftime('%b')
     if report_type == 'week':
         compare_current_name = 'this week'
         compare_last_name = 'last week'
@@ -921,7 +896,7 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
         compare_past_datasource.append({
             'value': su,
             'month': compare_past_date.strftime('%b'), 'country': "us"})
-        compare_past_date = previous_month(compare_past_date)
+        compare_past_date = compare_past_date - relativedelta(months=1)
     compare_past_datasource.reverse()
 
     # oops, hack?
