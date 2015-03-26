@@ -419,6 +419,8 @@ class CompareTplHepler:
     def text_desc(self):
         if self.compared_percent_abs:
             return "{self.compared_percent_abs:.0f}% {self.change_desc}".format(self=self)
+        else:
+            return 'N/A'
 
     def to_dict(self):
         return {
