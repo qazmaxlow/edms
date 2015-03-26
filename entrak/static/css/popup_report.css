@@ -1,3 +1,8 @@
+.no-x-padding {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
 .page-break-after {
     page-break-after: always !important;
 }
@@ -174,6 +179,7 @@ body {-webkit-print-color-adjust: exact;}
 
 .top-section .side-bar .item:not(.end) {
     background: url("../images/reports/side_row_splitter.png") no-repeat scroll center bottom white;
+    height: 132px;
 }
 
 .top-section .side-bar .inner {
@@ -183,7 +189,7 @@ body {-webkit-print-color-adjust: exact;}
 
 .top-section .side-bar .end {
     Background: white;
-    /* height: 143px; */
+    height: 124px;
 }
 
 .no-background-image {
@@ -234,8 +240,27 @@ body {-webkit-print-color-adjust: exact;}
     border-right: #e5dadb 1px solid;
 }
 
+.date-header {
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: #415368;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.border-bottom-2px {
+    border-bottom: #e5dadb 2px solid;
+}
+
+.border-bottom-5px {
+    border-bottom: #aeaeae 5px solid;
+}
+
 .highest-weekday-enegry {
     border-left: #e5dadb 1px solid;
+    float: left;
+    width: 238px;
+    height: 110px;
 }
 
 .highest-weekday-enegry h6 {
@@ -254,7 +279,9 @@ body {-webkit-print-color-adjust: exact;}
 
 .most-increase-from {
     background: url("../images/reports/vertical_splitter.png") no-repeat scroll left center transparent;
-    height: 97px;/* hack */
+    height: 110px;/* hack */
+    width: 238px;
+    float: left;
 }
 
 .better-mark {
@@ -266,6 +293,8 @@ body {-webkit-print-color-adjust: exact;}
     content: "\25A0";
     color: #a5d26f;
 }
+
+.
 
 .worse-mark {
     color: #e98264;
@@ -666,9 +695,12 @@ body {-webkit-print-color-adjust: exact;}
 
 .calendar-info-container {
     display: block;
-    width: 520px;
     vertical-align: top;
+}
+
+.calendar-width {
     margin: 0 auto;
+    width: 476px;
 }
 
 .calendar-title {

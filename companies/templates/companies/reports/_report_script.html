@@ -65,9 +65,10 @@ ngapp.controller("ReportController", function($scope) {
             labels: {
                 template: "#= kendo.format('{0:p0}', percentage)#",
                 position: "Center",
+                distance: 20,
                 visible: true,
                 background: "transparent",
-                font: "bold 18px Arial",
+                font: "bold 14px Arial",
                 color: function(e) {
                     return e.dataItem.color;
                 }
@@ -75,6 +76,13 @@ ngapp.controller("ReportController", function($scope) {
             overlay: {
                 gradient: "none"
             }
+        },
+        plotArea: {
+            margin: 10
+        },
+        chartArea: {
+            height: 250,
+            width: 300
         },
         series: [{
             startAngle: 150,
@@ -98,12 +106,14 @@ ngapp.controller("ReportController", function($scope) {
             visible: false
         },
         chartArea: {
-            background: ""
+            background: "",
+            margin: {top: 20, bottom: 20}
         },
         seriesDefaults: {
             type: "column",
             labels: {
                 visible: true,
+                background: "transparent",
                 template: "# if ( value > 0) { # #= kendo.toString(value, 'n0') # # } else { # N/A # } #"
             }
         },
@@ -156,14 +166,16 @@ ngapp.controller("ReportController", function($scope) {
     $scope.lineOptions = {
         width: 1000,
         title: {
-            text: "{% trans "WHEN DID WE ACHIEVE OUR SAVINGS?" %}",
-            color: "#354960"
+            text: "{% trans "When did we achieve our savings?" %}",
+            color: "#354960",
+            font: "bold 20px sans-serif"
         },
         legend: {
             position: "top"
         },
         chartArea: {
-            background: ""
+            background: "",
+            margin: {top: 20, bottom: 20}
         },
 
 
@@ -242,7 +254,8 @@ ngapp.controller("ReportController", function($scope) {
             position: "top"
         },
         chartArea: {
-            background: ""
+            background: "",
+            margin: {bottom: 20}
         },
 
 
