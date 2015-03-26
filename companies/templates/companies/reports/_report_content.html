@@ -147,9 +147,11 @@
                 {% for td in transformed_datas %}
                 <tr class="transformed-row-bg">
                   <td class="transformed-name" style="background-color:{{ td.color }};">{{ td.name }}</td><td>
-                    <div class="transformed-bar" style="width:{{ td.percent_in_total }}%;background-color:{{ td.color }}">
-                      {{ td.total_energy|floatformat:"0"|intcomma }}kWh
+                    <div class="transformed-bar" style="width:{{ td.percent_in_total }}%;background-image: -webkit-linear-gradient(left, #eeeeee 0%, {{ td.color }} 100%); background-image: -o-linear-gradient(left, #eeeeee 0%, {{ td.color }} 100%); background-image: linear-gradient(left, #eeeeee 0%, {{ td.color }} 100%);"></div>
                     </div>
+                  </td>
+                  <td class="transformed-label" style="color:{{ td.color }};">
+                    {{ td.total_energy|floatformat:"0"|intcomma }}kWh
                   </td>
                 </tr>
                 {% endfor %}
