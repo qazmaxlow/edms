@@ -145,8 +145,7 @@ ngapp.controller("ReportController", function($scope) {
         },
         tooltip: {
             visible: true,
-            format: "{0}%",
-            template: "#= dataItem.month #: #= value #"
+            template: "#= dataItem.month #: #= kendo.toString(value, 'n0') #"
         }
     };
 
