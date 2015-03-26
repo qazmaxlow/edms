@@ -147,7 +147,9 @@
                 {% for td in transformed_datas %}
                 <tr>
                   <td class="transformed-name" style="background-color:{{ td.color }};">{{ td.name }}</td><td>
-                    <div class="transformed-bar" style="width:{{ td.percent_in_total }}%;background-color:{{ td.color }}"></div>
+                    <div class="transformed-bar" style="width:{{ td.percent_in_total }}%;background-color:{{ td.color }}">
+                      {{ td.total_energy|floatformat:"0"|intcomma }}kWh
+                    </div>
                   </td>
                 </tr>
                 {% endfor %}
