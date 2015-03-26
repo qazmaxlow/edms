@@ -897,12 +897,20 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     for su in sumup_usages:
         compare_past_datasource.append({
             'value': su,
-            'month': compare_past_date.strftime('%b'), 'country': "us"})
-        compare_past_date = compare_past_date - relativedelta(months=1)
+            'month': compare_past_date.strftime('%b'),
+            'datetime': compare_past_date,
+            'country': "us"})
+        if report_type == 'month':
+            compare_past_date = compare_past_date - relativedelta(months=1)
+        elif report_type == 'week':
+            compare_past_date = compare_past_date - relativedelta(days=7)
+        elif report_type == 'quarter':
+            compare_past_date = compare_past_date - relativedelta(months=3)
+
     compare_past_datasource.reverse()
 
     # oops, hack?
-    m['compare_past_datasource_json'] = json.dumps(compare_past_datasource)
+    m['compare_past_datasource_json'] = json.dumps(compare_past_datasource, cls=DjangoJSONEncoder)
 
     # weekends
     weekends_usage = {}

@@ -96,8 +96,27 @@ ngapp.controller("ReportController", function($scope) {
 
     };
 
+    var bar_date_format = '{0:MMM}';
+    var bar_date_unitstep = 1;
+
+    if (report_type == 'week') {
+        bar_date_format = '{0:MMM d}';
+    }
+    else if (report_type == 'quarter') {
+        var bar_date_unitstep = 3;
+    }
+
     $scope.barOptions = {
-        dataSource: {{ compare_past_datasource_json|safe }},
+        dataSource: {
+            data: {{ compare_past_datasource_json|safe }},
+            schema: {
+                model: {
+                    fields: {
+                        datetime: { type: 'date'}
+                    }
+                }
+            }
+        },
         title: {
             text: "{% trans "Total energy consumption for the last 6 months (kWh)" %}",
             color: "#edbe4a"
@@ -138,7 +157,13 @@ ngapp.controller("ReportController", function($scope) {
             }
         },
         categoryAxis: {
-            field: "month",
+            field: 'datetime',
+            baseUnitStep: bar_date_unitstep,
+            labels: {
+                dateFormats: {
+                    months: bar_date_format
+                }
+            },
             majorGridLines: {
                 visible: false
             }
