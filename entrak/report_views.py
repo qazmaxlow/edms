@@ -331,6 +331,7 @@ def __generate_report_data(systems, report_type, start_timestamp, end_timestamp)
             info["overnightlastReadings"] = {}
             info["overnightbeginningReadings"] = {}
             info["overnightlastSamePeriodReadings"] = {}
+            info['last_year_this_month'] = {'enegry': 0, 'money': 0}
 
     unit_rates = UnitRate.objects.filter(Q(category_code=CO2_CATEGORY_CODE) | Q(category_code=MONEY_CATEGORY_CODE))
     co2_unit_rates = [unit_rate for unit_rate in unit_rates if unit_rate.category_code == CO2_CATEGORY_CODE]
