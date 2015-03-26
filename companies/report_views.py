@@ -968,7 +968,7 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
             # template='companies/reports/popup_report_pdf.html',
             template='companies/reports/report.html',
             # template='foo.html',
-            filename='hello.pdf',
+            filename='report.pdf',
             context=m,
             # show_content_in_browser=False,
             cmd_options={
