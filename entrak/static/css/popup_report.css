@@ -3,6 +3,10 @@
     padding-right: 0px !important;
 }
 
+.no-right-padding {
+    padding-right: 0px !important;   
+}
+
 .page-break-after {
     page-break-after: always !important;
 }
@@ -13,22 +17,32 @@ body {
 
 .transformed-bar-chart {
     width:100%;
-    border-spacing: 2px;
-    border-collapse: separate;
+    /*border-spacing: 2px;
+    border-collapse: separate;*/
+}
+
+.transformed-row-bg:nth-child(odd) {
+    background-color: #f5f5f5;
 }
 
 .transformed-name {
-    width: 220px;
+    width: 160px;
     color: white;
     text-align: left;
-    padding-left: 22px;
+    padding-left: 15px;
     font-weight: 600;
+}
+
+.transformed-label {
+    width: 100px;
+    text-align: right;
+    font-weight: 600;
+    padding-right: 15px;
 }
 
 .transformed-bar {
     height: 22px;
-    background-color: blue;
-    border-top-right-radius: 22px;
+     border-top-right-radius: 22px;
     border-bottom-right-radius: 22px;
     box-shadow: 1px 1px 0px #cccece;
 }
@@ -290,11 +304,10 @@ body {-webkit-print-color-adjust: exact;}
 }
 
 .better-mark:before {
-    content: "\25A0";
+    content: "\2022";
+    padding-right: 5px;
     color: #a5d26f;
 }
-
-.
 
 .worse-mark {
     color: #e98264;
@@ -302,7 +315,8 @@ body {-webkit-print-color-adjust: exact;}
 }
 
 .worse-mark:before {
-    content: "\25A0";
+    content: "\2022";
+    padding-right: 5px;
     color: #e98264;
 }
 
@@ -312,7 +326,8 @@ body {-webkit-print-color-adjust: exact;}
 }
 
 .average-mark:before {
-    content: "\25A0";
+    content: "\2022";
+    padding-right: 5px;
     color: #e4b563;
 }
 
