@@ -568,6 +568,7 @@ $(function() {
                 else {
                     $scope.custom_time = false;
                     $scope.monthSelectorOptions.select = $scope.report_type; // could bind?
+                    $scope.report_date.options.select = $scope.report_type;
 
                     start_date = $scope.report_date.getSelectedStartDate();
                     end_date = $scope.report_date.getSelectedEndDate();
