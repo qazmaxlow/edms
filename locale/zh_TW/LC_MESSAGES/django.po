@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-27 05:19+0000\n"
+"POT-Creation-Date: 2015-03-27 05:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,17 +75,21 @@ msgstr "年"
 msgid "{0} - Yearly Energy Report"
 msgstr "{0} - 能源使用報告"
 
-#: companies/report_views.py:720
+#: companies/report_views.py:532
+msgid "custom"
+msgstr "期"
+
+#: companies/report_views.py:722
 #, python-brace-format
 msgid "Overall: {0.compared_percent_abs:.0f}% more energy than last month"
 msgstr "總計: 比上月多用 {0.compared_percent_abs:.0f}%"
 
-#: companies/report_views.py:722
+#: companies/report_views.py:724
 #, fuzzy, python-format, python-brace-format
 msgid "Overall: {0.compared_percent_abs:.0f}% less energy than last month"
 msgstr "總計: 比上月少用 {0.compared_percent_abs:.0f}%"
 
-#: companies/report_views.py:869
+#: companies/report_views.py:871
 #, python-brace-format
 msgid "Your energy consumption this {1} was {0} than it was last {1}"
 msgstr "你本月的電力消耗比起上{1}{0}"

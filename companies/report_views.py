@@ -528,6 +528,8 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     elif report_type == 'year':
         report_type_name = _('year')
         report_date_text = _("{0} - Yearly Energy Report").format(report_date.strftime("%Y"))
+    if report_type =='custom':
+        report_type_name = _('custom')
     m['report_type_name'] = report_type_name
     m['report_date_text'] = report_date_text
     m['report_day_diff'] = (report_end_date - report_date).days
@@ -671,8 +673,8 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
         compare_current_name = report_date.strftime('%Y')
         compare_last_name = (report_date-relativedelta(years=1)).strftime('%Y')
     elif report_type == 'custom':
-        compare_current_name = 'this peroid'
-        compare_last_name = 'last same peroid'
+        compare_current_name = 'this period'
+        compare_last_name = 'last same period'
 
 
 
