@@ -18,7 +18,7 @@
 <div id="report_key_statistics" class="page-break-after">
     <div class="row report-component-header">
       <div class="col-xs-12 section-title">
-        {%blocktrans%}What are our key statistics for this {{ report_type }}?{%endblocktrans%}
+        {%blocktrans%}What are our key statistics for this {{ report_type_name }}?{%endblocktrans%}
       </div>
     </div>
 
@@ -201,7 +201,7 @@
 <div id="report_compared_to_last" class="xreport-component page-break-after">
     <div class="row report-component-header">
       <div class="col-xs-12 section-title">
-        {%blocktrans%}How much more / less did we use compared to last {{ report_type }}?{%endblocktrans%}
+        {%blocktrans%}How much more / less did we use compared to last {{ report_type_name }}?{%endblocktrans%}
       </div>
     </div>
 
@@ -282,7 +282,7 @@
                   <h3 class="{{ weekday_month_compare_helper.change_css_class }}">
                       {{ weekday_month_compare_helper.text_desc }}
                   </h3>
-                  <p>{%blocktrans%}Compared to last {{ report_type }}{%endblocktrans%}</p>
+                  <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
                 </div>
           </div>
           <div class="row item end">
@@ -352,7 +352,7 @@
                   <h3 class="{{ weekday_month_compare_helper.change_css_class }}">
                     {{ weekday_month_compare_helper.text_desc }}
                   </h3>
-                  <p>{%blocktrans%}Compared to last {{ report_type }}{%endblocktrans%}</p>
+                  <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
                 </div>
               </div>
           </div>
@@ -365,7 +365,7 @@
                   <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
                     {{ weekday_same_period_compare_helper.text_desc }}
                   </h3>
-                  <p>{% trans "Compared to same period year" %}</p>
+                  <p>{% trans "Compared to same period last year" %}</p>
                 </div>
               </div>
           </div>
@@ -399,7 +399,7 @@
               <h3 class="{{ wd.compare_last_month_helper.change_css_class }}">
                 {{ wd.compare_last_month_helper.text_desc }}
               </h3>
-              <p>{%blocktrans%}Compared to last {{ report_type }}{%endblocktrans%}</p>
+              <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
             </div>
           </div>
         </div>
@@ -445,7 +445,7 @@
                   <h3 class="{{ weekends.month_compare_helper.change_css_class }}">
                     {{ weekends.month_compare_helper.text_desc }}
                   </h3>
-                  <p>{%blocktrans%}Compared to last {{ report_type }}{%endblocktrans%}</p>
+                  <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
                 </div>
           </div>
           <div class="row item end">
@@ -515,7 +515,7 @@
                   <h3 class="{{ weekends.month_compare_helper.change_css_class }}">
                     {{ weekends.month_compare_helper.text_desc }}
                   </h3>
-                  <p>{%blocktrans%}Compared to last {{ report_type }}{%endblocktrans%}</p>
+                  <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
                 </div>
               </div>
           </div>
@@ -562,7 +562,7 @@
               <h3 class="{{ d.compare_last_month_helper.change_css_class }}">
                 {{ d.compare_last_month_helper.text_desc }}
               </h3>
-              <p>{%blocktrans%}Compared to last {{ report_type }}{%endblocktrans%}</p>
+              <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
             </div>
           </div>
         </div>
@@ -609,7 +609,7 @@
                   <h3 class="{{ overnight.month_compare_helper.change_css_class }}">
                     {{ overnight.month_compare_helper.text_desc }}
                   </h3>
-                  <p>{%blocktrans%}Compared to last {{ report_type }}{%endblocktrans%}</p>
+                  <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
                 </div>
           </div>
           <div class="row item end">
@@ -620,7 +620,7 @@
                   <h3 class="{{ overnight.compare_same_period_helper.change_css_class }}">
                     {{ overnight.compare_same_period_helper.text_desc }}
                   </h3>
-                  <p>{% trans "Compared to same period year" %}</p>
+                  <p>{% trans "Compared to same period last year" %}</p>
                 </div>
           </div>
         </div>
@@ -679,7 +679,7 @@
                   <h3 class="{{ overnight.month_compare_helper.change_css_class }}">
                     {{ overnight.month_compare_helper.text_desc }}
                   </h3>
-                  <p>{%blocktrans%}Compared to last {{ report_type }}{%endblocktrans%}</p>
+                  <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
                 </div>
               </div>
           </div>
@@ -692,7 +692,7 @@
                   <h3 class="{{ overnight.compare_same_period_helper.change_css_class }}">
                     {{ overnight.compare_same_period_helper.text_desc }}
                   </h3>
-                  <p>{% trans "Compared to same period year" %}</p>
+                  <p>{% trans "Compared to same period last year" %}</p>
                 </div>
               </div>
           </div>
@@ -726,7 +726,7 @@
               <h3 class="{{ d.compare_last_month_helper.change_css_class }}">
                 {{ d.compare_last_month_helper.text_desc }}
               </h3>
-              <p>{%blocktrans%}Compared to last {{ report_type }}{%endblocktrans%}</p>
+              <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
             </div>
           </div>
         </div>
@@ -739,7 +739,7 @@
               <h3 class="{{ d.compare_same_period_helper.change_css_class }}">
                 {{ d.compare_same_period_helper.text_desc }}
               </h3>
-              <p>{% trans "Compared to same period year" %}</p>
+              <p>{% trans "Compared to same period last year" %}</p>
             </div>
           </div>
         </div>

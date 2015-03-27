@@ -507,22 +507,26 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
         report_end_date = current_system_tz.localize(report_end_date)
 
     m['report_type'] = report_type
-
+    report_type_name = report_type
     report_date_text = "{0} - {1}".format(
         report_date.strftime("%d %b %Y"),
         report_end_date.strftime("%d %b %Y")
     )
 
     if report_type == 'month':
+        report_type_name = _('month')
         report_date_text = _("{0} - Monthly Energy Report").format(report_date.strftime("%b %Y"))
     elif report_type == 'week':
-        report_date_text = "{0} - Weekly Energy Report".format(report_date_text)
+        report_type_name = _('week')
+        report_date_text = _("{0} - Weekly Energy Report").format(report_date_text)
     elif report_type == 'quarter':
+        report_type_name = _('quarter')
         quarter_text =  '{0} Q{1}'.format(report_date.strftime("%Y"), report_end_date.month/3)
-        report_date_text = "{0} - Quarterly Energy Report".format(quarter_text)
+        report_date_text = _("{0} - Quarterly Energy Report").format(quarter_text)
     elif report_type == 'year':
-        report_date_text = "{0} - Yearly Energy Report".format(report_date.strftime("%Y"))
-
+        report_type_name = _('year')
+        report_date_text = _("{0} - Yearly Energy Report").format(report_date.strftime("%Y"))
+    m['report_type_name'] = report_type_name
     m['report_date_text'] = report_date_text
     m['report_day_diff'] = (report_end_date - report_date).days
 
