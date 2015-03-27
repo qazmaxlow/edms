@@ -67,6 +67,7 @@ def get_total_cost(source_ids, start_dt, end_dt, date_type):
         return sum([get_unitrate(r.source_id, r.datetime).rate*r.value for r in month_readings])
 
 
+@permission_required()
 def summary_ajax(request, system_code):
     systems_info = System.get_systems_info(system_code, request.user.system.code)
     systems = systems_info['systems']
