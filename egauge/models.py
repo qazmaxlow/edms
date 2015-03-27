@@ -6,6 +6,7 @@ from mongoengine.fields import *
 SOURCE_TZ_HK = u'Asia/Hong_Kong'
 
 class SourceMember(EmbeddedDocument):
+    id = ObjectIdField()
     name = StringField(max_length=200)
     xml_url = StringField(max_length=120)
     tz = StringField(max_length=50, default=SOURCE_TZ_HK)
