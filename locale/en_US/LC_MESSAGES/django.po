@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-27 10:17+0000\n"
+"POT-Creation-Date: 2015-03-27 10:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,80 +17,80 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: companies/report_views.py:402
+#: companies/report_views.py:403
 #, python-brace-format
 msgid "{0:.0f}% {1}"
 msgstr ""
 
-#: companies/report_views.py:410
+#: companies/report_views.py:411
 #: companies/templates/companies/reports/summary.html:90
 #: entrak/templates/report.html:67
 msgid "more"
 msgstr ""
 
-#: companies/report_views.py:410
+#: companies/report_views.py:411
 #: companies/templates/companies/reports/summary.html:91
 #: entrak/templates/report.html:68
 msgid "less"
 msgstr ""
 
-#: companies/report_views.py:429
+#: companies/report_views.py:430
 #, python-brace-format
 msgid "{self.compared_percent_abs:.0f}% {self.change_desc_wording}"
 msgstr ""
 
-#: companies/report_views.py:525
+#: companies/report_views.py:526
 msgid "month"
 msgstr ""
 
-#: companies/report_views.py:526
+#: companies/report_views.py:527
 #, python-brace-format
 msgid "{0} - Monthly Energy Report"
 msgstr ""
 
-#: companies/report_views.py:528
+#: companies/report_views.py:529
 #, fuzzy
 msgid "week"
 msgstr "Weekdays"
 
-#: companies/report_views.py:529
+#: companies/report_views.py:530
 #, python-brace-format
 msgid "{0} - Weekly Energy Report"
 msgstr ""
 
-#: companies/report_views.py:531
+#: companies/report_views.py:532
 msgid "quarter"
 msgstr ""
 
-#: companies/report_views.py:533
+#: companies/report_views.py:534
 #, python-brace-format
 msgid "{0} - Quarterly Energy Report"
 msgstr ""
 
-#: companies/report_views.py:535
+#: companies/report_views.py:536
 msgid "year"
 msgstr ""
 
-#: companies/report_views.py:536
+#: companies/report_views.py:537
 #, python-brace-format
 msgid "{0} - Yearly Energy Report"
 msgstr ""
 
-#: companies/report_views.py:538
+#: companies/report_views.py:539
 msgid "custom"
 msgstr ""
 
-#: companies/report_views.py:728
+#: companies/report_views.py:734
 #, python-brace-format
-msgid "Overall: {0.compared_percent_abs:.0f}% more energy than last month"
+msgid "Overall: {0.compared_percent_abs:.0f}% more energy than last {1}"
 msgstr ""
 
-#: companies/report_views.py:730
+#: companies/report_views.py:736
 #, python-format, python-brace-format
-msgid "Overall: {0.compared_percent_abs:.0f}% less energy than last month"
+msgid "Overall: {0.compared_percent_abs:.0f}% less energy than last {1}"
 msgstr ""
 
-#: companies/report_views.py:873
+#: companies/report_views.py:879
 #, python-brace-format
 msgid "Your energy consumption this {1} was {0} than it was last {1}"
 msgstr ""
