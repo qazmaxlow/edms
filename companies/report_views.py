@@ -33,7 +33,9 @@ from entrak.report_views import __generate_report_data
 def get_source_name(source_id):
     source = Source.objects(id=str(source_id)).first()
     return source.d_name
-
+def get_source_name_tc(source_id):
+    source = Source.objects(id=str(source_id)).first()
+    return source.d_name_tc
 
 def get_unitrate(source_id, datetime):
     source = Source.objects(id=str(source_id)).first()
@@ -391,7 +393,7 @@ class CompareTplHepler:
 
     @property
     def formated_percent_change(self):
-        return '{0:.0f}% {1}'.format(self.compared_percent_abs, self.change_desc) if self.compared_percent is not None else None
+        return _('{0:.0f}% {1}').format(self.compared_percent_abs, self.change_desc_wording) if self.compared_percent is not None else None
 
     @property
     def change_desc(self):
@@ -418,7 +420,7 @@ class CompareTplHepler:
     @property
     def text_desc(self):
         if self.compared_percent_abs:
-            return "{self.compared_percent_abs:.0f}% {self.change_desc}".format(self=self)
+            return _("{self.compared_percent_abs:.0f}% {self.change_desc_wording}").format(self=self)
         else:
             return 'N/A'
 
@@ -507,22 +509,26 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
         report_end_date = current_system_tz.localize(report_end_date)
 
     m['report_type'] = report_type
-
+    report_type_name = report_type
     report_date_text = "{0} - {1}".format(
         report_date.strftime("%d %b %Y"),
         report_end_date.strftime("%d %b %Y")
     )
 
     if report_type == 'month':
+        report_type_name = _('month')
         report_date_text = _("{0} - Monthly Energy Report").format(report_date.strftime("%b %Y"))
     elif report_type == 'week':
-        report_date_text = "{0} - Weekly Energy Report".format(report_date_text)
+        report_type_name = _('week')
+        report_date_text = _("{0} - Weekly Energy Report").format(report_date_text)
     elif report_type == 'quarter':
+        report_type_name = _('quarter')
         quarter_text =  '{0} Q{1}'.format(report_date.strftime("%Y"), report_end_date.month/3)
-        report_date_text = "{0} - Quarterly Energy Report".format(quarter_text)
+        report_date_text = _("{0} - Quarterly Energy Report").format(quarter_text)
     elif report_type == 'year':
-        report_date_text = "{0} - Yearly Energy Report".format(report_date.strftime("%Y"))
-
+        report_type_name = _('year')
+        report_date_text = _("{0} - Yearly Energy Report").format(report_date.strftime("%Y"))
+    m['report_type_name'] = report_type_name
     m['report_date_text'] = report_date_text
     m['report_day_diff'] = (report_end_date - report_date).days
 
@@ -732,14 +738,14 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
             dt = dt.astimezone(current_system_tz)
             last_day_readings[dt] = v
 
-
         graph_title = get_source_name(g['sourceIds'][0]) if g['system'].code == m['company_system'].code else g['system'].fullname
-
+        graph_title_tc = get_source_name_tc(g['sourceIds'][0]) if g['system'].code == m['company_system'].code else g['system'].fullname
         # [{'name': 'last', 'value': v, 'datetime': datetime.datetime.fromtimestamp(t, pytz.utc) } for t, v in combined_last_readings.items()]
         sub_graph = {
             'system': g['system'],
             'color': type_colors[ix],
             'title': graph_title,
+            'title_tc': graph_title_tc,
             'current_reading_serie': json.dumps([{'name': compare_current_name, 'value': v, 'datetime': t} for t, v in current_day_readings.items()], cls=DjangoJSONEncoder),
             'last_reading_serie': json.dumps([{'name': compare_last_name, 'value': v, 'datetime': t} for t, v in last_day_readings.items()], cls=DjangoJSONEncoder),
             'chart_title': chart_title
@@ -835,6 +841,7 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
             change_in_money = g['currentTotalMoney']- g['last_year_this_month']['money']
 
         data_info = {
+            'name_tc': g['sourceNameInfo']['zh-tw'],
             'total_energy': g['currentTotalEnergy'],
             'co2_val': g['currentTotalCo2'],
             'money_val': g['currentTotalMoney'],
@@ -859,9 +866,9 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     m['transformed_pie_json'] = json.dumps(transformed_pie)
 
     compare_last_month_helper = CompareTplHepler(compare_to_last_month)
-    m['barchart_compare_text'] = "Your energy consumption this {1} was {0} than it was last {1}".format(
+    m['barchart_compare_text'] = _("Your energy consumption this {1} was {0} than it was last {1}").format(
         compare_last_month_helper.formated_percent_change,
-        report_type
+        report_type_name
     )
     # var transformedDatas = [];
     # var energyPercentSum = 0;
