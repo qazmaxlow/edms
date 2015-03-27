@@ -529,6 +529,8 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     elif report_type == 'year':
         report_type_name = _('year')
         report_date_text = _("{0} - Yearly Energy Report").format(report_date.strftime("%Y"))
+    if report_type =='custom':
+        report_type_name = _('custom')
     m['report_type_name'] = report_type_name
     m['report_date_text'] = report_date_text
     m['report_day_diff'] = (report_end_date - report_date).days
@@ -663,18 +665,17 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     compare_current_name = report_date.strftime('%b')
     compare_last_name = (report_date - relativedelta(months=1)).strftime('%b')
     if report_type == 'week':
-        compare_current_name = 'this week'
-        compare_last_name = 'last week'
+        compare_current_name = 'This week'
+        compare_last_name = 'Last week'
     elif report_type == 'quarter':
-        compare_current_name = 'this quarter'
-        compare_last_name = 'last quarter'
+        compare_current_name = 'This quarter'
+        compare_last_name = 'Last quarter'
     elif report_type == 'year':
         compare_current_name = report_date.strftime('%Y')
         compare_last_name = (report_date-relativedelta(years=1)).strftime('%Y')
     elif report_type == 'custom':
-        compare_current_name = 'this peroid'
-        compare_last_name = 'last same peroid'
-
+        compare_current_name = 'This peroid'
+        compare_last_name = 'Last same peroid'
 
 
 
@@ -718,9 +719,9 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
         chart_title = 'N/A'
         if total_compare:
             if(CompareTplHepler(total_compare).change_desc=='more'):
-                chart_title = _('Overall: {0.compared_percent_abs:.0f}% more energy than last month').format(CompareTplHepler(total_compare))
+                chart_title = _('Overall: {0.compared_percent_abs:.0f}% more energy than last {1}').format(CompareTplHepler(total_compare), report_type_name)
             else:
-                chart_title = _('Overall: {0.compared_percent_abs:.0f}% less energy than last month').format(CompareTplHepler(total_compare))
+                chart_title = _('Overall: {0.compared_percent_abs:.0f}% less energy than last {1}').format(CompareTplHepler(total_compare), report_type_name)
         current_day_readings = {}
         # for day in range(1, 32):
         #     current_day_readings[day] = None
