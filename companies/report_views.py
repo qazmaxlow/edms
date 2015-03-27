@@ -436,7 +436,7 @@ class CompareTplHepler:
         }
 
 
-
+@permission_required()
 def popup_report_view(request, system_code, year=None, month=None, report_type=None, to_pdf=False):
     systems_info = System.get_systems_info(system_code, request.user.system.code)
     systems = systems_info['systems']
