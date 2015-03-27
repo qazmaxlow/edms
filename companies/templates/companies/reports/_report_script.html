@@ -105,6 +105,9 @@ ngapp.controller("ReportController", function($scope) {
     else if (report_type == 'quarter') {
         var bar_date_unitstep = 3;
     }
+    else if (report_type == 'year') {
+        bar_date_format = '{0:yyyy}';
+    }
 
     $scope.barOptions = {
         dataSource: {
@@ -160,9 +163,7 @@ ngapp.controller("ReportController", function($scope) {
             field: 'datetime',
             baseUnitStep: bar_date_unitstep,
             labels: {
-                dateFormats: {
-                    months: bar_date_format
-                }
+                format: bar_date_format
             },
             majorGridLines: {
                 visible: false
