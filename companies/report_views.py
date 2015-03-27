@@ -12,8 +12,9 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.templatetags.static import static
-from django.utils import timezone, dateparse
+from django.utils import timezone, dateparse, translation
 from django.utils.translation import ugettext_lazy as _
+from django.utils.dateformat import DateFormat
 
 from wkhtmltopdf.views import PDFTemplateResponse
 
@@ -28,14 +29,19 @@ from utils.utils import Utils
 
 # oops! change to write better API later
 from entrak.report_views import __generate_report_data
+from django.conf.global_settings import LANGUAGE_CODE
 
+
+def current_lang():
+    if (translation.get_language()=="zh-tw"):
+        return "zh-tw"
+    return "en"
 
 def get_source_name(source_id):
     source = Source.objects(id=str(source_id)).first()
+    if (current_lang()=="zh-tw"):
+        return source.d_name_tc
     return source.d_name
-def get_source_name_tc(source_id):
-    source = Source.objects(id=str(source_id)).first()
-    return source.d_name_tc
 
 def get_unitrate(source_id, datetime):
     source = Source.objects(id=str(source_id)).first()
@@ -510,14 +516,14 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
 
     m['report_type'] = report_type
     report_type_name = report_type
-    report_date_text = "{0} - {1}".format(
-        report_date.strftime("%d %b %Y"),
-        report_end_date.strftime("%d %b %Y")
+    report_date_text = u"{0} - {1}".format(
+        DateFormat(report_date).format("d M Y"),
+        DateFormat(report_end_date).format("d M Y")
     )
 
     if report_type == 'month':
         report_type_name = _('month')
-        report_date_text = _("{0} - Monthly Energy Report").format(report_date.strftime("%b %Y"))
+        report_date_text = _(u"{0} - Monthly Energy Report").format(DateFormat(report_date).format("M Y"))
     elif report_type == 'week':
         report_type_name = _('week')
         report_date_text = _("{0} - Weekly Energy Report").format(report_date_text)
@@ -741,13 +747,11 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
             last_day_readings[dt] = v
 
         graph_title = get_source_name(g['sourceIds'][0]) if g['system'].code == m['company_system'].code else g['system'].fullname
-        graph_title_tc = get_source_name_tc(g['sourceIds'][0]) if g['system'].code == m['company_system'].code else g['system'].fullname
         # [{'name': 'last', 'value': v, 'datetime': datetime.datetime.fromtimestamp(t, pytz.utc) } for t, v in combined_last_readings.items()]
         sub_graph = {
             'system': g['system'],
             'color': type_colors[ix],
             'title': graph_title,
-            'title_tc': graph_title_tc,
             'current_reading_serie': json.dumps([{'name': compare_current_name, 'value': v, 'datetime': t} for t, v in current_day_readings.items()], cls=DjangoJSONEncoder),
             'last_reading_serie': json.dumps([{'name': compare_last_name, 'value': v, 'datetime': t} for t, v in last_day_readings.items()], cls=DjangoJSONEncoder),
             'chart_title': chart_title
@@ -843,7 +847,6 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
             change_in_money = g['currentTotalMoney']- g['last_year_this_month']['money']
 
         data_info = {
-            'name_tc': g['sourceNameInfo']['zh-tw'],
             'total_energy': g['currentTotalEnergy'],
             'co2_val': g['currentTotalCo2'],
             'money_val': g['currentTotalMoney'],
@@ -852,8 +855,7 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
             'percent_in_total': percent_in_total,
             'color': type_colors[ix]
         }
-
-        data_info['name'] = g['sourceNameInfo']['en'] if g['systemCode'] == m['company_system'].code else g['system'].fullname
+        data_info['name'] = g['sourceNameInfo'][current_lang()] if g['systemCode'] == m['company_system'].code else g['system'].fullname
         transformed_datas.append(data_info)
 
     m['transformed_datas'] = transformed_datas

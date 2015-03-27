@@ -9,10 +9,10 @@
         <button ng-click="win2.close()" ng-show="win2visible">close</button>
 
 
-
+{% load l10n %}
 <div class="row report-head">
         <div class="system-name">{{ company_system.fullname }}</div>
-        <div class="report-name text-center">{{ report_date_text }}</div>
+        <div class="report-name text-center">{% localize on %}{{ report_date_text }}{% endlocalize %}</div>
 </div>
 
 <div id="report_key_statistics" class="page-break-after">
@@ -69,7 +69,7 @@
             <div>
                 <img src="{% static 'images/report/factory-co2.png' %}">
                 <div class="basic-info-text-container">
-                    <span id="save-co2-usage">{{ saving_sign }}{{ saving_co2|stringformat:".0f"|intcomma }} {% trans "tons" %}</span><span class="basic-info-col-unit"> {% trans "CO<sub>2" %}</sub></span>
+                    <span id="save-co2-usage">{{ saving_sign }}{{ saving_co2|stringformat:".0f"|intcomma }} {% trans "tons" %}</span><span class="basic-info-col-unit"> {% trans "CO<sub>2</sub>" %}</span>
                 </div>
             </div>
             <hr class="current-usage-separator-dark-grey">
@@ -152,13 +152,8 @@
               <table class="transformed-bar-chart">
                 {% for td in transformed_datas %}
                 <tr class="transformed-row-bg">
-                  <td class="transformed-name" style="background-color:{{ td.color }};">
-                 	 {% ifequal LANGUAGE_CODE 'zh-tw' %}
-                 		 {{ td.name_tc }}
-                 	 {% else %}
-                  		 {{ td.name }}
-                  	 {% endifequal %}
-                  </td><td>
+                  <td class="transformed-name" style="background-color:{{ td.color }};">{{ td.name }}</td>
+                  <td>
                     <div class="transformed-bar" style="width:{{ td.percent_in_total }}%;background-image: -webkit-linear-gradient(left, #eeeeee 0%, {{ td.color }} 100%); background-image: -o-linear-gradient(left, #eeeeee 0%, {{ td.color }} 100%); background-image: linear-gradient(left, #eeeeee 0%, {{ td.color }} 100%);"></div>
                     </div>
                   </td>
@@ -184,20 +179,14 @@
                 {% trans "Total Energy (kWh)" %}</th><th>
                 {% trans "Total CO<sub>2</sub> (kg)" %}</th><th>
                 {% trans "Total Cost ($)" %}</th>
-            <th>{% trans "% Change in kWh" %}<br>{% trans "Year-on-year" %}</th>
+            <th>{% trans "&#37; Change in kWh" %}<br>{% trans "Year-on-year" %}</th>
             <th>{% trans "Change in Cost" %}<br>{% trans "Year-on-year" %}</th>
         </tr>
       </thead>
       <tbody id="key-statistic-sub-data">
         {% for td in transformed_datas %}
         <tr class="key-statistics-row ">
-          <td class="usage-type-name">
-         	 {% ifequal LANGUAGE_CODE 'zh-tw' %}
-         		 {{ td.name_tc }}
-         	 {% else %}
-          		 {{ td.name }}
-          	 {% endifequal %}
-          </td><td>
+          <td class="usage-type-name">{{ td.name }}</td><td>
             {{ td.total_energy|floatformat:"0"|intcomma }}</td><td>
             {{ td.co2_val|floatformat:"0"|intcomma }}</td><td>
             {{ td.money_val|floatformat:"0"|intcomma }}</td>
@@ -239,13 +228,7 @@
       {% for subgraph in sub_compare_graphs %}
       <div class="col-xs-6">
         <div class="row">
-          <div class="col-xs-12 sub-graph-title" style="background-color: {{ subgraph.color }}">
-	          {% ifequal LANGUAGE_CODE 'zh-tw' %}
-	            {{ subgraph.title_tc }}
-	          {% else %}
-	          	{{ subgraph.title }}
-	          {% endifequal %} 
-          </div>
+          <div class="col-xs-12 sub-graph-title" style="background-color: {{ subgraph.color }}">{{ subgraph.title }}</div>
         </div>
         <div class="row detail-content">
           <div class="col-xs-12">

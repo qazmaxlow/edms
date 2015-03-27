@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-27 05:30+0000\n"
+"POT-Creation-Date: 2015-03-27 10:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,80 +17,80 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: companies/report_views.py:396
+#: companies/report_views.py:402
 #, python-brace-format
 msgid "{0:.0f}% {1}"
 msgstr ""
 
-#: companies/report_views.py:404
+#: companies/report_views.py:410
 #: companies/templates/companies/reports/summary.html:90
 #: entrak/templates/report.html:67
 msgid "more"
 msgstr ""
 
-#: companies/report_views.py:404
+#: companies/report_views.py:410
 #: companies/templates/companies/reports/summary.html:91
 #: entrak/templates/report.html:68
 msgid "less"
 msgstr ""
 
-#: companies/report_views.py:423
+#: companies/report_views.py:429
 #, python-brace-format
 msgid "{self.compared_percent_abs:.0f}% {self.change_desc_wording}"
 msgstr ""
 
-#: companies/report_views.py:519
+#: companies/report_views.py:525
 msgid "month"
 msgstr ""
 
-#: companies/report_views.py:520
+#: companies/report_views.py:526
 #, python-brace-format
 msgid "{0} - Monthly Energy Report"
 msgstr ""
 
-#: companies/report_views.py:522
+#: companies/report_views.py:528
 #, fuzzy
 msgid "week"
 msgstr "Weekdays"
 
-#: companies/report_views.py:523
+#: companies/report_views.py:529
 #, python-brace-format
 msgid "{0} - Weekly Energy Report"
 msgstr ""
 
-#: companies/report_views.py:525
+#: companies/report_views.py:531
 msgid "quarter"
 msgstr ""
 
-#: companies/report_views.py:527
+#: companies/report_views.py:533
 #, python-brace-format
 msgid "{0} - Quarterly Energy Report"
 msgstr ""
 
-#: companies/report_views.py:529
+#: companies/report_views.py:535
 msgid "year"
 msgstr ""
 
-#: companies/report_views.py:530
+#: companies/report_views.py:536
 #, python-brace-format
 msgid "{0} - Yearly Energy Report"
 msgstr ""
 
-#: companies/report_views.py:532
+#: companies/report_views.py:538
 msgid "custom"
 msgstr ""
 
-#: companies/report_views.py:722
+#: companies/report_views.py:728
 #, python-brace-format
 msgid "Overall: {0.compared_percent_abs:.0f}% more energy than last month"
 msgstr ""
 
-#: companies/report_views.py:724
+#: companies/report_views.py:730
 #, python-format, python-brace-format
 msgid "Overall: {0.compared_percent_abs:.0f}% less energy than last month"
 msgstr ""
 
-#: companies/report_views.py:871
+#: companies/report_views.py:873
 #, python-brace-format
 msgid "Your energy consumption this {1} was {0} than it was last {1}"
 msgstr ""
@@ -118,6 +118,7 @@ msgid "tons"
 msgstr ""
 
 #: companies/templates/companies/reports/_report_content.html:41
+#: companies/templates/companies/reports/_report_content.html:72
 msgid "CO<sub>2</sub>"
 msgstr ""
 
@@ -141,10 +142,6 @@ msgstr ""
 #: companies/templates/companies/reports/popup_report_pdf.html:111
 #: entrak/templates/report_main_content.html:44
 msgid "(year-on-year)"
-msgstr ""
-
-#: companies/templates/companies/reports/_report_content.html:72
-msgid "CO<sub>2"
 msgstr ""
 
 #: companies/templates/companies/reports/_report_content.html:85
@@ -205,37 +202,34 @@ msgstr ""
 msgid "How did that break down by usage type?"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:183
+#: companies/templates/companies/reports/_report_content.html:178
 #: companies/templates/companies/reports/popup_report_pdf.html:179
 #: entrak/templates/report_main_content.html:121
 msgid "Usage Type"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:184
+#: companies/templates/companies/reports/_report_content.html:179
 #: companies/templates/companies/reports/popup_report_pdf.html:180
 #: entrak/templates/report_main_content.html:122
 msgid "Total Energy (kWh)"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:185
+#: companies/templates/companies/reports/_report_content.html:180
 #: companies/templates/companies/reports/popup_report_pdf.html:181
 #: entrak/templates/report_main_content.html:123
 msgid "Total CO<sub>2</sub> (kg)"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:186
+#: companies/templates/companies/reports/_report_content.html:181
 msgid "Total Cost ($)"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:187
-#: companies/templates/companies/reports/popup_report_pdf.html:183
-#: entrak/templates/report_main_content.html:125
-#, python-format
-msgid "%% Change in kWh"
+#: companies/templates/companies/reports/_report_content.html:182
+msgid "&#37; Change in kWh"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:187
-#: companies/templates/companies/reports/_report_content.html:188
+#: companies/templates/companies/reports/_report_content.html:182
+#: companies/templates/companies/reports/_report_content.html:183
 #: companies/templates/companies/reports/popup_report_pdf.html:183
 #: companies/templates/companies/reports/popup_report_pdf.html:184
 #: entrak/templates/report_main_content.html:125
@@ -243,24 +237,24 @@ msgstr ""
 msgid "Year-on-year"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:188
+#: companies/templates/companies/reports/_report_content.html:183
 msgid "Change in Cost"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:221
+#: companies/templates/companies/reports/_report_content.html:210
 #, python-format
 msgid "How much more / less did we use compared to last %(report_type_name)s?"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:283
+#: companies/templates/companies/reports/_report_content.html:266
 #: companies/templates/companies/reports/popup_report_pdf.html:247
 #: entrak/templates/report_main_content.html:230
 msgid "HOW MUCH ENERGY DID WE USE ON <span>WEEKDAYS?</span>"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:295
-#: companies/templates/companies/reports/_report_content.html:363
-#: companies/templates/companies/reports/_report_content.html:410
+#: companies/templates/companies/reports/_report_content.html:278
+#: companies/templates/companies/reports/_report_content.html:346
+#: companies/templates/companies/reports/_report_content.html:393
 #: companies/templates/companies/reports/popup_report_pdf.html:258
 #: companies/templates/companies/reports/popup_report_pdf.html:335
 #: companies/templates/companies/reports/popup_report_pdf.html:348
@@ -272,62 +266,62 @@ msgstr ""
 msgid "Average Weekday Energy Use"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:306
-#: companies/templates/companies/reports/_report_content.html:376
-#: companies/templates/companies/reports/_report_content.html:423
-#: companies/templates/companies/reports/_report_content.html:469
-#: companies/templates/companies/reports/_report_content.html:539
-#: companies/templates/companies/reports/_report_content.html:586
-#: companies/templates/companies/reports/_report_content.html:633
-#: companies/templates/companies/reports/_report_content.html:703
-#: companies/templates/companies/reports/_report_content.html:750
+#: companies/templates/companies/reports/_report_content.html:289
+#: companies/templates/companies/reports/_report_content.html:359
+#: companies/templates/companies/reports/_report_content.html:406
+#: companies/templates/companies/reports/_report_content.html:452
+#: companies/templates/companies/reports/_report_content.html:522
+#: companies/templates/companies/reports/_report_content.html:569
+#: companies/templates/companies/reports/_report_content.html:616
+#: companies/templates/companies/reports/_report_content.html:686
+#: companies/templates/companies/reports/_report_content.html:733
 #, python-format
 msgid "Compared to last %(report_type_name)s"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:317
-#: companies/templates/companies/reports/_report_content.html:389
-#: companies/templates/companies/reports/_report_content.html:436
-#: companies/templates/companies/reports/_report_content.html:480
-#: companies/templates/companies/reports/_report_content.html:552
-#: companies/templates/companies/reports/_report_content.html:599
-#: companies/templates/companies/reports/_report_content.html:644
-#: companies/templates/companies/reports/_report_content.html:716
-#: companies/templates/companies/reports/_report_content.html:763
+#: companies/templates/companies/reports/_report_content.html:300
+#: companies/templates/companies/reports/_report_content.html:372
+#: companies/templates/companies/reports/_report_content.html:419
+#: companies/templates/companies/reports/_report_content.html:463
+#: companies/templates/companies/reports/_report_content.html:535
+#: companies/templates/companies/reports/_report_content.html:582
+#: companies/templates/companies/reports/_report_content.html:627
+#: companies/templates/companies/reports/_report_content.html:699
+#: companies/templates/companies/reports/_report_content.html:746
 msgid "Compared to same period last year"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:327
-#: companies/templates/companies/reports/_report_content.html:490
-#: companies/templates/companies/reports/_report_content.html:654
+#: companies/templates/companies/reports/_report_content.html:310
+#: companies/templates/companies/reports/_report_content.html:473
+#: companies/templates/companies/reports/_report_content.html:637
 msgid "Better"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:327
-#: companies/templates/companies/reports/_report_content.html:328
+#: companies/templates/companies/reports/_report_content.html:310
+#: companies/templates/companies/reports/_report_content.html:311
 msgid "than average weekday"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:328
-#: companies/templates/companies/reports/_report_content.html:491
-#: companies/templates/companies/reports/_report_content.html:655
+#: companies/templates/companies/reports/_report_content.html:311
+#: companies/templates/companies/reports/_report_content.html:474
+#: companies/templates/companies/reports/_report_content.html:638
 msgid "Worse"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:329
-#: companies/templates/companies/reports/_report_content.html:492
-#: companies/templates/companies/reports/_report_content.html:656
+#: companies/templates/companies/reports/_report_content.html:312
+#: companies/templates/companies/reports/_report_content.html:475
+#: companies/templates/companies/reports/_report_content.html:639
 msgid "Average"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:329
+#: companies/templates/companies/reports/_report_content.html:312
 #, fuzzy
 msgid "weekday"
 msgstr "Weekdays"
 
-#: companies/templates/companies/reports/_report_content.html:335
-#: companies/templates/companies/reports/_report_content.html:498
-#: companies/templates/companies/reports/_report_content.html:662
+#: companies/templates/companies/reports/_report_content.html:318
+#: companies/templates/companies/reports/_report_content.html:481
+#: companies/templates/companies/reports/_report_content.html:645
 #: companies/templates/companies/reports/popup_report_pdf.html:302
 #: companies/templates/companies/reports/popup_report_pdf.html:427
 #: companies/templates/companies/reports/popup_report_pdf.html:552
@@ -339,70 +333,70 @@ msgid ""
 "div><div>FRI</div><div>SAT</div>"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:344
+#: companies/templates/companies/reports/_report_content.html:327
 msgid "Highest Weekday Energy Use"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:348
-#: companies/templates/companies/reports/_report_content.html:511
-#: companies/templates/companies/reports/_report_content.html:675
+#: companies/templates/companies/reports/_report_content.html:331
+#: companies/templates/companies/reports/_report_content.html:494
+#: companies/templates/companies/reports/_report_content.html:658
 msgid "Most of the increase was from"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:447
+#: companies/templates/companies/reports/_report_content.html:430
 msgid ""
 "HOW MUCH ENERGY DID WE USE ON <span>WEEKENDS</span> AND <span>HOLIDAYS?</"
 "span>"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:458
-#: companies/templates/companies/reports/_report_content.html:526
-#: companies/templates/companies/reports/_report_content.html:573
+#: companies/templates/companies/reports/_report_content.html:441
+#: companies/templates/companies/reports/_report_content.html:509
+#: companies/templates/companies/reports/_report_content.html:556
 msgid "Average Weekend/Holiday Energy Use"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:490
-#: companies/templates/companies/reports/_report_content.html:491
+#: companies/templates/companies/reports/_report_content.html:473
+#: companies/templates/companies/reports/_report_content.html:474
 msgid "than average weekend"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:492
+#: companies/templates/companies/reports/_report_content.html:475
 #, fuzzy
 msgid "weekend"
 msgstr "Weekdays"
 
-#: companies/templates/companies/reports/_report_content.html:507
+#: companies/templates/companies/reports/_report_content.html:490
 msgid "Highest Weekend/Holiday Energy Use"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:610
+#: companies/templates/companies/reports/_report_content.html:593
 msgid "HOW MUCH ENERGY DID WE USE OVERNIGHT "
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:622
-#: companies/templates/companies/reports/_report_content.html:690
-#: companies/templates/companies/reports/_report_content.html:737
+#: companies/templates/companies/reports/_report_content.html:605
+#: companies/templates/companies/reports/_report_content.html:673
+#: companies/templates/companies/reports/_report_content.html:720
 msgid "Average Overnight Energy Use"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:654
-#: companies/templates/companies/reports/_report_content.html:655
+#: companies/templates/companies/reports/_report_content.html:637
+#: companies/templates/companies/reports/_report_content.html:638
 msgid "than average night"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:656
+#: companies/templates/companies/reports/_report_content.html:639
 msgid "night"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_content.html:671
+#: companies/templates/companies/reports/_report_content.html:654
 msgid "Highest Overnight Energy Use"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_script.html:124
+#: companies/templates/companies/reports/_report_script.html:123
 msgid "Total energy consumption for the last 6 months (kWh)"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_script.html:194
+#: companies/templates/companies/reports/_report_script.html:193
 msgid "When did we achieve our savings?"
 msgstr ""
 
@@ -474,6 +468,12 @@ msgstr ""
 #: companies/templates/companies/reports/popup_report_pdf.html:182
 #: entrak/templates/report_main_content.html:124
 msgid "Total Money ($)"
+msgstr ""
+
+#: companies/templates/companies/reports/popup_report_pdf.html:183
+#: entrak/templates/report_main_content.html:125
+#, python-format
+msgid "%% Change in kWh"
 msgstr ""
 
 #: companies/templates/companies/reports/popup_report_pdf.html:184
