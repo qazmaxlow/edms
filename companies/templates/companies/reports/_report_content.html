@@ -109,8 +109,14 @@
                 <img src="{% static 'images/report/trees.png' %}">
                 <div class="basic-info-text-container">
                     {% ifequal LANGUAGE_CODE 'zh-tw' %}
-                    <span id="forest-impact-subtext" class="basic-info-col-subtext"></span><br>
-                    <span id="forest-impact">{{ co2_in_forest|floatformat:"0"|intcomma }}</span>
+                    <span id="forest-impact-subtext" class="basic-info-col-subtext">
+                      {% if is_saving %}
+                      {% trans "of tropical rainforest protected" %}
+                      {% else %}
+                      {% trans "of tropical rainforest cut down" %}
+                      {% endif %}
+                    </span>
+                    <span id="forest-impact">{{ co2_in_forest|floatformat:"0"|intcomma }} {% trans "m<sup>2</sup>" %}</span></span>
                     {% else %}
                     <span id="forest-impact">{{ co2_in_forest|floatformat:"0"|intcomma }} m<sup>2</sup></span><br>
                     <span id="forest-impact-subtext" class="basic-info-col-subtext">
@@ -146,7 +152,13 @@
               <table class="transformed-bar-chart">
                 {% for td in transformed_datas %}
                 <tr class="transformed-row-bg">
-                  <td class="transformed-name" style="background-color:{{ td.color }};">{{ td.name }}</td><td>
+                  <td class="transformed-name" style="background-color:{{ td.color }};">
+                 	 {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                 		 {{ td.name_tc }}
+                 	 {% else %}
+                  		 {{ td.name }}
+                  	 {% endifequal %}
+                  </td><td>
                     <div class="transformed-bar" style="width:{{ td.percent_in_total }}%;background-image: -webkit-linear-gradient(left, #eeeeee 0%, {{ td.color }} 100%); background-image: -o-linear-gradient(left, #eeeeee 0%, {{ td.color }} 100%); background-image: linear-gradient(left, #eeeeee 0%, {{ td.color }} 100%);"></div>
                     </div>
                   </td>
@@ -180,7 +192,12 @@
         {% for td in transformed_datas %}
         <tr class="key-statistics-row ">
           <td class="usage-type-name">
-            {{ td.name }}</td><td>
+         	 {% ifequal LANGUAGE_CODE 'zh-tw' %}
+         		 {{ td.name_tc }}
+         	 {% else %}
+          		 {{ td.name }}
+          	 {% endifequal %}
+          </td><td>
             {{ td.total_energy|floatformat:"0"|intcomma }}</td><td>
             {{ td.co2_val|floatformat:"0"|intcomma }}</td><td>
             {{ td.money_val|floatformat:"0"|intcomma }}</td>
@@ -223,7 +240,11 @@
       <div class="col-xs-6">
         <div class="row">
           <div class="col-xs-12 sub-graph-title" style="background-color: {{ subgraph.color }}">
-            {{ subgraph.title }}
+	          {% ifequal LANGUAGE_CODE 'zh-tw' %}
+	            {{ subgraph.title_tc }}
+	          {% else %}
+	          	{{ subgraph.title }}
+	          {% endifequal %} 
           </div>
         </div>
         <div class="row detail-content">
