@@ -33,6 +33,7 @@ from entrak.report_views import __generate_report_data
 def get_source_name(source_id):
     source = Source.objects(id=str(source_id)).first()
     return source.d_name
+
 def get_source_name_tc(source_id):
     source = Source.objects(id=str(source_id)).first()
     return source.d_name_tc
@@ -624,6 +625,12 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     for ix, g in enumerate(group_data):
         g['color'] = type_colors[ix]
         g['system'] = System.objects.get(code=g['systemCode'])
+
+        if len(g['sourceIds']) == 1:
+            g['title'] = get_source_name(g['sourceIds'][0])
+        else:
+            g['title'] = g['system'].fullname
+
         g['usage'] = g['currentWeekdayInfo']['average']
         beginning_usage = g['beginningWeekdayInfo']['average']
         average_usage = g['currentWeekdayInfo']['average']

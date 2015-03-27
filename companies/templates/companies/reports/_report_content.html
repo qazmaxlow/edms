@@ -396,7 +396,7 @@
     {% for wd in weekday_details %}
       <div class="row report-detail-header" style="background-color: {{ wd.color }};">
         <div class="col-xs-12">
-        {{ wd.system.fullname }}
+        {{ wd.title }}
         </div>
       </div>
       <div class="row report-detail-body {% if forloop.last %}content-footer{% endif %} ">
@@ -559,7 +559,7 @@
     {% for d in weekday_details %}
       <div class="row report-detail-header" style="background-color: {{ d.color }};">
         <div class="col-xs-12">
-        {{ d.system.fullname }}
+        {{ d.title }}
         </div>
       </div>
       <div class="row report-detail-body {% if forloop.last %}content-footer{% endif %} ">
@@ -723,7 +723,7 @@
     {% for d in weekday_details %}
       <div class="row report-detail-header" style="background-color: {{ d.color }};">
         <div class="col-xs-12">
-        {{ d.system.fullname }}
+        {{ d.title }}
         </div>
       </div>
       <div class="row report-detail-body {% if forloop.last %}content-footer{% endif %} ">
