@@ -403,7 +403,7 @@ class SourceManager:
                         else:
                             multiplier = 1
 
-                        member_data = SourceManager.__get_validated_reading(member_reading, reading_datetime, source_member, idx)
+                        member_data = SourceManager.__get_validated_reading(url_readings[source_member['xml_url']], reading_datetime, source_member, idx)
                         parent_data['value'] += member_data['value']*multiplier
 
 
