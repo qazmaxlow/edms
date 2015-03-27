@@ -73,6 +73,7 @@ def get_total_cost(source_ids, start_dt, end_dt, date_type):
         return sum([get_unitrate(r.source_id, r.datetime).rate*r.value for r in month_readings])
 
 
+@permission_required()
 def summary_ajax(request, system_code):
     systems_info = System.get_systems_info(system_code, request.user.system.code)
     systems = systems_info['systems']
@@ -441,7 +442,7 @@ class CompareTplHepler:
         }
 
 
-
+@permission_required()
 def popup_report_view(request, system_code, year=None, month=None, report_type=None, to_pdf=False):
     systems_info = System.get_systems_info(system_code, request.user.system.code)
     systems = systems_info['systems']
@@ -629,6 +630,12 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     for ix, g in enumerate(group_data):
         g['color'] = type_colors[ix]
         g['system'] = System.objects.get(code=g['systemCode'])
+
+        if len(g['sourceIds']) == 1:
+            g['title'] = get_source_name(g['sourceIds'][0])
+        else:
+            g['title'] = g['system'].fullname
+
         g['usage'] = g['currentWeekdayInfo']['average']
         beginning_usage = g['beginningWeekdayInfo']['average']
         average_usage = g['currentWeekdayInfo']['average']
@@ -670,18 +677,17 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     compare_current_name = report_date.strftime('%b')
     compare_last_name = (report_date - relativedelta(months=1)).strftime('%b')
     if report_type == 'week':
-        compare_current_name = 'this week'
-        compare_last_name = 'last week'
+        compare_current_name = 'This week'
+        compare_last_name = 'Last week'
     elif report_type == 'quarter':
-        compare_current_name = 'this quarter'
-        compare_last_name = 'last quarter'
+        compare_current_name = 'This quarter'
+        compare_last_name = 'Last quarter'
     elif report_type == 'year':
         compare_current_name = report_date.strftime('%Y')
         compare_last_name = (report_date-relativedelta(years=1)).strftime('%Y')
     elif report_type == 'custom':
-        compare_current_name = 'this period'
-        compare_last_name = 'last same period'
-
+        compare_current_name = 'This peroid'
+        compare_last_name = 'Last same peroid'
 
 
 
@@ -725,9 +731,9 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
         chart_title = 'N/A'
         if total_compare:
             if(CompareTplHepler(total_compare).change_desc=='more'):
-                chart_title = _('Overall: {0.compared_percent_abs:.0f}% more energy than last month').format(CompareTplHepler(total_compare))
+                chart_title = _('Overall: {0.compared_percent_abs:.0f}% more energy than last {1}').format(CompareTplHepler(total_compare), report_type_name)
             else:
-                chart_title = _('Overall: {0.compared_percent_abs:.0f}% less energy than last month').format(CompareTplHepler(total_compare))
+                chart_title = _('Overall: {0.compared_percent_abs:.0f}% less energy than last {1}').format(CompareTplHepler(total_compare), report_type_name)
         current_day_readings = {}
         # for day in range(1, 32):
         #     current_day_readings[day] = None
