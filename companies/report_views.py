@@ -915,6 +915,8 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
             compare_past_date = compare_past_date - relativedelta(days=7)
         elif report_type == 'quarter':
             compare_past_date = compare_past_date - relativedelta(months=3)
+        elif report_type == 'custom':
+            compare_past_date = compare_past_date - relativedelta(days=m['report_day_diff'])
 
     compare_past_datasource.reverse()
 
