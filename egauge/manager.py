@@ -413,7 +413,7 @@ class SourceManager:
                     parent_data['value'] = abs(parent_data['value'])
 
                     source_reading_mins.append(parent_data)
-                    need_update_source_ids.append(source_with_members['id'])
+                    need_update_source_ids.append(parent_data['id'])
 
             except SourceManager.GetEgaugeDataError, e:
                 # mark whole batch (60 minutes) as invalid if any of the child members failed
