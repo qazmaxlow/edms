@@ -156,6 +156,8 @@ EMAIL_HOST_PASSWORD = 'entrak8888'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 
+FORMAT_MODULE_PATH = 'entrak.formats'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
