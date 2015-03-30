@@ -402,11 +402,11 @@ class CompareTplHepler:
     @property
     def formated_percent_change(self):
         return _('{0:.0f}% {1}').format(self.compared_percent_abs, self.change_desc) if self.compared_percent is not None else None
-
+    
     @property
     def change_desc(self):
         return _('more') if self.compared_percent >=0 else _('less')
-
+    
     @property
     def change_css_class(self):
         return 'more-usage' if self.compared_percent >=0 else 'less-usage'
@@ -516,8 +516,8 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     m['report_type'] = report_type
     report_type_name = report_type
     report_date_text = u"{0} - {1}".format(
-        DateFormat(report_date).format("d M Y"),
-        DateFormat(report_end_date).format("d M Y")
+        DateFormat(report_date).format("Y M d"),
+        DateFormat(report_end_date).format("Y M d")
     )
 
     if report_type == 'month':
