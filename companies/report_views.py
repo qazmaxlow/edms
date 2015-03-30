@@ -402,11 +402,11 @@ class CompareTplHepler:
     @property
     def formated_percent_change(self):
         return _('{0:.0f}% {1}').format(self.compared_percent_abs, self.change_desc) if self.compared_percent is not None else None
-    
+
     @property
     def change_desc(self):
         return _('more') if self.compared_percent >=0 else _('less')
-    
+
     @property
     def change_css_class(self):
         return 'more-usage' if self.compared_percent >=0 else 'less-usage'
@@ -516,16 +516,23 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     m['report_type'] = report_type
     report_type_name = report_type
     report_date_text = u"{0} - {1}".format(
-        DateFormat(report_date).format("Y M d"),
-        DateFormat(report_end_date).format("Y M d")
+        DateFormat(report_date).format("d M Y"),
+        DateFormat(report_end_date).format("d M Y")
     )
-
     if report_type == 'month':
         report_type_name = _('month')
-        report_date_text = _(u"{0} - Monthly Energy Report").format(DateFormat(report_date).format("M Y"))
+        if (current_lang()=="zh-tw"):
+            report_date_text = _(u"{0}{1} - Monthly Energy Report").format(report_date.strftime("%Y"),report_date.strftime("%-m"))
+        else:
+            report_date_text = _(u"{0} - Monthly Energy Report").format(DateFormat(report_date).format("M Y"))
     elif report_type == 'week':
         report_type_name = _('week')
-        report_date_text = _("{0} - Weekly Energy Report").format(report_date_text)
+        if (current_lang()=="zh-tw"):
+            report_date_text_begin = _(u"{0}{1}{2} - ").format(report_date.strftime("%Y"),report_date.strftime("%-m"),report_date.strftime("%-d"))
+            report_date_text_end = _(u"{0}{1}{2} - Weekly Energy Report").format(report_end_date.strftime("%Y"),report_end_date.strftime("%-m"),report_end_date.strftime("%-d"))
+            report_date_text = report_date_text_begin + report_date_text_end
+        else:
+            report_date_text = _("{0} - Weekly Energy Report").format(report_date_text)
     elif report_type == 'quarter':
         report_type_name = _('quarter')
         quarter_text =  '{0} Q{1}'.format(report_date.strftime("%Y"), report_end_date.month/3)
@@ -535,6 +542,10 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
         report_date_text = _("{0} - Yearly Energy Report").format(report_date.strftime("%Y"))
     if report_type =='custom':
         report_type_name = _('custom')
+        if (current_lang()=="zh-tw"):
+            report_date_text_begin = _(u"{0}{1}{2} - ").format(report_date.strftime("%Y"),report_date.strftime("%-m"),report_date.strftime("%-d"))
+            report_date_text_end = _(u"{0}{1}{2}").format(report_end_date.strftime("%Y"),report_end_date.strftime("%-m"),report_end_date.strftime("%-d"))
+            report_date_text = report_date_text_begin + report_date_text_end
     m['report_type_name'] = report_type_name
     m['report_date_text'] = report_date_text
     m['report_day_diff'] = (report_end_date - report_date).days
@@ -671,9 +682,12 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
 
         g['weekend'] = weekend
 
-    compare_current_name = DateFormat(report_date).format("M")
-    compare_last_name = DateFormat(report_date - relativedelta(months=1)).format("M")
-    
+    if current_lang()=="zh-tw":
+        compare_current_name = DateFormat(report_date).format("n")+_("tcmonth")
+        compare_last_name = DateFormat(report_date - relativedelta(months=1)).format("n")+_("tcmonth")
+    else:
+        compare_current_name = DateFormat(report_date).format("M")
+        compare_last_name = DateFormat(report_date - relativedelta(months=1)).format("M")
     if report_type == 'week':
         compare_current_name = _('This week')
         compare_last_name = _('Last week')
