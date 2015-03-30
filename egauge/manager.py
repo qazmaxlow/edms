@@ -153,6 +153,9 @@ class SourceManager:
 
                     parent_data['value'] += member_data['value']*multiplier
 
+                # temporary fix: absolute the value
+                parent_data['value'] = abs(parent_data['value'])
+
                 SourceReadingMin.objects.insert(parent_data)
                 SourceManager.update_sum(retrieve_time, source['tz'], [source['id']])
 
@@ -406,6 +409,8 @@ class SourceManager:
                         member_data = SourceManager.__get_validated_reading(url_readings[source_member['xml_url']], reading_datetime, source_member, idx)
                         parent_data['value'] += member_data['value']*multiplier
 
+                    # temporary fix: absolute the value
+                    parent_data['value'] = abs(parent_data['value'])
 
                     source_reading_mins.append(parent_data)
                     need_update_source_ids.append(source_with_members['id'])
