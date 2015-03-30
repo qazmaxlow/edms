@@ -283,10 +283,17 @@
                   <img src="{% static weekday_month_compare_helper.change_icon_path  %}">
                 </div>
                 <div class="col-xs-8">
+                {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                  <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  <h3 class="{{ weekday_month_compare_helper.change_css_class }}">
+                      {{ weekday_month_compare_helper.text_desc }}
+                  </h3>
+                {% else %}
                   <h3 class="{{ weekday_month_compare_helper.change_css_class }}">
                       {{ weekday_month_compare_helper.text_desc }}
                   </h3>
                   <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                {% endifequal %}
                 </div>
           </div>
           <div class="row item end">
@@ -294,10 +301,17 @@
                   <img src="{% static weekday_same_period_compare_helper.change_icon_path %}">
                 </div>
                 <div class="col-xs-8">
+                {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                  <p>{% trans "Compared to same period last year" %}</p>
+                  <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
+                      {{ weekday_same_period_compare_helper.text_desc }}
+                  </h3>
+                {% else %}
                   <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
                       {{ weekday_same_period_compare_helper.text_desc }}
                   </h3>
                   <p>{% trans "Compared to same period last year" %}</p>
+                {% endifequal %}
                 </div>
               </div>
         </div>
@@ -353,10 +367,17 @@
                   <img src="{% static weekday_month_compare_helper.change_icon_path  %}">
                 </div>
                 <div class="col-xs-8">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                  <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  <h3 class="{{ weekday_month_compare_helper.change_css_class }}">
+                    {{ weekday_month_compare_helper.text_desc }}
+                  </h3>
+                  {% else %}
                   <h3 class="{{ weekday_month_compare_helper.change_css_class }}">
                     {{ weekday_month_compare_helper.text_desc }}
                   </h3>
                   <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  {% endifequal %}
                 </div>
               </div>
           </div>
@@ -366,10 +387,17 @@
                   <img src="{% static weekday_same_period_compare_helper.change_icon_path %}">
                 </div>
                 <div class="col-xs-8">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                  <p>{% trans "Compared to same period last year" %}</p>
+                  <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
+                    {{ weekday_same_period_compare_helper.text_desc }}
+                  </h3>
+                  {% else %}
                   <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
                     {{ weekday_same_period_compare_helper.text_desc }}
                   </h3>
                   <p>{% trans "Compared to same period last year" %}</p>
+                  {% endifequal %}
                 </div>
               </div>
           </div>
@@ -400,10 +428,17 @@
               <img src="{% static wd.compare_last_month_helper.change_icon_path %}">
             </div>
             <div class="col-xs-8 no-x-padding">
-              <h3 class="{{ wd.compare_last_month_helper.change_css_class }}">
-                {{ wd.compare_last_month_helper.text_desc }}
-              </h3>
-              <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+	              <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+	              <h3 class="{{ wd.compare_last_month_helper.change_css_class }}">
+	                {{ wd.compare_last_month_helper.text_desc }}
+	              </h3>
+                  {% else %}
+	              <h3 class="{{ wd.compare_last_month_helper.change_css_class }}">
+	                {{ wd.compare_last_month_helper.text_desc }}
+	              </h3>
+	              <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  {% endifequal %}
             </div>
           </div>
         </div>
@@ -413,10 +448,17 @@
               <img src="{% static wd.compare_same_period_helper.change_icon_path %}">
             </div>
             <div class="col-xs-8 no-x-padding">
-              <h3 class="{{ wd.compare_same_period_helper.change_css_class }}">
-                {{ wd.compare_same_period_helper.text_desc }}
-              </h3>
-              <p>{% trans "Compared to same period last year" %}</p>
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+	              <p>{% trans "Compared to same period last year" %}</p>
+	              <h3 class="{{ wd.compare_same_period_helper.change_css_class }}">
+	                {{ wd.compare_same_period_helper.text_desc }}
+	              </h3>
+                  {% else %}
+	              <h3 class="{{ wd.compare_same_period_helper.change_css_class }}">
+	                {{ wd.compare_same_period_helper.text_desc }}
+	              </h3>
+	              <p>{% trans "Compared to same period last year" %}</p>
+                  {% endifequal %}
             </div>
           </div>
         </div>
@@ -446,10 +488,17 @@
                   <img src="{% static weekends.month_compare_helper.change_icon_path  %}">
                 </div>
                 <div class="col-xs-8">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                  <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  <h3 class="{{ weekends.month_compare_helper.change_css_class }}">
+                    {{ weekends.month_compare_helper.text_desc }}
+                  </h3>
+                  {% else %}
                   <h3 class="{{ weekends.month_compare_helper.change_css_class }}">
                     {{ weekends.month_compare_helper.text_desc }}
                   </h3>
                   <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  {% endifequal %}
                 </div>
           </div>
           <div class="row item end">
@@ -457,10 +506,17 @@
                   <img src="{% static weekday_same_period_compare_helper.change_icon_path %}">
                 </div>
                 <div class="col-xs-8">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                  <p>{% trans "Compared to same period last year" %}</p>
+                  <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
+                    {{ weekday_same_period_compare_helper.text_desc }}
+                  </h3>
+                  {% else %}
                   <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
                     {{ weekday_same_period_compare_helper.text_desc }}
                   </h3>
                   <p>{% trans "Compared to same period last year" %}</p>
+                  {% endifequal %}
                 </div>
           </div>
         </div>
@@ -516,10 +572,17 @@
                   <img src="{% static weekends.month_compare_helper.change_icon_path  %}">
                 </div>
                 <div class="col-xs-8">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                  <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  <h3 class="{{ weekends.month_compare_helper.change_css_class }}">
+                    {{ weekends.month_compare_helper.text_desc }}
+                  </h3>
+                  {% else %}
                   <h3 class="{{ weekends.month_compare_helper.change_css_class }}">
                     {{ weekends.month_compare_helper.text_desc }}
                   </h3>
                   <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  {% endifequal %}
                 </div>
               </div>
           </div>
@@ -529,10 +592,17 @@
                   <img src="{% static weekday_same_period_compare_helper.change_icon_path %}">
                 </div>
                 <div class="col-xs-8">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                  <p>{% trans "Compared to same period last year" %}</p>
+                  <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
+                    {{ weekday_same_period_compare_helper.text_desc }}
+                  </h3>
+                  {% else %}
                   <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
                     {{ weekday_same_period_compare_helper.text_desc }}
                   </h3>
                   <p>{% trans "Compared to same period last year" %}</p>
+                  {% endifequal %}
                 </div>
               </div>
           </div>
@@ -563,10 +633,17 @@
               <img src="{% static d.compare_last_month_helper.change_icon_path %}">
             </div>
             <div class="col-xs-8 no-x-padding">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+              <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+              <h3 class="{{ d.compare_last_month_helper.change_css_class }}">
+                {{ d.compare_last_month_helper.text_desc }}
+              </h3>
+                  {% else %}
               <h3 class="{{ d.compare_last_month_helper.change_css_class }}">
                 {{ d.compare_last_month_helper.text_desc }}
               </h3>
               <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  {% endifequal %}
             </div>
           </div>
         </div>
@@ -576,10 +653,17 @@
               <img src="{% static d.compare_same_period_helper.change_icon_path %}">
             </div>
             <div class="col-xs-8 no-x-padding">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+              <p>{% trans "Compared to same period last year" %}</p>
+              <h3 class="{{ d.compare_same_period_helper.change_css_class }}">
+                {{ d.compare_same_period_helper.text_desc }}
+              </h3>
+                  {% else %}
               <h3 class="{{ d.compare_same_period_helper.change_css_class }}">
                 {{ d.compare_same_period_helper.text_desc }}
               </h3>
               <p>{% trans "Compared to same period last year" %}</p>
+                  {% endifequal %}
             </div>
           </div>
         </div>
@@ -610,10 +694,17 @@
                   <img src="{% static overnight.month_compare_helper.change_icon_path  %}">
                 </div>
                 <div class="col-xs-8">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                  <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  <h3 class="{{ overnight.month_compare_helper.change_css_class }}">
+                    {{ overnight.month_compare_helper.text_desc }}
+                  </h3>
+                  {% else %}
                   <h3 class="{{ overnight.month_compare_helper.change_css_class }}">
                     {{ overnight.month_compare_helper.text_desc }}
                   </h3>
                   <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  {% endifequal %}
                 </div>
           </div>
           <div class="row item end">
@@ -621,10 +712,17 @@
                   <img src="{% static overnight.compare_same_period_helper.change_icon_path %}">
                 </div>
                 <div class="col-xs-8">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                  <p>{% trans "Compared to same period last year" %}</p>
+                  <h3 class="{{ overnight.compare_same_period_helper.change_css_class }}">
+                    {{ overnight.compare_same_period_helper.text_desc }}
+                  </h3>
+                  {% else %}
                   <h3 class="{{ overnight.compare_same_period_helper.change_css_class }}">
                     {{ overnight.compare_same_period_helper.text_desc }}
                   </h3>
                   <p>{% trans "Compared to same period last year" %}</p>
+                  {% endifequal %}
                 </div>
           </div>
         </div>
@@ -680,10 +778,17 @@
                   <img src="{% static overnight.month_compare_helper.change_icon_path  %}">
                 </div>
                 <div class="col-xs-8">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                  <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  <h3 class="{{ overnight.month_compare_helper.change_css_class }}">
+                    {{ overnight.month_compare_helper.text_desc }}
+                  </h3>
+                  {% else %}
                   <h3 class="{{ overnight.month_compare_helper.change_css_class }}">
                     {{ overnight.month_compare_helper.text_desc }}
                   </h3>
                   <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  {% endifequal %}
                 </div>
               </div>
           </div>
@@ -693,10 +798,17 @@
                   <img src="{% static overnight.compare_same_period_helper.change_icon_path %}">
                 </div>
                 <div class="col-xs-8">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                  <p>{% trans "Compared to same period last year" %}</p>
+                  <h3 class="{{ overnight.compare_same_period_helper.change_css_class }}">
+                    {{ overnight.compare_same_period_helper.text_desc }}
+                  </h3>
+                  {% else %}
                   <h3 class="{{ overnight.compare_same_period_helper.change_css_class }}">
                     {{ overnight.compare_same_period_helper.text_desc }}
                   </h3>
                   <p>{% trans "Compared to same period last year" %}</p>
+                  {% endifequal %}
                 </div>
               </div>
           </div>
@@ -727,10 +839,17 @@
               <img src="{% static d.compare_last_month_helper.change_icon_path %}">
             </div>
             <div class="col-xs-8 no-x-padding">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+              <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+              <h3 class="{{ d.compare_last_month_helper.change_css_class }}">
+                {{ d.compare_last_month_helper.text_desc }}
+              </h3>
+                  {% else %}
               <h3 class="{{ d.compare_last_month_helper.change_css_class }}">
                 {{ d.compare_last_month_helper.text_desc }}
               </h3>
               <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  {% endifequal %}
             </div>
           </div>
         </div>
@@ -740,10 +859,17 @@
               <img src="{% static d.compare_same_period_helper.change_icon_path %}">
             </div>
             <div class="col-xs-8 no-x-padding">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+              <p>{% trans "Compared to same period last year" %}</p>
+              <h3 class="{{ d.compare_same_period_helper.change_css_class }}">
+                {{ d.compare_same_period_helper.text_desc }}
+              </h3>
+                  {% else %}
               <h3 class="{{ d.compare_same_period_helper.change_css_class }}">
                 {{ d.compare_same_period_helper.text_desc }}
               </h3>
               <p>{% trans "Compared to same period last year" %}</p>
+                  {% endifequal %}
             </div>
           </div>
         </div>

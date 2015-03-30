@@ -318,6 +318,16 @@ $(function() {
           <p>{{ get_total_energy_cost_text() }}</p>
           {% endverbatim %}
       </div></div>
+      
+      {% ifequal LANGUAGE_CODE 'zh-tw' %}
+      {% verbatim %}
+      <div class="row content end"><div class="col-xs-12">
+          <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_total.icon_path }}">
+          <p style="padding:0;margin:0;">{{ get_compare_to_text() }}</p>
+          <h3 style="padding-bottom:25px;">{{ summary_report.compare_to_last_total.formated_percent_change || default_null }}</h3>
+      </div></div>
+      {% endverbatim %}
+      {% else %}
       {% verbatim %}
       <div class="row content end"><div class="col-xs-12">
           <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_total.icon_path }}">
@@ -325,6 +335,8 @@ $(function() {
           <p>{{ get_compare_to_text() }}</p>
       </div></div>
       {% endverbatim %}
+      {% endifequal %}
+      
     </div>
     <div class="col-xs-3">
       <div class="row time-type"><div class="col-xs-12">
@@ -335,6 +347,15 @@ $(function() {
           <h3>{% templatetag openvariable %} summary_report.formated_weekday_cost || default_null {% templatetag closevariable %}</h3>
           <p>{% trans "Average weekdays cost" %}</p>
       </div></div>
+      {% ifequal LANGUAGE_CODE 'zh-tw' %}
+      {% verbatim %}
+      <div class="row content end"><div class="col-xs-12">
+          <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_weekdays.icon_path }}">
+          <p style="padding:0;margin:0;">{{ get_compare_to_text() }}</p>
+          <h3 style="padding-bottom:25px;">{{ summary_report.compare_to_last_weekdays.formated_percent_change || default_null }}</h3>
+      </div></div>
+      {% endverbatim %}
+      {% else %}
       {% verbatim %}
       <div class="row content end"><div class="col-xs-12">
           <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_weekdays.icon_path }}">
@@ -342,6 +363,7 @@ $(function() {
           <p>{{ get_compare_to_text() }}</p>
       </div></div>
       {% endverbatim %}
+      {% endifequal %}
     </div>
     <div class="col-xs-3">
       <div class="row time-type"><div class="col-xs-12">
@@ -352,6 +374,15 @@ $(function() {
           <h3>{% templatetag openvariable %} summary_report.formated_overnight_avg_cost || default_null {% templatetag closevariable %}</h3>
           <p>{% trans "Average overnight cost" %}</p>
       </div></div>
+      {% ifequal LANGUAGE_CODE 'zh-tw' %}
+      {% verbatim %}
+      <div class="row content end"><div class="col-xs-12">
+          <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_overnight_avg_cost.icon_path }}">
+          <p style="padding:0;margin:0;">{{ get_compare_to_text() }}</p>
+          <h3 style="padding-bottom:25px;">{{ summary_report.compare_to_last_overnight_avg_cost.formated_percent_change || default_null }}</h3>
+      </div></div>
+      {% endverbatim %}
+	  {% else %}
       {% verbatim %}
       <div class="row content end"><div class="col-xs-12">
           <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_overnight_avg_cost.icon_path }}">
@@ -359,6 +390,7 @@ $(function() {
           <p>{{ get_compare_to_text() }}</p>
       </div></div>
       {% endverbatim %}
+      {% endifequal %}
     </div>
     <div class="col-xs-3">
 
@@ -411,7 +443,7 @@ $(function() {
                                 <div><span>{% trans "From:" %}</span><span class="from-date"></span></div>
                                 <div><span>{% trans "To:" %}</span><span class="to-date"></span></div>
                             </div>
-                            <hr>
+                            <hr class="hr-y-margin">
                             <div class="create-report-btn">{% trans "Download File" %}</div>
                         </div>
                     </div>
