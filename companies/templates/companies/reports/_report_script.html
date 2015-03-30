@@ -97,16 +97,15 @@ ngapp.controller("ReportController", function($scope) {
     };
 
     var bar_date_format = '{0:MMM}';
-    var bar_date_unitstep = 1;
 
     if (report_type == 'week') {
         bar_date_format = '{0:MMM d}';
     }
-    else if (report_type == 'quarter') {
-        var bar_date_unitstep = 3;
-    }
     else if (report_type == 'year') {
         bar_date_format = '{0:yyyy}';
+    }
+    else if (report_type == 'custom') {
+        bar_date_format = '{0:MMM d}';
     }
 
     $scope.barOptions = {
@@ -160,8 +159,8 @@ ngapp.controller("ReportController", function($scope) {
             }
         },
         categoryAxis: {
+            type: 'category',
             field: 'datetime',
-            baseUnitStep: bar_date_unitstep,
             labels: {
                 format: bar_date_format
             },
