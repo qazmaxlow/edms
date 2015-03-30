@@ -446,6 +446,8 @@ $(function() {
             $scope.default_null = "N/A";
 
             $scope.report_type = "month";
+            $scope.pass_week = new Date("{{ today_date.isoformat }}");
+            $scope.pass_week.setDate($scope.pass_week.getDate()-7);
 
             $scope.default_date = new Date("{{ default_date.isoformat }}");
             $scope.default_custom_end_date = new Date("{{ default_custom_end_date.isoformat }}");
@@ -600,7 +602,7 @@ $(function() {
                       ]
                     },
                     {
-                        template: '<div ng-show="!custom_time"><input kendo-et-date-picker="report_date" style="width: 240px;" k-on-change="on_date_selected(kendoEvent)" k-options="monthSelectorOptions" k-rebind="monthSelectorOptions" k-value="default_date" ></div>',
+                        template: '<div ng-show="!custom_time"><input kendo-et-date-picker="report_date" style="width: 240px;" k-on-change="on_date_selected(kendoEvent)" k-options="monthSelectorOptions" k-rebind="monthSelectorOptions" k-value="pass_week" ></div>',
                         ovefrlow: "never"
                     },
                     {
