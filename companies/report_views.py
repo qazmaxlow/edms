@@ -879,16 +879,16 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
         report_type_name
     )
 
-    m['barchart_title'] = 'Total energy consumption for the last 6 months (kWh)'
+    m['barchart_title'] = _('Total energy consumption for the last 6 months (kWh)')
 
     if report_type == 'week':
-        m['barchart_title'] = 'Total energy consumption for the last 6 weeks (kWh)'
+        m['barchart_title'] = _('Total energy consumption for the last 6 weeks (kWh)')
     elif report_type == 'quarter':
-        m['barchart_title'] = 'Total energy consumption for the last 6 quarters (kWh)'
+        m['barchart_title'] = _('Total energy consumption for the last 6 quarters (kWh)')
     elif report_type == 'year':
-        m['barchart_title'] = 'Total energy consumption for the last 6 years (kWh)'
+        m['barchart_title'] = _('Total energy consumption for the last 6 years (kWh)')
     elif report_type == 'custom':
-        m['barchart_title'] = 'Total energy consumption for the last 6 same peroids (kWh)'
+        m['barchart_title'] = _('Total energy consumption for the last 6 same periods (kWh)')
 
     # var transformedDatas = [];
     # var energyPercentSum = 0;
