@@ -8,11 +8,21 @@ from .manager import SourceManager
 
 @shared_task(ignore_result=True)
 def retrieve_all_reading():
-    SourceManager.retrieve_all_reading.delay()
+
+    retrieve_time = SourceManager.gen_retrieve_time()
+
+    for grouped_sources in SourceManager.get_grouped_sources():
+        retrieve_min_reading.delay(grouped_sources['_id'], grouped_sources['sources'], retrieve_time)
+
+    retrieve_source_with_members_min_reading.delay(SourceManager.get_sources_with_members(), retrieve_time)
 
 @shared_task(ignore_result=True)
 def retrieve_min_reading(xml_url, sources, retrieve_time):
     SourceManager.retrieve_min_reading(xml_url, sources, retrieve_time)
+
+@shared_task(ignore_result=True)
+def retrieve_source_with_members_min_reading(sources, retrieve_time):
+    SourceManager.retrieve_source_with_members_min_reading(sources, retrieve_time)
 
 @shared_task(ignore_result=True)
 def recover_all_invalid_reading():
