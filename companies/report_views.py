@@ -878,6 +878,18 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
         compare_last_month_helper.formated_percent_change,
         report_type_name
     )
+
+    m['barchart_title'] = 'Total energy consumption for the last 6 months (kWh)'
+
+    if report_type == 'week':
+        m['barchart_title'] = 'Total energy consumption for the last 6 weeks (kWh)'
+    elif report_type == 'quarter':
+        m['barchart_title'] = 'Total energy consumption for the last 6 quarters (kWh)'
+    elif report_type == 'year':
+        m['barchart_title'] = 'Total energy consumption for the last 6 years (kWh)'
+    elif report_type == 'custom':
+        m['barchart_title'] = 'Total energy consumption for the last 6 same peroids (kWh)'
+
     # var transformedDatas = [];
     # var energyPercentSum = 0;
     # $.each(reportGenThis.groupedSourceInfos, function(infoIdx, info) {
