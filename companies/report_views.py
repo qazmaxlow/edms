@@ -13,7 +13,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.templatetags.static import static
 from django.utils import timezone, dateparse, translation
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as _
 from django.utils.dateformat import DateFormat
 
 from wkhtmltopdf.views import PDFTemplateResponse
@@ -400,15 +400,12 @@ class CompareTplHepler:
 
     @property
     def formated_percent_change(self):
-        return _('{0:.0f}% {1}').format(self.compared_percent_abs, self.change_desc_wording) if self.compared_percent is not None else None
+        return _('{0:.0f}% {1}').format(self.compared_percent_abs, self.change_desc) if self.compared_percent is not None else None
 
     @property
     def change_desc(self):
-        return 'more' if self.compared_percent >=0 else 'less'
-
-    @property
-    def change_desc_wording(self):
         return _('more') if self.compared_percent >=0 else _('less')
+
     @property
     def change_css_class(self):
         return 'more-usage' if self.compared_percent >=0 else 'less-usage'
@@ -427,7 +424,7 @@ class CompareTplHepler:
     @property
     def text_desc(self):
         if self.compared_percent_abs:
-            return _("{self.compared_percent_abs:.0f}% {self.change_desc_wording}").format(self=self)
+            return _("{self.compared_percent_abs:.0f}% {self.change_desc}").format(self=self)
         else:
             return 'N/A'
 
