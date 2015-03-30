@@ -21,7 +21,8 @@
     <script src="{% static 'assets/kendoui/js/jquery.min.js' %}"></script>
     <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
     <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
-
+	<script src="{% static 'assets/kendoui/js/cultures/kendo.culture.zh-TW.min.js' %}"></script>
+	
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -62,6 +63,8 @@
     </div>
 
     <script>
+      var langCode = '{{LANGUAGE_CODE}}';
+   	  kendo.culture(langCode.substring(0,3)+langCode.substring(3,5).toUpperCase());
       {% include "companies/reports/_report_script.html" %}
     </script>
   </body>
