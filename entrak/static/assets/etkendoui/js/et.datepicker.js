@@ -1229,8 +1229,12 @@
                 end_date.setDate(start_date.getDate() + 6);
 
                 var week_format = 'd MMM yyyy, ddd';
-
-                date_text = 'Week starting ' + kendo.toString(start_date, week_format, options.culture);
+                if (kendo.culture().name=="zh-TW"){
+                    date_text = '從' + kendo.toString(start_date, week_format, options.culture) + '開始';
+                }
+                else{
+                    date_text = 'Week starting ' + kendo.toString(start_date, week_format, options.culture);
+                }
             } else if (date && options.select == 'month') {
                 var month_format = 'MMM yyyy';
                 date_text = kendo.toString(date, month_format, options.culture);
