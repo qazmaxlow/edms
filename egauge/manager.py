@@ -7,7 +7,7 @@ import logging
 from bson.code import Code
 from bson.objectid import ObjectId
 from mongoengine import connection, Q, NotUniqueError
-from .models import Source, SourceReadingMin, SourceReadingHour,\
+from .models import Source, SourceMember, SourceReadingMin, SourceReadingHour,\
     SourceReadingDay, SourceReadingWeek, SourceReadingMonth, SourceReadingYear, SourceReadingMinInvalid
 from lxml import etree
 from collections import defaultdict
@@ -18,6 +18,7 @@ class SourceManager:
     DEFAULT_USERNAME = 'entrak'
     DEFAULT_PASSWORD = 'jianshu1906'
     INVALID_RECOVER_LIMIT = 2000
+    OPERATOR_MAP = {"+": 1, "-": -1}
 
     class GetEgaugeDataError(Exception):
         pass
@@ -29,7 +30,7 @@ class SourceManager:
     def get_grouped_sources(system_codes=None):
         current_db_conn = connection.get_db()
         aggregate_pipeline = [
-            { "$match": {"active": True} },
+            { "$match": {"active": True, "$or": [{"source_members": {"$exists" : False}}, {"source_members": {"$size" : 0}}]}},
             { "$project": {"_id": 1, "name": 1, "tz": 1, "xml_url": 1}},
             {
                 "$group": {
@@ -45,6 +46,17 @@ class SourceManager:
         return result['result']
 
     @staticmethod
+    def get_sources_with_members(system_codes=None):
+        current_db_conn = connection.get_db()
+
+        if system_codes:
+            sources =  Source.objects(system_code__in=system_codes, source_members__exists=True, source_members__not__size=0)
+        else:
+            sources = Source.objects(source_members__exists=True, source_members__not__size=0)
+
+        return [s for s in sources]
+
+    @staticmethod
     def gen_retrieve_time():
         retrieve_time = datetime.datetime.utcnow()
         retrieve_time = pytz.utc.localize(retrieve_time.replace(second=0, microsecond=0))
@@ -57,54 +69,107 @@ class SourceManager:
     def retrieve_all_reading():
         retrieve_time = SourceManager.gen_retrieve_time()
         for grouped_sources in SourceManager.get_grouped_sources():
-            xml_url = grouped_sources['_id']
-            sources = grouped_sources['sources']
+            SourceManager.retrieve_min_reading(grouped_sources['_id'], grouped_sources['sources'], retrieve_time)
 
-            SourceManager.retrieve_min_reading(xml_url, sources, retrieve_time)
+        SourceManager.retrieve_source_with_members_min_reading(SourceManager.get_sources_with_members(), retrieve_time)
 
     @staticmethod
-    def retrieve_min_reading(xml_url, infos, retrieve_time):
+    def retrieve_min_reading(xml_url, sources, retrieve_time):
         source_reading_mins = []
-        source_reading_mins_invalid = []
+        error_sources = []
         need_update_source_ids = []
+        url_readings = {}
+
         start_timestamp = calendar.timegm(retrieve_time.utctimetuple())
+
         try:
             readings = SourceManager.__get_egauge_data(xml_url, start_timestamp, 1)
-            for info in infos:
-                construct_info = {
-                    'datetime': retrieve_time,
-                    'source_id': info['_id'],
-                }
-                if info['name'] in readings:
-                    construct_info['value'] = readings[info['name']][0]
-                    source_reading_min = SourceReadingMin(**construct_info)
-                    source_reading_mins.append(source_reading_min)
-                    need_update_source_ids.append(info['_id'])
-                else:
-                    Utils.log_error("no matching cname for source! source: %s, cname: %s"%(xml_url, info['name']))
-                    construct_info['xml_url'] = xml_url
-                    construct_info['name'] = info['name']
-                    construct_info['tz'] = info['tz']
-                    source_reading_mins_invalid.append(SourceReadingMinInvalid(**construct_info))
+            for source in sources:
+
+                try:
+                    source_reading_mins.append(SourceManager.__get_validated_reading(readings, retrieve_time, source))
+                    need_update_source_ids.append(source['_id'])
+                except SourceManager.GetEgaugeDataError, e:
+                    error_sources.append(source)
+
         except SourceManager.GetEgaugeDataError, e:
-            source_reading_mins_invalid = [SourceReadingMinInvalid(
-                    datetime=retrieve_time,
-                    source_id=info['_id'],
-                    name=info['name'],
-                    xml_url=xml_url,
-                    tz=info['tz']
-            ) for info in infos]
+            error_sources += [source for source in sources]
             Utils.log_exception(e)
 
         if source_reading_mins:
             SourceReadingMin.objects.insert(source_reading_mins)
-        if source_reading_mins_invalid:
-            SourceReadingMinInvalid.objects.insert(source_reading_mins_invalid)
+
+        if error_sources:
+            SourceReadingMinInvalid.objects.insert([
+                                SourceReadingMinInvalid(
+                                    datetime=retrieve_time,
+                                    source_id=source['_id'],
+                                    name=source['name'],
+                                    xml_url=xml_url,
+                                    tz=source['tz']
+                                ) for source in error_sources])
 
         if need_update_source_ids:
             # source with same XML should be same timezone
-            source_tz = infos[0]['tz']
+            source_tz = sources[0]['tz']
             SourceManager.update_sum(retrieve_time, source_tz, need_update_source_ids)
+
+    @staticmethod
+    def retrieve_source_with_members_min_reading(sources, retrieve_time):
+
+        start_timestamp = calendar.timegm(retrieve_time.utctimetuple())
+        url_readings = {}
+
+        for source in sources:
+            reading_is_valid = True
+
+            try:
+                if source['xml_url'] in url_readings:
+                    parent_reading = url_readings[source['xml_url']]
+                else:
+                    parent_reading = SourceManager.__get_egauge_data(source['xml_url'], start_timestamp, 1)
+                    url_readings[source['xml_url']] = parent_reading
+
+                parent_data = SourceManager.__get_validated_reading(parent_reading, retrieve_time, source)
+
+                for source_member in source['source_members']:
+                    # set timezone to parent timezone if its not set yet
+                    if 'tz' not in source_member:
+                        source_member['tz'] = source['tz']
+
+                    if source_member['xml_url'] in url_readings:
+                        member_reading = url_readings[source_member['xml_url']]
+                    else:
+                        member_reading = SourceManager.__get_egauge_data(source_member['xml_url'], start_timestamp, 1)
+                        url_readings[source_member['xml_url']] = member_reading
+
+                    member_reading = SourceManager.__get_egauge_data(source_member['xml_url'], start_timestamp, 1)
+                    member_data = SourceManager.__get_validated_reading(member_reading, retrieve_time, source_member)
+
+                    if source_member['operator'] in SourceManager.OPERATOR_MAP:
+                        multiplier = SourceManager.OPERATOR_MAP[source_member['operator']]
+                    else:
+                        multiplier = 1
+
+                    parent_data['value'] += member_data['value']*multiplier
+
+                SourceReadingMin.objects.insert(parent_data)
+                SourceManager.update_sum(retrieve_time, source['tz'], [source['id']])
+
+            except SourceManager.GetEgaugeDataError, e:
+                # log parent data only
+                # no point to log individual member as all members must be redownloaded
+                Utils.log_exception(e)
+                SourceReadingMinInvalid.objects.insert(
+                    SourceReadingMinInvalid(
+                        datetime=retrieve_time,
+                        source_id=source['id'],
+                        name=source['name'],
+                        xml_url=source['xml_url'],
+                        tz=source['tz']
+                    )
+                )
+
 
     @staticmethod
     def update_sum(retrieve_time, source_tz, source_ids):
@@ -286,23 +351,138 @@ class SourceManager:
                 SourceManager.update_sum(start_time, source_tz, need_update_source_ids)
 
     @staticmethod
+    def force_retrieve_source_with_members_hour_reading(all_sources_with_members, start_dt, hour_idx):
+        logger = logging.getLogger('django.recap_data_log')
+
+        start_time = start_dt + datetime.timedelta(hours=hour_idx)
+        end_time = start_time + datetime.timedelta(minutes=59)
+        end_timestamp = calendar.timegm(end_time.utctimetuple())
+        reading_datetimes = [(end_time - datetime.timedelta(minutes=minute)) for minute in xrange(60)]
+        url_readings = {}
+
+        for source_with_members in all_sources_with_members:
+
+            logger.info('force retrieve: Parent Data Download for time [%s] in [%s] started'%(start_time.strftime('%Y-%m-%d %H:%M'), source_with_members['xml_url']))
+
+            SourceReadingMin.objects(
+                source_id=source_with_members['id'],
+                datetime__gte=start_time,
+                datetime__lte=end_time
+            ).delete()
+
+            source_reading_mins = []
+            source_reading_mins_invalid = []
+            need_update_source_ids = []
+
+            try:
+                parent_reading = SourceManager.__get_egauge_data(source_with_members['xml_url'], end_timestamp, 60)
+                url_readings[source_with_members['xml_url']] = parent_reading
+
+                for source_member in source_with_members['source_members']:
+
+                    # set timezone to parent timezone if its not set yet
+                    if 'tz' not in source_member:
+                        source_member['tz'] = source_with_members['tz']
+
+                    logger.info('force retrieve: Member Data Download for time [%s] in [%s] started'%(start_time.strftime('%Y-%m-%d %H:%M'), source_member['xml_url']))
+
+                    if source_member['xml_url'] in url_readings:
+                        member_reading = url_readings[source_member['xml_url']]
+                    else:
+                        member_reading = SourceManager.__get_egauge_data(source_member['xml_url'], end_timestamp, 60)
+                        url_readings[source_member['xml_url']] = member_reading
+
+                for (idx, reading_datetime) in enumerate(reading_datetimes):
+
+                    parent_data = SourceManager.__get_validated_reading(parent_reading, reading_datetime, source_with_members, idx)
+
+                    for source_member in source_with_members['source_members']:
+
+                        if source_member['operator'] in SourceManager.OPERATOR_MAP:
+                            multiplier = SourceManager.OPERATOR_MAP[source_member['operator']]
+                        else:
+                            multiplier = 1
+
+                        member_data = SourceManager.__get_validated_reading(url_readings[source_member['xml_url']], reading_datetime, source_member, idx)
+                        parent_data['value'] += member_data['value']*multiplier
+
+
+                    source_reading_mins.append(parent_data)
+                    need_update_source_ids.append(source_with_members['id'])
+
+            except SourceManager.GetEgaugeDataError, e:
+                # mark whole batch (60 minutes) as invalid if any of the child members failed
+                Utils.log_exception(e)
+                source_reading_mins_invalid += [SourceReadingMinInvalid(
+                            datetime=reading_datetime,
+                            source_id=source_with_members['id'],
+                            xml_url=source_with_members['xml_url'],
+                            name=source_with_members['name'],
+                            tz=source_with_members['tz']
+                        ) for (idx, reading_datetime) in enumerate(reading_datetimes)]
+                SourceReadingMinInvalid.objects.insert(source_reading_mins_invalid)
+                return
+
+            if source_reading_mins:
+                SourceReadingMin.objects.insert(source_reading_mins)
+
+            if need_update_source_ids:
+                source_tz = source_with_members['tz']
+                SourceManager.update_sum(start_time, source_tz, need_update_source_ids)
+
+    @staticmethod
     def force_retrieve_reading(start_dt, end_dt, system_codes, celery_task=None):
         '''
         The start_dt and end_dt should be timezone aware
         '''
-        all_grouped_sources = SourceManager.get_grouped_sources(system_codes)
         start_dt = start_dt.replace(minute=0, second=0, microsecond=0)
         end_dt = end_dt.replace(minute=0, second=0, microsecond=0) + datetime.timedelta(hours=1)
         total_hour = int((end_dt - start_dt).total_seconds()/3600)
 
+        all_grouped_sources = SourceManager.get_grouped_sources(system_codes)
+        all_sources_with_members = SourceManager.get_sources_with_members(system_codes)
+
         for hour_idx in xrange(total_hour):
             if celery_task is None:
                 SourceManager.force_retrieve_hour_reading(all_grouped_sources, start_dt, hour_idx)
+                SourceManager.force_retrieve_source_with_members_hour_reading(all_sources_with_members, start_dt, hour_idx)
             else:
                 celery_task.delay(all_grouped_sources, start_dt, hour_idx)
+                celery_task.delay(all_sources_with_members, start_dt, hour_idx)
+
     @staticmethod
     def force_retrieve_all_reading(start_dt, end_dt):
         SourceManager.force_retrieve_reading(start_dt, end_dt, None)
+
+    @staticmethod
+    def __get_validated_reading(reading, retrieve_time, source, offset=0):
+
+        source_id = None
+
+        # source coming in maybe a Source/SourceMember object instance or raw data from Source collection
+        if isinstance(source, Source) or isinstance(source, SourceMember):
+            source_id = source['id']
+
+        if type(source) == type(dict()):
+            source_id = source['_id']
+
+        if source['name'] in reading:
+            source_reading_min = SourceReadingMin(
+                                    datetime=retrieve_time,
+                                    source_id=source_id,
+                                    value=reading[source['name']][offset]
+                                 )
+
+        else:
+            error_msg = "no matching cname for source! source: %s, cname: %s"%(source['xml_url'], source['name'])
+            Utils.log_error(error_msg)
+            raise SourceManager.GetEgaugeDataError(error_msg)
+
+        return source_reading_min
+
+    @staticmethod
+    def __validate_reading_with_source(reading, source):
+        return (source['name'] in reading)
 
     @staticmethod
     def __get_egauge_data(xml_url, start_timestamp, row):
@@ -521,7 +701,7 @@ class SourceManager:
             source_id__in=(ObjectId(source_id) for source_id in source_ids),
             datetime__gte=start_dt,
             datetime__lt=end_dt)
-        
+
         num_of_min_interval = len(source_readings)
         total = sum((source_reading.value for source_reading in source_readings))
 

@@ -7,13 +7,14 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from mongoengine import connection
 from system.models import System
 from egauge.manager import SourceManager
-from egauge.models import Source, SourceReadingMinInvalid
+from egauge.models import Source, SourceMember, SourceReadingMinInvalid
 from egauge.tasks import force_retrieve_reading
 from baseline.models import BaselineUsage
 from holiday.models import CityHoliday
 from utils.utils import Utils
+from bson.objectid import ObjectId
 
-CAN_UPDATE_SOURCE_FIELDS = ['name', 'xml_url', 'system_code', 'system_path', 'd_name', 'd_name_tc', 'order', 'active']
+CAN_UPDATE_SOURCE_FIELDS = ['name', 'xml_url', 'system_code', 'system_path', 'd_name', 'd_name_tc', 'order', 'source_members', 'active']
 
 def __is_source_need_update(source, info):
     need_update = False
@@ -86,7 +87,9 @@ def edit_sources_view(request, system_code=None):
             source_id_map[str(source.id)] = source
 
         will_insert_sources = []
+
         for info in source_infos:
+
             if info['system_path'] == '':
                 info['system_path'] = None
 
@@ -95,8 +98,16 @@ def edit_sources_view(request, system_code=None):
             except ValueError, e:
                 info['order'] = 1
 
+            source_members = []
+
+            for m in info['source_members']:
+                source_member = SourceMember(id=ObjectId(), name=m['name'], xml_url=m['xml_url'], operator=m['operator'])
+                source_members.append(source_member)
+
+            info['source_members'] = source_members
+
             if info['source_id'] is None:
-                will_insert_sources.append(Source(
+                source = Source(
                     name=info['name'],
                     xml_url=info['xml_url'],
                     system_code=info['system_code'],
@@ -104,11 +115,17 @@ def edit_sources_view(request, system_code=None):
                     d_name=info['d_name'],
                     d_name_tc=info['d_name_tc'],
                     order=info['order'],
-                    active=info['active']))
+                    active=info['active'])
+                if source_members:
+                    source.source_members = source_members
+                will_insert_sources.append(source)
             else:
                 original_source = source_id_map[info['source_id']]
                 if __is_source_need_update(original_source, info):
                     __assign_source_info(original_source, info)
+                    print(original_source.__dict__)
+                    print(type(original_source.source_members))
+                    print(type(info['source_members']))
                     original_source.save()
 
         if will_insert_sources:
