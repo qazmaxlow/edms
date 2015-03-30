@@ -30,6 +30,7 @@
 <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
 
 <script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
+<script src="{% static 'assets/kendoui/js/cultures/kendo.culture.zh-TW.min.js' %}"></script>
 
 <!-- hack for combining bootstrap -->
 <style>
@@ -196,6 +197,7 @@ function updateDlRawBtnStatus() {
 $(function() {
     setupAjaxForCsrf($.cookie('csrftoken'));
     report.langCode = '{{LANGUAGE_CODE}}';
+    kendo.culture(report.langCode.substring(0,3)+report.langCode.substring(3,5).toUpperCase());
     moment.locale(report.langCode);
 
     report.entrakSystem = new EntrakSystem();

@@ -670,21 +670,21 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
 
         g['weekend'] = weekend
 
-
-    compare_current_name = report_date.strftime('%b')
-    compare_last_name = (report_date - relativedelta(months=1)).strftime('%b')
+    compare_current_name = DateFormat(report_date).format("M")
+    compare_last_name = DateFormat(report_date - relativedelta(months=1)).format("M")
+    
     if report_type == 'week':
-        compare_current_name = 'This week'
-        compare_last_name = 'Last week'
+        compare_current_name = _('This week')
+        compare_last_name = _('Last week')
     elif report_type == 'quarter':
-        compare_current_name = 'This quarter'
-        compare_last_name = 'Last quarter'
+        compare_current_name = _('This quarter')
+        compare_last_name = _('Last quarter')
     elif report_type == 'year':
         compare_current_name = report_date.strftime('%Y')
         compare_last_name = (report_date-relativedelta(years=1)).strftime('%Y')
     elif report_type == 'custom':
-        compare_current_name = 'This peroid'
-        compare_last_name = 'Last same peroid'
+        compare_current_name = _('This period')
+        compare_last_name = _('Last same period')
 
 
 
@@ -728,9 +728,9 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
         chart_title = 'N/A'
         if total_compare:
             if(CompareTplHepler(total_compare).change_desc=='more'):
-                chart_title = _('Overall: {0.compared_percent_abs:.0f}% more energy than last {1}').format(CompareTplHepler(total_compare), report_type_name)
+                chart_title = _('Overall: {0.compared_percent_abs:.0f}&#37; more energy than last {1}').format(CompareTplHepler(total_compare), report_type_name)
             else:
-                chart_title = _('Overall: {0.compared_percent_abs:.0f}% less energy than last {1}').format(CompareTplHepler(total_compare), report_type_name)
+                chart_title = _('Overall: {0.compared_percent_abs:.0f}&#37; less energy than last {1}').format(CompareTplHepler(total_compare), report_type_name)
         current_day_readings = {}
         # for day in range(1, 32):
         #     current_day_readings[day] = None
