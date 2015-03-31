@@ -13,6 +13,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.templatetags.static import static
 from django.utils import timezone, dateparse, translation
+from django.utils import formats
 from django.utils.translation import ugettext as _
 from django.utils.dateformat import DateFormat
 
@@ -538,7 +539,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         report_date_text = _("{0} - Quarterly Energy Report").format(quarter_text)
     elif report_type == 'year':
         report_type_name = _('year')
-        report_date_text = _("{0} - Yearly Energy Report").format(report_date.strftime("%Y"))
+        report_date_text = _("{0} - Yearly Energy Report").format(DateFormat(report_date).format(formats.get_format('YEAR_FORMAT')))
     if report_type =='custom':
         report_type_name = _('custom')
         if (current_lang()=="zh-tw"):
