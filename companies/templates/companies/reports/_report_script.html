@@ -99,13 +99,13 @@ ngapp.controller("ReportController", function($scope) {
     var bar_date_format = '{0:MMM}';
 
     if (report_type == 'week') {
-        bar_date_format = '{0:MMM d}';
+        bar_date_format = '{0:M}';
     }
     else if (report_type == 'year') {
         bar_date_format = '{0:yyyy}';
     }
     else if (report_type == 'custom') {
-        bar_date_format = '{0:MMM d}';
+        bar_date_format = '{0:M}';
     }
 
     $scope.barOptions = {
