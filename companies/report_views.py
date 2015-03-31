@@ -535,7 +535,7 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
             report_date_text = _("{0} - Weekly Energy Report").format(report_date_text)
     elif report_type == 'quarter':
         report_type_name = _('quarter')
-        quarter_text =  '{0} Q{1}'.format(report_date.strftime("%Y"), report_end_date.month/3)
+        quarter_text =  _('{0} Q{1}').format(report_date.strftime("%Y"), report_end_date.month/3)
         report_date_text = _("{0} - Quarterly Energy Report").format(quarter_text)
     elif report_type == 'year':
         report_type_name = _('year')
