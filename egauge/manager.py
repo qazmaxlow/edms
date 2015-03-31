@@ -397,26 +397,30 @@ class SourceManager:
 
                 for (idx, reading_datetime) in enumerate(reading_datetimes):
 
-                    parent_data = SourceManager.__get_validated_reading(parent_reading, reading_datetime, source_with_members, idx)
+                    try:
+                        parent_data = SourceManager.__get_validated_reading(parent_reading, reading_datetime, source_with_members, idx)
 
-                    for source_member in source_with_members['source_members']:
+                        for source_member in source_with_members['source_members']:
 
-                        if source_member['operator'] in SourceManager.OPERATOR_MAP:
-                            multiplier = SourceManager.OPERATOR_MAP[source_member['operator']]
-                        else:
-                            multiplier = 1
+                            if source_member['operator'] in SourceManager.OPERATOR_MAP:
+                                multiplier = SourceManager.OPERATOR_MAP[source_member['operator']]
+                            else:
+                                multiplier = 1
 
-                        member_data = SourceManager.__get_validated_reading(url_readings[source_member['xml_url']], reading_datetime, source_member, idx)
-                        parent_data['value'] += member_data['value']*multiplier
+                            member_data = SourceManager.__get_validated_reading(url_readings[source_member['xml_url']], reading_datetime, source_member, idx)
+                            parent_data['value'] += member_data['value']*multiplier
 
-                    # temporary fix: absolute the value
-                    parent_data['value'] = abs(parent_data['value'])
+                        # temporary fix: absolute the value
+                        parent_data['value'] = abs(parent_data['value'])
 
-                    source_reading_mins.append(parent_data)
-                    need_update_source_ids.append(parent_data['id'])
+                        source_reading_mins.append(parent_data)
+                        need_update_source_ids.append(parent_data['id'])
+
+                    except SourceManager.GetEgaugeDataError, e:
+                        # skip the current minute if any errors found
 
             except SourceManager.GetEgaugeDataError, e:
-                # mark whole batch (60 minutes) as invalid if any of the child members failed
+                # mark whole batch (60 minutes) as invalid if the parent contains any error
                 Utils.log_exception(e)
                 source_reading_mins_invalid += [SourceReadingMinInvalid(
                             datetime=reading_datetime,
