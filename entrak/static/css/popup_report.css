@@ -3,12 +3,28 @@
     padding-right: 0px !important;
 }
 
-.no-right-padding {
-    padding-right: 0px !important;   
+.x-padding-5 {
+    padding-left: 5px !important;
+    padding-right: 5px !important;   
+}
+
+.x-padding-5-0 {
+    padding-right: 0px !important;
+    padding-left: 5px !important;
+}
+
+.bottom-border-3 {
+    border-bottom: solid 2px #cbcbcb;
 }
 
 .page-break-after {
     page-break-after: always !important;
+}
+
+.used-money {
+    color: #354960;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
 }
 
 body {
@@ -217,7 +233,7 @@ body {-webkit-print-color-adjust: exact;}
 }
 
 .top-section .side-bar .item p {
-    color: #778491;
+    color: #626060;
     font-weight: 600;
 }
 
@@ -308,7 +324,7 @@ body {-webkit-print-color-adjust: exact;}
 }
 
 .border-bottom-5px {
-    border-bottom: #aeaeae 5px solid;
+    border-bottom: #e3e7e8 5px solid;
 }
 
 .highest-weekday-enegry {
@@ -395,7 +411,6 @@ body {-webkit-print-color-adjust: exact;}
 }
 
 .basic-info-col {
-    font-size: 12pt;
     vertical-align: top;
 }
 
@@ -499,9 +514,15 @@ body {-webkit-print-color-adjust: exact;}
 .detail-container h4 {
     text-align: center;
     padding: 8px 0;
-    font-size:2rem;
+    font-size: 1.1em;
     font-weight: 600;
     color: #354960;
+}
+
+.report-subtitle-text {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #354960;   
 }
 
 .detail-container table {
