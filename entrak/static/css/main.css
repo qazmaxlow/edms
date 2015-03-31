@@ -108,7 +108,7 @@ html, body {
 #menu{
     position: absolute;
     width: 222px;
-    height: 100%;
+    height: calc(100% + 50px);
     background: -webkit-gradient(linear, left top, left bottom, from(#eff2f3), to(#cbcfd1));
     background: -moz-linear-gradient(#eff2f3, #cbcfd1);
     background: linear-gradient(linear, left top, left bottom, from(#eff2f3), to(#cbcfd1));
