@@ -316,10 +316,7 @@
               </div>
         </div>
         <div class="col-xs-8 calendar-content">
-          <div class="row text-center report-date"><div class="col-xs-12">{{ report_date|date:"M Y" }}</div></div>
-          <div class="row text-center date-header border-bottom-2px">
-            Jul 2014
-          </div>
+          <div class="row text-center report-date"><div class="col-xs-12">{{ report_start|date:"YEAR_MONTH_FORMAT" }}</div></div>
           <div class="row text-center">
             <div class="col-xs-4 border-right"><h9 class="better-mark">{% trans "Better" %}</h9><p>{% trans "than average weekday" %}</p></div>
             <div class="col-xs-4 border-right"><h9 class="worse-mark">{% trans "Worse" %}</h9><p>{% trans "than average weekday" %}</p></div>
@@ -521,10 +518,7 @@
           </div>
         </div>
         <div class="col-xs-8 calendar-content">
-          <div class="row text-center report-date"><div class="col-xs-12">{{ report_date|date:"M Y" }}</div></div>
-          <div class="row text-center date-header border-bottom-2px">
-            Jul 2014
-          </div>
+          <div class="row text-center report-date"><div class="col-xs-12">{{ report_start|date:"YEAR_MONTH_FORMAT" }}</div></div>
           <div class="row text-center">
             <div class="col-xs-4 border-right"><h9 class="better-mark">{% trans "Better" %}</h9><p>{% trans "than average weekend" %}</p></div>
             <div class="col-xs-4 border-right"><h9 class="worse-mark">{% trans "Worse" %}</h9><p>{% trans "than average weekend" %}</p></div>
@@ -727,10 +721,7 @@
           </div>
         </div>
         <div class="col-xs-8 calendar-content">
-          <div class="row text-center report-date"><div class="col-xs-12">{{ report_date|date:"M Y" }}</div></div>
-          <div class="row text-center date-header border-bottom-2px">
-            Jul 2014
-          </div>
+          <div class="row text-center report-date"><div class="col-xs-12">{{ report_start|date:"YEAR_MONTH_FORMAT" }}</div></div>
           <div class="row text-center">
             <div class="col-xs-4 border-right"><h9 class="better-mark">{% trans "Better" %}</h9><p>{% trans "than average night" %}</p></div>
             <div class="col-xs-4 border-right"><h9 class="worse-mark">{% trans "Worse" %}</h9><p>{% trans "than average night" %}</p></div>
