@@ -1228,7 +1228,7 @@
                 var end_date = new Date(date);
                 end_date.setDate(start_date.getDate() + 6);
 
-                var week_format = 'd MMM yyyy, ddd';
+                var week_format = 'd MMM yyyy, dddd';
                 if (kendo.culture().name=="zh-TW"){
                     date_text = '從' + kendo.toString(start_date, week_format, options.culture) + '開始';
                 }
