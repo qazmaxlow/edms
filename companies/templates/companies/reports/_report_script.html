@@ -341,7 +341,9 @@ setCalendar = function(currentDt, currentEndDt, eleSel, readings, averageUsage, 
 
     var calendarStartDt = moment(currentDt).startOf('w');
     var calendarEndDt = moment(currentEndDt).subtract(1, 's').endOf('w');
+    var cellCount = 0;
     for (var calendarNowDt=calendarStartDt; calendarNowDt.isBefore(calendarEndDt); calendarNowDt.add(1, 'd')) {
+        cellCount++;
         var calendarDayEle = $("<div class='calendar-day'></div>");
         calendarDayEle.append("<div class='calendar-day-digit'>"+calendarNowDt.date()+"</div>");
 
@@ -375,9 +377,11 @@ setCalendar = function(currentDt, currentEndDt, eleSel, readings, averageUsage, 
                                   +diffPercentText
                                   +"<span class='calendar-day-percent-symbol'>%</span></div>");
         }
-
         calendarContainer.append(calendarDayEle);
     }
+
+    var rowCount = cellCount / 7;
+    calendarContainer.addClass("calendar-row-" + rowCount);
 }
 
 
