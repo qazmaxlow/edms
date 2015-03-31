@@ -418,6 +418,7 @@ class SourceManager:
 
                     except SourceManager.GetEgaugeDataError, e:
                         # skip the current minute if any errors found
+                        continue
 
             except SourceManager.GetEgaugeDataError, e:
                 # mark whole batch (60 minutes) as invalid if the parent contains any error
