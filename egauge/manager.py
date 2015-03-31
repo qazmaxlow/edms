@@ -414,7 +414,10 @@ class SourceManager:
                         parent_data['value'] = abs(parent_data['value'])
 
                         source_reading_mins.append(parent_data)
-                        need_update_source_ids.append(parent_data['id'])
+
+                        if source_with_members['id'] not in need_update_source_ids:
+                            need_update_source_ids.append(source_with_members['id'])
+
 
                     except SourceManager.GetEgaugeDataError, e:
                         # skip the current minute if any errors found
