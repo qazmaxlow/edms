@@ -469,8 +469,17 @@ $(document).ready(function()  {
     var report_start = new Date("{{ report_start.isoformat }}");
     var report_end = new Date("{{ report_end.isoformat }}");
 
+    var creport_start = new Date(report_start);
+    var creport_end = new Date(report_end);
+
+    if (report_type == 'week') {
+        creport_start.setDate(1);
+        creport_end.setMonth(creport_end.getMonth()+1);
+        creport_end.setDate(0);
+    }
+
     setCalendar(
-        report_start, report_end,
+        creport_start, creport_end,
         '#weekday-info .calendar-info-container', report_readings, average_usage, isNotConcernFunc);
 
     $('#weekday-info .average-usage').html(average_usage);
@@ -488,7 +497,7 @@ $(document).ready(function()  {
     }
 
     setCalendar(
-        report_start, report_end,
+        creport_start, creport_end,
         '#weekend-info .calendar-info-container', report_readings, weekend_average_usage, isNotConcernFunc);
 
     var combinedOvernightCurrentReadings = {};
@@ -509,7 +518,7 @@ $(document).ready(function()  {
     });
 
     setCalendar(
-        report_start, report_end,
+        creport_start, creport_end,
         '#overnight-info .calendar-info-container', combinedOvernightCurrentReadings, overnight_average_usage, isNotConcernFunc);
 
     // $('#weekday-info .average-usage').html(average_usage);
