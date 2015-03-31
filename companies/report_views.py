@@ -539,7 +539,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         report_date_text = _("{0} - Quarterly Energy Report").format(quarter_text)
     elif report_type == 'year':
         report_type_name = _('year')
-        report_date_text = _("{0} - Yearly Energy Report").format(DateFormat(report_date).format(formats.get_format('YEAR_FORMAT')))
+        report_date_text = _("{0} - Yearly Energy Report").format(formats.date_format(report_date, 'YEAR_FORMAT'))
     if report_type =='custom':
         report_type_name = _('custom')
         if (current_lang()=="zh-tw"):
