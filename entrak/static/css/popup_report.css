@@ -199,6 +199,7 @@ body {-webkit-print-color-adjust: exact;}
 }
 
 .less-usage {
+    margin: 0;
     color: #81d51d;
     font-weight: 600;
 }
@@ -243,6 +244,10 @@ body {-webkit-print-color-adjust: exact;}
 .report-detail-body .col-xs-4 .row img {
     position: relative;
     top: 26px;
+}
+
+.report-detail-body .row .col-xs-8 {
+    padding: 20px 0;
 }
 
 .report-detail-body .col-xs-4:not(:first-child) {
