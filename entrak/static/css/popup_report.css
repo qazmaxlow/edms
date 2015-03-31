@@ -164,6 +164,7 @@ body {-webkit-print-color-adjust: exact;}
 }
 
 .top-section .side-bar {
+    height: 470px;  /*align with the right path*/
     border-right: 5px solid #e3e7e8;
 }
 
@@ -174,8 +175,17 @@ body {-webkit-print-color-adjust: exact;}
 
 
 .top-section .side-bar .item {
-    /* height: 144px; */
     padding: 13px 0;
+    height: 155px;
+}
+
+.top-section .side-bar .start {
+    padding: 20px 0 13px 0;
+    height: 165px !important;
+}
+
+.top-section .side-bar .end {
+        height: 150px !important;
 }
 
 .top-section .side-bar .item p {
@@ -195,7 +205,6 @@ body {-webkit-print-color-adjust: exact;}
 
 .top-section .side-bar .item:not(.end) {
     background: url("../images/reports/side_row_splitter.png") no-repeat scroll center bottom white;
-    height: 132px;
 }
 
 .top-section .side-bar .inner {
@@ -205,7 +214,6 @@ body {-webkit-print-color-adjust: exact;}
 
 .top-section .side-bar .end {
     Background: white;
-    height: 124px;
 }
 
 .no-background-image {
@@ -246,22 +254,20 @@ body {-webkit-print-color-adjust: exact;}
     font-weight: 600;
 }
 
-.report-date {
-    color: #637282;
-    font-weight: 600;
-    border-bottom: #e5dadb 1px solid;
-}
-
 .border-right {
     border-right: #e5dadb 1px solid;
+}
+
+.height-50 > div {
+    height: 50px;
 }
 
 .date-header {
     font-weight: 600;
     font-size: 1.5rem;
     color: #415368;
-    margin-top: 15px;
-    margin-bottom: 5px;
+    height: 43px;
+    padding-top: 20px;
 }
 
 .border-bottom-2px {
@@ -736,10 +742,11 @@ body {-webkit-print-color-adjust: exact;}
 .calendar-weekday-header > div {
     display: inline-block;
     width: 68px;
+    height: 25px;
     font-size: 9pt;
     font-weight: bold;
     color: #fff;
-    padding: 3px 8px;
+    padding: 5px 8px;
     border-left: 1px solid #fff;
 }
 .calendar-weekday-header>div:nth-child(odd) {
@@ -801,6 +808,22 @@ body {-webkit-print-color-adjust: exact;}
     background-color: #D85341;
     color: white;
 }
+
+/*fix calendar total height*/
+.calendar-day-container {
+    height: 240px;
+}
+.calendar-row-4 div.calendar-day {
+    height: 60px;
+}
+.calendar-row-5 div.calendar-day {
+    height: 48px;
+}
+.calendar-row-6 div.calendar-day {
+    height: 40px;
+}
+/*fix calendar total height*/
+
 .calendar-day-container + div {
     clear: both;
 }

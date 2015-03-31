@@ -269,7 +269,7 @@
       {% if report_type != 'quarter' and report_type != 'year' and report_type != 'custom' %}
         <div class="row top-section border-bottom-5px">
         <div class="col-xs-4 side-bar">
-          <div class="row item">
+          <div class="row item start">
                 <div class="col-xs-4">
                   <img src="{% static 'images/reports/icon_money.svg' %}">
                 </div>
@@ -316,8 +316,10 @@
               </div>
         </div>
         <div class="col-xs-8 calendar-content">
-          <div class="row text-center report-date"><div class="col-xs-12">{{ report_start|date:"YEAR_MONTH_FORMAT" }}</div></div>
-          <div class="row text-center">
+          <div class="row text-center border-bottom-2px">
+            <div class="col-xs-12 date-header">{{ report_start|date:"YEAR_MONTH_FORMAT" }}</div>
+          </div>
+          <div class="row text-center height-50">
             <div class="col-xs-4 border-right"><h9 class="better-mark">{% trans "Better" %}</h9><p>{% trans "than average weekday" %}</p></div>
             <div class="col-xs-4 border-right"><h9 class="worse-mark">{% trans "Worse" %}</h9><p>{% trans "than average weekday" %}</p></div>
             <div class="col-xs-4"><h9 class="average-mark">{% trans "Average" %}</h9><p>{% trans "weekday" %}</p></div>
@@ -471,7 +473,7 @@
       {% if report_type != 'quarter' and report_type != 'year' and report_type != 'custom' %}
         <div class="row top-section border-bottom-5px">
         <div class="col-xs-4 side-bar">
-          <div class="row item">
+          <div class="row item start">
                 <div class="col-xs-4">
                   <img src="{% static 'images/reports/icon_money.svg'  %}">
                 </div>
@@ -518,8 +520,10 @@
           </div>
         </div>
         <div class="col-xs-8 calendar-content">
-          <div class="row text-center report-date"><div class="col-xs-12">{{ report_start|date:"YEAR_MONTH_FORMAT" }}</div></div>
-          <div class="row text-center">
+          <div class="row text-center border-bottom-2px">
+            <div class="col-xs-12 date-header">{{ report_start|date:"YEAR_MONTH_FORMAT" }}</div>
+          </div>
+          <div class="row text-center height-50">
             <div class="col-xs-4 border-right"><h9 class="better-mark">{% trans "Better" %}</h9><p>{% trans "than average weekend" %}</p></div>
             <div class="col-xs-4 border-right"><h9 class="worse-mark">{% trans "Worse" %}</h9><p>{% trans "than average weekend" %}</p></div>
             <div class="col-xs-4"><h9 class="average-mark">{% trans "Average" %}</h9><p>{% trans "weekend" %}</p></div>
@@ -674,7 +678,7 @@
       {% if report_type != 'quarter' and report_type != 'year' and report_type != 'custom' %}
         <div class="row top-section border-bottom-5px">
         <div class="col-xs-4 side-bar">
-          <div class="row item">
+          <div class="row item start">
                 <div class="col-xs-4">
                   <img src="{% static 'images/reports/icon_money.svg'  %}">
                 </div>
@@ -721,8 +725,10 @@
           </div>
         </div>
         <div class="col-xs-8 calendar-content">
-          <div class="row text-center report-date"><div class="col-xs-12">{{ report_start|date:"YEAR_MONTH_FORMAT" }}</div></div>
-          <div class="row text-center">
+          <div class="row text-center border-bottom-2px">
+            <div class="col-xs-12 date-header">{{ report_start|date:"YEAR_MONTH_FORMAT" }}</div>
+          </div>
+          <div class="row text-center height-50">
             <div class="col-xs-4 border-right"><h9 class="better-mark">{% trans "Better" %}</h9><p>{% trans "than average night" %}</p></div>
             <div class="col-xs-4 border-right"><h9 class="worse-mark">{% trans "Worse" %}</h9><p>{% trans "than average night" %}</p></div>
             <div class="col-xs-4"><h9 class="average-mark">{% trans "Average" %}</h9><p>{% trans "night" %}</p></div>
