@@ -271,12 +271,6 @@ $(function() {
         color: #354960;
         line-height: 1.32em;
     }
-    .notification-wrapper .downWhiteArrow {
-        margin: 0px auto 0px auto;
-        width: 26px;
-        height: 13px;
-        background-image: url("{% static 'images/notifications/notification-arrow.png' %}");
-    }
 
     .notification-wrapper {
         background: transparent !important;
@@ -306,7 +300,7 @@ $(function() {
     }
 
     .notification-wrapper .actions {
-        background-color: #4a8c9b;
+        background: url("{% static 'images/notifications/notification-arrow.png' %}") no-repeat scroll center top #4a8c9b;
     }
 
     .notification-wrapper .actions button {
@@ -336,7 +330,6 @@ $(function() {
       <p>#:body#</p>
     </div>
     <div class="actions">
-    <div class="downWhiteArrow"></div>
     <button class="xk-button" onclick="$('\\#notifications').data('kendoWindow').close();">OK</button>
     </div>
 </script>
