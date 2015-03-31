@@ -1,0 +1,47 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap 101 Template</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/popup_report.css' %}">
+    <script src="{% static 'js/moment-with-locales.js' %}"></script>
+    <script src="{% static 'js/entrak-utils.js' %}"></script>
+
+    <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/kendoui/styles/kendo.default.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/kendoui/styles/kendo.dataviz.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/kendoui/styles/kendo.dataviz.default.min.css' %}" rel="stylesheet">
+    <!-- Because now using jquery v1.11 -->
+    <script src="{% static 'assets/kendoui/js/jquery.min.js' %}"></script>
+    <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
+    <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- hack css for pdf -->
+    <style>
+      .container {
+        width: 1024px !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" ng-app="Entrak">
+        {% include "companies/reports/_report_content.html" %}
+    </div>
+
+    <script>
+      {% include "companies/reports/_report_script.html" %}
+    </script>
+  </body>
+</html>

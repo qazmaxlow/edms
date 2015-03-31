@@ -1,0 +1,142 @@
+{% extends "page_base.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% load humanize %}
+
+{% block ga_page_title %}report{% endblock %}
+
+{% block extra_head %}
+{{block.super}}
+{% get_current_language as LANGUAGE_CODE %}
+
+<link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
+<link href="{% static 'assets/kendoui/styles/kendo.default.min.css' %}" rel="stylesheet">
+<!-- Because now using jquery v1.11 -->
+<!-- <script src="{% static 'assets/kendoui/js/jquery.min.js' %}"></script> -->
+<script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
+<script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
+
+<!-- hack for combining bootstrap -->
+<style>
+  #menu-links li:hover, #menu-links li.menu-links-selected {
+     height: auto;
+  }
+
+  .panel-header-left-menu h3 {
+    margin: 0;
+    height: 33px;
+  }
+
+</style>
+
+<style>
+  .report-summary .time-type {
+    color: #44586a;
+    font-weight: 600;
+    font-size: 3 rem;
+    padding: 25px 0;
+    border-bottom: #e8ebeb solid 3px;
+  }
+
+  .report-summary .content {
+    background-color: #eff2f2;
+  }
+
+  .report-summary .col-xs-3 {
+    background-color: white;
+    border-left: #e8ebeb solid 3px;
+  }
+
+  .report-summary img.icon {
+    padding: 20px;
+    height: 120px;
+    width: 120px;
+  }
+</style>
+{% endblock %}
+
+{% block selected-menu-link-id %}menu-link-report{% endblock %}
+{% block system_menu_target_view %}report{% endblock %}
+{% block breadcrumb_target_view %}report{% endblock %}
+
+{% block page_title %}{% trans "THE REPORTS PAGE" %}{% endblock %}
+{% block page_subtitle %}{% trans "Get all your information here at the" %}{% endblock %}
+
+{% block extra_script %}
+{{block.super}}
+
+{% endblock %}
+
+{% block page_content %}
+
+<div id="example" ng-app="KendoDemos">
+    <div ng-controller="MyCtrl">
+
+      <div class="report-summary text-center">
+        <div class="row">
+          <div class="col-xs-3">
+            <div class="row time-type"><div class="col-xs-12">
+                Monthly
+            </div></div>
+            <div class="row content"><div class="col-xs-12">
+                <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
+                <h3>${{ monthly_money_sum|floatformat:3 }}</h3>
+            </div></div>
+            <div class="row content"><div class="col-xs-12">
+                <img alt="decrease enegry" class="icon" src="{% static 'images/reports/decrease_engry.svg'  %}">
+                <h3>{{ compare_last_month_money|floatformat:0 }}%</h3>
+            </div></div>
+          </div>
+          <div class="col-xs-3">
+            <div class="row time-type"><div class="col-xs-12">
+                Weekdays
+            </div></div>
+            <div class="row content"><div class="col-xs-12">
+                <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
+                <h3>${{ month_summary.money_usage|floatformat:3 }}</h3>
+            </div></div>
+            <div class="row content"><div class="col-xs-12">
+                <img alt="decrease enegry" class="icon" src="{% static 'images/reports/decrease_engry.svg'  %}">
+                <h3>{{ compare_last_month_money|floatformat:0 }}%</h3>
+            </div></div>
+          </div>
+          <div class="col-xs-3">
+            <div class="row time-type"><div class="col-xs-12">
+                Overnight
+            </div></div>
+            <div class="row content"><div class="col-xs-12">
+                <img alt="power" class="icon" src="{% static 'images/report/lightning-energy.png' %}">
+                <h3>${{ month_summary.money_usage|floatformat:3 }}</h3>
+            </div></div>
+            <div class="row content"><div class="col-xs-12">
+                <img alt="decrease enegry" class="icon" src="{% static 'images/reports/decrease_engry.svg'  %}">
+                <h3>{{ compare_last_month_money|floatformat:0 }}%</h3>
+            </div></div>
+          </div>
+          <div class="col-xs-3">
+            <button class="k-button" ng-click="win_report.center().open()">Open AJAX content</button>
+          </div>
+        </div>
+      </div>
+
+        <div kendo-window="win_report" k-title="'AJAX content'"
+            k-width="1000" k-height="1200" k-visible="false"
+            k-iframe="true"
+            k-content="{ url: '/adidas/report/popup-report/2014/dec/' }"
+             ></div>
+
+    </div>
+</div>
+
+<script>
+
+  angular.module("KendoDemos", [ "kendo.directives" ])
+      .controller("MyCtrl", function($scope){
+          $scope.hello = "Hello from Controller!";
+      })
+
+</script>
+{% endblock %}

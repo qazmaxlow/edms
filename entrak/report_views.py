@@ -271,6 +271,7 @@ def __generate_report_data(systems, report_type, start_timestamp, end_timestamp)
 
     sources = SourceManager.get_sources(current_system)
     source_ids = [str(source.id) for source in sources]
+
     timestamp_info = {
         'currentReadings': {'start': dt_info['start_dt'], 'end': dt_info['end_dt']},
         'beginningReadings': {'start': dt_info['beginning_start_dt'], 'end': dt_info['beginning_end_dt']},
@@ -412,11 +413,13 @@ def __generate_report_data(systems, report_type, start_timestamp, end_timestamp)
             overnight_name = "overnight"+cal_info["targetReadings"]
             info[cal_info['keyPrefix']+'OvernightInfo'] = __calculate_overnight_info(info[overnight_name], current_system_timezone)
 
+
     total_last_same_period_energy = SourceReadingDay.objects(
             source_id__in=source_ids,
-            datetime__gte=dt_info['last_same_period_start_dt'],
+        datetime__gte=dt_info['last_same_period_start_dt'],
             datetime__lt=dt_info['last_same_period_end_dt']).sum('value')
     need_calculate_systems = System.assign_source_under_system(systems, sources)
+
     grouped_baselines = BaselineUsage.get_baselines_for_systems([system.id for system in need_calculate_systems.keys()])
     for system, attached_sources in need_calculate_systems.items():
         system_timezone = pytz.timezone(system.timezone)
@@ -431,6 +434,8 @@ def __generate_report_data(systems, report_type, start_timestamp, end_timestamp)
                 missing_end_dt = system.first_record
             baselines = grouped_baselines[system.id]
             baseline_daily_usages = BaselineUsage.transform_to_daily_usages(baselines, system_timezone)
+
+
             total_last_same_period_energy += calculation.calculate_total_baseline_energy_usage(
                 missing_start_dt.astimezone(system_timezone),
                 missing_end_dt.astimezone(system_timezone),
@@ -529,15 +534,17 @@ def download_report_view(request, system_code, start_timestamp, end_timestamp, r
     # end_timestamp = request.POST.get("end_timestamp", 0)
     # report_type = request.POST.get("report_type")
     # report_layout = request.POST.get('report_layout')
+    # assert False
 
     if request.is_secure():
         domain_url = "https://" + request.META['HTTP_HOST']
     else:
         domain_url = "http://" + request.META['HTTP_HOST']
 
+    # assert False
     report_name = 'generate_report_pdf'
-    if report_layout == 'summary':
-        report_name = 'generate_summary_report_pdf'
+    # if report_layout == 'summary':
+    #     report_name = 'generate_summary_report_pdf'
 
     request_url = domain_url + reverse(report_name, kwargs={
         'system_code': system_code,
@@ -608,6 +615,9 @@ def generate_report_pdf_view(request, system_code, report_type, start_timestamp,
 
     m = {}
     m['systems'] = systems
+    # m['system_code'] = systems[0].code
+    m['company_system'] = systems.first()
+
     m["report_type"] = report_type
     m["start_timestamp"] = start_timestamp
     m["end_timestamp"] = end_timestamp
@@ -615,7 +625,8 @@ def generate_report_pdf_view(request, system_code, report_type, start_timestamp,
 
     m["report_data"] = escapejs(json.dumps(__generate_report_data(systems, report_type, start_timestamp, end_timestamp)))
 
-    return render(request, 'generate_report_pdf.html', m)
+    # return render(request, 'generate_report_pdf.html', m)
+    return render(request, 'companies/reports/popup_report.html', m)
 
 
 def generate_summary_report_pdf_view(request, system_code, report_type, start_timestamp, end_timestamp, lang_code):

@@ -690,7 +690,6 @@ $(function() {
     });
 });
 </script>
-
 {% endblock %}
 
 {% block page_content %}
@@ -725,6 +724,10 @@ $(function() {
                     <span>{{summary.money_usage|floatformat:"0"|intcomma}}</span>
                     {% endlanguage %}
 
+            <button class="k-button" ng-show="!win2visible" ng-click="win2.open()">Open AJAX content</button>
+        </div>
+                    </span>
+                    {% endlanguage %}
                     <a href="{% url 'entrak.download_report' systems.0.code summary.timestamp 0 'month' %}">
                       <img class="pdf-icon" src="{% static 'images/report/pdf-icon.png' %}">
                       <span class="pdf-text">PDF</span>

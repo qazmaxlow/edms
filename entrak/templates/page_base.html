@@ -16,6 +16,11 @@
 <script src="{% static 'js/arboreal-customized.js' %}"></script>
 <script src="{% static 'js/moment.min.js' %}"></script>
 <script src="{% static 'js/superfish-master/dist/js/superfish.min.js' %}"></script>
+
+<link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/kendo.entrak.theme.css' %}" rel="stylesheet">
+<script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
+<script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
 {% endblock %}
 
 {% block extra_script %}
@@ -25,6 +30,7 @@
 
 var page = {};
 
+var noti_datasource;
 $(function() {
     {% for system in user_systems %}
         var system = {};
@@ -86,6 +92,37 @@ $(function() {
         event.preventDefault();
         $('.change-lang-form input[name=language]').val($(this).attr('lang_code'));
         $('.change-lang-form').submit();
+    });
+
+    // notifications
+    $('#notifications').kendoWindow(
+        {
+            width: "600px",
+            title: false,
+            modal: true,
+            visible: false
+        }
+    );
+    $('#notifications').parent().addClass("notification-wrapper");
+
+    var notiwin = $('#notifications').data('kendoWindow');
+
+    // create datasource for notifications api
+    noti_datasource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: "{% url 'companies.notifications.messages' system_code=systems.0.code %}",
+                dataType: "json"
+            }
+        },
+        change: function() {
+            var data = this.view();
+            if (this.total() != 0) {
+                var tpl = kendo.template($('#notificationsTemplate').html());
+                notiwin.content(tpl(data[0]));
+                notiwin.open().center();
+            }
+        }
     });
 });
 </script>
@@ -227,5 +264,81 @@ $(function() {
     <p style="clear: both;"></p>
 </footer>
 {% endblock %}
+
+<style>
+    .notification-wrapper p {
+        margin-bottom: 0px !important;
+        font-weight: lighter;
+        width: 90%;
+        font-size: 0.9em;
+        margin-left: auto;
+        margin-right: auto;
+        letter-spacing: 0.03em;
+        color: #354960;
+        line-height: 1.32em;
+    }
+
+    .notification-wrapper {
+        background: transparent !important;
+        -webkit-box-shadow: none !important;
+        bow-shadow: none !important;
+        border: 0 !important;
+    }
+
+    #notifications {
+        padding: 0;
+        background: transparent !important;
+    }
+
+    .notification-wrapper .body {
+        background-color: #f4f4f4;
+        color: #8c94a2 !important;
+        padding: 20px;
+        font-size: 2.2rem;
+    }
+
+    .notification-wrapper .body img {
+        margin-bottom: 20px;
+    }
+
+    .notification-wrapper .title-bar {
+        text-align: right;
+    }
+
+    .notification-wrapper .actions {
+        background: url("{% static 'images/notifications/notification-arrow.png' %}") no-repeat scroll center top #4a8c9b;
+    }
+
+    .notification-wrapper .actions button {
+        color: #ffffff;
+        border: 0;
+        background-color: #9bceda;
+        padding: 8px 20px;
+        box-shadow: 0px 2px 0px #6b9aa5 !important;
+        border-radius: 4px;
+        margin: 20px 0px;
+    }
+
+    .notification-wrapper .actions button:hover {
+        color: #ffffff;
+        border-color: rgba(0, 0, 0, 0);
+        background-color: #74c62b;
+    }
+
+</style>
+<script type="text/x-kendo-template" id="notificationsTemplate">
+    <div class="text-center">
+    <div class="body">
+      <div class="title-bar">
+          <!--<button onclick="$('\\#notifications').data('kendoWindow').close();">X</button>-->
+      </div>
+      <img alt="good news" src="{% static 'images/notifications/good_news.png' %}">
+      <p>#:body#</p>
+    </div>
+    <div class="actions">
+    <button class="xk-button" onclick="$('\\#notifications').data('kendoWindow').close();">OK</button>
+    </div>
+</script>
+<div id="notifications"></div>
 
 {% endblock %}

@@ -3,6 +3,8 @@ import datetime
 import pytz
 import operator
 from django.db import models
+from django.utils import translation
+
 from entrak.settings import BASE_DIR, LANG_CODE_EN, LANG_CODE_TC
 from django.db.models import Q
 from holiday.models import CityHoliday, Holiday
@@ -88,20 +90,30 @@ class System(models.Model):
     def __unicode__(self):
         return "code: %s, name: %s"%(self.code, self.name)
 
-    def get_all_holidays(self, timestamp_info):
-        system_timezone = pytz.timezone(self.timezone)
-        transformed_dt_ranges = []
-        for name, dt_range in timestamp_info.items():
-            transformed_dt_ranges.append(
-                Q(date__gte=dt_range['start'].astimezone(system_timezone).date(),
-                    date__lt=dt_range['end'].astimezone(system_timezone).date())
-            )
-        date_bounds = reduce(operator.or_, transformed_dt_ranges)
-        city_holidays = CityHoliday.objects.filter(date_bounds, city=self.city).values_list('date', flat=True)
-        holidays = Holiday.objects.filter(date_bounds, system=self).values_list('date', flat=True)
+    def get_all_holidays(self, timestamp_info=None):
+        if timestamp_info:
+            system_timezone = pytz.timezone(self.timezone)
+            transformed_dt_ranges = []
+            for name, dt_range in timestamp_info.items():
+                transformed_dt_ranges.append(
+                    Q(date__gte=dt_range['start'].astimezone(system_timezone).date(),
+                      date__lt=dt_range['end'].astimezone(system_timezone).date())
+                )
+            date_bounds = reduce(operator.or_, transformed_dt_ranges)
+            city_holidays = CityHoliday.objects.filter(date_bounds, city=self.city).values_list('date', flat=True)
+            holidays = Holiday.objects.filter(date_bounds, system=self).values_list('date', flat=True)
+        else:
+            city_holidays = CityHoliday.objects.filter(city=self.city).values_list('date', flat=True)
+            holidays = Holiday.objects.filter(system=self).values_list('date', flat=True)
 
         all_holidays = set(city_holidays).union(holidays)
         return list(all_holidays)
+
+    @property
+    def fullname(self):
+        lang = translation.get_language()
+        fn = self.full_name_tc if lang == 'zh-tw' else self.full_name
+        return fn
 
 class SystemHomeImage(models.Model):
     image = models.ImageField(upload_to="system_home/%Y/%m")
