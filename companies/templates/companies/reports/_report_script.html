@@ -184,6 +184,8 @@ ngapp.controller("ReportController", function($scope) {
     var line_date_formats = { days: ' d'};
     if (report_type == 'year') {
         line_date_formats = { days: 'M/d'};
+    } else if (report_type == 'week'){
+        line_date_formats = { days: 'ddd'};
     }
 
 
@@ -247,7 +249,8 @@ ngapp.controller("ReportController", function($scope) {
                 visible: false
             },
             title: {
-                text: "kWh"
+                text: "kWh",
+                color: "#9F9F9F"
             },
             minorGridLines: {
                 visible: false
@@ -308,7 +311,8 @@ ngapp.controller("ReportController", function($scope) {
                 visible: false
             },
             title: {
-                text: "kWh"
+                text: "kWh",
+                color: "#9F9F9F"
             },
             minorGridLines: {
                 visible: false
