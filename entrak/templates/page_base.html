@@ -260,6 +260,17 @@ $(function() {
 {% endblock %}
 
 <style>
+    .notification-wrapper p {
+        margin-bottom: 0px !important;
+    }
+
+    .notification-wrapper .downWhiteArrow {
+        margin: 0px auto 0px auto;
+        width: 26px;
+        height: 13px;
+        background-image: url("{% static 'images/notifications/notification-arrow.png' %}");
+    }
+
     .notification-wrapper {
         background: transparent !important;
         -webkit-box-shadow: none !important;
@@ -275,8 +286,12 @@ $(function() {
     .notification-wrapper .body {
         background-color: #f4f4f4;
         color: #8c94a2 !important;
-        padding: 25px;
+        padding: 20px;
         font-size: 2.2rem;
+    }
+
+    .notification-wrapper .body img {
+        margin-bottom: 20px;
     }
 
     .notification-wrapper .title-bar {
@@ -285,16 +300,16 @@ $(function() {
 
     .notification-wrapper .actions {
         background-color: #4a8c9b;
-        padding: 10px;
     }
 
     .notification-wrapper .actions button {
         color: #ffffff;
         border: 0;
         background-color: #9bceda;
-        padding: 4px 12px;
+        padding: 8px 20px;
         box-shadow: 0px 2px 0px #6b9aa5 !important;
         border-radius: 4px;
+        margin: 20px 0px;
     }
 
     .notification-wrapper .actions button:hover {
@@ -308,12 +323,14 @@ $(function() {
     <div class="text-center">
     <div class="body">
       <div class="title-bar">
-          <button onclick="$('\\#notifications').data('kendoWindow').close();">X</button>
+          <!--<button onclick="$('\\#notifications').data('kendoWindow').close();">X</button>-->
       </div>
       <img alt="good news" src="{% static 'images/notifications/good_news.png' %}">
       <p>#:body#</p>
     </div>
-    <div class="actions"><button class="xk-button" onclick="$('\\#notifications').data('kendoWindow').close();">OK</div>
+    <div class="actions">
+    <div class="downWhiteArrow"></div>
+    <button class="xk-button" onclick="$('\\#notifications').data('kendoWindow').close();">OK</button>
     </div>
 </script>
 <div id="notifications"></div>
