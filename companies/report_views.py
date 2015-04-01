@@ -665,6 +665,21 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
         g['compare_last_month'] = compare_last_month
 
+
+        # for weekday
+        weekday = {}
+
+        last_weekday_usage = g['lastWeekdayInfo']['total']
+        current_weekday_usage = g['currentWeekdayInfo']['total']
+
+        weekday_compare_last = None
+        if last_weekday_usage > 0:
+            weekday_compare_last = float(current_weekday_usage - last_weekday_usage)/last_weekday_usage*100
+
+        weekday['compare_last_helper'] = CompareTplHepler(weekday_compare_last)
+        g['weekday'] = weekday
+
+
         compare_same_period = None
         last_same_period = g['lastSamePeriodWeekdayInfo']['average']
         if last_same_period > 0:
@@ -716,6 +731,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     combined_readings = {}
 
 
+    # for weekday
     # combined_current_readings = {};
     combined_last_readings = {};
     for ix, g in enumerate(group_data):
