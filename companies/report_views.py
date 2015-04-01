@@ -697,7 +697,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
         weekend_compare_last = None
         if weekend_last_usage > 0:
-            weekend_compare_last_month = float(weekend_current_usage - weekend_last_usage)/weekend_last_usage*100
+            weekend_compare_last = float(weekend_current_usage - weekend_last_usage)/weekend_last_usage*100
 
         weekend['compare_last_helper'] = CompareTplHepler(weekend_compare_last)
 
