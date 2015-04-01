@@ -701,6 +701,13 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
         weekend['compare_last_helper'] = CompareTplHepler(weekend_compare_last)
 
+        weekend_compare_same = None
+        weekend_last_same_period_avg = g['lastSamePeriodWeekendInfo']['average']
+        if weekend_last_same_period_avg > 0:
+            weekend_compare_same = float(weekend_average_usage - weekend_last_same_period_avg)/weekend_last_same_period_avg*100
+
+        weekend['compare_same_period_helper'] = CompareTplHepler(weekend_compare_same)
+
         g['weekend'] = weekend
 
 
