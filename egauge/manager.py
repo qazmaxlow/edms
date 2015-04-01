@@ -143,7 +143,6 @@ class SourceManager:
                         member_reading = SourceManager.__get_egauge_data(source_member['xml_url'], start_timestamp, 1)
                         url_readings[source_member['xml_url']] = member_reading
 
-                    member_reading = SourceManager.__get_egauge_data(source_member['xml_url'], start_timestamp, 1)
                     member_data = SourceManager.__get_validated_reading(member_reading, retrieve_time, source_member)
 
                     if source_member['operator'] in SourceManager.OPERATOR_MAP:
@@ -487,7 +486,7 @@ class SourceManager:
                                  )
 
         else:
-            error_msg = "no matching cname for source! source: %s, cname: %s"%(source['xml_url'], source['name'])
+            error_msg = "no matching cname for source! source: %s, cname: %s"%(source_id, source['name'])
             Utils.log_error(error_msg)
             raise SourceManager.GetEgaugeDataError(error_msg)
 
