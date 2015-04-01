@@ -1017,7 +1017,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
     m['weekends'] = weekends_usage
 
-    # weekends
+    # overnight
     overnight_usage = {}
     overnight_bill = sum([ g['currentOvernightInfo']['average'] for g in group_data])
     overnight_usage['bill'] = overnight_bill * money_unit_rate.rate
@@ -1033,7 +1033,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     if overnight_last_usage > 0:
         overnight_compare_last = float(overnight_current_usage - overnight_last_usage)/overnight_last_usage*100
 
-    overnight_usage['month_compare_helper'] = CompareTplHepler(overnight_compare_last)
+    overnight_usage['compare_last_helper'] = CompareTplHepler(overnight_compare_last)
 
     overnight_last_same_period = sum([ g['lastSamePeriodOvernightInfo']['average'] for g in group_data])
     overnight_compare_same_period = None
