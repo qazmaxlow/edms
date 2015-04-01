@@ -465,23 +465,49 @@ $(document).ready(function()  {
     var holidays = {{ holidays_json|safe }};
 
     // for weekday report
-    var isNotConcernFunc = function(targetDt) {
-        return (targetDt.day() == 0
-                || targetDt.day() == 6
-                || ($.inArray(targetDt.format("YYYY-MM-DD"), holidays) != -1))
-        // || ($.inArray(targetDt.format("YYYY-MM-DD"), reportGenThis.holidays) != -1))
-    }
-
+    var isNotConcernFunc = null;
     var report_start = new Date("{{ report_start.isoformat }}");
     var report_end = new Date("{{ report_end.isoformat }}");
 
     var creport_start = new Date(report_start);
     var creport_end = new Date(report_end);
 
+    var datesInWeek = [];
     if (report_type == 'week') {
+        for (var i=0; i<7; i++){
+            var tmpDate = new Date(report_start);
+            tmpDate.setDate(tmpDate.getDate()+i);
+
+            var dateStr = tmpDate.getFullYear() + "-";
+            if (tmpDate.getMonth() > 8){
+                dateStr += (tmpDate.getMonth()+1) + "-";
+            } else {
+                dateStr += "0" + (tmpDate.getMonth()+1) + "-";
+            }
+            if (tmpDate.getDate() > 9){
+                dateStr += tmpDate.getDate();
+            } else {
+                dateStr += "0" + tmpDate.getDate();
+            }
+            datesInWeek.push(dateStr);
+        }
+
         creport_start.setDate(1);
         creport_end.setMonth(creport_end.getMonth()+1);
         creport_end.setDate(0);
+        isNotConcernFunc = function(targetDt) {
+            return (targetDt.day() == 0
+                    || targetDt.day() == 6
+                    || ($.inArray(targetDt.format("YYYY-MM-DD"), holidays) != -1)
+                    || ($.inArray(targetDt.format("YYYY-MM-DD"), datesInWeek) == -1))
+        }
+    } else {
+        isNotConcernFunc = function(targetDt) {
+            return (targetDt.day() == 0
+                    || targetDt.day() == 6
+                    || ($.inArray(targetDt.format("YYYY-MM-DD"), holidays) != -1))
+            // || ($.inArray(targetDt.format("YYYY-MM-DD"), reportGenThis.holidays) != -1))
+        }
     }
 
     setCalendar(
@@ -496,10 +522,19 @@ $(document).ready(function()  {
         weekend_average_usage += info['currentWeekendInfo'].average;
     });
 
-    var isNotConcernFunc = function(targetDt) {
-        return (targetDt.day() >= 1
+    if (report_type == 'week') {
+        isNotConcernFunc = function(targetDt) {
+            return (targetDt.day() >= 1
+                    && targetDt.day() <= 5
+                    && ($.inArray(targetDt.format("YYYY-MM-DD"), holidays) == -1)
+                    || ($.inArray(targetDt.format("YYYY-MM-DD"), datesInWeek) == -1))
+        }
+    } else {
+        isNotConcernFunc = function(targetDt) {
+            return (targetDt.day() >= 1
                 && targetDt.day() <= 5
                 && ($.inArray(targetDt.format("YYYY-MM-DD"), holidays) == -1))
+        }
     }
 
     setCalendar(
@@ -514,8 +549,14 @@ $(document).ready(function()  {
         });
     });
 
-    var isNotConcernFunc = function(targetDt) {
-        return false;
+    if (report_type == 'week') {
+        isNotConcernFunc = function(targetDt) {
+            return ($.inArray(targetDt.format("YYYY-MM-DD"), datesInWeek) == -1);
+        }
+    } else {
+        isNotConcernFunc = function(targetDt) {
+            return false;
+        }
     }
 
     var overnight_average_usage = 0;
