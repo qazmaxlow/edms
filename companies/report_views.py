@@ -1025,12 +1025,15 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     overnight_beginning_usage = sum([ g['beginningOvernightInfo']['average'] for g in group_data])
     overnight_average_usage = sum([ g['currentOvernightInfo']['average'] for g in group_data])
 
-    # average_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
-    overnight_compare_last_month = None
-    if overnight_beginning_usage > 0:
-        overnight_compare_last_month = float(overnight_average_usage - overnight_beginning_usage)/overnight_beginning_usage*100
+    overnight_last_usage = sum([ g['lastOvernightInfo']['total'] for g in group_data])
+    overnight_current_usage = sum([ g['currentOvernightInfo']['total'] for g in group_data])
 
-    overnight_usage['month_compare_helper'] = CompareTplHepler(overnight_compare_last_month)
+    # average_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
+    overnight_compare_last = None
+    if overnight_last_usage > 0:
+        overnight_compare_last = float(overnight_current_usage - overnight_last_usage)/overnight_last_usage*100
+
+    overnight_usage['month_compare_helper'] = CompareTplHepler(overnight_compare_last)
 
     overnight_last_same_period = sum([ g['lastSamePeriodOvernightInfo']['average'] for g in group_data])
     overnight_compare_same_period = None
