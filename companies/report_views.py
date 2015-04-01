@@ -692,11 +692,14 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         weekend_beginning_usage = g['beginningWeekendInfo']['average']
         weekend_average_usage = g['currentWeekendInfo']['average']
 
-        weekend_compare_last_month = None
-        if weekend_beginning_usage > 0:
-            weekend_compare_last_month = float(weekend_average_usage - weekend_beginning_usage)/weekend_beginning_usage*100
+        weekend_last_usage = g['lastWeekendInfo']['total']
+        weekend_current_usage = g['currentWeekendInfo']['total']
 
-        weekend['compare_last_month_helper'] = CompareTplHepler(weekend_compare_last_month)
+        weekend_compare_last = None
+        if weekend_last_usage > 0:
+            weekend_compare_last_month = float(weekend_current_usage - weekend_last_usage)/weekend_last_usage*100
+
+        weekend['compare_last_helper'] = CompareTplHepler(weekend_compare_last)
 
         g['weekend'] = weekend
 
