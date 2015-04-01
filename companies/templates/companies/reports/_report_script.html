@@ -179,6 +179,8 @@ ngapp.controller("ReportController", function($scope) {
     var line_step = 2;
     if (report_type == 'year') {
         line_step = 30;
+    } else if (report_type == 'week'){
+        line_step = 1;
     }
 
     var line_date_formats = { days: ' d'};
