@@ -703,6 +703,22 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
         g['weekend'] = weekend
 
+
+        # for overnight
+        overnight = {'bill': g['currentOvernightInfo']['average'] * money_unit_rate.rate}
+
+        last_overnight_usage = g['lastOvernightInfo']['total']
+        current_overnight_usage = g['currentOvernightInfo']['total']
+
+        overnight_compare_last = None
+        if last_overnight_usage > 0:
+            overnight_compare_last = float(current_overnight_usage - last_overnight_usage)/last_overnight_usage*100
+
+        overnight['compare_last_helper'] = CompareTplHepler(overnight_compare_last)
+
+        g['overnight'] = overnight
+
+
     if current_lang()=="zh-tw":
         compare_current_name = DateFormat(report_date).format("n")+_("tcmonth")
         compare_last_name = DateFormat(report_date - relativedelta(months=1)).format("n")+_("tcmonth")
