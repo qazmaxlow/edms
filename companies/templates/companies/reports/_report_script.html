@@ -181,6 +181,8 @@ ngapp.controller("ReportController", function($scope) {
         line_step = 30;
     } else if (report_type == 'week'){
         line_step = 1;
+    } else if (report_type == 'quarter'){
+        line_step = 5;
     }
 
     var line_date_formats = { days: ' d'};
