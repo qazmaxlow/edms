@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-31 10:07+0000\n"
+"POT-Creation-Date: 2015-04-01 07:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,24 +17,24 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: companies/report_views.py:404
+#: companies/report_views.py:405
 #, python-brace-format
 msgid "{0:.0f}% {1}"
 msgstr ""
 
-#: companies/report_views.py:408
+#: companies/report_views.py:409
 #: companies/templates/companies/reports/summary.html:94
 #: entrak/templates/report.html:67
 msgid "more"
 msgstr ""
 
-#: companies/report_views.py:408
+#: companies/report_views.py:409
 #: companies/templates/companies/reports/summary.html:95
 #: entrak/templates/report.html:68
 msgid "less"
 msgstr ""
 
-#: companies/report_views.py:428
+#: companies/report_views.py:429
 #, python-brace-format
 msgid "{self.compared_percent_abs:.0f}% {self.change_desc}"
 msgstr ""
@@ -65,12 +65,12 @@ msgstr ""
 
 #: companies/report_views.py:532
 #, python-brace-format
-msgid "{0}{1}{2} - Weekly Energy Report"
+msgid "{0}{1}{2} Weekly Energy Report"
 msgstr ""
 
 #: companies/report_views.py:535
 #, python-brace-format
-msgid "{0} - Weekly Energy Report"
+msgid "{0} Weekly Energy Report"
 msgstr ""
 
 #: companies/report_views.py:537
@@ -105,68 +105,68 @@ msgstr ""
 msgid "{0}{1}{2}"
 msgstr ""
 
-#: companies/report_views.py:686 companies/report_views.py:687
+#: companies/report_views.py:739 companies/report_views.py:740
 msgid "tcmonth"
 msgstr ""
 
-#: companies/report_views.py:692
+#: companies/report_views.py:745
 #, fuzzy
 msgid "This week"
 msgstr "Weekdays"
 
-#: companies/report_views.py:693
+#: companies/report_views.py:746
 #, fuzzy
 msgid "Last week"
 msgstr "Weekdays"
 
-#: companies/report_views.py:695
+#: companies/report_views.py:748
 msgid "This quarter"
 msgstr ""
 
-#: companies/report_views.py:696
+#: companies/report_views.py:749
 msgid "Last quarter"
 msgstr ""
 
-#: companies/report_views.py:701
+#: companies/report_views.py:754
 msgid "This period"
 msgstr ""
 
-#: companies/report_views.py:702
+#: companies/report_views.py:755
 msgid "Last same period"
 msgstr ""
 
-#: companies/report_views.py:746
+#: companies/report_views.py:800
 #, python-brace-format
 msgid "Overall: {0.compared_percent_abs:.0f}&#37; more energy than last {1}"
 msgstr ""
 
-#: companies/report_views.py:748
+#: companies/report_views.py:802
 #, python-brace-format
 msgid "Overall: {0.compared_percent_abs:.0f}&#37; less energy than last {1}"
 msgstr ""
 
-#: companies/report_views.py:891
+#: companies/report_views.py:955
 #, python-brace-format
 msgid "Your energy consumption this {1} was {0} than it was last {1}"
 msgstr ""
 
-#: companies/report_views.py:896
+#: companies/report_views.py:960
 msgid "Total energy consumption for the last 6 months (kWh)"
 msgstr ""
 
-#: companies/report_views.py:899
+#: companies/report_views.py:963
 msgid "Total energy consumption for the last 6 weeks (kWh)"
 msgstr ""
 
-#: companies/report_views.py:901
+#: companies/report_views.py:965
 msgid "Total energy consumption for the last 6 quarters (kWh)"
 msgstr ""
 
-#: companies/report_views.py:903
+#: companies/report_views.py:967
 msgid "Total energy consumption for the last 6 years (kWh)"
 msgstr ""
 
-#: companies/report_views.py:905
+#: companies/report_views.py:969
 msgid "Total energy consumption for the last 6 same periods (kWh)"
 msgstr ""
 
@@ -176,10 +176,7 @@ msgid "What are our key statistics for this %(report_type_name)s?"
 msgstr ""
 
 #: companies/templates/companies/reports/_report_content.html:27
-#: companies/templates/companies/reports/popup_report_pdf.html:79
-#: companies/templates/companies/reports/popup_report_xxx.html:88
-#: entrak/templates/report_main_content.html:9
-msgid "HOW MUCH ENERGY<br>DID WE USE?"
+msgid "How much energy<br>did we use?"
 msgstr ""
 
 #: companies/templates/companies/reports/_report_content.html:34
@@ -211,10 +208,7 @@ msgid "in energy costs"
 msgstr ""
 
 #: companies/templates/companies/reports/_report_content.html:58
-#: companies/templates/companies/reports/popup_report_pdf.html:110
-#: companies/templates/companies/reports/popup_report_xxx.html:119
-#: entrak/templates/report_main_content.html:43
-msgid "HOW MUCH ENERGY<br>DID WE SAVE?"
+msgid "How much energy<br>did we save?"
 msgstr ""
 
 #: companies/templates/companies/reports/_report_content.html:59
@@ -225,10 +219,7 @@ msgid "(year-on-year)"
 msgstr ""
 
 #: companies/templates/companies/reports/_report_content.html:85
-#: companies/templates/companies/reports/popup_report_pdf.html:137
-#: companies/templates/companies/reports/popup_report_xxx.html:146
-#: entrak/templates/report_main_content.html:73
-msgid "HOW DID OUR<br>CARBON FOOTPRINT CHANGE?"
+msgid "How did our<br>carbon footprint change?"
 msgstr ""
 
 #: companies/templates/companies/reports/_report_content.html:93
@@ -504,7 +495,7 @@ msgstr ""
 msgid "Highest Overnight Energy Use"
 msgstr ""
 
-#: companies/templates/companies/reports/_report_script.html:193
+#: companies/templates/companies/reports/_report_script.html:199
 msgid "When did we achieve our savings?"
 msgstr ""
 
@@ -571,6 +562,12 @@ msgid ""
 "span>?"
 msgstr ""
 
+#: companies/templates/companies/reports/popup_report_pdf.html:79
+#: companies/templates/companies/reports/popup_report_xxx.html:88
+#: entrak/templates/report_main_content.html:9
+msgid "HOW MUCH ENERGY<br>DID WE USE?"
+msgstr ""
+
 #: companies/templates/companies/reports/popup_report_pdf.html:93
 #: companies/templates/companies/reports/popup_report_xxx.html:102
 #: entrak/templates/report_main_content.html:25
@@ -578,6 +575,18 @@ msgid ""
 "<span class=\"basic-info-col-unit\"> CO<sub>2</sub></span>\n"
 "                    <br>\n"
 "                    <span class=\"basic-info-col-subtext\">emitted</span>"
+msgstr ""
+
+#: companies/templates/companies/reports/popup_report_pdf.html:110
+#: companies/templates/companies/reports/popup_report_xxx.html:119
+#: entrak/templates/report_main_content.html:43
+msgid "HOW MUCH ENERGY<br>DID WE SAVE?"
+msgstr ""
+
+#: companies/templates/companies/reports/popup_report_pdf.html:137
+#: companies/templates/companies/reports/popup_report_xxx.html:146
+#: entrak/templates/report_main_content.html:73
+msgid "HOW DID OUR<br>CARBON FOOTPRINT CHANGE?"
 msgstr ""
 
 #: companies/templates/companies/reports/popup_report_pdf.html:182
