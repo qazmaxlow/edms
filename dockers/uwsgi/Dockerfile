@@ -7,6 +7,11 @@ RUN apt-get install -y libmysqlclient-dev libpq-dev
 RUN apt-get install -y python-dev libxslt1-dev libxml2-dev
 RUN apt-get install -y uwsgi uwsgi-plugin-python
 
+# ubuntu's one did not work for server version
+Add wkhtmltox-0.12.1_linux-trusty-amd64.deb .
+RUN apt-get install -y xorg libssl-dev libxrender-dev libjpeg8-dev libjpeg8 fontconfig
+RUN dpkg -i wkhtmltox-0.12.1_linux-trusty-amd64.deb
+
 ADD pip_requirements.txt pip_requirements.txt
 RUN pip install -r pip_requirements.txt
 RUN rm pip_requirements.txt
