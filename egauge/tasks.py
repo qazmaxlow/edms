@@ -14,7 +14,8 @@ def retrieve_all_reading():
     for grouped_sources in SourceManager.get_grouped_sources():
         retrieve_min_reading.delay(grouped_sources['_id'], grouped_sources['sources'], retrieve_time)
 
-    retrieve_source_with_members_min_reading.delay(SourceManager.get_sources_with_members(), retrieve_time)
+    for source_with_members in SourceManager.get_sources_with_members():
+        retrieve_source_with_members_min_reading.delay([source_with_members], retrieve_time)
 
 @shared_task(ignore_result=True)
 def retrieve_min_reading(xml_url, sources, retrieve_time):
