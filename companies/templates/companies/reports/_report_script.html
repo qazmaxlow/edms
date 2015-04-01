@@ -185,7 +185,7 @@ ngapp.controller("ReportController", function($scope) {
         line_step = 5;
     }
 
-    var line_date_formats = { days: 'dddd'};
+    var line_date_formats = { days: 'ddd'};
     if (report_type == 'year') {
         line_date_formats = { days: 'M/d'};
     } else if (report_type == 'week'){
