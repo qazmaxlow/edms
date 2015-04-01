@@ -854,6 +854,11 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
     transformed_datas = []
     energy_percentsum = 0
+    energy_max_value = 0
+
+    for ix, g in enumerate(group_data):
+        if g['currentTotalEnergy'] > energy_max_value:
+            energy_max_value = g['currentTotalEnergy']
 
     transformed_total_energy = sum([ g['currentTotalEnergy'] for g in group_data])
     for ix, g in enumerate(group_data):
@@ -862,6 +867,10 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
             change_in_kwh = (g['currentTotalMoney'] - g['last_year_this_month']['money'])/g['last_year_this_month']['money'] * 100
 
         percent_in_total = float(g['currentTotalEnergy']/transformed_total_energy) * 100
+
+        percent_base_on_max = 0
+        if energy_max_value > 0:
+            percent_base_on_max = float(g['currentTotalEnergy']/energy_max_value) * 100
 
         change_in_money = None
         if 'last_year_this_month' in g and g['last_year_this_month']['money']:
@@ -874,6 +883,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
             'change_in_kwh': change_in_kwh,
             'change_in_money': change_in_money,
             'percent_in_total': percent_in_total,
+            'percent_base_on_max': percent_base_on_max,
             'color': type_colors[ix]
         }
         data_info['name'] = g['sourceNameInfo'][current_lang()] if g['systemCode'] == m['company_system'].code else g['system'].fullname
