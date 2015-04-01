@@ -478,6 +478,7 @@ html .km-pane-wrapper .k-header {
 .k-marquee-text {
   color: #ffffff;
 }
+/*
 .k-state-focused,
 .k-list > .k-state-focused,
 .k-listview > .k-state-focused,
@@ -487,6 +488,7 @@ td.k-state-focused,
   -webkit-box-shadow: #bcb4b0 0px 0px 5px 1px inset;
   box-shadow: #bcb4b0 0px 0px 5px 1px inset;
 }
+*/
 .k-state-focused.k-state-selected,
 .k-list > .k-state-focused.k-state-selected,
 .k-listview > .k-state-focused.k-state-selected,
@@ -523,6 +525,7 @@ td.k-state-focused.k-state-selected {
 }
 .k-state-hover,
 .k-state-hover:hover,
+.k-calendar .k-state-hover .k-link,
 .k-splitbar-horizontal-hover:hover,
 .k-splitbar-vertical-hover:hover,
 .k-list > .k-state-hover,
@@ -534,9 +537,14 @@ td.k-state-focused.k-state-selected {
 .k-mobile-list .k-item > .k-label:active,
 .k-mobile-list .k-edit-label.k-check:active,
 .k-mobile-list .k-recur-view .k-check:active {
+  /*
   color: #2e2e2e;
   background-color: #bcb4b0;
   border-color: #bcb4b0;
+  */
+  color: #ffffff;
+  background-color: #74c62b;
+  border-color: #74c62b;
 }
 /* this selector should be used separately, otherwise old IEs ignore the whole rule */
 .k-mobile-list .k-scheduler-timezones .k-edit-field:nth-child(2):active {
