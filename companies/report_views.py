@@ -621,11 +621,14 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     # this._fillInComparePercent(targetSel+" .compare-last-same-period", lastSamePeriodUsage, averageUsage, this.multiLangTexts.samePeriodLastYear);
     beginning_usage = sum([ g['beginningWeekdayInfo']['average'] for g in group_data])
     average_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
-    weekday_compare_last_month = None
-    if beginning_usage > 0:
-        weekday_compare_last_month = float(average_usage - beginning_usage)/beginning_usage*100
-    # m['weekday_compare_last_month'] = weekday_compare_last_month
-    m['weekday_month_compare_helper'] = CompareTplHepler(weekday_compare_last_month)
+
+    last_weekday_usage = g['lastWeekdayInfo']['total']
+    current_weekday_usage = g['currentWeekdayInfo']['total']
+
+    weekday_compare_last = None
+    if last_weekday_usage > 0:
+        weekday_compare_last = float(current_weekday_usage - last_weekday_usage)/last_weekday_usage*100
+    m['weekday_month_compare_helper'] = CompareTplHepler(weekday_compare_last)
 
     last_same_period = sum([ g['lastSamePeriodWeekdayInfo']['average'] for g in group_data])
 
