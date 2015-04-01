@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-31 10:07+0000\n"
+"POT-Creation-Date: 2015-04-01 07:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,24 +17,24 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: companies/report_views.py:404
+#: companies/report_views.py:405
 #, python-brace-format
 msgid "{0:.0f}% {1}"
 msgstr "{1} {0:.0f}%"
 
-#: companies/report_views.py:408
+#: companies/report_views.py:409
 #: companies/templates/companies/reports/summary.html:94
 #: entrak/templates/report.html:67
 msgid "more"
 msgstr "增加了"
 
-#: companies/report_views.py:408
+#: companies/report_views.py:409
 #: companies/templates/companies/reports/summary.html:95
 #: entrak/templates/report.html:68
 msgid "less"
 msgstr "減少了"
 
-#: companies/report_views.py:428
+#: companies/report_views.py:429
 #, python-brace-format
 msgid "{self.compared_percent_abs:.0f}% {self.change_desc}"
 msgstr "{self.change_desc} {self.compared_percent_abs:.0f}%"
@@ -63,13 +63,13 @@ msgid "{0}{1}{2} - "
 msgstr "{0}年{1}月{2}日 - "
 
 #: companies/report_views.py:532
-#, python-brace-format
-msgid "{0}{1}{2} - Weekly Energy Report"
+#, fuzzy, python-brace-format
+msgid "{0}{1}{2} Weekly Energy Report"
 msgstr "{0}年{1}月{2}日 - 能源使用報告"
 
 #: companies/report_views.py:535
-#, python-brace-format
-msgid "{0} - Weekly Energy Report"
+#, fuzzy, python-brace-format
+msgid "{0} Weekly Energy Report"
 msgstr "{0} - 能源使用報告"
 
 #: companies/report_views.py:537
@@ -104,66 +104,66 @@ msgstr "期"
 msgid "{0}{1}{2}"
 msgstr "{0}年{1}月{2}日"
 
-#: companies/report_views.py:686 companies/report_views.py:687
+#: companies/report_views.py:739 companies/report_views.py:740
 msgid "tcmonth"
 msgstr "月"
 
-#: companies/report_views.py:692
+#: companies/report_views.py:745
 msgid "This week"
 msgstr "本週"
 
-#: companies/report_views.py:693
+#: companies/report_views.py:746
 msgid "Last week"
 msgstr "上週"
 
-#: companies/report_views.py:695
+#: companies/report_views.py:748
 msgid "This quarter"
 msgstr "本季"
 
-#: companies/report_views.py:696
+#: companies/report_views.py:749
 msgid "Last quarter"
 msgstr "上季"
 
-#: companies/report_views.py:701
+#: companies/report_views.py:754
 msgid "This period"
 msgstr "本期"
 
-#: companies/report_views.py:702
+#: companies/report_views.py:755
 msgid "Last same period"
 msgstr "上期"
 
-#: companies/report_views.py:746
+#: companies/report_views.py:800
 #, python-brace-format
 msgid "Overall: {0.compared_percent_abs:.0f}&#37; more energy than last {1}"
 msgstr "總計: 比上{1}多用 {0.compared_percent_abs:.0f}&#37;"
 
-#: companies/report_views.py:748
+#: companies/report_views.py:802
 #, python-brace-format
 msgid "Overall: {0.compared_percent_abs:.0f}&#37; less energy than last {1}"
 msgstr "總計: 比上{1}少用 {0.compared_percent_abs:.0f}&#37;"
 
-#: companies/report_views.py:891
+#: companies/report_views.py:955
 #, python-brace-format
 msgid "Your energy consumption this {1} was {0} than it was last {1}"
 msgstr "你本月的電力消耗比起上{1}{0}"
 
-#: companies/report_views.py:896
+#: companies/report_views.py:960
 msgid "Total energy consumption for the last 6 months (kWh)"
 msgstr "過去6個月的電力消耗 (kWh)"
 
-#: companies/report_views.py:899
+#: companies/report_views.py:963
 msgid "Total energy consumption for the last 6 weeks (kWh)"
 msgstr "過去6週的電力消耗 (kWh)"
 
-#: companies/report_views.py:901
+#: companies/report_views.py:965
 msgid "Total energy consumption for the last 6 quarters (kWh)"
 msgstr "過去6季的電力消耗 (kWh)"
 
-#: companies/report_views.py:903
+#: companies/report_views.py:967
 msgid "Total energy consumption for the last 6 years (kWh)"
 msgstr "過去6年的電力消耗 (kWh)"
 
-#: companies/report_views.py:905
+#: companies/report_views.py:969
 msgid "Total energy consumption for the last 6 same periods (kWh)"
 msgstr "過去6期的電力消耗 (kWh)"
 
@@ -173,10 +173,7 @@ msgid "What are our key statistics for this %(report_type_name)s?"
 msgstr "我們本%(report_type_name)s主要數據是什麼?"
 
 #: companies/templates/companies/reports/_report_content.html:27
-#: companies/templates/companies/reports/popup_report_pdf.html:79
-#: companies/templates/companies/reports/popup_report_xxx.html:88
-#: entrak/templates/report_main_content.html:9
-msgid "HOW MUCH ENERGY<br>DID WE USE?"
+msgid "How much energy<br>did we use?"
 msgstr "我們消耗了多少電力?"
 
 #: companies/templates/companies/reports/_report_content.html:34
@@ -208,10 +205,7 @@ msgid "in energy costs"
 msgstr "電費"
 
 #: companies/templates/companies/reports/_report_content.html:58
-#: companies/templates/companies/reports/popup_report_pdf.html:110
-#: companies/templates/companies/reports/popup_report_xxx.html:119
-#: entrak/templates/report_main_content.html:43
-msgid "HOW MUCH ENERGY<br>DID WE SAVE?"
+msgid "How much energy<br>did we save?"
 msgstr "我們節省了多少電力?"
 
 #: companies/templates/companies/reports/_report_content.html:59
@@ -222,10 +216,7 @@ msgid "(year-on-year)"
 msgstr "(與去年同期比較)"
 
 #: companies/templates/companies/reports/_report_content.html:85
-#: companies/templates/companies/reports/popup_report_pdf.html:137
-#: companies/templates/companies/reports/popup_report_xxx.html:146
-#: entrak/templates/report_main_content.html:73
-msgid "HOW DID OUR<br>CARBON FOOTPRINT CHANGE?"
+msgid "How did our<br>carbon footprint change?"
 msgstr "我們的碳足跡怎樣改變了?"
 
 #: companies/templates/companies/reports/_report_content.html:93
@@ -501,7 +492,7 @@ msgstr "<br>"
 msgid "Highest Overnight Energy Use"
 msgstr "晚間最高用電量"
 
-#: companies/templates/companies/reports/_report_script.html:193
+#: companies/templates/companies/reports/_report_script.html:199
 msgid "When did we achieve our savings?"
 msgstr "我們在什麼時候達到節省？"
 
@@ -517,6 +508,7 @@ msgid "Key Statistics"
 msgstr "主要數據"
 
 #: companies/templates/companies/reports/popup_report.html:49
+#, python-format
 msgid "Compared to Last %(report_type_name)s"
 msgstr "相比上%(report_type_name)s"
 
@@ -567,6 +559,12 @@ msgid ""
 "span>?"
 msgstr "我們本月主要有關數字是什麼?"
 
+#: companies/templates/companies/reports/popup_report_pdf.html:79
+#: companies/templates/companies/reports/popup_report_xxx.html:88
+#: entrak/templates/report_main_content.html:9
+msgid "HOW MUCH ENERGY<br>DID WE USE?"
+msgstr "我們消耗了多少電力?"
+
 #: companies/templates/companies/reports/popup_report_pdf.html:93
 #: companies/templates/companies/reports/popup_report_xxx.html:102
 #: entrak/templates/report_main_content.html:25
@@ -577,6 +575,18 @@ msgid ""
 msgstr ""
 "<span class=\"basic-info-col-unit\">二氧化碳</span><br><span class=\"basic-"
 "info-col-subtext\">排放</span>"
+
+#: companies/templates/companies/reports/popup_report_pdf.html:110
+#: companies/templates/companies/reports/popup_report_xxx.html:119
+#: entrak/templates/report_main_content.html:43
+msgid "HOW MUCH ENERGY<br>DID WE SAVE?"
+msgstr "我們節省了多少電力?"
+
+#: companies/templates/companies/reports/popup_report_pdf.html:137
+#: companies/templates/companies/reports/popup_report_xxx.html:146
+#: entrak/templates/report_main_content.html:73
+msgid "HOW DID OUR<br>CARBON FOOTPRINT CHANGE?"
+msgstr "我們的碳足跡怎樣改變了?"
 
 #: companies/templates/companies/reports/popup_report_pdf.html:182
 #: companies/templates/companies/reports/popup_report_xxx.html:191
