@@ -1230,7 +1230,7 @@
 
                 var week_format = 'd MMM yyyy, dddd';
                 if (kendo.culture().name=="zh-TW"){
-                    date_text = '從' + kendo.toString(start_date, week_format, options.culture) + '開始';
+                    date_text = '從' + kendo.toString(start_date, 'D', options.culture) + ', ' +kendo.toString(start_date, 'dddd', options.culture) + '開始';
                 }
                 else{
                     date_text = 'Week starting ' + kendo.toString(start_date, week_format, options.culture);
