@@ -723,6 +723,15 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
         overnight['compare_last_helper'] = CompareTplHepler(overnight_compare_last)
 
+        overnight_compare_same = None
+        overnight_average_usage = g['currentOvernightInfo']['average']
+        overnight_last_same_period_avg = g['lastSamePeriodOvernightInfo']['average']
+        if overnight_last_same_period_avg > 0:
+            overnight_compare_same = float(overnight_average_usage - overnight_last_same_period_avg)/overnight_last_same_period_avg*100
+
+        overnight['compare_same_period_helper'] = CompareTplHepler(overnight_compare_same)
+
+
         g['overnight'] = overnight
 
 
