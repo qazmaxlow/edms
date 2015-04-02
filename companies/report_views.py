@@ -895,6 +895,29 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     m['weekday_details'] = group_data
     m['saving_info'] = report_data['savingInfo']
 
+
+    # filter weekend
+    def weekend_filter(tv):
+        t, v = tv
+        wd = datetime.datetime.fromtimestamp(t, pytz.utc).weekday()
+        return wd >= 5 and wd <=6
+
+    only_weekend_readings = filter(weekend_filter, combined_readings.items())
+
+    we_highest_usage = None
+    we_highest_datetime = None
+
+    if only_weekend_readings:
+        we_highest_datetime, we_highest_usage= sorted(only_weekend_readings, key=lambda x: x[1])[-1]
+
+
+    if we_highest_datetime:
+        we_highest_datetime = datetime.datetime.fromtimestamp(we_highest_datetime, pytz.utc)
+
+    m['weekend_highest_usage'] = we_highest_usage
+    m['weekend_highest_datetime'] = we_highest_datetime
+
+
     # oops!!! have to rewrite
     p_or_n = -1 if report_data['savingInfo']['energy'] >=0 else 0
 

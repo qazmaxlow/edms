@@ -549,8 +549,8 @@
           <div class="text-center calendar-width">
             <div class="highest-weekday-enegry">
               <h6><img src="{% static 'images/reports/electricity.png' %}"> {% trans "Highest Weekend/Holiday Energy Use" %}</h6>
-              <h5>${{ weekday_highest_usage|floatformat:"0"|intcomma }}</h5>
-              <p>{{ weekday_highest_datetime|date:"DATE_FORMAT" }}</p>
+              <h5>${{ weekend_highest_usage|floatformat:"0"|intcomma }}</h5>
+              <p>{{ weekend_highest_datetime|date:"DATE_FORMAT" }}</p>
             </div>
             <div class="most-increase-from"><h6>{% trans "Most of the increase was from" %}</h6>
               <p>{{ highest_diff_source.system.fullname }}</p></div>
