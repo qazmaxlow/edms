@@ -548,9 +548,10 @@
 
           <div class="text-center calendar-width">
             <div class="highest-weekday-enegry">
+
               <h6 class="font-09em"><img src="{% static 'images/reports/electricity.png' %}"> {% trans "Highest Weekend/Holiday Energy Use" %}</h6>
-              <h5 class="font-1em">${{ weekday_highest_usage|floatformat:"0"|intcomma }}</h5>
-              <p class="font-09em">{{ weekday_highest_datetime|date:"DATE_FORMAT" }}</p>
+              <h5 class="font-1em">${{ weekend_highest_usage|floatformat:"0"|intcomma }}</h5>
+              <p class="font-09em">{{ weekend_highest_datetime|date:"DATE_FORMAT" }}</p>
             </div>
             <div class="most-increase-from"><h6 class="font-09em two-line">{% trans "Most of the increase was from" %}</h6>
               <p class="font-1em">{{ highest_diff_source.system.fullname }}</p></div>
@@ -757,8 +758,8 @@
           <div class="text-center calendar-width">
             <div class="highest-weekday-enegry">
               <h6 class="font-09em"><img src="{% static 'images/reports/electricity.png' %}"> {% trans "Highest Overnight Energy Use" %}</h6>
-              <h5 class="font-1em">${{ weekday_highest_usage|floatformat:"0"|intcomma }}</h5>
-              <p class="font-09em">{{ weekday_highest_datetime|date:"DATE_FORMAT" }}</p>
+              <h5 class="font-1em">${{ overnight_highest_usage|floatformat:"0"|intcomma }}</h5>
+              <p class="font-09em">{{ overnight_highest_datetime|date:"DATE_FORMAT" }}</p>
             </div>
             <div class="most-increase-from"><h6 class="font-09em">{% trans "Most of the increase was from" %}</h6>
               <p class="font-1em">{{ highest_diff_source.system.fullname }}</p></div>

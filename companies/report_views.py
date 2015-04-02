@@ -764,13 +764,15 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
     # this is combined current readings
     combined_readings = {}
-
+    combined_overnight_readings = {}
 
     # for weekday
     # combined_current_readings = {};
     combined_last_readings = {};
     for ix, g in enumerate(group_data):
         current_readings = g['currentReadings']
+        overnight_readings = g['overnightcurrentReadings']
+
         g['compare_last_month_helper'] = CompareTplHepler(g['compare_last_month'])
         g['compare_same_period_helper'] = CompareTplHepler(g['compare_same_period'])
 
@@ -779,6 +781,13 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
                 combined_readings[ts] += val
             else:
                 combined_readings[ts] = val
+
+        for ts, val in overnight_readings.items():
+            if ts in combined_overnight_readings:
+                combined_overnight_readings[ts] += val
+            else:
+                combined_overnight_readings[ts] = val
+
 
         last_readings = g['lastReadings']
         for ts, val in last_readings.items():
@@ -867,17 +876,72 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     m['sub_compare_graphs'] = sub_compare_graphs
 
 
-    highest_datetime, highest_usage= sorted(combined_readings.items(), key=lambda x: x[1])[-1]
+    # filter the
+    def weekday_filter(tv):
+        t, v = tv
+        wd = datetime.datetime.fromtimestamp(t, pytz.utc).weekday()
+        return wd >= 0 and wd <=4
+
+    only_weekday_readings = filter(weekday_filter, combined_readings.items())
+
+    wd_highest_usage = None
+    wd_highest_datetime = None
+
+    if only_weekday_readings:
+        wd_highest_datetime, wd_highest_usage= sorted(only_weekday_readings, key=lambda x: x[1])[-1]
+
     # m['highest_value']
     groupdata_sorted_by_diff = sorted(group_data, key=lambda x: x['diff_same_period'])
     highest_diff_source = groupdata_sorted_by_diff[-1]
     m['highest_diff_source'] = highest_diff_source
 
-    m['weekday_highest_usage'] = highest_usage
-    m['weekday_highest_datetime'] = datetime.datetime.fromtimestamp(highest_datetime, pytz.utc)
+    if wd_highest_datetime:
+        wd_highest_datetime = datetime.datetime.fromtimestamp(wd_highest_datetime, pytz.utc)
+
+    m['weekday_highest_usage'] = wd_highest_usage
+    m['weekday_highest_datetime'] = wd_highest_datetime
 
     m['weekday_details'] = group_data
     m['saving_info'] = report_data['savingInfo']
+
+
+    # filter weekend
+    def weekend_filter(tv):
+        t, v = tv
+        wd = datetime.datetime.fromtimestamp(t, pytz.utc).weekday()
+        return wd >= 5 and wd <=6
+
+    only_weekend_readings = filter(weekend_filter, combined_readings.items())
+
+    we_highest_usage = None
+    we_highest_datetime = None
+
+    if only_weekend_readings:
+        we_highest_datetime, we_highest_usage= sorted(only_weekend_readings, key=lambda x: x[1])[-1]
+
+
+    if we_highest_datetime:
+        we_highest_datetime = datetime.datetime.fromtimestamp(we_highest_datetime, pytz.utc)
+
+    m['weekend_highest_usage'] = we_highest_usage
+    m['weekend_highest_datetime'] = we_highest_datetime
+
+
+    only_overnight_readings = combined_overnight_readings.items()
+
+    overnight_highest_usage = None
+    overnight_highest_datetime = None
+
+    if only_overnight_readings:
+        overnight_highest_datetime, overnight_highest_usage= sorted(only_overnight_readings, key=lambda x: x[1])[-1]
+
+
+    if overnight_highest_datetime:
+        overnight_highest_datetime = datetime.datetime.fromtimestamp(overnight_highest_datetime, pytz.utc)
+
+    m['overnight_highest_usage'] = overnight_highest_usage
+    m['overnight_highest_datetime'] = overnight_highest_datetime
+
 
     # oops!!! have to rewrite
     p_or_n = -1 if report_data['savingInfo']['energy'] >=0 else 0
