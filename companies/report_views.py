@@ -937,10 +937,10 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
 
     if overnight_highest_datetime:
-        we_highest_datetime = datetime.datetime.fromtimestamp(overnight_highest_datetime, pytz.utc)
+        overnight_highest_datetime = datetime.datetime.fromtimestamp(overnight_highest_datetime, pytz.utc)
 
-    m['overnight_highest_usage'] = we_highest_usage
-    m['overnight_highest_datetime'] = we_highest_datetime
+    m['overnight_highest_usage'] = overnight_highest_usage
+    m['overnight_highest_datetime'] = overnight_highest_datetime
 
 
     # oops!!! have to rewrite
