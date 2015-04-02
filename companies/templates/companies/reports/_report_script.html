@@ -71,6 +71,10 @@ ngapp.controller("ReportController", function($scope) {
                 font: "bold 14px Arial",
                 color: function(e) {
                     return e.dataItem.color;
+                },
+                border: {
+                    width: 0,
+                    color: "white"
                 }
             },
             overlay: {
@@ -198,7 +202,7 @@ ngapp.controller("ReportController", function($scope) {
         title: {
             text: "{% trans "When did we achieve our savings?" %}",
             color: "#354960",
-            font: "bold 1.145em sans-serif"
+            font: "bold 1.145em Arial"
         },
         legend: {
             position: "top"
