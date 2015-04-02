@@ -764,13 +764,15 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
     # this is combined current readings
     combined_readings = {}
-
+    combined_overnight_readings = {}
 
     # for weekday
     # combined_current_readings = {};
     combined_last_readings = {};
     for ix, g in enumerate(group_data):
         current_readings = g['currentReadings']
+        overnight_readings = g['overnightcurrentReadings']
+
         g['compare_last_month_helper'] = CompareTplHepler(g['compare_last_month'])
         g['compare_same_period_helper'] = CompareTplHepler(g['compare_same_period'])
 
@@ -779,6 +781,13 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
                 combined_readings[ts] += val
             else:
                 combined_readings[ts] = val
+
+        for ts, val in overnight_readings.items():
+            if ts in combined_overnight_readings:
+                combined_overnight_readings[ts] += val
+            else:
+                combined_overnight_readings[ts] = val
+
 
         last_readings = g['lastReadings']
         for ts, val in last_readings.items():
@@ -916,6 +925,22 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
     m['weekend_highest_usage'] = we_highest_usage
     m['weekend_highest_datetime'] = we_highest_datetime
+
+
+    only_overnight_readings = combined_overnight_readings.items()
+
+    overnight_highest_usage = None
+    overnight_highest_datetime = None
+
+    if only_overnight_readings:
+        overnight_highest_datetime, overnight_highest_usage= sorted(only_overnight_readings, key=lambda x: x[1])[-1]
+
+
+    if overnight_highest_datetime:
+        we_highest_datetime = datetime.datetime.fromtimestamp(overnight_highest_datetime, pytz.utc)
+
+    m['overnight_highest_usage'] = we_highest_usage
+    m['overnight_highest_datetime'] = we_highest_datetime
 
 
     # oops!!! have to rewrite
