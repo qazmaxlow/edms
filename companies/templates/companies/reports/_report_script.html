@@ -185,7 +185,7 @@ ngapp.controller("ReportController", function($scope) {
         line_step = 5;
     }
 
-    var line_date_formats = { days: ' d'};
+    var line_date_formats = { days: 'ddd'};
     if (report_type == 'year') {
         line_date_formats = { days: 'M/d'};
     } else if (report_type == 'week'){
@@ -198,7 +198,7 @@ ngapp.controller("ReportController", function($scope) {
         title: {
             text: "{% trans "When did we achieve our savings?" %}",
             color: "#354960",
-            font: "bold 1.1em sans-serif"
+            font: "bold 1.145em sans-serif"
         },
         legend: {
             position: "top"

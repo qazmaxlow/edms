@@ -47,6 +47,7 @@ body {
     text-align: left;
     padding-left: 15px;
     font-weight: 600;
+    font-size: 0.9em;
 }
 
 .transformed-label {
@@ -54,6 +55,7 @@ body {
     text-align: right;
     font-weight: 600;
     padding-right: 15px;
+    font-size: 0.9em;
 }
 
 .transformed-bar {
@@ -87,8 +89,7 @@ body {
 
 .sidebar-left .section {
     border-bottom: #E2E2E2 2px solid;
-    padding: 0 10px 10px;
-    margin-bottom: 10px;
+    padding: 0 10px ;
 }
 
 .sidebar-left .section ul {
@@ -113,8 +114,8 @@ body {
 }
 
 .sidebar-left .btn-section {
-    padding-top: 40px;
-    padding-bottom: 20px;
+    padding-top: 30px;
+    padding-bottom: 30px;
 }
 
 .report-head {
@@ -212,24 +213,21 @@ body {-webkit-print-color-adjust: exact;}
     border-right: 5px solid #e3e7e8;
 }
 
-.top-section .side-bar img {
-    /* width: 80px !important; */
-    /* height: 80px !important; */
-}
-
-
 .top-section .side-bar .item {
-    padding: 13px 0;
+    padding-top: 25px;
+    padding-bottom: 13px;
     height: 155px;
 }
 
 .top-section .side-bar .start {
-    padding: 20px 0 13px 0;
+    padding-top: 35px;
+    padding-bottom: 13px;
     height: 165px !important;
 }
 
 .top-section .side-bar .end {
-        height: 150px !important;
+    height: 150px !important;
+    padding-top: 30px;
 }
 
 .top-section .side-bar .item p {
@@ -237,7 +235,13 @@ body {-webkit-print-color-adjust: exact;}
     font-weight: 600;
 }
 
+.row.item img {
+    height: 79px;
+    width: 79px;
+}
+
 .more-usage {
+    margin: 0;
     color: #e98264;
     font-weight: 600;
 }
@@ -272,6 +276,14 @@ body {-webkit-print-color-adjust: exact;}
     font-weight: 600;
 }
 
+.report-overall-header {
+    background-color: #e3e3e3;
+    color: #354960;
+    padding: 5px 0;
+    font-weight: 600;
+    border-bottom: solid 1px #d3d3d3;
+}
+
 .report-detail-body {
     background-color: white;
 }
@@ -299,8 +311,9 @@ body {-webkit-print-color-adjust: exact;}
 }
 
 .report-detail-body p {
-    color: #778491;
+    color: #626060;
     font-weight: 600;
+    font-size: 0.9em;
 }
 
 .border-right {
@@ -311,9 +324,17 @@ body {-webkit-print-color-adjust: exact;}
     height: 50px;
 }
 
+.font-09em {
+    font-size: 0.9em;
+}
+
+.font-1em {
+    font-size: 1em;
+}
+
 .date-header {
     font-weight: 600;
-    font-size: 1.5rem;
+    font-size: 1em;
     color: #415368;
     height: 43px;
     padding-top: 20px;
@@ -336,7 +357,6 @@ body {-webkit-print-color-adjust: exact;}
 
 .highest-weekday-enegry h6 {
     color: #415368;
-    font-weight: 600;
 }
 
 .highest-weekday-enegry h5 {
@@ -353,6 +373,23 @@ body {-webkit-print-color-adjust: exact;}
     height: 110px;/* hack */
     width: 238px;
     float: left;
+}
+
+.most-increase-from p {
+    line-height: 1.1;
+    font-weight: bold;
+    color: #6bc0d4;
+}
+
+.most-increase-from h6 {
+    color: #415368;
+    height: 22px;
+    padding-top: 3px;
+}
+
+.most-increase-from h6.two-line {
+    height: 35px;
+    padding-top: 3px;
 }
 
 .better-mark {
@@ -429,6 +466,7 @@ body {-webkit-print-color-adjust: exact;}
 .basic-info-col .basic-info-text-container {
     display: inline-block;
     width: 178px;
+    height: 80px;
     padding-left: 14px;
     vertical-align: middle;
 }
@@ -494,7 +532,7 @@ body {-webkit-print-color-adjust: exact;}
 .basic-info-col .basic-info-col-subtext {
     color: #354960 !important;
     font-weight: 500;
-    font-size: 0.813em;
+    font-size: 0.9em;
     /*margin-top: 2px;*/
     display: block;
 }
@@ -512,15 +550,18 @@ body {-webkit-print-color-adjust: exact;}
 }
 
 .detail-container h4 {
+    height: 37px;
     text-align: center;
     padding: 8px 0;
-    font-size: 1.1em;
+    font-size: 1.145em;
     font-weight: 600;
     color: #354960;
 }
 
 .report-subtitle-text {
-    font-size: 1.1em;
+    margin-bottom: 0px;
+    margin-top: 15px;
+    font-size: 1.145em;
     font-weight: 600;
     color: #354960;   
 }
@@ -550,6 +591,12 @@ body {-webkit-print-color-adjust: exact;}
 .detail-title {
     overflow: hidden;
     text-align: center;
+    height: 57px;
+}
+
+.detail-title th {
+    font-size: 1em;
+    font-weight: 600;
 }
 
 .detail-title span {
@@ -645,6 +692,9 @@ body {-webkit-print-color-adjust: exact;}
     white-space: nowrap;
     border-bottom: 1px solid #f0f2f2;
 }
+.key-statistics-row td{
+    font-size: 0.9em;
+}
 .key-statistics-row span{
     display: inline-block;
     width: 242px;
@@ -670,6 +720,7 @@ body {-webkit-print-color-adjust: exact;}
     padding-left: 15px;
     width: 160px !important;
     color: #FFF;
+    font-size: 0.9em;
 }
 .detail-split-title{
     width: 100%;

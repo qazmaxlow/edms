@@ -95,7 +95,9 @@
                          {% trans "increase" %}
                       {% endif %}
                     {% endifequal %}
-                    {{ co2_in_car|floatformat:"0"|intcomma }} {% trans "cars" %}</span><br>
+                    {{ co2_in_car|floatformat:"0"|intcomma }}
+                    {% if report_type == 'year' %}<br>{% endif %}
+                    {% trans "cars" %}</span><br>
                     <span id="car-impact-subtext" class="basic-info-col-subtext">
                       {% if is_saving %}
                       {% trans "taken off the road for a month" %}
@@ -116,9 +118,9 @@
                       {% trans "of tropical rainforest cut down" %}
                       {% endif %}
                     </span>
-                    <span id="forest-impact">{{ co2_in_forest|floatformat:"0"|intcomma }} {% trans "m<sup>2</sup>" %}</span></span>
+                    <span id="forest-impact">{{ co2_in_forest|floatformat:"0"|intcomma }}{% if report_type == 'year' %}<br>{% endif %}{% trans "m<sup>2</sup>" %}</span>
                     {% else %}
-                    <span id="forest-impact">{{ co2_in_forest|floatformat:"0"|intcomma }} m<sup>2</sup></span><br>
+                    <span id="forest-impact">{{ co2_in_forest|floatformat:"0"|intcomma }}{% if report_type == 'year' %}<br>{% endif %}m<sup>2</sup></span><br>
                     <span id="forest-impact-subtext" class="basic-info-col-subtext">
                       {% if is_saving %}
                       of tropical rainforest protected
@@ -140,7 +142,9 @@
                       {% trans "Extra CO<sub>2</sub> emissions equal to the weight of" %}
                       {% endif %}
                     </span>
-                    <span id="panda-impact">{{ co2_in_elephant|floatformat:"0"|intcomma }}{% trans " pandas" %}</span>
+                    <span id="panda-impact">{{ co2_in_elephant|floatformat:"0"|intcomma }}
+                      {% if report_type == 'year' %}<br>{% endif %}
+                      {% trans " pandas" %}</span>
                 </div>
             </div>
         </div>
@@ -319,7 +323,7 @@
           <div class="row text-center border-bottom-2px">
             <div class="col-xs-12 date-header">{{ report_start|date:"YEAR_MONTH_FORMAT" }}</div>
           </div>
-          <div class="row text-center height-50">
+          <div class="row text-center height-50 font-09em">
             <div class="col-xs-4 border-right"><h9 class="better-mark">{% trans "Better" %}</h9><p>{% trans "than average weekday" %}</p></div>
             <div class="col-xs-4 border-right"><h9 class="worse-mark">{% trans "Worse" %}</h9><p>{% trans "than average weekday" %}</p></div>
             <div class="col-xs-4"><h9 class="average-mark">{% trans "Average" %}</h9><p>{% trans "weekday" %}</p></div>
@@ -337,17 +341,20 @@
 
           <div class="text-center calendar-width">
             <div class="highest-weekday-enegry">
-              <h6><img src="{% static 'images/reports/electricity.png' %}"> {% trans "Highest Weekday Energy Use" %}</h6>
-              <h5>${{ weekday_highest_usage|floatformat:"0"|intcomma }}</h5>
-              <p>{{ weekday_highest_datetime|date:"DATE_FORMAT" }}</p>
+              <h6 class="font-09em"><img src="{% static 'images/reports/electricity.png' %}"> {% trans "Highest Weekday Energy Use" %}</h6>
+              <h5 class="font-1em">${{ weekday_highest_usage|floatformat:"0"|intcomma }}</h5>
+              <p class="font-09em">{{ weekday_highest_datetime|date:"DATE_FORMAT" }}</p>
             </div>
-            <div class="most-increase-from"><h6>{% trans "Most of the increase was from" %}</h6>
-              <p>{{ highest_diff_source.system.fullname }}</p></div>
+            <div class="most-increase-from"><h6 class="font-09em">{% trans "Most of the increase was from" %}</h6>
+              <p class="font-1em">{{ highest_diff_source.system.fullname }}</p></div>
           </div>
 
         </div>
         </div>
         {% else %}
+        <div class="row report-overall-header">
+          <div class="col-xs-12">{% trans "Overall" %}</div>
+        </div>
         <div class="row report-detail-body">
           <div class="col-xs-4 no-x-padding">
               <div class="row inner">
@@ -424,7 +431,7 @@
         <div class="col-xs-4 no-x-padding">
           <div class="row">
             <div class="col-xs-4">
-              <img src="{% static wd.compare_last_month_helper.change_icon_path %}">
+              <img src="{% static wd.weekday.compare_last_helper.change_icon_path %}">
             </div>
             <div class="col-xs-8 no-x-padding">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
@@ -523,7 +530,7 @@
           <div class="row text-center border-bottom-2px">
             <div class="col-xs-12 date-header">{{ report_start|date:"YEAR_MONTH_FORMAT" }}</div>
           </div>
-          <div class="row text-center height-50">
+          <div class="row text-center height-50 font-09em">
             <div class="col-xs-4 border-right"><h9 class="better-mark">{% trans "Better" %}</h9><p>{% trans "than average weekend" %}</p></div>
             <div class="col-xs-4 border-right"><h9 class="worse-mark">{% trans "Worse" %}</h9><p>{% trans "than average weekend" %}</p></div>
             <div class="col-xs-4"><h9 class="average-mark">{% trans "Average" %}</h9><p>{% trans "weekend" %}</p></div>
@@ -541,17 +548,21 @@
 
           <div class="text-center calendar-width">
             <div class="highest-weekday-enegry">
-              <h6><img src="{% static 'images/reports/electricity.png' %}"> {% trans "Highest Weekend/Holiday Energy Use" %}</h6>
-              <h5>${{ weekday_highest_usage|floatformat:"0"|intcomma }}</h5>
-              <p>{{ weekday_highest_datetime|date:"DATE_FORMAT" }}</p>
+
+              <h6 class="font-09em"><img src="{% static 'images/reports/electricity.png' %}"> {% trans "Highest Weekend/Holiday Energy Use" %}</h6>
+              <h5 class="font-1em">${{ weekend_highest_usage|floatformat:"0"|intcomma }}</h5>
+              <p class="font-09em">{{ weekend_highest_datetime|date:"DATE_FORMAT" }}</p>
             </div>
-            <div class="most-increase-from"><h6>{% trans "Most of the increase was from" %}</h6>
-              <p>{{ highest_diff_source.system.fullname }}</p></div>
+            <div class="most-increase-from"><h6 class="font-09em two-line">{% trans "Most of the increase was from" %}</h6>
+              <p class="font-1em">{{ highest_diff_source.system.fullname }}</p></div>
           </div>
 
         </div>
         </div>
         {% else %}
+        <div class="row report-overall-header">
+          <div class="col-xs-12">{% trans "Overall" %}</div>
+        </div>
         <div class="row report-detail-body">
         <div class="col-xs-4 no-x-padding">
               <div class="row inner">
@@ -628,7 +639,7 @@
         <div class="col-xs-4 no-x-padding">
           <div class="row">
             <div class="col-xs-4">
-              <img src="{% static d.compare_last_month_helper.change_icon_path %}">
+              <img src="{% static d.weekend.compare_last_helper.change_icon_path %}">
             </div>
             <div class="col-xs-8 no-x-padding">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
@@ -648,7 +659,7 @@
         <div class="col-xs-4 no-x-padding">
           <div class="row">
             <div class="col-xs-4">
-              <img src="{% static d.compare_same_period_helper.change_icon_path %}">
+              <img src="{% static d.weekend.compare_same_period_helper.change_icon_path %}">
             </div>
             <div class="col-xs-8 no-x-padding">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
@@ -728,7 +739,7 @@
           <div class="row text-center border-bottom-2px">
             <div class="col-xs-12 date-header">{{ report_start|date:"YEAR_MONTH_FORMAT" }}</div>
           </div>
-          <div class="row text-center height-50">
+          <div class="row text-center height-50 font-09em">
             <div class="col-xs-4 border-right"><h9 class="better-mark">{% trans "Better" %}</h9><p>{% trans "than average night" %}</p></div>
             <div class="col-xs-4 border-right"><h9 class="worse-mark">{% trans "Worse" %}</h9><p>{% trans "than average night" %}</p></div>
             <div class="col-xs-4"><h9 class="average-mark">{% trans "Average" %}</h9><p>{% trans "night" %}</p></div>
@@ -746,17 +757,20 @@
 
           <div class="text-center calendar-width">
             <div class="highest-weekday-enegry">
-              <h6><img src="{% static 'images/reports/electricity.png' %}"> {% trans "Highest Overnight Energy Use" %}</h6>
-              <h5>${{ weekday_highest_usage|floatformat:"0"|intcomma }}</h5>
-              <p>{{ weekday_highest_datetime|date:"DATE_FORMAT" }}</p>
+              <h6 class="font-09em"><img src="{% static 'images/reports/electricity.png' %}"> {% trans "Highest Overnight Energy Use" %}</h6>
+              <h5 class="font-1em">${{ overnight_highest_usage|floatformat:"0"|intcomma }}</h5>
+              <p class="font-09em">{{ overnight_highest_datetime|date:"DATE_FORMAT" }}</p>
             </div>
-            <div class="most-increase-from"><h6>{% trans "Most of the increase was from" %}</h6>
-              <p>{{ highest_diff_source.system.fullname }}</p></div>
+            <div class="most-increase-from"><h6 class="font-09em">{% trans "Most of the increase was from" %}</h6>
+              <p class="font-1em">{{ highest_diff_source.system.fullname }}</p></div>
           </div>
 
         </div>
         </div>
         {% else %}
+        <div class="row report-overall-header">
+          <div class="col-xs-12">{% trans "Overall" %}</div>
+        </div>
         <div class="row report-detail-body">
           <div class="col-xs-4 no-x-padding">
               <div class="row inner">
@@ -833,7 +847,7 @@
         <div class="col-xs-4 no-x-padding">
           <div class="row">
             <div class="col-xs-4">
-              <img src="{% static d.compare_last_month_helper.change_icon_path %}">
+              <img src="{% static d.overnight.compare_last_helper.change_icon_path %}">
             </div>
             <div class="col-xs-8 no-x-padding">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
@@ -853,7 +867,7 @@
         <div class="col-xs-4 no-x-padding">
           <div class="row">
             <div class="col-xs-4">
-              <img src="{% static d.compare_same_period_helper.change_icon_path %}">
+              <img src="{% static d.overnight.compare_same_period_helper.change_icon_path %}">
             </div>
             <div class="col-xs-8 no-x-padding">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
