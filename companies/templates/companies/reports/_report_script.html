@@ -472,11 +472,14 @@ $(document).ready(function()  {
 
     // for weekday report
     var isNotConcernFunc = null;
-    var report_start = new Date("{{ report_start.isoformat }}");
-    var report_end = new Date("{{ report_end.isoformat }}");
+    var report_start = new moment("{{ report_start.isoformat }}");
+    var report_start = report_start.tz('Asia/Hong_Kong');
 
-    var creport_start = new Date(report_start);
-    var creport_end = new Date(report_end);
+    var report_end = new moment("{{ report_end.isoformat }}");
+    var report_end = report_end.tz('Asia/Hong_Kong');
+
+    var creport_start = new moment(report_start);
+    var creport_end = new moment(report_end);
 
     var datesInWeek = [];
     if (report_type == 'week') {
