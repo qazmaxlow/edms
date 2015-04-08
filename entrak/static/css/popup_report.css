@@ -105,7 +105,8 @@ body {
 
 .sidebar-left .section li {
     height: 50px;
-    text-align: middle;
+    line-height: 50px;
+    text-align: center;
     border-width: 2px !important;
     border-bottom: #c9c9c9 solid;
 }
@@ -117,6 +118,10 @@ body {
 
 .sidebar-left .section li span {
     text-align: center;
+    padding: 10px !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    line-height: normal !important;
 }
 
 .sidebar-left .btn-section {
