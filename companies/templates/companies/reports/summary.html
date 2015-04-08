@@ -631,11 +631,11 @@ $(function() {
                         overflow: "never"
                     },
                     {
-                        template: '<div ng-show="custom_time"><input kendo-date-picker="report_date_start" style="width: 220px;" k-on-change="on_start_date_selected(kendoEvent);on_custom_date_selected(kendoEvent)" k-options="customStartDateOptions" k-value="default_custom_start_date" ></div>',
+                        template: '<div ng-show="custom_time"><input kendo-et-date-picker="report_date_start" style="width: 220px;" k-on-change="on_start_date_selected(kendoEvent);on_custom_date_selected(kendoEvent)" k-options="customStartDateOptions" k-value="default_custom_start_date" ></div>',
                         overflow: "never"
                     },
                     {
-                        template: '<div ng-show="custom_time"><input kendo-date-picker="report_date_end" style="width: 220px;" k-on-change="on_end_date_selected(kendoEvent);on_custom_date_selected(kendoEvent)" k-options="customEndDateOptions" k-value="default_custom_end_date" ></div>',
+                        template: '<div ng-show="custom_time"><input kendo-et-date-picker="report_date_end" style="width: 220px;" k-on-change="on_end_date_selected(kendoEvent);on_custom_date_selected(kendoEvent)" k-options="customEndDateOptions" k-value="default_custom_end_date" ></div>',
                         overflow: "never"
                     }
 
@@ -649,12 +649,14 @@ $(function() {
 
             $scope.customStartDateOptions = {
                 format: 'dd MMM yyyy, ddd',
-                max: $scope.default_custom_end_date
+                max: $scope.default_custom_end_date,
+                clickPopup: true
             };
 
             $scope.customEndDateOptions = {
                 format: 'dd MMM yyyy, ddd',
-                min: $scope.default_custom_start_date
+                min: $scope.default_custom_start_date,
+                clickPopup: true
             };
 
             $scope.on_start_date_selected = function(e) {
