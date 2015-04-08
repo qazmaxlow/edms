@@ -1029,8 +1029,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     weekends_beginning_usage = sum([ g['beginningWeekendInfo']['average'] for g in group_data])
     weekends_average_usage = sum([ g['currentWeekendInfo']['average'] for g in group_data])
 
-    weekends_last_usage = sum([ g['lastWeekendInfo']['total'] for g in group_data])
-    weekends_current_usage = sum([ g['currentWeekendInfo']['total'] for g in group_data])
+    weekends_last_usage = sum([ g['lastWeekendInfo']['average'] for g in group_data])
+    weekends_current_usage = sum([ g['currentWeekendInfo']['average'] for g in group_data])
 
     # average_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
     weekends_compare_last = None
