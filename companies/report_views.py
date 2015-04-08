@@ -622,8 +622,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     beginning_usage = sum([ g['beginningWeekdayInfo']['average'] for g in group_data])
     average_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
 
-    last_weekday_usage = sum([ g['lastWeekdayInfo']['total'] for g in group_data])
-    current_weekday_usage = sum([ g['currentWeekdayInfo']['total'] for g in group_data])
+    last_weekday_usage = sum([ g['lastWeekdayInfo']['average'] for g in group_data])
+    current_weekday_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
 
     weekday_compare_last = None
     if last_weekday_usage > 0:
@@ -669,8 +669,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         # for weekday
         weekday = {}
 
-        last_weekday_usage = g['lastWeekdayInfo']['total']
-        current_weekday_usage = g['currentWeekdayInfo']['total']
+        last_weekday_usage = g['lastWeekdayInfo']['average']
+        current_weekday_usage = g['currentWeekdayInfo']['average']
 
         weekday_compare_last = None
         if last_weekday_usage > 0:
@@ -692,8 +692,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         weekend_beginning_usage = g['beginningWeekendInfo']['average']
         weekend_average_usage = g['currentWeekendInfo']['average']
 
-        weekend_last_usage = g['lastWeekendInfo']['total']
-        weekend_current_usage = g['currentWeekendInfo']['total']
+        weekend_last_usage = g['lastWeekendInfo']['average']
+        weekend_current_usage = g['currentWeekendInfo']['average']
 
         weekend_compare_last = None
         if weekend_last_usage > 0:
@@ -714,8 +714,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         # for overnight
         overnight = {'bill': g['currentOvernightInfo']['average'] * money_unit_rate.rate}
 
-        last_overnight_usage = g['lastOvernightInfo']['total']
-        current_overnight_usage = g['currentOvernightInfo']['total']
+        last_overnight_usage = g['lastOvernightInfo']['average']
+        current_overnight_usage = g['currentOvernightInfo']['average']
 
         overnight_compare_last = None
         if last_overnight_usage > 0:
@@ -1121,8 +1121,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     overnight_beginning_usage = sum([ g['beginningOvernightInfo']['average'] for g in group_data])
     overnight_average_usage = sum([ g['currentOvernightInfo']['average'] for g in group_data])
 
-    overnight_last_usage = sum([ g['lastOvernightInfo']['total'] for g in group_data])
-    overnight_current_usage = sum([ g['currentOvernightInfo']['total'] for g in group_data])
+    overnight_last_usage = sum([ g['lastOvernightInfo']['average'] for g in group_data])
+    overnight_current_usage = sum([ g['currentOvernightInfo']['average'] for g in group_data])
 
     # average_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
     overnight_compare_last = None
@@ -1159,7 +1159,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
             # show_content_in_browser=False,
             cmd_options={
                 'page-size': 'A3',
-                "javascript-delay": '5000',
+                "javascript-delay": 3000,
                 # 'quiet': '',
                 # 'margin-left': '18mm',
                 # 'page-size': 'A3',
