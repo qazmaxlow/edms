@@ -415,7 +415,7 @@ class CompareTplHepler:
     @property
     def change_icon_path(self):
         if self.compared_percent is None:
-            return 'images/reports/na.png'
+            return 'images/reports/na.gif'
 
         path = 'images/reports/decrease_energy.png'
         if self.compared_percent >=0:
