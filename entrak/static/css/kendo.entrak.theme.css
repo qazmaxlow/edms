@@ -458,6 +458,10 @@ html .km-pane-wrapper .k-header {
 .k-calendar-container.k-group {
   border-color: #c5c5c5;
 }
+.k-calendar tr.k-state-selected a, 
+.k-calendar td.k-state-hover a {
+  color: #ffffff !important;
+}
 .k-state-selected,
 .k-state-selected:link,
 .k-state-selected:visited,
