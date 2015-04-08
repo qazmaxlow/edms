@@ -1236,8 +1236,7 @@
                     date_text = 'Week of ' + kendo.toString(start_date, week_format, options.culture);
                 }
             } else if (date && options.select == 'month') {
-                var month_format = 'Y';
-                date_text = kendo.toString(date, month_format, options.culture);
+                date_text = kendo.toString(date, options.format, options.culture);
             }
             else if(date && options.select == 'quarter'){
                 var quarter_ix = Math.floor(1+date.getMonth()/3);
