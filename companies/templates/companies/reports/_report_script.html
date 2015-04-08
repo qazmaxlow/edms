@@ -168,6 +168,10 @@ ngapp.controller("ReportController", function($scope) {
             labels: {
                 format: bar_date_format
             },
+            majorTicks: {
+                size: 0,
+                width: 0
+            },
             majorGridLines: {
                 visible: false
             }
@@ -270,7 +274,9 @@ ngapp.controller("ReportController", function($scope) {
                 visible: false
             },
             majorTicks: {
-                step: line_step
+                step: line_step,
+                size: 0,
+                width: 0
             },
             labels: {
                 step: line_step,
@@ -332,7 +338,9 @@ ngapp.controller("ReportController", function($scope) {
                 visible: false
             },
             majorTicks: {
-                step: line_step
+                step: line_step,
+                size: 0,
+                width: 0
             },
             labels: {
                 step: line_step,

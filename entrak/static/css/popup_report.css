@@ -17,6 +17,10 @@
     border-bottom: solid 2px #cbcbcb;
 }
 
+.bottom-margin-20 {
+    margin-bottom: 20px;
+}
+
 .page-break-after {
     page-break-after: always !important;
 }
@@ -25,6 +29,7 @@
     color: #354960;
     margin-top: 0px !important;
     margin-bottom: 0px !important;
+    font-weight: bold;
 }
 
 body {
@@ -54,7 +59,8 @@ body {
     width: 100px;
     text-align: right;
     font-weight: 600;
-    padding-right: 15px;
+    padding-right: 5px;
+    padding-left: 5px;
     font-size: 0.9em;
 }
 
@@ -146,7 +152,7 @@ body {
     font-size: 14pt;
     color: #354960;
     border-top: 1px #354960 solid;
-    width: 300px;
+    width: 350px;
     margin: 0 auto;
     padding-bottom: 15px;
     padding-top: 4px;
@@ -302,6 +308,7 @@ body {-webkit-print-color-adjust: exact;}
 }
 
 .report-detail-body .col-xs-4 .row img {
+    background-color: transparent;
     position: relative;
     height: 73px;
 }
@@ -387,6 +394,7 @@ body {-webkit-print-color-adjust: exact;}
     line-height: 1.1;
     font-weight: bold;
     color: #6bc0d4;
+    padding: 0 15px;
 }
 
 .most-increase-from h6 {
@@ -466,12 +474,21 @@ body {-webkit-print-color-adjust: exact;}
     margin-bottom: 10px;
     margin-left: 25px;
     border-radius: 100px;
-    background-color: #9ccfda;
     border: 2px solid #8bb2ba;
+    background-color: #8bb2ba;
     vertical-align: middle;
 }
 
 .basic-info-col .basic-info-text-container {
+    display: inline-block;
+    width: 178px;
+    height: 80px;
+    margin-top: 20px;
+    padding-left: 14px;
+    vertical-align: middle;
+}
+
+.basic-info-col .basic-info-text-container-last-col {
     display: inline-block;
     width: 178px;
     height: 80px;
@@ -540,7 +557,7 @@ body {-webkit-print-color-adjust: exact;}
 .basic-info-col .basic-info-col-subtext {
     color: #354960 !important;
     font-weight: 500;
-    font-size: 0.9em;
+    font-size: 1em;
     /*margin-top: 2px;*/
     display: block;
 }
@@ -697,7 +714,6 @@ body {-webkit-print-color-adjust: exact;}
     text-align: center;
     color:#5E5E5E;
     overflow: hidden;
-    white-space: nowrap;
     border-bottom: 1px solid #f0f2f2;
 }
 .key-statistics-row td{
