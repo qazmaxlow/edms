@@ -44,7 +44,7 @@
                 </div>
             </div>
             <hr class="current-usage-separator-dark-grey">
-            <div>
+            <div class="bottom-margin-20">
                 <img src="{% static 'images/report/piggy.png' %}">
                 <div class="basic-info-text-container">
                     <span id="current-money-usage">${{ total_money|floatformat:"0"|intcomma }}</span>
@@ -73,7 +73,7 @@
                 </div>
             </div>
             <hr class="current-usage-separator-dark-grey">
-            <div>
+            <div class="bottom-margin-20">
                 <img src="{% static 'images/report/piggy.png' %}">
                 <div class="basic-info-text-container">
                     <span id="save-money-usage">{{ saving_sign }}${{ saving_money|stringformat:".0f"|intcomma }}</span>
@@ -132,7 +132,7 @@
                 </div>
             </div>
             <hr class="current-usage-separator-dark-grey">
-            <div>
+            <div class="bottom-margin-20">
                 <img src="{% static 'images/report/panda.png' %}">
                 <div class="basic-info-text-container">
                     <span id="panda-impact-subtext" class="basic-info-col-subtext">
@@ -172,7 +172,7 @@
           <div kendo-chart k-options="transformedPieOptions" ></div>
         </div>
     </div>
-    <div class="row detail-container">
+    <div class="row detail-container bottom-border-3">
       <div class="col-xs-12 x-padding-5">
 <div>
     <table>
@@ -275,7 +275,7 @@
         <div class="col-xs-4 side-bar">
           <div class="row item start">
                 <div class="col-xs-4">
-                  <img src="{% static 'images/reports/icon_money.svg' %}">
+                  <img src="{% static 'images/reports/icon_money.png' %}">
                 </div>
                 <div class="col-xs-8">
                   <h3 class="used-money">${{ weekday_bill|floatformat:"0"|intcomma }}</h3>
@@ -323,7 +323,7 @@
           <div class="row text-center border-bottom-2px">
             <div class="col-xs-12 date-header">{{ report_start|date:"YEAR_MONTH_FORMAT" }}</div>
           </div>
-          <div class="row text-center height-50">
+          <div class="row text-center height-50 font-09em">
             <div class="col-xs-4 border-right"><h9 class="better-mark">{% trans "Better" %}</h9><p>{% trans "than average weekday" %}</p></div>
             <div class="col-xs-4 border-right"><h9 class="worse-mark">{% trans "Worse" %}</h9><p>{% trans "than average weekday" %}</p></div>
             <div class="col-xs-4"><h9 class="average-mark">{% trans "Average" %}</h9><p>{% trans "weekday" %}</p></div>
@@ -341,12 +341,12 @@
 
           <div class="text-center calendar-width">
             <div class="highest-weekday-enegry">
-              <h6><img src="{% static 'images/reports/electricity.png' %}"> {% trans "Highest Weekday Energy Use" %}</h6>
-              <h5>${{ weekday_highest_usage|floatformat:"0"|intcomma }}</h5>
-              <p>{{ weekday_highest_datetime|date:"DATE_FORMAT" }}</p>
+              <h6 class="font-09em"><img src="{% static 'images/reports/electricity.png' %}"> {% trans "Highest Weekday Energy Use" %}</h6>
+              <h5 class="font-1em">${{ weekday_highest_usage|floatformat:"0"|intcomma }}</h5>
+              <p class="font-09em">{{ weekday_highest_datetime|date:"DATE_FORMAT" }}</p>
             </div>
-            <div class="most-increase-from"><h6>{% trans "Most of the increase was from" %}</h6>
-              <p>{{ highest_diff_source.system.fullname }}</p></div>
+            <div class="most-increase-from"><h6 class="font-09em">{% trans "Most of the increase was from" %}</h6>
+              <p class="font-1em">{{ highest_diff_source.system.fullname }}</p></div>
           </div>
 
         </div>
@@ -359,7 +359,7 @@
           <div class="col-xs-4 no-x-padding">
               <div class="row inner">
                 <div class="col-xs-4">
-                  <img src="{% static 'images/reports/icon_money.svg'  %}">
+                  <img src="{% static 'images/reports/icon_money.png'  %}">
                 </div>
                 <div class="col-xs-8">
                   <h3 class="used-money">${{ weekday_bill|floatformat:"0"|intcomma }}</h3>
@@ -416,11 +416,11 @@
         {{ wd.title }}
         </div>
       </div>
-      <div class="row report-detail-body {% if forloop.last %}content-footer{% endif %} ">
+      <div class="row report-detail-body {% if forloop.last %}content-footer bottom-border-3{% endif %} ">
         <div class="col-xs-4 no-x-padding">
           <div class="row">
             <div class="col-xs-4">
-              <img src="{% static 'images/reports/icon_money.svg'  %}">
+              <img src="{% static 'images/reports/icon_money.png'  %}">
             </div>
             <div class="col-xs-8 no-x-padding">
               <h3 class="used-money">${{  wd.usage_bill|floatformat:"0"|intcomma }}</h3>
@@ -482,7 +482,7 @@
         <div class="col-xs-4 side-bar">
           <div class="row item start">
                 <div class="col-xs-4">
-                  <img src="{% static 'images/reports/icon_money.svg'  %}">
+                  <img src="{% static 'images/reports/icon_money.png'  %}">
                 </div>
                 <div class="col-xs-8">
                   <h3 class="used-money">${{ weekends.total_bill|floatformat:"0"|intcomma }}</h3>
@@ -530,7 +530,7 @@
           <div class="row text-center border-bottom-2px">
             <div class="col-xs-12 date-header">{{ report_start|date:"YEAR_MONTH_FORMAT" }}</div>
           </div>
-          <div class="row text-center height-50">
+          <div class="row text-center height-50 font-09em">
             <div class="col-xs-4 border-right"><h9 class="better-mark">{% trans "Better" %}</h9><p>{% trans "than average weekend" %}</p></div>
             <div class="col-xs-4 border-right"><h9 class="worse-mark">{% trans "Worse" %}</h9><p>{% trans "than average weekend" %}</p></div>
             <div class="col-xs-4"><h9 class="average-mark">{% trans "Average" %}</h9><p>{% trans "weekend" %}</p></div>
@@ -548,12 +548,13 @@
 
           <div class="text-center calendar-width">
             <div class="highest-weekday-enegry">
-              <h6><img src="{% static 'images/reports/electricity.png' %}"> {% trans "Highest Weekend/Holiday Energy Use" %}</h6>
-              <h5>${{ weekend_highest_usage|floatformat:"0"|intcomma }}</h5>
-              <p>{{ weekend_highest_datetime|date:"DATE_FORMAT" }}</p>
+
+              <h6 class="font-09em"><img src="{% static 'images/reports/electricity.png' %}"> {% trans "Highest Weekend/Holiday Energy Use" %}</h6>
+              <h5 class="font-1em">${{ weekend_highest_usage|floatformat:"0"|intcomma }}</h5>
+              <p class="font-09em">{{ weekend_highest_datetime|date:"DATE_FORMAT" }}</p>
             </div>
-            <div class="most-increase-from"><h6>{% trans "Most of the increase was from" %}</h6>
-              <p>{{ highest_diff_source.system.fullname }}</p></div>
+            <div class="most-increase-from"><h6 class="font-09em two-line">{% trans "Most of the increase was from" %}</h6>
+              <p class="font-1em">{{ highest_diff_source.system.fullname }}</p></div>
           </div>
 
         </div>
@@ -566,7 +567,7 @@
         <div class="col-xs-4 no-x-padding">
               <div class="row inner">
                 <div class="col-xs-4">
-                  <img src="{% static 'images/reports/icon_money.svg'  %}">
+                  <img src="{% static 'images/reports/icon_money.png'  %}">
                 </div>
                 <div class="col-xs-8">
                   <h3 class="used-money">${{ weekends.total_bill|floatformat:"0"|intcomma }}</h3>
@@ -623,11 +624,11 @@
         {{ d.title }}
         </div>
       </div>
-      <div class="row report-detail-body {% if forloop.last %}content-footer{% endif %} ">
+      <div class="row report-detail-body {% if forloop.last %}content-footer bottom-border-3{% endif %} ">
         <div class="col-xs-4 no-x-padding">
           <div class="row">
             <div class="col-xs-4">
-              <img src="{% static 'images/reports/icon_money.svg'  %}">
+              <img src="{% static 'images/reports/icon_money.png'  %}">
             </div>
             <div class="col-xs-8 no-x-padding">
               <h3 class="used-money">${{  d.weekend.bill|floatformat:"0"|intcomma }}</h3>
@@ -690,7 +691,7 @@
         <div class="col-xs-4 side-bar">
           <div class="row item start">
                 <div class="col-xs-4">
-                  <img src="{% static 'images/reports/icon_money.svg'  %}">
+                  <img src="{% static 'images/reports/icon_money.png'  %}">
                 </div>
                 <div class="col-xs-8">
                   <h3 class="used-money">${{ overnight.bill|floatformat:"0"|intcomma }}</h3>
@@ -738,7 +739,7 @@
           <div class="row text-center border-bottom-2px">
             <div class="col-xs-12 date-header">{{ report_start|date:"YEAR_MONTH_FORMAT" }}</div>
           </div>
-          <div class="row text-center height-50">
+          <div class="row text-center height-50 font-09em">
             <div class="col-xs-4 border-right"><h9 class="better-mark">{% trans "Better" %}</h9><p>{% trans "than average night" %}</p></div>
             <div class="col-xs-4 border-right"><h9 class="worse-mark">{% trans "Worse" %}</h9><p>{% trans "than average night" %}</p></div>
             <div class="col-xs-4"><h9 class="average-mark">{% trans "Average" %}</h9><p>{% trans "night" %}</p></div>
@@ -756,12 +757,12 @@
 
           <div class="text-center calendar-width">
             <div class="highest-weekday-enegry">
-              <h6><img src="{% static 'images/reports/electricity.png' %}"> {% trans "Highest Overnight Energy Use" %}</h6>
-              <h5>${{ overnight_highest_usage|floatformat:"0"|intcomma }}</h5>
-              <p>{{ overnight_highest_datetime|date:"DATE_FORMAT" }}</p>
+              <h6 class="font-09em"><img src="{% static 'images/reports/electricity.png' %}"> {% trans "Highest Overnight Energy Use" %}</h6>
+              <h5 class="font-1em">${{ overnight_highest_usage|floatformat:"0"|intcomma }}</h5>
+              <p class="font-09em">{{ overnight_highest_datetime|date:"DATE_FORMAT" }}</p>
             </div>
-            <div class="most-increase-from"><h6>{% trans "Most of the increase was from" %}</h6>
-              <p>{{ highest_diff_source.system.fullname }}</p></div>
+            <div class="most-increase-from"><h6 class="font-09em">{% trans "Most of the increase was from" %}</h6>
+              <p class="font-1em">{{ highest_diff_source.system.fullname }}</p></div>
           </div>
 
         </div>
@@ -774,7 +775,7 @@
           <div class="col-xs-4 no-x-padding">
               <div class="row inner">
                 <div class="col-xs-4">
-                  <img src="{% static 'images/reports/icon_money.svg'  %}">
+                  <img src="{% static 'images/reports/icon_money.png'  %}">
                 </div>
                 <div class="col-xs-8">
                   <h3 class="used-money">${{ overnight.bill|floatformat:"0"|intcomma }}</h3>
@@ -831,11 +832,11 @@
         {{ d.title }}
         </div>
       </div>
-      <div class="row report-detail-body {% if forloop.last %}content-footer{% endif %} ">
+      <div class="row report-detail-body {% if forloop.last %}content-footer bottom-border-3{% endif %} ">
         <div class="col-xs-4 no-x-padding">
           <div class="row">
             <div class="col-xs-4">
-              <img src="{% static 'images/reports/icon_money.svg'  %}">
+              <img src="{% static 'images/reports/icon_money.png'  %}">
             </div>
             <div class="col-xs-8 no-x-padding">
               <h3 class="used-money">${{  d.overnight.bill|floatformat:"0"|intcomma }}</h3>

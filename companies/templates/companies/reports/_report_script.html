@@ -71,6 +71,10 @@ ngapp.controller("ReportController", function($scope) {
                 font: "bold 14px Arial",
                 color: function(e) {
                     return e.dataItem.color;
+                },
+                border: {
+                    width: 0,
+                    color: "white"
                 }
             },
             overlay: {
@@ -164,6 +168,10 @@ ngapp.controller("ReportController", function($scope) {
             labels: {
                 format: bar_date_format
             },
+            majorTicks: {
+                size: 0,
+                width: 0
+            },
             majorGridLines: {
                 visible: false
             }
@@ -198,7 +206,7 @@ ngapp.controller("ReportController", function($scope) {
         title: {
             text: "{% trans "When did we achieve our savings?" %}",
             color: "#354960",
-            font: "bold 1.1em sans-serif"
+            font: "bold 1.145em Arial"
         },
         legend: {
             position: "top"
@@ -266,7 +274,9 @@ ngapp.controller("ReportController", function($scope) {
                 visible: false
             },
             majorTicks: {
-                step: line_step
+                step: line_step,
+                size: 0,
+                width: 0
             },
             labels: {
                 step: line_step,
@@ -328,7 +338,9 @@ ngapp.controller("ReportController", function($scope) {
                 visible: false
             },
             majorTicks: {
-                step: line_step
+                step: line_step,
+                size: 0,
+                width: 0
             },
             labels: {
                 step: line_step,
@@ -468,11 +480,14 @@ $(document).ready(function()  {
 
     // for weekday report
     var isNotConcernFunc = null;
-    var report_start = new Date("{{ report_start.isoformat }}");
-    var report_end = new Date("{{ report_end.isoformat }}");
+    var report_start = new moment("{{ report_start.isoformat }}");
+    var report_start = report_start.tz('Asia/Hong_Kong');
 
-    var creport_start = new Date(report_start);
-    var creport_end = new Date(report_end);
+    var report_end = new moment("{{ report_end.isoformat }}");
+    var report_end = report_end.tz('Asia/Hong_Kong');
+
+    var creport_start = new moment(report_start);
+    var creport_end = new moment(report_end);
 
     var datesInWeek = [];
     if (report_type == 'week') {
