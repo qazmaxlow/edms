@@ -509,9 +509,9 @@ $(document).ready(function()  {
             datesInWeek.push(dateStr);
         }
 
-        creport_start.setDate(1);
-        creport_end.setMonth(creport_end.getMonth()+1);
-        creport_end.setDate(0);
+        creport_start.startOf('month');
+        creport_end.endOf('month');
+
         isNotConcernFunc = function(targetDt) {
             return (targetDt.day() == 0
                     || targetDt.day() == 6
