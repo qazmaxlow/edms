@@ -631,11 +631,11 @@ $(function() {
                         overflow: "never"
                     },
                     {
-                        template: '<div ng-show="custom_time"><input kendo-date-picker="report_date_start" style="width: 220px;" k-on-change="on_start_date_selected(kendoEvent);on_custom_date_selected(kendoEvent)" k-options="customStartDateOptions" k-value="default_custom_start_date" ></div>',
+                        template: '<div ng-show="custom_time"><input ng-click="datepicker_on_clicked($event)" kendo-date-picker="report_date_start" style="width: 220px;" k-on-change="on_start_date_selected(kendoEvent);on_custom_date_selected(kendoEvent)" k-options="customStartDateOptions" k-value="default_custom_start_date" ></div>',
                         overflow: "never"
                     },
                     {
-                        template: '<div ng-show="custom_time"><input kendo-date-picker="report_date_end" style="width: 220px;" k-on-change="on_end_date_selected(kendoEvent);on_custom_date_selected(kendoEvent)" k-options="customEndDateOptions" k-value="default_custom_end_date" ></div>',
+                        template: '<div ng-show="custom_time"><input ng-click="datepicker_on_clicked($event)" class="match-my-bill-input" kendo-date-picker="report_date_end" style="width: 220px;" k-on-change="on_end_date_selected(kendoEvent);on_custom_date_selected(kendoEvent)" k-options="customEndDateOptions" k-value="default_custom_end_date" ></div>',
                         overflow: "never"
                     }
 
@@ -659,6 +659,14 @@ $(function() {
                 min: $scope.default_custom_start_date,
                 clickPopup: true
             };
+
+            $scope.datepicker_on_clicked = function($event) {
+                var kElm = $($event.target).data('kendoDatePicker');
+
+                if (kElm && kElm.options && kElm.options.clickPopup){
+                  kElm.open();
+                }
+            }; 
 
             $scope.on_start_date_selected = function(e) {
                 var startDate = $scope.report_date_start.value();
