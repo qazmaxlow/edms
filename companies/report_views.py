@@ -1042,9 +1042,9 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     weekends_last_same_period = sum([ g['lastSamePeriodWeekendInfo']['average'] for g in group_data])
     weekends_compare_same_period = None
     if weekends_last_same_period > 0 :
-        weekends_compare_same_period = float(weekends_last_same_period - weekends_average_usage)/weekends_last_same_period*100
+        weekends_compare_same_period = float(weekends_average_usage - weekends_last_same_period)/weekends_last_same_period*100
 
-    m['weekends_compare_same_period'] = weekends_compare_same_period
+    weekends_usage['same_period_compare_helper'] = CompareTplHepler(weekends_compare_same_period)
 
 
     m['weekends'] = weekends_usage

@@ -509,17 +509,17 @@
           </div>
           <div class="row item end">
                 <div class="col-xs-4">
-                  <img src="{% static weekday_same_period_compare_helper.change_icon_path %}">
+                  <img src="{% static weekends.same_period_compare_helper.change_icon_path %}">
                 </div>
                 <div class="col-xs-8">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
                   <p>{% trans "Compared to same period last year" %}</p>
-                  <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
-                    {{ weekday_same_period_compare_helper.text_desc }}
+                  <h3 class="{{ weekends.same_period_compare_helper.change_css_class }}">
+                    {{ weekends.same_period_compare_helper.text_desc }}
                   </h3>
                   {% else %}
-                  <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
-                    {{ weekday_same_period_compare_helper.text_desc }}
+                  <h3 class="{{ weekends.same_period_compare_helper.change_css_class }}">
+                    {{ weekends.same_period_compare_helper.text_desc }}
                   </h3>
                   <p>{% trans "Compared to same period last year" %}</p>
                   {% endifequal %}
@@ -604,11 +604,11 @@
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
                   <p>{% trans "Compared to same period last year" %}</p>
                   <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
-                    {{ weekday_same_period_compare_helper.text_desc }}
+                    {{ weekends.same_period_compare_helper.text_desc }}
                   </h3>
                   {% else %}
                   <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
-                    {{ weekday_same_period_compare_helper.text_desc }}
+                    {{ weekends.same_period_compare_helper.text_desc }}
                   </h3>
                   <p>{% trans "Compared to same period last year" %}</p>
                   {% endifequal %}
