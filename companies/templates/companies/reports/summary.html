@@ -30,6 +30,7 @@
 <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
 
 <script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
+<script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
 
 <!-- hack for combining bootstrap -->
@@ -642,7 +643,6 @@ $(function() {
             };
 
             $scope.monthSelectorOptions = {
-                format: 'MMMM yyyy',
                 select: "month",
                 clickPopup: true
             };
