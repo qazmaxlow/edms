@@ -597,7 +597,7 @@
         for(; idx < length; idx++) {
             if (idx > 0 && idx % cellsPerRow == 0) {
                 if (options.select=='quarter') {
-                    html += '</tr><tr role="row"><th class="quaterTh" style="color:black;">Q' + (idx+3)/3 + '</th>';
+                    html += '</tr><tr role="row"><th class="quarterTh" style="color:black;">Q' + (idx+3)/3 + '</th>';
                 }else{
                     html += '</tr><tr role="row">';
                 }
