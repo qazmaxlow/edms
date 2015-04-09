@@ -97,7 +97,7 @@ def ranking_data_view(request, system_code=None):
 
 
     grouped_readings = [{'name': info['name'], 'code': info.get('code', None), 'value': 0} for info in grouped_source_infos]
-    if ranking_type == RANKING_TYPE_TOTAL or ranking_type == RANKING_TYPE_PER_PERSON or ranking_type == 'per_sqroot':
+    if ranking_type == RANKING_TYPE_TOTAL or ranking_type == RANKING_TYPE_PER_PERSON or ranking_type == 'per_sqfoot':
         for source_id, reading_val in sources_sum_info.items():
             target_group = grouped_readings[source_group_map[source_id]]
             target_group['value'] += reading_val
