@@ -35,7 +35,13 @@ iframe {
 }
 
 .k-icon.k-i-close {
-    background: url("../images/reports/closeButton-popup.png") no-repeat scroll center !important;
+    background: url("../images/reports/closeButton-popup.png") no-repeat scroll top !important;
+    height: 24px;
+    width: 24px;
+}
+
+.k-state-hover .k-icon.k-i-close {
+    background-position: bottom !important;
 }
 
 .k-overlay {
