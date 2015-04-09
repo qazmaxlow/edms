@@ -444,6 +444,9 @@ html .km-pane-wrapper .k-header {
 .k-calendar .quarterTh {
   text-align: center;
 }
+.k-calendar .k-content th:not(.quarterTh) {
+  text-align: right;
+}
 .k-calendar .k-nav-fast.k-state-hover {
   text-decoration: none;
   color: #2e2e2e;
