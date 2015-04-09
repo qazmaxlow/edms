@@ -240,7 +240,7 @@ ngapp.controller("ReportController", function($scope) {
                 parse:function (response) {
                     $.each(response, function (idx, elem) {
                         if (elem.datetime && typeof elem.datetime === "string") {
-                            elem.datetime = kendo.parseDate(elem.datetime, "yyyy-MM-ddTHH:mm:ssZ");
+                            elem.datetime = kendo.parseDate(elem.datetime);
                             if (elem.type == "last") {
                                 shift_series_date(elem);
                             }
