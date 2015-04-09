@@ -228,7 +228,8 @@ function finishReceiveRankData(data) {
     var barBoundValue = maxValue*1.1;
 
     if (ranking.currentRankingType === RANKING_TYPE_TOTAL
-        || ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
+        || ranking.currentRankingType === RANKING_TYPE_PER_PERSON
+        || ranking.currentRankingType == 'per_sqfoot') {
         var templateSelector = '#total-rank-template';
     } else if (ranking.currentRankingType === RANKING_TYPE_PERCENT) {
         var templateSelector = '#percent-rank-template';
@@ -269,7 +270,8 @@ function finishReceiveRankData(data) {
         };
 
         if (ranking.currentRankingType === RANKING_TYPE_TOTAL
-            || ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
+            || ranking.currentRankingType === RANKING_TYPE_PER_PERSON
+            || ranking.currentRankingType == 'per_sqfoot') {
 
             var valueText = Utils.formatWithCommas(Utils.fixedDecBaseOnVal(item.value));
             if (ranking.currentUnit.isSuffix) {
@@ -279,6 +281,9 @@ function finishReceiveRankData(data) {
             }
             if (ranking.currentRankingType === RANKING_TYPE_PER_PERSON) {
                 valueText += '<span>{% trans "/person" %}</span>';
+            }
+            else if (ranking.currentRankingType == 'per_sqfoot') {
+                valueText += '<span>/ft<sup style="vertical-align:super">2</sup></span>';
             }
 
             var meterWidth = item.value/barBoundValue*100;
@@ -556,6 +561,7 @@ $(function() {
         <div class="panel-header-right-menu">
             <h3 ranking-type='percent'>{% blocktrans %}% Change{% endblocktrans %}</h3>
             <h3 ranking-type='per_person'>{% trans "Per person" %}</h3>
+            <h3 ranking-type="per_sqfoot">{% trans "Per square foot" %}</h3>
             <h3 ranking-type='total'>{% trans "Total" %}</h3>
             <h3 class='sort-by-btn'><span id="sort-by-text">{% trans "Sort by" %}</span> &nbsp;&nbsp; &#9662;</h3>
             <span style='clear: both;'></span>
