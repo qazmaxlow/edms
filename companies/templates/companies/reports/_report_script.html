@@ -209,7 +209,7 @@ ngapp.controller("ReportController", function($scope) {
 
     var line_date_formats = { days: 'ddd'};
     if (report_type == 'year') {
-        line_date_formats = { days: 'M/d'};
+        line_date_formats = { months: 'd MMM'};
     } else if (report_type == 'month'){
         line_date_formats = { days: ' d'};
     }
