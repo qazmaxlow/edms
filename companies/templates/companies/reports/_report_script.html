@@ -60,11 +60,10 @@ ngapp.controller("ReportController", function($scope) {
     };
     {% endfor %}
 
-
     $.each(cg_ds, function(idx, ds) {
         set_serie_date(ds.current);
         set_serie_date(ds.last);
-        $.each(ds.current, function(idx, elem) {shift_series_date(elem)});
+        $.each(ds.last, function(idx, elem) {shift_series_date(elem)});
     });
     $scope.cgDatas = cg_ds;
 
@@ -199,7 +198,6 @@ ngapp.controller("ReportController", function($scope) {
     };
 
     var powers = {{ compare_series|safe }};
-
     var line_step = 2;
     if (report_type == 'year') {
         line_step = 30;
