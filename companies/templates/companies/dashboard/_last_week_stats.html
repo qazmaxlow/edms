@@ -1,0 +1,203 @@
+<div class="widget-container">
+    <div class="widget-panel row">
+        <div class="widget-title col-sm-7">Last Week Stats</div>
+        <div class="widget-toggle col-sm-5">
+            <div class="pull-right">
+                <button id="day_button_{{widget_id}}" class="toggle-primary toggle-button button-left">Day</button>
+                <button id="night_button_{{widget_id}}" class="toggle-button button-right">Night</button>
+            </div>
+        </div>
+    </div>
+    <div class="widget-content row">
+        <div class="widget-message">
+            <div class='col-sm-6 left-box'>
+                <h2 class="number-text widget-font">$2,588</h2>
+                <div class="clearfix"></div>
+                <span class="description widget-font">average Weekday</span>
+            </div>
+            <div class='col-sm-6 right-box'>
+                <h2 class="number-text widget-font">3.5</h2>
+                <h3 class="percent-text widget-font">%</h2>
+                <h4 class="compare-text widget-font">more</h4>
+                <div class="clearfix"></div>
+                <span class="description widget-font">than two weeks ago</span>
+            </div>
+        </div>
+        <div class="widget-graph">
+            <div class="k-content">
+                <div id="chart_{{widget_id}}"></div>
+            </div>
+        </div>
+    </div>
+    <style>
+        h2.number-text {
+            float: left;
+            font-weight: bold;
+            font-size: 1.5em;
+            margin: 5px 0px 0px 0px;
+        }
+
+        h3.percent-text {
+            float: left;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin: 10px 0px 0px 2px;
+        }
+
+        h4.compare-text {
+            float: left;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin: 10px 0px 0px 5px;
+        }
+
+        h2.widget-font, h3.widget-font, h4.widget-font, span.widget-font {
+            font-family: 'Muli', sans-serif;
+        }
+
+        span.description {
+            float: :left;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+    </style>
+    <script>
+        var ngapp = angular.module("Entrak", [ "kendo.directives" ]);
+
+        var day_usage = [
+            {
+                "day": "Mon",
+                "value": 4.9
+            },
+            {
+                "day": "Tue",
+                "value": 5.9
+            },
+            {
+                "day": "Wed",
+                "value": 5.3
+            },
+            {
+                "day": "Thu",
+                "value": 1.5
+            },
+            {
+                "day": "Fri",
+                "value": 8.2
+            }
+
+        ];
+
+        var night_usage = [
+            {
+                "day": "Mon",
+                "value": 4.9
+            },
+            {
+                "day": "Tue",
+                "value": 5.9
+            },
+            {
+                "day": "Wed",
+                "value": 5.3
+            },
+            {
+                "day": "Thu",
+                "value": 1.5
+            },
+            {
+                "day": "Fri",
+                "value": 8.2
+            },
+            {
+                "day": "Sat",
+                "value": 6.1
+            },
+            {
+                "day": "Sun",
+                "value": 4.6
+            }
+
+        ];
+
+        function createChart{{widget_id}}() {
+            $("#chart_{{widget_id}}").kendoChart({
+                dataSource: {
+                    data: day_usage
+                },
+                chartArea: {
+                    height: 230,
+                    margin: 15,
+                    background: "#FCFCFC"
+                },
+                seriesDefaults: {
+                    type: "area",
+                    area: {
+                        line: {
+                            style: "smooth"
+                        }
+                    }
+                },
+                series: [{
+                    markers: {visible: true},
+                    field: "value",
+                    color: "#84919D"
+                }],
+                valueAxis: {
+                    labels: {
+                        format: "{0}",
+                        font: "14px muli",
+                    },
+                    line: {
+                        visible: false
+                    },
+                    name: "HKD",
+                    title: {
+                        text: "HKD",
+                        font: "14px muli",
+                    }
+                },
+                categoryAxis: {
+                    field: "day",
+                    majorGridLines: {
+                        visible: false
+                    },
+                    labels: {
+                        font: "14px muli",
+                    },
+                },
+                tooltip: {
+                    visible: true,
+                    format: "{0}%",
+                    template: "#= value #",
+                    background: "#EFEFEF",
+                    border: {
+                        color: "#333",
+                        width: 2
+                    },
+                }
+            });
+        };
+
+        function show_day_usage_{{widget_id}}(){
+            $("#night_button_{{widget_id}}").removeClass("toggle-primary");
+            $("#day_button_{{widget_id}}").addClass("toggle-primary");
+            var chart = $("#chart_{{widget_id}}").data("kendoChart");
+            chart.dataSource.data(day_usage);
+        }
+
+        function show_night_usage_{{widget_id}}(){
+            $("#day_button_{{widget_id}}").removeClass("toggle-primary");
+            $("#night_button_{{widget_id}}").addClass("toggle-primary");
+            var chart = $("#chart_{{widget_id}}").data("kendoChart");
+            chart.dataSource.data(night_usage);
+        }
+
+        $(document).ready(function(){
+            createChart{{widget_id}}();
+            $("#day_button_{{widget_id}}").click(show_day_usage_{{widget_id}});
+            $("#night_button_{{widget_id}}").click(show_night_usage_{{widget_id}});
+        });
+
+    </script>
+</div>
