@@ -200,7 +200,7 @@ ngapp.controller("ReportController", function($scope) {
     var powers = {{ compare_series|safe }};
     var line_step = 2;
     if (report_type == 'year') {
-        line_step = 30;
+        line_step = 31;
     } else if (report_type == 'week'){
         line_step = 1;
     } else if (report_type == 'quarter'){
@@ -209,7 +209,7 @@ ngapp.controller("ReportController", function($scope) {
 
     var line_date_formats = { days: 'ddd'};
     if (report_type == 'year') {
-        line_date_formats = { months: 'd MMM'};
+        line_date_formats = { days: 'MMM'};
     } else if (report_type == 'month'){
         line_date_formats = { days: ' d'};
     }
