@@ -207,6 +207,10 @@ body {
 body {-webkit-print-color-adjust: exact;}
 }
 
+.sub-graph-container>div:nth-child(odd){
+    border-right: #e0e0e0 solid 1px;
+}
+
 .sub-graph-title {
     background-color: #68C0D4;
     color: white;
