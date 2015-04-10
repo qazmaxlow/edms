@@ -473,6 +473,8 @@ $(function() {
             $scope.report_type = "month";
             $scope.pass_week = new Date("{{ today_date.isoformat }}");
             $scope.pass_week.setDate($scope.pass_week.getDate()-7);
+            $scope.default_date = new Date("{{ today_date.isoformat }}");
+            $scope.default_date.setMonth($scope.pass_week.getMonth()-1);
 
             $scope.default_date = new Date("{{ default_date.isoformat }}");
             $scope.default_custom_end_date = new Date("{{ default_custom_end_date.isoformat }}");
@@ -480,16 +482,16 @@ $(function() {
             $scope.get_report_type_name = function() {
                 var report_type_name;
                 if ($scope.report_type == 'week') {
-                    report_type_name = '{% trans "Week total" %}';
+                    report_type_name = '{% trans "Week Total" %}';
                 }
                 else if ($scope.report_type == 'month' || $scope.report_type == 'custom') {
-                    report_type_name = '{% trans "Month total" %}';
+                    report_type_name = '{% trans "Month Total" %}';
                 }
                 else if ($scope.report_type == 'quarter') {
-                    report_type_name = '{% trans "Quarter total" %}';
+                    report_type_name = '{% trans "Quarter Total" %}';
                 }
                 else if ($scope.report_type == 'year') {
-                    report_type_name = '{% trans "Year total" %}';
+                    report_type_name = '{% trans "Year Total" %}';
                 }
 
                 return report_type_name
@@ -584,6 +586,20 @@ $(function() {
                 var selected = $scope.dateToolbar.getSelectedFromGroup('time');
                 $scope.report_type = selected.attr('id');
 
+                if ($scope.report_type == 'month') {
+                  $scope.default_date = new Date("{{ today_date.isoformat }}");
+                  $scope.default_date.setMonth($scope.pass_week.getMonth()-1);
+                } else if ($scope.report_type == 'week') {
+                  $scope.default_date = new Date("{{ today_date.isoformat }}");
+                  $scope.default_date.setDate($scope.pass_week.getDate()-7);
+                } else if ($scope.report_type == 'quarter') {
+                  $scope.default_date = new Date("{{ today_date.isoformat }}");
+                  $scope.default_date.setMonth($scope.pass_week.getMonth()-3);
+                } else if ($scope.report_type == 'year') {
+                  $scope.default_date = new Date("{{ today_date.isoformat }}");
+                  $scope.default_date.setFullYear($scope.pass_week.getFullYear()-1);
+                }
+
                 var start_date, end_date;
 
                 if ($scope.report_type == 'custom') {
@@ -627,7 +643,7 @@ $(function() {
                       ]
                     },
                     {
-                        template: '<div ng-show="!custom_time"><input kendo-et-date-picker="report_date" style="width: 250px;" k-on-change="on_date_selected(kendoEvent)" k-options="monthSelectorOptions" k-rebind="monthSelectorOptions" k-value="pass_week" ></div>',
+                        template: '<div ng-show="!custom_time"><input id="et-datepicker" kendo-et-date-picker="report_date" style="width: 250px;" k-on-change="on_date_selected(kendoEvent)" k-options="monthSelectorOptions" k-rebind="monthSelectorOptions" k-value="default_date" ></div>',
                         overflow: "never"
                     },
                     {

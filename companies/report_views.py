@@ -72,7 +72,7 @@ def get_total_cost(source_ids, start_dt, end_dt, date_type):
         datetime__lt=end_dt)
     if month_readings:
         return sum([get_unitrate(r.source_id, r.datetime).rate*r.value for r in month_readings])
-
+        
 
 @permission_required()
 def summary_ajax(request, system_code):
@@ -785,11 +785,12 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         g['compare_same_period_helper'] = CompareTplHepler(g['compare_same_period'])
 
         for ts, val in current_readings.items():
-            combined_readings_g[ts] = g
             if ts in combined_readings:
                 combined_readings[ts] += val
+                combined_readings_g[ts].append((g,val))
             else:
                 combined_readings[ts] = val
+                combined_readings_g[ts] = []
 
         for ts, val in overnight_readings.items():
             combined_overnight_readings_g[ts] = g
@@ -932,7 +933,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
 
     if we_highest_datetime:
-        m['weekend_highest_g'] = combined_readings_g[we_highest_datetime]
+        m['weekend_highest_g'], _v = sorted(combined_readings_g[we_highest_datetime], key=lambda x: x[1])[-1]
         we_highest_datetime = datetime.datetime.fromtimestamp(we_highest_datetime, pytz.utc)
 
     m['weekend_highest_usage'] = we_highest_usage
