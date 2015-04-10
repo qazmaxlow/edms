@@ -186,6 +186,7 @@ class System(models.Model):
     city = models.CharField(max_length=200, default='hk')
     timezone = models.CharField(max_length=50, default=SOURCE_TZ_HK)
     population = models.PositiveIntegerField(default=1)
+    area_sqfoot = models.PositiveIntegerField(blank=True, null=True)
     first_record = models.DateTimeField()
     night_time_start = models.TimeField(default=DEFAULT_NIGHT_TIME_START)
     night_time_end = models.TimeField(default=DEFAULT_NIGHT_TIME_END)
