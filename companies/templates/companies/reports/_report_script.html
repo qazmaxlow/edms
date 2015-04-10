@@ -525,7 +525,8 @@ $(document).ready(function()  {
         }
 
         creport_start.startOf('month');
-//        creport_end.endOf('month');
+        if (report_start.month() == report_end.month())
+            creport_end.endOf('month');
 
         isNotConcernFunc = function(targetDt) {
             return (targetDt.day() == 0
