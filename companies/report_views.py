@@ -516,8 +516,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     m['report_type'] = report_type
     report_type_name = report_type
     report_date_text = u"{0} - {1}".format(
-        DateFormat(report_date).format("d M Y"),
-        DateFormat(report_end_date).format("d M Y")
+        DateFormat(report_date).format("j M Y"),
+        DateFormat(report_end_date).format("j M Y")
     )
     if report_type == 'month':
         report_type_name = _('month')
