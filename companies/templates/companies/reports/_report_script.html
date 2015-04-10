@@ -201,6 +201,17 @@ ngapp.controller("ReportController", function($scope) {
         line_step = 3;
     }
 
+    var line_labels = {
+        step: line_step,
+        dateFormats: line_date_formats
+    };
+    if (report_type == 'quarter') {
+        line_labels = {
+            step: line_step,
+            template: "#=kendo.toString(value, 'MMM')+'/'+kendo.toString(new Date(2000, value.getMonth()-3, 1), 'MMM')#"
+        };
+    }
+
     $scope.lineOptions = {
         width: 1000,
         title: {
@@ -279,10 +290,7 @@ ngapp.controller("ReportController", function($scope) {
                 size: 0,
                 width: 0
             },
-            labels: {
-                step: line_step,
-                dateFormats: line_date_formats
-            }
+            labels: line_labels
         }
 
     };
@@ -340,10 +348,7 @@ ngapp.controller("ReportController", function($scope) {
                 size: 0,
                 width: 0
             },
-            labels: {
-                step: line_step,
-                dateFormats: line_date_formats
-            }
+            labels: line_labels
         }
 
     };
