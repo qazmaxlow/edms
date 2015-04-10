@@ -204,7 +204,7 @@ ngapp.controller("ReportController", function($scope) {
             visible: true,
             template: "#= dataItem.month #: #= kendo.toString(value, 'n0') #"
         }
-    };console.log(JSON.stringify($scope.barOptions.dataSource.data));
+    };
 
     var powers = {{ compare_series|safe }};
     var line_step = 2;
