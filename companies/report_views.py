@@ -157,7 +157,7 @@ def summary_ajax(request, system_code):
         day_source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingDay, start_dt, end_dt)
         if day_source_readings:
             weekday_costs = [(source_id, weekday_cost_avg(source_id, sr) ) for source_id, sr in day_source_readings.items()]
-            return sum([ c for s, c in weekday_costs if c is not None])
+            return sum([ get_unitrate(s, start_dt).rate*c for s, c in weekday_costs if c is not None])
 
     weekday_cost = get_weekdays_cost(source_ids, start_dt, end_dt)
     # weekday_money_sum = sum([ c for s, c in weekday_costs if c is not None])
