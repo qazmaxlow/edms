@@ -94,13 +94,12 @@
                       {% endif %}
                     {% endifequal %}
                     {{ co2_in_car|floatformat:"0"|intcomma }}
-                    {% if report_type == 'year' %}<br>{% endif %}
                     {% trans "cars" %}</span><br>
                     <span id="car-impact-subtext" class="basic-info-col-subtext">
                       {% if is_saving %}
-                      {% trans "taken off the road for a month" %}
+                      {% trans "off the road for a month" %}
                       {% else %}
-                      {% trans "more on the road for a month" %}
+                      {% trans "on the road for a month" %}
                       {% endif %}</span>
                 </div>
             </div>
@@ -111,19 +110,19 @@
                     {% ifequal LANGUAGE_CODE 'zh-tw' %}
                     <span id="forest-impact-subtext" class="basic-info-col-subtext">
                       {% if is_saving %}
-                      {% trans "of tropical rainforest protected" %}
+                      {% trans "of rainforest protected" %}
                       {% else %}
-                      {% trans "of tropical rainforest cut down" %}
+                      {% trans "of rainforest cut down" %}
                       {% endif %}
                     </span>
-                    <span id="forest-impact">{{ co2_in_forest|floatformat:"0"|intcomma }}{% if report_type == 'year' %}<br>{% endif %}{% trans "m<sup>2</sup>" %}</span>
+                    <span id="forest-impact">{{ co2_in_forest|floatformat:"0"|intcomma }}{% trans "m<sup>2</sup>" %}</span>
                     {% else %}
-                    <span id="forest-impact">{{ co2_in_forest|floatformat:"0"|intcomma }}{% if report_type == 'year' %}<br>{% endif %}m<sup>2</sup></span><br>
+                    <span id="forest-impact">{{ co2_in_forest|floatformat:"0"|intcomma }}m<sup>2</sup></span><br>
                     <span id="forest-impact-subtext" class="basic-info-col-subtext">
                       {% if is_saving %}
-                      of tropical rainforest protected
+                      of rainforest protected
                       {% else %}
-                      of tropical rainforest cut down
+                      of rainforest cut down
                       {% endif %}
                     </span>
                     {% endifequal %}
@@ -133,16 +132,14 @@
             <div class="bottom-margin-20">
                 <img src="{% static 'images/report/panda.png' %}">
                 <div class="basic-info-text-container">
+                    <span id="panda-impact">{{ co2_in_elephant|floatformat:"0"|intcomma }}{% trans " aircons" %}</span>
                     <span id="panda-impact-subtext" class="basic-info-col-subtext">
                       {% if is_saving %}
-                      {% trans "Reduced CO<sub>2</sub> emissions equal to the weight of" %}
+                      {% trans "turned off for one day" %}
                       {% else %}
-                      {% trans "Extra CO<sub>2</sub> emissions equal to the weight of" %}
+                      {% trans "turned on for one day" %}
                       {% endif %}
                     </span>
-                    <span id="panda-impact">{{ co2_in_elephant|floatformat:"0"|intcomma }}
-                      {% if report_type == 'year' %}<br>{% endif %}
-                      {% trans " pandas" %}</span>
                 </div>
             </div>
         </div>
