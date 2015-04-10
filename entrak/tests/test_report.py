@@ -6,7 +6,7 @@ from django.core.files.base import ContentFile
 from django.test import TestCase
 
 from user.models import EntrakUser
-from system.models import System
+from system.models import System,DEFAULT_NIGHT_TIME_START,DEFAULT_NIGHT_TIME_END
 from egauge.models import *
 from egauge.manager import *
 from unit.models import *
@@ -53,7 +53,7 @@ class ReportSummaryTestCase(TestCase):
                 continue
             srm=SourceReadingMin(source_id=sources.id,
                                  datetime=testDatetime,
-                                 value=5*random.random()
+                                 value=15*random.random()
                                  )
             srm.save()
             i+=1
@@ -109,7 +109,7 @@ class ReportSummaryTestCase(TestCase):
         response = self.client.get('/ettestsys01/report/summary/ajax/?start_date='+start_date+'&end_date='+end_date+'&compare_type=month')
         string = response.content
         json_obj = json.loads(string)
-        formated_total_cost_in_ajax = int(json_obj['formated_total_cost'][1:])
+        formated_total_cost_in_ajax = int(json_obj['formated_total_cost'][1:].replace(",", ""))
         actual_source_id = Source.objects.get(name='testSource').id
         actual_total_cost = 0
         for j in SourceReadingMin.objects.filter(source_id=actual_source_id):
@@ -128,10 +128,31 @@ class ReportSummaryTestCase(TestCase):
         response = self.client.get('/ettestsys01/report/summary/ajax/?start_date='+start_date+'&end_date='+end_date+'&compare_type=month')
         string = response.content
         json_obj = json.loads(string)
-        formated_weekday_cost_in_ajax = int(json_obj['formated_weekday_cost'][1:])
+        formated_weekday_cost_in_ajax = int(json_obj['formated_weekday_cost'][1:].replace(",", ""))
         actual_source_id = Source.objects.get(name='testSource').id
         actual_total_cost = 0
         for j in SourceReadingMin.objects.filter(source_id=actual_source_id):
             actual_total_cost += j.value
         actual_formated_weekday_cost = round(actual_total_cost*1.45)
         self.assertEqual(formated_weekday_cost_in_ajax,actual_formated_weekday_cost)
+        
+    def test_overnight_cost(self):
+        self.client.post('/ettestsys01/login/', {
+            'username': 'ettester01',
+            'password': '00000',
+        })
+        current_date=datetime.datetime.now().date()
+        start_date=current_date.replace(day=1).strftime("%Y-%m-%d")
+        end_date=current_date.replace(day=calendar.monthrange(current_date.year, current_date.month)[1]).strftime("%Y-%m-%d")
+        response = self.client.get('/ettestsys01/report/summary/ajax/?start_date='+start_date+'&end_date='+end_date+'&compare_type=month')
+        string = response.content
+        json_obj = json.loads(string)
+        print json_obj
+        formated_overnight_cost_in_ajax = int(json_obj['formated_overnight_avg_cost'][1:].replace(",", ""))
+        actual_source_id = Source.objects.get(name='testSource').id
+        actual_total_cost = 0
+        for j in SourceReadingMin.objects.filter(source_id=actual_source_id):
+            if (j.datetime.time()>DEFAULT_NIGHT_TIME_START or j.datetime.time()<DEFAULT_NIGHT_TIME_END):
+                actual_total_cost += j.value
+        actual_formated_overnight_cost = round(actual_total_cost*1.45/calendar.monthrange(current_date.year,current_date.month)[1])
+        self.assertEqual(formated_overnight_cost_in_ajax,actual_formated_overnight_cost)
