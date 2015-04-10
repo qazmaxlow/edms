@@ -24,11 +24,10 @@
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/kendo.entrak.theme.css' %}" rel="stylesheet">
-<link href='http://fonts.googleapis.com/css?family=Muli:300,300italic,400,400italic' rel='stylesheet' type='text/css'>
+
 <!-- Because now using jquery v1.11 -->
 <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
 <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
-
 <script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
 
@@ -56,13 +55,13 @@
 
     .widget-container .widget-panel {
         border-radius: 8px 8px 0 0;
-        background-color: #97CED9;
-        -webkit-box-shadow: -6px 6px 10px 0px #e8e8e8;
+        background-color: #9BCEDA;
+        -webkit-box-shadow: -6px 6px 10px 0px #E8E8E8;
     }
 
     .widget-title {
         color: #FFF;
-        font-family: 'Muli', sans-serif;
+        font-family: 'ITCAvantGardeStd-Bk', sans-serif;
         font-size: 1.0em;
         line-height: 30px;
         font-weight: bold;
@@ -72,7 +71,7 @@
     }
 
     .widget-toggle {
-        font-family: 'Muli', sans-serif;
+        font-family: 'ITCAvantGardeStd-Bk', sans-serif;
         font-size: 1.0em;
         font-weight: bold;
         padding-top: 5px;
@@ -101,15 +100,19 @@
         background-color: #E5E8E9;
     }
 
+    .widget-graph {
+        margin-top: -5px;
+    }
+
     .toggle-button {
-        color: #787878;
+        color: #9D9D9D;
         border: none;
-        height: 20px;
         /*border-color: #dadada;*/
         background-color: #fff;
         min-width: 50px;
         line-height: 20px;
-        font-size: 0.8em;
+        font-size: 0.929em;
+        font-weight: normal;
         border-radius: 6px;
         -webkit-box-shadow: none;
         -moz-box-shadow: none;
@@ -122,8 +125,9 @@
     .toggle-primary {
         color: #eee;
         /*border-color: #67cd18;*/
+        font-weight: bold;
         background-image: none;
-        background-color: #57bd08;
+        background-color: #74C62B;
 
     }
 

@@ -14,7 +14,7 @@ from dateutil.relativedelta import relativedelta
 from mongoengine import connection, Q as MQ
 
 from egauge.manager import SourceManager
-from egauge.models import Source, SourceReadingHour
+from egauge.models import Source, SourceReadingHour, SourceReadingDay
 from entrak.settings import BASE_DIR, LANG_CODE_EN, LANG_CODE_TC
 from holiday.models import CityHoliday, Holiday
 from unit.models import UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
@@ -28,39 +28,12 @@ DEFAULT_NIGHT_TIME_END = datetime.time(7)
 
 class ReportManager(models.Manager):
 
-    def get_unitrate_by_source_id(source_id, datetime):
-
-        source = Source.objects(id=str(source_id)).first()
-        system = System.objects.get(code=source.system_code)
-        unit_infos = json.loads(system.unit_info)
-        money_unit_code = unit_infos['money']
-        money_unit_rates = UnitRate.objects.filter(category_code='money', code=unit_infos['money'])
-        dt = datetime
-        ur = money_unit_rates.filter(effective_date__lte=dt).order_by('-effective_date').first()
-        return ur
-
-    def _average_weekday_cost(source_id, source_reading):
-
-        total_day = 0
-        total_val = 0
-
-        all_holidays = current_system.get_all_holidays()
-
-        for t, v in source_reading.items():
-            dt = datetime.datetime.fromtimestamp(t, current_system_tz)
-            if dt.weekday() <= 4 or dt.date() in all_holidays:
-                # total_val += get_unit_rate(source_id, t).rate * v
-                total_val += v
-                total_day += 1
-
-        if total_day > 0:
-            return total_val / float(total_day)
-
     def weekday_cost_by_day(self, current_system, start_dt, end_dt):
 
         sources = SourceManager.get_sources(current_system)
         source_ids = [str(source.id) for source in sources]
         current_system_tz = pytz.timezone(current_system.timezone)
+        all_holidays = current_system.get_all_holidays()
 
         if isinstance(start_dt, str):
             start_dt = dateparse.parse_date(start_dt)
@@ -77,33 +50,42 @@ class ReportManager(models.Manager):
         for ur in UnitRate.objects.filter(category_code='money', code=unit_infos['money']).order_by('-effective_date'):
             money_unit_rates.append({"date": ur.effective_date.astimezone(current_system_tz).strftime("%Y-%m-%d"), "rate": ur.rate})
 
-        weekday_costs = {}
-        readings = SourceReadingHour.objects(source_id__in=source_ids, datetime__gte=start_dt, datetime__lt=(end_dt + relativedelta(days=1)))
-        for reading in readings:
+        weekday_costs = []
+        total_values = 0
+        total_days = 0
 
-            dt = datetime.datetime.fromtimestamp(t, current_system_tz)
-            if dt.weekday() <= 4 or dt.date() in all_holidays:
-                # total_val += get_unit_rate(source_id, t).rate * v
-                total_val += v
-                total_day += 1
+        current_db_conn = connection.get_db()
+        readings = current_db_conn.source_reading_day.aggregate([
+                { "$match":
+                    {
+                        "source_id": {"$in": [ObjectId(s) for s in source_ids]},
+                        "datetime": {"$gte": start_dt, "$lt": end_dt + relativedelta(days=1)}
+                    }
+                },
+                { "$group":
+                    {
+                        "_id": "$datetime",
+                        "value": {"$sum": "$value"}
+                    }
+                }
+            ])
+        # readings = SourceReadingDay.objects(source_id__in=source_ids, datetime__gte=start_dt, datetime__lt=(end_dt + relativedelta(days=1)))
+        for reading in readings["result"]:
 
-            if total_day > 0:
-                return total_val / float(total_day)
+            reading_datetime = reading["_id"].astimezone(current_system_tz)
 
-            reading_datetime = reading.datetime.astimezone(current_system_tz)
-            if dt is not None:
-                key = dt.strftime("%Y-%m-%d")
+            if reading_datetime.weekday() <= 4 and reading_datetime.date() not in all_holidays:
+
                 for ur in money_unit_rates:
                     if reading_datetime.strftime("%Y-%m-%d") >= ur["date"]:
                         rate = ur["rate"]
                         break
 
-                if key in weekday_costs:
-                    weekday_costs[key] += reading.value*rate
-                else:
-                    weekday_costs[key] = reading.value*rate
+                weekday_costs.append({'date':reading_datetime.strftime("%Y-%m-%d"), 'weekday':reading_datetime.strftime("%a"), 'value':reading["value"]*rate})
+                total_days += 1
+                total_values += reading["value"]*rate
 
-        return weekday_costs
+        return {'data': weekday_costs, 'total': total_values, 'number_of_days': total_days}
 
     def overnight_cost_by_day(self, current_system, start_dt, end_dt):
 
@@ -147,6 +129,9 @@ class ReportManager(models.Manager):
 
         # readings = SourceReadingHour.objects(source_id__in=source_ids, datetime__gte=start_dt, datetime__lt=(end_dt + relativedelta(days=1)))
 
+        total_values = 0
+        total_days = 0
+
         for reading in readings["result"]:
 
             dt = current_system.validate_overnight(reading["_id"]["datetime"])
@@ -163,11 +148,14 @@ class ReportManager(models.Manager):
                     costs[key] += reading["value"]*rate
                 else:
                     costs[key] = reading["value"]*rate
+                    total_days += 1
+
+                total_values += reading["value"]*rate
 
         overnight_costs = []
         for k,v in OrderedDict(sorted(costs.items())).items():
             overnight_costs.append({'date':k.split(" ")[0], 'weekday':k.split(" ")[1], 'value':v})
-        return overnight_costs
+        return {'data': overnight_costs, 'total': total_values, 'number_of_days': total_days}
 
 
 class System(models.Model):

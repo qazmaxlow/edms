@@ -136,13 +136,13 @@ $(function() {
     <!-- Left Sidebar Main -->
     <div id="menu">
 
-        <!-- User's Company Logo -->            
+        <!-- User's Company Logo -->
         <div id="user-logo">
             <div class="logo-circle-bound" style="background-image: url('{{systems.0.logo.url}}');">
             </div>
             <img src="{% static 'images/user-logo-bg.png' %}">
         </div>
-                
+
         <!-- User's Company Name -->
         <h2 id="company">{{systems.0|get_system_full_name:LANGUAGE_CODE|upper}}</h2>
 
@@ -183,12 +183,12 @@ $(function() {
             </ul>
         </nav>
 
-    </div>  
+    </div>
     <!-- Left Sidebar Main End -->
-    
+
     <!-- Main Content -->
     <div class="right-content">
-        
+
         <!-- Blue Bar top -->
         <div class="blue-bar"></div>
 
@@ -202,7 +202,7 @@ $(function() {
           {% endif %}
 
 
-            
+
             <!-- Header Wording -->
             <div id="heading"><h1>{% block page_title %}{% endblock %}</h1></div>
             <div id="sub-heading"><h2>{% block page_subtitle %}{% endblock %}</h2></div>
@@ -222,7 +222,7 @@ $(function() {
 
         </div>
         <!-- Header End -->
-        
+
         <!-- Blue Bar bottom -->
         <div class="blue-bar"></div>
 
@@ -256,7 +256,7 @@ $(function() {
 {% get_current_language as LANGUAGE_CODE %}
 <footer class="site-footer">
     <p style="clear: both;"></p>
-    <p id="copyright">Copyright © En-trak Hong Kong Ltd 2013. All rights reserved.</p>
+    <p id="copyright">Copyright © En-trak Hong Kong Ltd 2015. All rights reserved.</p>
     <a><img id="entrak-logo" src="{% static 'images/powered-by-logo.png' %}"></a>
     <p class="footer-main"><a class="footer-link" href="{% url 'faq' system_code=systems.0.code %}">FAQ </a>
     <a class="footer-link" href="{% url 'general_settings' system_code=systems.0.code %}"> |  Settings</a>
