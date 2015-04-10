@@ -1068,7 +1068,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         elif report_type == 'quarter':
             formated_date = compare_past_date.strftime('%b')
         elif report_type == 'year':
-            formated_date = compare_past_date.strftime('%b')
+            formated_date = formats.date_format(compare_past_date, 'YEAR_FORMAT')
         elif report_type == 'custom':
             formated_date = compare_past_date.strftime('%b')
 
