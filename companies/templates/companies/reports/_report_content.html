@@ -253,7 +253,7 @@
         </div>
       </div>
       {% if forloop.counter|divisibleby:2 %}
-        </div><div class="row">
+        </div><div class="row {% if forloop.counter|divisibleby:7 or forloop.counter == 3 %}page-break-after{% endif %}">
       {% endif %}
 
       {% endfor %}
