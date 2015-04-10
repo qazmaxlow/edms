@@ -268,7 +268,13 @@ def summary_ajax(request, system_code):
             dr_sum = r.rate * SourceReadingHour.objects(conds, source_id__in=source_ids).sum('value')
             total_on_sum += dr_sum
 
-        return total_on_sum / (end_dt - start_dt).days
+        # dirty way to count number of days
+        total_day = (end_dt - start_dt).days
+        today = datetime.datetime.now(pytz.utc)
+        if end_dt > today:
+            total_day = (today - start_dt).days
+
+        return total_on_sum / total_day
 
 
     overnight_avg_cost = get_new_overnight_avg_cost(source_ids, start_dt, end_dt)
