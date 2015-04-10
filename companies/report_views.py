@@ -1160,15 +1160,12 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     if to_pdf:
         return PDFTemplateResponse(
             request=request,
-            # template='companies/reports/popup_report_pdf.html',
             template='companies/reports/report.html',
-            # template='foo.html',
             filename='report.pdf',
             context=m,
             # show_content_in_browser=False,
             cmd_options={
                 'page-size': 'A3',
-                "javascript-delay": 3000,
                 # 'quiet': '',
                 # 'margin-left': '18mm',
                 # 'page-size': 'A3',
