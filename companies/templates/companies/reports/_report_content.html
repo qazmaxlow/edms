@@ -341,7 +341,7 @@
               <p class="font-09em">{{ weekday_highest_datetime|date:"DATE_FORMAT" }}</p>
             </div>
             <div class="most-increase-from"><h6 class="font-09em">{% trans "Most of the increase was from" %}</h6>
-              <p class="font-1em">{{ highest_diff_source.system.fullname }}</p></div>
+              <p class="font-1em">{{ highest_diff_source.title }}</p></div>
           </div>
 
         </div>
@@ -549,7 +549,7 @@
               <p class="font-09em">{{ weekend_highest_datetime|date:"DATE_FORMAT" }}</p>
             </div>
             <div class="most-increase-from"><h6 class="font-09em">{% trans "Most of the increase was from" %}</h6>
-              <p class="font-1em">{{ highest_diff_source.system.fullname }}</p></div>
+              <p class="font-1em">{{ weekend_highest_g.title }}</p></div>
           </div>
 
         </div>
@@ -757,7 +757,7 @@
               <p class="font-09em">{{ overnight_highest_datetime|date:"DATE_FORMAT" }}</p>
             </div>
             <div class="most-increase-from"><h6 class="font-09em">{% trans "Most of the increase was from" %}</h6>
-              <p class="font-1em">{{ highest_diff_source.system.fullname }}</p></div>
+              <p class="font-1em">{{ overnight_highest_g.title }}</p></div>
           </div>
 
         </div>
