@@ -1059,7 +1059,19 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
     compare_past_datasource = []
     for su in sumup_usages:
-        formated_date = compare_past_date.strftime('%b')
+        if report_type == 'month':
+            formated_date = compare_past_date.strftime('%b')
+        elif report_type == 'week':
+            formated_date = u'{0} - {1}'.format(
+                formats.date_format(compare_past_date, 'MONTH_DAY_FORMAT'),
+                formats.date_format(compare_past_date_end, 'MONTH_DAY_FORMAT'))
+        elif report_type == 'quarter':
+            formated_date = compare_past_date.strftime('%b')
+        elif report_type == 'year':
+            formated_date = compare_past_date.strftime('%b')
+        elif report_type == 'custom':
+            formated_date = compare_past_date.strftime('%b')
+
         compare_past_datasource.append({
             'value': su,
             'month': compare_past_date.strftime('%b'),
