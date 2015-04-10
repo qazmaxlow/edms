@@ -1,3 +1,8 @@
+{% load i18n %}
+{% load entrak_extras %}
+{% load static %}
+{% load humanize %}
+
 <div class="widget-container">
     <div class="widget-panel row">
         <div class="widget-title col-sm-7">Last Week Stats</div>
@@ -11,7 +16,7 @@
     <div class="widget-content row">
         <div class="widget-message">
             <div class='col-sm-6 left-box'>
-                <h2 class="number-text widget-font">$2,588</h2>
+                <h2 class="number-text widget-font">${{ last_week_overnight_average|floatformat:"0"|intcomma }}</h2>
                 <div class="clearfix"></div>
                 <span class="description widget-font">average Weekday</span>
             </div>
@@ -66,59 +71,29 @@
 
         var day_usage = [
             {
-                "day": "Mon",
+                "weekday": "Mon",
                 "value": 4.9
             },
             {
-                "day": "Tue",
+                "weekday": "Tue",
                 "value": 5.9
             },
             {
-                "day": "Wed",
+                "weekday": "Wed",
                 "value": 5.3
             },
             {
-                "day": "Thu",
+                "weekday": "Thu",
                 "value": 1.5
             },
             {
-                "day": "Fri",
+                "weekday": "Fri",
                 "value": 8.2
             }
 
         ];
 
-        var night_usage = [
-            {
-                "day": "Mon",
-                "value": 4.9
-            },
-            {
-                "day": "Tue",
-                "value": 5.9
-            },
-            {
-                "day": "Wed",
-                "value": 5.3
-            },
-            {
-                "day": "Thu",
-                "value": 1.5
-            },
-            {
-                "day": "Fri",
-                "value": 8.2
-            },
-            {
-                "day": "Sat",
-                "value": 6.1
-            },
-            {
-                "day": "Sun",
-                "value": 4.6
-            }
-
-        ];
+        var night_usage = {{last_week_overnight_stats|safe}};
 
         function createChart{{widget_id}}() {
             $("#chart_{{widget_id}}").kendoChart({
@@ -158,7 +133,7 @@
                     }
                 },
                 categoryAxis: {
-                    field: "day",
+                    field: "weekday",
                     majorGridLines: {
                         visible: false
                     },
