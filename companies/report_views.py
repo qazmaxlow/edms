@@ -773,7 +773,10 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
     # this is combined current readings
     combined_readings = {}
+    combined_readings_g = {}
+
     combined_overnight_readings = {}
+    combined_overnight_readings_g = {}
 
 
     # for weekday
@@ -786,12 +789,14 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         g['compare_same_period_helper'] = CompareTplHepler(g['compare_same_period'])
 
         for ts, val in current_readings.items():
+            combined_readings_g[ts] = g
             if ts in combined_readings:
                 combined_readings[ts] += val
             else:
                 combined_readings[ts] = val
 
         for ts, val in overnight_readings.items():
+            combined_overnight_readings_g[ts] = g
             if ts in combined_overnight_readings:
                 combined_overnight_readings[ts] += val
             else:
@@ -929,7 +934,9 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     if only_weekend_readings:
         we_highest_datetime, we_highest_usage= sorted(only_weekend_readings, key=lambda x: x[1])[-1]
 
+
     if we_highest_datetime:
+        m['weekend_highest_g'] = combined_readings_g[we_highest_datetime]
         we_highest_datetime = datetime.datetime.fromtimestamp(we_highest_datetime, pytz.utc)
 
     m['weekend_highest_usage'] = we_highest_usage
@@ -944,6 +951,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         overnight_highest_datetime, overnight_highest_usage= sorted(only_overnight_readings, key=lambda x: x[1])[-1]
 
     if overnight_highest_datetime:
+        m['overnight_highest_g'] = combined_overnight_readings_g[overnight_highest_datetime]
         overnight_highest_datetime = datetime.datetime.fromtimestamp(overnight_highest_datetime, pytz.utc)
 
     m['overnight_highest_usage'] = overnight_highest_usage
