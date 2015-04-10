@@ -787,7 +787,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         for ts, val in current_readings.items():
             if ts in combined_readings:
                 combined_readings[ts] += val
-                combined_readings_g[ts].append((g,val))
+                combined_readings_g[ts].append((g,val-g['currentWeekendInfo']['average']))
             else:
                 combined_readings[ts] = val
                 combined_readings_g[ts] = []
