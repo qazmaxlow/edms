@@ -117,3 +117,21 @@ class ReportSummaryTestCase(TestCase):
         actual_formated_total_cost = round(actual_total_cost*1.45)
         self.assertEqual(formated_total_cost_in_ajax,actual_formated_total_cost)
         
+    def test_weekday_cost(self):
+        self.client.post('/ettestsys01/login/', {
+            'username': 'ettester01',
+            'password': '00000',
+        })
+        current_date=datetime.datetime.now().date()
+        start_date=current_date.replace(day=1).strftime("%Y-%m-%d")
+        end_date=current_date.replace(day=calendar.monthrange(current_date.year, current_date.month)[1]).strftime("%Y-%m-%d")
+        response = self.client.get('/ettestsys01/report/summary/ajax/?start_date='+start_date+'&end_date='+end_date+'&compare_type=month')
+        string = response.content
+        json_obj = json.loads(string)
+        formated_weekday_cost_in_ajax = int(json_obj['formated_weekday_cost'][1:])
+        actual_source_id = Source.objects.get(name='testSource').id
+        actual_total_cost = 0
+        for j in SourceReadingMin.objects.filter(source_id=actual_source_id):
+            actual_total_cost += j.value
+        actual_formated_weekday_cost = round(actual_total_cost*1.45)
+        self.assertEqual(formated_weekday_cost_in_ajax,actual_formated_weekday_cost)
