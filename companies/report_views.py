@@ -1171,6 +1171,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
             # show_content_in_browser=False,
             cmd_options={
                 'page-size': 'A3',
+                'javascript-delay': 1000,
                 # 'quiet': '',
                 # 'margin-left': '18mm',
                 # 'page-size': 'A3',
