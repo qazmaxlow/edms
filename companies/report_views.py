@@ -1061,33 +1061,21 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
     compare_past_datasource = []
     for su in sumup_usages:
-        if report_type == 'custom' or report_type == 'week':
-            compare_past_date_end = compare_past_date
-            if report_type == 'custom':
-                compare_past_date = compare_past_date - relativedelta(days=m['report_day_diff'])
-            else:
-                compare_past_date = compare_past_date - relativedelta(days=7)
-            compare_past_datasource.append({
-                'value': su,
-                'month': compare_past_date.strftime('%b'),
-                'datetime': "{} - {}".format(DateFormat(compare_past_date).format("j M"), DateFormat(compare_past_date_end).format("j M")),
-                'country': "us"})
-        else:
-            compare_past_datasource.append({
-                'value': su,
-                'month': compare_past_date.strftime('%b'),
-                'datetime': compare_past_date,
-                'country': "us"})
-            if report_type == 'month':
-                compare_past_date = compare_past_date - relativedelta(months=1)
-#            elif report_type == 'week':
-#                compare_past_date = compare_past_date - relativedelta(days=7)
-            elif report_type == 'quarter':
-                compare_past_date = compare_past_date - relativedelta(months=3)
-            elif report_type == 'year':
-                compare_past_date = compare_past_date - relativedelta(years=1)
-#            elif report_type == 'custom':
-#                compare_past_date = compare_past_date - relativedelta(days=m['report_day_diff'])
+        compare_past_datasource.append({
+            'value': su,
+            'month': compare_past_date.strftime('%b'),
+            'datetime': compare_past_date,
+            'country': "us"})
+        if report_type == 'month':
+            compare_past_date = compare_past_date - relativedelta(months=1)
+        elif report_type == 'week':
+            compare_past_date = compare_past_date - relativedelta(days=7)
+        elif report_type == 'quarter':
+            compare_past_date = compare_past_date - relativedelta(months=3)
+        elif report_type == 'year':
+            compare_past_date = compare_past_date - relativedelta(years=1)
+        elif report_type == 'custom':
+            compare_past_date = compare_past_date - relativedelta(days=m['report_day_diff'])
 
     compare_past_datasource.reverse()
 
