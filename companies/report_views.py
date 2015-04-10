@@ -795,11 +795,12 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
                 combined_weekday_readings_g[ts] = [(g,val-g['currentWeekdayInfo']['average'])]
 
         for ts, val in overnight_readings.items():
-            combined_overnight_readings_g[ts] = g
             if ts in combined_overnight_readings:
-                combined_overnight_readings[ts].append([(g,val-g['currentOvernightInfo']['average'])])
+                combined_overnight_readings[ts] += val
+                combined_overnight_readings_g[ts].append([(g,val-g['currentOvernightInfo']['average'])])
             else:
-                combined_overnight_readings[ts] = [(g,val-g['currentOvernightInfo']['average'])]
+                combined_overnight_readings[ts] = val
+                combined_overnight_readings_g[ts] = [(g,val-g['currentOvernightInfo']['average'])]
 
         last_readings = g['lastReadings']
         for ts, val in last_readings.items():
@@ -952,7 +953,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         overnight_highest_datetime, overnight_highest_usage= sorted(only_overnight_readings, key=lambda x: x[1])[-1]
 
     if overnight_highest_datetime:
-        m['overnight_highest_g'] = combined_overnight_readings_g[overnight_highest_datetime]
+        m['overnight_highest_g'], _v = sorted(combined_overnight_readings_g[overnight_highest_datetime], key=lambda x: x[1])[-1]
         overnight_highest_datetime = datetime.datetime.fromtimestamp(overnight_highest_datetime, pytz.utc)
 
     m['overnight_highest_usage'] = overnight_highest_usage
