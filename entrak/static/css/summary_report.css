@@ -35,7 +35,13 @@ iframe {
 }
 
 .k-icon.k-i-close {
-    background: url("../images/reports/closeButton-popup.png") no-repeat scroll center !important;
+    background: url("../images/reports/closeButton-popup.png") no-repeat scroll top !important;
+    height: 24px;
+    width: 24px;
+}
+
+.k-state-hover .k-icon.k-i-close {
+    background-position: bottom !important;
 }
 
 .k-overlay {
@@ -68,13 +74,14 @@ iframe {
 
 .summary {
     height: 630px;
-    box-shadow: -18px 4px 5px 0 #e8e8e8;
+    box-shadow: -2px 4px 5px 0 #e8e8e8;
     margin-left: auto;
     margin-right: auto;
     margin-top: 25px;
     margin-bottom: 50px;
     /* position: relative; */
-    width: 972px;
+    width: 1002px;
+    padding: 0 15px;
 }
 
 .img-button {

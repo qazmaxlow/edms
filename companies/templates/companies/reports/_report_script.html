@@ -1,4 +1,7 @@
 {% load i18n %}
+// could have better way?
+var langCode = '{{LANGUAGE_CODE}}';
+kendo.culture(langCode.substring(0,3)+langCode.substring(3,5).toUpperCase());
 
 var ngapp = angular.module("Entrak", [ "kendo.directives" ]);
 var report_type = "{{ report_type }}";
@@ -19,22 +22,41 @@ function set_serie_date(s) {
 
 
 ngapp.controller("ReportController", function($scope) {
+    var date_offset = null;
+
     function shift_series_date(elem) {
         if (report_type == "month") {
-            elem.datetime.setMonth(elem.datetime.getMonth()-1);
+            if (date_offset == null){
+                var lastDay = elem.datetime.getDay();
+                var diff = new Date(elem.datetime.getFullYear(), elem.datetime.getMonth()+1, 0).getDate();
+                elem.datetime.setMonth(elem.datetime.getMonth()+1);
+                var curDay = elem.datetime.getDay();
+                elem.datetime.setDate(elem.datetime.getDate() + lastDay - curDay);
+                date_offset = diff + lastDay - curDay;
+            } else {
+                elem.datetime.setDate(elem.datetime.getDate() + date_offset);
+            }   
         }
         else if (report_type == "week") {
-            elem.datetime.setDate(elem.datetime.getDate()-7);
+            elem.datetime.setDate(elem.datetime.getDate()+7);
         }
         else if (report_type == "quarter") {
-            elem.datetime.setMonth(elem.datetime.getMonth()-3);
+            elem.datetime.setMonth(elem.datetime.getMonth()+3);
         }
         else if (report_type == "year") {
-            elem.datetime.setYear(elem.datetime.getFullYear()-1);
+            elem.datetime.setYear(elem.datetime.getFullYear()+1);
         }
         else if (report_type == "custom") {
             var diff = {{ report_day_diff }};
-            elem.datetime.setDate(elem.datetime.getDate()-diff);
+            if (date_offset == null){
+                var lastDay = elem.datetime.getDay();
+                elem.datetime.setDate(elem.datetime.getDate() + diff);
+                var curDay = elem.datetime.getDay();
+                elem.datetime.setDate(elem.datetime.getDate() + lastDay - curDay);
+                date_offset = diff + lastDay - curDay;
+            } else {
+                elem.datetime.setDate(elem.datetime.getDate() + date_offset);
+            }            
         }
     }
 
@@ -47,11 +69,10 @@ ngapp.controller("ReportController", function($scope) {
     };
     {% endfor %}
 
-
     $.each(cg_ds, function(idx, ds) {
         set_serie_date(ds.current);
         set_serie_date(ds.last);
-        $.each(ds.current, function(idx, elem) {shift_series_date(elem)});
+        $.each(ds.last, function(idx, elem) {shift_series_date(elem)});
     });
     $scope.cgDatas = cg_ds;
 
@@ -71,6 +92,10 @@ ngapp.controller("ReportController", function($scope) {
                 font: "bold 14px Arial",
                 color: function(e) {
                     return e.dataItem.color;
+                },
+                border: {
+                    width: 0,
+                    color: "white"
                 }
             },
             overlay: {
@@ -96,17 +121,6 @@ ngapp.controller("ReportController", function($scope) {
 
     };
 
-    var bar_date_format = '{0:MMM}';
-
-    if (report_type == 'week') {
-        bar_date_format = '{0:M}';
-    }
-    else if (report_type == 'year') {
-        bar_date_format = '{0:yyyy}';
-    }
-    else if (report_type == 'custom') {
-        bar_date_format = '{0:M}';
-    }
 
     $scope.barOptions = {
         dataSource: {
@@ -114,7 +128,7 @@ ngapp.controller("ReportController", function($scope) {
             schema: {
                 model: {
                     fields: {
-                        datetime: { type: 'date'}
+                        datetime: { type: "string"}
                     }
                 }
             }
@@ -160,9 +174,10 @@ ngapp.controller("ReportController", function($scope) {
         },
         categoryAxis: {
             type: 'category',
-            field: 'datetime',
-            labels: {
-                format: bar_date_format
+            field: 'formated_date',
+            majorTicks: {
+                size: 0,
+                width: 0
             },
             majorGridLines: {
                 visible: false
@@ -175,30 +190,34 @@ ngapp.controller("ReportController", function($scope) {
     };
 
     var powers = {{ compare_series|safe }};
-
     var line_step = 2;
-    if (report_type == 'year') {
-        line_step = 30;
+    var line_date_formats = { days: 'ddd'};
+    if (report_type == 'year' || report_type == 'quarter') {
+        line_step = 31;
+        line_date_formats = { days: 'MMM'};
     } else if (report_type == 'week'){
         line_step = 1;
-    } else if (report_type == 'quarter'){
-        line_step = 5;
+    } else if (report_type == 'month'){
+        line_step = 3;
     }
 
-    var line_date_formats = { days: 'ddd'};
-    if (report_type == 'year') {
-        line_date_formats = { days: 'M/d'};
-    } else if (report_type == 'week'){
-        line_date_formats = { days: 'ddd'};
+    var line_labels = {
+        step: line_step,
+        dateFormats: line_date_formats
+    };
+    if (report_type == 'quarter') {
+        line_labels = {
+            step: line_step,
+            template: "#=kendo.toString(value, 'MMM')+'/'+kendo.toString(new Date(2000, value.getMonth()-3, 1), 'MMM')#"
+        };
     }
-
 
     $scope.lineOptions = {
         width: 1000,
         title: {
             text: "{% trans "When did we achieve our savings?" %}",
             color: "#354960",
-            font: "bold 1.145em sans-serif"
+            font: "bold 1.145em Arial"
         },
         legend: {
             position: "top"
@@ -216,8 +235,8 @@ ngapp.controller("ReportController", function($scope) {
                 parse:function (response) {
                     $.each(response, function (idx, elem) {
                         if (elem.datetime && typeof elem.datetime === "string") {
-                            elem.datetime = kendo.parseDate(elem.datetime, "yyyy-MM-ddTHH:mm:ssZ");
-                            if (elem.type == "current") {
+                            elem.datetime = kendo.parseDate(elem.datetime);
+                            if (elem.type == "last") {
                                 shift_series_date(elem);
                             }
                         }
@@ -254,7 +273,8 @@ ngapp.controller("ReportController", function($scope) {
             },
             title: {
                 text: "kWh",
-                color: "#9F9F9F"
+                color: "#9F9F9F",
+                font: "0.9em Arial"
             },
             minorGridLines: {
                 visible: false
@@ -266,21 +286,16 @@ ngapp.controller("ReportController", function($scope) {
                 visible: false
             },
             majorTicks: {
-                step: line_step
-            },
-            labels: {
                 step: line_step,
-                dateFormats: line_date_formats
-            }
+                size: 0,
+                width: 0
+            },
+            labels: line_labels
         }
 
     };
 
     $scope.subLineOptions = {
-        title: {
-            text: "WHEN DID WE ACHIEVE OUR SAVINGS?",
-            color: "#354960"
-        },
         legend: {
             position: "top"
         },
@@ -316,7 +331,8 @@ ngapp.controller("ReportController", function($scope) {
             },
             title: {
                 text: "kWh",
-                color: "#9F9F9F"
+                color: "#9F9F9F",
+                font: "0.9em Arial"
             },
             minorGridLines: {
                 visible: false
@@ -328,12 +344,11 @@ ngapp.controller("ReportController", function($scope) {
                 visible: false
             },
             majorTicks: {
-                step: line_step
-            },
-            labels: {
                 step: line_step,
-                dateFormats: line_date_formats
-            }
+                size: 0,
+                width: 0
+            },
+            labels: line_labels
         }
 
     };
@@ -468,11 +483,14 @@ $(document).ready(function()  {
 
     // for weekday report
     var isNotConcernFunc = null;
-    var report_start = new Date("{{ report_start.isoformat }}");
-    var report_end = new Date("{{ report_end.isoformat }}");
+    var report_start = new moment("{{ report_start.isoformat }}");
+    var report_start = report_start.tz('Asia/Hong_Kong');
 
-    var creport_start = new Date(report_start);
-    var creport_end = new Date(report_end);
+    var report_end = new moment("{{ report_end.isoformat }}");
+    var report_end = report_end.tz('Asia/Hong_Kong');
+
+    var creport_start = new moment(report_start);
+    var creport_end = new moment(report_end);
 
     var datesInWeek = [];
     if (report_type == 'week') {
@@ -494,9 +512,10 @@ $(document).ready(function()  {
             datesInWeek.push(dateStr);
         }
 
-        creport_start.setDate(1);
-        creport_end.setMonth(creport_end.getMonth()+1);
-        creport_end.setDate(0);
+        creport_start.startOf('month');
+        if (report_start.month() == report_end.month())
+            creport_end.endOf('month');
+
         isNotConcernFunc = function(targetDt) {
             return (targetDt.day() == 0
                     || targetDt.day() == 6

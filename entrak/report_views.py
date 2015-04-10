@@ -44,6 +44,7 @@ CONSECUTIVE_LASTS_COUNT = 4
 @ensure_csrf_cookie
 def report_view(request, system_code=None):
     systems_info = System.get_systems_info(system_code, request.user.system.code)
+    
     systems = systems_info['systems']
     current_system = systems[0]
     sources = SourceManager.get_sources(current_system)
@@ -446,6 +447,7 @@ def __generate_report_data(systems, report_type, start_timestamp, end_timestamp)
     co2_unit_code = unit_info[CO2_CATEGORY_CODE]
     money_unit_code = unit_info[MONEY_CATEGORY_CODE]
     energy_saving = total_last_same_period_energy-total_energy
+    saving_info['kwh'] = energy_saving
     if total_last_same_period_energy != 0:
         saving_info["energy"] = energy_saving/total_last_same_period_energy*100
     else:
