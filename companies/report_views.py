@@ -146,8 +146,7 @@ def summary_ajax(request, system_code):
         for t, v in source_reading.items():
             dt = datetime.datetime.fromtimestamp(t, current_system_tz)
             if dt.weekday() <= 4 or dt.date() in all_holidays:
-                # total_val += get_unit_rate(source_id, t).rate * v
-                total_val += v
+                total_val += get_unitrate(source_id, dt).rate * v
                 total_day += 1
 
         if total_day > 0:
