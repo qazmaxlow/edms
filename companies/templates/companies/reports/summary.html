@@ -480,16 +480,16 @@ $(function() {
             $scope.get_report_type_name = function() {
                 var report_type_name;
                 if ($scope.report_type == 'week') {
-                    report_type_name = '{% trans "Week total" %}';
+                    report_type_name = '{% trans "Week Total" %}';
                 }
                 else if ($scope.report_type == 'month' || $scope.report_type == 'custom') {
-                    report_type_name = '{% trans "Month total" %}';
+                    report_type_name = '{% trans "Month Total" %}';
                 }
                 else if ($scope.report_type == 'quarter') {
-                    report_type_name = '{% trans "Quarter total" %}';
+                    report_type_name = '{% trans "Quarter Total" %}';
                 }
                 else if ($scope.report_type == 'year') {
-                    report_type_name = '{% trans "Year total" %}';
+                    report_type_name = '{% trans "Year Total" %}';
                 }
 
                 return report_type_name
