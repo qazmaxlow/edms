@@ -145,9 +145,8 @@ def summary_ajax(request, system_code):
 
         for t, v in source_reading.items():
             dt = datetime.datetime.fromtimestamp(t, current_system_tz)
-            if dt.weekday() <= 4 or dt.date() in all_holidays:
-                # total_val += get_unit_rate(source_id, t).rate * v
-                total_val += v
+            if dt.weekday() <= 4 and dt.date() not in all_holidays:
+                total_val += get_unitrate(source_id, dt).rate * v
                 total_day += 1
 
         if total_day > 0:
@@ -269,7 +268,13 @@ def summary_ajax(request, system_code):
             dr_sum = r.rate * SourceReadingHour.objects(conds, source_id__in=source_ids).sum('value')
             total_on_sum += dr_sum
 
-        return total_on_sum / (end_dt - start_dt).days
+        # dirty way to count number of days
+        total_day = (end_dt - start_dt).days
+        today = datetime.datetime.now(pytz.utc)
+        if end_dt > today:
+            total_day = (today - start_dt).days
+
+        return total_on_sum / total_day
 
 
     overnight_avg_cost = get_new_overnight_avg_cost(source_ids, start_dt, end_dt)
@@ -415,11 +420,11 @@ class CompareTplHepler:
     @property
     def change_icon_path(self):
         if self.compared_percent is None:
-            return 'images/reports/na.svg'
+            return 'images/reports/na.gif'
 
-        path = 'images/reports/decrease_engry.svg'
+        path = 'images/reports/decrease_energy.png'
         if self.compared_percent >=0:
-            path = 'images/reports/increase_engry.svg'
+            path = 'images/reports/increase_energy.png'
 
         return path
 
@@ -516,8 +521,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     m['report_type'] = report_type
     report_type_name = report_type
     report_date_text = u"{0} - {1}".format(
-        DateFormat(report_date).format("d M Y"),
-        DateFormat(report_end_date).format("d M Y")
+        DateFormat(report_date).format("j M Y"),
+        DateFormat(report_end_date).format("j M Y")
     )
     if report_type == 'month':
         report_type_name = _('month')
@@ -541,7 +546,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         report_type_name = _('year')
         report_date_text = _("{0} - Yearly Energy Report").format(formats.date_format(report_date, 'YEAR_FORMAT'))
     if report_type =='custom':
-        report_type_name = _('custom')
+        report_type_name = _('month')
         if (current_lang()=="zh-tw"):
             report_date_text_begin = _(u"{0}{1}{2} - ").format(report_date.strftime("%Y"),report_date.strftime("%-m"),report_date.strftime("%-d"))
             report_date_text_end = _(u"{0}{1}{2}").format(report_end_date.strftime("%Y"),report_end_date.strftime("%-m"),report_end_date.strftime("%-d"))
@@ -622,8 +627,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     beginning_usage = sum([ g['beginningWeekdayInfo']['average'] for g in group_data])
     average_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
 
-    last_weekday_usage = sum([ g['lastWeekdayInfo']['total'] for g in group_data])
-    current_weekday_usage = sum([ g['currentWeekdayInfo']['total'] for g in group_data])
+    last_weekday_usage = sum([ g['lastWeekdayInfo']['average'] for g in group_data])
+    current_weekday_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
 
     weekday_compare_last = None
     if last_weekday_usage > 0:
@@ -669,8 +674,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         # for weekday
         weekday = {}
 
-        last_weekday_usage = g['lastWeekdayInfo']['total']
-        current_weekday_usage = g['currentWeekdayInfo']['total']
+        last_weekday_usage = g['lastWeekdayInfo']['average']
+        current_weekday_usage = g['currentWeekdayInfo']['average']
 
         weekday_compare_last = None
         if last_weekday_usage > 0:
@@ -692,8 +697,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         weekend_beginning_usage = g['beginningWeekendInfo']['average']
         weekend_average_usage = g['currentWeekendInfo']['average']
 
-        weekend_last_usage = g['lastWeekendInfo']['total']
-        weekend_current_usage = g['currentWeekendInfo']['total']
+        weekend_last_usage = g['lastWeekendInfo']['average']
+        weekend_current_usage = g['currentWeekendInfo']['average']
 
         weekend_compare_last = None
         if weekend_last_usage > 0:
@@ -714,8 +719,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         # for overnight
         overnight = {'bill': g['currentOvernightInfo']['average'] * money_unit_rate.rate}
 
-        last_overnight_usage = g['lastOvernightInfo']['total']
-        current_overnight_usage = g['currentOvernightInfo']['total']
+        last_overnight_usage = g['lastOvernightInfo']['average']
+        current_overnight_usage = g['currentOvernightInfo']['average']
 
         overnight_compare_last = None
         if last_overnight_usage > 0:
@@ -766,13 +771,13 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     combined_readings = {}
     combined_overnight_readings = {}
 
+
     # for weekday
     # combined_current_readings = {};
     combined_last_readings = {};
     for ix, g in enumerate(group_data):
         current_readings = g['currentReadings']
         overnight_readings = g['overnightcurrentReadings']
-
         g['compare_last_month_helper'] = CompareTplHepler(g['compare_last_month'])
         g['compare_same_period_helper'] = CompareTplHepler(g['compare_same_period'])
 
@@ -787,7 +792,6 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
                 combined_overnight_readings[ts] += val
             else:
                 combined_overnight_readings[ts] = val
-
 
         last_readings = g['lastReadings']
         for ts, val in last_readings.items():
@@ -853,11 +857,11 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
     # m['compare_current_readings_series']= json.dumps(combined_readings.values(), cls=DjangoJSONEncoder)
 
-    current_series = [{'name': compare_current_name, 'type': 'current', 'value': v, 'datetime': datetime.datetime.fromtimestamp(t, pytz.utc) } for t, v in combined_readings.items()]
+    current_series = [{'name': compare_current_name, 'type': 'current', 'value': v, 'datetime': datetime.datetime.fromtimestamp(t, pytz.utc).astimezone(current_system_tz)} for t, v in combined_readings.items()]
 
     m['compare_current_readings_series']= json.dumps(current_series, cls=DjangoJSONEncoder)
 
-    last_series = [{'name': compare_last_name, 'type': 'last', 'value': v, 'datetime': datetime.datetime.fromtimestamp(t, pytz.utc) } for t, v in combined_last_readings.items()]
+    last_series = [{'name': compare_last_name, 'type': 'last', 'value': v, 'datetime': datetime.datetime.fromtimestamp(t, pytz.utc).astimezone(current_system_tz) } for t, v in combined_last_readings.items()]
 
     compare_series = current_series + last_series
 
@@ -876,7 +880,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     m['sub_compare_graphs'] = sub_compare_graphs
 
 
-    # filter the
+    highest_datetime, highest_usage= sorted(combined_readings.items(), key=lambda x: x[1])[-1]
+
     def weekday_filter(tv):
         t, v = tv
         wd = datetime.datetime.fromtimestamp(t, pytz.utc).weekday()
@@ -895,6 +900,9 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     highest_diff_source = groupdata_sorted_by_diff[-1]
     m['highest_diff_source'] = highest_diff_source
 
+    m['weekday_highest_usage'] = highest_usage
+    m['weekday_highest_datetime'] = datetime.datetime.fromtimestamp(highest_datetime, pytz.utc)
+
     if wd_highest_datetime:
         wd_highest_datetime = datetime.datetime.fromtimestamp(wd_highest_datetime, pytz.utc)
 
@@ -904,8 +912,6 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     m['weekday_details'] = group_data
     m['saving_info'] = report_data['savingInfo']
 
-
-    # filter weekend
     def weekend_filter(tv):
         t, v = tv
         wd = datetime.datetime.fromtimestamp(t, pytz.utc).weekday()
@@ -919,13 +925,11 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     if only_weekend_readings:
         we_highest_datetime, we_highest_usage= sorted(only_weekend_readings, key=lambda x: x[1])[-1]
 
-
     if we_highest_datetime:
         we_highest_datetime = datetime.datetime.fromtimestamp(we_highest_datetime, pytz.utc)
 
     m['weekend_highest_usage'] = we_highest_usage
     m['weekend_highest_datetime'] = we_highest_datetime
-
 
     only_overnight_readings = combined_overnight_readings.items()
 
@@ -935,13 +939,11 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     if only_overnight_readings:
         overnight_highest_datetime, overnight_highest_usage= sorted(only_overnight_readings, key=lambda x: x[1])[-1]
 
-
     if overnight_highest_datetime:
         overnight_highest_datetime = datetime.datetime.fromtimestamp(overnight_highest_datetime, pytz.utc)
 
     m['overnight_highest_usage'] = overnight_highest_usage
     m['overnight_highest_datetime'] = overnight_highest_datetime
-
 
     # oops!!! have to rewrite
     p_or_n = -1 if report_data['savingInfo']['energy'] >=0 else 0
@@ -956,7 +958,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
     m['co2_in_car'] = abs(report_data['savingInfo']['co2']*0.003)
     m['co2_in_forest'] = abs(report_data['savingInfo']['co2']*0.016)
-    m['co2_in_elephant'] = abs(report_data['savingInfo']['co2']*0.00667)
+    m['co2_in_elephant'] = abs(report_data['savingInfo']['kwh']*0.0417)
     # var co2InCar = Utils.formatWithCommas(Math.abs((reportGenThis.savingInfo.co2*0.003).toFixed(0)));
 
     # lastSamePeriodUsage += info[lastSamePeriodUsageKey].average;
@@ -1056,29 +1058,48 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     # max_sum_up = max(report_data['sumUpUsages'])
     sumup_usages = report_data['sumUpUsages']
 
-    # make 6 months
-    # report_date
-    # compare_past
+
     compare_past_date = report_date
-    # for i in range(6):
+    compare_past_date_end = report_end_date
 
     compare_past_datasource = []
     for su in sumup_usages:
+        if report_type == 'month':
+            formated_date = compare_past_date.strftime('%b')
+        elif report_type == 'week':
+            formated_date = u'{0} - {1}'.format(
+                formats.date_format(compare_past_date, 'MONTH_DAY_FORMAT'),
+                formats.date_format(compare_past_date_end, 'MONTH_DAY_FORMAT'))
+        elif report_type == 'quarter':
+            formated_date = '{0} Q{1}'.format(compare_past_date.strftime("%Y"), compare_past_date.month/3 + 1)
+        elif report_type == 'year':
+            formated_date = formats.date_format(compare_past_date, 'YEAR_FORMAT')
+        elif report_type == 'custom':
+            formated_date = u'{0} - {1}'.format(
+                formats.date_format(compare_past_date, 'MONTH_DAY_FORMAT'),
+                formats.date_format(compare_past_date_end, 'MONTH_DAY_FORMAT'))
+
         compare_past_datasource.append({
             'value': su,
             'month': compare_past_date.strftime('%b'),
             'datetime': compare_past_date,
+            'formated_date': formated_date,
             'country': "us"})
         if report_type == 'month':
             compare_past_date = compare_past_date - relativedelta(months=1)
+            compare_past_date_end -= relativedelta(months=1)
         elif report_type == 'week':
             compare_past_date = compare_past_date - relativedelta(days=7)
+            compare_past_date_end -= relativedelta(days=7)
         elif report_type == 'quarter':
             compare_past_date = compare_past_date - relativedelta(months=3)
+            compare_past_date_end -= relativedelta(months=3)
         elif report_type == 'year':
             compare_past_date = compare_past_date - relativedelta(years=1)
+            compare_past_date_end -= relativedelta(years=1)
         elif report_type == 'custom':
             compare_past_date = compare_past_date - relativedelta(days=m['report_day_diff'])
+            compare_past_date_end -= relativedelta(days=m['report_day_diff'])
 
     compare_past_datasource.reverse()
 
@@ -1093,8 +1114,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     weekends_beginning_usage = sum([ g['beginningWeekendInfo']['average'] for g in group_data])
     weekends_average_usage = sum([ g['currentWeekendInfo']['average'] for g in group_data])
 
-    weekends_last_usage = sum([ g['lastWeekendInfo']['total'] for g in group_data])
-    weekends_current_usage = sum([ g['currentWeekendInfo']['total'] for g in group_data])
+    weekends_last_usage = sum([ g['lastWeekendInfo']['average'] for g in group_data])
+    weekends_current_usage = sum([ g['currentWeekendInfo']['average'] for g in group_data])
 
     # average_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
     weekends_compare_last = None
@@ -1106,9 +1127,9 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     weekends_last_same_period = sum([ g['lastSamePeriodWeekendInfo']['average'] for g in group_data])
     weekends_compare_same_period = None
     if weekends_last_same_period > 0 :
-        weekends_compare_same_period = float(weekends_last_same_period - weekends_average_usage)/weekends_last_same_period*100
+        weekends_compare_same_period = float(weekends_average_usage - weekends_last_same_period)/weekends_last_same_period*100
 
-    m['weekends_compare_same_period'] = weekends_compare_same_period
+    weekends_usage['same_period_compare_helper'] = CompareTplHepler(weekends_compare_same_period)
 
 
     m['weekends'] = weekends_usage
@@ -1121,8 +1142,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     overnight_beginning_usage = sum([ g['beginningOvernightInfo']['average'] for g in group_data])
     overnight_average_usage = sum([ g['currentOvernightInfo']['average'] for g in group_data])
 
-    overnight_last_usage = sum([ g['lastOvernightInfo']['total'] for g in group_data])
-    overnight_current_usage = sum([ g['currentOvernightInfo']['total'] for g in group_data])
+    overnight_last_usage = sum([ g['lastOvernightInfo']['average'] for g in group_data])
+    overnight_current_usage = sum([ g['currentOvernightInfo']['average'] for g in group_data])
 
     # average_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
     overnight_compare_last = None
@@ -1151,15 +1172,13 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     if to_pdf:
         return PDFTemplateResponse(
             request=request,
-            # template='companies/reports/popup_report_pdf.html',
             template='companies/reports/report.html',
-            # template='foo.html',
             filename='report.pdf',
             context=m,
             # show_content_in_browser=False,
             cmd_options={
                 'page-size': 'A3',
-                "javascript-delay": '5000',
+                'javascript-delay': 1000,
                 # 'quiet': '',
                 # 'margin-left': '18mm',
                 # 'page-size': 'A3',

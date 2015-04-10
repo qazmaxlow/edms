@@ -1,3 +1,7 @@
+.bottom-margin-4 {
+    margin-bottom: 4px !important;
+}
+
 .no-x-padding {
     padding-left: 0px !important;
     padding-right: 0px !important;
@@ -8,13 +12,39 @@
     padding-right: 5px !important;   
 }
 
+.x-padding-25 {
+    padding-left: 25px !important;
+    padding-right: 25px !important;   
+}
+
 .x-padding-5-0 {
     padding-right: 0px !important;
     padding-left: 5px !important;
 }
 
-.bottom-border-3 {
+.left-padding-10 {
+    padding-left: 10px !important;
+}
+
+.top-padding-6 {
+    padding-top: 6px;
+}
+
+.top-padding-18 {
+    padding-top: 18px;
+}
+
+.bottom-border-2 {
     border-bottom: solid 2px #cbcbcb;
+}
+
+.top-border-2 {
+    border-top: solid 2px #cbcbcb;
+}
+
+
+.bottom-margin-20 {
+    margin-bottom: 20px;
 }
 
 .page-break-after {
@@ -25,6 +55,7 @@
     color: #354960;
     margin-top: 0px !important;
     margin-bottom: 0px !important;
+    font-weight: bold;
 }
 
 body {
@@ -38,7 +69,7 @@ body {
 }
 
 .transformed-row-bg:nth-child(odd) {
-    background-color: #f5f5f5;
+    background-color: #ededed;
 }
 
 .transformed-name {
@@ -54,7 +85,8 @@ body {
     width: 100px;
     text-align: right;
     font-weight: 600;
-    padding-right: 15px;
+    padding-right: 5px;
+    padding-left: 5px;
     font-size: 0.9em;
 }
 
@@ -99,7 +131,8 @@ body {
 
 .sidebar-left .section li {
     height: 50px;
-    text-align: middle;
+    line-height: 50px;
+    text-align: center;
     border-width: 2px !important;
     border-bottom: #c9c9c9 solid;
 }
@@ -109,8 +142,16 @@ body {
     background: linear-gradient(to bottom, #aee428, #67cd18);
 }
 
+.sidebar-left .section li.k-state-hover span {
+    color: #ffffff;
+}
+
 .sidebar-left .section li span {
     text-align: center;
+    padding: 10px !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    line-height: normal !important;
 }
 
 .sidebar-left .btn-section {
@@ -145,8 +186,7 @@ body {
     font-weight: lighter;
     font-size: 14pt;
     color: #354960;
-    border-top: 1px #354960 solid;
-    width: 300px;
+    width: 500px;
     margin: 0 auto;
     padding-bottom: 15px;
     padding-top: 4px;
@@ -168,6 +208,11 @@ body {
     width: 100%;
 }
 
+a.btn-save-report:hover {
+    background: linear-gradient(to bottom, #aee428, #67cd18);
+    color: white;
+}
+
 .btn-save-report img {
     margin-right: 10px;
 }
@@ -185,6 +230,10 @@ body {
 
 @media print {
 body {-webkit-print-color-adjust: exact;}
+}
+
+.sub-graph-container>div:nth-child(odd){
+    border-right: #e0e0e0 solid 1px;
 }
 
 .sub-graph-title {
@@ -237,7 +286,11 @@ body {-webkit-print-color-adjust: exact;}
 
 .row.item img {
     height: 79px;
-    width: 79px;
+    padding-left: 15px;
+}
+
+.row.item .col-xs-4 {
+    padding: 0px;
 }
 
 .more-usage {
@@ -293,17 +346,22 @@ body {-webkit-print-color-adjust: exact;}
 }
 
 .report-detail-body .col-xs-4 .row {
-    width: 85%;
+    width: 90%;
     margin: 0 auto;
 }
 
 .report-detail-body .col-xs-4 .row img {
+    background-color: transparent;
     position: relative;
-    top: 26px;
+    height: 73px;
 }
 
 .report-detail-body .row .col-xs-8 {
-    padding: 20px 0;
+    padding: 40px 0 20px 10px;
+}
+
+.report-detail-body .col-xs-4 .row .col-xs-4 {
+    padding: 26px 0 20px 0;
 }
 
 .report-detail-body .col-xs-4:not(:first-child) {
@@ -349,14 +407,16 @@ body {-webkit-print-color-adjust: exact;}
 }
 
 .highest-weekday-enegry {
-    border-left: #e5dadb 1px solid;
     float: left;
     width: 238px;
     height: 110px;
+    padding-bottom: 5px;
+    padding-top: 10px;
 }
 
 .highest-weekday-enegry h6 {
     color: #415368;
+    font-weight: bold;
 }
 
 .highest-weekday-enegry h5 {
@@ -373,23 +433,21 @@ body {-webkit-print-color-adjust: exact;}
     height: 110px;/* hack */
     width: 238px;
     float: left;
+    padding-bottom: 5px;
+    padding-top: 10px;
 }
 
 .most-increase-from p {
     line-height: 1.1;
     font-weight: bold;
     color: #6bc0d4;
+    padding: 0 15px;
 }
 
 .most-increase-from h6 {
     color: #415368;
     height: 22px;
-    padding-top: 3px;
-}
-
-.most-increase-from h6.two-line {
-    height: 35px;
-    padding-top: 3px;
+    font-weight: bold;
 }
 
 .better-mark {
@@ -426,7 +484,7 @@ body {-webkit-print-color-adjust: exact;}
 }
 
 .report-component-header {
-    margin-top: 20px;
+    margin-top: 30px;
     background-color: #FDE6AD;
     font-size: 1.8rem;
     font-weight: 600;
@@ -458,12 +516,21 @@ body {-webkit-print-color-adjust: exact;}
     margin-bottom: 10px;
     margin-left: 25px;
     border-radius: 100px;
-    background-color: #9ccfda;
     border: 2px solid #8bb2ba;
+    background-color: #8bb2ba;
     vertical-align: middle;
 }
 
 .basic-info-col .basic-info-text-container {
+    display: inline-block;
+    width: 194px;
+    height: 70px;
+    margin-top: 30px;
+    padding-left: 14px;
+    vertical-align: middle;
+}
+
+.basic-info-col .basic-info-text-container-last-col {
     display: inline-block;
     width: 178px;
     height: 80px;
@@ -511,7 +578,7 @@ body {-webkit-print-color-adjust: exact;}
 .basic-info-col span{
     font-size: 20pt;
     font-weight: bold;
-    vertical-align: middle;
+    vertical-align: baseline;
 }
 .positive-saving .basic-info-col span {
     color: #81D51D;
@@ -523,7 +590,7 @@ body {-webkit-print-color-adjust: exact;}
     font-size: 13pt;
     margin-left: 0px;
     margin-top: 0px;
-    vertical-align: sub;
+    vertical-align: baseline;
 }
 #save-co2-usage .basic-info-col-unit {
     vertical-align: middle;
@@ -532,7 +599,7 @@ body {-webkit-print-color-adjust: exact;}
 .basic-info-col .basic-info-col-subtext {
     color: #354960 !important;
     font-weight: 500;
-    font-size: 0.9em;
+    font-size: 1em;
     /*margin-top: 2px;*/
     display: block;
 }
@@ -560,7 +627,7 @@ body {-webkit-print-color-adjust: exact;}
 
 .report-subtitle-text {
     margin-bottom: 0px;
-    margin-top: 15px;
+    margin-top: 20px;
     font-size: 1.145em;
     font-weight: 600;
     color: #354960;   
@@ -685,11 +752,10 @@ body {-webkit-print-color-adjust: exact;}
 .key-statistics-row{
     width: 100%;
     height: 45px;
-    background-color: #F5F5F5;
+    background-color: #ededed;
     text-align: center;
     color:#5E5E5E;
     overflow: hidden;
-    white-space: nowrap;
     border-bottom: 1px solid #f0f2f2;
 }
 .key-statistics-row td{

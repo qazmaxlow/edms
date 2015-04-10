@@ -597,7 +597,7 @@
         for(; idx < length; idx++) {
             if (idx > 0 && idx % cellsPerRow == 0) {
                 if (options.select=='quarter') {
-                    html += '</tr><tr role="row"><th class="quaterTh" style="color:black;">Q' + (idx+3)/3 + '</th>';
+                    html += '</tr><tr role="row"><th class="quarterTh" style="color:black;">Q' + (idx+3)/3 + '</th>';
                 }else{
                     html += '</tr><tr role="row">';
                 }
@@ -1228,16 +1228,15 @@
                 var end_date = new Date(date);
                 end_date.setDate(start_date.getDate() + 6);
 
-                var week_format = 'd MMM yyyy';
+                var week_format = 'd MMM yyyy, ddd';
                 if (kendo.culture().name=="zh-TW"){
                     date_text = '從' + kendo.toString(start_date, 'D', options.culture) + ', ' +kendo.toString(start_date, 'dddd', options.culture) + '開始';
                 }
                 else{
-                    date_text = 'Week of ' + kendo.toString(start_date, week_format, options.culture);
+                    date_text = 'Week starting ' + kendo.toString(start_date, week_format, options.culture);
                 }
             } else if (date && options.select == 'month') {
-                var month_format = 'Y';
-                date_text = kendo.toString(date, month_format, options.culture);
+                date_text = kendo.toString(date, options.format, options.culture);
             }
             else if(date && options.select == 'quarter'){
                 var quarter_ix = Math.floor(1+date.getMonth()/3);
