@@ -121,20 +121,6 @@ ngapp.controller("ReportController", function($scope) {
 
     };
 
-    var bar_date_format = '{0:MMM}';
-    var bar_datetime_type = 'date';
-
-    if (report_type == 'week') {
-        bar_date_format = '{0:M}';
-        bar_datetime_type = 'string';
-    }
-    else if (report_type == 'year') {
-        bar_date_format = '{0:yyyy}';
-    }
-    else if (report_type == 'custom') {
-        bar_date_format = '{0:M}';
-        bar_datetime_type = 'string';
-    }
 
     $scope.barOptions = {
         dataSource: {
@@ -142,7 +128,7 @@ ngapp.controller("ReportController", function($scope) {
             schema: {
                 model: {
                     fields: {
-                        datetime: { type: bar_datetime_type}
+                        datetime: { type: "string"}
                     }
                 }
             }
@@ -188,10 +174,7 @@ ngapp.controller("ReportController", function($scope) {
         },
         categoryAxis: {
             type: 'category',
-            field: 'datetime',
-            labels: {
-                format: bar_date_format
-            },
+            field: 'formated_date',
             majorTicks: {
                 size: 0,
                 width: 0
