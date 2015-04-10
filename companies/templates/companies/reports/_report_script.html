@@ -26,7 +26,16 @@ ngapp.controller("ReportController", function($scope) {
 
     function shift_series_date(elem) {
         if (report_type == "month") {
-            elem.datetime.setMonth(elem.datetime.getMonth()+1);
+            if (date_offset == null){
+                var lastDay = elem.datetime.getDay();
+                var diff = new Date(elem.datetime.getFullYear(), elem.datetime.getMonth()+1, 0).getDate();
+                elem.datetime.setMonth(elem.datetime.getMonth()+1);
+                var curDay = elem.datetime.getDay();
+                elem.datetime.setDate(elem.datetime.getDate() + lastDay - curDay);
+                date_offset = diff + lastDay - curDay;
+            } else {
+                elem.datetime.setDate(elem.datetime.getDate() + date_offset);
+            }   
         }
         else if (report_type == "week") {
             elem.datetime.setDate(elem.datetime.getDate()+7);
@@ -199,19 +208,15 @@ ngapp.controller("ReportController", function($scope) {
 
     var powers = {{ compare_series|safe }};
     var line_step = 2;
-    if (report_type == 'year' || report_type == 'quarter') {
-        line_step = 31;
-    } else if (report_type == 'week'){
-        line_step = 1;
-    }
-
     var line_date_formats = { days: 'ddd'};
     if (report_type == 'year' || report_type == 'quarter') {
+        line_step = 31;
         line_date_formats = { days: 'MMM'};
+    } else if (report_type == 'week'){
+        line_step = 1;
     } else if (report_type == 'month'){
-        line_date_formats = { days: ' d'};
+        line_step = 3;
     }
-
 
     $scope.lineOptions = {
         width: 1000,
