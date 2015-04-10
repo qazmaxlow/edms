@@ -1053,29 +1053,34 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     # max_sum_up = max(report_data['sumUpUsages'])
     sumup_usages = report_data['sumUpUsages']
 
-    # make 6 months
-    # report_date
-    # compare_past
+
     compare_past_date = report_date
-    # for i in range(6):
+    compare_past_date_end = report_end_date
 
     compare_past_datasource = []
     for su in sumup_usages:
+        formated_date = compare_past_date.strftime('%b')
         compare_past_datasource.append({
             'value': su,
             'month': compare_past_date.strftime('%b'),
             'datetime': compare_past_date,
+            'formated_date': formated_date,
             'country': "us"})
         if report_type == 'month':
             compare_past_date = compare_past_date - relativedelta(months=1)
+            compare_past_date_end -= relativedelta(months=1)
         elif report_type == 'week':
             compare_past_date = compare_past_date - relativedelta(days=7)
+            compare_past_date_end -= relativedelta(days=7)
         elif report_type == 'quarter':
             compare_past_date = compare_past_date - relativedelta(months=3)
+            compare_past_date_end -= relativedelta(months=3)
         elif report_type == 'year':
             compare_past_date = compare_past_date - relativedelta(years=1)
+            compare_past_date_end -= relativedelta(years=1)
         elif report_type == 'custom':
             compare_past_date = compare_past_date - relativedelta(days=m['report_day_diff'])
+            compare_past_date_end -= relativedelta(days=m['report_day_diff'])
 
     compare_past_datasource.reverse()
 
