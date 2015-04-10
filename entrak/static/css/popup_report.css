@@ -1,3 +1,7 @@
+.bottom-margin-4 {
+    margin-bottom: 4px !important;
+}
+
 .no-x-padding {
     padding-left: 0px !important;
     padding-right: 0px !important;
@@ -16,6 +20,10 @@
 .x-padding-5-0 {
     padding-right: 0px !important;
     padding-left: 5px !important;
+}
+
+.left-padding-10 {
+    padding-left: 10px !important;
 }
 
 .top-padding-6 {
@@ -339,7 +347,7 @@ body {-webkit-print-color-adjust: exact;}
 }
 
 .report-detail-body .col-xs-4 .row {
-    width: 85%;
+    width: 90%;
     margin: 0 auto;
 }
 
@@ -350,7 +358,7 @@ body {-webkit-print-color-adjust: exact;}
 }
 
 .report-detail-body .row .col-xs-8 {
-    padding: 43px 0 20px 10px;
+    padding: 40px 0 20px 10px;
 }
 
 .report-detail-body .col-xs-4 .row .col-xs-4 {
@@ -400,14 +408,16 @@ body {-webkit-print-color-adjust: exact;}
 }
 
 .highest-weekday-enegry {
-    border-left: #e5dadb 1px solid;
     float: left;
     width: 238px;
     height: 110px;
+    padding-bottom: 5px;
+    padding-top: 10px;
 }
 
 .highest-weekday-enegry h6 {
     color: #415368;
+    font-weight: bold;
 }
 
 .highest-weekday-enegry h5 {
@@ -424,6 +434,8 @@ body {-webkit-print-color-adjust: exact;}
     height: 110px;/* hack */
     width: 238px;
     float: left;
+    padding-bottom: 5px;
+    padding-top: 10px;
 }
 
 .most-increase-from p {
@@ -436,12 +448,7 @@ body {-webkit-print-color-adjust: exact;}
 .most-increase-from h6 {
     color: #415368;
     height: 22px;
-    padding-top: 3px;
-}
-
-.most-increase-from h6.two-line {
-    height: 35px;
-    padding-top: 3px;
+    font-weight: bold;
 }
 
 .better-mark {

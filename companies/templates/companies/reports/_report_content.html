@@ -230,7 +230,7 @@
           <div class="col-xs-12 sub-graph-title" style="background-color: {{ subgraph.color }}">{{ subgraph.title }}</div>
         </div>
         <div class="row detail-content">
-          <div class="col-xs-12">
+          <div class="col-xs-12 left-padding-10">
           <div kendo-chart k-options="subLineOptions"
                k-title="{text: '{{ subgraph.chart_title }}', font: '1em Arial'}"
 
@@ -283,7 +283,7 @@
                 </div>
                 <div class="col-xs-8 top-padding-18">
                 {% ifequal LANGUAGE_CODE 'zh-tw' %}
-                  <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  <p class="bottom-margin-4">{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
                   <h3 class="{{ weekday_month_compare_helper.change_css_class }}">
                       {{ weekday_month_compare_helper.text_desc }}
                   </h3>
@@ -301,7 +301,7 @@
                 </div>
                 <div class="col-xs-8 top-padding-18">
                 {% ifequal LANGUAGE_CODE 'zh-tw' %}
-                  <p>{% trans "Compared to same period last year" %}</p>
+                  <p class="bottom-margin-4">{% trans "Compared to same period last year" %}</p>
                   <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
                       {{ weekday_same_period_compare_helper.text_desc }}
                   </h3>
@@ -336,7 +336,7 @@
 
           <div class="text-center calendar-width">
             <div class="highest-weekday-enegry">
-              <h6 class="font-09em"><img src="{% static 'images/reports/electricity.png' %}"> {% trans "Highest Weekday Energy Use" %}</h6>
+              <h6 class="font-09em">{% trans "Highest Weekday Energy Use" %}</h6>
               <h5 class="font-1em">${{ weekday_highest_usage|floatformat:"0"|intcomma }}</h5>
               <p class="font-09em">{{ weekday_highest_datetime|date:"DATE_FORMAT" }}</p>
             </div>
@@ -369,7 +369,7 @@
                 </div>
                 <div class="col-xs-8">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
-                  <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  <p class="bottom-margin-4">{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
                   <h3 class="{{ weekday_month_compare_helper.change_css_class }}">
                     {{ weekday_month_compare_helper.text_desc }}
                   </h3>
@@ -389,7 +389,7 @@
                 </div>
                 <div class="col-xs-8">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
-                  <p>{% trans "Compared to same period last year" %}</p>
+                  <p class="bottom-margin-4">{% trans "Compared to same period last year" %}</p>
                   <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
                     {{ weekday_same_period_compare_helper.text_desc }}
                   </h3>
@@ -430,7 +430,7 @@
             </div>
             <div class="col-xs-8 no-x-padding">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
-                    <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                    <p class="bottom-margin-4">{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
                     <h3 class="{{ wd.weekday.compare_last_helper.change_css_class }}">
                         {{ wd.weekday.compare_last_helper.text_desc }}
                     </h3>
@@ -450,7 +450,7 @@
             </div>
             <div class="col-xs-8 no-x-padding">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
-	              <p>{% trans "Compared to same period last year" %}</p>
+	              <p class="bottom-margin-4">{% trans "Compared to same period last year" %}</p>
 	              <h3 class="{{ wd.compare_same_period_helper.change_css_class }}">
 	                {{ wd.compare_same_period_helper.text_desc }}
 	              </h3>
@@ -490,7 +490,7 @@
                 </div>
                 <div class="col-xs-8 top-padding-18">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
-                  <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  <p class="bottom-margin-4">{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
                   <h3 class="{{ weekends.month_compare_helper.change_css_class }}">
                     {{ weekends.month_compare_helper.text_desc }}
                   </h3>
@@ -508,7 +508,7 @@
                 </div>
                 <div class="col-xs-8 top-padding-18">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
-                  <p>{% trans "Compared to same period last year" %}</p>
+                  <p class="bottom-margin-4">{% trans "Compared to same period last year" %}</p>
                   <h3 class="{{ weekends.same_period_compare_helper.change_css_class }}">
                     {{ weekends.same_period_compare_helper.text_desc }}
                   </h3>
@@ -544,11 +544,11 @@
           <div class="text-center calendar-width">
             <div class="highest-weekday-enegry">
 
-              <h6 class="font-09em"><img src="{% static 'images/reports/electricity.png' %}"> {% trans "Highest Weekend/Holiday Energy Use" %}</h6>
+              <h6 class="font-09em">{% trans "Highest Weekend/Holiday Energy Use" %}</h6>
               <h5 class="font-1em">${{ weekend_highest_usage|floatformat:"0"|intcomma }}</h5>
               <p class="font-09em">{{ weekend_highest_datetime|date:"DATE_FORMAT" }}</p>
             </div>
-            <div class="most-increase-from"><h6 class="font-09em two-line">{% trans "Most of the increase was from" %}</h6>
+            <div class="most-increase-from"><h6 class="font-09em">{% trans "Most of the increase was from" %}</h6>
               <p class="font-1em">{{ highest_diff_source.system.fullname }}</p></div>
           </div>
 
@@ -577,7 +577,7 @@
                 </div>
                 <div class="col-xs-8">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
-                  <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  <p class="bottom-margin-4">{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
                   <h3 class="{{ weekends.month_compare_helper.change_css_class }}">
                     {{ weekends.month_compare_helper.text_desc }}
                   </h3>
@@ -597,7 +597,7 @@
                 </div>
                 <div class="col-xs-8">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
-                  <p>{% trans "Compared to same period last year" %}</p>
+                  <p class="bottom-margin-4">{% trans "Compared to same period last year" %}</p>
                   <h3 class="{{ weekday_same_period_compare_helper.change_css_class }}">
                     {{ weekends.same_period_compare_helper.text_desc }}
                   </h3>
@@ -638,7 +638,7 @@
             </div>
             <div class="col-xs-8 no-x-padding">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
-              <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+              <p class="bottom-margin-4">{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
               <h3 class="{{ d.weekend.compare_last_helper.change_css_class }}">
                 {{ d.weekend.compare_last_helper.text_desc }}
               </h3>
@@ -658,7 +658,7 @@
             </div>
             <div class="col-xs-8 no-x-padding">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
-              <p>{% trans "Compared to same period last year" %}</p>
+              <p class="bottom-margin-4">{% trans "Compared to same period last year" %}</p>
               <h3 class="{{ d.weekend.compare_same_period_helper.change_css_class }}">
                 {{ d.weekend.compare_same_period_helper.text_desc }}
               </h3>
@@ -699,7 +699,7 @@
                 </div>
                 <div class="col-xs-8 top-padding-18">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
-                  <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  <p class="bottom-margin-4">{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
                   <h3 class="{{ overnight.compare_last_helper.change_css_class }}">
                     {{ overnight.compare_last_helper.text_desc }}
                   </h3>
@@ -717,7 +717,7 @@
                 </div>
                 <div class="col-xs-8 top-padding-18">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
-                  <p>{% trans "Compared to same period last year" %}</p>
+                  <p class="bottom-margin-4">{% trans "Compared to same period last year" %}</p>
                   <h3 class="{{ overnight.compare_same_period_helper.change_css_class }}">
                     {{ overnight.compare_same_period_helper.text_desc }}
                   </h3>
@@ -752,7 +752,7 @@
 
           <div class="text-center calendar-width">
             <div class="highest-weekday-enegry">
-              <h6 class="font-09em"><img src="{% static 'images/reports/electricity.png' %}"> {% trans "Highest Overnight Energy Use" %}</h6>
+              <h6 class="font-09em">{% trans "Highest Overnight Energy Use" %}</h6>
               <h5 class="font-1em">${{ overnight_highest_usage|floatformat:"0"|intcomma }}</h5>
               <p class="font-09em">{{ overnight_highest_datetime|date:"DATE_FORMAT" }}</p>
             </div>
@@ -785,7 +785,7 @@
                 </div>
                 <div class="col-xs-8">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
-                  <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  <p class="bottom-margin-4">{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
                   <h3 class="{{ overnight.compare_last_helper.change_css_class }}">
                     {{ overnight.compare_last_helper.text_desc }}
                   </h3>
@@ -805,7 +805,7 @@
                 </div>
                 <div class="col-xs-8">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
-                  <p>{% trans "Compared to same period last year" %}</p>
+                  <p class="bottom-margin-4">{% trans "Compared to same period last year" %}</p>
                   <h3 class="{{ overnight.compare_same_period_helper.change_css_class }}">
                     {{ overnight.compare_same_period_helper.text_desc }}
                   </h3>
@@ -846,7 +846,7 @@
             </div>
             <div class="col-xs-8 no-x-padding">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
-              <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+              <p class="bottom-margin-4">{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
               <h3 class="{{ d.overnight.compare_last_helper.change_css_class }}">
                 {{ d.overnight.compare_last_helper.text_desc }}
               </h3>
@@ -866,7 +866,7 @@
             </div>
             <div class="col-xs-8 no-x-padding">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
-              <p>{% trans "Compared to same period last year" %}</p>
+              <p class="bottom-margin-4">{% trans "Compared to same period last year" %}</p>
               <h3 class="{{ d.overnight.compare_same_period_helper.change_css_class }}">
                 {{ d.overnight.compare_same_period_helper.text_desc }}
               </h3>
