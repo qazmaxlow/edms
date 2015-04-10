@@ -691,7 +691,6 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
             compare_same_period = float(average_usage - last_same_period)/last_same_period*100
 
         g['compare_same_period'] = compare_same_period
-        g['diff_same_period'] = last_same_period - average_usage
 
         weekend = {'bill': g['currentWeekendInfo']['average'] * money_unit_rate.rate}
         weekend_beginning_usage = g['beginningWeekendInfo']['average']
@@ -767,6 +766,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     # sub compare graphs
     sub_compare_graphs = []
 
+    combined_weekday_readings_g = {}
     # this is combined current readings
     combined_readings = {}
     combined_readings_g = {}
@@ -788,9 +788,11 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
             if ts in combined_readings:
                 combined_readings[ts] += val
                 combined_readings_g[ts].append((g,val-g['currentWeekendInfo']['average']))
+                combined_weekday_readings_g[ts].append((g,val-g['currentWeekdayInfo']['average']))
             else:
                 combined_readings[ts] = val
                 combined_readings_g[ts] = [(g,val-g['currentWeekendInfo']['average'])]
+                combined_weekday_readings_g[ts] = [(g,val-g['currentWeekdayInfo']['average'])]
 
         for ts, val in overnight_readings.items():
             combined_overnight_readings_g[ts] = g
@@ -902,9 +904,6 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         wd_highest_datetime, wd_highest_usage= sorted(only_weekday_readings, key=lambda x: x[1])[-1]
 
     # m['highest_value']
-    groupdata_sorted_by_diff = sorted(group_data, key=lambda x: x['diff_same_period'])
-    highest_diff_source = groupdata_sorted_by_diff[-1]
-    m['highest_diff_source'] = highest_diff_source
 
     m['weekday_highest_usage'] = highest_usage
     m['weekday_highest_datetime'] = datetime.datetime.fromtimestamp(highest_datetime, pytz.utc)
@@ -938,6 +937,11 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
     m['weekend_highest_usage'] = we_highest_usage
     m['weekend_highest_datetime'] = we_highest_datetime
+
+
+    if highest_datetime:
+        m['highest_diff_source'], _v = sorted(combined_weekday_readings_g[highest_datetime], key=lambda x: x[1])[-1]
+
 
     only_overnight_readings = combined_overnight_readings.items()
 
