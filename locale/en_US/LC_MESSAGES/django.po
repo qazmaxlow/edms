@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-13 03:43+0000\n"
+"POT-Creation-Date: 2015-04-13 04:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -133,68 +133,68 @@ msgstr ""
 msgid "{0}{1}{2}"
 msgstr ""
 
-#: companies/report_views.py:750 companies/report_views.py:751
+#: companies/report_views.py:749 companies/report_views.py:750
 msgid "tcmonth"
 msgstr ""
 
-#: companies/report_views.py:756
+#: companies/report_views.py:755
 #, fuzzy
 msgid "This week"
 msgstr "Weekdays"
 
-#: companies/report_views.py:757
+#: companies/report_views.py:756
 #, fuzzy
 msgid "Last week"
 msgstr "Weekdays"
 
-#: companies/report_views.py:759
+#: companies/report_views.py:758
 msgid "This quarter"
 msgstr ""
 
-#: companies/report_views.py:760
+#: companies/report_views.py:759
 msgid "Last quarter"
 msgstr ""
 
-#: companies/report_views.py:765
+#: companies/report_views.py:764
 msgid "This period"
 msgstr ""
 
-#: companies/report_views.py:766
+#: companies/report_views.py:765
 msgid "Last same period"
 msgstr ""
 
-#: companies/report_views.py:824
+#: companies/report_views.py:828
 #, python-brace-format
 msgid "Overall: {0.compared_percent_abs:.0f}&#37; more energy than last {1}"
 msgstr ""
 
-#: companies/report_views.py:826
+#: companies/report_views.py:830
 #, python-brace-format
 msgid "Overall: {0.compared_percent_abs:.0f}&#37; less energy than last {1}"
 msgstr ""
 
-#: companies/report_views.py:1035
+#: companies/report_views.py:1041
 #, python-brace-format
 msgid "Your energy consumption this {1} was {0} than it was last {1}"
 msgstr ""
 
-#: companies/report_views.py:1040
+#: companies/report_views.py:1046
 msgid "Total energy consumption for the last 6 months (kWh)"
 msgstr ""
 
-#: companies/report_views.py:1043
+#: companies/report_views.py:1049
 msgid "Total energy consumption for the last 6 weeks (kWh)"
 msgstr ""
 
-#: companies/report_views.py:1045
+#: companies/report_views.py:1051
 msgid "Total energy consumption for the last 6 quarters (kWh)"
 msgstr ""
 
-#: companies/report_views.py:1047
+#: companies/report_views.py:1053
 msgid "Total energy consumption for the last 6 years (kWh)"
 msgstr ""
 
-#: companies/report_views.py:1049
+#: companies/report_views.py:1055
 msgid "Total energy consumption for the last 6 same periods (kWh)"
 msgstr ""
 
@@ -551,6 +551,11 @@ msgstr ""
 #: companies/templates/companies/reports/summary.html:361
 #: entrak/templates/report.html:82 entrak/templates/report.html.py:86
 msgid "Overnight"
+msgstr ""
+
+#: companies/templates/companies/reports/popup_report.html:51
+#, python-format
+msgid "Compared to Last %(report_type_name)s"
 msgstr ""
 
 #: companies/templates/companies/reports/popup_report_pdf.html:44
