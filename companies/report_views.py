@@ -75,39 +75,39 @@ def get_total_cost(source_ids, start_dt, end_dt, date_type):
         return sum([get_unitrate(r.source_id, r.datetime).rate*r.value for r in month_readings])
 
 
-def get_weekdays_cost(system, start_dt, end_dt):
-    sources = SourceManager.get_sources(system)
-    source_ids = [str(source.id) for source in sources]
+def get_weekdays_cost_by_source_readings(system, source_id, start_dt, end_dt):
     all_holidays = system.get_all_holidays()
+    total_day = 0
+    total_val = 0
 
-    day_source_readings = SourceReadingDay.objects(
-        source_id__in=source_ids,
+    readings = SourceReadingDay.objects(
+        source_id=source_id,
         datetime__gte=start_dt,
         datetime__lte=end_dt)
 
+    for sr in readings:
+        source_id = sr.source_id
+        dt = sr.datetime
+        if dt.weekday() <= 4 and (dt.date() not in all_holidays):
+            total_val += get_unitrate(source_id, dt).rate * sr.value
+            total_day += 1
+
+    if total_day > 0:
+        return total_val / float(total_day)
+
+
+def get_weekdays_cost(system, start_dt, end_dt):
+    sources = SourceManager.get_sources(system)
+    source_ids = [str(source.id) for source in sources]
+
     # group by source id
     source_groups = {}
-
-    for sr in day_source_readings:
-        if not sr.source_id in source_groups:
-            source_groups[sr.source_id] = [sr]
-        else:
-            source_groups[sr.source_id].append(sr)
-
     avgs = []
-    for sid, readings in source_groups.items():
-        total_day = 0
-        total_val = 0
 
-        for sr in readings:
-            source_id = sr.source_id
-            dt = sr.datetime
-            if dt.weekday() <= 4 and (dt.date() not in all_holidays):
-                total_val += get_unitrate(source_id, dt).rate * sr.value
-                total_day += 1
-
-        if total_day > 0:
-            avgs.append(total_val / float(total_day))
+    for sid in source_ids:
+        avg_cost = get_weekdays_cost_by_source_readings(system, sid, start_dt, end_dt)
+        if avg_cost is not None:
+            avgs.append(avg_cost)
 
     if avgs:
         return sum(avgs)
