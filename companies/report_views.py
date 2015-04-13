@@ -645,7 +645,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     m['weekday_same_period_compare_helper'] = CompareTplHepler(weekday_compare_same_period)
 
     for ix, g in enumerate(group_data):
-        g['color'] = type_colors[ix]
+        g['color'] = type_colors[ix % len(type_colors)]
         g['system'] = System.objects.get(code=g['systemCode'])
 
         if len(g['sourceIds']) == 1:
@@ -844,7 +844,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         # [{'name': 'last', 'value': v, 'datetime': datetime.datetime.fromtimestamp(t, pytz.utc) } for t, v in combined_last_readings.items()]
         sub_graph = {
             'system': g['system'],
-            'color': type_colors[ix],
+            'color': type_colors[ix % len(type_colors)],
             'title': graph_title,
             'current_reading_serie': json.dumps([{'name': compare_current_name, 'value': v, 'datetime': t} for t, v in current_day_readings.items()], cls=DjangoJSONEncoder),
             'last_reading_serie': json.dumps([{'name': compare_last_name, 'value': v, 'datetime': t} for t, v in last_day_readings.items()], cls=DjangoJSONEncoder),
@@ -1015,7 +1015,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
             'change_in_money': change_in_money,
             'percent_in_total': percent_in_total,
             'percent_base_on_max': percent_base_on_max,
-            'color': type_colors[ix]
+            'color': type_colors[ix % len(type_colors)]
         }
         data_info['name'] = g['sourceNameInfo'][current_lang()] if g['systemCode'] == m['company_system'].code else g['system'].fullname
         transformed_datas.append(data_info)
@@ -1023,11 +1023,11 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     m['transformed_datas'] = transformed_datas
 
 
-    transformed_bars = [{'name': td['name'], 'data': [td['total_energy']], 'color': type_colors[i]} for i, td in enumerate(transformed_datas)]
+    transformed_bars = [{'name': td['name'], 'data': [td['total_energy']], 'color': type_colors[i % len(type_colors)]} for i, td in enumerate(transformed_datas)]
 
     m['transformed_bars_json'] = json.dumps(transformed_bars)
 
-    transformed_pie = [{'category': td['name'], 'value': td['total_energy'], 'color': type_colors[i]} for i, td in enumerate(transformed_datas)]
+    transformed_pie = [{'category': td['name'], 'value': td['total_energy'], 'color': type_colors[i % len(type_colors)]} for i, td in enumerate(transformed_datas)]
 
     m['transformed_pie_json'] = json.dumps(transformed_pie)
 
