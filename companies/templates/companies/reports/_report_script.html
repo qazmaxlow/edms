@@ -106,7 +106,7 @@ ngapp.controller("ReportController", function($scope) {
             labels: {
                 template: "#= kendo.format('{0:p0}', percentage)#",
                 position: "Center",
-                distance: 20,
+                distance: 30,
                 visible: true,
                 background: "transparent",
                 font: "bold 14px Arial",
@@ -392,7 +392,7 @@ setCalendar = function(currentDt, currentEndDt, eleSel, readings, averageUsage, 
         calendarDayEle.append("<div class='calendar-day-digit'>"+calendarNowDt.date()+"</div>");
 
         if (calendarNowDt.isBefore(currentDt)
-            || calendarNowDt.isSame(currentEndDt)
+            //|| calendarNowDt.isSame(currentEndDt)
             || calendarNowDt.isAfter(currentEndDt)) {
             calendarDayEle.addClass('calendar-day-out-range');
         } else if (isNotConcernFunc(calendarNowDt)) {
