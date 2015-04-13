@@ -162,7 +162,7 @@
                     </span>
                     <span id="forest-impact">{{ co2_in_forest|floatformat:"0"|intcomma }}{% trans "m<sup>2</sup>" %}</span>
                     {% else %}
-                    <span id="forest-impact">{{ co2_in_forest|floatformat:"0"|intcomma }}m<sup>2</sup></span><br>
+                    <span id="forest-impact">{{ co2_in_forest|floatformat:"0"|intcomma }} m<sup>2</sup></span><br>
                     <span id="forest-impact-subtext" class="basic-info-col-subtext">
                       {% if is_saving %}
                       of rainforest protected
@@ -202,7 +202,7 @@
                     </div>
                   </td>
                   <td class="transformed-label" style="color:{{ td.color }};">
-                    {{ td.total_energy|floatformat:"0"|intcomma }}kWh
+                    {{ td.total_energy|floatformat:"0"|intcomma }} kWh
                   </td>
                 </tr>
                 {% endfor %}
