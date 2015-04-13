@@ -706,8 +706,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         money_unit_code = unit_infos['money']
         money_unit_rate = UnitRate.objects.filter(category_code='money', code=unit_infos['money']).first()
 
-        g['usage_bill'] = g['usage'] * money_unit_rate.rate
-
+        weekday_costs = [get_weekdays_cost_by_source_readings(current_system, sid, report_date, report_end_date) for sid in g['sourceIds']]
+        g['usage_bill'] = sum([c for c in weekday_costs if c is not None])
 
         compare_last_month = None
         if beginning_usage > 0:
