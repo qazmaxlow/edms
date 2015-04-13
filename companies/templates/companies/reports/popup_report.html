@@ -48,7 +48,7 @@
                 k-orientation="'vertical'"
                 k-on-select="onSelect(kendoEvent)">
               <li data-anchor="report_key_statistics">{% trans "Key Statistics" %}</li>
-              <li data-anchor="report_compared_to_last">{% trans report_sidebar_label %}</li>
+              <li data-anchor="report_compared_to_last">{% filter title %}{% blocktrans %}Compared to Last {{ report_type_name }}{% endblocktrans %}{% endfilter %}</li>
               <li data-anchor="weekday-info">{% trans "Weekdays" %}</li>
               <li data-anchor="weekend-info">{% trans "Weekends and Holidays" %}</li>
               <li data-anchor="overnight-info">{% trans "Overnight" %}</li>
