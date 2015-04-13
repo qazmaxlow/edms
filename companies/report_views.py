@@ -73,7 +73,45 @@ def get_total_cost(source_ids, start_dt, end_dt, date_type):
 
     if month_readings:
         return sum([get_unitrate(r.source_id, r.datetime).rate*r.value for r in month_readings])
-        
+
+
+def get_weekdays_cost(system, start_dt, end_dt):
+    sources = SourceManager.get_sources(system)
+    source_ids = [str(source.id) for source in sources]
+    all_holidays = system.get_all_holidays()
+
+    day_source_readings = SourceReadingDay.objects(
+        source_id__in=source_ids,
+        datetime__gte=start_dt,
+        datetime__lte=end_dt)
+
+    # group by source id
+    source_groups = {}
+
+    for sr in day_source_readings:
+        if not sr.source_id in source_groups:
+            source_groups[sr.source_id] = [sr]
+        else:
+            source_groups[sr.source_id].append(sr)
+
+    avgs = []
+    for sid, readings in source_groups.items():
+        total_day = 0
+        total_val = 0
+
+        for sr in readings:
+            source_id = sr.source_id
+            dt = sr.datetime
+            if dt.weekday() <= 4 and (dt.date() not in all_holidays):
+                total_val += get_unitrate(source_id, dt).rate * sr.value
+                total_day += 1
+
+        if total_day > 0:
+            avgs.append(total_val / float(total_day))
+
+    if avgs:
+        return sum(avgs)
+
 
 @permission_required()
 def summary_ajax(request, system_code):
@@ -153,51 +191,19 @@ def summary_ajax(request, system_code):
         if total_day > 0:
             return total_val / float(total_day)
 
-    def get_weekdays_cost(source_ids, start_dt, end_dt):
+    def _get_weekdays_cost(source_ids, start_dt, end_dt):
         day_source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingDay, start_dt, end_dt)
         if day_source_readings:
             weekday_costs = [(source_id, weekday_cost_avg(source_id, sr) ) for source_id, sr in day_source_readings.items()]
             return sum([ c for s, c in weekday_costs if c is not None])
 
-    def _get_weekdays_cost(source_ids, start_dt, end_dt):
-        day_source_readings = SourceReadingDay.objects(
-            source_id__in=source_ids,
-            datetime__gte=start_dt,
-            datetime__lte=end_dt)
 
-        # group by source id
-        source_groups = {}
-
-        for sr in day_source_readings:
-            if not sr.source_id in source_groups:
-                source_groups[sr.source_id] = [sr]
-            else:
-                source_groups[sr.source_id].append(sr)
-
-        avgs = []
-        for sid, readings in source_groups.items():
-            total_day = 0
-            total_val = 0
-
-            for sr in readings:
-                source_id = sr.source_id
-                dt = sr.datetime
-                if dt.weekday() <= 4 and (dt.date() not in all_holidays):
-                    total_val += get_unitrate(source_id, dt).rate * sr.value
-                    total_day += 1
-
-            if total_day > 0:
-                avgs.append(total_val / float(total_day))
-
-        if avgs:
-            return sum(avgs)
-
-    weekday_cost = _get_weekdays_cost(source_ids, start_dt, end_dt)
+    weekday_cost = get_weekdays_cost(current_system, start_dt, end_dt)
     # weekday_money_sum = sum([ c for s, c in weekday_costs if c is not None])
 
     compare_to_last_weekdays = None
 
-    last_weekdays_cost = _get_weekdays_cost(source_ids, last_start_dt, last_end_dt)
+    last_weekdays_cost = get_weekdays_cost(current_system, last_start_dt, last_end_dt)
 
     if last_weekdays_cost > 0 and weekday_cost:
         compare_to_last_weekdays = float(weekday_cost-last_weekdays_cost)/last_weekdays_cost*100
@@ -631,15 +637,14 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     m['report_data_json'] = json.dumps(report_data)
 
     group_data = report_data['groupedSourceInfos']
-    weekday_average = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
-    m['weekday_average'] = weekday_average
+
 
     unit_infos = json.loads(m['company_system'].unit_info)
     money_unit_code = unit_infos['money']
     # oops, wrong?
     money_unit_rate = UnitRate.objects.filter(category_code='money', code=unit_infos['money']).first()
 
-    m['weekday_bill'] = weekday_average * money_unit_rate.rate
+    m['weekday_bill'] = get_weekdays_cost(current_system, report_date, report_end_date)
 
     m['total_co2'] = sum([g['currentTotalCo2'] for g in group_data])/1000.0
     m['total_money'] = sum([g['currentTotalMoney'] for g in group_data])
