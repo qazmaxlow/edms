@@ -85,9 +85,11 @@ def get_weekdays_cost_by_source_readings(system, source_id, start_dt, end_dt):
         datetime__gte=start_dt,
         datetime__lte=end_dt)
 
+    system_tz = pytz.timezone(system.timezone)
     for sr in readings:
         source_id = sr.source_id
-        dt = sr.datetime
+        dt = sr.datetime.astimezone(system_tz)
+
         if dt.weekday() <= 4 and (dt.date() not in all_holidays):
             total_val += get_unitrate(source_id, dt).rate * sr.value
             total_day += 1
