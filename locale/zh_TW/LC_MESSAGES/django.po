@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-10 11:52+0000\n"
+"POT-Creation-Date: 2015-04-13 03:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,127 +53,145 @@ msgstr "減少了"
 msgid "{self.compared_percent_abs:.0f}% {self.change_desc}"
 msgstr "{self.change_desc} {self.compared_percent_abs:.0f}%"
 
-#: companies/report_views.py:528 companies/report_views.py:549
+#: companies/report_views.py:528 companies/report_views.py:553
 msgid "month"
 msgstr "月"
 
-#: companies/report_views.py:530
+#: companies/report_views.py:529 companies/report_views.py:554
+#: companies/templates/companies/reports/popup_report - Copy.html:48
+#: companies/templates/companies/reports/summary Copy.html:473
+msgid "Compared to Last Month"
+msgstr "相比上月"
+
+#: companies/report_views.py:531
 #, python-brace-format
 msgid "{0}{1} - Monthly Energy Report"
 msgstr "{0}年{1}月 - 能源使用報告"
 
-#: companies/report_views.py:532
+#: companies/report_views.py:533
 #, python-brace-format
 msgid "{0} - Monthly Energy Report"
 msgstr "{0} - 能源使用報告"
 
-#: companies/report_views.py:534
+#: companies/report_views.py:535
 msgid "week"
 msgstr "週"
 
-#: companies/report_views.py:536 companies/report_views.py:551
+#: companies/report_views.py:536
+msgid "Compared to Last Week"
+msgstr "相比上週"
+
+#: companies/report_views.py:538 companies/report_views.py:556
 #, python-brace-format
 msgid "{0}{1}{2} - "
 msgstr "{0}年{1}月{2}日 - "
 
-#: companies/report_views.py:537
+#: companies/report_views.py:539
 #, fuzzy, python-brace-format
 msgid "{0}{1}{2} Weekly Energy Report"
 msgstr "{0}年{1}月{2}日 - 能源使用報告"
 
-#: companies/report_views.py:540
+#: companies/report_views.py:542
 #, fuzzy, python-brace-format
 msgid "{0} Weekly Energy Report"
 msgstr "{0} - 能源使用報告"
 
-#: companies/report_views.py:542
+#: companies/report_views.py:544
 msgid "quarter"
 msgstr "季"
 
-#: companies/report_views.py:543
+#: companies/report_views.py:545
+msgid "Compared to Last Quarter"
+msgstr "相比上季"
+
+#: companies/report_views.py:546
 #, python-brace-format
 msgid "{0} Q{1}"
 msgstr "{0}年 第{1}季"
 
-#: companies/report_views.py:544
+#: companies/report_views.py:547
 #, python-brace-format
 msgid "{0} - Quarterly Energy Report"
 msgstr "{0} - 能源使用報告"
 
-#: companies/report_views.py:546
+#: companies/report_views.py:549
 msgid "year"
 msgstr "年"
 
-#: companies/report_views.py:547
+#: companies/report_views.py:550
+msgid "Compared to Last Year"
+msgstr "相比上年"
+
+#: companies/report_views.py:551
 #, python-brace-format
 msgid "{0} - Yearly Energy Report"
 msgstr "{0} - 能源使用報告"
 
-#: companies/report_views.py:552
+#: companies/report_views.py:557
 #, python-brace-format
 msgid "{0}{1}{2}"
 msgstr "{0}年{1}月{2}日"
 
-#: companies/report_views.py:744 companies/report_views.py:745
+#: companies/report_views.py:750 companies/report_views.py:751
 msgid "tcmonth"
 msgstr "月"
 
-#: companies/report_views.py:750
+#: companies/report_views.py:756
 msgid "This week"
 msgstr "本週"
 
-#: companies/report_views.py:751
+#: companies/report_views.py:757
 msgid "Last week"
 msgstr "上週"
 
-#: companies/report_views.py:753
+#: companies/report_views.py:759
 msgid "This quarter"
 msgstr "本季"
 
-#: companies/report_views.py:754
+#: companies/report_views.py:760
 msgid "Last quarter"
 msgstr "上季"
 
-#: companies/report_views.py:759
+#: companies/report_views.py:765
 msgid "This period"
 msgstr "本期"
 
-#: companies/report_views.py:760
+#: companies/report_views.py:766
 msgid "Last same period"
 msgstr "上期"
 
-#: companies/report_views.py:813
+#: companies/report_views.py:824
 #, python-brace-format
 msgid "Overall: {0.compared_percent_abs:.0f}&#37; more energy than last {1}"
 msgstr "總計: 比上{1}多用 {0.compared_percent_abs:.0f}&#37;"
 
-#: companies/report_views.py:815
+#: companies/report_views.py:826
 #, python-brace-format
 msgid "Overall: {0.compared_percent_abs:.0f}&#37; less energy than last {1}"
 msgstr "總計: 比上{1}少用 {0.compared_percent_abs:.0f}&#37;"
 
-#: companies/report_views.py:1021
+#: companies/report_views.py:1035
 #, python-brace-format
 msgid "Your energy consumption this {1} was {0} than it was last {1}"
 msgstr "你本月的電力消耗比起上{1}{0}"
 
-#: companies/report_views.py:1026
+#: companies/report_views.py:1040
 msgid "Total energy consumption for the last 6 months (kWh)"
 msgstr "過去6個月的電力消耗 (kWh)"
 
-#: companies/report_views.py:1029
+#: companies/report_views.py:1043
 msgid "Total energy consumption for the last 6 weeks (kWh)"
 msgstr "過去6週的電力消耗 (kWh)"
 
-#: companies/report_views.py:1031
+#: companies/report_views.py:1045
 msgid "Total energy consumption for the last 6 quarters (kWh)"
 msgstr "過去6季的電力消耗 (kWh)"
 
-#: companies/report_views.py:1033
+#: companies/report_views.py:1047
 msgid "Total energy consumption for the last 6 years (kWh)"
 msgstr "過去6年的電力消耗 (kWh)"
 
-#: companies/report_views.py:1035
+#: companies/report_views.py:1049
 msgid "Total energy consumption for the last 6 same periods (kWh)"
 msgstr "過去6期的電力消耗 (kWh)"
 
@@ -507,11 +525,6 @@ msgstr "下載報告"
 msgid "Key Statistics"
 msgstr "主要數據"
 
-#: companies/templates/companies/reports/popup_report - Copy.html:48
-#: companies/templates/companies/reports/summary Copy.html:473
-msgid "Compared to Last Month"
-msgstr "相比上個月"
-
 #: companies/templates/companies/reports/popup_report - Copy.html:49
 #: companies/templates/companies/reports/popup_report.html:52
 #: companies/templates/companies/reports/summary Copy.html:110 Copy.html:345
@@ -537,11 +550,6 @@ msgstr "週末及假期能源使用"
 #: entrak/templates/report.html:82 entrak/templates/report.html.py:86
 msgid "Overnight"
 msgstr "晚間能源使用"
-
-#: companies/templates/companies/reports/popup_report.html:51
-#, python-format
-msgid "Compared to Last %(report_type_name)s"
-msgstr "相比上%(report_type_name)s"
 
 #: companies/templates/companies/reports/popup_report_pdf.html:44
 #: companies/templates/companies/reports/summary - Copy.html:125
@@ -998,83 +1006,83 @@ msgid "Year total"
 msgstr "全年"
 
 #: companies/templates/companies/reports/summary - Copy.html:527
-#: companies/templates/companies/reports/summary.html:501
+#: companies/templates/companies/reports/summary.html:503
 msgid "Compared to last week"
 msgstr "比上週"
 
 #: companies/templates/companies/reports/summary - Copy.html:530
-#: companies/templates/companies/reports/summary.html:504
+#: companies/templates/companies/reports/summary.html:506
 msgid "Compared to last month"
 msgstr "比上月"
 
 #: companies/templates/companies/reports/summary - Copy.html:533
-#: companies/templates/companies/reports/summary.html:507
+#: companies/templates/companies/reports/summary.html:509
 msgid "Compared to last quarter"
 msgstr "比上季"
 
 #: companies/templates/companies/reports/summary - Copy.html:536
-#: companies/templates/companies/reports/summary.html:510
+#: companies/templates/companies/reports/summary.html:512
 msgid "Compared to last year"
 msgstr "比上年"
 
 #: companies/templates/companies/reports/summary - Copy.html:545
-#: companies/templates/companies/reports/summary.html:519
+#: companies/templates/companies/reports/summary.html:521
 msgid "Total week cost"
 msgstr "總用電量"
 
 #: companies/templates/companies/reports/summary - Copy.html:548
-#: companies/templates/companies/reports/summary.html:522
+#: companies/templates/companies/reports/summary.html:524
 msgid "Total month cost"
 msgstr "總用電量"
 
 #: companies/templates/companies/reports/summary - Copy.html:551
-#: companies/templates/companies/reports/summary.html:525
+#: companies/templates/companies/reports/summary.html:527
 msgid "Total quarter cost"
 msgstr "總用電量"
 
 #: companies/templates/companies/reports/summary - Copy.html:554
-#: companies/templates/companies/reports/summary.html:528
+#: companies/templates/companies/reports/summary.html:530
 msgid "Total year cost"
 msgstr "總用電量"
 
 #: companies/templates/companies/reports/summary - Copy.html:650
-#: companies/templates/companies/reports/summary.html:622
+#: companies/templates/companies/reports/summary.html:638
 msgid "Week"
 msgstr "週報"
 
 #: companies/templates/companies/reports/summary - Copy.html:651
-#: companies/templates/companies/reports/summary.html:623
+#: companies/templates/companies/reports/summary.html:639
 msgid "Month"
 msgstr "月報"
 
 #: companies/templates/companies/reports/summary - Copy.html:652
-#: companies/templates/companies/reports/summary.html:624
+#: companies/templates/companies/reports/summary.html:640
 msgid "Quarter"
 msgstr "季報"
 
 #: companies/templates/companies/reports/summary - Copy.html:653
-#: companies/templates/companies/reports/summary.html:625
+#: companies/templates/companies/reports/summary.html:641
 msgid "Year"
 msgstr "年報"
 
 #: companies/templates/companies/reports/summary - Copy.html:654
-#: companies/templates/companies/reports/summary.html:626
+#: companies/templates/companies/reports/summary.html:642
 msgid "Match my bills"
 msgstr "與電費月結單同步"
 
-#: companies/templates/companies/reports/summary.html:483
+#: companies/templates/companies/reports/summary.html:485
 msgid "Week Total"
 msgstr "全週"
 
-#: companies/templates/companies/reports/summary.html:486
+#: companies/templates/companies/reports/summary.html:488
 msgid "Month Total"
 msgstr "全月"
 
-#: companies/templates/companies/reports/summary.html:489
+#: companies/templates/companies/reports/summary.html:491
 msgid "Quarter Total"
 msgstr "全季"
 
-#: companies/templates/companies/reports/summary.html:492
+#: companies/templates/companies/reports/summary.html:494
 msgid "Year Total"
 msgstr "全年"
 
@@ -2431,6 +2439,9 @@ msgstr "用戶沒有訪問這部份的權限。"
 #: utils/auth.py:40
 msgid "Please enter username and password."
 msgstr "請輸入用戶名稱和密碼"
+
+#~ msgid "Compared to Last %(report_type_name)s"
+#~ msgstr "相比上%(report_type_name)s"
 
 #~ msgid "Reduced CO<sub>2</sub> emissions equal to the weight of"
 #~ msgstr "減少排放二氧化碳的重量，等於"
