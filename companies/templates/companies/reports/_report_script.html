@@ -76,6 +76,26 @@ ngapp.controller("ReportController", function($scope) {
     });
     $scope.cgDatas = cg_ds;
 
+    var pieData = {{ transformed_pie_json|safe }};
+    pieData.sort(function(a,b){
+        if (a.value < b.value){
+            return -1;
+        } else if (a.value > b.value){
+            return 1;
+        } else {
+            return 0;
+        }
+    });
+
+    //put small value between large value
+    var pieDataSorted = [];
+    while(pieData.length > 0){
+        if (pieData.length & 1){
+            pieDataSorted.push(pieData.shift());
+        } else {
+            pieDataSorted.push(pieData.pop());
+        }
+    }
 
     $scope.transformedPieOptions = {
         legend: {
@@ -111,7 +131,8 @@ ngapp.controller("ReportController", function($scope) {
         },
         series: [{
             startAngle: 150,
-            data: {{ transformed_pie_json|safe }}
+            //data: {{ transformed_pie_json|safe }}
+            data: pieDataSorted
         }],
         tooltip: {
             visible: true,
