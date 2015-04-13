@@ -70,6 +70,7 @@ def get_total_cost(source_ids, start_dt, end_dt, date_type):
         source_id__in=source_ids,
         datetime__gte=start_dt,
         datetime__lt=end_dt)
+
     if month_readings:
         return sum([get_unitrate(r.source_id, r.datetime).rate*r.value for r in month_readings])
         
@@ -158,12 +159,45 @@ def summary_ajax(request, system_code):
             weekday_costs = [(source_id, weekday_cost_avg(source_id, sr) ) for source_id, sr in day_source_readings.items()]
             return sum([ c for s, c in weekday_costs if c is not None])
 
-    weekday_cost = get_weekdays_cost(source_ids, start_dt, end_dt)
+    def _get_weekdays_cost(source_ids, start_dt, end_dt):
+        day_source_readings = SourceReadingDay.objects(
+            source_id__in=source_ids,
+            datetime__gte=start_dt,
+            datetime__lte=end_dt)
+
+        # group by source id
+        source_groups = {}
+
+        for sr in day_source_readings:
+            if not sr.source_id in source_groups:
+                source_groups[sr.source_id] = [sr]
+            else:
+                source_groups[sr.source_id].append(sr)
+
+        avgs = []
+        for sid, readings in source_groups.items():
+            total_day = 0
+            total_val = 0
+
+            for sr in readings:
+                source_id = sr.source_id
+                dt = sr.datetime
+                if dt.weekday() <= 4 and (dt.date() not in all_holidays):
+                    total_val += get_unitrate(source_id, dt).rate * sr.value
+                    total_day += 1
+
+            if total_day > 0:
+                avgs.append(total_val / float(total_day))
+
+        if avgs:
+            return sum(avgs)
+
+    weekday_cost = _get_weekdays_cost(source_ids, start_dt, end_dt)
     # weekday_money_sum = sum([ c for s, c in weekday_costs if c is not None])
 
     compare_to_last_weekdays = None
 
-    last_weekdays_cost = get_weekdays_cost(source_ids, last_start_dt, last_end_dt)
+    last_weekdays_cost = _get_weekdays_cost(source_ids, last_start_dt, last_end_dt)
 
     if last_weekdays_cost > 0 and weekday_cost:
         compare_to_last_weekdays = float(weekday_cost-last_weekdays_cost)/last_weekdays_cost*100
@@ -526,12 +560,14 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     )
     if report_type == 'month':
         report_type_name = _('month')
+        report_sidebar_label = _('Compared to Last Month')
         if (current_lang()=="zh-tw"):
             report_date_text = _(u"{0}{1} - Monthly Energy Report").format(report_date.strftime("%Y"),report_date.strftime("%-m"))
         else:
             report_date_text = _(u"{0} - Monthly Energy Report").format(DateFormat(report_date).format("M Y"))
     elif report_type == 'week':
         report_type_name = _('week')
+        report_sidebar_label = _('Compared to Last Week')
         if (current_lang()=="zh-tw"):
             report_date_text_begin = _(u"{0}{1}{2} - ").format(report_date.strftime("%Y"),report_date.strftime("%-m"),report_date.strftime("%-d"))
             report_date_text_end = _(u"{0}{1}{2} Weekly Energy Report").format(report_end_date.strftime("%Y"),report_end_date.strftime("%-m"),report_end_date.strftime("%-d"))
@@ -540,18 +576,22 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
             report_date_text = _("{0} Weekly Energy Report").format(report_date_text)
     elif report_type == 'quarter':
         report_type_name = _('quarter')
+        report_sidebar_label = _('Compared to Last Quarter')
         quarter_text =  _('{0} Q{1}').format(report_date.strftime("%Y"), report_end_date.month/3)
         report_date_text = _("{0} - Quarterly Energy Report").format(quarter_text)
     elif report_type == 'year':
         report_type_name = _('year')
+        report_sidebar_label = _('Compared to Last Year')
         report_date_text = _("{0} - Yearly Energy Report").format(formats.date_format(report_date, 'YEAR_FORMAT'))
     if report_type =='custom':
         report_type_name = _('month')
+        report_sidebar_label = _('Compared to Last Month')
         if (current_lang()=="zh-tw"):
             report_date_text_begin = _(u"{0}{1}{2} - ").format(report_date.strftime("%Y"),report_date.strftime("%-m"),report_date.strftime("%-d"))
             report_date_text_end = _(u"{0}{1}{2}").format(report_end_date.strftime("%Y"),report_end_date.strftime("%-m"),report_end_date.strftime("%-d"))
             report_date_text = report_date_text_begin + report_date_text_end
     m['report_type_name'] = report_type_name
+    m['report_sidebar_label'] = report_sidebar_label
     m['report_date_text'] = report_date_text
     m['report_day_diff'] = (report_end_date - report_date).days
 

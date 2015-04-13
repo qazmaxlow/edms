@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-10 11:52+0000\n"
+"POT-Creation-Date: 2015-04-13 04:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,130 +53,148 @@ msgstr ""
 msgid "{self.compared_percent_abs:.0f}% {self.change_desc}"
 msgstr ""
 
-#: companies/report_views.py:528 companies/report_views.py:549
+#: companies/report_views.py:528 companies/report_views.py:553
 msgid "month"
 msgstr ""
 
-#: companies/report_views.py:530
+#: companies/report_views.py:529 companies/report_views.py:554
+#: companies/templates/companies/reports/popup_report - Copy.html:48
+#: companies/templates/companies/reports/summary Copy.html:473
+msgid "Compared to Last Month"
+msgstr ""
+
+#: companies/report_views.py:531
 #, python-brace-format
 msgid "{0}{1} - Monthly Energy Report"
 msgstr ""
 
-#: companies/report_views.py:532
+#: companies/report_views.py:533
 #, python-brace-format
 msgid "{0} - Monthly Energy Report"
 msgstr ""
 
-#: companies/report_views.py:534
+#: companies/report_views.py:535
 #, fuzzy
 msgid "week"
 msgstr "Weekdays"
 
-#: companies/report_views.py:536 companies/report_views.py:551
+#: companies/report_views.py:536
+msgid "Compared to Last Week"
+msgstr ""
+
+#: companies/report_views.py:538 companies/report_views.py:556
 #, python-brace-format
 msgid "{0}{1}{2} - "
 msgstr ""
 
-#: companies/report_views.py:537
+#: companies/report_views.py:539
 #, python-brace-format
 msgid "{0}{1}{2} Weekly Energy Report"
 msgstr ""
 
-#: companies/report_views.py:540
+#: companies/report_views.py:542
 #, python-brace-format
 msgid "{0} Weekly Energy Report"
 msgstr ""
 
-#: companies/report_views.py:542
+#: companies/report_views.py:544
 msgid "quarter"
 msgstr ""
 
-#: companies/report_views.py:543
+#: companies/report_views.py:545
+msgid "Compared to Last Quarter"
+msgstr ""
+
+#: companies/report_views.py:546
 #, python-brace-format
 msgid "{0} Q{1}"
 msgstr ""
 
-#: companies/report_views.py:544
+#: companies/report_views.py:547
 #, python-brace-format
 msgid "{0} - Quarterly Energy Report"
 msgstr ""
 
-#: companies/report_views.py:546
+#: companies/report_views.py:549
 msgid "year"
 msgstr ""
 
-#: companies/report_views.py:547
+#: companies/report_views.py:550
+msgid "Compared to Last Year"
+msgstr ""
+
+#: companies/report_views.py:551
 #, python-brace-format
 msgid "{0} - Yearly Energy Report"
 msgstr ""
 
-#: companies/report_views.py:552
+#: companies/report_views.py:557
 #, python-brace-format
 msgid "{0}{1}{2}"
 msgstr ""
 
-#: companies/report_views.py:744 companies/report_views.py:745
+#: companies/report_views.py:749 companies/report_views.py:750
 msgid "tcmonth"
 msgstr ""
 
-#: companies/report_views.py:750
+#: companies/report_views.py:755
 #, fuzzy
 msgid "This week"
 msgstr "Weekdays"
 
-#: companies/report_views.py:751
+#: companies/report_views.py:756
 #, fuzzy
 msgid "Last week"
 msgstr "Weekdays"
 
-#: companies/report_views.py:753
+#: companies/report_views.py:758
 msgid "This quarter"
 msgstr ""
 
-#: companies/report_views.py:754
+#: companies/report_views.py:759
 msgid "Last quarter"
 msgstr ""
 
-#: companies/report_views.py:759
+#: companies/report_views.py:764
 msgid "This period"
 msgstr ""
 
-#: companies/report_views.py:760
+#: companies/report_views.py:765
 msgid "Last same period"
 msgstr ""
 
-#: companies/report_views.py:813
+#: companies/report_views.py:828
 #, python-brace-format
 msgid "Overall: {0.compared_percent_abs:.0f}&#37; more energy than last {1}"
 msgstr ""
 
-#: companies/report_views.py:815
+#: companies/report_views.py:830
 #, python-brace-format
 msgid "Overall: {0.compared_percent_abs:.0f}&#37; less energy than last {1}"
 msgstr ""
 
-#: companies/report_views.py:1021
+#: companies/report_views.py:1041
 #, python-brace-format
 msgid "Your energy consumption this {1} was {0} than it was last {1}"
 msgstr ""
 
-#: companies/report_views.py:1026
+#: companies/report_views.py:1046
 msgid "Total energy consumption for the last 6 months (kWh)"
 msgstr ""
 
-#: companies/report_views.py:1029
+#: companies/report_views.py:1049
 msgid "Total energy consumption for the last 6 weeks (kWh)"
 msgstr ""
 
-#: companies/report_views.py:1031
+#: companies/report_views.py:1051
 msgid "Total energy consumption for the last 6 quarters (kWh)"
 msgstr ""
 
-#: companies/report_views.py:1033
+#: companies/report_views.py:1053
 msgid "Total energy consumption for the last 6 years (kWh)"
 msgstr ""
 
-#: companies/report_views.py:1035
+#: companies/report_views.py:1055
 msgid "Total energy consumption for the last 6 same periods (kWh)"
 msgstr ""
 
@@ -507,11 +525,6 @@ msgstr ""
 #: companies/templates/companies/reports/popup_report.html:50
 #: companies/templates/companies/reports/summary Copy.html:472
 msgid "Key Statistics"
-msgstr ""
-
-#: companies/templates/companies/reports/popup_report - Copy.html:48
-#: companies/templates/companies/reports/summary Copy.html:473
-msgid "Compared to Last Month"
 msgstr ""
 
 #: companies/templates/companies/reports/popup_report - Copy.html:49
@@ -990,83 +1003,83 @@ msgid "Year total"
 msgstr ""
 
 #: companies/templates/companies/reports/summary - Copy.html:527
-#: companies/templates/companies/reports/summary.html:501
+#: companies/templates/companies/reports/summary.html:503
 msgid "Compared to last week"
 msgstr ""
 
 #: companies/templates/companies/reports/summary - Copy.html:530
-#: companies/templates/companies/reports/summary.html:504
+#: companies/templates/companies/reports/summary.html:506
 msgid "Compared to last month"
 msgstr ""
 
 #: companies/templates/companies/reports/summary - Copy.html:533
-#: companies/templates/companies/reports/summary.html:507
+#: companies/templates/companies/reports/summary.html:509
 msgid "Compared to last quarter"
 msgstr ""
 
 #: companies/templates/companies/reports/summary - Copy.html:536
-#: companies/templates/companies/reports/summary.html:510
+#: companies/templates/companies/reports/summary.html:512
 msgid "Compared to last year"
 msgstr ""
 
 #: companies/templates/companies/reports/summary - Copy.html:545
-#: companies/templates/companies/reports/summary.html:519
+#: companies/templates/companies/reports/summary.html:521
 msgid "Total week cost"
 msgstr ""
 
 #: companies/templates/companies/reports/summary - Copy.html:548
-#: companies/templates/companies/reports/summary.html:522
+#: companies/templates/companies/reports/summary.html:524
 msgid "Total month cost"
 msgstr ""
 
 #: companies/templates/companies/reports/summary - Copy.html:551
-#: companies/templates/companies/reports/summary.html:525
+#: companies/templates/companies/reports/summary.html:527
 msgid "Total quarter cost"
 msgstr ""
 
 #: companies/templates/companies/reports/summary - Copy.html:554
-#: companies/templates/companies/reports/summary.html:528
+#: companies/templates/companies/reports/summary.html:530
 msgid "Total year cost"
 msgstr ""
 
 #: companies/templates/companies/reports/summary - Copy.html:650
-#: companies/templates/companies/reports/summary.html:622
+#: companies/templates/companies/reports/summary.html:638
 msgid "Week"
 msgstr ""
 
 #: companies/templates/companies/reports/summary - Copy.html:651
-#: companies/templates/companies/reports/summary.html:623
+#: companies/templates/companies/reports/summary.html:639
 msgid "Month"
 msgstr ""
 
 #: companies/templates/companies/reports/summary - Copy.html:652
-#: companies/templates/companies/reports/summary.html:624
+#: companies/templates/companies/reports/summary.html:640
 msgid "Quarter"
 msgstr ""
 
 #: companies/templates/companies/reports/summary - Copy.html:653
-#: companies/templates/companies/reports/summary.html:625
+#: companies/templates/companies/reports/summary.html:641
 msgid "Year"
 msgstr ""
 
 #: companies/templates/companies/reports/summary - Copy.html:654
-#: companies/templates/companies/reports/summary.html:626
+#: companies/templates/companies/reports/summary.html:642
 msgid "Match my bills"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:483
+#: companies/templates/companies/reports/summary.html:485
 msgid "Week Total"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:486
+#: companies/templates/companies/reports/summary.html:488
 msgid "Month Total"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:489
+#: companies/templates/companies/reports/summary.html:491
 msgid "Quarter Total"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:492
+#: companies/templates/companies/reports/summary.html:494
 msgid "Year Total"
 msgstr ""
 
