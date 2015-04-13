@@ -115,6 +115,75 @@ def get_weekdays_cost(system, start_dt, end_dt):
         return sum(avgs)
 
 
+def get_overnight_avg_cost(system, source_ids, start_dt, end_dt):
+    date_ranges = []
+
+    unit_infos = json.loads(system.unit_info)
+    # money_unit_code = unit_infos['money']
+    # money_unit_rate = UnitRate.objects.filter(category_code='money', code=unit_infos['money']).first()
+    money_unit_rates = UnitRate.objects.filter(category_code='money', code=unit_infos['money']).order_by('effective_date')
+    system_tz = pytz.timezone(system.timezone)
+
+    for ix, mr in enumerate(money_unit_rates):
+        c_rate_date = mr.effective_date.astimezone(system_tz)
+        if c_rate_date >= start_dt and c_rate_date <= end_dt:
+            try:
+                n_rate_date = money_unit_rates[ix+1].effective_date.astimezone(system_tz)
+                if n_rate_date > end_dt:
+                    n_rate_date = end_dt
+
+                date_range = (c_rate_date, n_rate_date, mr)
+                date_ranges.append(date_range)
+            except IndexError:
+                date_range = (c_rate_date, end_dt, mr)
+                date_ranges.append(date_range)
+
+    # if no date ranges use the first rate as the default money rate
+    # else if first date range has gap between the start date
+    # use the first money_unit_rate as the default unit rate
+    if not date_ranges:
+        default_rate = money_unit_rates.first()
+        date_range = (start_dt, end_dt, default_rate)
+        date_ranges.append(date_range)
+    elif start_dt < date_ranges[0][0]:
+        default_rate = money_unit_rates.first()
+        date_range = (start_dt, date_ranges[0][0], default_rate)
+        date_ranges.append(date_range)
+
+    total_on_sum = 0
+    for date_range in date_ranges:
+        sd, ed, r = date_range
+        mqs = []
+        num_day = (ed - sd).days
+        rdays = [sd+datetime.timedelta(days=n) for n in range(num_day)]
+        for rday in rdays:
+            on_sd = datetime.datetime.combine(rday, system.night_time_start)
+            on_sd = on_sd.replace(tzinfo=system_tz)
+
+            on_ed = datetime.datetime.combine(
+                rday + datetime.timedelta(days=1), system.night_time_end)
+            on_ed = on_ed.replace(tzinfo=system_tz)
+
+            q = MQ(datetime__gte=on_sd, datetime__lt=on_ed)
+            mqs.append(q)
+
+        conds = reduce(
+            operator.or_,
+            mqs
+        )
+
+        dr_sum = r.rate * SourceReadingHour.objects(conds, source_id__in=source_ids).sum('value')
+        total_on_sum += dr_sum
+
+    # dirty way to count number of days
+    total_day = (end_dt - start_dt).days
+    today = datetime.datetime.now(pytz.utc)
+    if end_dt > today:
+        total_day = (today - start_dt).days
+
+    return total_on_sum / total_day
+
+
 @permission_required()
 def summary_ajax(request, system_code):
     systems_info = System.get_systems_info(system_code, request.user.system.code)
@@ -230,7 +299,7 @@ def summary_ajax(request, system_code):
             return get_unitrate(reading.source_id, reading.datetime).rate * reading.value
 
 
-    def get_overnight_avg_cost(source_ids, start_dt, end_dt):
+    def _get_overnight_avg_cost(source_ids, start_dt, end_dt):
         overnight_start = datetime.datetime.combine(start_dt, datetime.datetime.min.time())
         overnight_start= current_system_tz.localize(overnight_start)
 
@@ -257,75 +326,15 @@ def summary_ajax(request, system_code):
     money_unit_code = unit_infos['money']
     money_unit_rates = UnitRate.objects.filter(category_code='money', code=unit_infos['money']).order_by('effective_date')
 
-    def get_new_overnight_avg_cost(source_ids, start_dt, end_dt):
-        date_ranges = []
-        for ix, mr in enumerate(money_unit_rates):
-            c_rate_date = mr.effective_date.astimezone(current_system_tz)
-            if c_rate_date >= start_dt and c_rate_date <= end_dt:
-                try:
-                    n_rate_date = money_unit_rates[ix+1].effective_date.astimezone(current_system_tz)
-                    if n_rate_date > end_dt:
-                        n_rate_date = end_dt
-
-                    date_range = (c_rate_date, n_rate_date, mr)
-                    date_ranges.append(date_range)
-                except IndexError:
-                    date_range = (c_rate_date, end_dt, mr)
-                    date_ranges.append(date_range)
-
-        # if no date ranges use the first rate as the default money rate
-        # else if first date range has gap between the start date
-        # use the first money_unit_rate as the default unit rate
-        if not date_ranges:
-            default_rate = money_unit_rates.first()
-            date_range = (start_dt, end_dt, default_rate)
-            date_ranges.append(date_range)
-        elif start_dt < date_ranges[0][0]:
-            default_rate = money_unit_rates.first()
-            date_range = (start_dt, date_ranges[0][0], default_rate)
-            date_ranges.append(date_range)
-
-        total_on_sum = 0
-        for date_range in date_ranges:
-            sd, ed, r = date_range
-            mqs = []
-            num_day = (ed - sd).days
-            rdays = [sd+datetime.timedelta(days=n) for n in range(num_day)]
-            for rday in rdays:
-                on_sd = datetime.datetime.combine(rday, current_system.night_time_start)
-                on_sd = on_sd.replace(tzinfo=current_system_tz)
-
-                on_ed = datetime.datetime.combine(
-                    rday + datetime.timedelta(days=1), current_system.night_time_end)
-                on_ed = on_ed.replace(tzinfo=current_system_tz)
-
-                q = MQ(datetime__gte=on_sd, datetime__lt=on_ed)
-                mqs.append(q)
-
-            conds = reduce(
-                operator.or_,
-                mqs
-            )
-
-            dr_sum = r.rate * SourceReadingHour.objects(conds, source_id__in=source_ids).sum('value')
-            total_on_sum += dr_sum
-
-        # dirty way to count number of days
-        total_day = (end_dt - start_dt).days
-        today = datetime.datetime.now(pytz.utc)
-        if end_dt > today:
-            total_day = (today - start_dt).days
-
-        return total_on_sum / total_day
 
 
-    overnight_avg_cost = get_new_overnight_avg_cost(source_ids, start_dt, end_dt)
+    overnight_avg_cost = get_overnight_avg_cost(current_system, source_ids, start_dt, end_dt)
     # overnight_avg_cost = total_on_sum / (end_dt - start_dt).days
     # overnight_avg_cost = get_overnight_avg_cost(source_ids, start_dt, end_dt)
     m['formated_overnight_avg_cost'] = '${0:,.0f}'.format(overnight_avg_cost) if overnight_avg_cost else None
 
     compare_to_last_overnight_avg_cost = None
-    last_overnight_avg_cost = get_new_overnight_avg_cost(source_ids, last_start_dt, last_end_dt)
+    last_overnight_avg_cost = get_overnight_avg_cost(current_system, source_ids, last_start_dt, last_end_dt)
 
     if last_overnight_avg_cost > 0 and overnight_avg_cost is not None:
         compare_to_last_overnight_avg_cost = float(overnight_avg_cost-last_overnight_avg_cost)/last_overnight_avg_cost*100
@@ -763,7 +772,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
 
         # for overnight
-        overnight = {'bill': g['currentOvernightInfo']['average'] * money_unit_rate.rate}
+        overnight = {'bill': get_overnight_avg_cost(current_system, g['sourceIds'], report_date, report_end_date)}
 
         last_overnight_usage = g['lastOvernightInfo']['average']
         current_overnight_usage = g['currentOvernightInfo']['average']
@@ -1198,7 +1207,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     # overnight
     overnight_usage = {}
     overnight_bill = sum([ g['currentOvernightInfo']['average'] for g in group_data])
-    overnight_usage['bill'] = overnight_bill * money_unit_rate.rate
+    # overnight_usage['bill'] = overnight_bill * money_unit_rate.rate
+    overnight_usage['bill'] = get_overnight_avg_cost(current_system, source_ids, report_date, report_end_date)
 
     overnight_beginning_usage = sum([ g['beginningOvernightInfo']['average'] for g in group_data])
     overnight_average_usage = sum([ g['currentOvernightInfo']['average'] for g in group_data])
