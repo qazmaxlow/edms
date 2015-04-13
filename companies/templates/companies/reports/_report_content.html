@@ -268,7 +268,7 @@
       </div>
 
     </div>
-    <div class="row sub-graph-container">
+    <div class="row sub-graph-container page-break-after">
       {% for subgraph in sub_compare_graphs %}
       <div class="col-xs-6">
         <div class="row">
@@ -295,7 +295,7 @@
         </div>
       </div>
       {% if forloop.counter|divisibleby:2 %}
-        </div><div class="row {% if forloop.counter|divisibleby:6 or forloop.counter == 2 %}page-break-after{% endif %}">
+        </div><div class="row {% if forloop.counter|divisibleby:6 %}page-break-after{% endif %}">
       {% endif %}
 
       {% endfor %}
