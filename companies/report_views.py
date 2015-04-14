@@ -1020,7 +1020,6 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
     m['saving_energy'] = abs(report_data['savingInfo']['energy'])
     m['css_class_energy_saving'] = 'positive-saving' if report_data['savingInfo']['energy'] >=0 else 'negative-saving'
-    m['saving_sign'] = '-' if report_data['savingInfo']['energy'] >=0 else '+'
     m['is_saving'] = (report_data['savingInfo']['energy'] >=0)
     # in tons
     m['saving_co2'] = abs(report_data['savingInfo']['co2'] / 1000.0)

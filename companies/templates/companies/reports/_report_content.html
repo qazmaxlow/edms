@@ -61,20 +61,20 @@
                 <img src="{% static 'images/report/lightning-energy.png' %}">
                 <div class="basic-info-text-container">
                     {% ifequal LANGUAGE_CODE 'zh-tw' %}
-                      {% ifequal is_saving true %}
-                      <span class="basic-info-col-subtext">{% trans "more" %}</span>
-                      {% else %}
+                      {% if is_saving  %}
                       <span class="basic-info-col-subtext">{% trans "less" %}</span>
-                      {% endifequal %}
+                      {% else %}
+                      <span class="basic-info-col-subtext">{% trans "more" %}</span>
+                      {% endif %}
                       <span id="save-energy-usage">{{ saving_energy|stringformat:".0f"|intcomma }}%</span>
                     {% else %}
                       <span id="save-energy-usage">{{ saving_energy|stringformat:".0f"|intcomma }}%</span>
                       <br>
-                      {% ifequal is_saving true %}
-                      <span class="basic-info-col-subtext">{% trans "more" %}</span>
-                      {% else %}
+                      {% if is_saving %}
                       <span class="basic-info-col-subtext">{% trans "less" %}</span>
-                      {% endifequal %}
+                      {% else %}
+                      <span class="basic-info-col-subtext">{% trans "more" %}</span>
+                      {% endif %}
                     {% endifequal %}
                 </div>
             </div>
@@ -83,20 +83,20 @@
                 <img src="{% static 'images/report/factory-co2.png' %}">
                 <div class="basic-info-text-container">
                     {% ifequal LANGUAGE_CODE 'zh-tw' %}
-                      {% ifequal is_saving true %}
-                      <span class="basic-info-col-subtext">{% trans "more" %}</span>
-                      {% else %}
+                      {% if is_saving %}
                       <span class="basic-info-col-subtext">{% trans "less" %}</span>
-                      {% endifequal %}
+                      {% else %}
+                      <span class="basic-info-col-subtext">{% trans "more" %}</span>
+                      {% endif %}
                       <span id="save-co2-usage">{{ saving_co2|stringformat:".0f"|intcomma }} {% trans "tons" %}</span><span class="basic-info-col-unit"> {% trans "CO<sub>2</sub>" %}</span>
                     {% else %}
                       <span id="save-co2-usage">{{ saving_co2|stringformat:".0f"|intcomma }} {% trans "tons" %}</span><span class="basic-info-col-unit"> {% trans "CO<sub>2</sub>" %}</span>
                       <br>
-                      {% ifequal is_saving true %}
-                      <span class="basic-info-col-subtext">{% trans "more" %}</span>
-                      {% else %}
+                      {% if is_saving %}
                       <span class="basic-info-col-subtext">{% trans "less" %}</span>
-                      {% endifequal %}
+                      {% else %}
+                      <span class="basic-info-col-subtext">{% trans "more" %}</span>
+                      {% endif %}
                     {% endifequal %}
                 </div>
             </div>
@@ -105,20 +105,20 @@
                 <img src="{% static 'images/report/piggy.png' %}">
                 <div class="basic-info-text-container">
                     {% ifequal LANGUAGE_CODE 'zh-tw' %}
-                      {% ifequal is_saving true %}
-                      <span class="basic-info-col-subtext">{% trans "more" %}</span>
-                      {% else %}
+                      {% if is_saving %}
                       <span class="basic-info-col-subtext">{% trans "less" %}</span>
-                      {% endifequal %}
+                      {% else %}
+                      <span class="basic-info-col-subtext">{% trans "more" %}</span>
+                      {% endif %}
                       <span id="save-money-usage">${{ saving_money|stringformat:".0f"|intcomma }}</span>
                     {% else %}
                       <span id="save-money-usage">${{ saving_money|stringformat:".0f"|intcomma }}</span>
                       <br>
-                      {% ifequal is_saving true %}
-                      <span class="basic-info-col-subtext">{% trans "more" %}</span>
-                      {% else %}
+                      {% if is_saving %}
                       <span class="basic-info-col-subtext">{% trans "less" %}</span>
-                      {% endifequal %}
+                      {% else %}
+                      <span class="basic-info-col-subtext">{% trans "more" %}</span>
+                      {% endif %}
                     {% endifequal %}
                 </div>
             </div>
