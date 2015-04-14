@@ -265,6 +265,9 @@
     <div class="row detail-content">
       <div class="col-xs-12">
         <div kendo-chart k-options="lineOptions" ></div>
+        {% if report_type_name == 'quarter' or report_type_name == 'month' or report_type_name == 'custom' %}
+        <p class="x-padding-25">* The graphs in this section have been shifted to match by day of the week - the day of the month may not match between the two lines.</p>
+        {% endif %}
       </div>
 
     </div>
