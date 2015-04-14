@@ -250,8 +250,11 @@ def summary_ajax(request, system_code):
 
     # weekday
     def weekday_cost_avg(source_id, source_reading):
+
         total_day = 0
         total_val = 0
+
+        all_datetimes = [datetime.datetime.fromtimestamp(t, current_system_tz) for t,v in source_reading.items()]
 
         for t, v in source_reading.items():
             dt = datetime.datetime.fromtimestamp(t, current_system_tz)
