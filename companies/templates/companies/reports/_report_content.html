@@ -162,7 +162,7 @@
                     </span>
                     <span id="forest-impact">{{ co2_in_forest|floatformat:"0"|intcomma }}{% trans "m<sup>2</sup>" %}</span>
                     {% else %}
-                    <span id="forest-impact">{{ co2_in_forest|floatformat:"0"|intcomma }}m<sup>2</sup></span><br>
+                    <span id="forest-impact">{{ co2_in_forest|floatformat:"0"|intcomma }} m<sup>2</sup></span><br>
                     <span id="forest-impact-subtext" class="basic-info-col-subtext">
                       {% if is_saving %}
                       of rainforest protected
@@ -192,7 +192,7 @@
 
     <div class="row detail-container"><h4>{% trans "How did that break down by usage type?" %}</h4></div>
       <div class="row detail-container bottom-border-2 top-border-2">
-        <div class="col-xs-8 x-padding-5-0">
+        <div class="col-xs-8 x-padding-5-0 break-down-bar">
               <table class="transformed-bar-chart">
                 {% for td in transformed_datas %}
                 <tr class="transformed-row-bg">
@@ -202,13 +202,13 @@
                     </div>
                   </td>
                   <td class="transformed-label" style="color:{{ td.color }};">
-                    {{ td.total_energy|floatformat:"0"|intcomma }}kWh
+                    {{ td.total_energy|floatformat:"0"|intcomma }} kWh
                   </td>
                 </tr>
                 {% endfor %}
               </table>
         </div>
-        <div class="col-xs-4" style="border-left: 1px #e0e0e0 solid;">
+        <div class="col-xs-4">
           <div kendo-chart k-options="transformedPieOptions" ></div>
         </div>
     </div>
@@ -268,7 +268,7 @@
       </div>
 
     </div>
-    <div class="row sub-graph-container">
+    <div class="row sub-graph-container page-break-after">
       {% for subgraph in sub_compare_graphs %}
       <div class="col-xs-6">
         <div class="row">
@@ -295,7 +295,7 @@
         </div>
       </div>
       {% if forloop.counter|divisibleby:2 %}
-        </div><div class="row {% if forloop.counter|divisibleby:7 or forloop.counter == 3 %}page-break-after{% endif %}">
+        </div><div class="row {% if forloop.counter|divisibleby:6 %}page-break-after{% endif %}">
       {% endif %}
 
       {% endfor %}
