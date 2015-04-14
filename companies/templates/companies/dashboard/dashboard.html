@@ -157,19 +157,19 @@
 </style>
 <div class="container" ng-app="Entrak">
     <div class="row">
+        <div class="col-md-8">
+            {% include "companies/dashboard/_last_week_stats.html" with widget_id=4 %}
+        </div>
+        <div class="col-md-4">
+            {% include "companies/dashboard/_last_week_stats.html" with widget_id=3 %}
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-4">
           {% include "companies/dashboard/_last_week_stats.html" with widget_id=1 %}
         </div>
         <div class="col-md-4">
           {% include "companies/dashboard/_last_week_stats.html" with widget_id=2 %}
-        </div>
-        <div class="col-md-4">
-          {% include "companies/dashboard/_last_week_stats.html" with widget_id=3 %}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-8">
-          {% include "companies/dashboard/_last_week_stats.html" with widget_id=4 %}
         </div>
         <div class="col-md-4">
           {% include "companies/dashboard/_last_week_stats.html" with widget_id=5 %}
