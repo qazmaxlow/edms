@@ -707,7 +707,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         if len(g['sourceIds']) == 1:
             g['title'] = get_source_name(g['sourceIds'][0])
         else:
-            g['title'] = g['system'].fullname
+            g['title'] = g['system'].name
 
         g['usage'] = g['currentWeekdayInfo']['average']
         beginning_usage = g['beginningWeekdayInfo']['average']
@@ -896,7 +896,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
             dt = dt.astimezone(current_system_tz)
             last_day_readings[dt] = v
 
-        graph_title = get_source_name(g['sourceIds'][0]) if g['system'].code == m['company_system'].code else g['system'].fullname
+        graph_title = get_source_name(g['sourceIds'][0]) if g['system'].code == m['company_system'].code else g['system'].name
         # [{'name': 'last', 'value': v, 'datetime': datetime.datetime.fromtimestamp(t, pytz.utc) } for t, v in combined_last_readings.items()]
         sub_graph = {
             'system': g['system'],
@@ -1073,7 +1073,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
             'percent_base_on_max': percent_base_on_max,
             'color': type_colors[ix % len(type_colors)]
         }
-        data_info['name'] = g['sourceNameInfo'][current_lang()] if g['systemCode'] == m['company_system'].code else g['system'].fullname
+        data_info['name'] = g['sourceNameInfo'][current_lang()] if g['systemCode'] == m['company_system'].code else g['system'].name
         transformed_datas.append(data_info)
 
     m['transformed_datas'] = transformed_datas
