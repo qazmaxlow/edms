@@ -491,6 +491,7 @@ $(document).ready(function()  {
 
     var creport_start = new moment(report_start);
     var creport_end = new moment(report_end);
+    creport_end.add('days', 1);
 
     var datesInWeek = [];
     if (report_type == 'week') {
