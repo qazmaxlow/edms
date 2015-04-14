@@ -1135,7 +1135,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     compare_past_datasource = []
     for su in sumup_usages:
         if report_type == 'month':
-            formated_date = compare_past_date.strftime('%b')
+            formated_date = formats.date_format(compare_past_date, 'SHORT_MONTH_FORMAT')
         elif report_type == 'week':
             formated_date = u'{0} - {1}'.format(
                 formats.date_format(compare_past_date, 'MONTH_DAY_FORMAT'),
