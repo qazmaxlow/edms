@@ -3,25 +3,143 @@
 
 {% block extra_head %}
 {{ block.super }}
-<link rel="stylesheet" type="text/css" href="{% static "css/edit-sources.css" %}" />
+<script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{% static "assets/bootstrap/css/bootstrap.min.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "assets/kendoui/styles/kendo.common-bootstrap.min.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "assets/kendoui/styles/kendo.bootstrap.min.css" %}" />
+<style type="text/css">
+body {
+  font-size: 13px;
+  line-height: 1.3;
+}
+.buttons-wrap {
+  padding-top: 0.5em;
+  padding-bottom: 1.5em;
+  padding-right: 1.5em;
+  text-align: right;
+}
+@media (min-width: 768px) {
+  .form-horizontal .control-label {
+    text-align: right;
+    margin-bottom: 0;
+    padding-top: 3px;
+  }
+  .zero-remove {
+    display:block;
+    position: relative;
+  }
+  .source-block .member-block {
+    padding-top: 20px;
+    border-bottom: 3px solid;
+    border-color: #ddd;
+    border-radius: 4px 4px 0 0;
+  }
+}
+.zero-remove .remove-btn {
+  border-top-right-radius:0;
+}
+.remove-btn {
+  position: absolute;
+  top: -20px;
+  right: 0;
+  z-index: 10;
+  display: block;
+  padding: 5px 8px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 0 4px 0 4px;
+  color: #000;
+  background-color: #ddd;
+  border-color: #ddd;
+}
+input[type="radio"], input[type="checkbox"] {
+  margin-top: 7px;
+  line-height: normal;
+}
+</style>
 {% endblock %}
 
 {% block extra_script %}
 
-<script id="input-block-template" type="x-tmpl-mustache">
-<div class="input-block" system_code="{% templatetag openvariable %}systemCode{% templatetag closevariable %}" system_path="{% templatetag openvariable %}systemPath{% templatetag closevariable %}">
-    <div>name: <input type="text" name="name"></div>
-    <div>xml-url: <input type="text" name="xml_url" size="40"></div><br>
-    <div>display name: <input type="text" name="d_name"></div>
-    <div>display name (TC): <input type="text" name="d_name_tc"></div>
-    <div>order: <input type="text" name="order" size="3"></div>
-    <div>active: <input type="checkbox" name="active" value="true" checked></div>
-    <div class="remove-btn">X</div>
+<script id="source-template" type="x-tmpl-mustache">
+<div class="source-block form-horizontal form-widgets" system_code="{% templatetag openvariable %}systemCode{% templatetag closevariable %}" system_path="{% templatetag openvariable %}systemPath{% templatetag closevariable %}">
+  <div class="zero-remove"><button class="btn btn-sm btn-default remove-btn">X</button></div>
+  <div class="form-group">
+    <label class="control-label col-sm-4" for="name">Name</label>
+    <div class="col-sm-8">
+      <input id="name" type="text" class="col-sm-8" name="name" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-4" for="xml_url">XML File Url</label>
+    <div class="col-sm-8">
+      <input id="xml_url" type="text" class="col-sm-8" name="xml_url" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-4" for="d_name">Display Name (EN) </label>
+      <div class="col-sm-8">
+        <input id="d_name" type="text" class="col-sm-8" name="d_name" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-4" for="d_name_tc">Display Name (TC)</label>
+    <div class="col-sm-8">
+      <input id="d_name_tc" type="text" class="col-sm-8" name="d_name_tc" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-4" for="order">Order</label>
+    <div class="col-sm-8">
+      <input id="order" type="text" class="col-sm-8" name="order" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-4" for="active">Active?</label>
+    <div class="col-sm-8">
+      <input id="active" type="checkbox" name="active" value="true" checked />
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-4 col-sm-8">
+      <div class="panel panel-success">
+        <div class="panel-heading">
+          <h3 class="panel-title">Members &#8195;<button class="btn btn-sm btn-success add-member-btn btn btn-sm btn-success">Add Member</button></h3>
+        </div>
+        <div class="member-container">
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script id="member-template" type="x-tmpl-mustache">
+<div class="member-block form-horizontal form-widgets">
+  <div class="zero-remove"><button class="btn btn-sm btn-default remove-btn">X</button></div>
+  <div class="form-group">
+    <label class="control-label col-sm-4" for="member_name">Name</label>
+    <div class="col-sm-8">
+      <input id="member_name" type="text" class="col-sm-8" name="member_name" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-4" for="member_xml_url">XML File Url</label>
+    <div class="col-sm-8">
+      <input id="member_xml_url" type="text" class="col-sm-8" name="member_xml_url" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-4" for="d_name">Operator </label>
+    <div class="col-sm-8">
+      <select class="col-sm-8" name="operator" id="operator">
+        <option>+</option>
+        <option>-</option>
+      </select>
+    </div>
+  </div>
 </div>
 </script>
 
-
-<script src="{% static 'assets/jquery/jquery-1.11.0.min.js' %}"></script>
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
 <script src="{% static 'js/mustache.js-master/mustache.js' %}"></script>
@@ -30,26 +148,50 @@
 $(function() {
     setupAjaxForCsrf($.cookie('csrftoken'));
 
-    var inputBlockTemplate = $("#input-block-template").html();
-    Mustache.parse(inputBlockTemplate);
+    var sourceTemplate = $("#source-template").html();
+    var memberTemplate = $("#member-template").html();
+    Mustache.parse(sourceTemplate);
+    Mustache.parse(memberTemplate);
 
-    $(".add-more-btn").each(function(systemIdx) {
+    $(".add-source-btn").each(function(systemIdx) {
         $(this).click({systemIdx: systemIdx}, function(event) {
             var systemCode = $(this).attr('system_code');
             var systemPath = $(this).attr('system_path');
-            var inputBlockHtml = Mustache.render(inputBlockTemplate, {systemCode: systemCode, systemPath: systemPath});
-            var inputBlockEle = $(inputBlockHtml);
-            inputBlockEle.find(".remove-btn").click(function() {
-                $(this).parent().remove();
+            var sourceHtml = Mustache.render(sourceTemplate, {systemCode: systemCode, systemPath: systemPath});
+            var sourceEle = $(sourceHtml);
+            sourceEle.find(".remove-btn").click(function() {
+                $(this).parent().parent().remove();
+            });
+            sourceEle.find(".add-member-btn").each(function(systemIdx) {
+              $(this).click({systemIdx: systemIdx}, function(event) {
+                var memberHtml = Mustache.render(memberTemplate);
+                var memberEle = $(memberHtml);
+                memberEle.find(".remove-btn").click(function() {
+                  $(this).parent().parent().remove();
+                })
+                sourceEle.find(".member-container:eq("+event.data.systemIdx+")").append(memberEle);
+              });
+            });
+            $(".source-container:eq("+event.data.systemIdx+")").append(sourceEle);
+        });
+    });
+
+    $(".add-member-btn").each(function(systemIdx) {
+        $(this).click({systemIdx: systemIdx}, function(event) {
+            var memberHtml = Mustache.render(memberTemplate);
+            var memberEle = $(memberHtml);
+            memberEle.find(".remove-btn").click(function() {
+                $(this).parent().parent().remove();
             })
-            $(".input-container:eq("+event.data.systemIdx+")").append(inputBlockEle);
+            $(".member-container:eq("+event.data.systemIdx+")").append(memberEle);
         });
     });
 
     $(".save-btn").click(function() {
         var sourceInfos = [];
-        $('.input-block').each(function(inputBlockIdx) {
-            var info = {}
+        $('.source-block').each(function(inputBlockIdx) {
+            var info = {};
+            var members = [];
             info.system_code = $(this).attr('system_code');
             info.system_path = $(this).attr('system_path');
             info.name = $(this).find("input[name='name']").val();
@@ -64,7 +206,14 @@ $(function() {
             } else {
                 info.source_id = sourceIdInput.val();
             }
-
+            $(this).find(".member-block").each(function(inputBlockIdx) {
+              var member = {};
+              member.name = $(this).find("input[name='member_name']").val();
+              member.xml_url = $(this).find("input[name='member_xml_url']").val();
+              member.operator = $(this).find("select[name='operator']").val();
+              members.push(member);
+            });
+            info.source_members = members;
             sourceInfos.push(info);
         });
 
@@ -87,24 +236,94 @@ $(function() {
 {% block content %}
 
 {% for system in systems %}
-<div>{{system.code}} &#8195;<span class="add-more-btn" system_code="{{system.code}}" system_path="{{system.path}}">Add More</span></div>
-<hr>
-<div class="input-container">
-    {% for source in system.sources %}
-    <div class="input-block" system_code="{{system.code}}" system_path="{{system.path}}">
-        <div>name: <input type="text" name="name" value="{{source.name}}"></div>
-        <div>xml-url: <input type="text" name="xml_url" size="40" value="{{source.xml_url}}"></div><br>
-        <div>display name: <input type="text" name="d_name" value="{{source.d_name}}"></div>
-        <div>display name (TC): <input type="text" name="d_name_tc" value="{{source.d_name_tc}}"></div>
-        <div>order: <input type="text" name="order" size="3" value="{{source.order}}"></div>
-        <div>active: <input type="checkbox" name="active" value="true" {% if source.active %}checked{% endif %}></div>
-        <div><input type="hidden" name="source_id" value="{{source.id}}"></div>
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{system.code}} &#8195;<button class="btn btn-sm btn-success add-source-btn btn btn-sm btn-success" system_code="{{system.code}}" system_path="{{system.path}}">Add Source</button></h3>
+  </div>
+  <div class="panel-body">
+    <div class="source-container">
+      {% for source in system.sources %}
+      <div class="source-block form-horizontal form-widgets" system_code="{{system.code}}" system_path="{{system.path}}">
+        <input type="hidden" name="source_id" value="{{source.id}}">
+        <div class="form-group">
+            <label class="control-label col-sm-4" for="name">Name</label>
+            <div class="col-sm-8">
+                <input id="name" type="text" class="col-sm-8" name="name" value="{{source.name}}" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-4" for="xml_url">XML File Url</label>
+            <div class="col-sm-8">
+                <input id="xml_url" type="text" class="col-sm-8" name="xml_url" value="{{source.xml_url}}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-4" for="d_name">Display Name (EN) </label>
+            <div class="col-sm-8">
+                <input id="d_name" type="text" class="col-sm-8" name="d_name" value="{{source.d_name}}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-4" for="d_name_tc">Display Name (TC)</label>
+            <div class="col-sm-8">
+                <input id="d_name_tc" type="text" class="col-sm-8" name="d_name_tc" value="{{source.d_name_tc}}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-4" for="order">Order</label>
+            <div class="col-sm-8">
+                <input id="order" type="text" class="col-sm-8" name="order" value="{{source.order}}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-4" for="active">Active?</label>
+            <div class="col-sm-8">
+                <input id="active" type="checkbox" name="active" value="true" {% if source.active %}checked{% endif %} />
+            </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-4 col-sm-8">
+            <div class="panel panel-success">
+              <div class="panel-heading">
+                <h3 class="panel-title">Members &#8195;<button class="btn btn-sm btn-success add-member-btn btn btn-sm btn-success">Add Member</button></h3>
+              </div>
+              <div class="member-container">
+                {% for member in source.source_members %}
+                <div class="member-block form-horizontal form-widgets">
+                  <div class="form-group">
+                    <label class="control-label col-sm-4" for="member_name">Name</label>
+                    <div class="col-sm-8">
+                      <input id="member_name" type="text" class="col-sm-8" name="member_name" value="{{member.name}}" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-sm-4" for="member_xml_url">XML File Url</label>
+                    <div class="col-sm-8">
+                      <input id="member_xml_url" type="text" class="col-sm-8" name="member_xml_url" value="{{member.xml_url}}"/>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-sm-4" for="d_name">Operator </label>
+                    <div class="col-sm-8">
+                      <select class="col-sm-8" name="operator" id="operator">
+                        <option {% if member.operator == "+" %} selected {% endif %} >+</option>
+                        <option {% if member.operator == "-" %} selected {% endif %} >-</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
     </div>
-    {% endfor %}
+  </div>
 </div>
-<hr>
 {% endfor %}
-
-<div class="save-btn">SAVE</div>
-
+<div class="buttons-wrap">
+    <button class="btn btn-sm btn-success save-btn">SAVE</button>
+</div>
 {% endblock %}

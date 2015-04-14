@@ -1,0 +1,73 @@
+{% load i18n %}
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Report</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/popup_report.css' %}">
+    <script src="{% static 'js/moment-with-locales.js' %}"></script>
+    <script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
+    <script src="{% static 'js/entrak-utils.js' %}"></script>
+
+    <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/kendo.entrak.theme.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/kendoui/styles/kendo.dataviz.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/kendoui/styles/kendo.dataviz.default.min.css' %}" rel="stylesheet">
+    <!-- Because now using jquery v1.11 -->
+    <script src="{% static 'assets/kendoui/js/jquery.min.js' %}"></script>
+    <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
+    <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
+    <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
+    <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container" ng-app="Entrak">
+    <div class="row">
+      <div class="col-xs-2 x-padding-25">
+
+    <div class="sidebar-left" ng-controller="MyCtrl">
+      <div class="section btn-section">
+              <a class="btn btn-save-report" href="download/?{{ request.GET.urlencode }}" role="button">
+                <img src="{% static 'images/reports/popup_download.png' %}" alt="logo">
+                {% trans "Save Report" %}</a>
+      </div>
+      <div class="section">
+              <ul kendo-menu style="display: inline-block; min-width: 150px;"
+                k-orientation="'vertical'"
+                k-on-select="onSelect(kendoEvent)">
+              <li data-anchor="report_key_statistics">{% trans "Key Statistics" %}</li>
+              <li data-anchor="report_compared_to_last">{% filter title %}{% blocktrans %}Compared to Last {{ report_type_name }}{% endblocktrans %}{% endfilter %}</li>
+              <li data-anchor="weekday-info">{% trans "Weekdays" %}</li>
+              <li data-anchor="weekend-info">{% trans "Weekends and Holidays" %}</li>
+              <li data-anchor="overnight-info">{% trans "Overnight" %}</li>
+            </ul>
+      </div>
+      <img src="{% static 'images/reports/popup_logo.png' %}" alt="logo">
+    </div>
+
+      </div>
+      <div class="col-xs-10">
+        {% include "companies/reports/_report_content.html" %}
+      </div>
+    </div>
+    </div>
+
+    <script>
+      var langCode = '{{LANGUAGE_CODE}}';
+   	  kendo.culture(langCode.substring(0,3)+langCode.substring(3,5).toUpperCase());
+      {% include "companies/reports/_report_script.html" %}
+    </script>
+  </body>
+</html>

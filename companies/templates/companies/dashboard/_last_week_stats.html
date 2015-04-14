@@ -1,0 +1,198 @@
+{% load i18n %}
+{% load entrak_extras %}
+{% load static %}
+{% load humanize %}
+
+<div class="widget-container">
+    <div class="widget-panel row">
+        <div class="widget-title col-sm-7">Last Week Stats</div>
+        <div class="widget-toggle col-sm-5">
+            <div class="pull-right">
+                <button id="day_button_{{widget_id}}" class="toggle-primary toggle-button button-left">Day</button>
+                <button id="night_button_{{widget_id}}" class="toggle-button button-right">Night</button>
+            </div>
+        </div>
+    </div>
+    <div class="widget-content row">
+        <div class="widget-message" id="weekday_messages_{{widget_id}}">
+            <div class='col-sm-6 left-box'>
+                <h3 class="number-text widget-font">${{ last_week_weekday_average|floatformat:"0"|intcomma }}</h3>
+                <div class="clearfix"></div>
+                <span class="description-1 widget-font">average weekday</span>
+            </div>
+            <div class='col-sm-6 right-box'>
+                {% if weekday_percentage_change > 0 %}
+                    <h3 class="number-text widget-font red-text">{{weekday_percentage_change|floatformat:0}}</h3>
+                    <h4 class="compare-text widget-font red-text">% more</h4>
+                {% else %}
+                    <h3 class="number-text widget-font green-text">{{weekday_percentage_change|floatformat:1|slice:"1:"}}</h3>
+                    <h4 class="compare-text widget-font green-text">% less</h4>
+                {% endif %}
+                <div class="clearfix"></div>
+                <span class="description-2 widget-font">than two weeks ago</span>
+            </div>
+        </div>
+        <div class="widget-message" id="overnight_messages_{{widget_id}}" style="display: none;">
+            <div class='col-sm-6 left-box'>
+                <h3 class="number-text widget-font">${{ last_week_overnight_average|floatformat:"0"|intcomma }}</h3>
+                <div class="clearfix"></div>
+                <span class="description-1 widget-font">average overnight</span>
+            </div>
+            <div class='col-sm-6 right-box'>
+                {% if overnight_percentage_change > 0 %}
+                    <h3 class="number-text widget-font red-text">{{overnight_percentage_change|floatformat:0}}</h3>
+                    <h4 class="compare-text widget-font red-text">% more</h4>
+                {% else %}
+                    <h3 class="number-text widget-font green-text">{{overnight_percentage_change|floatformat:1|slice:"1:"}}</h3>
+                    <h4 class="compare-text widget-font green-text">% less</h4>
+                {% endif %}
+                <div class="clearfix"></div>
+                <span class="description-2 widget-font">than two weeks ago</span>
+            </div>
+        </div>
+        <div class="yaxis-legend">
+            <span class="widget-font legend-label">HKD</span>
+        </div>
+        <div class="widget-graph">
+            <div class="k-content">
+                <div id="chart_{{widget_id}}"></div>
+            </div>
+        </div>
+    </div>
+    <style>
+        h2.widget-font, h3.widget-font, h4.widget-font, span.widget-font {
+            font-family: 'ITCAvantGardeStd-Bk', sans-serif;
+            font-weight: bold;
+            color: #354960;
+        }
+
+        h3.number-text {
+            float: left;
+            font-size: 1.5em;
+            margin: 5px 0px 0px 0px;
+        }
+
+        h4.compare-text {
+            float: left;
+            font-weight: normal;
+            font-size: 1.1em;
+            margin: 10px 0px 0px 5px;
+        }
+
+        span.description-1 {
+            float: :left;
+            color: #354960;
+        }
+
+        span.description-2 {
+            float: :left;
+            font-weight: bold;
+            font-size: 1.0em;
+            color: #878787;
+        }
+
+        span.legend-label {
+            font-size: 0.929em;
+            font-weight: bold;
+        }
+
+        h3.red-text, h4.red-text {
+            color: #D65C2C;
+        }
+
+        h3.green-text, h4.green-text {
+            color: #74C26B;
+        }
+
+        .yaxis-legend {
+            padding: 5px 15px 0px 15px;
+            margin-left: 1px;
+        }
+    </style>
+    <script>
+        var ngapp = angular.module("Entrak", [ "kendo.directives" ]);
+
+        var day_usage = {{last_week_weekday_stats|safe}};
+        var night_usage = {{last_week_overnight_stats|safe}};
+
+        function createChart{{widget_id}}() {
+            $("#chart_{{widget_id}}").kendoChart({
+                dataSource: {
+                    data: day_usage
+                },
+                chartArea: {
+                    height: 210,
+                    margin: 15,
+                    background: "#FCFCFC"
+                },
+                seriesDefaults: {
+                    type: "area",
+                    area: {
+                        line: {
+                            style: "smooth"
+                        }
+                    },
+                    opacity: 0.6
+                },
+                series: [{
+                    markers: {visible: true},
+                    field: "value",
+                    color: "#354960"
+                }],
+                valueAxis: {
+                    labels: {
+                        format: "{0}",
+                        font: "13px ITCAvantGardeStd-Bk",
+                    },
+                    line: {
+                        visible: false
+                    },
+                },
+                categoryAxis: {
+                    field: "weekday",
+                    majorGridLines: {
+                        visible: false
+                    },
+                    labels: {
+                        font: "13px ITCAvantGardeStd-Bk",
+                    },
+                },
+                tooltip: {
+                    visible: true,
+                    format: "{0}%",
+                    template: "#= value #",
+                    background: "#EFEFEF",
+                    border: {
+                        color: "#333",
+                        width: 2
+                    },
+                }
+            });
+        };
+
+        function show_day_usage_{{widget_id}}(){
+            $("#night_button_{{widget_id}}").removeClass("toggle-primary");
+            $("#day_button_{{widget_id}}").addClass("toggle-primary");
+            var chart = $("#chart_{{widget_id}}").data("kendoChart");
+            chart.dataSource.data(day_usage);
+            $("#overnight_messages_{{widget_id}}").hide();
+            $("#weekday_messages_{{widget_id}}").show();
+        }
+
+        function show_night_usage_{{widget_id}}(){
+            $("#day_button_{{widget_id}}").removeClass("toggle-primary");
+            $("#night_button_{{widget_id}}").addClass("toggle-primary");
+            var chart = $("#chart_{{widget_id}}").data("kendoChart");
+            chart.dataSource.data(night_usage);
+            $("#weekday_messages_{{widget_id}}").hide();
+            $("#overnight_messages_{{widget_id}}").show();
+        }
+
+        $(document).ready(function(){
+            createChart{{widget_id}}();
+            $("#day_button_{{widget_id}}").click(show_day_usage_{{widget_id}});
+            $("#night_button_{{widget_id}}").click(show_night_usage_{{widget_id}});
+        });
+
+    </script>
+</div>

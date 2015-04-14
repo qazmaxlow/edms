@@ -1,8 +1,16 @@
 # -*- coding: utf-8 -*-
 from mongoengine.document import Document
+from mongoengine.document import EmbeddedDocument
 from mongoengine.fields import *
 
 SOURCE_TZ_HK = u'Asia/Hong_Kong'
+
+class SourceMember(EmbeddedDocument):
+    id = ObjectIdField()
+    name = StringField(max_length=200)
+    xml_url = StringField(max_length=120)
+    tz = StringField(max_length=50, default=SOURCE_TZ_HK)
+    operator = StringField(max_length=1)
 
 class Source(Document):
     name = StringField(max_length=200)
@@ -14,6 +22,7 @@ class Source(Document):
     d_name_tc = StringField(max_length=200)
     order = IntField(default=1)
     tz = StringField(max_length=50, default=SOURCE_TZ_HK)
+    source_members = ListField(EmbeddedDocumentField(SourceMember))
     active = BooleanField(default=True)
 
 class BaseSourceReading(Document):
