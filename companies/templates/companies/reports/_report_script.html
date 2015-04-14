@@ -76,6 +76,26 @@ ngapp.controller("ReportController", function($scope) {
     });
     $scope.cgDatas = cg_ds;
 
+    var pieData = {{ transformed_pie_json|safe }};
+    pieData.sort(function(a,b){
+        if (a.value < b.value){
+            return -1;
+        } else if (a.value > b.value){
+            return 1;
+        } else {
+            return 0;
+        }
+    });
+
+    //put small value between large value
+    var pieDataSorted = [];
+    while(pieData.length > 0){
+        if (pieData.length & 1){
+            pieDataSorted.push(pieData.shift());
+        } else {
+            pieDataSorted.push(pieData.pop());
+        }
+    }
 
     $scope.transformedPieOptions = {
         legend: {
@@ -86,7 +106,7 @@ ngapp.controller("ReportController", function($scope) {
             labels: {
                 template: "#= kendo.format('{0:p0}', percentage)#",
                 position: "Center",
-                distance: 20,
+                distance: 30,
                 visible: true,
                 background: "transparent",
                 font: "bold 14px Arial",
@@ -111,7 +131,8 @@ ngapp.controller("ReportController", function($scope) {
         },
         series: [{
             startAngle: 150,
-            data: {{ transformed_pie_json|safe }}
+            //data: {{ transformed_pie_json|safe }}
+            data: pieDataSorted
         }],
         tooltip: {
             visible: true,
@@ -371,7 +392,7 @@ setCalendar = function(currentDt, currentEndDt, eleSel, readings, averageUsage, 
         calendarDayEle.append("<div class='calendar-day-digit'>"+calendarNowDt.date()+"</div>");
 
         if (calendarNowDt.isBefore(currentDt)
-            || calendarNowDt.isSame(currentEndDt)
+            //|| calendarNowDt.isSame(currentEndDt)
             || calendarNowDt.isAfter(currentEndDt)) {
             calendarDayEle.addClass('calendar-day-out-range');
         } else if (isNotConcernFunc(calendarNowDt)) {
