@@ -26,8 +26,8 @@
 <link href="{% static 'css/kendo.entrak.theme.css' %}" rel="stylesheet">
 
 <!-- Because now using jquery v1.11 -->
-<script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
-<script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
+<!-- <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script> -->
+<!-- <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script> -->
 <script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
 
@@ -178,4 +178,10 @@
         </div>
     </div>
 </div>
+<script>
+    var ngapp = angular.module("Entrak", [ "kendo.directives" ]);
+    ngapp.controller("WidgetRealtime", function($scope) {
+        
+    });
+</script>
 {% endblock %}
