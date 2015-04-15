@@ -51,7 +51,7 @@
             {% include "companies/dashboard/widgets/_real_time.html" with widget_id=4 %}
         </div>
         <div class="col-md-4">
-            {% include "companies/dashboard/widgets/_last_week_stats.html" with widget_id=3 %}
+            {% include "companies/dashboard/widgets/_tips.html" with widget_id=3 %}
         </div>
     </div>
     <div class="row">
@@ -69,7 +69,38 @@
 <script>
     var ngapp = angular.module("Entrak", [ "kendo.directives" ]);
     ngapp.controller("WidgetRealtime", function($scope) {
-        
+
+    });
+
+    ngapp.controller("WidgetTips", function($scope){
+        var tipsList = [{
+            shortDesc: "Put a ribbon on it",
+            longDesc: "Tie a ribbon to the vent of each aircon unit so you can easily tell if aircon has actually been turned off.",
+            imgPath: ""
+        },
+        {
+            shortDesc: "Put a ribbon on it2",
+            longDesc: "Tie a ribbon to the vent of each aircon unit so you can easily tell if aircon has actually been turned off.",
+            imgPath: ""
+        }];
+
+        $scope.curTips = 0;
+        $scope.shortDesc = tipsList[$scope.curTips].shortDesc;
+        $scope.longDesc = tipsList[$scope.curTips].longDesc;
+        $scope.imgPath = tipsList[$scope.curTips].imgPath;
+
+        $scope.showNext = function(goNext){
+            $scope.curTips += goNext;
+            if ($scope.curTips >= tipsList.length){
+                $scope.curTips = 0;
+            } else if ($scope.curTips < 0){
+                $scope.curTips = tipsList.length - 1;
+            }
+
+            $scope.shortDesc = tipsList[$scope.curTips].shortDesc;
+            $scope.longDesc = tipsList[$scope.curTips].longDesc;
+            $scope.imgPath = tipsList[$scope.curTips].imgPath;
+        }
     });
 </script>
 {% endblock %}
