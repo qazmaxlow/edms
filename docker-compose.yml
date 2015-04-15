@@ -17,6 +17,7 @@ uwsgi:
   links:
     - postgres
     - mongo
+    - rabbitmq
 
 webserver:
   build: dockers/nginx
