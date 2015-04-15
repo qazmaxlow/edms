@@ -6,6 +6,7 @@ from . import audit_views
 from . import report_views
 from . import dashboard_views
 from . import apis
+from . import measure_views
 
 
 router = routers.DefaultRouter()
@@ -21,4 +22,6 @@ urlpatterns = patterns(
     url(r'^report/popup-report/$', report_views.popup_report_view, name='companies.reports.popup-report.custom-dates'),
     url(r'^report/popup-report/(?P<year>\d{4})/(?P<month>[a-z]{3})/$', report_views.popup_report_view, name='companies.reports.popup-report'),
     url(r'^report/popup-report/download/$', report_views.download_popup_report_view, name='companies.reports.popup-report.download'),
+
+    url('^measures/daily/$', measure_views.DailyMeasureList.as_view(), name='companies.measures.daily')
 )
