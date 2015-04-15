@@ -5,11 +5,26 @@
 	padding: 20px 20px 30px 20px;
 }
 
+
+/*widget common-------*/
 .widget-container {
     padding: 10px;
     font-family: 'ITCAvantGardeStd-Bk', sans-serif;
     font-size: 14px;
 }
+
+.widget-container .description-1{
+	color: #354960;
+	font-size: 0.929em;
+	font-weight: bold;
+}
+
+.widget-container .description-2{
+	color: #878787;
+	font-size: 0.929em;
+	font-weight: bold;
+}
+/*-------widget common*/
 
 /*widget header-------*/
 .widget-header {
@@ -80,6 +95,14 @@
 	height: 60px;
 }
 
+.widget-message .single-box {
+	height: 60px;
+	line-height: 40px;
+	padding: 10px 15px;
+	text-align: center;
+	width: 100%;
+}
+
 .widget-message .left-box {
     height: 60px;
     background-color: #FCFCFC;
@@ -96,14 +119,12 @@
 }
 
 .widget-message .left-box h3{
-	margin-top: 0px;
 	color: #354960;
 	font-size: 1.357em;
 	font-weight: bold;
 }
 
 .widget-message .right-box h3{
-	margin-top: 0px;
 	font-size: 1.357em;
 	font-weight: bold;
 }
@@ -112,18 +133,6 @@
 	margin-top: 6px;
 	font-size: 0.929em;
 	font-weight: lighter;
-}
-
-.widget-message .left-box .description-1{
-	color: #354960;
-	font-size: 0.929em;
-	font-weight: bold;
-}
-
-.widget-message .right-box .description-2{
-	color: #878787;
-	font-size: 0.929em;
-	font-weight: bold;
 }
 
 .widget-message h3.red-text, .widget-message h4.red-text {
@@ -153,6 +162,7 @@
 
 .widget-content h3, .widget-content h4 {
 	margin-bottom: 0px;
+	margin-top: 0px;
 }
 
 .widget-content span.legend-label {
@@ -165,3 +175,39 @@
     padding: 9px 10px 5px 15px;
 }
 /*-------widget content*/
+
+
+/*tips widget-------*/
+.widget-header .tips-button {
+    background-color: #F6F6F6;
+    padding: 0px;
+    border: none;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    vertical-align: middle;
+    outline: none;
+
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background-image: url(../../images/dashboard/tips-arrow-toggle.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.widget-header .tips-button:hover {
+	background-image: url(../../images/dashboard/tips-arrow-toggle.png);
+	background-color: #74C62B;
+}
+
+.widget-header .tips-button-left {
+}
+
+.widget-header .tips-button-right {
+	border-right: 1px solid #D2D2D2;
+	-ms-transform: rotate(180deg);
+	-webkit-transform: rotate(180deg);
+	transform: rotate(180deg);
+}
+
+/*-------tips widget*/
