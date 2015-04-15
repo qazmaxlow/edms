@@ -1,21 +1,26 @@
 postgres:
-  image: postgres:9.3.5
+  image: postgres:9.4
   environment:
       POSTGRES_PASSWORD: postgres
 
 mongo:
   image: mongo:2.6.5
 
+rabbitmq:
+  image: rabbitmq:3.5.0
+
 uwsgi:
-  image: entrak_dms/uwsgi
+  build: dockers/uwsgi
+  command: uwsgi --ini dockers/uwsgi/uwsgi.ini
   volumes:
     - .:/srv
   links:
     - postgres
     - mongo
 
-testserver:
-  image: entrak_dms/testserver
+webserver:
+  build: dockers/nginx
+  command: [nginx, -g, "daemon off;"]
   volumes:
     - .:/srv
   links:
@@ -24,11 +29,12 @@ testserver:
     - "80:80"
     - "443:443"
 
-rabbitmq:
-  image: rabbitmq:3.5.0
+celerybase:
+  build: dockers/celery
+  command: /bin/bash
 
 cwcelery:
-  image: entrak_dms/celery
+  image: entrakdms_celerybase
   command: python -m celery worker --app=entrak --loglevel=INFO -Q celery
   volumes:
     - .:/srv
@@ -38,7 +44,7 @@ cwcelery:
     - rabbitmq
 
 cwtaskstarter:
-  image: entrak_dms/celery
+  image: entrakdms_celerybase
   command: python -m celery worker --app=entrak --loglevel=INFO -Q task_starter
   volumes:
     - .:/srv
@@ -48,7 +54,7 @@ cwtaskstarter:
     - rabbitmq
 
 cwrecap:
-  image: entrak_dms/celery
+  image: entrakdms_celerybase
   command: python -m celery worker --app=entrak --loglevel=INFO -Q recap
   volumes:
     - .:/srv
@@ -58,7 +64,7 @@ cwrecap:
     - rabbitmq
 
 cwrecover:
-  image: entrak_dms/celery
+  image: entrakdms_celerybase
   command: python -m celery worker --app=entrak --loglevel=INFO -Q recover
   volumes:
     - .:/srv
@@ -68,7 +74,7 @@ cwrecover:
     - rabbitmq
 
 celerybeat:
-  image: entrak_dms/celery
+  image: entrakdms_celerybase
   command: celery beat --app=entrak
   volumes:
     - .:/srv
@@ -76,3 +82,4 @@ celerybeat:
     - postgres
     - mongo
     - rabbitmq
+

@@ -1,4 +1,4 @@
-FROM ubuntu:14.04.1
+FROM ubuntu:14.10
 
 RUN apt-get update && apt-get install -y python-pip
 RUN apt-get install -y libmysqlclient-dev libpq-dev
