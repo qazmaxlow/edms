@@ -33,13 +33,7 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/dashboard/widgets.css' %}">
 
-<!-- hack css for pdf -->
-<style>
-  .container {
-    width: 1024px !important;
-    padding: 20px 20px 30px 20px;
-  }
-</style>
+
 {% endblock %}
 
 {% block selected-menu-link-id %}menu-link-report{% endblock %}
@@ -50,131 +44,25 @@
 {% block page_subtitle %}{% trans "Get all your information here at the" %}{% endblock %}
 
 {% block page_content %}
-<style>
-    .widget-container {
-        padding: 10px;
-    }
 
-    .widget-container .widget-panel {
-        border-radius: 8px 8px 0 0;
-        background-color: #9BCEDA;
-        -webkit-box-shadow: -6px 6px 10px 0px #E8E8E8;
-    }
-
-    .widget-title {
-        color: #FFF;
-        font-family: 'ITCAvantGardeStd-Bk', sans-serif;
-        font-size: 1.0em;
-        line-height: 30px;
-        font-weight: bold;
-        height: 40px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-    }
-
-    .widget-toggle {
-        font-family: 'ITCAvantGardeStd-Bk', sans-serif;
-        font-size: 1.0em;
-        font-weight: bold;
-        padding-top: 5px;
-        padding-bottom: 5px;
-    }
-
-    .widget-content {
-        height: 300px;
-        background-color: #FCFCFC;
-        -webkit-box-shadow: -6px 6px 10px 0px #e8e8e8;
-    }
-
-    .widget-content .widget-message {
-        height: 70px;
-    }
-
-    .widget-message .left-box {
-        height: 70px;
-        background-color: #FCFCFC;
-        padding: 10px 15px 10px 15px;
-    }
-
-    .widget-message .right-box {
-        height: 70px;
-        padding: 10px 15px 10px 15px;
-        background-color: #E5E8E9;
-    }
-
-    .widget-graph {
-        margin-top: -5px;
-    }
-
-    .toggle-button {
-        color: #9D9D9D;
-        border: none;
-        /*border-color: #dadada;*/
-        background-color: #fff;
-        min-width: 50px;
-        line-height: 20px;
-        font-size: 0.929em;
-        font-weight: normal;
-        border-radius: 6px;
-        -webkit-box-shadow: none;
-        -moz-box-shadow: none;
-        -o-box-shadow: none;
-        box-shadow: none;
-        margin-top: 4px;
-        margin-bottom: 4px;
-    }
-
-    .toggle-primary {
-        color: #eee;
-        /*border-color: #67cd18;*/
-        font-weight: bold;
-        background-image: none;
-        background-color: #74C62B;
-
-    }
-
-    .button-left {
-        border-top-right-radius: 0px;
-        border-bottom-right-radius: 0px;
-    }
-
-    .button-right {
-        border-top-left-radius: 0px;
-        border-bottom-left-radius: 0px;
-        margin-left: -4px;
-    }
-
-    .toggle-button:hover {
-      color: #333;
-      /*border-color: #adadad;*/
-      background-color: #ebebeb;
-    }
-
-    .toggle-primary:hover {
-      color: #fff;
-      /*border-color: #78ed29;*/
-      background-color: #48ad00;
-    }
-
-</style>
 <div class="container" ng-app="Entrak">
     <div class="row">
         <div class="col-md-8">
             {% include "companies/dashboard/widgets/_real_time.html" with widget_id=4 %}
         </div>
         <div class="col-md-4">
-            {% include "companies/dashboard/_last_week_stats.html" with widget_id=3 %}
+            {% include "companies/dashboard/widgets/_last_week_stats.html" with widget_id=3 %}
         </div>
     </div>
     <div class="row">
         <div class="col-md-4">
-          {% include "companies/dashboard/_last_week_stats.html" with widget_id=1 %}
+          {% include "companies/dashboard/widgets/_last_week_stats.html" with widget_id=1 %}
         </div>
         <div class="col-md-4">
-          {% include "companies/dashboard/_last_week_stats.html" with widget_id=2 %}
+          {% include "companies/dashboard/widgets/_last_week_stats.html" with widget_id=2 %}
         </div>
         <div class="col-md-4">
-          {% include "companies/dashboard/_last_week_stats.html" with widget_id=5 %}
+          {% include "companies/dashboard/widgets/_last_week_stats.html" with widget_id=5 %}
         </div>
     </div>
 </div>
