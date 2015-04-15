@@ -719,7 +719,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         if len(g['sourceIds']) == 1:
             g['title'] = get_source_name(g['sourceIds'][0])
         else:
-            g['title'] = g['system'].fullname
+            g['title'] = g['system'].name
 
         g['usage'] = g['currentWeekdayInfo']['average']
         beginning_usage = g['beginningWeekdayInfo']['average']
@@ -908,7 +908,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
             dt = dt.astimezone(current_system_tz)
             last_day_readings[dt] = v
 
-        graph_title = get_source_name(g['sourceIds'][0]) if g['system'].code == m['company_system'].code else g['system'].fullname
+        graph_title = get_source_name(g['sourceIds'][0]) if g['system'].code == m['company_system'].code else g['system'].name
         # [{'name': 'last', 'value': v, 'datetime': datetime.datetime.fromtimestamp(t, pytz.utc) } for t, v in combined_last_readings.items()]
         sub_graph = {
             'system': g['system'],
@@ -1032,7 +1032,6 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
     m['saving_energy'] = abs(report_data['savingInfo']['energy'])
     m['css_class_energy_saving'] = 'positive-saving' if report_data['savingInfo']['energy'] >=0 else 'negative-saving'
-    m['saving_sign'] = '-' if report_data['savingInfo']['energy'] >=0 else '+'
     m['is_saving'] = (report_data['savingInfo']['energy'] >=0)
     # in tons
     m['saving_co2'] = abs(report_data['savingInfo']['co2'] / 1000.0)
@@ -1085,7 +1084,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
             'percent_base_on_max': percent_base_on_max,
             'color': type_colors[ix % len(type_colors)]
         }
-        data_info['name'] = g['sourceNameInfo'][current_lang()] if g['systemCode'] == m['company_system'].code else g['system'].fullname
+        data_info['name'] = g['sourceNameInfo'][current_lang()] if g['systemCode'] == m['company_system'].code else g['system'].name
         transformed_datas.append(data_info)
 
     m['transformed_datas'] = transformed_datas
@@ -1147,7 +1146,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     compare_past_datasource = []
     for su in sumup_usages:
         if report_type == 'month':
-            formated_date = compare_past_date.strftime('%b')
+            formated_date = formats.date_format(compare_past_date, 'SHORT_MONTH_FORMAT')
         elif report_type == 'week':
             formated_date = u'{0} - {1}'.format(
                 formats.date_format(compare_past_date, 'MONTH_DAY_FORMAT'),

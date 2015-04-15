@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-13 04:18+0000\n"
+"POT-Creation-Date: 2015-04-14 03:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: companies/report_views.py:410
+#: companies/report_views.py:461
 #, python-brace-format
 msgid "{0:.0f}% {1}"
 msgstr "{1} {0:.0f}%"
 
-#: companies/report_views.py:414
+#: companies/report_views.py:465
 #: companies/templates/companies/reports/_report_content.html:65
 #: companies/templates/companies/reports/_report_content.html:74
 #: companies/templates/companies/reports/_report_content.html:87
@@ -35,7 +35,7 @@ msgstr "{1} {0:.0f}%"
 msgid "more"
 msgstr "增加了"
 
-#: companies/report_views.py:414
+#: companies/report_views.py:465
 #: companies/templates/companies/reports/_report_content.html:67
 #: companies/templates/companies/reports/_report_content.html:76
 #: companies/templates/companies/reports/_report_content.html:89
@@ -48,150 +48,150 @@ msgstr "增加了"
 msgid "less"
 msgstr "減少了"
 
-#: companies/report_views.py:434
+#: companies/report_views.py:485
 #, python-brace-format
 msgid "{self.compared_percent_abs:.0f}% {self.change_desc}"
 msgstr "{self.change_desc} {self.compared_percent_abs:.0f}%"
 
-#: companies/report_views.py:528 companies/report_views.py:553
+#: companies/report_views.py:579 companies/report_views.py:604
 msgid "month"
 msgstr "月"
 
-#: companies/report_views.py:529 companies/report_views.py:554
+#: companies/report_views.py:580 companies/report_views.py:605
 #: companies/templates/companies/reports/popup_report - Copy.html:48
 #: companies/templates/companies/reports/summary Copy.html:473
 msgid "Compared to Last Month"
 msgstr "相比上月"
 
-#: companies/report_views.py:531
+#: companies/report_views.py:582
 #, python-brace-format
 msgid "{0}{1} - Monthly Energy Report"
 msgstr "{0}年{1}月 - 能源使用報告"
 
-#: companies/report_views.py:533
+#: companies/report_views.py:584
 #, python-brace-format
 msgid "{0} - Monthly Energy Report"
 msgstr "{0} - 能源使用報告"
 
-#: companies/report_views.py:535
+#: companies/report_views.py:586
 msgid "week"
 msgstr "週"
 
-#: companies/report_views.py:536
+#: companies/report_views.py:587
 msgid "Compared to Last Week"
 msgstr "相比上週"
 
-#: companies/report_views.py:538 companies/report_views.py:556
+#: companies/report_views.py:589 companies/report_views.py:607
 #, python-brace-format
 msgid "{0}{1}{2} - "
 msgstr "{0}年{1}月{2}日 - "
 
-#: companies/report_views.py:539
+#: companies/report_views.py:590
 #, fuzzy, python-brace-format
 msgid "{0}{1}{2} Weekly Energy Report"
 msgstr "{0}年{1}月{2}日 - 能源使用報告"
 
-#: companies/report_views.py:542
+#: companies/report_views.py:593
 #, fuzzy, python-brace-format
 msgid "{0} Weekly Energy Report"
 msgstr "{0} - 能源使用報告"
 
-#: companies/report_views.py:544
+#: companies/report_views.py:595
 msgid "quarter"
 msgstr "季"
 
-#: companies/report_views.py:545
+#: companies/report_views.py:596
 msgid "Compared to Last Quarter"
 msgstr "相比上季"
 
-#: companies/report_views.py:546
+#: companies/report_views.py:597
 #, python-brace-format
 msgid "{0} Q{1}"
 msgstr "{0}年 第{1}季"
 
-#: companies/report_views.py:547
+#: companies/report_views.py:598
 #, python-brace-format
 msgid "{0} - Quarterly Energy Report"
 msgstr "{0} - 能源使用報告"
 
-#: companies/report_views.py:549
+#: companies/report_views.py:600
 msgid "year"
 msgstr "年"
 
-#: companies/report_views.py:550
+#: companies/report_views.py:601
 msgid "Compared to Last Year"
 msgstr "相比上年"
 
-#: companies/report_views.py:551
+#: companies/report_views.py:602
 #, python-brace-format
 msgid "{0} - Yearly Energy Report"
 msgstr "{0} - 能源使用報告"
 
-#: companies/report_views.py:557
+#: companies/report_views.py:608
 #, python-brace-format
 msgid "{0}{1}{2}"
 msgstr "{0}年{1}月{2}日"
 
-#: companies/report_views.py:749 companies/report_views.py:750
+#: companies/report_views.py:799 companies/report_views.py:800
 msgid "tcmonth"
 msgstr "月"
 
-#: companies/report_views.py:755
+#: companies/report_views.py:805
 msgid "This week"
 msgstr "本週"
 
-#: companies/report_views.py:756
+#: companies/report_views.py:806
 msgid "Last week"
 msgstr "上週"
 
-#: companies/report_views.py:758
+#: companies/report_views.py:808
 msgid "This quarter"
 msgstr "本季"
 
-#: companies/report_views.py:759
+#: companies/report_views.py:809
 msgid "Last quarter"
 msgstr "上季"
 
-#: companies/report_views.py:764
+#: companies/report_views.py:814
 msgid "This period"
 msgstr "本期"
 
-#: companies/report_views.py:765
+#: companies/report_views.py:815
 msgid "Last same period"
 msgstr "上期"
 
-#: companies/report_views.py:828
+#: companies/report_views.py:878
 #, python-brace-format
 msgid "Overall: {0.compared_percent_abs:.0f}&#37; more energy than last {1}"
 msgstr "總計: 比上{1}多用 {0.compared_percent_abs:.0f}&#37;"
 
-#: companies/report_views.py:830
+#: companies/report_views.py:880
 #, python-brace-format
 msgid "Overall: {0.compared_percent_abs:.0f}&#37; less energy than last {1}"
 msgstr "總計: 比上{1}少用 {0.compared_percent_abs:.0f}&#37;"
 
-#: companies/report_views.py:1041
+#: companies/report_views.py:1091
 #, python-brace-format
 msgid "Your energy consumption this {1} was {0} than it was last {1}"
 msgstr "你本月的電力消耗比起上{1}{0}"
 
-#: companies/report_views.py:1046
+#: companies/report_views.py:1096
 msgid "Total energy consumption for the last 6 months (kWh)"
 msgstr "過去6個月的電力消耗 (kWh)"
 
-#: companies/report_views.py:1049
+#: companies/report_views.py:1099
 msgid "Total energy consumption for the last 6 weeks (kWh)"
 msgstr "過去6週的電力消耗 (kWh)"
 
-#: companies/report_views.py:1051
+#: companies/report_views.py:1101
 msgid "Total energy consumption for the last 6 quarters (kWh)"
 msgstr "過去6季的電力消耗 (kWh)"
 
-#: companies/report_views.py:1053
+#: companies/report_views.py:1103
 msgid "Total energy consumption for the last 6 years (kWh)"
 msgstr "過去6年的電力消耗 (kWh)"
 
-#: companies/report_views.py:1055
+#: companies/report_views.py:1105
 msgid "Total energy consumption for the last 6 same periods (kWh)"
 msgstr "過去6期的電力消耗 (kWh)"
 
@@ -340,13 +340,21 @@ msgstr "電費差額 ($)"
 msgid "How much more / less did we use compared to last %(report_type_name)s?"
 msgstr "相比上%(report_type_name)s，我們的用電增加 / 減少了？"
 
-#: companies/templates/companies/reports/_report_content.html:310
+#: companies/templates/companies/reports/_report_content.html:269
+msgid ""
+"For comparison purpose, in this section, the graph of the earlier period has "
+"been shifted to match the current period by day of the week."
+msgstr ""
+"為方便讀者比較，此部份的圖表在顯示上經過調整，較早時段的圖表被移動至匹配較後"
+"時段圖表的週內相同日子，以表達每週同一天的同比情況。"
+
+#: companies/templates/companies/reports/_report_content.html:313
 msgid "HOW MUCH ENERGY DID WE USE ON WEEKDAYS?"
 msgstr "在平日，我們平均消耗多少能源？"
 
-#: companies/templates/companies/reports/_report_content.html:322
-#: companies/templates/companies/reports/_report_content.html:406
-#: companies/templates/companies/reports/_report_content.html:467
+#: companies/templates/companies/reports/_report_content.html:325
+#: companies/templates/companies/reports/_report_content.html:409
+#: companies/templates/companies/reports/_report_content.html:470
 #: companies/templates/companies/reports/popup_report_pdf.html:258
 #: companies/templates/companies/reports/popup_report_pdf.html:335
 #: companies/templates/companies/reports/popup_report_pdf.html:348
@@ -358,79 +366,79 @@ msgstr "在平日，我們平均消耗多少能源？"
 msgid "Average Weekday Energy Use"
 msgstr "平日平均電力消耗量"
 
-#: companies/templates/companies/reports/_report_content.html:331
-#: companies/templates/companies/reports/_report_content.html:339
-#: companies/templates/companies/reports/_report_content.html:417
-#: companies/templates/companies/reports/_report_content.html:425
-#: companies/templates/companies/reports/_report_content.html:478
-#: companies/templates/companies/reports/_report_content.html:486
-#: companies/templates/companies/reports/_report_content.html:538
-#: companies/templates/companies/reports/_report_content.html:546
-#: companies/templates/companies/reports/_report_content.html:625
-#: companies/templates/companies/reports/_report_content.html:633
-#: companies/templates/companies/reports/_report_content.html:686
-#: companies/templates/companies/reports/_report_content.html:694
-#: companies/templates/companies/reports/_report_content.html:747
-#: companies/templates/companies/reports/_report_content.html:755
-#: companies/templates/companies/reports/_report_content.html:833
-#: companies/templates/companies/reports/_report_content.html:841
-#: companies/templates/companies/reports/_report_content.html:894
-#: companies/templates/companies/reports/_report_content.html:902
+#: companies/templates/companies/reports/_report_content.html:334
+#: companies/templates/companies/reports/_report_content.html:342
+#: companies/templates/companies/reports/_report_content.html:420
+#: companies/templates/companies/reports/_report_content.html:428
+#: companies/templates/companies/reports/_report_content.html:481
+#: companies/templates/companies/reports/_report_content.html:489
+#: companies/templates/companies/reports/_report_content.html:541
+#: companies/templates/companies/reports/_report_content.html:549
+#: companies/templates/companies/reports/_report_content.html:628
+#: companies/templates/companies/reports/_report_content.html:636
+#: companies/templates/companies/reports/_report_content.html:689
+#: companies/templates/companies/reports/_report_content.html:697
+#: companies/templates/companies/reports/_report_content.html:750
+#: companies/templates/companies/reports/_report_content.html:758
+#: companies/templates/companies/reports/_report_content.html:836
+#: companies/templates/companies/reports/_report_content.html:844
+#: companies/templates/companies/reports/_report_content.html:897
+#: companies/templates/companies/reports/_report_content.html:905
 #, python-format
 msgid "Compared to last %(report_type_name)s"
 msgstr "比上%(report_type_name)s"
 
-#: companies/templates/companies/reports/_report_content.html:349
-#: companies/templates/companies/reports/_report_content.html:357
-#: companies/templates/companies/reports/_report_content.html:437
-#: companies/templates/companies/reports/_report_content.html:445
-#: companies/templates/companies/reports/_report_content.html:498
-#: companies/templates/companies/reports/_report_content.html:506
-#: companies/templates/companies/reports/_report_content.html:556
-#: companies/templates/companies/reports/_report_content.html:564
-#: companies/templates/companies/reports/_report_content.html:645
-#: companies/templates/companies/reports/_report_content.html:653
-#: companies/templates/companies/reports/_report_content.html:706
-#: companies/templates/companies/reports/_report_content.html:714
-#: companies/templates/companies/reports/_report_content.html:765
-#: companies/templates/companies/reports/_report_content.html:773
-#: companies/templates/companies/reports/_report_content.html:853
-#: companies/templates/companies/reports/_report_content.html:861
-#: companies/templates/companies/reports/_report_content.html:914
-#: companies/templates/companies/reports/_report_content.html:922
+#: companies/templates/companies/reports/_report_content.html:352
+#: companies/templates/companies/reports/_report_content.html:360
+#: companies/templates/companies/reports/_report_content.html:440
+#: companies/templates/companies/reports/_report_content.html:448
+#: companies/templates/companies/reports/_report_content.html:501
+#: companies/templates/companies/reports/_report_content.html:509
+#: companies/templates/companies/reports/_report_content.html:559
+#: companies/templates/companies/reports/_report_content.html:567
+#: companies/templates/companies/reports/_report_content.html:648
+#: companies/templates/companies/reports/_report_content.html:656
+#: companies/templates/companies/reports/_report_content.html:709
+#: companies/templates/companies/reports/_report_content.html:717
+#: companies/templates/companies/reports/_report_content.html:768
+#: companies/templates/companies/reports/_report_content.html:776
+#: companies/templates/companies/reports/_report_content.html:856
+#: companies/templates/companies/reports/_report_content.html:864
+#: companies/templates/companies/reports/_report_content.html:917
+#: companies/templates/companies/reports/_report_content.html:925
 msgid "Compared to same period last year"
 msgstr "比去年同期"
 
-#: companies/templates/companies/reports/_report_content.html:367
-#: companies/templates/companies/reports/_report_content.html:574
-#: companies/templates/companies/reports/_report_content.html:783
+#: companies/templates/companies/reports/_report_content.html:370
+#: companies/templates/companies/reports/_report_content.html:577
+#: companies/templates/companies/reports/_report_content.html:786
 msgid "Better"
 msgstr "優於"
 
-#: companies/templates/companies/reports/_report_content.html:367
-#: companies/templates/companies/reports/_report_content.html:368
+#: companies/templates/companies/reports/_report_content.html:370
+#: companies/templates/companies/reports/_report_content.html:371
 msgid "than average weekday"
 msgstr "平均值"
 
-#: companies/templates/companies/reports/_report_content.html:368
-#: companies/templates/companies/reports/_report_content.html:575
-#: companies/templates/companies/reports/_report_content.html:784
+#: companies/templates/companies/reports/_report_content.html:371
+#: companies/templates/companies/reports/_report_content.html:578
+#: companies/templates/companies/reports/_report_content.html:787
 msgid "Worse"
 msgstr "遜於"
 
-#: companies/templates/companies/reports/_report_content.html:369
-#: companies/templates/companies/reports/_report_content.html:576
-#: companies/templates/companies/reports/_report_content.html:785
+#: companies/templates/companies/reports/_report_content.html:372
+#: companies/templates/companies/reports/_report_content.html:579
+#: companies/templates/companies/reports/_report_content.html:788
 msgid "Average"
 msgstr "平均值"
 
-#: companies/templates/companies/reports/_report_content.html:369
+#: companies/templates/companies/reports/_report_content.html:372
 msgid "weekday"
 msgstr " "
 
-#: companies/templates/companies/reports/_report_content.html:375
-#: companies/templates/companies/reports/_report_content.html:582
-#: companies/templates/companies/reports/_report_content.html:791
+#: companies/templates/companies/reports/_report_content.html:378
+#: companies/templates/companies/reports/_report_content.html:585
+#: companies/templates/companies/reports/_report_content.html:794
 #: companies/templates/companies/reports/popup_report_pdf.html:302
 #: companies/templates/companies/reports/popup_report_pdf.html:427
 #: companies/templates/companies/reports/popup_report_pdf.html:552
@@ -444,70 +452,70 @@ msgstr ""
 "<div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</"
 "div><div>六</div>"
 
-#: companies/templates/companies/reports/_report_content.html:384
+#: companies/templates/companies/reports/_report_content.html:387
 msgid "Highest Weekday Energy Use"
 msgstr "平日最高用電量"
 
-#: companies/templates/companies/reports/_report_content.html:388
-#: companies/templates/companies/reports/_report_content.html:596
-#: companies/templates/companies/reports/_report_content.html:804
+#: companies/templates/companies/reports/_report_content.html:391
+#: companies/templates/companies/reports/_report_content.html:599
+#: companies/templates/companies/reports/_report_content.html:807
 msgid "Most of the increase was from"
 msgstr "用量上升的主要來源是"
 
-#: companies/templates/companies/reports/_report_content.html:396
-#: companies/templates/companies/reports/_report_content.html:604
-#: companies/templates/companies/reports/_report_content.html:812
+#: companies/templates/companies/reports/_report_content.html:399
+#: companies/templates/companies/reports/_report_content.html:607
+#: companies/templates/companies/reports/_report_content.html:815
 #, fuzzy
 msgid "Overall"
 msgstr "整體： "
 
-#: companies/templates/companies/reports/_report_content.html:518
+#: companies/templates/companies/reports/_report_content.html:521
 msgid "HOW MUCH ENERGY DID WE USE ON WEEKENDS AND HOLIDAYS?"
 msgstr "在週末及假期，我們平均消耗多少能源？"
 
-#: companies/templates/companies/reports/_report_content.html:529
-#: companies/templates/companies/reports/_report_content.html:614
-#: companies/templates/companies/reports/_report_content.html:675
+#: companies/templates/companies/reports/_report_content.html:532
+#: companies/templates/companies/reports/_report_content.html:617
+#: companies/templates/companies/reports/_report_content.html:678
 msgid "Average Weekend/Holiday Energy Use"
 msgstr "週末及假期平均電力消耗量"
 
-#: companies/templates/companies/reports/_report_content.html:574
-#: companies/templates/companies/reports/_report_content.html:575
+#: companies/templates/companies/reports/_report_content.html:577
+#: companies/templates/companies/reports/_report_content.html:578
 msgid "than average weekend"
 msgstr "<br>"
 
-#: companies/templates/companies/reports/_report_content.html:576
+#: companies/templates/companies/reports/_report_content.html:579
 msgid "weekend"
 msgstr "<br>"
 
-#: companies/templates/companies/reports/_report_content.html:592
+#: companies/templates/companies/reports/_report_content.html:595
 msgid "Highest Weekend/Holiday Energy Use"
 msgstr "週末及假期最高用電量"
 
-#: companies/templates/companies/reports/_report_content.html:726
+#: companies/templates/companies/reports/_report_content.html:729
 msgid "HOW MUCH ENERGY DID WE USE OVERNIGHT "
 msgstr "在晚間，我們平均消耗多少能源？"
 
-#: companies/templates/companies/reports/_report_content.html:738
-#: companies/templates/companies/reports/_report_content.html:822
-#: companies/templates/companies/reports/_report_content.html:883
+#: companies/templates/companies/reports/_report_content.html:741
+#: companies/templates/companies/reports/_report_content.html:825
+#: companies/templates/companies/reports/_report_content.html:886
 msgid "Average Overnight Energy Use"
 msgstr "晚間平均電力消耗量"
 
-#: companies/templates/companies/reports/_report_content.html:783
-#: companies/templates/companies/reports/_report_content.html:784
+#: companies/templates/companies/reports/_report_content.html:786
+#: companies/templates/companies/reports/_report_content.html:787
 msgid "than average night"
 msgstr "<br>"
 
-#: companies/templates/companies/reports/_report_content.html:785
+#: companies/templates/companies/reports/_report_content.html:788
 msgid "night"
 msgstr "<br>"
 
-#: companies/templates/companies/reports/_report_content.html:800
+#: companies/templates/companies/reports/_report_content.html:803
 msgid "Highest Overnight Energy Use"
 msgstr "晚間最高用電量"
 
-#: companies/templates/companies/reports/_report_script.html:218
+#: companies/templates/companies/reports/_report_script.html:227
 msgid "When did we achieve our savings?"
 msgstr "我們在什麼時候達到節省？"
 
