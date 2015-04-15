@@ -293,6 +293,24 @@ class System(models.Model):
         fn = self.full_name_tc if lang == 'zh-tw' else self.full_name
         return fn
 
+    @property
+    def sources(self):
+        system_code = self.code
+        system_path = self.path
+
+        if not system_path:
+            target_path = ',%s,' % system_code
+        else:
+            target_path = '%s%s,' % (system_path, system_code)
+
+        sources = Source.objects(
+            MQ(system_code=system_code) |
+            MQ(system_path__startswith=target_path
+          ))
+
+        return sources
+
+
 class SystemHomeImage(models.Model):
     image = models.ImageField(upload_to="system_home/%Y/%m")
     system = models.ForeignKey(System)
