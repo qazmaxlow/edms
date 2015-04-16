@@ -96,6 +96,10 @@
             }
         });
 
+        var hours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
+        var per_hour_measures = {};
+        $.each(hours, function(i, h) { per_hour_measures[h] = null; });
+
         $scope.realTimeOptions = {
             series: [{
                 type: "column",
@@ -109,8 +113,7 @@
                 data: [5,4,3,5]
             }],
             categoryAxis: {
-                categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
-
+                categories: hours
             }
         }
 
@@ -118,8 +121,14 @@
             today_measure_ds.fetch().then(function() {
                 var data = today_measure_ds.data();
                 $.each(data, function(index, m) {
-                    today_measures.push(m.value);
+                    var hour = m.datetime.getHours();
+                    if (per_hour_measures[hour] === null) {
+                        per_hour_measures[hour] = m.value;
+                    }
                 });
+
+                today_measures.length = 0;
+                $.each(per_hour_measures, function(h, v) { today_measures.push(v); });
 
                 $scope.realTimeChart.refresh();
             });
