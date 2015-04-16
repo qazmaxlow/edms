@@ -26,8 +26,6 @@
 <link href="{% static 'css/kendo.entrak.theme.css' %}" rel="stylesheet">
 
 <!-- Because now using jquery v1.11 -->
-<script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
-<script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
 
@@ -155,13 +153,16 @@
     }
 
 </style>
+<script>
+    var ngapp = angular.module("Entrak", [ "kendo.directives" ]);
+</script>
 <div class="container" ng-app="Entrak">
     <div class="row">
         <div class="col-md-8">
             {% include "companies/dashboard/_last_week_stats.html" with widget_id=4 %}
         </div>
         <div class="col-md-4">
-            {% include "companies/dashboard/_last_week_stats.html" with widget_id=3 %}
+            {% include "companies/dashboard/_so_far.html" with widget_id=3 %}
         </div>
     </div>
     <div class="row">
@@ -176,4 +177,5 @@
         </div>
     </div>
 </div>
+
 {% endblock %}
