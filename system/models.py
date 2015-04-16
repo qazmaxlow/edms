@@ -14,7 +14,7 @@ from dateutil.relativedelta import relativedelta
 from mongoengine import connection, Q as MQ
 
 from egauge.manager import SourceManager
-from egauge.models import Source, SourceReadingHour, SourceReadingDay
+from egauge.models import Source, SourceReadingYear, SourceReadingMonth, SourceReadingDay, SourceReadingHour, SourceReadingMin
 from entrak.settings import BASE_DIR, LANG_CODE_EN, LANG_CODE_TC
 from holiday.models import CityHoliday, Holiday
 from unit.models import UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
@@ -315,6 +315,43 @@ class System(models.Model):
           ))
 
         return sources
+
+
+    def get_unit_rate(self, rate_date, rate_type):
+        unit_infos = json.loads(self.unit_info)
+        unit_code = unit_infos[rate_type]
+        unit_rates = UnitRate.objects.filter(
+            category_code=rate_type, code=unit_infos[rate_type])
+
+        return unit_rates.filter(
+            effective_date__lte=rate_date).order_by('-effective_date').first()
+
+
+    def get_total_cost(self, start_dt, end_dt):
+        """
+        Calculate the cost between the dates of the system.
+        """
+        source_ids = [s.id for s in self.sources]
+        date_type = 'day'
+
+        reading_map = {
+            'day': SourceReadingMin,
+            'week': SourceReadingDay,
+            'month': SourceReadingMonth,
+            'quarter': SourceReadingMonth,
+            'year': SourceReadingYear,
+            'custom': SourceReadingDay
+        }
+
+        reading_cls = reading_map[date_type]
+
+        readings = reading_cls.objects(
+            source_id__in=source_ids,
+            datetime__gte=start_dt,
+            datetime__lt=end_dt)
+
+        if readings:
+            return sum([self.get_unit_rate(r.datetime, 'money').rate*r.value for r in readings])
 
 
 class SystemHomeImage(models.Model):
