@@ -151,6 +151,39 @@
             $scope.imgPath = tipsList[$scope.curTips].imgPath;
         }
     });
+
+
+    ngapp.controller("WidgetSoFar", function($scope){
+
+        var movies = [
+            { "value": 2200, "name": "So far this week" },
+            { "value": 1941, "name": "By this time last week" },
+        ];
+
+        $scope.soFarOptions = {
+            chartArea: {
+                height: 230,
+                margin: 15,
+                background: '#FCFCFC'
+            },
+            legend: {
+                position: 'bottom'
+            },
+            seriesDefaults: {
+                type: 'column'
+            },
+            series: [{
+                markers: { visible: true },
+                field: 'value',
+                color: '#354960',
+                gap: 0.5,
+                labels: {
+                    visible: true
+                }
+            }],
+            dataSource: movies
+        }
+    });
 </script>
 
 {% endblock %}

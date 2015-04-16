@@ -3,128 +3,37 @@
 {% load static %}
 {% load humanize %}
 
-<div class="widget-container" ng-controller="barChart">
-    <div class="widget-panel row" >
-        <div class="widget-title col-sm-7">Last Week Stats</div>
+<div class="widget-container" ng-controller="WidgetSoFar">
+    <div class="widget-header row">
+        <div class="widget-title col-sm-7">Energy Use</div>
         <div class="widget-toggle col-sm-5">
             <div class="pull-right">
-                <button id="day_button_{{widget_id}}" class="toggle-primary toggle-button button-left">Day</button>
-                <button id="night_button_{{widget_id}}" class="toggle-button button-right">Night</button>
+                <button id="weekly_button_{{widget_id}}" class="toggle-primary toggle-button button-left">Week</button>
+                <button id="monthly_button_{{widget_id}}" class="toggle-button button-right">Month</button>
             </div>
         </div>
     </div>
     <div class="widget-content row">
-        <div class="widget-message" id="weekday_messages_{{widget_id}}">
+        <div class="widget-message" id="weekly_messages_{{widget_id}}">
             <div class='col-sm-6 left-box'>
-                <h3 class="number-text widget-font">${{ last_week_weekday_average|floatformat:"0"|intcomma }}</h3>
-                <div class="clearfix"></div>
-                <span class="description-1 widget-font">average weekday</span>
+                <span class="description-1 ">So far this week</span>
             </div>
             <div class='col-sm-6 right-box'>
-                {% if weekday_percentage_change > 0 %}
-                    <h3 class="number-text widget-font red-text">{{weekday_percentage_change|floatformat:0}}</h3>
-                    <h4 class="compare-text widget-font red-text">% more</h4>
-                {% else %}
-                    <h3 class="number-text widget-font green-text">{{weekday_percentage_change|floatformat:1|slice:"1:"}}</h3>
-                    <h4 class="compare-text widget-font green-text">% less</h4>
-                {% endif %}
-                <div class="clearfix"></div>
-                <span class="description-2 widget-font">than two weeks ago</span>
+                <span class="description-2 ">By this time last week</span>
             </div>
         </div>
-        <div class="widget-message" id="overnight_messages_{{widget_id}}" style="display: none;">
+        <div class="widget-message" id="monthly_messages_{{widget_id}}" style="display: none;">
             <div class='col-sm-6 left-box'>
-                <h3 class="number-text widget-font">${{ last_week_overnight_average|floatformat:"0"|intcomma }}</h3>
-                <div class="clearfix"></div>
-                <span class="description-1 widget-font">average overnight</span>
+                <span class="description-1 ">So far this month</span>
             </div>
             <div class='col-sm-6 right-box'>
-                {% if overnight_percentage_change > 0 %}
-                    <h3 class="number-text widget-font red-text">{{overnight_percentage_change|floatformat:0}}</h3>
-                    <h4 class="compare-text widget-font red-text">% more</h4>
-                {% else %}
-                    <h3 class="number-text widget-font green-text">{{overnight_percentage_change|floatformat:1|slice:"1:"}}</h3>
-                    <h4 class="compare-text widget-font green-text">% less</h4>
-                {% endif %}
-                <div class="clearfix"></div>
-                <span class="description-2 widget-font">than two weeks ago</span>
+                <span class="description-2 ">By this time last month</span>
             </div>
         </div>
         <div class="widget-graph">
             <div class="k-content">
-                <div kendo-chart
-                     k-chart-area="{ height: 230, margin: 15, background: '#FCFCFC' }"
-                     k-legend="{ position: 'bottom' }"
-                     k-series-defaults="{ type: 'column' }"
-                     k-series="[{
-                        markers: { visible: true },
-                        field: 'value',
-                        color: '#354960',
-                        gap: 1.0,
-                        labels: {
-                            visible: true
-                        }
-                        }]"
-                     k-data-source="movieRating"
-                     ></div>
+                <div kendo-chart="soFarChart" k-options="soFarOptions"></div>
             </div>
         </div>
     </div>
-    <style>
-        h2.widget-font, h3.widget-font, h4.widget-font, span.widget-font {
-            font-family: 'ITCAvantGardeStd-Bk', sans-serif;
-            font-weight: bold;
-            color: #354960;
-        }
-
-        h3.number-text {
-            float: left;
-            font-size: 1.5em;
-            margin: 5px 0px 0px 0px;
-        }
-
-        h4.compare-text {
-            float: left;
-            font-weight: normal;
-            font-size: 1.1em;
-            margin: 10px 0px 0px 5px;
-        }
-
-        span.description-1 {
-            float: :left;
-            color: #354960;
-        }
-
-        span.description-2 {
-            float: :left;
-            font-weight: bold;
-            font-size: 1.0em;
-            color: #878787;
-        }
-
-        span.legend-label {
-            font-size: 0.929em;
-            font-weight: bold;
-        }
-
-        h3.red-text, h4.red-text {
-            color: #D65C2C;
-        }
-
-        h3.green-text, h4.green-text {
-            color: #74C26B;
-        }
-    </style>
-    <script>
-        var movies = [
-                        { "value": 2200, "name": "So far this week" },
-                        { "value": 1941, "name": "By this time last week" },
-                    ];
-
-        ngapp.controller("barChart", function($scope){
-            $scope.movieRating = new kendo.data.DataSource({
-                data: movies
-            });
-        });
-    </script>
 </div>
