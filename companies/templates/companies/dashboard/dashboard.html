@@ -124,18 +124,37 @@
         var tipsList = [{
             shortDesc: "Put a ribbon on it",
             longDesc: "Tie a ribbon to the vent of each aircon unit so you can easily tell if aircon has actually been turned off.",
-            imgPath: ""
+            imgPath: "/static/images/dashboard/tips-ribbon.png"
         },
         {
             shortDesc: "Put a ribbon on it2",
-            longDesc: "Tie a ribbon to the vent of each aircon unit so you can easily tell if aircon has actually been turned off.",
-            imgPath: ""
+            longDesc: "Tie a ribbon to the vent of each aircon unit so you can easily tell if aircon has actually been turned off.2",
+            imgPath: "/static/images/dashboard/tips-button.png"
+        },
+        {
+            shortDesc: "Put a ribbon on it3",
+            longDesc: "Tie a ribbon to the vent of each aircon unit so you can easily tell if aircon has actually been turned off.3",
+            imgPath: "/static/images/dashboard/tips-lightbulbs.png"
+        },
+        {
+            shortDesc: "Put a ribbon on it4",
+            longDesc: "Tie a ribbon to the vent of each aircon unit so you can easily tell if aircon has actually been turned off.4",
+            imgPath: "/static/images/dashboard/tips-switch-off.png"
+        },
+        {
+            shortDesc: "Put a ribbon on it5",
+            longDesc: "Tie a ribbon to the vent of each aircon unit so you can easily tell if aircon has actually been turned off.5",
+            imgPath: "/static/images/dashboard/tips-temperature.png"
         }];
 
+        var update = function(){
+            $scope.shortDesc = tipsList[$scope.curTips].shortDesc;
+            $scope.longDesc = tipsList[$scope.curTips].longDesc;
+            $scope.imgPath = tipsList[$scope.curTips].imgPath;
+        };
+        
         $scope.curTips = 0;
-        $scope.shortDesc = tipsList[$scope.curTips].shortDesc;
-        $scope.longDesc = tipsList[$scope.curTips].longDesc;
-        $scope.imgPath = tipsList[$scope.curTips].imgPath;
+        update();
 
         $scope.showNext = function(goNext){
             $scope.curTips += goNext;
@@ -145,9 +164,7 @@
                 $scope.curTips = tipsList.length - 1;
             }
 
-            $scope.shortDesc = tipsList[$scope.curTips].shortDesc;
-            $scope.longDesc = tipsList[$scope.curTips].longDesc;
-            $scope.imgPath = tipsList[$scope.curTips].imgPath;
+            update();
         }
     });
 </script>
