@@ -293,6 +293,12 @@ class System(models.Model):
         fn = self.full_name_tc if lang == 'zh-tw' else self.full_name
         return fn
 
+
+    @property
+    def time_zone(self):
+        return pytz.timezone(self.timezone)
+
+
     @property
     def sources(self):
         system_code = self.code

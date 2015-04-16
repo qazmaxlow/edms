@@ -71,14 +71,24 @@
     var ngapp = angular.module("Entrak", [ "kendo.directives" ]);
     ngapp.controller("WidgetRealtime", function($scope) {
         var today_measures = [];
+        var last_week_measures = [];
 
         var today_measure_ds = new kendo.data.DataSource({
             transport: {
                 read: {
-                    async: false,
                     url: "{% url 'companies.measures.daily' current_system.code %}",
                     type: 'GET',
                     dataType: "json"
+                },
+                parameterMap: function(data, type) {
+                    if (type == "read") {
+                        var d = data.date;
+                        if (d === undefined) { d = new Date(); }
+
+                        return {
+                            date: kendo.toString(d, 'yyyy-MM-dd')
+                        }
+                    }
                 }
             },
             schema: {
@@ -90,7 +100,12 @@
             }
         });
 
+        var hours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
+        var per_hour_measures = {};
+        $.each(hours, function(i, h) { per_hour_measures[h] = null; });
+
         $scope.realTimeOptions = {
+            transitions: false,
             series: [{
                 type: "column",
                 name: "Today",
@@ -100,43 +115,83 @@
                 type: "line",
                 name: "Last Wed",
                 color: "#565656",
-                data: [5,4,3,5]
+                data: last_week_measures
             }],
             categoryAxis: {
-                categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
-
+                categories: hours
             }
         }
 
-        $scope.updateTodayMeasure = function (e) {
-            today_measure_ds.fetch().then(function() {
+        // get last week data
+        var last_week_date = new Date();
+        last_week_date.setDate(last_week_date.getDate()-7);
+
+        today_measure_ds.read({date: kendo.toString(last_week_date, 'yyyy-MM-dd')}).then(function() {
+            var data = today_measure_ds.data();
+            $.each(data, function(index, m) {
+                var hour = m.datetime.getHours();
+                last_week_measures[hour-1] = m.value;
+            });
+        });
+
+        updateTodayMeasure = function () {
+            today_measure_ds.read().then(function() {
                 var data = today_measure_ds.data();
                 $.each(data, function(index, m) {
-                    today_measures.push(m.value);
+                    var hour = m.datetime.getHours();
+                    if (per_hour_measures[hour] === null) {
+                        per_hour_measures[hour] = m.value;
+                    }
                 });
+
+                today_measures.length = 0;
+                $.each(per_hour_measures, function(h, v) { today_measures.push(v); });
 
                 $scope.realTimeChart.refresh();
             });
+
+            // update by animation frame
+            kendo.animationFrame(updateTodayMeasure);
         }
 
+        updateTodayMeasure();
     });
 
     ngapp.controller("WidgetTips", function($scope){
         var tipsList = [{
             shortDesc: "Put a ribbon on it",
             longDesc: "Tie a ribbon to the vent of each aircon unit so you can easily tell if aircon has actually been turned off.",
-            imgPath: ""
+            imgPath: "/static/images/dashboard/tips-ribbon.png"
         },
         {
-            shortDesc: "Put a ribbon on it2",
-            longDesc: "Tie a ribbon to the vent of each aircon unit so you can easily tell if aircon has actually been turned off.",
-            imgPath: ""
+            shortDesc: "Label your plugs",
+            longDesc: "Label your plugs so you can unplug appliances without accidentally turning off important things!",
+            imgPath: "/static/images/dashboard/tips-button.png"
+        },
+        {
+            shortDesc: "Remove a tube",
+            longDesc: "If you have more light than you need in an area, you can remove one light tube to save energy!",
+            imgPath: "/static/images/dashboard/tips-lightbulbs.png"
+        },
+        {
+            shortDesc: "Turn off the socket",
+            longDesc: "Even if an appliance is off, it can still consume 10% of normal energy. Remember to turn off the socket switch too!",
+            imgPath: "/static/images/dashboard/tips-switch-off.png"
+        },
+        {
+            shortDesc: "Adjest aircon tomperature",
+            longDesc: "30 minutes after turning on aircon, adjust the temperature to minimize energy wastage.",
+            imgPath: "/static/images/dashboard/tips-temperature.png"
         }];
 
+        var update = function(){
+            $scope.shortDesc = tipsList[$scope.curTips].shortDesc;
+            $scope.longDesc = tipsList[$scope.curTips].longDesc;
+            $scope.imgPath = tipsList[$scope.curTips].imgPath;
+        };
+
         $scope.curTips = 0;
-        $scope.shortDesc = tipsList[$scope.curTips].shortDesc;
-        $scope.longDesc = tipsList[$scope.curTips].longDesc;
-        $scope.imgPath = tipsList[$scope.curTips].imgPath;
+        update();
 
         $scope.showNext = function(goNext){
             $scope.curTips += goNext;
@@ -146,9 +201,7 @@
                 $scope.curTips = tipsList.length - 1;
             }
 
-            $scope.shortDesc = tipsList[$scope.curTips].shortDesc;
-            $scope.longDesc = tipsList[$scope.curTips].longDesc;
-            $scope.imgPath = tipsList[$scope.curTips].imgPath;
+            update();
         }
     });
 
