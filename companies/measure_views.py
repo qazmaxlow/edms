@@ -20,7 +20,10 @@ class DailyMeasureList(generics.ListAPIView):
         date = self.request.QUERY_PARAMS.get('date', None)
         if date is not None:
             date = dateparse.parse_date(date)
+
             date_start = datetime.datetime.combine(date, datetime.datetime.min.time())
+            date_start = sys.time_zone.localize(date_start)
+
             date_end = date_start + datetime.timedelta(days=1)
 
             mdb_conn = connection.get_db()
