@@ -30,4 +30,4 @@ class TrailSerializer(serializers.HyperlinkedModelSerializer):
 
 class MeasureSerializer(serializers.Serializer):
     value = serializers.FloatField()
-    datetime = serializers.DateTimeField()
+    datetime = DateTimeTzAwareField()
