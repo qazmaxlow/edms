@@ -32,6 +32,14 @@
 	line-height: 175%;
 }
 
+.widget-content .red-text {
+    color: #D65C2C;
+}
+
+.widget-content .green-text {
+    color: #74C26B;
+}
+
 .widget-content .full-width-img {
 	width: 100%;
 	height: auto;
@@ -57,6 +65,7 @@
 
 .widget-toggle {
 	padding-right: 13px;
+	padding-left: 0px;
     height: 36px;
     line-height: 36px;
 }
@@ -68,7 +77,7 @@
     color: #9D9D9D;
     padding: 0px;
     border: none;
-    min-width: 50px;
+    min-width: 55px;
     height: 18px;
     line-height: 18px;
     vertical-align: middle;
@@ -146,14 +155,6 @@
 	font-size: 0.929em;
 	font-weight: lighter;
 }
-
-.widget-message h3.red-text, .widget-message h4.red-text {
-    color: #D65C2C;
-}
-
-.widget-message h3.green-text, .widget-message h4.green-text {
-    color: #74C26B;
-}
 /*-------widget message*/
 
 
@@ -222,9 +223,114 @@
 	transform: rotate(180deg);
 }
 
-
-
 .widget-content .long-desc-holder {
 	padding: 22px 15px 10px 15px;
 }
 /*-------tips widget*/
+
+
+/*biggest consumers widget-------*/
+.widget-content .bc-left-box {
+	width: auto;
+	overflow: hidden;
+}
+
+.widget-content .bc-right-box {
+	width: 105px;
+	border-left: 1px solid #F2F2F2;
+}
+
+.widget-content .bc-left-box.first-row h3 {
+	padding-left: 15px;
+	height: 60px;
+	line-height: 60px;
+}
+
+.widget-content .bc-right-box.first-row {
+	display: table;
+	height: 100%;
+}
+
+.widget-content .bc-right-box.first-row h3 {
+	padding-left: 6px;
+	padding-right: 6px;
+	line-height: 1.5em;
+	color: #878787;
+	font-size: 0.857em;
+	font-weight: bold;
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.widget-content .bc-graph {
+	height: 240px;
+	height: calc(100% - 60px);
+}
+
+.bc-graph .horizontal-bars {
+	height: 100%;
+	width: 100%;
+}
+
+.horizontal-bars tr {
+	border-top: 1px solid #F2F2F2;
+}
+
+.horizontal-bars div.bc-right-box, .horizontal-bars div.bc-left-box {
+	height: 100%;
+}
+
+.horizontal-bars .name-row {
+	height: 40%;
+	display: table;
+}
+
+.horizontal-bars .name-row .name{
+	padding-left: 15px;
+	font-size: 0.857em;
+	color: #4B4B4B;
+	font-weight: bold;
+
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.horizontal-bars .bar-row {
+	height: 60%;
+	min-height: 44px;
+}
+
+.horizontal-bars .bar-row .bar-container {
+	height: 44px;
+	padding-top: 11px;
+	padding-left: 19px;
+	padding-right: 10px;
+}
+
+.horizontal-bars .bar-row img {
+	position: absolute;
+	z-index: 10;
+}
+
+.horizontal-bars .bar-row .bar-container .bar {
+	height: 22px;
+	background-color: #354960;
+	border-top-right-radius: 22px;
+    border-bottom-right-radius: 22px;
+    position: relative;
+}
+
+.horizontal-bars .bar-row .bar-container .bar .bar-value {
+	color: #FFF;
+	font-weight: bold;
+	font-size: 0.857em;
+	text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.8);
+	position: absolute;
+	padding-top: 4px;
+	padding-right: 10px;
+	min-width: 50px;
+	width: 100%;
+	text-align: right;
+}
+
+/*-------biggest consumers widget*/
