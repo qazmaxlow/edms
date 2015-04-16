@@ -23,5 +23,6 @@ urlpatterns = patterns(
     url(r'^report/popup-report/(?P<year>\d{4})/(?P<month>[a-z]{3})/$', report_views.popup_report_view, name='companies.reports.popup-report'),
     url(r'^report/popup-report/download/$', report_views.download_popup_report_view, name='companies.reports.popup-report.download'),
 
-    url('^measures/daily/$', measure_views.DailyMeasureList.as_view(), name='companies.measures.daily')
+    url('^measures/daily/$', measure_views.DailyMeasureList.as_view(), name='companies.measures.daily'),
+    url('^cost/$', measure_views.CostDetail.as_view(), name='companies.cost'),
 )
