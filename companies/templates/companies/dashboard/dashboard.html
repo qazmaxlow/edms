@@ -99,6 +99,22 @@
             }
         });
 
+        var cost_ds = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "{% url 'companies.cost' current_system.code %}",
+                    type: 'GET',
+                    dataType: "json"
+                }
+            },
+            schema: {
+                    // Fix for single result
+                    data: function(response) {
+                        return [response];
+                    }
+                }
+        });
+
         var hours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
         var per_hour_measures = {};
         $.each(hours, function(i, h) { per_hour_measures[h] = null; });
@@ -149,11 +165,21 @@
                 $scope.realTimeChart.refresh();
             });
 
+            cost_ds.read().then(function() {
+                var data = cost_ds.data();
+                $scope.total_cost = data[0].total;
+                $scope.$apply(function(){
+                    $scope.total_cost = data[0].total;
+                });
+            });
+
+
             // update by animation frame
             kendo.animationFrame(updateTodayMeasure);
         }
 
-        updateTodayMeasure();
+       updateTodayMeasure();
+
     });
 
     ngapp.controller("WidgetTips", function($scope){
