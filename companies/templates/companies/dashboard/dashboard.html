@@ -78,6 +78,13 @@
                     url: "{% url 'companies.measures.daily' current_system.code %}",
                     type: 'GET',
                     dataType: "json"
+                },
+                parameterMap: function(data, type) {
+                    if (type == "read") {
+                        return {
+                            date: kendo.toString(new Date(), 'yyyy-MM-dd')
+                        }
+                    }
                 }
             },
             schema: {
