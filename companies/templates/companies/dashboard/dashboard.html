@@ -70,6 +70,7 @@
     var ngapp = angular.module("Entrak", [ "kendo.directives" ]);
     ngapp.controller("WidgetRealtime", function($scope) {
         var today_measures = [];
+        var last_week_measures = [];
 
         var today_measure_ds = new kendo.data.DataSource({
             transport: {
@@ -81,8 +82,11 @@
                 },
                 parameterMap: function(data, type) {
                     if (type == "read") {
+                        var d = data.date;
+                        if (d === undefined) { d = new Date(); }
+
                         return {
-                            date: kendo.toString(new Date(), 'yyyy-MM-dd')
+                            date: kendo.toString(d, 'yyyy-MM-dd')
                         }
                     }
                 }
@@ -110,12 +114,24 @@
                 type: "line",
                 name: "Last Wed",
                 color: "#565656",
-                data: [5,4,3,5]
+                data: last_week_measures
             }],
             categoryAxis: {
                 categories: hours
             }
         }
+
+        // get last week data
+        var last_week_date = new Date();
+        last_week_date.setDate(last_week_date.getDate()-7);
+
+        today_measure_ds.read({date: kendo.toString(last_week_date, 'yyyy-MM-dd')}).then(function() {
+            var data = today_measure_ds.data();
+            $.each(data, function(index, m) {
+                var hour = m.datetime.getHours();
+                last_week_measures[hour-1] = m.value;
+            });
+        });
 
         $scope.updateTodayMeasure = function (e) {
             today_measure_ds.fetch().then(function() {
