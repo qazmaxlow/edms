@@ -277,12 +277,12 @@ class System(models.Model):
         if self.night_time_start.hour <= 12:
             # datetime_in_current_tz BETWEEN the night time start and end hours
             # prevent miscalcuation when night time start is after 00:00am
-            if (self.night_time_start.hour <=  datetime_in_current_tz.hour <= self.night_time_end.hour):
+            if (self.night_time_start.hour <=  datetime_in_current_tz.hour < self.night_time_end.hour):
                 return datetime_in_current_tz.date() - relativedelta(days=1)
         else:
             if datetime_in_current_tz.hour >= self.night_time_start.hour:
                 return datetime_in_current_tz.date()
-            elif datetime_in_current_tz.hour <= self.night_time_end.hour:
+            elif datetime_in_current_tz.hour < self.night_time_end.hour:
                 return datetime_in_current_tz.date() - relativedelta(days=1)
 
         return None
