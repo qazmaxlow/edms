@@ -31,3 +31,7 @@ class TrailSerializer(serializers.HyperlinkedModelSerializer):
 class MeasureSerializer(serializers.Serializer):
     value = serializers.FloatField()
     datetime = DateTimeTzAwareField()
+
+
+class CostSerializer(serializers.Serializer):
+    total = serializers.FloatField()
