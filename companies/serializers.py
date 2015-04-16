@@ -26,3 +26,8 @@ class TrailSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Trail
         fields = ('action_name', 'user', 'created_time')
+
+
+class MeasureSerializer(serializers.Serializer):
+    value = serializers.FloatField()
+    datetime = serializers.DateTimeField()

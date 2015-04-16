@@ -81,4 +81,5 @@ def dashboard_view(request, system_code):
     m["last_week_overnight_stats"] = json.dumps(sorted(last_week_overnight_stats['data'], key=itemgetter('date')))
     m["last_week_weekday_stats"] = json.dumps(sorted(last_week_weekday_stats['data'], key=itemgetter('date')))
 
+    m['current_system'] = current_system
     return render(request, 'companies/dashboard/dashboard.html', m)
