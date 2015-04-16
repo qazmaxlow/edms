@@ -51,7 +51,7 @@
             {% include "companies/dashboard/widgets/_real_time.html" with widget_id=4 %}
         </div>
         <div class="col-md-4">
-            {% include "companies/dashboard/widgets/_last_week_stats.html" with widget_id=3 %}
+            {% include "companies/dashboard/widgets/_tips.html" with widget_id=3 %}
         </div>
     </div>
     <div class="row">
@@ -148,6 +148,55 @@
 
                 $scope.realTimeChart.refresh();
             });
+        }
+
+    });
+
+    ngapp.controller("WidgetTips", function($scope){
+        var tipsList = [{
+            shortDesc: "Put a ribbon on it",
+            longDesc: "Tie a ribbon to the vent of each aircon unit so you can easily tell if aircon has actually been turned off.",
+            imgPath: "/static/images/dashboard/tips-ribbon.png"
+        },
+        {
+            shortDesc: "Label your plugs",
+            longDesc: "Label your plugs so you can unplug appliances without accidentally turning off important things!",
+            imgPath: "/static/images/dashboard/tips-button.png"
+        },
+        {
+            shortDesc: "Remove a tube",
+            longDesc: "If you have more light than you need in an area, you can remove one light tube to save energy!",
+            imgPath: "/static/images/dashboard/tips-lightbulbs.png"
+        },
+        {
+            shortDesc: "Turn off the socket",
+            longDesc: "Even if an appliance is off, it can still consume 10% of normal energy. Remember to turn off the socket switch too!",
+            imgPath: "/static/images/dashboard/tips-switch-off.png"
+        },
+        {
+            shortDesc: "Adjest aircon tomperature",
+            longDesc: "30 minutes after turning on aircon, adjust the temperature to minimize energy wastage.",
+            imgPath: "/static/images/dashboard/tips-temperature.png"
+        }];
+
+        var update = function(){
+            $scope.shortDesc = tipsList[$scope.curTips].shortDesc;
+            $scope.longDesc = tipsList[$scope.curTips].longDesc;
+            $scope.imgPath = tipsList[$scope.curTips].imgPath;
+        };
+
+        $scope.curTips = 0;
+        update();
+
+        $scope.showNext = function(goNext){
+            $scope.curTips += goNext;
+            if ($scope.curTips >= tipsList.length){
+                $scope.curTips = 0;
+            } else if ($scope.curTips < 0){
+                $scope.curTips = tipsList.length - 1;
+            }
+
+            update();
         }
     });
 </script>
