@@ -1,21 +1,26 @@
+{% verbatim %}
 <div class="widget-container" ng-controller="WidgetRealtime">
-<div class="widget-header row">
-    <div class="widget-title col-sm-9">Real-Time</div>
-    <div class="widget-toggle col-sm-3">
-        <div class="pull-right">
-            <div class="btn-group" role="group" aria-label="...">
-                <button type="button" class="btn btn-default">Graph</button>
-                <button type="button" class="btn btn-default">Rates</button>
+    <div class="widget-header row">
+        <div class="widget-title col-sm-9">Real-Time</div>
+        <div class="widget-toggle col-sm-3">
+            <div class="pull-right">
+                <div class="btn-group" role="group" aria-label="...">
+                    <button type="button" class="btn btn-default" ng-click="realTimeSelect = 'graph'">Graph</button>
+                    <button type="button" class="btn btn-default" ng-click="realTimeSelect = 'rates'">Rates</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-{% verbatim %}
-<div class="row">
-    So far today you have used: ${{ total_cost | number:0 }}
+    <div class="row">
+        So far today you have used: ${{ total_cost | number:0 }}
+    </div>
+    <div ng-show="realTimeSelect=='graph'">
+        <div class="widget-content row">
+            <div kendo-chart="realTimeChart" k-options="realTimeOptions" ></div>
+        </div>
+    </div>
+    <div ng-show="realTimeSelect=='rates'">
+        rates
+    </div>
 </div>
 {% endverbatim %}
-<div class="widget-content row">
-    <div kendo-chart="realTimeChart" k-options="realTimeOptions" ></div>
-</div>
-</div>
