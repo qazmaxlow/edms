@@ -303,10 +303,11 @@
         $scope.soFarOptions = {
             chartArea: {
                 height: 230,
-                margin: 15,
+                margin: 0,
                 background: '#FCFCFC'
             },
             legend: {
+                visible: false,
                 position: 'bottom'
             },
             seriesDefaults: {
@@ -316,6 +317,7 @@
                 markers: { visible: true },
                 field: 'value',
                 color: '#354960',
+                //colorField: "barColor",
                 gap: 0.5,
                 labels: {
                     visible: true,
@@ -344,6 +346,7 @@
 
             dataSource: costs
         }
+        console.log(JSON.stringify($scope.soFarOptions.dataSource));
     });
 
     ngapp.controller("WidgetLastWeekStats", function($scope){
