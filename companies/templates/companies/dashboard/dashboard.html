@@ -208,8 +208,8 @@
         }];
 
         $scope.isWeek = true;
-        $scope.toggle = function(){
-            $scope.isWeek = !$scope.isWeek;
+        $scope.toggle = function(clickWeek){
+            $scope.isWeek = clickWeek;
             //action
         }
 
@@ -351,9 +351,14 @@
         //console.log(JSON.stringify($scope.soFarOptions.dataSource));
 
         $scope.isWeek = true;
-        $scope.toggle = function() {
-            $scope.isWeek = !$scope.isWeek;
-
+        var setTitle = function(){
+            $scope.leftBoxTitle = $scope.isWeek ? "So far this week" : "So far this month";
+            $scope.rightBoxTitle = $scope.isWeek ? "By this time last week" : "By this time last month";
+        }
+        setTitle();
+        $scope.toggle = function(clickWeek) {
+            $scope.isWeek = clickWeek;
+            setTitle();
             clearInterval(refreshIntervalId);
 
             var retrieve_date = new Date();
