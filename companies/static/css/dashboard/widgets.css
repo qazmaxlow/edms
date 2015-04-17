@@ -272,6 +272,30 @@
 	width: 100%;
 }
 
+.bc-graph .horizontal-bars .bc-change-percent {
+	display: inline-block;
+	margin-left: 17px;
+	padding-left: 18px;
+	margin-top: 7px;
+	text-align: left;
+	font-size: 1.357em;
+	font-weight: bold;
+}
+
+.bc-graph .horizontal-bars .bc-percent-unit {
+	display: inline-block;
+	text-align: left;
+	font-size: 1.071em;
+}
+
+.bc-graph .horizontal-bars .bc-change-percent.red-text {
+	background: url(../../images/dashboard/arrow-up.png) no-repeat center left;	
+}
+
+.bc-graph .horizontal-bars .bc-change-percent.green-text {
+	background: url(../../images/dashboard/arrow-down.png) no-repeat center left;	
+}
+
 .horizontal-bars tr {
 	border-top: 1px solid #F2F2F2;
 }

@@ -198,9 +198,14 @@
             percent: 3.2
         }];
 
-
         for (var i=0; i<$scope.consumers.length; i++){
             $scope.consumers[i].imgPath = "/static/images/dashboard/consumer-" + (i+1) + ".png";
+            if ($scope.consumers[i].percent > 0){
+                $scope.consumers[i].colorClass = "red-text";
+            } else {
+                $scope.consumers[i].colorClass = "green-text";
+                $scope.consumers[i].percent = Math.abs($scope.consumers[i]);
+            }
         }
     });
 
