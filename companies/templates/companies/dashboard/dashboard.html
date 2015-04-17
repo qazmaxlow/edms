@@ -207,6 +207,12 @@
             percent: -3.2
         }];
 
+        $scope.isWeek = true;
+        $scope.toggle = function(){
+            $scope.isWeek = !$scope.isWeek;
+            //action
+        }
+
         for (var i=0; i<$scope.consumers.length; i++){
             $scope.consumers[i].imgPath = "/static/images/dashboard/consumer-" + (i+1) + ".png";
             if ($scope.consumers[i].percent > 0){
