@@ -357,8 +357,8 @@
 
         setTitle();
 
-        $scope.toggle = function(clickWeek) {
-            $scope.isWeek = clickWeek;
+        $scope.toggle = function() {
+            $scope.isWeek = !$scope.isWeek;
             setTitle();
             clearInterval(refreshIntervalId);
 
