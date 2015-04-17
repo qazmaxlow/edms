@@ -359,3 +359,23 @@
 }
 
 /*-------biggest consumers widget*/
+
+/*energy use widget-------*/
+.widget-message .eu-box {
+    height: 50px;
+    padding: 0px 8px;
+    border-bottom: 1px solid #F2F2F2;
+}
+
+.widget-message .eu-box:first-child {
+    border-right: 1px solid #F2F2F2;
+}
+
+.widget-message .eu-box .description-1, .widget-message .eu-box .description-2 {
+	text-align: center;
+	display: inline-block;
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+}
+/*-------energy use widget*/

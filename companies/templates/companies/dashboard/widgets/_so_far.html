@@ -8,61 +8,24 @@
         <div class="widget-title col-sm-7">Energy Use</div>
         <div class="widget-toggle col-sm-5">
             <div class="pull-right">
-                <button id="weekly_button_{{widget_id}}" class="toggle-primary toggle-button button-left" data-type="weekly" data-messages='{"desc-1":"So far this week", "desc-2":"By this time last week"}'>Week</button>
-                <button id="monthly_button_{{widget_id}}" class="toggle-button button-right" data-type="monthly" data-messages='{"desc-1":"So far this month", "desc-2":"By this time last month"}'>Month</button>
+                <button ng-class="{'toggle-primary' : isWeek}" ng-click="toggle(true)" class="toggle-button button-left">Week</button><!--
+                --><button ng-class="{'toggle-primary' : !isWeek}" ng-click="toggle(false)" class="toggle-button button-right">Month</button>
             </div>
         </div>
     </div>
     <div class="widget-content row">
         <div class="widget-message" id="messages_{{widget_id}}">
-            <div class='col-sm-6 left-box'>
-                <span class="description-1 ">So far this week</span>
+            <div class='col-sm-6 eu-box'>
+                <span class="description-1" ng-bind="leftBoxTitle"></span>
             </div>
-            <div class='col-sm-6 right-box'>
-                <span class="description-2 ">By this time last week</span>
+            <div class='col-sm-6 eu-box'>
+                <span class="description-2" ng-bind="rightBoxTitle"></span>
             </div>
         </div>
         <div class="widget-graph">
             <div class="k-content">
-                <div id="chart_{{widget_id}}" kendo-chart="soFarChart" k-options="soFarOptions"></div>
+                <div kendo-chart="soFarChart" k-options="soFarOptions"></div>
             </div>
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-
-    var refreshIntervalId;
-    var refreshPeriod = 30000;
-
-    function toggle_weekly_monthly_{{widget_id}}(){
-
-        clearInterval(refreshIntervalId);
-        current_type = $("[id$=button_2][class*=toggle-primary]").data("type");
-
-        if (current_type=="monthly") {
-            $("#weekly_button_{{widget_id}}").addClass("toggle-primary");
-            $("#monthly_button_{{widget_id}}").removeClass("toggle-primary");
-        } else {
-            $("#weekly_button_{{widget_id}}").removeClass("toggle-primary");
-            $("#monthly_button_{{widget_id}}").addClass("toggle-primary");
-        }
-
-        retrieve_type = $("[id$=button_2][class*=toggle-primary]").data("type");
-        retrieve_date = new Date();
-        messages = $("[id$=button_2][class*=toggle-primary]").data("messages");
-
-        $("#chart_{{widget_id}}").data("kendoChart").dataSource.read({datetime:retrieve_date, type:retrieve_type});
-        refreshIntervalId = setInterval(function() { $("#chart_{{widget_id}}").data("kendoChart").dataSource.read({datetime:retrieve_date, type:retrieve_type}); }, refreshPeriod);
-
-        $("#messages_{{widget_id}} span.description-1").html(messages["desc-1"]);
-        $("#messages_{{widget_id}} span.description-2").html(messages["desc-2"]);
-    }
-
-
-    $(document).ready(function(){
-        $("#weekly_button_{{widget_id}}").click(toggle_weekly_monthly_{{widget_id}});
-        $("#monthly_button_{{widget_id}}").click(toggle_weekly_monthly_{{widget_id}});
-        refreshIntervalId = setInterval(function() { $("#chart_{{widget_id}}").data("kendoChart").dataSource.read(); }, refreshPeriod);
-    });
-</script>

@@ -224,6 +224,12 @@
             percent: -3.2
         }];
 
+        $scope.isWeek = true;
+        $scope.toggle = function(clickWeek){
+            $scope.isWeek = clickWeek;
+            //action
+        }
+
         for (var i=0; i<$scope.consumers.length; i++){
             $scope.consumers[i].imgPath = "/static/images/dashboard/consumer-" + (i+1) + ".png";
             if ($scope.consumers[i].percent > 0){
@@ -284,40 +290,42 @@
     });
 
 
-    var costs = new kendo.data.DataSource({
-        transport: {
-            read: {
-                url: "{% url 'companies.measures.up-till-now' current_system.code %}",
-                type: 'GET',
-                dataType: "json"
-            },
-            parameterMap: function(data, type) {
-                if (type == "read") {
-                    var d = data["datetime"];
-                    var t = data["type"];
-                    if (d === undefined) { d = new Date(); }
-                    if (t === undefined) { t = "weekly"; }
+    ngapp.controller("WidgetSoFar", function($scope){
 
-                    return {
-                        datetime: d.toISOString(),
-                        type: t
+        var costs = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "{% url 'companies.measures.up-till-now' current_system.code %}",
+                    type: 'GET',
+                    dataType: "json"
+                },
+                parameterMap: function(data, type) {
+                    if (type == "read") {
+                        var d = data["datetime"];
+                        var t = data["type"];
+                        if (d === undefined) { d = new Date(); }
+                        if (t === undefined) { t = "weekly"; }
+
+                        return {
+                            datetime: d.toISOString(),
+                            type: t
+                        }
                     }
                 }
             }
-        }
-    });
+        });
 
-
-    ngapp.controller("WidgetSoFar", function($scope){
-
+        var refreshIntervalId;
+        var refreshPeriod = 30000;
 
         $scope.soFarOptions = {
             chartArea: {
                 height: 230,
-                margin: 15,
+                margin: 0,
                 background: '#FCFCFC'
             },
             legend: {
+                visible: false,
                 position: 'bottom'
             },
             seriesDefaults: {
@@ -327,6 +335,7 @@
                 markers: { visible: true },
                 field: 'value',
                 color: '#354960',
+                //colorField: "barColor",
                 gap: 0.5,
                 labels: {
                     visible: true,
@@ -355,6 +364,29 @@
 
             dataSource: costs
         }
+
+
+        $scope.isWeek = true;
+        var setTitle = function(){
+            $scope.leftBoxTitle = $scope.isWeek ? "So far this week" : "So far this month";
+            $scope.rightBoxTitle = $scope.isWeek ? "By this time last week" : "By this time last month";
+        }
+
+        setTitle();
+
+        $scope.toggle = function(clickWeek) {
+            $scope.isWeek = clickWeek;
+            setTitle();
+            clearInterval(refreshIntervalId);
+
+            var retrieve_date = new Date();
+            var retrieve_type = ($scope.isWeek ? "weekly" : "monthly");
+
+            costs.read({datetime:retrieve_date, type:retrieve_type});
+            refreshIntervalId = setInterval(function() { costs.read({datetime:retrieve_date, type:retrieve_type}); }, refreshPeriod);
+        }
+
+        refreshIntervalId = setInterval(function() { costs.read(); }, refreshPeriod);
     });
 
     ngapp.controller("WidgetLastWeekStats", function($scope){
