@@ -273,32 +273,33 @@
     });
 
 
-    var costs = new kendo.data.DataSource({
-        transport: {
-            read: {
-                url: "{% url 'companies.measures.up-till-now' current_system.code %}",
-                type: 'GET',
-                dataType: "json"
-            },
-            parameterMap: function(data, type) {
-                if (type == "read") {
-                    var d = data["datetime"];
-                    var t = data["type"];
-                    if (d === undefined) { d = new Date(); }
-                    if (t === undefined) { t = "weekly"; }
+    ngapp.controller("WidgetSoFar", function($scope){
 
-                    return {
-                        datetime: d.toISOString(),
-                        type: t
+        var costs = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "{% url 'companies.measures.up-till-now' current_system.code %}",
+                    type: 'GET',
+                    dataType: "json"
+                },
+                parameterMap: function(data, type) {
+                    if (type == "read") {
+                        var d = data["datetime"];
+                        var t = data["type"];
+                        if (d === undefined) { d = new Date(); }
+                        if (t === undefined) { t = "weekly"; }
+
+                        return {
+                            datetime: d.toISOString(),
+                            type: t
+                        }
                     }
                 }
             }
-        }
-    });
+        });
 
-
-    ngapp.controller("WidgetSoFar", function($scope){
-
+        var refreshIntervalId;
+        var refreshPeriod = 30000;
 
         $scope.soFarOptions = {
             chartArea: {
@@ -346,7 +347,23 @@
 
             dataSource: costs
         }
-        console.log(JSON.stringify($scope.soFarOptions.dataSource));
+
+        //console.log(JSON.stringify($scope.soFarOptions.dataSource));
+
+        $scope.isWeek = true;
+        $scope.toggle = function() {
+            $scope.isWeek = !$scope.isWeek;
+
+            clearInterval(refreshIntervalId);
+
+            var retrieve_date = new Date();
+            var retrieve_type = ($scope.isWeek ? "weekly" : "monthly");
+
+            costs.read({datetime:retrieve_date, type:retrieve_type});
+            refreshIntervalId = setInterval(function() { costs.read({datetime:retrieve_date, type:retrieve_type}); }, refreshPeriod);
+        }
+
+        refreshIntervalId = setInterval(function() { $("#chart_{{widget_id}}").data("kendoChart").dataSource.read({datetime:retrieve_date, type:retrieve_type}); }, refreshPeriod);
     });
 
     ngapp.controller("WidgetLastWeekStats", function($scope){
