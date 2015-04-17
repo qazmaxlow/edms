@@ -173,12 +173,13 @@
                 });
             });
 
-
-            // update by animation frame
-            kendo.animationFrame(updateTodayMeasure);
         }
 
-       updateTodayMeasure();
+        updateTodayMeasure();
+        // update the chart every 10 sec
+        setInterval(function(){
+            updateTodayMeasure();
+        }, 10000);
 
     });
 
