@@ -76,7 +76,7 @@
         var dayStep = dayMaxStep / 4;
 
         for (var i=0; i<night_usage.length; i++){
-            nightMax = Math.max(dayMax, night_usage[i].value);
+            nightMax = Math.max(nightMax, night_usage[i].value);
         }
         var nightDiff = nightMax;
         var nightPow = (nightDiff+".").indexOf(".") - 1;
@@ -161,7 +161,9 @@
             $("#night_button_{{widget_id}}").removeClass("toggle-primary");
             $("#day_button_{{widget_id}}").addClass("toggle-primary");
             var chart = $("#chart_{{widget_id}}").data("kendoChart");
+            chart.setOptions({valueAxis: {max: dayMaxStep, majorUnit: dayStep}});
             chart.dataSource.data(day_usage);
+            chart.refresh();
             $("#overnight_messages_{{widget_id}}").hide();
             $("#weekday_messages_{{widget_id}}").show();
         }
@@ -170,7 +172,9 @@
             $("#day_button_{{widget_id}}").removeClass("toggle-primary");
             $("#night_button_{{widget_id}}").addClass("toggle-primary");
             var chart = $("#chart_{{widget_id}}").data("kendoChart");
+            chart.setOptions({valueAxis: {max: nightMaxStep, majorUnit: nightStep}});
             chart.dataSource.data(night_usage);
+            chart.refresh();
             $("#weekday_messages_{{widget_id}}").hide();
             $("#overnight_messages_{{widget_id}}").show();
         }
