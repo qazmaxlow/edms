@@ -287,6 +287,12 @@ class System(models.Model):
 
         return None
 
+    def get_unit_rate(self, datetime, target_unit='money'):
+        unit_infos = json.loads(self.unit_info)
+        unit_code = unit_infos[target_unit]
+        unit_rate = UnitRate.objects.filter(category_code=target_unit, code=unit_code, effective_date__lte=datetime).order_by('-effective_date').first()
+        return unit_rate
+
     @property
     def fullname(self):
         lang = translation.get_language()

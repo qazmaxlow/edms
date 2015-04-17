@@ -150,8 +150,7 @@
                 $scope.realTimeChart.refresh();
             });
 
-            // update by animation frame
-            kendo.animationFrame(updateTodayMeasure);
+            //kendo.animationFrame(updateTodayMeasure);
         }
 
         updateTodayMeasure();
@@ -179,7 +178,7 @@
             imgPath: "/static/images/dashboard/tips-switch-off.png"
         },
         {
-            shortDesc: "Adjest aircon tomperature",
+            shortDesc: "Adjust aircon tomperature",
             longDesc: "30 minutes after turning on aircon, adjust the temperature to minimize energy wastage.",
             imgPath: "/static/images/dashboard/tips-temperature.png"
         }];
@@ -206,12 +205,32 @@
     });
 
 
+    var costs = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: "{% url 'companies.measures.up-till-now' current_system.code %}",
+                type: 'GET',
+                dataType: "json"
+            },
+            parameterMap: function(data, type) {
+                if (type == "read") {
+                    var d = data["datetime"];
+                    var t = data["type"];
+                    if (d === undefined) { d = new Date(); }
+                    if (t === undefined) { t = "weekly"; }
+
+                    return {
+                        datetime: d.toISOString(),
+                        type: t
+                    }
+                }
+            }
+        }
+    });
+
+
     ngapp.controller("WidgetSoFar", function($scope){
 
-        var movies = [
-            { "value": 2200, "name": "So far this week" },
-            { "value": 1941, "name": "By this time last week" },
-        ];
 
         $scope.soFarOptions = {
             chartArea: {
@@ -231,10 +250,11 @@
                 color: '#354960',
                 gap: 0.5,
                 labels: {
-                    visible: true
+                    visible: true,
+                    format: "$ ##,#"
                 }
             }],
-            dataSource: movies
+            dataSource: costs
         }
     });
 
