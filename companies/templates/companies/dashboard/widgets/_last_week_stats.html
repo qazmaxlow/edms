@@ -63,6 +63,26 @@
     <script>
         var day_usage = {{last_week_weekday_stats|safe}};
         var night_usage = {{last_week_overnight_stats|safe}};
+        var dayMax = day_usage[0].value;
+        var nightMax = night_usage[0].value;;
+        
+        for (var i=0; i<day_usage.length; i++){
+            dayMax = Math.max(dayMax, day_usage[i].value);
+        }
+
+        var dayDiff = dayMax;
+        var dayPow = (dayDiff+".").indexOf(".") - 1;
+        var dayMaxStep = Math.ceil(dayDiff/Math.pow(10, dayPow)) * Math.pow(10, dayPow);
+        var dayStep = dayMaxStep / 4;
+
+        for (var i=0; i<night_usage.length; i++){
+            nightMax = Math.max(dayMax, night_usage[i].value);
+        }
+        var nightDiff = nightMax;
+        var nightPow = (nightDiff+".").indexOf(".") - 1;
+        var nightMaxStep = Math.ceil(nightDiff/Math.pow(10, nightPow)) * Math.pow(10, nightPow);
+        var nightStep = nightMaxStep / 4;
+
 
         function createChart{{widget_id}}() {
             $("#chart_{{widget_id}}").kendoChart({
@@ -99,7 +119,10 @@
                     majorGridLines: {
                         color: "#ECECEC",
                         visible: true
-                    }
+                    },
+                    majorUnit: dayStep,
+                    max: dayMaxStep,
+                    min: 0
                 },
                 categoryAxis: {
                     field: "weekday",
