@@ -63,6 +63,6 @@
     $(document).ready(function(){
         $("#weekly_button_{{widget_id}}").click(toggle_weekly_monthly_{{widget_id}});
         $("#monthly_button_{{widget_id}}").click(toggle_weekly_monthly_{{widget_id}});
-        refreshIntervalId = setInterval(function() { $("#chart_{{widget_id}}").data("kendoChart").read(); }, refreshPeriod);
+        refreshIntervalId = setInterval(function() { $("#chart_{{widget_id}}").data("kendoChart").dataSource.read(); }, refreshPeriod);
     });
 </script>
