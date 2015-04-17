@@ -195,7 +195,7 @@
         },{
             name: "Wan Chai",
             value: 80,
-            percent: 3.2
+            percent: -3.2
         }];
 
         for (var i=0; i<$scope.consumers.length; i++){
@@ -204,7 +204,7 @@
                 $scope.consumers[i].colorClass = "red-text";
             } else {
                 $scope.consumers[i].colorClass = "green-text";
-                $scope.consumers[i].percent = Math.abs($scope.consumers[i]);
+                $scope.consumers[i].percent = Math.abs($scope.consumers[i].percent);
             }
         }
     });
