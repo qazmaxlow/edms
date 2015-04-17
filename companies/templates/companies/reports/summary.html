@@ -13,6 +13,7 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/summary_report.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap_hack.css' %}">
 
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
@@ -32,26 +33,6 @@
 <script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
-
-<!-- hack for combining bootstrap -->
-<style>
-  #menu-links li:hover, #menu-links li.menu-links-selected {
-     height: auto;
-  }
-
-  .panel-header-left-menu h3 {
-    margin: 0;
-    height: 33px;
-  }
-
-  #sub-heading-facilities h3 {
-    font-size: 15px;
-  }
-
-  #sub-heading h2 { font-size: 16px; }
-  #heading h1 { font-size: 30px; }
-
-</style>
 
 <style>
   .report-summary img.icon {
