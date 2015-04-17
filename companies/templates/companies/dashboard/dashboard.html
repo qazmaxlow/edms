@@ -183,12 +183,29 @@
 
         }
 
+
+        $scope.updateRates = function () {
+            var date_end = new Date();
+            var date_start = new Date();
+            date_start.setDate(date_start.getDate() -1);
+
+            total_ds.read({
+                date_start: date_start.getTime(),
+                date_end: date_end.getTime()
+            }).then(function() {
+                var data = total_ds.data();
+                $scope.$apply(function(){
+                    $scope.cost_per_day = data[0].cost;
+                });
+            });
+
+        }
+
         updateTodayMeasure();
         // update the chart every 10 sec
         setInterval(function(){
             updateTodayMeasure();
         }, 10000);
-
     });
 
     ngapp.controller("WidgetBiggestConsumers", function($scope){

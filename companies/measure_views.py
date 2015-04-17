@@ -137,6 +137,17 @@ class TotalDetail(generics.RetrieveAPIView):
         date_start = datetime.datetime.combine(date_start, datetime.datetime.min.time())
         date_end = date_start + datetime.timedelta(days=1)
 
+        _date_start = self.request.QUERY_PARAMS.get('date_start', None)
+        _date_end = self.request.QUERY_PARAMS.get('date_end', None)
+
+        if _date_start is not None:
+            date_start = datetime.datetime.fromtimestamp(int(_date_start)/1000.0, tz=pytz.utc)
+
+
+        if _date_end is not None:
+            date_end = datetime.datetime.fromtimestamp(int(_date_end)/1000.0, tz=pytz.utc)
+
+
         total_cost = sys.get_total_cost(date_start, date_end)
 
         json_data = {'cost': total_cost}

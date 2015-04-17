@@ -6,7 +6,7 @@
             <div class="pull-right">
                 <div class="btn-group" role="group" aria-label="...">
                     <button type="button" class="btn btn-default" ng-click="realTimeSelect = 'graph'">Graph</button>
-                    <button type="button" class="btn btn-default" ng-click="realTimeSelect = 'rates'">Rates</button>
+                    <button type="button" class="btn btn-default" ng-click="realTimeSelect = 'rates';updateRates();">Rates</button>
                 </div>
             </div>
         </div>
@@ -19,8 +19,8 @@
             <div kendo-chart="realTimeChart" k-options="realTimeOptions" ></div>
         </div>
     </div>
-    <div ng-show="realTimeSelect=='rates'">
-        rates
+    <div ng-show="realTimeSelect=='rates'" class="row">
+        <div class="col-sm-6">{{ cost_per_day }}</div>
     </div>
 </div>
 {% endverbatim %}
