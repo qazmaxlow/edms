@@ -10,7 +10,7 @@ from rest_framework import generics, mixins
 
 from system.models import System
 from egauge.models import SourceReadingYear, SourceReadingMonth, SourceReadingDay, SourceReadingHour, SourceReadingMin, Source
-from .serializers import MeasureSerializer, CostSerializer
+from .serializers import MeasureSerializer, TotalSerializer
 
 class DailyMeasureList(generics.ListAPIView):
     serializer_class = MeasureSerializer
@@ -127,7 +127,7 @@ class EnergyUsedList(generics.ListAPIView):
 
 
 class TotalDetail(generics.RetrieveAPIView):
-    serializer_class = CostSerializer
+    serializer_class = TotalSerializer
 
     def get_object(self):
         syscode = self.kwargs['system_code']
@@ -139,7 +139,7 @@ class TotalDetail(generics.RetrieveAPIView):
 
         total_cost = sys.get_total_cost(date_start, date_end)
 
-        json_data = {'total': total_cost}
+        json_data = {'cost': total_cost}
 
         return json_data
 

@@ -176,9 +176,8 @@
 
             cost_ds.read().then(function() {
                 var data = cost_ds.data();
-                $scope.total_cost = data[0].total;
                 $scope.$apply(function(){
-                    $scope.total_cost = data[0].total;
+                    $scope.total_cost = data[0].cost;
                 });
             });
 

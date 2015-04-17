@@ -33,5 +33,5 @@ class MeasureSerializer(serializers.Serializer):
     datetime = DateTimeTzAwareField()
 
 
-class CostSerializer(serializers.Serializer):
-    total = serializers.FloatField()
+class TotalSerializer(serializers.Serializer):
+    cost = serializers.FloatField()
