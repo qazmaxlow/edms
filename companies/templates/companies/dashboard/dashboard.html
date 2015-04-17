@@ -102,7 +102,7 @@
             }
         });
 
-        var cost_ds = new kendo.data.DataSource({
+        var total_ds = new kendo.data.DataSource({
             transport: {
                 read: {
                     url: "{% url 'companies.measures.total' current_system.code %}",
@@ -174,8 +174,8 @@
                 $scope.realTimeChart.refresh();
             });
 
-            cost_ds.read().then(function() {
-                var data = cost_ds.data();
+            total_ds.read().then(function() {
+                var data = total_ds.data();
                 $scope.$apply(function(){
                     $scope.total_cost = data[0].cost;
                 });
