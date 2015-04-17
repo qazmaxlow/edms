@@ -126,7 +126,7 @@ class EnergyUsedList(generics.ListAPIView):
             return json_data
 
 
-class CostDetail(generics.RetrieveAPIView):
+class TotalDetail(generics.RetrieveAPIView):
     serializer_class = CostSerializer
 
     def get_object(self):

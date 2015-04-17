@@ -105,7 +105,7 @@
         var cost_ds = new kendo.data.DataSource({
             transport: {
                 read: {
-                    url: "{% url 'companies.cost' current_system.code %}",
+                    url: "{% url 'companies.measures.total' current_system.code %}",
                     type: 'GET',
                     dataType: "json"
                 }
