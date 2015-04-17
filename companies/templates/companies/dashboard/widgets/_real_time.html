@@ -10,7 +10,7 @@
 </div>
 {% verbatim %}
 <div class="row">
-    So far today you have used: {{ total_cost }} 
+    So far today you have used: ${{ total_cost | number:0 }}
 </div>
 {% endverbatim %}
 <div class="widget-content row">
