@@ -347,6 +347,8 @@
         }
 
         $scope.isWeek = true;
+        $scope.description1 = "So far this week";
+        $scope.description2 = "By this time last week";
 
         $scope.toggle = function() {
             $scope.isWeek = !$scope.isWeek;
@@ -355,6 +357,9 @@
 
             var retrieve_date = new Date();
             var retrieve_type = ($scope.isWeek ? "weekly" : "monthly");
+
+            $scope.description1 = ($scope.isWeek ? "So far this week" : "So far this month");
+            $scope.description2 = ($scope.isWeek ? "By this time last week" : "By this time last month")
 
             costs.read({datetime:retrieve_date, type:retrieve_type});
             refreshIntervalId = setInterval(function() { costs.read({datetime:retrieve_date, type:retrieve_type}); }, refreshPeriod);
