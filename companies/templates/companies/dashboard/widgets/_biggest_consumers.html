@@ -1,0 +1,49 @@
+<div class="widget-container" ng-controller="WidgetBiggestConsumers">
+<div class="widget-header row">
+    <div class="widget-title col-sm-7">Biggest Consumers</div>
+    <div class="widget-toggle col-sm-5">
+        <div class="pull-right">
+            <button id="day_button_{{widget_id}}" class="toggle-primary toggle-button button-left">Week</button><!--
+            --><button id="night_button_{{widget_id}}" class="toggle-button button-right">Month</button>
+        </div>
+    </div>
+</div>
+<div class="widget-content row">
+    <div class="widget-message">
+        <div class="bc-right-box pull-right first-row">
+            <h3>% Change from last month</h3>
+        </div>
+        <div class="bc-left-box first-row">
+            <h3 class="description-1">Energy cost so far (HKD)</h3>
+        </div>
+    </div>
+    <div class="bc-graph">
+        {% verbatim %}
+        <table class="horizontal-bars">
+            <tr ng-repeat="c in consumers"><td>
+                <div class="bc-right-box pull-right">
+                    <div class="name-row"></div>
+                    <div class="bar-row">
+                        <span class="bc-change-percent" ng-class="c.colorClass" ng-bind="c.percent"></span>
+                        <span class="bc-percent-unit" ng-class="c.colorClass">%</span>
+                    </div>
+                </div>
+                <div class="bc-left-box">
+                    <div class="name-row">
+                        <div class="name" ng-bind="c.name"></div>
+                    </div>
+                    <div class="bar-row">
+                        <img ng-src="{{c.imgPath}}"></img>
+                        <div class="bar-container">
+                            <div class="bar" style="width: {{100 * c.value / consumers[0].value}}%">
+                                <span class="bar-value" ng-bind="c.value"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td></tr>
+        </table>
+        {% endverbatim %}
+    </div>
+</div>
+</div>

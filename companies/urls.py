@@ -25,4 +25,5 @@ urlpatterns = patterns(
 
     url(r'^measures/daily/$', measure_views.DailyMeasureList.as_view(), name='companies.measures.daily'),
     url(r'^measures/up-till-now/$', measure_views.EnergyUsedList.as_view(), name='companies.measures.up-till-now'),
+    url(r'^cost/$', measure_views.CostDetail.as_view(), name='companies.cost'),
 )

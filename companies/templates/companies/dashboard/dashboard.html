@@ -56,7 +56,7 @@
     </div>
     <div class="row">
         <div class="col-md-4">
-          {% include "companies/dashboard/widgets/_tips.html" with widget_id=1 %}
+          {% include "companies/dashboard/widgets/_biggest_consumers.html" with widget_id=1 %}
         </div>
         <div class="col-md-4">
           {% include "companies/dashboard/widgets/_so_far.html" with widget_id=2 %}
@@ -98,6 +98,22 @@
                     }
                 }
             }
+        });
+
+        var cost_ds = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "{% url 'companies.cost' current_system.code %}",
+                    type: 'GET',
+                    dataType: "json"
+                }
+            },
+            schema: {
+                    // Fix for single result
+                    data: function(response) {
+                        return [response];
+                    }
+                }
         });
 
         var hours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
@@ -150,10 +166,48 @@
                 $scope.realTimeChart.refresh();
             });
 
-            //kendo.animationFrame(updateTodayMeasure);
+            cost_ds.read().then(function() {
+                var data = cost_ds.data();
+                $scope.total_cost = data[0].total;
+                $scope.$apply(function(){
+                    $scope.total_cost = data[0].total;
+                });
+            });
+
+
+            // update by animation frame
+            kendo.animationFrame(updateTodayMeasure);
         }
 
-        updateTodayMeasure();
+       updateTodayMeasure();
+
+    });
+
+    ngapp.controller("WidgetBiggestConsumers", function($scope){
+        //assume the consumers is sorted in descending order by "value"
+        $scope.consumers = [{
+            name: "Central",
+            value: 526,
+            percent: 11
+        },{
+            name: "Mongkok",
+            value: 326,
+            percent: 4
+        },{
+            name: "Wan Chai",
+            value: 80,
+            percent: -3.2
+        }];
+
+        for (var i=0; i<$scope.consumers.length; i++){
+            $scope.consumers[i].imgPath = "/static/images/dashboard/consumer-" + (i+1) + ".png";
+            if ($scope.consumers[i].percent > 0){
+                $scope.consumers[i].colorClass = "red-text";
+            } else {
+                $scope.consumers[i].colorClass = "green-text";
+                $scope.consumers[i].percent = Math.abs($scope.consumers[i].percent);
+            }
+        }
     });
 
     ngapp.controller("WidgetTips", function($scope){
