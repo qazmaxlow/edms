@@ -208,8 +208,8 @@
         }];
 
         $scope.isWeek = true;
-        $scope.toggle = function(){
-            $scope.isWeek = !$scope.isWeek;
+        $scope.toggle = function(clickWeek){
+            $scope.isWeek = clickWeek;
             //action
         }
 
@@ -304,10 +304,11 @@
         $scope.soFarOptions = {
             chartArea: {
                 height: 230,
-                margin: 15,
+                margin: 0,
                 background: '#FCFCFC'
             },
             legend: {
+                visible: false,
                 position: 'bottom'
             },
             seriesDefaults: {
@@ -317,6 +318,7 @@
                 markers: { visible: true },
                 field: 'value',
                 color: '#354960',
+                //colorField: "barColor",
                 gap: 0.5,
                 labels: {
                     visible: true,
@@ -346,26 +348,28 @@
             dataSource: costs
         }
 
+
         $scope.isWeek = true;
-        $scope.description1 = "So far this week";
-        $scope.description2 = "By this time last week";
+        var setTitle = function(){
+            $scope.leftBoxTitle = $scope.isWeek ? "So far this week" : "So far this month";
+            $scope.rightBoxTitle = $scope.isWeek ? "By this time last week" : "By this time last month";
+        }
 
-        $scope.toggle = function() {
-            $scope.isWeek = !$scope.isWeek;
+        setTitle();
 
+        $scope.toggle = function(clickWeek) {
+            $scope.isWeek = clickWeek;
+            setTitle();
             clearInterval(refreshIntervalId);
 
             var retrieve_date = new Date();
             var retrieve_type = ($scope.isWeek ? "weekly" : "monthly");
 
-            $scope.description1 = ($scope.isWeek ? "So far this week" : "So far this month");
-            $scope.description2 = ($scope.isWeek ? "By this time last week" : "By this time last month")
-
             costs.read({datetime:retrieve_date, type:retrieve_type});
             refreshIntervalId = setInterval(function() { costs.read({datetime:retrieve_date, type:retrieve_type}); }, refreshPeriod);
         }
 
-        refreshIntervalId = setInterval(function() { $("#chart_{{widget_id}}").data("kendoChart").dataSource.read({datetime:retrieve_date, type:retrieve_type}); }, refreshPeriod);
+        refreshIntervalId = setInterval(function() { costs.read(); }, refreshPeriod);
     });
 
     ngapp.controller("WidgetLastWeekStats", function($scope){

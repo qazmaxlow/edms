@@ -8,18 +8,18 @@
         <div class="widget-title col-sm-7">Energy Use</div>
         <div class="widget-toggle col-sm-5">
             <div class="pull-right">
-                <button ng-class="{'toggle-primary' : isWeek}" ng-click="toggle()" class="toggle-button button-left">Week</button><!--
-                --><button ng-class="{'toggle-primary' : !isWeek}" ng-click="toggle()" class="toggle-button button-right">Month</button>
+                <button ng-class="{'toggle-primary' : isWeek}" ng-click="toggle(true)" class="toggle-button button-left">Week</button><!--
+                --><button ng-class="{'toggle-primary' : !isWeek}" ng-click="toggle(false)" class="toggle-button button-right">Month</button>
             </div>
         </div>
     </div>
     <div class="widget-content row">
-        <div class="widget-message">
-            <div class='col-sm-6 left-box'>
-                <span class="description-1 " ng-bind="description1"></span>
+        <div class="widget-message" id="messages_{{widget_id}}">
+            <div class='col-sm-6 eu-box'>
+                <span class="description-1" ng-bind="leftBoxTitle"></span>
             </div>
-            <div class='col-sm-6 right-box'>
-                <span class="description-2 " ng-bind="description2"></span>
+            <div class='col-sm-6 eu-box'>
+                <span class="description-2" ng-bind="rightBoxTitle"></span>
             </div>
         </div>
         <div class="widget-graph">
