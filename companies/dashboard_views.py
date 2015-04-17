@@ -24,7 +24,7 @@ def dashboard_view(request, system_code):
     sources = SourceManager.get_sources(current_system)
     current_system_tz = pytz.timezone(current_system.timezone)
 
-    today = timezone.now().astimezone(current_system_tz).replace(hour=0, minute=0, microsecond=0)
+    today = timezone.now().astimezone(current_system_tz).replace(hour=0, minute=0, second=0, microsecond=0)
 
     last_week_start_dt = today - relativedelta(days=7+today.isoweekday())
     last_week_end_dt = today - relativedelta(days=1+today.isoweekday())
@@ -80,6 +80,6 @@ def dashboard_view(request, system_code):
 
     m["last_week_overnight_stats"] = json.dumps(sorted(last_week_overnight_stats['data'], key=itemgetter('date')))
     m["last_week_weekday_stats"] = json.dumps(sorted(last_week_weekday_stats['data'], key=itemgetter('date')))
-
     m['current_system'] = current_system
+
     return render(request, 'companies/dashboard/dashboard.html', m)

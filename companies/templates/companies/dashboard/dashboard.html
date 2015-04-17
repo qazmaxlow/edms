@@ -59,13 +59,14 @@
           {% include "companies/dashboard/widgets/_biggest_consumers.html" with widget_id=1 %}
         </div>
         <div class="col-md-4">
-          {% include "companies/dashboard/widgets/_last_week_stats.html" with widget_id=2 %}
+          {% include "companies/dashboard/widgets/_so_far.html" with widget_id=2 %}
         </div>
         <div class="col-md-4">
           {% include "companies/dashboard/widgets/_last_week_stats.html" with widget_id=5 %}
         </div>
     </div>
 </div>
+
 <script>
     var ngapp = angular.module("Entrak", [ "kendo.directives" ]);
     ngapp.controller("WidgetRealtime", function($scope) {
@@ -121,6 +122,11 @@
 
         $scope.realTimeOptions = {
             transitions: false,
+            chartArea: {
+                height: 250,
+                margin: 0,
+                background: "#FCFCFC"
+            },
             series: [{
                 type: "column",
                 name: "Today",
@@ -196,12 +202,17 @@
         },{
             name: "Wan Chai",
             value: 80,
-            percent: 3.2
+            percent: -3.2
         }];
-
 
         for (var i=0; i<$scope.consumers.length; i++){
             $scope.consumers[i].imgPath = "/static/images/dashboard/consumer-" + (i+1) + ".png";
+            if ($scope.consumers[i].percent > 0){
+                $scope.consumers[i].colorClass = "red-text";
+            } else {
+                $scope.consumers[i].colorClass = "green-text";
+                $scope.consumers[i].percent = Math.abs($scope.consumers[i].percent);
+            }
         }
     });
 
@@ -227,7 +238,7 @@
             imgPath: "/static/images/dashboard/tips-switch-off.png"
         },
         {
-            shortDesc: "Adjest aircon tomperature",
+            shortDesc: "Adjust aircon tomperature",
             longDesc: "30 minutes after turning on aircon, adjust the temperature to minimize energy wastage.",
             imgPath: "/static/images/dashboard/tips-temperature.png"
         }];
@@ -252,5 +263,83 @@
             update();
         }
     });
+
+
+    var costs = new kendo.data.DataSource({
+        transport: {
+            read: {
+                url: "{% url 'companies.measures.up-till-now' current_system.code %}",
+                type: 'GET',
+                dataType: "json"
+            },
+            parameterMap: function(data, type) {
+                if (type == "read") {
+                    var d = data["datetime"];
+                    var t = data["type"];
+                    if (d === undefined) { d = new Date(); }
+                    if (t === undefined) { t = "weekly"; }
+
+                    return {
+                        datetime: d.toISOString(),
+                        type: t
+                    }
+                }
+            }
+        }
+    });
+
+
+    ngapp.controller("WidgetSoFar", function($scope){
+
+
+        $scope.soFarOptions = {
+            chartArea: {
+                height: 230,
+                margin: 15,
+                background: '#FCFCFC'
+            },
+            legend: {
+                position: 'bottom'
+            },
+            seriesDefaults: {
+                type: 'column'
+            },
+            series: [{
+                markers: { visible: true },
+                field: 'value',
+                color: '#354960',
+                gap: 0.5,
+                labels: {
+                    visible: true,
+                    format: "$ ##,#"
+                }
+            }],
+            valueAxis: {
+                visible: false,
+                line: {
+                    visible: false
+                },
+                majorGridLines: {
+                    visible: false
+                }
+            },
+
+            categoryAxis: {
+                visible: false,
+                line: {
+                    visible: false
+                },
+                majorGridLines: {
+                    visible: false
+                }
+            },
+
+            dataSource: costs
+        }
+    });
+
+    ngapp.controller("WidgetLastWeekStats", function($scope){
+    });
 </script>
+
 {% endblock %}

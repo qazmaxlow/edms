@@ -1,2 +1,0 @@
-FROM postgres:9.3.5
-ENV POSTGRES_PASSWORD postgres

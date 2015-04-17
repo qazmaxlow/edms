@@ -55,6 +55,15 @@ def get_unitrate(source_id, datetime):
     return ur
 
 
+def get_unitrate_by_system(system, datetime):
+    unit_infos = json.loads(system.unit_info)
+    money_unit_code = unit_infos['money']
+    money_unit_rates = UnitRate.objects.filter(category_code='money', code=unit_infos['money'])
+    dt = datetime
+    ur = money_unit_rates.filter(effective_date__lte=dt).order_by('-effective_date').first()
+    return ur
+
+
 def get_total_cost(source_ids, start_dt, end_dt, date_type):
     reading_map = {
         'week': SourceReadingDay,
@@ -710,7 +719,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         if len(g['sourceIds']) == 1:
             g['title'] = get_source_name(g['sourceIds'][0])
         else:
-            g['title'] = g['system'].fullname
+            g['title'] = g['system'].name
 
         g['usage'] = g['currentWeekdayInfo']['average']
         beginning_usage = g['beginningWeekdayInfo']['average']
@@ -899,7 +908,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
             dt = dt.astimezone(current_system_tz)
             last_day_readings[dt] = v
 
-        graph_title = get_source_name(g['sourceIds'][0]) if g['system'].code == m['company_system'].code else g['system'].fullname
+        graph_title = get_source_name(g['sourceIds'][0]) if g['system'].code == m['company_system'].code else g['system'].name
         # [{'name': 'last', 'value': v, 'datetime': datetime.datetime.fromtimestamp(t, pytz.utc) } for t, v in combined_last_readings.items()]
         sub_graph = {
             'system': g['system'],
@@ -970,8 +979,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
     if wd_highest_datetime:
         wd_highest_datetime = datetime.datetime.fromtimestamp(wd_highest_datetime, pytz.utc)
+        m['weekday_highest_usage'] = wd_highest_usage * get_unitrate_by_system(current_system, wd_highest_datetime).rate
 
-    m['weekday_highest_usage'] = wd_highest_usage
     m['weekday_highest_datetime'] = wd_highest_datetime
 
     m['weekday_details'] = group_data
@@ -995,7 +1004,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         m['weekend_highest_g'], _v = sorted(combined_readings_g[we_highest_datetime], key=lambda x: x[1])[-1]
         we_highest_datetime = datetime.datetime.fromtimestamp(we_highest_datetime, pytz.utc)
 
-    m['weekend_highest_usage'] = we_highest_usage
+        m['weekend_highest_usage'] = we_highest_usage*get_unitrate_by_system(current_system, we_highest_datetime).rate
     m['weekend_highest_datetime'] = we_highest_datetime
 
 
@@ -1015,7 +1024,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         m['overnight_highest_g'], _v = sorted(combined_overnight_readings_g[overnight_highest_datetime], key=lambda x: x[1])[-1]
         overnight_highest_datetime = datetime.datetime.fromtimestamp(overnight_highest_datetime, pytz.utc)
 
-    m['overnight_highest_usage'] = overnight_highest_usage
+        m['overnight_highest_usage'] = overnight_highest_usage * get_unitrate_by_system(current_system, overnight_highest_datetime).rate
     m['overnight_highest_datetime'] = overnight_highest_datetime
 
     # oops!!! have to rewrite
@@ -1023,7 +1032,6 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
     m['saving_energy'] = abs(report_data['savingInfo']['energy'])
     m['css_class_energy_saving'] = 'positive-saving' if report_data['savingInfo']['energy'] >=0 else 'negative-saving'
-    m['saving_sign'] = '-' if report_data['savingInfo']['energy'] >=0 else '+'
     m['is_saving'] = (report_data['savingInfo']['energy'] >=0)
     # in tons
     m['saving_co2'] = abs(report_data['savingInfo']['co2'] / 1000.0)
@@ -1076,7 +1084,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
             'percent_base_on_max': percent_base_on_max,
             'color': type_colors[ix % len(type_colors)]
         }
-        data_info['name'] = g['sourceNameInfo'][current_lang()] if g['systemCode'] == m['company_system'].code else g['system'].fullname
+        data_info['name'] = g['sourceNameInfo'][current_lang()] if g['systemCode'] == m['company_system'].code else g['system'].name
         transformed_datas.append(data_info)
 
     m['transformed_datas'] = transformed_datas
@@ -1138,7 +1146,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     compare_past_datasource = []
     for su in sumup_usages:
         if report_type == 'month':
-            formated_date = compare_past_date.strftime('%b')
+            formated_date = formats.date_format(compare_past_date, 'SHORT_MONTH_FORMAT')
         elif report_type == 'week':
             formated_date = u'{0} - {1}'.format(
                 formats.date_format(compare_past_date, 'MONTH_DAY_FORMAT'),

@@ -18,15 +18,20 @@
         </div>
     </div>
     <div class="bc-graph">
+        {% verbatim %}
         <table class="horizontal-bars">
             <tr ng-repeat="c in consumers"><td>
                 <div class="bc-right-box pull-right">
+                    <div class="name-row"></div>
+                    <div class="bar-row">
+                        <span class="bc-change-percent" ng-class="c.colorClass" ng-bind="c.percent"></span>
+                        <span class="bc-percent-unit" ng-class="c.colorClass">%</span>
+                    </div>
                 </div>
                 <div class="bc-left-box">
                     <div class="name-row">
                         <div class="name" ng-bind="c.name"></div>
                     </div>
-                    {% verbatim %}
                     <div class="bar-row">
                         <img ng-src="{{c.imgPath}}"></img>
                         <div class="bar-container">
@@ -35,10 +40,10 @@
                             </div>
                         </div>
                     </div>
-                    {% endverbatim %}
                 </div>
             </td></tr>
         </table>
+        {% endverbatim %}
     </div>
 </div>
 </div>
