@@ -9,12 +9,12 @@
 
 {% load l10n %}
 <div class="row report-head">
-        <div class="system-name">{{ company_system.fullname }}</div>
-        <div class="report-name text-center">{% localize on %}{{ report_date_text }}{% endlocalize %}</div>
+        <div class="system-name-popup">{{ company_system.fullname }}</div>
+        <div class="report-name-popup text-center">{% localize on %}{{ report_date_text }}{% endlocalize %}</div>
 </div>
 
 <div id="report_key_statistics" class="page-break-after">
-    <div class="row report-component-header">
+    <div class="row report-component-header-popup">
       <div class="col-xs-12 section-title">
         {%blocktrans%}What are our key statistics for this {{ report_type_name }}?{%endblocktrans%}
       </div>
@@ -249,7 +249,7 @@
 
 <div class="page-break-after">
 <div id="report_compared_to_last" class="xreport-component page-break-after">
-    <div class="row report-component-header">
+    <div class="row report-component-header-popup">
       <div class="col-xs-12 section-title">
         {%blocktrans%}How much more / less did we use compared to last {{ report_type_name }}?{%endblocktrans%}
       </div>
@@ -308,7 +308,7 @@
 </div>
 
 <div id="weekday-info" class="page-break-after">
-    <div class="row report-component-header">
+    <div class="row report-component-header-popup">
       <div class="col-xs-12">
         {% trans "HOW MUCH ENERGY DID WE USE ON WEEKDAYS?" %}</div>
     </div>
@@ -516,7 +516,7 @@
 </div>
 
 <div id="weekend-info" class="xreport-component xcalendar-component page-break-after">
-    <div class="row report-component-header">
+    <div class="row report-component-header-popup">
       <div class="col-xs-12">
         {% trans "HOW MUCH ENERGY DID WE USE ON WEEKENDS AND HOLIDAYS?" %}</div>
     </div>
@@ -724,7 +724,7 @@
 </div>
 
 <div id="overnight-info">
-    <div class="row report-component-header">
+    <div class="row report-component-header-popup">
       <div class="col-xs-12">
         {% trans "HOW MUCH ENERGY DID WE USE OVERNIGHT " %}<span style="font-weight:300;">({{ overnight_timerange_text }})</span></div>
     </div>
