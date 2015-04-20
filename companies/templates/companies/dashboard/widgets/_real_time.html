@@ -20,8 +20,12 @@
 	    	<span class="description-1 message-text">So far today you have used: </span>
 	    	<span class="description-4 message-text">${{ total_cost | number:0 }}</span>
 	    </div>
+	    <div class="legend-label yaxis-legend">kWh</div>
 	    <div ng-show="realTimeSelect=='graph'">
-	        <div kendo-chart="realTimeChart" k-options="realTimeOptions" ></div>
+	        <div class="xaxis-legend pull-right legend-label">
+	            hr
+	        </div>
+	        <div kendo-chart="realTimeChart" k-options="realTimeOptions" class="bc-left-box widget-graph"></div>
 	    </div>
 	    <div ng-show="realTimeSelect=='rates'" class="row">
 	        <div class="col-sm-6">${{ total_per_day.cost | number:0 }}<h4>per day</h4></div>
