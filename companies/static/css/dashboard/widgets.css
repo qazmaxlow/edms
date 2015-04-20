@@ -38,6 +38,23 @@
 	font-weight: bold;
 }
 
+.widget-container .description-5{
+	color: #354960;
+	font-size: 2.214em;
+	font-weight: bold;
+}
+
+.widget-container .description-6{
+	color: #354960;
+	font-size: 1.071em;
+	font-weight: bold;
+}
+
+.widget-content .auto-width {
+	width: auto;
+	overflow: hidden;
+}
+
 .widget-content .red-text {
     color: #D65C2C;
 }
@@ -240,11 +257,6 @@
 
 
 /*biggest consumers widget-------*/
-.widget-content .bc-left-box {
-	width: auto;
-	overflow: hidden;
-}
-
 .widget-content .bc-right-box {
 	width: 105px;
 	border-left: 1px solid #F2F2F2;
@@ -432,5 +444,33 @@
 	padding-right: 15px;
 	padding-top: 183px;
 	height: 200px;
+}
+
+.widget-content .rt-left-box {
+	border-right: 1px solid #F2F2F2;
+	height: 250px;
+	padding: 25px 0;
+}
+
+.widget-content .rt-right-box {
+	height: 250px;
+	padding: 25px 0;
+}
+
+.widget-content .rt-right-box div{
+	text-align: center;
+}
+
+.widget-content .rt-right-box span{
+	display: inline-block;
+	line-height: 1.1; /*align with h3 in left-box*/
+}
+
+.rt-left-box h3, .rt-left-box h4, .rt-right-box h4 {
+	text-align: center;
+}
+
+.rt-left-box h4, .rt-right-box h4 {
+	line-height: 2em;
 }
 /*-------real time widget*/

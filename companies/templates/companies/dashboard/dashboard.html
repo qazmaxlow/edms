@@ -221,7 +221,7 @@
             });
         });
 
-        updateTodayMeasure = function () {
+        $scope.updateTodayMeasure = function () {
             today_measure_ds.read().then(function() {
                 var data = today_measure_ds.data();
                 $.each(data, function(index, m) {
@@ -263,10 +263,10 @@
 
         }
 
-        updateTodayMeasure();
+        $scope.updateTodayMeasure();
         // update the chart every 10 sec
         setInterval(function(){
-            updateTodayMeasure();
+            $scope.updateTodayMeasure();
         }, 10000);
     });
 
