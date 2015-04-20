@@ -33,6 +33,13 @@ class MeasureSerializer(serializers.Serializer):
     datetime = DateTimeTzAwareField()
 
 
+class MeasureTimeSpanSerializer(serializers.Serializer):
+    value = serializers.FloatField()
+    start_datetime = DateTimeTzAwareField()
+    end_datetime = DateTimeTzAwareField()
+    is_today = serializers.BooleanField()
+
+
 class TotalSerializer(serializers.Serializer):
     cost = serializers.FloatField()
     co2 = serializers.FloatField()
