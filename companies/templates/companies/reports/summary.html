@@ -23,11 +23,7 @@
 <script src="{% static 'js/report-generator.js' %}"></script>
 
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-<link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
-<link href="{% static 'css/kendo.entrak.theme.css' %}" rel="stylesheet">
 <!-- Because now using jquery v1.11 -->
-<script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
-<script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
 
 <script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
@@ -274,16 +270,6 @@ $(function() {
 {% endblock %}
 
 {% block page_content %}
-
-    <div ng-app="Entrak">
-    <div ng-controller="ReportController">
-        <button ng-click="win2.close()" ng-show="win2visible">close</button>
-        <!-- extra height for sub graphs -->
-        <div class="ttt" kendo-window="win_report" k-visible="false" k-iframe="false"
-             k-width="1200" k-height="14000" k-modal="true"
-             k-resizable="false" k-draggable="false"
-             >
-        </div>
         <style>
         .grey_layer{
         	width:100%;
@@ -296,14 +282,31 @@ $(function() {
         	z-index: 99;
         }
         #win_report_ajax{
-			  position: absolute;
 			  left: 0;
 			  top: 0;
 			  z-index: 100;
         }
         </style>
         <div class="grey_layer"></div>
-		<div id="win_report_ajax"></div>
+    <div id="AjaxBootStrap">
+    <div xng-controller="AjaxReportController">
+		<div id="win_report_ajax">
+      <div kendo-chart></div>
+      <kendo-button>12345
+      </div>
+    </div>
+  </div>
+
+    <div ng-app="Entrak">
+    <div ng-controller="ReportControllers">
+        <button ng-click="win2.close()" ng-show="win2visible">close</button>
+        <!-- extra height for sub graphs -->
+        <div class="ttt" kendo-window="win_report" k-visible="false" k-iframe="false"
+             k-width="1200" k-height="14000" k-modal="true"
+             k-resizable="false" k-draggable="false"
+             >
+        </div>
+
 
 <div class="summary">
     <div class="row drop-down-panel-header">
@@ -337,7 +340,7 @@ $(function() {
           <p>{{ get_total_energy_cost_text() }}</p>
           {% endverbatim %}
       </div></div>
-      
+
       {% ifequal LANGUAGE_CODE 'zh-tw' %}
       {% verbatim %}
       <div class="row content end"><div class="col-xs-12">
@@ -355,7 +358,7 @@ $(function() {
       </div></div>
       {% endverbatim %}
       {% endifequal %}
-      
+
     </div>
     <div class="col-xs-3">
       <div class="row time-type"><div class="col-xs-12">
@@ -493,7 +496,7 @@ $(function() {
 <!-- end ng-app -->
 <script>
     angular.module("Entrak", [ "kendo.directives" ])
-        .controller("ReportController", function($scope){
+        .controller("ReportControllers", function($scope){
             // var selected_time_type = "month";
             // var start_time;
             // var end_time;
@@ -608,14 +611,26 @@ $(function() {
                 }
 		        $.ajax({url: '../report/popup-report/?start_date=' + start_date + '&end_date=' + end_date + '&report_type='+report_type, success: function(result){
 		            $("#win_report_ajax").html(result);
+
+			        var win_report_ajax = document.getElementById('win_report_ajax');
+
+
+    				    angular.module('Entraks', ["kendo.directives"]).controller('MyController', ['$scope', function ($scope) {
+        $scope.greetMe = 'World';
+      }]);
+
+    				    angular.element(win_report_ajax).ready(function() {
+    				      angular.bootstrap(win_report_ajax, ['Entraks']);
+    				    });
+
+
 		        }});
-		        $ (".grey_layer").css("display","block");
 		        $("#win_report_ajax").fadeIn();
-		        $ (".grey_layer").fadeIn();
+
+
 			}
 			$(".grey_layer").click(function(){
-				$("#win_report_ajax").fadeOut();
-				$(".grey_layer").fadeOut();
+
 			})
             var summary_report_ds = new kendo.data.DataSource({
                 transport: {
