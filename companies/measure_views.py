@@ -149,8 +149,9 @@ class TotalDetail(generics.RetrieveAPIView):
 
 
         total_cost = sys.get_total_cost(date_start, date_end)
+        total_co2 = sys.get_total_co2(date_start, date_end)
 
-        json_data = {'cost': total_cost}
+        json_data = {'cost': total_cost, 'co2': total_co2}
 
         return json_data
 

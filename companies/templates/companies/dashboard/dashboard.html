@@ -195,7 +195,7 @@
             }).then(function() {
                 var data = total_ds.data();
                 $scope.$apply(function(){
-                    $scope.cost_per_day = data[0].cost;
+                    $scope.total_per_day = data[0];
                 });
             });
 

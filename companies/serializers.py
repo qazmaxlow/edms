@@ -35,3 +35,4 @@ class MeasureSerializer(serializers.Serializer):
 
 class TotalSerializer(serializers.Serializer):
     cost = serializers.FloatField()
+    co2 = serializers.FloatField()
