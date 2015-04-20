@@ -245,7 +245,6 @@
             });
         }
 
-
         $scope.updateRates = function () {
             var date_end = new Date();
             var date_start = new Date();
@@ -263,7 +262,16 @@
 
         }
 
-        $scope.updateTodayMeasure();
+        $scope.toggle = function(isGraph){
+            $scope.isGraph = isGraph;
+            if (isGraph){
+                $scope.updateTodayMeasure();
+            } else {
+                $scope.updateRates();
+            }
+        }
+        $scope.toggle(true);
+
         // update the chart every 10 sec
         setInterval(function(){
             $scope.updateTodayMeasure();

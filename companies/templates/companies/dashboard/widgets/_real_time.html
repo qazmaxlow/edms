@@ -9,8 +9,8 @@
         <div class="widget-toggle col-sm-3">
             <div class="pull-right">
                 <div role="group" aria-label="...">
-                    <button type="button" class="toggle-primary toggle-button button-left" ng-click="realTimeSelect = 'graph';updateTodayMeasure();">Graph</button><!--
-                    --><button type="button" class="toggle-button button-right" ng-click="realTimeSelect = 'rates';updateRates();">Rates</button>
+                    <button type="button" ng-class="{'toggle-primary' : isGraph}" class="toggle-button button-left" ng-click="realTimeSelect = 'graph';toggle(true);">Graph</button><!--
+                    --><button type="button" ng-class="{'toggle-primary' : !isGraph}" class="toggle-button button-right" ng-click="realTimeSelect = 'rates';toggle(false);">Rates</button>
                 </div>
             </div>
         </div>
