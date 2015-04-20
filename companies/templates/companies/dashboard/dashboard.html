@@ -317,9 +317,9 @@
             }
         };
         var costsThis = new kendo.data.DataSource(ds);
-        costsThis.filter({field: "istoday", operator: "eq", value: true});
+        costsThis.filter({field: "is_today", operator: "eq", value: true});
         var costsLast = new kendo.data.DataSource(ds);
-        costsLast.filter({field: "istoday", operator: "eq", value: false});
+        costsLast.filter({field: "is_today", operator: "eq", value: false});
 // var costs = new kendo.data.DataSource(ds);
 // costs.filter({field: "datetime", operator: "eq", value: "2015-03-01T00:00:00+08:00"});
         var ca = {
@@ -416,7 +416,7 @@
             costsLast.read({datetime:retrieve_date, type:retrieve_type});
             refreshIntervalId = setInterval(function() { 
                 costsThis.read({datetime:retrieve_date, type:retrieve_type});
-                costsLast.read({datetime:retrieve_date, type:retrieve_type}); 
+                costsLast.read({datetime:retrieve_date, type:retrieve_type});
             }, refreshPeriod);
         }
 
