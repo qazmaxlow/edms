@@ -2,6 +2,7 @@
 from mongoengine.document import Document
 from mongoengine.document import EmbeddedDocument
 from mongoengine.fields import *
+from mongoengine import connection
 
 SOURCE_TZ_HK = u'Asia/Hong_Kong'
 
@@ -36,6 +37,52 @@ class BaseSourceReading(Document):
     source_id = ObjectIdField()
     datetime = DateTimeField()
     value = FloatField()
+
+    @classmethod
+    def total_used(cls, source_ids, start_dt, end_dt):
+
+        mdb_conn = connection.get_db()
+        collection_name = cls._meta['collection']
+
+        return getattr(mdb_conn, collection_name).aggregate([
+            { "$match":
+                {
+                    "source_id": {"$in": source_ids},
+                    "datetime": {"$gte": start_dt, "$lt": end_dt }
+                }
+            },
+            { "$group":
+                {
+                    "_id": None,
+                    "total": {"$sum": "$value"}
+                }
+            }
+        ])['result']
+
+    @classmethod
+    def total_used_by_source_id(cls, source_ids, start_dt, end_dt):
+
+        mdb_conn = connection.get_db()
+        collection_name = cls._meta['collection']
+
+        return getattr(mdb_conn, collection_name).aggregate([
+            { "$match":
+                {
+                    "source_id": {"$in": source_ids},
+                    "datetime": {"$gte": start_dt, "$lt": end_dt }
+                }
+            },
+            { "$group":
+                {
+                    "_id": "$source_id",
+                    "total": {"$sum": "$value"}
+                }
+            },
+            { "$sort" :
+                { "total" : -1 }
+            }
+        ])['result']
+
 
 class SourceReadingMin(BaseSourceReading):
     pass

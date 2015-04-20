@@ -333,6 +333,33 @@ class System(models.Model):
             effective_date__lte=rate_date).order_by('-effective_date').first()
 
 
+    def get_total_co2(self, start_dt, end_dt):
+        """
+        Calculate the co2 usage between the dates of the system.
+        """
+        source_ids = [s.id for s in self.sources]
+        date_type = 'day'
+
+        reading_map = {
+            'day': SourceReadingMin,
+            'week': SourceReadingDay,
+            'month': SourceReadingMonth,
+            'quarter': SourceReadingMonth,
+            'year': SourceReadingYear,
+            'custom': SourceReadingDay
+        }
+
+        reading_cls = reading_map[date_type]
+
+        readings = reading_cls.objects(
+            source_id__in=source_ids,
+            datetime__gte=start_dt,
+            datetime__lt=end_dt)
+
+        if readings:
+            return sum([self.get_unit_rate(r.datetime, 'co2').rate*r.value for r in readings])
+
+
     def get_total_cost(self, start_dt, end_dt):
         """
         Calculate the cost between the dates of the system.
