@@ -9,7 +9,7 @@ from rest_framework import generics, mixins
 
 from system.models import System
 from egauge.models import SourceReadingYear, SourceReadingMonth, SourceReadingDay, SourceReadingHour, SourceReadingMin, Source
-from .serializers import MeasureSerializer, CostSerializer, MeasureTimeSpanSerializer
+from .serializers import MeasureSerializer, TotalSerializer, MeasureTimeSpanSerializer
 
 
 class DailyMeasureList(generics.ListAPIView):
@@ -101,8 +101,8 @@ class EnergyUsedList(generics.ListAPIView):
             return json_data
 
 
-class CostDetail(generics.RetrieveAPIView):
-    serializer_class = CostSerializer
+class TotalDetail(generics.RetrieveAPIView):
+    serializer_class = TotalSerializer
 
     def get_object(self):
         syscode = self.kwargs['system_code']
@@ -112,9 +112,21 @@ class CostDetail(generics.RetrieveAPIView):
         date_start = datetime.datetime.combine(date_start, datetime.datetime.min.time())
         date_end = date_start + datetime.timedelta(days=1)
 
-        total_cost = sys.get_total_cost(date_start, date_end)
+        _date_start = self.request.QUERY_PARAMS.get('date_start', None)
+        _date_end = self.request.QUERY_PARAMS.get('date_end', None)
 
-        json_data = {'total': total_cost}
+        if _date_start is not None:
+            date_start = datetime.datetime.fromtimestamp(int(_date_start)/1000.0, tz=pytz.utc)
+
+
+        if _date_end is not None:
+            date_end = datetime.datetime.fromtimestamp(int(_date_end)/1000.0, tz=pytz.utc)
+
+
+        total_cost = sys.get_total_cost(date_start, date_end)
+        total_co2 = sys.get_total_co2(date_start, date_end)
+
+        json_data = {'cost': total_cost, 'co2': total_co2}
 
         return json_data
 

@@ -102,10 +102,10 @@
             }
         });
 
-        var cost_ds = new kendo.data.DataSource({
+        var total_ds = new kendo.data.DataSource({
             transport: {
                 read: {
-                    url: "{% url 'companies.cost' current_system.code %}",
+                    url: "{% url 'companies.measures.total' current_system.code %}",
                     type: 'GET',
                     dataType: "json"
                 }
@@ -122,6 +122,7 @@
         var per_hour_measures = {};
         $.each(hours, function(i, h) { per_hour_measures[h] = null; });
 
+        $scope.realTimeSelect = 'graph';
         $scope.realTimeOptions = {
             transitions: false,
             chartArea: {
@@ -173,11 +174,28 @@
                 $scope.realTimeChart.refresh();
             });
 
-            cost_ds.read().then(function() {
-                var data = cost_ds.data();
-                $scope.total_cost = data[0].total;
+            total_ds.read().then(function() {
+                var data = total_ds.data();
                 $scope.$apply(function(){
-                    $scope.total_cost = data[0].total;
+                    $scope.total_cost = data[0].cost;
+                });
+            });
+
+        }
+
+
+        $scope.updateRates = function () {
+            var date_end = new Date();
+            var date_start = new Date();
+            date_start.setDate(date_start.getDate() -1);
+
+            total_ds.read({
+                date_start: date_start.getTime(),
+                date_end: date_end.getTime()
+            }).then(function() {
+                var data = total_ds.data();
+                $scope.$apply(function(){
+                    $scope.total_per_day = data[0];
                 });
             });
 
@@ -188,7 +206,6 @@
         setInterval(function(){
             updateTodayMeasure();
         }, 10000);
-
     });
 
     ngapp.controller("WidgetBiggestConsumers", function($scope){

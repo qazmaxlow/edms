@@ -40,5 +40,6 @@ class MeasureTimeSpanSerializer(serializers.Serializer):
     is_today = serializers.BooleanField()
 
 
-class CostSerializer(serializers.Serializer):
-    total = serializers.FloatField()
+class TotalSerializer(serializers.Serializer):
+    cost = serializers.FloatField()
+    co2 = serializers.FloatField()
