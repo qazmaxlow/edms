@@ -291,8 +291,10 @@
 
 
     ngapp.controller("WidgetSoFar", function($scope){
+        var refreshIntervalId;
+        var refreshPeriod = 30000;
 
-        var costs = new kendo.data.DataSource({
+        var ds = {
             transport: {
                 read: {
                     url: "{% url 'companies.measures.up-till-now' current_system.code %}",
@@ -313,56 +315,101 @@
                     }
                 }
             }
-        });
+        };
+        var costsThis = new kendo.data.DataSource(ds);
+        costsThis.filter({field: "is_today", operator: "eq", value: true});
+        var costsLast = new kendo.data.DataSource(ds);
+        costsLast.filter({field: "is_today", operator: "eq", value: false});
 
-        var refreshIntervalId;
-        var refreshPeriod = 30000;
+        var ca = {
+            height: 230,
+            margin: 0,
+            background: '#FCFCFC'
+        };
+        var le = {
+            visible: false,
+            position: 'bottom'
+        };
+        var sd = {
+            type: 'column'
+        };
+        var va = {
+            visible: false,
+            line: {
+                visible: false
+            },
+            majorGridLines: {
+                visible: false
+            }
+        };
+        var catAxis = {
+            visible: true,
+            line: {
+                visible: true,
+                width: 2,
+                color: "#D3D3D3"
+            },
+            majorGridLines: {
+                visible: false
+            },
+            majorTicks: {
+                size: 0
+            }
+        };
 
-        $scope.soFarOptions = {
-            chartArea: {
-                height: 230,
-                margin: 0,
-                background: '#FCFCFC'
-            },
-            legend: {
-                visible: false,
-                position: 'bottom'
-            },
-            seriesDefaults: {
-                type: 'column'
-            },
+        $scope.soFarOptionsThis = {
             series: [{
                 markers: { visible: true },
                 field: 'value',
                 color: '#354960',
-                //colorField: "barColor",
-                gap: 0.5,
+                opacity: 0.6,
+                gap: 0.1,
+                overlay: {
+                    gradient: "none"
+                },
+                border: {
+                    width: 0
+                },
                 labels: {
                     visible: true,
+                    font: "bold 1.357em ITCAvantGardeStd-Bk",
+                    color: "#354960",
                     format: "$ ##,#"
                 }
             }],
-            valueAxis: {
-                visible: false,
-                line: {
-                    visible: false
+            chartArea: ca,
+            legend: le,
+            seriesDefaults: sd,
+            valueAxis: va,
+            categoryAxis: catAxis,
+            dataSource: costsThis
+        }
+        $scope.soFarOptionsLast = {
+            series: [{
+                markers: { visible: true },
+                field: 'value',
+                color: '#7a7a7a',
+                opacity: 0.6,
+                gap: 0.1,
+                overlay: {
+                    gradient: "none"
                 },
-                majorGridLines: {
-                    visible: false
-                }
-            },
-
-            categoryAxis: {
-                visible: false,
-                line: {
-                    visible: false
+                border: {
+                    width: 0
                 },
-                majorGridLines: {
-                    visible: false
+                labels: {
+                    visible: true,
+                    font: "bold 1.357em ITCAvantGardeStd-Bk",
+                    color: "#878787",
+                    format: "$ ##,#"
                 }
-            },
-
-            dataSource: costs
+            }],
+            chartArea: ca,
+            legend: le,
+            seriesDefaults: sd,
+            valueAxis: va,
+            categoryAxis: catAxis,
+            dataSource: costsLast
         }
 
 
@@ -374,19 +421,26 @@
 
         setTitle();
 
-        $scope.toggle = function(clickWeek) {
-            $scope.isWeek = clickWeek;
+        $scope.toggle = function() {
+            $scope.isWeek = !$scope.isWeek;
             setTitle();
             clearInterval(refreshIntervalId);
 
             var retrieve_date = new Date();
             var retrieve_type = ($scope.isWeek ? "weekly" : "monthly");
 
-            costs.read({datetime:retrieve_date, type:retrieve_type});
-            refreshIntervalId = setInterval(function() { costs.read({datetime:retrieve_date, type:retrieve_type}); }, refreshPeriod);
+            costsThis.read({datetime:retrieve_date, type:retrieve_type});
+            costsLast.read({datetime:retrieve_date, type:retrieve_type});
+            refreshIntervalId = setInterval(function() { 
+                costsThis.read({datetime:retrieve_date, type:retrieve_type});
+                costsLast.read({datetime:retrieve_date, type:retrieve_type});
+            }, refreshPeriod);
         }
 
-        refreshIntervalId = setInterval(function() { costs.read(); }, refreshPeriod);
+        refreshIntervalId = setInterval(function() { 
+            costsThis.read();
+            costsLast.read(); 
+        }, refreshPeriod);
     });
 
     ngapp.controller("WidgetLastWeekStats", function($scope){
