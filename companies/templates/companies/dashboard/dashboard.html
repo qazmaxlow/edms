@@ -320,8 +320,7 @@
         costsThis.filter({field: "is_today", operator: "eq", value: true});
         var costsLast = new kendo.data.DataSource(ds);
         costsLast.filter({field: "is_today", operator: "eq", value: false});
-// var costs = new kendo.data.DataSource(ds);
-// costs.filter({field: "datetime", operator: "eq", value: "2015-03-01T00:00:00+08:00"});
+
         var ca = {
             height: 230,
             margin: 0,
@@ -359,37 +358,55 @@
         };
 
         $scope.soFarOptionsThis = {
-            chartArea: ca,
-            legend: le,
-            seriesDefaults: sd,
             series: [{
                 markers: { visible: true },
                 field: 'value',
                 color: '#354960',
-                gap: 0.5,
+                opacity: 0.6,
+                gap: 0.1,
+                overlay: {
+                    gradient: "none"
+                },
+                border: {
+                    width: 0
+                },
                 labels: {
                     visible: true,
+                    font: "bold 1.357em ITCAvantGardeStd-Bk",
+                    color: "#354960",
                     format: "$ ##,#"
                 }
             }],
+            chartArea: ca,
+            legend: le,
+            seriesDefaults: sd,
             valueAxis: va,
             categoryAxis: catAxis,
             dataSource: costsThis
         }
         $scope.soFarOptionsLast = {
-            chartArea: ca,
-            legend: le,
-            seriesDefaults: sd,
             series: [{
                 markers: { visible: true },
                 field: 'value',
-                color: '#354960',
-                gap: 0.5,
+                color: '#7a7a7a',
+                opacity: 0.6,
+                gap: 0.1,
+                overlay: {
+                    gradient: "none"
+                },
+                border: {
+                    width: 0
+                },
                 labels: {
                     visible: true,
+                    font: "bold 1.357em ITCAvantGardeStd-Bk",
+                    color: "#878787",
                     format: "$ ##,#"
                 }
             }],
+            chartArea: ca,
+            legend: le,
+            seriesDefaults: sd,
             valueAxis: va,
             categoryAxis: catAxis,
             dataSource: costsLast
