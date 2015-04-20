@@ -1,14 +1,27 @@
-<div class="sidebar-left" ng-controller="WidgetRealtime">
-<div class="widget-header row">
-    <div class="widget-title col-sm-7">Last Week Stats</div>
-    <div class="widget-toggle col-sm-5">
-        <div class="pull-right">
-            <button id="day_button_{{widget_id}}" class="toggle-primary toggle-button button-left">Day</button>
-            <button id="night_button_{{widget_id}}" class="toggle-button button-right">Night</button>
+{% verbatim %}
+<div class="widget-container" ng-controller="WidgetRealtime">
+    <div class="widget-header row">
+        <div class="widget-title col-sm-9">Real-Time</div>
+        <div class="widget-toggle col-sm-3">
+            <div class="pull-right">
+                <div class="btn-group" role="group" aria-label="...">
+                    <button type="button" class="btn btn-default" ng-click="realTimeSelect = 'graph'">Graph</button>
+                    <button type="button" class="btn btn-default" ng-click="realTimeSelect = 'rates';updateRates();">Rates</button>
+                </div>
+            </div>
         </div>
     </div>
+    <div class="row">
+        So far today you have used: ${{ total_cost | number:0 }}
+    </div>
+    <div ng-show="realTimeSelect=='graph'">
+        <div class="widget-content row">
+            <div kendo-chart="realTimeChart" k-options="realTimeOptions" ></div>
+        </div>
+    </div>
+    <div ng-show="realTimeSelect=='rates'" class="row">
+        <div class="col-sm-6">${{ total_per_day.cost | number:0 }}<h4>per day</h4></div>
+        <div class="col-sm-6">{{ total_per_day.co2 | number:0 }} kg CO<sub>2</sub><h4>per day</h4></div>
+    </div>
 </div>
-<div class="widget-content row">
-    <div kendo-chart="realTimeChart" k-options="realTimeOptions" ></div>
-</div>
-</div>
+{% endverbatim %}

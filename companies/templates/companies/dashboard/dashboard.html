@@ -25,6 +25,8 @@
 <link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/kendo.entrak.theme.css' %}" rel="stylesheet">
 
+<link href="{% static 'assets/kendoui/styles/kendo.dataviz.min.css' %}" rel="stylesheet">
+<link href="{% static 'assets/kendoui/styles/kendo.dataviz.default.min.css' %}" rel="stylesheet"
 <!-- Because now using jquery v1.11 -->
 <!-- <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script> -->
 <!-- <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script> -->
@@ -56,7 +58,7 @@
     </div>
     <div class="row">
         <div class="col-md-4">
-          {% include "companies/dashboard/widgets/_tips.html" with widget_id=1 %}
+          {% include "companies/dashboard/widgets/_biggest_consumers.html" with widget_id=1 %}
         </div>
         <div class="col-md-4">
           {% include "companies/dashboard/widgets/_so_far.html" with widget_id=2 %}
@@ -100,12 +102,34 @@
             }
         });
 
+        var total_ds = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "{% url 'companies.measures.total' current_system.code %}",
+                    type: 'GET',
+                    dataType: "json"
+                }
+            },
+            schema: {
+                    // Fix for single result
+                    data: function(response) {
+                        return [response];
+                    }
+                }
+        });
+
         var hours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
         var per_hour_measures = {};
         $.each(hours, function(i, h) { per_hour_measures[h] = null; });
 
+        $scope.realTimeSelect = 'graph';
         $scope.realTimeOptions = {
             transitions: false,
+            chartArea: {
+                height: 250,
+                margin: 0,
+                background: "#FCFCFC"
+            },
             series: [{
                 type: "column",
                 name: "Today",
@@ -150,11 +174,71 @@
                 $scope.realTimeChart.refresh();
             });
 
-            // update by animation frame
-            kendo.animationFrame(updateTodayMeasure);
+            total_ds.read().then(function() {
+                var data = total_ds.data();
+                $scope.$apply(function(){
+                    $scope.total_cost = data[0].cost;
+                });
+            });
+
+        }
+
+
+        $scope.updateRates = function () {
+            var date_end = new Date();
+            var date_start = new Date();
+            date_start.setDate(date_start.getDate() -1);
+
+            total_ds.read({
+                date_start: date_start.getTime(),
+                date_end: date_end.getTime()
+            }).then(function() {
+                var data = total_ds.data();
+                $scope.$apply(function(){
+                    $scope.total_per_day = data[0];
+                });
+            });
+
         }
 
         updateTodayMeasure();
+        // update the chart every 10 sec
+        setInterval(function(){
+            updateTodayMeasure();
+        }, 10000);
+    });
+
+    ngapp.controller("WidgetBiggestConsumers", function($scope){
+        //assume the consumers is sorted in descending order by "value"
+        $scope.consumers = [{
+            name: "Central",
+            value: 526,
+            percent: 11
+        },{
+            name: "Mongkok",
+            value: 326,
+            percent: 4
+        },{
+            name: "Wan Chai",
+            value: 80,
+            percent: -3.2
+        }];
+
+        $scope.isWeek = true;
+        $scope.toggle = function(clickWeek){
+            $scope.isWeek = clickWeek;
+            //action
+        }
+
+        for (var i=0; i<$scope.consumers.length; i++){
+            $scope.consumers[i].imgPath = "/static/images/dashboard/consumer-" + (i+1) + ".png";
+            if ($scope.consumers[i].percent > 0){
+                $scope.consumers[i].colorClass = "red-text";
+            } else {
+                $scope.consumers[i].colorClass = "green-text";
+                $scope.consumers[i].percent = Math.abs($scope.consumers[i].percent);
+            }
+        }
     });
 
     ngapp.controller("WidgetTips", function($scope){
@@ -179,7 +263,7 @@
             imgPath: "/static/images/dashboard/tips-switch-off.png"
         },
         {
-            shortDesc: "Adjest aircon tomperature",
+            shortDesc: "Adjust aircon tomperature",
             longDesc: "30 minutes after turning on aircon, adjust the temperature to minimize energy wastage.",
             imgPath: "/static/images/dashboard/tips-temperature.png"
         }];
@@ -208,18 +292,40 @@
 
     ngapp.controller("WidgetSoFar", function($scope){
 
-        var movies = [
-            { "value": 2200, "name": "So far this week" },
-            { "value": 1941, "name": "By this time last week" },
-        ];
+        var costs = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "{% url 'companies.measures.up-till-now' current_system.code %}",
+                    type: 'GET',
+                    dataType: "json"
+                },
+                parameterMap: function(data, type) {
+                    if (type == "read") {
+                        var d = data["datetime"];
+                        var t = data["type"];
+                        if (d === undefined) { d = new Date(); }
+                        if (t === undefined) { t = "weekly"; }
+
+                        return {
+                            datetime: d.toISOString(),
+                            type: t
+                        }
+                    }
+                }
+            }
+        });
+
+        var refreshIntervalId;
+        var refreshPeriod = 30000;
 
         $scope.soFarOptions = {
             chartArea: {
                 height: 230,
-                margin: 15,
+                margin: 0,
                 background: '#FCFCFC'
             },
             legend: {
+                visible: false,
                 position: 'bottom'
             },
             seriesDefaults: {
@@ -229,13 +335,58 @@
                 markers: { visible: true },
                 field: 'value',
                 color: '#354960',
+                //colorField: "barColor",
                 gap: 0.5,
                 labels: {
-                    visible: true
+                    visible: true,
+                    format: "$ ##,#"
                 }
             }],
-            dataSource: movies
+            valueAxis: {
+                visible: false,
+                line: {
+                    visible: false
+                },
+                majorGridLines: {
+                    visible: false
+                }
+            },
+
+            categoryAxis: {
+                visible: false,
+                line: {
+                    visible: false
+                },
+                majorGridLines: {
+                    visible: false
+                }
+            },
+
+            dataSource: costs
         }
+
+
+        $scope.isWeek = true;
+        var setTitle = function(){
+            $scope.leftBoxTitle = $scope.isWeek ? "So far this week" : "So far this month";
+            $scope.rightBoxTitle = $scope.isWeek ? "By this time last week" : "By this time last month";
+        }
+
+        setTitle();
+
+        $scope.toggle = function(clickWeek) {
+            $scope.isWeek = clickWeek;
+            setTitle();
+            clearInterval(refreshIntervalId);
+
+            var retrieve_date = new Date();
+            var retrieve_type = ($scope.isWeek ? "weekly" : "monthly");
+
+            costs.read({datetime:retrieve_date, type:retrieve_type});
+            refreshIntervalId = setInterval(function() { costs.read({datetime:retrieve_date, type:retrieve_type}); }, refreshPeriod);
+        }
+
+        refreshIntervalId = setInterval(function() { costs.read(); }, refreshPeriod);
     });
 
     ngapp.controller("WidgetLastWeekStats", function($scope){

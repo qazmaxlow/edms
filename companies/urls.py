@@ -24,5 +24,6 @@ urlpatterns = patterns(
     url(r'^report/popup-report/download/$', report_views.download_popup_report_view, name='companies.reports.popup-report.download'),
 
     url(r'^measures/daily/$', measure_views.DailyMeasureList.as_view(), name='companies.measures.daily'),
-    url(r'^measures/up-till-now/$', measure_views.EnergyUsedRetrieve.as_view(), name='companies.measures.up-till-now'),
+    url(r'^measures/up-till-now/$', measure_views.EnergyUsedList.as_view(), name='companies.measures.up-till-now'),
+    url(r'^measures/total/$', measure_views.TotalDetail.as_view(), name='companies.measures.total'),
 )
