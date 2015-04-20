@@ -70,6 +70,18 @@
 </div>
 
 <script>
+    function to_ampm(h) {
+        var ampm = h;
+        if (ampm > 12) {
+            ampm -= 12;
+        }
+        else if (ampm == 0) {
+            ampm = 12
+        }
+
+        return ampm
+    }
+
     var ngapp = angular.module("Entrak", [ "kendo.directives" ]);
     ngapp.controller("WidgetRealtime", function($scope) {
         var today_measures = [];
@@ -142,7 +154,11 @@
                 data: last_week_measures
             }],
             categoryAxis: {
-                categories: hours
+                categories: hours,
+                labels: {
+                    step: 2,
+                    template: "#= to_ampm(value) #"
+                }
             }
         }
 
