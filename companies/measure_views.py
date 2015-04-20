@@ -2,7 +2,6 @@ import datetime, pytz
 import time
 import dateutil
 
-
 from mongoengine import connection
 from dateutil.relativedelta import relativedelta
 from django.utils import dateparse
@@ -10,7 +9,8 @@ from rest_framework import generics, mixins
 
 from system.models import System
 from egauge.models import SourceReadingYear, SourceReadingMonth, SourceReadingDay, SourceReadingHour, SourceReadingMin, Source
-from .serializers import MeasureSerializer, CostSerializer
+from .serializers import MeasureSerializer, CostSerializer, MeasureTimeSpanSerializer
+
 
 class DailyMeasureList(generics.ListAPIView):
     serializer_class = MeasureSerializer
@@ -53,7 +53,7 @@ class DailyMeasureList(generics.ListAPIView):
 
 class EnergyUsedList(generics.ListAPIView):
 
-    serializer_class = MeasureSerializer
+    serializer_class = MeasureTimeSpanSerializer
 
 
     def get_queryset(self):
@@ -80,48 +80,23 @@ class EnergyUsedList(generics.ListAPIView):
                 previous_date_start = date_start - relativedelta(months=1)
                 previous_date_end = date_end - relativedelta(months=1)
 
-            mdb_conn = connection.get_db()
-            current = mdb_conn.source_reading_hour.aggregate([
-                { "$match":
-                  {
-                      "source_id": {"$in": source_ids},
-                      "datetime": {"$gte": date_start, "$lt": date_end }
-                  }
-              },
-                { "$group":
-                  {
-                      "_id": None,
-                      "value": {"$sum": "$value"}
-                  }
-              }
-            ])
+            current = SourceReadingHour.total_used(source_ids, date_start, date_end)
+            previous = SourceReadingHour.total_used(source_ids, previous_date_start, previous_date_end)
 
-            previous = mdb_conn.source_reading_hour.aggregate([
-                { "$match":
-                  {
-                      "source_id": {"$in": source_ids},
-                      "datetime": {"$gte": previous_date_start, "$lt": previous_date_end }
-                  }
-              },
-                { "$group":
-                  {
-                      "_id": None,
-                      "value": {"$sum": "$value"}
-                  }
-              }
-            ])
-
-            if current['result']:
-                current_reading = current['result'][0]['value']*money_rate.rate
+            if current:
+                current_reading = current[0]['total']*money_rate.rate
             else:
                 current_reading = 0
 
-            if previous['result']:
-                previous_reading = previous['result'][0]['value']*money_rate.rate
+            if previous:
+                previous_reading = previous[0]['total']*money_rate.rate
             else:
                 previous_reading = 0
 
-            json_data = [{'datetime': date_start, 'value': current_reading}, {'datetime': previous_date_start, 'value': previous_reading}]
+            json_data = [
+                {'start_datetime': date_start, 'end_datetime': date_end, 'value': current_reading, 'is_today': True},
+                {'start_datetime': previous_date_start, 'end_datetime': previous_date_end, 'value': previous_reading, 'is_today': False}
+              ]
 
             return json_data
 
