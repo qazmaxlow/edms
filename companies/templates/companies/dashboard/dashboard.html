@@ -365,7 +365,7 @@
         var refreshIntervalId;
         var refreshPeriod = 30000;
 
-        var ds = {
+        var costs = new kendo.data.DataSource({
             transport: {
                 read: {
                     url: "{% url 'companies.measures.up-till-now' current_system.code %}",
@@ -386,11 +386,28 @@
                     }
                 }
             }
-        };
-        var costsThis = new kendo.data.DataSource(ds);
-        costsThis.filter({field: "is_today", operator: "eq", value: true});
-        var costsLast = new kendo.data.DataSource(ds);
-        costsLast.filter({field: "is_today", operator: "eq", value: false});
+        });
+
+        var thisCost = [];
+        var lastCost = [];
+        var updateChart = function(){
+            var data = costs.data();
+            thisCost.length = 0;
+            lastCost.length = 0;
+            for (var i=0; i<data.length; i++){
+                if (data[i].is_today){
+                    thisCost.push(data[i].value);
+                } else {
+                    lastCost.push(data[i].value);
+                }
+            }
+            var yMax = Math.max(thisCost[0], lastCost[0]) / 0.85;  //give move space to the text
+
+            $scope.soFarChartThis.setOptions({valueAxis: {max: yMax}}); //use same scale for both chart
+            $scope.soFarChartLast.setOptions({valueAxis: {max: yMax}});
+            $scope.soFarChartThis.refresh();
+            $scope.soFarChartLast.refresh();
+        }
 
         var ca = {
             height: 230,
@@ -411,7 +428,8 @@
             },
             majorGridLines: {
                 visible: false
-            }
+            },
+            min: 0
         };
         var catAxis = {
             visible: true,
@@ -431,7 +449,7 @@
         $scope.soFarOptionsThis = {
             series: [{
                 markers: { visible: true },
-                field: 'value',
+                data: thisCost,
                 color: '#354960',
                 opacity: 0.6,
                 gap: 0.1,
@@ -452,13 +470,12 @@
             legend: le,
             seriesDefaults: sd,
             valueAxis: va,
-            categoryAxis: catAxis,
-            dataSource: costsThis
+            categoryAxis: catAxis
         }
         $scope.soFarOptionsLast = {
             series: [{
                 markers: { visible: true },
-                field: 'value',
+                data: lastCost,
                 color: '#7a7a7a',
                 opacity: 0.6,
                 gap: 0.1,
@@ -479,8 +496,7 @@
             legend: le,
             seriesDefaults: sd,
             valueAxis: va,
-            categoryAxis: catAxis,
-            dataSource: costsLast
+            categoryAxis: catAxis
         }
 
 
@@ -500,17 +516,14 @@
             var retrieve_date = new Date();
             var retrieve_type = ($scope.isWeek ? "weekly" : "monthly");
 
-            costsThis.read({datetime:retrieve_date, type:retrieve_type});
-            costsLast.read({datetime:retrieve_date, type:retrieve_type});
+            costs.read({datetime:retrieve_date, type:retrieve_type}).then(updateChart);;
             refreshIntervalId = setInterval(function() { 
-                costsThis.read({datetime:retrieve_date, type:retrieve_type});
-                costsLast.read({datetime:retrieve_date, type:retrieve_type});
+                costs.read({datetime:retrieve_date, type:retrieve_type}).then(updateChart);;
             }, refreshPeriod);
         }
 
         refreshIntervalId = setInterval(function() { 
-            costsThis.read();
-            costsLast.read(); 
+            costs.read().then(updateChart);
         }, refreshPeriod);
     });
 
