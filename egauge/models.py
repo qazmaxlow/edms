@@ -60,7 +60,7 @@ class BaseSourceReading(Document):
         ])['result']
 
     @classmethod
-    def total_used_by_source_id(cls, source_ids, start_dt, end_dt):
+    def total_used_with_source_id(cls, source_ids, start_dt, end_dt):
 
         mdb_conn = connection.get_db()
         collection_name = cls._meta['collection']
