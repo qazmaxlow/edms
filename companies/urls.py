@@ -1,5 +1,4 @@
 from django.conf.urls import patterns, url, include
-from django.views.generic import TemplateView
 
 from rest_framework import routers
 
@@ -7,7 +6,7 @@ from . import audit_views
 from . import report_views
 from . import dashboard_views
 from . import apis
-from . import measure_views
+from . import measure_views, export_views
 
 
 router = routers.DefaultRouter()
@@ -29,5 +28,5 @@ urlpatterns = patterns(
     url(r'^measures/total/$', measure_views.TotalDetail.as_view(), name='companies.measures.total'),
     url(r'^measures/top_three', measure_views.TopThreeConsumersList.as_view(), name='companies.measures.top-three'),
 
-    url(r'^export/$', TemplateView.as_view(template_name="companies/export/index.html"),)
+    url(r'^export/$', export_views.ExportView.as_view(),)
 )
