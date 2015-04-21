@@ -91,6 +91,18 @@
         }
     });
 
+    ngapp.filter('entrakNumber', function () {
+        return function(val) {
+            if (val < 1) {
+                return +val.toFixed(2);
+            } else if (val < 10 ) {
+                return +val.toFixed(1);
+            } else {
+                return Math.round(val);
+            }
+        }
+    });
+
     ngapp.controller("WidgetRealtime", function($scope) {
         var today_measures = [];
         var last_week_measures = [];
@@ -315,7 +327,7 @@
             sort: { field: "rank", dir: "dsc" }
         });
 
-        $scope.consumers.read();
+        $scope.consumers.read().done(function() {$scope.$digest()});
 
         $scope.isWeek = true;
         $scope.toggle = function(clickWeek){
@@ -325,14 +337,10 @@
 
             var retrieve_type = ($scope.isWeek ? "weekly" : "monthly");
 
-            $scope.consumers.read({type:retrieve_type});
-            refreshIntervalId = setInterval(function() { $scope.consumers.read({type:retrieve_type}); }, refreshPeriod);
+            $scope.consumers.read({type:retrieve_type}).done(function() {$scope.$digest() });
+            refreshIntervalId = setInterval(function() { $scope.consumers.read({type:retrieve_type}) }, refreshPeriod);
         };
 
-
-        $scope.colorClass = function(percentage_change){
-            return (percentage_change > 0) ? "red-text" : "green-text";
-        };
 
         refreshIntervalId = setInterval(function() { $scope.consumers.read(); }, refreshPeriod);
 
@@ -378,7 +386,7 @@
             $scope.curTips += goNext;
             if ($scope.curTips >= tipsList.length){
                 $scope.curTips = 0;
-            } else if ($scope.curTips < 0){
+            } else if ($scope.curTips < 0) {
                 $scope.curTips = tipsList.length - 1;
             }
 
@@ -540,6 +548,173 @@
     });
 
     ngapp.controller("WidgetLastWeekStats", function($scope){
+
+        var ds = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "{% url 'companies.measures.last-week-stats' current_system.code %}",
+                    type: 'GET',
+                    dataType: "json"
+                },
+                parameterMap: function(data, type) {
+                    if (type == "read") {
+                        var d = data["datetime"];
+                        if (d === undefined) { d = new Date(); }
+
+                        return {
+                            datetime: d.toISOString(),
+                        }
+                    }
+                }
+            },
+        });
+
+        var dayMaxStep, nightMaxStep = 100;
+        var dayStep, nightStep = 100/4;
+        var dayUsage, nightUsage = {}
+
+        var dayAverage, nightAverage = 0
+        var dayPercentageChange, nightPercentageChange = 0
+
+        ds.read().done(function() {
+
+            dayUsage = ds.data()[0];
+            nightUsage = ds.data()[1];
+
+            var dayMax, nightMax = 0;
+
+            for (var i=0; i<dayUsage.data.length; i++){
+                dayMax = Math.max(dayMax, dayUsage.data[i].value);
+            }
+
+            for (var i=0; i<nightUsage.data.length; i++) {
+                nightMax = Math.max(nightMax, nightUsage.data[i].value);
+            }
+
+            var dayDiff = dayMax;
+            var dayPow = (dayDiff+".").indexOf(".") - 1;
+
+            dayMaxStep = Math.ceil(dayDiff/Math.pow(10, dayPow)) * Math.pow(10, dayPow);
+            dayStep = dayMaxStep / 4;
+            dayAverage = dayUsage.average;
+            dayPercentageChange = dayUsage.percentage_change;
+
+            var nightDiff = nightMax;
+            var nightPow = (nightDiff+".").indexOf(".") - 1;
+
+            nightMaxStep = Math.ceil(nightDiff/Math.pow(10, nightPow)) * Math.pow(10, nightPow);
+            nightStep = nightMaxStep / 4;
+            nightAverage = nightUsage.average;
+            nightPercentageChange = nightUsage.percentage_change;
+
+            $scope.average = dayAverage;
+            $scope.percentage_change = dayPercentageChange;
+            $scope.lastWeekStatChart.dataSource.data(dayUsage.data);
+            $scope.$digest();
+        });
+
+
+        $scope.lastWeekStatOptions = {
+            dataSource: {
+                data: []
+            },
+            chartArea: {
+                height: 190,
+                margin: 0,
+                background: "#FCFCFC"
+            },
+            seriesDefaults: {
+                type: "area",
+                opacity: 0.6
+            },
+            series: [{
+                markers: {visible: true},
+                field: "value",
+                color: "#354960",
+                line: {
+                    width: 2
+                },
+            }],
+            valueAxis: {
+                labels: {
+                    format: "{0}",
+                    font: "0.857em ITCAvantGardeStd-Bk",
+                    color: "#4B4B4B"
+                },
+                line: {
+                    visible: false
+                },
+                majorGridLines: {
+                    color: "#ECECEC",
+                    visible: true
+                },
+                majorUnit: dayStep,
+                max: dayMaxStep,
+                min: 0
+            },
+            categoryAxis: {
+                field: "weekday",
+                majorGridLines: {
+                    color: "#ECECEC",
+                    visible: true
+                },
+                labels: {
+                    font: "0.857em ITCAvantGardeStd-Bk",
+                    color: "#4B4B4B"
+                },
+                line: {
+                    color: "#ECECEC",
+                    width: 2,
+                    visible: true
+                },
+                majorTicks: {
+                    size: 0
+
+                }
+            },
+            tooltip: {
+                visible: true,
+                //format: "{0}%",
+                template: "# if (value < 1) { # #=kendo.toString(value, 'n2')# # } else if (value < 10) { # #=kendo.toString(value, 'n1') # # } else { # #=kendo.toString(value, 'n0') # # } #",
+                background: "#EFEFEF",
+                border: {
+                    color: "#333",
+                    width: 2
+                },
+            }
+        };
+
+
+        $scope.isWeekday = true;
+
+        $scope.toggle = function() {
+
+            $scope.isWeekday = !$scope.isWeekday;
+
+            if ($scope.isWeekday) {
+                $scope.lastWeekStatChart.setOptions({valueAxis: {max: dayMaxStep, majorUnit: dayStep}});
+                $scope.lastWeekStatChart.dataSource.data(dayUsage.data);
+                $scope.average = dayAverage;
+                $scope.percentage_change = dayPercentageChange;
+
+            } else {
+                $scope.lastWeekStatChart.setOptions({valueAxis: {max: nightMaxStep, majorUnit: nightStep}});
+                $scope.lastWeekStatChart.dataSource.data(nightUsage.data);
+                $scope.average = nightAverage;
+                $scope.percentage_change = nightPercentageChange;
+
+            }
+
+            $scope.lastWeekStatChart.refresh();
+        }
+
+        $scope.moreLessText = function(percentage_change){
+            return (percentage_change > 0) ? "more" : "less";
+        };
+
+        $scope.currentAverage = function(){
+            return  ($scope.isWeekday ? "average weekday" : "average overnight");
+        };
     });
 </script>
 
