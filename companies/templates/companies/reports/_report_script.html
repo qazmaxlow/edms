@@ -408,7 +408,7 @@ setCalendar = function(currentDt, currentEndDt, eleSel, readings, averageUsage, 
         calendarDayEle.append("<div class='calendar-day-digit'>"+calendarNowDt.date()+"</div>");
 
         if (calendarNowDt.isBefore(currentDt)
-            //|| calendarNowDt.isSame(currentEndDt)
+            || calendarNowDt.isSame(currentEndDt)
             || calendarNowDt.isAfter(currentEndDt)) {
             calendarDayEle.addClass('calendar-day-out-range');
         } else if (isNotConcernFunc(calendarNowDt)) {
@@ -424,9 +424,9 @@ setCalendar = function(currentDt, currentEndDt, eleSel, readings, averageUsage, 
 
             var diffPercentText;
             if (diffPercent >= 0) {
-                diffPercentText = "<span class='calendar-day-plus-symbol'>+</span> "+diffPercent;
+                diffPercentText = "<span class='calendar-day-plus-symbol'>+</span> "+kendo.toString(diffPercent, "##.#");
             } else {
-                diffPercentText = "<span class='calendar-day-minus-symbol'>-</span> "+Math.abs(diffPercent);
+                diffPercentText = "<span class='calendar-day-minus-symbol'>-</span> "+kendo.toString(Math.abs(diffPercent), "##.#");
             }
             if (diffPercent >= 5) {
                 calendarDayEle.addClass('calendar-day-worse');
