@@ -470,12 +470,17 @@
 .widget-content .rt-left-box {
 	border-right: 1px solid #F2F2F2;
 	height: 250px;
-	padding: 25px 0;
+	padding: 0;
 }
 
 .widget-content .rt-right-box {
 	height: 250px;
-	padding: 25px 0;
+	position: relative;
+	padding: 0;
+}
+
+.widget-content .rt-top-padding {
+	padding-top: 25px;
 }
 
 .widget-content .rt-right-box div{
@@ -493,5 +498,17 @@
 
 .rt-left-box h4, .rt-right-box h4 {
 	line-height: 2em;
+}
+
+.widget-content .rt-animate-co2 {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+.widget-content .rt-animate-money {
+	position: absolute;
+	width: 100%;
+	height: 100%;
 }
 /*-------real time widget*/
