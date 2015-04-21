@@ -420,7 +420,7 @@
 
         var thisCost = [];
         var lastCost = [];
-        var updateChart = function(){
+        var updateChart = function(isInit){
             var data = costs.data();
             thisCost.length = 0;
             lastCost.length = 0;
@@ -432,7 +432,6 @@
                 }
             }
             var yMax = Math.max(thisCost[0], lastCost[0]) / 0.85;  //give move space to the text
-
             $scope.soFarChartThis.setOptions({valueAxis: {max: yMax}}); //use same scale for both chart
             $scope.soFarChartLast.setOptions({valueAxis: {max: yMax}});
             $scope.soFarChartThis.refresh();
@@ -538,20 +537,22 @@
 
         setTitle();
 
-        $scope.toggle = function() {
-            $scope.isWeek = !$scope.isWeek;
+        $scope.toggle = function(isWeek) {
+            $scope.isWeek = isWeek;
             setTitle();
             clearInterval(refreshIntervalId);
 
+            var retrieve_date = new Date();
             var retrieve_type = ($scope.isWeek ? "weekly" : "monthly");
 
-            costs.read({datetime:retrieve_date, type:retrieve_type}).then(updateChart);;
+            costs.read({datetime:retrieve_date, type:retrieve_type}).then(updateChart);
             refreshIntervalId = setInterval(function() { 
-                costs.read({datetime:retrieve_date, type:retrieve_type}).then(updateChart);;
+                costs.read({datetime:retrieve_date, type:retrieve_type}).then(updateChart);
             }, refreshPeriod);
         }
 
-        refreshIntervalId = setInterval(function() { 
+        costs.read().then(updateChart);
+        refreshIntervalId = setInterval(function() {
             costs.read().then(updateChart);
         }, refreshPeriod);
     });
