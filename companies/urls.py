@@ -6,7 +6,7 @@ from . import audit_views
 from . import report_views
 from . import dashboard_views
 from . import apis
-from . import measure_views
+from . import measure_views, export_views
 
 
 router = routers.DefaultRouter()
@@ -28,4 +28,5 @@ urlpatterns = patterns(
     url(r'^measures/total/$', measure_views.TotalDetail.as_view(), name='companies.measures.total'),
     url(r'^measures/top_three/$', measure_views.TopThreeConsumersList.as_view(), name='companies.measures.top-three'),
     url(r'^measures/last_week_stats/$', measure_views.LastWeekDailyCostList.as_view(), name='companies.measures.last-week-stats')
+    url(r'^export/$', export_views.ExportView.as_view(),)
 )
