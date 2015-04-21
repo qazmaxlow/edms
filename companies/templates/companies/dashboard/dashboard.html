@@ -96,6 +96,11 @@
         var last_week_measures = [];
         for (var i = 0; i < 24; i++) last_week_measures[i] = null;
 
+        $scope.refreshHeader = function(){
+            var d = new Date();
+            $scope.curDate = kendo.toString(d, "d MMMM yyyy");
+            $scope.curTime = kendo.toString(d, "h:mm tt").toLowerCase();
+        }
 
         var refreshChartAxis = function(){
             var max_today = Math.max.apply(null, today_measures);
@@ -281,12 +286,15 @@
             } else {
                 $scope.updateRates();
             }
+            $scope.refreshHeader();
         }
         $scope.toggle(true);
 
         // update the chart every 10 sec
+        $scope.refreshHeader();
         setInterval(function(){
             $scope.updateTodayMeasure();
+            $scope.refreshHeader();
         }, 10000);
     });
 
