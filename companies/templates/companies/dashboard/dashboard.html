@@ -96,6 +96,11 @@
         var last_week_measures = [];
         for (var i = 0; i < 24; i++) last_week_measures[i] = null;
 
+        $scope.refreshHeader = function(){
+            var d = new Date();
+            $scope.curDate = kendo.toString(d, "d MMMM yyyy");
+            $scope.curTime = kendo.toString(d, "h:mm tt").toLowerCase();
+        }
 
         var refreshChartAxis = function(){
             var max_today = Math.max.apply(null, today_measures);
@@ -281,12 +286,15 @@
             } else {
                 $scope.updateRates();
             }
+            $scope.refreshHeader();
         }
         $scope.toggle(true);
 
         // update the chart every 10 sec
+        $scope.refreshHeader();
         setInterval(function(){
             $scope.updateTodayMeasure();
+            $scope.refreshHeader();
         }, 10000);
     });
 
@@ -432,7 +440,6 @@
                 }
             }
             var yMax = Math.max(thisCost[0], lastCost[0]) / 0.85;  //give move space to the text
-
             $scope.soFarChartThis.setOptions({valueAxis: {max: yMax}}); //use same scale for both chart
             $scope.soFarChartLast.setOptions({valueAxis: {max: yMax}});
             $scope.soFarChartThis.refresh();
@@ -538,20 +545,22 @@
 
         setTitle();
 
-        $scope.toggle = function() {
-            $scope.isWeek = !$scope.isWeek;
+        $scope.toggle = function(isWeek) {
+            $scope.isWeek = isWeek;
             setTitle();
             clearInterval(refreshIntervalId);
 
+            var retrieve_date = new Date();
             var retrieve_type = ($scope.isWeek ? "weekly" : "monthly");
 
-            costs.read({datetime:retrieve_date, type:retrieve_type}).then(updateChart);;
+            costs.read({datetime:retrieve_date, type:retrieve_type}).then(updateChart);
             refreshIntervalId = setInterval(function() { 
-                costs.read({datetime:retrieve_date, type:retrieve_type}).then(updateChart);;
+                costs.read({datetime:retrieve_date, type:retrieve_type}).then(updateChart);
             }, refreshPeriod);
         }
 
-        refreshIntervalId = setInterval(function() { 
+        costs.read().then(updateChart);
+        refreshIntervalId = setInterval(function() {
             costs.read().then(updateChart);
         }, refreshPeriod);
     });

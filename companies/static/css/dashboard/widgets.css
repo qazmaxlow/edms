@@ -84,7 +84,7 @@
 .widget-title {
 	padding-left: 10px;
 	height: 36px;
-	line-height: 36px;
+	line-height: 35px;
     color: #FFF;
     font-size: 1.0em;
     font-weight: bold;
@@ -429,13 +429,34 @@
 
 .widget-title .main-title, .widget-title .title-date, .widget-title .title-time {
 	display: inline-block;
-
 }
 
 .widget-title .main-title {
 	text-align: center;
 	border-right: #fff 1px solid;
 	padding-right: 10px;
+}
+
+.widget-title .title-date {
+	font-weight: lighter;
+	font-size: 0.929em;
+	color: #FFF;
+	margin-left: 12px;
+	padding-left: 18px;
+    background-image: url(../../images/dashboard/day-icon.png);
+    background-repeat: no-repeat;
+    background-position: left;
+}
+
+.widget-title .title-time {
+	font-weight: lighter;
+	font-size: 0.929em;
+	color: #FFF;
+	margin-left: 12px;
+	padding-left: 18px;
+    background-image: url(../../images/dashboard/time-icon.png);
+    background-repeat: no-repeat;
+    background-position: left;
 }
 
 .widget-content .xaxis-legend {
