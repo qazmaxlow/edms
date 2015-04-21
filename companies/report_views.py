@@ -886,7 +886,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
         chart_title = 'N/A'
         if total_compare:
-            if(CompareTplHepler(total_compare).change_desc=='more'):
+            if(CompareTplHepler(total_compare).compared_percent >=0):
                 chart_title = _('Overall: {0.compared_percent_abs:.0f}&#37; more energy than last {1}').format(CompareTplHepler(total_compare), report_type_name)
             else:
                 chart_title = _('Overall: {0.compared_percent_abs:.0f}&#37; less energy than last {1}').format(CompareTplHepler(total_compare), report_type_name)
