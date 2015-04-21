@@ -61,6 +61,8 @@ class DailyMeasureSerializer(serializers.Serializer):
 
 class LastWeekStatSerializer(serializers.Serializer):
     average = serializers.FloatField()
+    minimum = serializers.FloatField()
+    maximum = serializers.FloatField()
     percentage_change = serializers.FloatField()
     data = DailyMeasureSerializer( many=True)
     is_weekday = serializers.BooleanField()

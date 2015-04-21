@@ -562,7 +562,7 @@
             var retrieve_type = ($scope.isWeek ? "weekly" : "monthly");
 
             costs.read({datetime:retrieve_date, type:retrieve_type}).then(updateChart);
-            refreshIntervalId = setInterval(function() { 
+            refreshIntervalId = setInterval(function() {
                 costs.read({datetime:retrieve_date, type:retrieve_type}).then(updateChart);
             }, refreshPeriod);
         }
@@ -607,28 +607,18 @@
             dayUsage = ds.data()[0];
             nightUsage = ds.data()[1];
 
-            var dayMax, nightMax = 0;
+            var dayMax = dayUsage.maximum;
+            var dayPow = (dayMax+".").indexOf(".") - 1;
 
-            for (var i=0; i<dayUsage.data.length; i++){
-                dayMax = Math.max(dayMax, dayUsage.data[i].value);
-            }
-
-            for (var i=0; i<nightUsage.data.length; i++) {
-                nightMax = Math.max(nightMax, nightUsage.data[i].value);
-            }
-
-            var dayDiff = dayMax;
-            var dayPow = (dayDiff+".").indexOf(".") - 1;
-
-            dayMaxStep = Math.ceil(dayDiff/Math.pow(10, dayPow)) * Math.pow(10, dayPow);
+            dayMaxStep = Math.ceil(dayMax/Math.pow(10, dayPow)) * Math.pow(10, dayPow);
             dayStep = dayMaxStep / 4;
             dayAverage = dayUsage.average;
             dayPercentageChange = dayUsage.percentage_change;
 
-            var nightDiff = nightMax;
-            var nightPow = (nightDiff+".").indexOf(".") - 1;
+            var nightMax = nightUsage.maximum;
+            var nightPow = (nightMax+".").indexOf(".") - 1;
 
-            nightMaxStep = Math.ceil(nightDiff/Math.pow(10, nightPow)) * Math.pow(10, nightPow);
+            nightMaxStep = Math.ceil(nightMax/Math.pow(10, nightPow)) * Math.pow(10, nightPow);
             nightStep = nightMaxStep / 4;
             nightAverage = nightUsage.average;
             nightPercentageChange = nightUsage.percentage_change;

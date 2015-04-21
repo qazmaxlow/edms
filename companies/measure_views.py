@@ -178,7 +178,6 @@ class TopThreeConsumersList(generics.ListAPIView):
 
                 json_data.append({'d_name': source['d_name'], 'd_name_tc': source['d_name_tc'], 'value': cost, 'previous_value': cost_before, 'percentage_change': percentage_change})
 
-            print(json_data)
             return json_data
 
 class LastWeekDailyCostList(generics.ListAPIView):
@@ -232,7 +231,13 @@ class LastWeekDailyCostList(generics.ListAPIView):
                 else:
                     percentage_change = 0
 
-                dates_with_data = [s["date"] for s in last_week_stats["data"]]
+                dates_with_data = []
+                minimum = 0
+                maximum = 0
+                for s in last_week_stats["data"]:
+                    dates_with_data.append(s["date"])
+                    minimum = min([minimum, s["value"]])
+                    maximum = max([maximum, s["value"]])
 
                 for single_date in daterange(last_week_start_dt, last_week_end_dt + relativedelta(days=1)):
                     if (single_date.strftime("%Y-%m-%d") not in dates_with_data) \
@@ -241,6 +246,6 @@ class LastWeekDailyCostList(generics.ListAPIView):
                         last_week_stats["data"].append({"date":single_date.strftime("%Y-%m-%d"), "weekday":single_date.strftime("%a"), "value":0})
 
 
-                json_data.append({"is_weekday": query_type == "weekday", "average": last_week_average, "percentage_change": percentage_change, "data": last_week_stats["data"]})
+                json_data.append({"is_weekday": query_type == "weekday", "average": last_week_average, "minimum": minimum, "maximum": maximum, "percentage_change": percentage_change, "data": last_week_stats["data"]})
 
             return json_data
