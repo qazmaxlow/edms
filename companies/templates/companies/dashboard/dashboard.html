@@ -86,14 +86,18 @@
     ngapp.controller("WidgetRealtime", function($scope) {
         var today_measures = [];
         var last_week_measures = [];
+        for (var i = 0; i < 24; i++) last_week_measures[i] = null;
+
 
         var refreshChartAxis = function(){
-            var maxValue = 0;
-            for (var i=0; i<today_measures.length; i++){
-                maxValue = Math.max(maxValue, today_measures[i]);
-            }
+            var max_today = Math.max.apply(null, today_measures);
+            var max_last = Math.max.apply(null, last_week_measures);
+            var maxValue = Math.max(max_today, max_last);
+
+            // find the nearest 10, 100, 1000... based interget
             var pow = (maxValue+".").indexOf(".") - 1;
             var maxStep = Math.ceil(maxValue/Math.pow(10, pow)) * Math.pow(10, pow);
+
             var step = maxStep / 4;
             $scope.realTimeChart.setOptions({valueAxis: {max: maxStep, majorUnit: step}});
         }
