@@ -43,3 +43,12 @@ class MeasureTimeSpanSerializer(serializers.Serializer):
 class TotalSerializer(serializers.Serializer):
     cost = serializers.FloatField()
     co2 = serializers.FloatField()
+
+
+class TopThreeConsumersSerializer(serializers.Serializer):
+    d_name = serializers.CharField()
+    d_name_tc = serializers.CharField()
+    value = serializers.FloatField()
+    previous_value = serializers.FloatField()
+    percentage_change = serializers.FloatField()
+

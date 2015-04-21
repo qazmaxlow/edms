@@ -9,7 +9,7 @@ from rest_framework import generics, mixins
 
 from system.models import System
 from egauge.models import SourceReadingYear, SourceReadingMonth, SourceReadingDay, SourceReadingHour, SourceReadingMin, Source
-from .serializers import MeasureSerializer, TotalSerializer, MeasureTimeSpanSerializer
+from .serializers import MeasureSerializer, TotalSerializer, MeasureTimeSpanSerializer, TopThreeConsumersSerializer
 
 
 class DailyMeasureList(generics.ListAPIView):
@@ -130,3 +130,53 @@ class TotalDetail(generics.RetrieveAPIView):
 
         return json_data
 
+
+class TopThreeConsumersList(generics.ListAPIView):
+
+    serializer_class = TopThreeConsumersSerializer
+
+
+    def get_queryset(self):
+
+        syscode = self.kwargs['system_code']
+        sys = System.objects.get(code=syscode)
+        source_map = [{"source_id": s["id"], "d_name": s["d_name"], "d_name_tc": s["d_name_tc"]} for s in sys.sources]
+
+        query_dt = self.request.QUERY_PARAMS.get('datetime', None)
+        query_type = self.request.QUERY_PARAMS.get('type', None)
+
+        if query_dt is not None and query_type in ['weekly', 'monthly']:
+
+            json_data = []
+            date_end = dateutil.parser.parse(query_dt).astimezone(pytz.timezone(sys.timezone))
+
+            if query_type == "weekly":
+                date_start = date_end.replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=date_end.isoweekday())
+                previous_date_start = date_start - datetime.timedelta(days=7)
+                previous_date_end = date_end - datetime.timedelta(days=7)
+            else:
+                date_start = date_end.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+                previous_date_start = date_start - relativedelta(months=1)
+                previous_date_end = date_end - relativedelta(months=1)
+
+            current_cost = sys.get_total_cost_with_source_id(date_start, date_end)
+            previous_cost = sys.get_total_cost_with_source_id(previous_date_start, previous_date_end)
+
+            for c in current_cost[0:3]:
+                source_id = c['source_id']
+                source = [s for s in source_map if s["source_id"] == source_id][0]
+
+                cost = c['cost']
+                p_cost = [p for p in previous_cost if p['source_id'] == source_id]
+
+                if p_cost:
+                  cost_before = p_cost[0]['cost']
+                  percentage_change = 100*(cost - cost_before)/float(cost_before)
+                else:
+                  cost_before = 0
+                  percentage_change = 0
+
+                json_data.append({'d_name': source['d_name'], 'd_name_tc': source['d_name_tc'], 'value': cost, 'previous_value': cost_before, 'percentage_change': percentage_change})
+
+            print(json_data)
+            return json_data
