@@ -71,6 +71,13 @@
 
 <script>
     var ngapp = angular.module("Entrak", [ "kendo.directives" ]);
+
+    ngapp.filter('abs', function () {
+        return function(val) {
+            return Math.abs(val);
+        }
+    });
+
     ngapp.controller("WidgetRealtime", function($scope) {
         var today_measures = [];
         var last_week_measures = [];
@@ -209,36 +216,55 @@
     });
 
     ngapp.controller("WidgetBiggestConsumers", function($scope){
-        //assume the consumers is sorted in descending order by "value"
-        $scope.consumers = [{
-            name: "Central",
-            value: 526,
-            percent: 11
-        },{
-            name: "Mongkok",
-            value: 326,
-            percent: 4
-        },{
-            name: "Wan Chai",
-            value: 80,
-            percent: -3.2
-        }];
+
+        var refreshIntervalId;
+        var refreshPeriod = 30000;
+
+        $scope.consumers = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "{% url 'companies.measures.top-three' current_system.code %}",
+                    type: 'GET',
+                    dataType: "json"
+                },
+                parameterMap: function(data, type) {
+                    if (type == "read") {
+                        var d = data["datetime"];
+                        var t = data["type"];
+                        if (d === undefined) { d = new Date(); }
+                        if (t === undefined) { t = "weekly"; }
+
+                        return {
+                            datetime: d.toISOString(),
+                            type: t
+                        }
+                    }
+                },
+            },
+            sort: { field: "rank", dir: "dsc" }
+        });
+
+        $scope.consumers.read();
 
         $scope.isWeek = true;
         $scope.toggle = function(clickWeek){
-            $scope.isWeek = clickWeek;
-            //action
-        }
 
-        for (var i=0; i<$scope.consumers.length; i++){
-            $scope.consumers[i].imgPath = "/static/images/dashboard/consumer-" + (i+1) + ".png";
-            if ($scope.consumers[i].percent > 0){
-                $scope.consumers[i].colorClass = "red-text";
-            } else {
-                $scope.consumers[i].colorClass = "green-text";
-                $scope.consumers[i].percent = Math.abs($scope.consumers[i].percent);
-            }
-        }
+            $scope.isWeek = clickWeek;
+            clearInterval(refreshIntervalId);
+
+            var retrieve_type = ($scope.isWeek ? "weekly" : "monthly");
+
+            $scope.consumers.read({type:retrieve_type});
+            refreshIntervalId = setInterval(function() { $scope.consumers.read({type:retrieve_type}); }, refreshPeriod);
+        };
+
+
+        $scope.colorClass = function(percentage_change){
+            return (percentage_change > 0) ? "red-text" : "green-text";
+        };
+
+        refreshIntervalId = setInterval(function() { $scope.consumers.read(); }, refreshPeriod);
+
     });
 
     ngapp.controller("WidgetTips", function($scope){
@@ -379,11 +405,10 @@
             setTitle();
             clearInterval(refreshIntervalId);
 
-            var retrieve_date = new Date();
             var retrieve_type = ($scope.isWeek ? "weekly" : "monthly");
 
             costs.read({datetime:retrieve_date, type:retrieve_type});
-            refreshIntervalId = setInterval(function() { costs.read({datetime:retrieve_date, type:retrieve_type}); }, refreshPeriod);
+            refreshIntervalId = setInterval(function() { costs.read({type:retrieve_type}); }, refreshPeriod);
         }
 
         refreshIntervalId = setInterval(function() { costs.read(); }, refreshPeriod);

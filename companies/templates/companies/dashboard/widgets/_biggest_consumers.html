@@ -20,23 +20,23 @@
     <div class="bc-graph">
         {% verbatim %}
         <table class="horizontal-bars">
-            <tr ng-repeat="c in consumers"><td>
+            <tr ng-repeat="c in consumers.data()"><td>
                 <div class="bc-right-box pull-right">
                     <div class="name-row"></div>
                     <div class="bar-row">
-                        <span class="bc-change-percent" ng-class="c.colorClass" ng-bind="c.percent"></span>
-                        <span class="bc-percent-unit" ng-class="c.colorClass">%</span>
+                        <span class="bc-change-percent" ng-class="colorClass(c.percentage_change)" ng-bind="c.percentage_change  | abs | number:2"></span>
+                        <span class="bc-percent-unit" ng-class="colorClass(c.percentage_change)">%</span>
                     </div>
                 </div>
                 <div class="bc-left-box">
                     <div class="name-row">
-                        <div class="name" ng-bind="c.name"></div>
+                        <div class="name" ng-bind="c.d_name"></div>
                     </div>
                     <div class="bar-row">
-                        <img ng-src="{{c.imgPath}}"></img>
+                        <img ng-src="/static/images/dashboard/consumer-{{$index+1}}.png"></img>
                         <div class="bar-container">
-                            <div class="bar" style="width: {{100 * c.value / consumers[0].value}}%">
-                                <span class="bar-value" ng-bind="c.value"></span>
+                            <div class="bar" style="width: {{100 * c.value / consumers.data()[0].value}}%">
+                                <span class="bar-value" ng-bind="c.value | number:2"></span>
                             </div>
                         </div>
                     </div>

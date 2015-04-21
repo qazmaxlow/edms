@@ -236,6 +236,37 @@ class System(models.Model):
     def __unicode__(self):
         return "code: %s, name: %s"%(self.code, self.name)
 
+
+    @property
+    def fullname(self):
+        lang = translation.get_language()
+        fn = self.full_name_tc if lang == 'zh-tw' else self.full_name
+        return fn
+
+
+    @property
+    def time_zone(self):
+        return pytz.timezone(self.timezone)
+
+
+    @property
+    def sources(self):
+        system_code = self.code
+        system_path = self.path
+
+        if not system_path:
+            target_path = ',%s,' % system_code
+        else:
+            target_path = '%s%s,' % (system_path, system_code)
+
+        sources = Source.objects(
+            MQ(system_code=system_code) |
+            MQ(system_path__startswith=target_path
+          ))
+
+        return sources
+
+
     def get_all_holidays(self, timestamp_info=None):
         if timestamp_info:
             system_timezone = pytz.timezone(self.timezone)
@@ -287,61 +318,23 @@ class System(models.Model):
 
         return None
 
+
     def get_unit_rate(self, datetime, target_unit='money'):
         unit_infos = json.loads(self.unit_info)
         unit_code = unit_infos[target_unit]
         unit_rate = UnitRate.objects.filter(category_code=target_unit, code=unit_code, effective_date__lte=datetime).order_by('-effective_date').first()
         return unit_rate
 
-    @property
-    def fullname(self):
-        lang = translation.get_language()
-        fn = self.full_name_tc if lang == 'zh-tw' else self.full_name
-        return fn
 
-
-    @property
-    def time_zone(self):
-        return pytz.timezone(self.timezone)
-
-
-    @property
-    def sources(self):
-        system_code = self.code
-        system_path = self.path
-
-        if not system_path:
-            target_path = ',%s,' % system_code
-        else:
-            target_path = '%s%s,' % (system_path, system_code)
-
-        sources = Source.objects(
-            MQ(system_code=system_code) |
-            MQ(system_path__startswith=target_path
-          ))
-
-        return sources
-
-
-    def get_unit_rate(self, rate_date, rate_type):
-        unit_infos = json.loads(self.unit_info)
-        unit_code = unit_infos[rate_type]
-        unit_rates = UnitRate.objects.filter(
-            category_code=rate_type, code=unit_infos[rate_type])
-
-        return unit_rates.filter(
-            effective_date__lte=rate_date).order_by('-effective_date').first()
-
-
-    def get_total_co2(self, start_dt, end_dt):
+    def get_total_co2(self, start_dt, end_dt, date_type='day'):
         """
         Calculate the co2 usage between the dates of the system.
         """
         source_ids = [s.id for s in self.sources]
-        date_type = 'day'
 
         reading_map = {
             'day': SourceReadingMin,
+            'hour': SourceReadingHour,
             'week': SourceReadingDay,
             'month': SourceReadingMonth,
             'quarter': SourceReadingMonth,
@@ -360,15 +353,15 @@ class System(models.Model):
             return sum([self.get_unit_rate(r.datetime, 'co2').rate*r.value for r in readings])
 
 
-    def get_total_cost(self, start_dt, end_dt):
+    def get_total_cost(self, start_dt, end_dt, date_type='day'):
         """
         Calculate the cost between the dates of the system.
         """
         source_ids = [s.id for s in self.sources]
-        date_type = 'day'
 
         reading_map = {
             'day': SourceReadingMin,
+            'hour': SourceReadingHour,
             'week': SourceReadingDay,
             'month': SourceReadingMonth,
             'quarter': SourceReadingMonth,
@@ -386,6 +379,14 @@ class System(models.Model):
         if readings:
             return sum([self.get_unit_rate(r.datetime, 'money').rate*r.value for r in readings])
 
+
+    def get_total_cost_with_source_id(self, start_dt, end_dt):
+
+        readings = SourceReadingHour.total_used_with_source_id([s.id for s in self.sources], start_dt, end_dt)
+        rate = self.get_unit_rate(end_dt, 'money').rate
+
+        if readings:
+            return [({"source_id": r["_id"], "cost": rate*r["total"]}) for r in readings]
 
 class SystemHomeImage(models.Model):
     image = models.ImageField(upload_to="system_home/%Y/%m")
