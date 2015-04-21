@@ -23,35 +23,11 @@
 <script src="{% static 'js/report-generator.js' %}"></script>
 
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-<link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
-<link href="{% static 'css/kendo.entrak.theme.css' %}" rel="stylesheet">
-<!-- Because now using jquery v1.11 -->
-<script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
-<script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
+<link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
 
 <script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
-
-<!-- hack for combining bootstrap -->
-<style>
-  #menu-links li:hover, #menu-links li.menu-links-selected {
-     height: auto;
-  }
-
-  .panel-header-left-menu h3 {
-    margin: 0;
-    height: 33px;
-  }
-
-  #sub-heading-facilities h3 {
-    font-size: 15px;
-  }
-
-  #sub-heading h2 { font-size: 16px; }
-  #heading h1 { font-size: 30px; }
-
-</style>
 
 <style>
   .report-summary img.icon {

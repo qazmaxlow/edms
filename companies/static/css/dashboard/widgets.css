@@ -32,6 +32,29 @@
 	line-height: 175%;
 }
 
+.widget-container .description-4{
+	color: #354960;
+	font-size: 1.357em;
+	font-weight: bold;
+}
+
+.widget-container .description-5{
+	color: #354960;
+	font-size: 2.214em;
+	font-weight: bold;
+}
+
+.widget-container .description-6{
+	color: #354960;
+	font-size: 1.071em;
+	font-weight: bold;
+}
+
+.widget-content .auto-width {
+	width: auto;
+	overflow: hidden;
+}
+
 .widget-content .red-text {
     color: #D65C2C;
 }
@@ -43,6 +66,10 @@
 .widget-content .full-width-img {
 	width: 100%;
 	height: auto;
+}
+
+.left-padding-15 {
+	padding-left: 15px;
 }
 /*-------widget common*/
 
@@ -116,6 +143,11 @@
 	height: 60px;
 }
 
+.widget-message2 {
+	height: 50px;
+	border-bottom: 1px solid #F2F2F2;
+}
+
 .widget-message .single-box {
 	height: 60px;
 	line-height: 40px;
@@ -137,12 +169,6 @@
     background-image: url(../../images/dashboard/left-arrow-widget.png);
     background-repeat: no-repeat;
     background-position: left;
-}
-
-.widget-message .left-box h3{
-	color: #354960;
-	font-size: 1.357em;
-	font-weight: bold;
 }
 
 .widget-message .right-box h3{
@@ -179,14 +205,14 @@
 	margin-top: 0px;
 }
 
-.widget-content span.legend-label {
+.widget-content .legend-label {
     font-size: 0.857em;
     font-weight: bold;
     color: #354960;
 }
 
 .widget-content .yaxis-legend {
-    padding: 9px 10px 5px 15px;
+    padding: 20px 10px 5px 15px;
 }
 /*-------widget content*/
 
@@ -231,11 +257,6 @@
 
 
 /*biggest consumers widget-------*/
-.widget-content .bc-left-box {
-	width: auto;
-	overflow: hidden;
-}
-
 .widget-content .bc-right-box {
 	width: 105px;
 	border-left: 1px solid #F2F2F2;
@@ -351,7 +372,7 @@
 	font-size: 0.857em;
 	text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.8);
 	position: absolute;
-	padding-top: 4px;
+	padding-top: 3px;
 	padding-right: 10px;
 	min-width: 50px;
 	width: 100%;
@@ -361,21 +382,95 @@
 /*-------biggest consumers widget*/
 
 /*energy use widget-------*/
-.widget-message .eu-box {
+.widget-message2 .eu-box {
     height: 50px;
     padding: 0px 8px;
-    border-bottom: 1px solid #F2F2F2;
 }
 
-.widget-message .eu-box:first-child {
+.widget-message2 .eu-box:first-child {
     border-right: 1px solid #F2F2F2;
 }
 
-.widget-message .eu-box .description-1, .widget-message .eu-box .description-2 {
+.widget-message2 .eu-box .description-1, .widget-message2 .eu-box .description-2 {
 	text-align: center;
 	display: inline-block;
 	width: 100%;
 	height: 50px;
 	line-height: 50px;
 }
+
+.eu-widget-graph {
+	padding: 0 7px;
+}
+
+.eu-widget-graph .eu-left-chart {
+	display: inline-block;
+	border-right: 1px solid #F2F2F2;
+	padding: 5px 15px;
+	height: 250px;
+}
+
+.eu-widget-graph .eu-right-chart {
+	display: inline-block;
+	padding: 5px 15px;
+	height: 250px;
+}
 /*-------energy use widget*/
+
+
+/*real time widget-------*/
+.widget-message2 .message-text {
+	text-align: left;
+	height: 50px;
+	line-height: 50px;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.widget-title .main-title, .widget-title .title-date, .widget-title .title-time {
+	display: inline-block;
+
+}
+
+.widget-title .main-title {
+	text-align: center;
+	border-right: #fff 1px solid;
+	padding-right: 10px;
+}
+
+.widget-content .xaxis-legend {
+	width: 30px;
+	text-align: right;
+	padding-right: 15px;
+	padding-top: 183px;
+	height: 200px;
+}
+
+.widget-content .rt-left-box {
+	border-right: 1px solid #F2F2F2;
+	height: 250px;
+	padding: 25px 0;
+}
+
+.widget-content .rt-right-box {
+	height: 250px;
+	padding: 25px 0;
+}
+
+.widget-content .rt-right-box div{
+	text-align: center;
+}
+
+.widget-content .rt-right-box span{
+	display: inline-block;
+	line-height: 1.1; /*align with h3 in left-box*/
+}
+
+.rt-left-box h3, .rt-left-box h4, .rt-right-box h4 {
+	text-align: center;
+}
+
+.rt-left-box h4, .rt-right-box h4 {
+	line-height: 2em;
+}
+/*-------real time widget*/
