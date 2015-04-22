@@ -140,7 +140,6 @@ class TopThreeConsumersList(generics.ListAPIView):
 
         syscode = self.kwargs['system_code']
         sys = System.objects.get(code=syscode)
-        source_map = [{"source_id": s["id"], "d_name": s["d_name"], "d_name_tc": s["d_name_tc"]} for s in sys.sources]
 
         query_dt = self.request.QUERY_PARAMS.get('datetime', None)
         query_type = self.request.QUERY_PARAMS.get('type', None)
@@ -162,23 +161,29 @@ class TopThreeConsumersList(generics.ListAPIView):
             current_cost = sys.get_total_cost_with_source_id(date_start, date_end)
             previous_cost = sys.get_total_cost_with_source_id(previous_date_start, previous_date_end)
 
-            for c in current_cost[0:3]:
-                source_id = c['source_id']
-                source = [s for s in source_map if s["source_id"] == source_id][0]
+            for s in sys.sources:
+                c_cost = [c for c in current_cost if c['source_id'] == s.id]
+                p_cost = [p for p in previous_cost if p['source_id'] == s.id]
 
-                cost = c['cost']
-                p_cost = [p for p in previous_cost if p['source_id'] == source_id]
+                if c_cost:
+                    cost_now = c_cost[0]['cost']
+                else:
+                    cost_now = None
 
                 if p_cost:
-                  cost_before = p_cost[0]['cost']
-                  percentage_change = 100*(cost - cost_before)/float(cost_before)
+                    cost_before = p_cost[0]['cost']
+                    percentage_change = 100*((cost_now or 0) - cost_before)/float(cost_before)
                 else:
-                  cost_before = 0
-                  percentage_change = 0
+                    cost_before = None
+                    percentage_change = None
 
-                json_data.append({'d_name': source['d_name'], 'd_name_tc': source['d_name_tc'], 'value': cost, 'previous_value': cost_before, 'percentage_change': percentage_change})
+                json_data.append({'d_name': s['d_name'], 'd_name_tc': s['d_name_tc'], 'value': cost_now, 'previous_value': cost_before, 'percentage_change': percentage_change})
 
-            return json_data
+            if json_data:
+                print(json_data)
+                json_data.sort(key=lambda r: ((-1*r['value'] if r['value'] else 0), (r['d_name'])))
+
+            return json_data[0:3]
 
 class LastWeekDailyCostList(generics.ListAPIView):
 
@@ -232,8 +237,9 @@ class LastWeekDailyCostList(generics.ListAPIView):
                     percentage_change = 0
 
                 dates_with_data = []
-                minimum = 0
+                minimum = 999999
                 maximum = 0
+
                 for s in last_week_stats["data"]:
                     dates_with_data.append(s["date"])
                     minimum = min([minimum, s["value"]])
