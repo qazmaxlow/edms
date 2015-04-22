@@ -90,7 +90,7 @@ class DownloadView(View):
                                          # unit_category_code, money_unit_rates, co2_unit_rates, system)
 
         result_rows = [];
-        sources = SourceManager.get_sources(system)
+
         source_headers = [s.name for s in sources]
         csv_header = ["Date Time"] + [s.d_name for s in sources]
         # yield csv_header
