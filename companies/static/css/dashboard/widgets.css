@@ -193,7 +193,7 @@
 
 /*widget content-------*/
 .widget-content {
-	border-radius: 0 0 8px 8px ;
+	border-radius: 0 0 8px 8px;
     height: 300px;
     background-color: #FCFCFC;
     -webkit-box-shadow: -2px 2px 3px rgba(0,0,0,0.1);
@@ -381,6 +381,7 @@
 
 .horizontal-bars .bar-value-na {
 	color: #878787 !important;
+	text-shadow: none !important;
 }
 
 /*-------biggest consumers widget*/
@@ -472,12 +473,12 @@
 }
 
 .widget-content .rt-left-box {
-	border-right: 1px solid #F2F2F2;
 	height: 250px;
 	padding: 0;
 }
 
 .widget-content .rt-right-box {
+	border-left: 2px solid #F2F2F2;
 	height: 250px;
 	position: relative;
 	padding: 0;
@@ -522,10 +523,11 @@
 	height: 100%;
 }
 
-/*
-.EDGE-18660633 {
-    -ms-transform: scale(0.7,0.7);
-    -webkit-transform: scale(0.7,0.7);
-    transform: scale(0.7,0.7);
-}*/
+#stageMoney {
+	border-radius: 0 0 0px 8px;
+}
+
+#stageCO2 {
+	border-radius: 0 0 8px 0;
+}
 /*-------real time widget*/
