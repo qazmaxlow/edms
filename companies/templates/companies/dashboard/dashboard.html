@@ -98,7 +98,9 @@
 
     ngapp.filter('entrakNumber', function () {
         return function(val) {
-            if (val < 1) {
+            if (isNaN(val)){
+                return "";
+            } else if (val < 1) {
                 return +val.toFixed(2);
             } else if (val < 10 ) {
                 return +val.toFixed(1);
@@ -705,17 +707,22 @@
                 margin: 0,
                 background: "#FCFCFC"
             },
-            seriesDefaults: {
-                type: "area",
-                opacity: 0.6
-            },
+            // seriesDefaults: {
+            //     type: "area",
+            //     opacity: 0.6
+            // },
             series: [{
+                type: "area",
+                opacity: 0.6,
                 markers: {visible: true},
                 field: "value",
                 color: "#354960",
                 line: {
                     width: 2
-                },
+                }
+            },{
+                type: "column", //add this to give some space before the first data point and after the last data point
+                field: "dummy"
             }],
             valueAxis: {
                 labels: {
