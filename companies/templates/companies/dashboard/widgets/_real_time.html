@@ -29,14 +29,14 @@
 	    </div>
 	    <div ng-show="realTimeSelect=='rates'">
 	        <div class="col-sm-6 rt-left-box">
-	        	<div class="rt-animate-money"></div>
+	        	<div id="animationContainerMoney" class="rt-animate-money"><div id="stageMoney" class="EDGE-9220080"></div></div>
 	        	<div class="rt-overlay">
 					<h3 class="description-5 rt-top-padding">${{ total_per_day.cost | number:0 }}</h3>
 		        	<h4 class="description-6">per day</h4>
 	        	</div>
 	        </div>
 	        <div class="col-sm-6 rt-right-box">
-				<div class="rt-animate-co2 EDGE-18660633"></div>
+				<div id="animationContainerCO2" class="rt-animate-co2"><div id="stageCO2" class="EDGE-18660633"></div></div>
 				<div class="rt-overlay">
 		        	<div class="rt-top-padding">
 		        		<span class="description-5">{{ total_per_day.co2 | number:0 }}</span>
