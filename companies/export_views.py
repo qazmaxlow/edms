@@ -41,20 +41,21 @@ class PseudoBuffer(object):
 
 class DownloadView(View):
     def get(self, request, *args, **kwargs):
-        start_timestamp = request.GET.get('start')
-        end_timestamp = request.GET.get('end')
         unit_category_code = request.GET.get('unit')
 
-        start_dt = dateparse.parse_datetime(start_timestamp)
-        end_dt = dateparse.parse_datetime(end_timestamp)
+        start_dt = dateparse.parse_datetime(request.GET.get('start'))
+        end_dt = dateparse.parse_datetime(request.GET.get('end'))
 
         system_code = self.kwargs['system_code']
 
         systems = System.get_systems_within_root(system_code)
-        system = systems[0]
-        sources = SourceManager.get_sources(system)
+        system = systems.first()
+
+        sources = system.sources
         source_ids = [str(source.id) for source in sources]
+
         source_id_map = {}
+
         for source in sources:
             source_id_map[str(source.id)] = source
             source.system = calculation.grep_system_by_code(systems, source.system_code)
