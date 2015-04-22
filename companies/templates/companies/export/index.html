@@ -44,6 +44,7 @@
 
 {% block page_content %}
 
+{% verbatim %}
 <div ng-app="Entrak">
     <div ng-controller="ReportController">
         <div class="row">
@@ -53,8 +54,8 @@
             <div class="col-md-8">
                 <div class="row">
                     <div class="col-md-6">
-                        <input kendo-et-date-picker="dowload_date_start" k-value="default_start_date" style="width: 220px;">
-                        <input kendo-et-date-picker="dowload_date_end" k-value="default_end_date" style="width: 220px;">
+                        <input kendo-et-date-picker="dp_date_start" k-ng-model="date_start" style="width: 220px;">
+                        <input kendo-et-date-picker="dp_date_end" k-ng-model="date_end" style="width: 220px;">
                     </div>
                     <div class="col-md-6">
                         <button ng-click="interval='minute'" ng-class="{ 'active': interval=='minute'}">Minute</button>
@@ -69,6 +70,8 @@
                         <button ng-click="unit='co2'" ng-class="{ 'active': unit=='co2'}">CO<sub>2</sub></button>
                     </div>
                     <div class="col-md-6">
+                        <p>From {{ date_start }}</p>
+                        <p>To {{ date_end }}</p>
                         <button>Download</button>
                     </div>
                 </div>
@@ -76,6 +79,7 @@
         </div>
     </div>
 </div>
+{% endverbatim %}
 
 <script>
     angular.module("Entrak", [ "kendo.directives" ])
@@ -83,9 +87,9 @@
             $scope.interval = null;
             $scope.unit = null;
 
-            $scope.default_start_date = new Date();
-            $scope.default_end_date = new Date();
-            $scope.default_end_date.setDate($scope.default_end_date.getDate()+1);
+            $scope.date_start = new Date();
+            $scope.date_end = new Date();
+            $scope.date_end.setDate($scope.date_end.getDate()+1);
 
     });
 </script>
