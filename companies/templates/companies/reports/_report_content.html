@@ -191,7 +191,7 @@
     </div>
 
     <div class="row detail-container"><h4>{% trans "How did that break down by usage type?" %}</h4></div>
-      <div class="row detail-container bottom-border-2 top-border-2">
+      <div class="row detail-container bottom-border-2 top-border-2{% if transformed_datas|length > 6 %} page-break-after{% endif %}">
         <div class="col-xs-8 x-padding-5-0 break-down-bar">
               <table class="transformed-bar-chart">
                 {% for td in transformed_datas %}
@@ -459,7 +459,7 @@
         {{ wd.title }}
         </div>
       </div>
-      <div class="row report-detail-body {% if forloop.last %}content-footer bottom-border-2{% endif %} ">
+      <div class="row report-detail-body {% if forloop.last %}content-footer bottom-border-2{% endif %} {% if forloop.counter == 6 %}page-break-after{% elif forloop.counter > 6 and forloop.counter|add:-6|divisibleby:9 %}page-break-after{% endif %}">
         <div class="col-xs-4">
           <div class="row">
             <div class="col-xs-4">
@@ -498,15 +498,15 @@
             </div>
             <div class="col-xs-8 no-x-padding">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
-	              <p class="bottom-margin-4">{% trans "Compared to same period last year" %}</p>
-	              <h3 class="{{ wd.compare_same_period_helper.change_css_class }}">
-	                {{ wd.compare_same_period_helper.text_desc }}
-	              </h3>
+                <p class="bottom-margin-4">{% trans "Compared to same period last year" %}</p>
+                <h3 class="{{ wd.compare_same_period_helper.change_css_class }}">
+                  {{ wd.compare_same_period_helper.text_desc }}
+                </h3>
                   {% else %}
-	              <h3 class="{{ wd.compare_same_period_helper.change_css_class }}">
-	                {{ wd.compare_same_period_helper.text_desc }}
-	              </h3>
-	              <p>{% trans "Compared to same period last year" %}</p>
+                <h3 class="{{ wd.compare_same_period_helper.change_css_class }}">
+                  {{ wd.compare_same_period_helper.text_desc }}
+                </h3>
+                <p>{% trans "Compared to same period last year" %}</p>
                   {% endifequal %}
             </div>
           </div>
@@ -667,7 +667,7 @@
         {{ d.title }}
         </div>
       </div>
-      <div class="row report-detail-body {% if forloop.last %}content-footer bottom-border-2{% endif %} ">
+      <div class="row report-detail-body {% if forloop.last %}content-footer bottom-border-2{% endif %} {% if forloop.counter == 6 %}page-break-after{% elif forloop.counter > 6 and forloop.counter|add:-6|divisibleby:9 %}page-break-after{% endif %}">
         <div class="col-xs-4">
           <div class="row">
             <div class="col-xs-4">
@@ -875,7 +875,7 @@
         {{ d.title }}
         </div>
       </div>
-      <div class="row report-detail-body {% if forloop.last %}content-footer bottom-border-2{% endif %} ">
+      <div class="row report-detail-body {% if forloop.last %}content-footer bottom-border-2{% endif %} {% if forloop.counter == 6 %}page-break-after{% elif forloop.counter > 6 and forloop.counter|add:-6|divisibleby:9 %}page-break-after{% endif %}">
         <div class="col-xs-4">
           <div class="row">
             <div class="col-xs-4">
