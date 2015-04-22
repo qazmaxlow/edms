@@ -9,7 +9,7 @@ from rest_framework import generics, mixins
 
 from system.models import System
 from egauge.models import SourceReadingYear, SourceReadingMonth, SourceReadingDay, SourceReadingHour, SourceReadingMin, Source
-from .serializers import MeasureSerializer, TotalSerializer, MeasureTimeSpanSerializer, TopThreeConsumersSerializer
+from .serializers import MeasureSerializer, TotalSerializer, MeasureTimeSpanSerializer, TopThreeConsumersSerializer, LastWeekStatSerializer
 
 
 class DailyMeasureList(generics.ListAPIView):
@@ -178,5 +178,74 @@ class TopThreeConsumersList(generics.ListAPIView):
 
                 json_data.append({'d_name': source['d_name'], 'd_name_tc': source['d_name_tc'], 'value': cost, 'previous_value': cost_before, 'percentage_change': percentage_change})
 
-            print(json_data)
+            return json_data
+
+class LastWeekDailyCostList(generics.ListAPIView):
+
+    serializer_class = LastWeekStatSerializer
+
+
+    def get_queryset(self):
+
+        def daterange(start_date, end_date):
+            for n in range(int ((end_date - start_date).days)):
+                yield start_date + datetime.timedelta(n)
+
+        syscode = self.kwargs["system_code"]
+        sys = System.objects.get(code=syscode)
+
+        query_dt = self.request.QUERY_PARAMS.get("datetime", None)
+
+        if query_dt is not None:
+
+            json_data = []
+
+            today = dateutil.parser.parse(query_dt).astimezone(sys.time_zone)
+
+            for query_type in ["weekday", "overnight"]:
+                last_week_start_dt = today - relativedelta(days=7+today.isoweekday())
+                last_week_end_dt = today - relativedelta(days=1+today.isoweekday())
+
+                two_weeks_ago_start_dt = last_week_start_dt - relativedelta(days=7)
+                two_weeks_ago_end_dt = last_week_end_dt - relativedelta(days=7)
+
+                if query_type == "weekday":
+                    last_week_stats = sys.weekday_cost_by_day(last_week_start_dt, last_week_end_dt)
+                    two_weeks_ago_stats = sys.weekday_cost_by_day(two_weeks_ago_start_dt, two_weeks_ago_end_dt)
+                elif query_type == "overnight":
+                    last_week_stats = sys.overnight_cost_by_day(last_week_start_dt, last_week_end_dt)
+                    two_weeks_ago_stats = sys.overnight_cost_by_day(two_weeks_ago_start_dt, two_weeks_ago_end_dt)
+
+                if last_week_stats["number_of_days"] > 0:
+                    last_week_average = last_week_stats["total"]/float(last_week_stats["number_of_days"])
+                else:
+                    last_week_average = 0
+
+                if two_weeks_ago_stats["number_of_days"] > 0:
+                    two_weeks_ago_average = two_weeks_ago_stats["total"]/float(two_weeks_ago_stats["number_of_days"])
+                else:
+                    two_weeks_ago_average = 0
+
+                if two_weeks_ago_average > 0:
+                    percentage_change = (last_week_average - two_weeks_ago_average)*100/float(two_weeks_ago_average)
+                else:
+                    percentage_change = 0
+
+                dates_with_data = []
+                minimum = 0
+                maximum = 0
+                for s in last_week_stats["data"]:
+                    dates_with_data.append(s["date"])
+                    minimum = min([minimum, s["value"]])
+                    maximum = max([maximum, s["value"]])
+
+                for single_date in daterange(last_week_start_dt, last_week_end_dt + relativedelta(days=1)):
+                    if (single_date.strftime("%Y-%m-%d") not in dates_with_data) \
+                        and ((query_type == "overnight") or (query_type == "weekday" and single_date.weekday() <= 4)):
+
+                        last_week_stats["data"].append({"date":single_date.strftime("%Y-%m-%d"), "weekday":single_date.strftime("%a"), "value":0})
+
+
+                json_data.append({"is_weekday": query_type == "weekday", "average": last_week_average, "minimum": minimum, "maximum": maximum, "percentage_change": percentage_change, "data": last_week_stats["data"]})
+
             return json_data
