@@ -255,6 +255,8 @@ class System(models.Model):
 
         if readings:
             return [({"source_id": r["_id"], "cost": rate*r["total"]}) for r in readings]
+        else:
+            return []
 
 
     def weekday_cost_by_day(self, start_dt, end_dt):
