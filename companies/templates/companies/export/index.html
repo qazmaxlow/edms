@@ -24,10 +24,8 @@
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
 
-<link href="{% static 'assets/kendoui/styles/kendo.dataviz.min.css' %}" rel="stylesheet">
-<link href="{% static 'assets/kendoui/styles/kendo.dataviz.default.min.css' %}" rel="stylesheet"
-
 <script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
+<script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
 
 {% endblock %}
@@ -39,8 +37,48 @@
 {% block page_title %}{% trans "THE DOWNLOAD PAGE" %}{% endblock %}
 {% block page_subtitle %}{% trans "Get all your information here at the" %}{% endblock %}
 
+{% block extra_script %}
+{{block.super}}
+{% endblock %}
+
 {% block page_content %}
 
+<div ng-app="Entrak">
+    <div ng-controller="ReportController">
+        <div class="row">
+            <div class="col-md-4">
+                Simply select
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-6">
+                        <input kendo-et-date-picker="dowload_date_start" style="width: 220px;">
+                        <input kendo-et-date-picker="dowload_date_end" style="width: 220px;">
+                    </div>
+                    <div class="col-md-6">
+                        <button>Minute</button>
+                        <button>Hour</button>
+                        <button>Day</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <button>kWh</button>
+                        <button>Dollar</button>
+                        <button>CO<sub>2</sub></button>
+                    </div>
+                    <div class="col-md-6">
+                        <button>Download</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-
+<script>
+    angular.module("Entrak", [ "kendo.directives" ])
+        .controller("ReportController", function($scope){
+    });
+</script>
 {% endblock %}
