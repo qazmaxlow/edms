@@ -244,7 +244,7 @@ class LastWeekDailyCostList(generics.ListAPIView):
                     minimum = min([minimum, s["value"]])
                     maximum = max([maximum, s["value"]])
 
-                for single_date in daterange(last_week_start_dt, last_week_end_dt + relativedelta(days=1)):
+                for single_date in daterange(last_week_start_dt, last_week_end_dt):
                     if (single_date.strftime("%Y-%m-%d") not in dates_with_data) \
                         and ((query_type == "overnight") or (query_type == "weekday" and single_date.weekday() <= 4)):
 

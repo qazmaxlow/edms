@@ -165,13 +165,13 @@ class System(models.Model):
         else:
             return start_dt.replace(hour=self.night_time_start.hour), end_dt + relativedelta(hours=self.night_time_end.hour)
 
-    def validate_overnight(self, datetime):
+    def validate_overnight(self, dt):
 
         # overnight cost for Monday is defined as Monday night to Tuesday Morning
         # may actually do not include Monday usage if nighttime start is set to 00:00am afterwards
 
         current_tz = pytz.timezone(self.timezone)
-        datetime_in_current_tz = datetime.astimezone(current_tz)
+        datetime_in_current_tz = dt.astimezone(current_tz)
 
         if self.night_time_start.hour <= 12:
             # datetime_in_current_tz BETWEEN the night time start and end hours
@@ -322,22 +322,12 @@ class System(models.Model):
         source_ids = [str(source.id) for source in self.sources]
         system_tz = pytz.timezone(self.timezone)
 
-        if isinstance(start_dt, str):
-            start_dt = dateparse.parse_date(start_dt)
-            start_dt = datetime.datetime.combine(start_dt, datetime.datetime.min.time())
-            start_dt = system_tz.localize(start_dt)
-
-        if isinstance(end_dt, str):
-            end_dt = dateparse.parse_date(end_dt)
-            end_dt = datetime.datetime.combine(end_dt, datetime.datetime.min.time())
-            end_dt = system_tz.localize(end_dt)
-
         unit_infos = json.loads(self.unit_info)
         money_unit_rates = []
         for ur in UnitRate.objects.filter(category_code='money', code=unit_infos['money']).order_by('-effective_date'):
             money_unit_rates.append({"date": ur.effective_date.astimezone(system_tz).strftime("%Y-%m-%d"), "rate": ur.rate})
 
-        start_dt, end_dt = self.get_overnight_dates(start_dt, end_dt)
+        overnight_start_dt, overnight_end_dt = self.get_overnight_dates(start_dt, end_dt)
 
         costs = {}
         current_db_conn = connection.get_db()
@@ -345,7 +335,7 @@ class System(models.Model):
                 { "$match":
                     {
                         "source_id": {"$in": [ObjectId(s) for s in source_ids]},
-                        "datetime": {"$gte": start_dt, "$lt": end_dt}
+                        "datetime": {"$gte": overnight_start_dt, "$lt": overnight_end_dt}
                     }
                 },
                 { "$group":
