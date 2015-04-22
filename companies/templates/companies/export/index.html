@@ -63,9 +63,9 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <button>kWh</button>
-                        <button>Dollar</button>
-                        <button>CO<sub>2</sub></button>
+                        <button ng-click="unit='kwh'" ng-class="{ 'active': unit=='kwh'}">kWh</button>
+                        <button ng-click="unit='money'" ng-class="{ 'active': unit=='money'}">Dollar</button>
+                        <button ng-click="unit='co2'" ng-class="{ 'active': unit=='co2'}">CO<sub>2</sub></button>
                     </div>
                     <div class="col-md-6">
                         <button>Download</button>
@@ -80,6 +80,7 @@
     angular.module("Entrak", [ "kendo.directives" ])
         .controller("ReportController", function($scope){
             $scope.interval = null;
+            $scope.unit = null;
     });
 </script>
 {% endblock %}
