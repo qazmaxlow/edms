@@ -705,17 +705,22 @@
                 margin: 0,
                 background: "#FCFCFC"
             },
-            seriesDefaults: {
-                type: "area",
-                opacity: 0.6
-            },
+            // seriesDefaults: {
+            //     type: "area",
+            //     opacity: 0.6
+            // },
             series: [{
+                type: "area",
+                opacity: 0.6,
                 markers: {visible: true},
                 field: "value",
                 color: "#354960",
                 line: {
                     width: 2
-                },
+                }
+            },{
+                type: "column", //add this to give some space before the first data point and after the last data point
+                field: "dummy"
             }],
             valueAxis: {
                 labels: {
