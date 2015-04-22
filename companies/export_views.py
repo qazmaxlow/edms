@@ -77,18 +77,13 @@ class DownloadView(View):
             money_unit_rates = UnitRate.objects.filter(category_code='money')
         elif unit_category_code == 'co2':
             co2_unit_rates = UnitRate.objects.filter(category_code='co2')
-        elif unit_category_code == 'all':
-            unit_rates = UnitRate.objects.filter(Q(category_code='co2') | Q(category_code='money'))
-            money_unit_rates = [unit_rate for unit_rate in unit_rates if unit_rate.category_code == 'money']
-            co2_unit_rates = [unit_rate for unit_rate in unit_rates if unit_rate.category_code == 'co2']
+
 
         pseudo_buffer = PseudoBuffer()
         csv_writer = csv.writer(pseudo_buffer)
 
 
-        # result_rows = result_generator(source_readings, source_id_map,
-                                         # unit_category_code, money_unit_rates, co2_unit_rates, system)
-
+        # Storing csv rows
         result_rows = [];
 
         source_headers = [s.name for s in sources]
@@ -100,13 +95,14 @@ class DownloadView(View):
         source_vals = {}
         for reading in source_readings:
             source = source_id_map[str(reading.source_id)]
+
             source_name = source.name
             timestamp = calendar.timegm(reading.datetime.utctimetuple())
             if system:
                 # convert time in system's timezone
-                local_tz = pytz.timezone(system.timezone)
+                # local_tz = pytz.timezone(system.timezone)
                 utc_dt = datetime.utcfromtimestamp(timestamp).replace(tzinfo=pytz.utc)
-                local_dt = local_tz.normalize(utc_dt.astimezone(local_tz))
+                local_dt = utc_dt.astimezone(system.time_zone)
                 timestamp = local_dt.strftime("%Y-%m-%d %H:%M")
 
             reading_val = reading.value
@@ -118,34 +114,22 @@ class DownloadView(View):
                 co2_val = calculation.transform_reading(source.co2_unit_rate_code,
                     timestamp, reading.value, co2_unit_rates)
                 reading_val = co2_val
-            # All option would not be used, remove this?
-            elif unit_category_code == 'all':
-                money_val = calculation.transform_reading(source.money_unit_rate_code,
-                    timestamp, reading.value, money_unit_rates)
-                co2_val = calculation.transform_reading(source.co2_unit_rate_code,
-                    timestamp, reading.value, co2_unit_rates)
-                result += [money_val, co2_val]
 
-            if not last_ts:
+            if last_ts is None:
                 last_ts = timestamp
 
             if last_ts != timestamp:
-                row_vals = []
-                for header_fn in source_headers:
-                    row_vals.append(source_vals.get(header_fn, ''))
-                result = [last_ts] + row_vals
-                last_ts = timestamp
-                source_vals = {}
-                # yield result
+                result = [last_ts] + [ source_vals.get(s.name, '') for s in sources]
                 result_rows.append(result)
 
-            # need to log if the key already exist?
+                last_ts = timestamp
+                source_vals = {}
+
             source_vals[source_name] = reading_val
 
-        row_vals = []
-        for header_fn in source_headers:
-            row_vals.append(source_vals.get(header_fn, ''))
-        result = [last_ts] + row_vals
+
+        # Append the last row
+        result = [last_ts] + [ source_vals.get(s.name, '') for s in sources]
         result_rows.append(result)
 
         response = StreamingHttpResponse((csv_writer.writerow(row) for row in result_rows),
