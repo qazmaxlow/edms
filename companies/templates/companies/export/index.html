@@ -74,7 +74,7 @@
                         <p>To {{ date_end }}</p>
                         <p>Interval {{ interval }}</p>
                         <p>Units {{ unit }}</p>
-                        <button>Download</button>
+                        <button ng-disabled="!is_downloadable()">Download</button>
                     </div>
                 </div>
             </div>
@@ -92,6 +92,10 @@
             $scope.date_start = new Date();
             $scope.date_end = new Date();
             $scope.date_end.setDate($scope.date_end.getDate()+1);
+
+            $scope.is_downloadable = function() {
+                return  $scope.interval && $scope.unit && $scope.date_start && $scope.date_end;
+            }
 
     });
 </script>
