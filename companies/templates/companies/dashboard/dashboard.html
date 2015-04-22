@@ -693,8 +693,9 @@
 
             $scope.average = dayAverage;
             $scope.percentage_change = dayPercentageChange;
-            $scope.lastWeekStatChart.dataSource.data(dayUsage.data);
-            $scope.$digest();
+            $scope.$apply(function(){
+                $scope.lastWeekStatChart.dataSource.data(dayUsage.data);
+            });
         });
 
 
