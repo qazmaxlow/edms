@@ -29,4 +29,5 @@ urlpatterns = patterns(
     url(r'^measures/top_three/$', measure_views.TopThreeConsumersList.as_view(), name='companies.measures.top-three'),
     url(r'^measures/last_week_stats/$', measure_views.LastWeekDailyCostList.as_view(), name='companies.measures.last-week-stats'),
     url(r'^export/$', export_views.ExportView.as_view(),),
+    url(r'^export/download/$', export_views.DownloadView.as_view(), name='companies.export.download'),
 )

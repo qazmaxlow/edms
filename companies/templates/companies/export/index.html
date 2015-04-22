@@ -74,7 +74,7 @@
                         <p>To {{ date_end }}</p>
                         <p>Interval {{ interval }}</p>
                         <p>Units {{ unit }}</p>
-                        <button ng-disabled="!is_downloadable()">Download</button>
+                        <button ng-disabled="!is_downloadable()" ng-click="download_csv()">Download</button>
                     </div>
                 </div>
             </div>
@@ -90,11 +90,19 @@
             $scope.unit = null;
 
             $scope.date_start = new Date();
-            $scope.date_end = new Date();
+            $scope.date_start.setHours(0,0,0,0)
+            $scope.date_end = new Date($scope.date_start);
             $scope.date_end.setDate($scope.date_end.getDate()+1);
 
             $scope.is_downloadable = function() {
                 return  $scope.interval && $scope.unit && $scope.date_start && $scope.date_end;
+            }
+
+            $scope.download_csv = function() {
+                var url = "{% url 'companies.export.download' current_system.code %}";
+                url += '?start=' + $scope.date_start.toISOString() + '&end=' + $scope.date_end.toISOString() + '&unit=' + $scope.unit;
+                window.open(url, '_blank', '');
+
             }
 
     });
