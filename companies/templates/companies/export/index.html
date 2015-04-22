@@ -23,11 +23,10 @@
 
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
-
-<link href="{% static 'assets/kendoui/styles/kendo.dataviz.min.css' %}" rel="stylesheet">
-<link href="{% static 'assets/kendoui/styles/kendo.dataviz.default.min.css' %}" rel="stylesheet"
+<link href="{% static 'css/companies/export.css' %}" rel="stylesheet">
 
 <script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
+<script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
 
 {% endblock %}
@@ -39,8 +38,65 @@
 {% block page_title %}{% trans "THE DOWNLOAD PAGE" %}{% endblock %}
 {% block page_subtitle %}{% trans "Get all your information here at the" %}{% endblock %}
 
+{% block extra_script %}
+{{block.super}}
+{% endblock %}
+
 {% block page_content %}
 
+{% verbatim %}
+<div ng-app="Entrak">
+    <div ng-controller="ReportController">
+        <div class="row">
+            <div class="col-md-4">
+                Simply select
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-6">
+                        <input kendo-et-date-picker="dp_date_start" k-ng-model="date_start" style="width: 220px;">
+                        <input kendo-et-date-picker="dp_date_end" k-ng-model="date_end" style="width: 220px;">
+                    </div>
+                    <div class="col-md-6">
+                        <button ng-click="interval='minute'" ng-class="{ 'active': interval=='minute'}">Minute</button>
+                        <button ng-click="interval='hour'" ng-class="{ 'active': interval=='hour'}">Hour</button>
+                        <button ng-click="interval='day'" ng-class="{ 'active': interval=='day'}">Day</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <button ng-click="unit='kwh'" ng-class="{ 'active': unit=='kwh'}">kWh</button>
+                        <button ng-click="unit='money'" ng-class="{ 'active': unit=='money'}">Dollar</button>
+                        <button ng-click="unit='co2'" ng-class="{ 'active': unit=='co2'}">CO<sub>2</sub></button>
+                    </div>
+                    <div class="col-md-6">
+                        <p>From {{ date_start }}</p>
+                        <p>To {{ date_end }}</p>
+                        <p>Interval {{ interval }}</p>
+                        <p>Units {{ unit }}</p>
+                        <button ng-disabled="!is_downloadable()">Download</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endverbatim %}
 
+<script>
+    angular.module("Entrak", [ "kendo.directives" ])
+        .controller("ReportController", function($scope){
+            $scope.interval = null;
+            $scope.unit = null;
 
+            $scope.date_start = new Date();
+            $scope.date_end = new Date();
+            $scope.date_end.setDate($scope.date_end.getDate()+1);
+
+            $scope.is_downloadable = function() {
+                return  $scope.interval && $scope.unit && $scope.date_start && $scope.date_end;
+            }
+
+    });
+</script>
 {% endblock %}
