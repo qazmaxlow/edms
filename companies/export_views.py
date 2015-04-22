@@ -11,6 +11,7 @@ from django.utils import dateparse
 from egauge.manager import SourceManager
 from egauge.models import Source, SourceReadingYear, SourceReadingMonth, SourceReadingDay, SourceReadingHour, SourceReadingMin
 from system.models import System
+from unit.models import UnitRate
 from utils import calculation
 from utils.auth import permission_required
 
