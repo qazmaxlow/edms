@@ -56,9 +56,9 @@
                         <input kendo-et-date-picker="dowload_date_end" style="width: 220px;">
                     </div>
                     <div class="col-md-6">
-                        <button>Minute</button>
-                        <button>Hour</button>
-                        <button>Day</button>
+                        <button ng-click="interval='minute'" ng-class="{ 'active': interval=='minute'}">Minute</button>
+                        <button ng-click="interval='hour'" ng-class="{ 'active': interval=='hour'}">Hour</button>
+                        <button ng-click="interval='day'" ng-class="{ 'active': interval=='day'}">Day</button>
                     </div>
                 </div>
                 <div class="row">
@@ -79,6 +79,7 @@
 <script>
     angular.module("Entrak", [ "kendo.directives" ])
         .controller("ReportController", function($scope){
+            $scope.interval = null;
     });
 </script>
 {% endblock %}
