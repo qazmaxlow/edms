@@ -616,6 +616,30 @@
         var dayAverage, nightAverage = 0
         var dayPercentageChange, nightPercentageChange = 0
 
+        $scope.average = 0;
+        $scope.percentage_change = 0;
+        $scope.isWeekday = true;
+
+        function updateChart() {
+
+            if ($scope.isWeekday) {
+                $scope.lastWeekStatChart.setOptions({valueAxis: {max: dayMaxStep, majorUnit: dayStep}});
+                $scope.lastWeekStatChart.dataSource.data(dayUsage.data);
+                $scope.average = dayAverage;
+                $scope.percentage_change = dayPercentageChange;
+            } else {
+                $scope.lastWeekStatChart.setOptions({valueAxis: {max: nightMaxStep, majorUnit: nightStep}});
+                $scope.lastWeekStatChart.dataSource.data(nightUsage.data);
+                $scope.average = nightAverage;
+                $scope.percentage_change = nightPercentageChange;
+            }
+
+            $scope.lastWeekStatChart.refresh();
+            if(!$scope.$$phase) {
+                $scope.$digest();
+            }
+        }
+
         ds.read().done(function() {
 
             dayUsage = ds.data()[0];
@@ -637,10 +661,7 @@
             nightAverage = nightUsage.average;
             nightPercentageChange = nightUsage.percentage_change;
 
-            $scope.average = dayAverage;
-            $scope.percentage_change = dayPercentageChange;
-            $scope.lastWeekStatChart.dataSource.data(dayUsage.data);
-            $scope.$digest();
+            updateChart();
         });
 
 
@@ -715,27 +736,9 @@
         };
 
 
-        $scope.isWeekday = true;
-
         $scope.toggle = function() {
-
             $scope.isWeekday = !$scope.isWeekday;
-
-            if ($scope.isWeekday) {
-                $scope.lastWeekStatChart.setOptions({valueAxis: {max: dayMaxStep, majorUnit: dayStep}});
-                $scope.lastWeekStatChart.dataSource.data(dayUsage.data);
-                $scope.average = dayAverage;
-                $scope.percentage_change = dayPercentageChange;
-
-            } else {
-                $scope.lastWeekStatChart.setOptions({valueAxis: {max: nightMaxStep, majorUnit: nightStep}});
-                $scope.lastWeekStatChart.dataSource.data(nightUsage.data);
-                $scope.average = nightAverage;
-                $scope.percentage_change = nightPercentageChange;
-
-            }
-
-            $scope.lastWeekStatChart.refresh();
+            updateChart();
         }
 
         $scope.moreLessText = function(percentage_change){

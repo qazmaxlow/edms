@@ -161,9 +161,9 @@ class System(models.Model):
         end_dt = end_dt.astimezone(current_tz)
 
         if self.night_time_start.hour <= 12:
-            return start_dt.replace(hour=self.night_time_start.hour) + relativedelta(days=1), end_dt + relativedelta(days=1,hours=self.night_time_end.hour)
+            return start_dt.replace(hour=self.night_time_start.hour) + relativedelta(days=1), end_dt + relativedelta(hours=self.night_time_end.hour)
         else:
-            return start_dt.replace(hour=self.night_time_start.hour), end_dt + relativedelta(days=1,hours=self.night_time_end.hour)
+            return start_dt.replace(hour=self.night_time_start.hour), end_dt + relativedelta(hours=self.night_time_end.hour)
 
     def validate_overnight(self, datetime):
 

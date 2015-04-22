@@ -180,7 +180,6 @@ class TopThreeConsumersList(generics.ListAPIView):
                 json_data.append({'d_name': s['d_name'], 'd_name_tc': s['d_name_tc'], 'value': cost_now, 'previous_value': cost_before, 'percentage_change': percentage_change})
 
             if json_data:
-                print(json_data)
                 json_data.sort(key=lambda r: ((-1*r['value'] if r['value'] else 0), (r['d_name'])))
 
             return json_data[0:3]
@@ -205,11 +204,11 @@ class LastWeekDailyCostList(generics.ListAPIView):
 
             json_data = []
 
-            today = dateutil.parser.parse(query_dt).astimezone(sys.time_zone)
+            today = dateutil.parser.parse(query_dt).astimezone(sys.time_zone).replace(hour=0, minute=0, second=0, microsecond=0)
 
             for query_type in ["weekday", "overnight"]:
                 last_week_start_dt = today - relativedelta(days=7+today.isoweekday())
-                last_week_end_dt = today - relativedelta(days=1+today.isoweekday())
+                last_week_end_dt = today - relativedelta(days=today.isoweekday())
 
                 two_weeks_ago_start_dt = last_week_start_dt - relativedelta(days=7)
                 two_weeks_ago_end_dt = last_week_end_dt - relativedelta(days=7)
@@ -251,7 +250,7 @@ class LastWeekDailyCostList(generics.ListAPIView):
 
                         last_week_stats["data"].append({"date":single_date.strftime("%Y-%m-%d"), "weekday":single_date.strftime("%a"), "value":0})
 
-
+                last_week_stats["data"].sort(key=lambda r: r['date'])
                 json_data.append({"is_weekday": query_type == "weekday", "average": last_week_average, "minimum": minimum, "maximum": maximum, "percentage_change": percentage_change, "data": last_week_stats["data"]})
 
             return json_data
