@@ -98,7 +98,9 @@
 
     ngapp.filter('entrakNumber', function () {
         return function(val) {
-            if (val < 1) {
+            if (isNaN(val)){
+                return "";
+            } else if (val < 1) {
                 return +val.toFixed(2);
             } else if (val < 10 ) {
                 return +val.toFixed(1);
