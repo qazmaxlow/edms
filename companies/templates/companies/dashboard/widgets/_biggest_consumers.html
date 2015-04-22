@@ -23,9 +23,13 @@
             <tr ng-repeat="c in consumers.data()"><td>
                 <div class="bc-right-box pull-right">
                     <div class="name-row"></div>
-                    <div class="bar-row">
+                    <div class="bar-row" ng-if="c.percentage_change != null">
                         <span class="bc-change-percent" ng-class="{'red-text' : c.percentage_change > 0, 'green-text' : c.percentage_change <= 0}" ng-bind="c.percentage_change | abs | entrakNumber"></span>
                         <span class="bc-percent-unit" ng-class="{'red-text' : c.percentage_change > 0, 'green-text' : c.percentage_change <= 0}">%</span>
+                    </div>
+                    <div class="bar-row" ng-if="c.percentage_change == null">
+                        <span class="bc-change-percent bar-value-na"></span>
+                        <span class="bc-percent-unit bar-value-na">0%</span>
                     </div>
                 </div>
                 <div class="bc-left-box auto-width">
@@ -35,8 +39,11 @@
                     <div class="bar-row">
                         <img ng-src="/static/images/dashboard/consumer-{{$index+1}}.png"></img>
                         <div class="bar-container">
-                            <div class="bar" style="width: {{100 * c.value / consumers.data()[0].value}}%">
+                            <div class="bar" ng-if="c.value != null" style="width: {{100 * c.value / consumers.data()[0].value}}%">
                                 <span class="bar-value" ng-bind="c.value | entrakNumber"></span>
+                            </div>
+                            <div class="bar" ng-if="c.value == null" style="width: 0px">
+                                <span class="bar-value bar-value-na">N/A</span>
                             </div>
                         </div>
                     </div>
