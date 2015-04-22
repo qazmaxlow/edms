@@ -44,6 +44,7 @@ class PseudoBuffer(object):
 class DownloadView(View):
     def get(self, request, *args, **kwargs):
         unit_category_code = request.GET.get('unit')
+        interval = request.GET.get('interval')
 
         start_dt = dateparse.parse_datetime(request.GET.get('start'))
         end_dt = dateparse.parse_datetime(request.GET.get('end'))
@@ -65,7 +66,14 @@ class DownloadView(View):
             source.money_unit_rate_code = unit_info['money']
             source.co2_unit_rate_code = unit_info['co2']
 
-        source_readings = SourceReadingHour.objects(
+        reading_map = {
+            'minute': SourceReadingMin,
+            'hour': SourceReadingHour,
+            'day': SourceReadingDay
+        }
+        reading_cls = reading_map[interval]
+
+        source_readings = reading_cls.objects(
             source_id__in=source_ids,
             datetime__gte=start_dt,
             datetime__lt=end_dt
@@ -88,7 +96,7 @@ class DownloadView(View):
 
         source_headers = [s.name for s in sources]
         csv_header = ["Date Time"] + [s.d_name for s in sources]
-        # yield csv_header
+
         result_rows.append(csv_header)
 
         last_ts = None
@@ -100,7 +108,6 @@ class DownloadView(View):
             timestamp = calendar.timegm(reading.datetime.utctimetuple())
             if system:
                 # convert time in system's timezone
-                # local_tz = pytz.timezone(system.timezone)
                 utc_dt = datetime.utcfromtimestamp(timestamp).replace(tzinfo=pytz.utc)
                 local_dt = utc_dt.astimezone(system.time_zone)
                 timestamp = local_dt.strftime("%Y-%m-%d %H:%M")
