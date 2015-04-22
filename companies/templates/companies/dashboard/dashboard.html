@@ -39,6 +39,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/dashboard/widgets.css' %}">
 <style>
     .edgeLoad-EDGE-18660633 { visibility:hidden; }
+    .edgeLoad-EDGE-9220080 { visibility:hidden; }
 </style>
 
 {% endblock %}
@@ -97,7 +98,9 @@
 
     ngapp.filter('entrakNumber', function () {
         return function(val) {
-            if (val < 1) {
+            if (isNaN(val)){
+                return "";
+            } else if (val < 1) {
                 return +val.toFixed(2);
             } else if (val < 10 ) {
                 return +val.toFixed(1);
@@ -112,15 +115,62 @@
         var last_week_measures = [];
         for (var i = 0; i < 24; i++) last_week_measures[i] = null;
 
-        AdobeEdge.loadComposition('co2', 'EDGE-18660633', {
-            scaleToFit: "true",
+        AdobeEdge.loadComposition('money', 'EDGE-9220080', {
+            scaleToFit: "none",
             centerStage: "none",
             minW: "0",
             maxW: "undefined",
-            width: "328x",
+            width: "328px",
+            height: "250px",
+            htmlRoot: "/static/edges/dashboard/widgets/money/"
+        }, {"dom":{}}, {"dom":{}});
+        AdobeEdge.loadComposition('co2', 'EDGE-18660633', {
+            scaleToFit: "none",
+            centerStage: "none",
+            minW: "0",
+            maxW: "undefined",
+            width: "326px",
             height: "250px",
             htmlRoot: "/static/edges/dashboard/widgets/co2/"
-        }, {"dom":{}}, {"dom":{}});
+        }, {"dom":{}}, {"style":{"${symbolSelector}":{"isStage":"true","rect":["undefined","undefined","550px","400px"],"fill":["rgba(255,255,255,1)"]}},"dom":{}});
+
+        $("#stageMoney,#stageCO2").css({ // Set the transform origin so we always scale to the top left corner of the stage
+            "transform-origin":"0 0",
+            "-ms-transform-origin":"0 0",
+            "-webkit-transform-origin":"0 0",
+            "-moz-transform-origin":"0 0",
+            "-o-transform-origin":"0 0"
+        });
+
+        var scaleStage = function (id, pid) {
+            var stage = $("#"+id); // Set a reusable variable to reference the stage
+            var parent = pid ? $("#"+pid) : $("#"+id).parent(); // Set a reusable variable to reference the parent container of the stage
+
+            var parentWidth = parent.width(); // Get the parent of the stage width
+            var parentHeight = parent.height(); // Get the browser window height
+
+            var stageWidth = stage.width(); // Get the stage width
+            var stageHeight = stage.height(); // Get the stage height
+
+            var desiredWidth = Math.round(parentWidth * 1); // Set the new width of the stage as it scales
+            var desiredHeight = Math.round(parentHeight * 1); // Set the new height of the stage as it scales
+
+            var rescaleWidth = (desiredWidth / stageWidth); // Set a variable to calculate the new width of the stage as it scales
+            var rescaleHeight = stageHeight > 0 ? (desiredHeight / stageHeight) : rescaleWidth; // Set a variable to calculate the new height of the stage as it scales
+
+            // Rescale the stage!
+            stage.css('transform', 'scale(' + rescaleWidth + ', ' + rescaleHeight + ')');
+            stage.css(  '-o-transform', 'scale(' + rescaleWidth + ', ' + rescaleHeight + ')');
+            stage.css('-ms-transform', 'scale(' + rescaleWidth + ', ' + rescaleHeight + ')');
+            stage.css('-webkit-transform', 'scale(' + rescaleWidth + ', ' + rescaleHeight + ')');
+            stage.css('-moz-transform', 'scale(' + rescaleWidth + ', ' + rescaleHeight + ')');
+            stage.css('-o-transform', 'scale(' + rescaleWidth + ', ' + rescaleHeight + ')');
+        }
+
+        $(window).on('resize', function(){
+            scaleStage("stageCO2", "animationContainerCO2");
+            scaleStage("stageMoney", "animationContainerMoney");
+        });
 
         $scope.refreshHeader = function(){
             var d = new Date();
@@ -311,6 +361,10 @@
                 $scope.updateTodayMeasure();
             } else {
                 $scope.updateRates();
+                setTimeout(function(){  //without timeout, the parent dimension is incorrect
+                    scaleStage("stageCO2", "animationContainerCO2");
+                    scaleStage("stageMoney", "animationContainerMoney");
+                }, 150);
             }
             $scope.refreshHeader();
         }
@@ -661,6 +715,7 @@
             nightAverage = nightUsage.average;
             nightPercentageChange = nightUsage.percentage_change;
 
+            $scope.lastWeekStatChart.dataSource.data(dayUsage.data)
             updateChart();
         });
 
@@ -674,17 +729,22 @@
                 margin: 0,
                 background: "#FCFCFC"
             },
-            seriesDefaults: {
-                type: "area",
-                opacity: 0.6
-            },
+            // seriesDefaults: {
+            //     type: "area",
+            //     opacity: 0.6
+            // },
             series: [{
+                type: "area",
+                opacity: 0.6,
                 markers: {visible: true},
                 field: "value",
                 color: "#354960",
                 line: {
                     width: 2
-                },
+                }
+            },{
+                type: "column", //add this to give some space before the first data point and after the last data point
+                field: "dummy"
             }],
             valueAxis: {
                 labels: {

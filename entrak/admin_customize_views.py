@@ -71,7 +71,7 @@ def edit_sources_view(request, system_code=None):
 
         for system in systems:
             match_sources = [source for source in sources if source.system_code == system.code]
-            system.sources = match_sources
+            system.xsources = match_sources # oops! hack fix... should use system.sources property
 
         m = {}
         m['systems'] = systems
