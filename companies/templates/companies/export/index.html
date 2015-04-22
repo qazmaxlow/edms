@@ -52,8 +52,8 @@
             <div class="col-md-8">
                 <div class="row">
                     <div class="col-md-6">
-                        <input kendo-et-date-picker="dowload_date_start" style="width: 220px;">
-                        <input kendo-et-date-picker="dowload_date_end" style="width: 220px;">
+                        <input kendo-et-date-picker="dowload_date_start" k-value="default_start_date" style="width: 220px;">
+                        <input kendo-et-date-picker="dowload_date_end" k-value="default_end_date" style="width: 220px;">
                     </div>
                     <div class="col-md-6">
                         <button ng-click="interval='minute'" ng-class="{ 'active': interval=='minute'}">Minute</button>
@@ -81,6 +81,11 @@
         .controller("ReportController", function($scope){
             $scope.interval = null;
             $scope.unit = null;
+
+            $scope.default_start_date = new Date();
+            $scope.default_end_date = new Date();
+            $scope.default_end_date.setDate($scope.default_end_date.getDate()+1);
+
     });
 </script>
 {% endblock %}
