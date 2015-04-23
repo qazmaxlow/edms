@@ -101,11 +101,11 @@
             if (isNaN(val)){
                 return "";
             } else if (val < 1) {
-                return +val.toFixed(2);
+                return kendo.toString(val, "#.##");
             } else if (val < 10 ) {
-                return +val.toFixed(1);
+                return kendo.toString(val, "#.#");
             } else {
-                return Math.round(val);
+                return kendo.toString(val, "##,#");
             }
         }
     });
