@@ -424,6 +424,17 @@
 
 
 /*real time widget-------*/
+.today-mark:before, .last-week-mark:before {
+    content: "\2022";
+    padding-right: 5px;
+    color: #a5d26f;
+}
+
+.today-mark {
+  color: #a5d26f;
+  font-weight: 600;
+}
+
 .widget-message2 .message-text {
 	text-align: left;
 	height: 50px;
