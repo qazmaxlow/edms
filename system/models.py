@@ -201,7 +201,7 @@ class System(models.Model):
         source_ids = [s.id for s in self.sources]
 
         reading_map = {
-            'day': SourceReadingMin,
+            'day': SourceReadingHour,
             'hour': SourceReadingHour,
             'week': SourceReadingDay,
             'month': SourceReadingMonth,
