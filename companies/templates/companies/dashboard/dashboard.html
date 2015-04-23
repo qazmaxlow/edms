@@ -101,11 +101,11 @@
             if (isNaN(val)){
                 return "";
             } else if (val < 1) {
-                return +val.toFixed(2);
+                return kendo.toString(val, "#.##");
             } else if (val < 10 ) {
-                return +val.toFixed(1);
+                return kendo.toString(val, "#.#");
             } else {
-                return Math.round(val);
+                return kendo.toString(val, "##,#");
             }
         }
     });
@@ -134,6 +134,7 @@
             htmlRoot: "/static/edges/dashboard/widgets/co2/"
         }, {"dom":{}}, {"style":{"${symbolSelector}":{"isStage":"true","rect":["undefined","undefined","550px","400px"],"fill":["rgba(255,255,255,1)"]}},"dom":{}});
 
+        // Reference from https://www.youtube.com/watch?feature=player_embedded&v=hrLt0Y9QAY8
         $("#stageMoney,#stageCO2").css({ // Set the transform origin so we always scale to the top left corner of the stage
             "transform-origin":"0 0",
             "-ms-transform-origin":"0 0",
@@ -298,6 +299,15 @@
                         color: "#4B4B4B"
                     },
                 min: 0
+            },
+            tooltip: {
+                visible: true,
+                template: "# if (value < 1) { # #=kendo.toString(value, 'n2')# # } else if (value < 10) { # #=kendo.toString(value, 'n1') # # } else { # #=kendo.toString(value, 'n0') # # } #",
+                background: "#EFEFEF",
+                border: {
+                    color: "#333",
+                    width: 2
+                },
             }
 
         }
@@ -572,6 +582,9 @@
                 border: {
                     width: 0
                 },
+                highlight: {
+                    visible: false
+                },
                 labels: {
                     visible: true,
                     font: "bold 1.357em ITCAvantGardeStd-Bk",
@@ -597,6 +610,9 @@
                 },
                 border: {
                     width: 0
+                },
+                highlight: {
+                    visible: false
                 },
                 labels: {
                     visible: true,
