@@ -69,9 +69,11 @@ $(function() {
             <img src="{% static 'images/login/password-icon.png' %}">
             <input type="password" name="password" placeholder='{% trans "Password" %}'>
         </div>
-        <div>
-            <input type="checkbox" value="remember_me" name="remember_me" class="remember-me">
-            Remember Me
+        <div class="remember-me">
+            <label for="remember_me" class="remember-me">
+                <input type="checkbox" value="remember_me" name="remember_me" class="remember-me">
+                Remember Me
+            </label>
         </div>
         <input type="submit" value='{% trans "Sign In" %}'>
     </form>

@@ -154,7 +154,25 @@ input[type="submit"]{
     bottom: 0px;
 }
 
+label.remember-me {
+    display: block;
+    padding-left: 15px;
+    text-indent: -15px;
+    top: -5px;
+}
+
 input.remember-me {
-    width: 50px;
-    height: 14px
+    width: 13px;
+    height: 15px;
+    padding: 0;
+    margin:0;
+    vertical-align: bottom;
+    position: relative;
+    top: -1px;
+    *overflow: hidden;
+}
+
+div.remember-me {
+    height: 20px;
+    padding-top: 10px;
 }
