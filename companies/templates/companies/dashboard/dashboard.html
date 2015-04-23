@@ -299,6 +299,15 @@
                         color: "#4B4B4B"
                     },
                 min: 0
+            },
+            tooltip: {
+                visible: true,
+                template: "# if (value < 1) { # #=kendo.toString(value, 'n2')# # } else if (value < 10) { # #=kendo.toString(value, 'n1') # # } else { # #=kendo.toString(value, 'n0') # # } #",
+                background: "#EFEFEF",
+                border: {
+                    color: "#333",
+                    width: 2
+                },
             }
 
         }
