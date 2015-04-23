@@ -11,7 +11,7 @@
 	margin-left: 0;
 }
 
-.export-base .col-md-6, .export-base .col-md-4, .export-base .col-md-8 {
+.export-base .col-md-6, .export-base .col-md-5, .export-base .col-md-4, .export-base .col-md-3, .export-base .col-md-8 {
 	padding: 0;
 }
 
@@ -103,7 +103,7 @@
 	text-align: center;
 }
 
-.export-base .steps .content .table-row:nth-child(2) {
+.export-base .steps .content .table-row:not(:first-child):not(:last-child) {
 	height: 5%;
 }
 
@@ -143,10 +143,6 @@
 	margin-top: 20px;
 }
 
-.export-base .k-datepicker {
-	border-radius: 0;
-}
-
 .export-base button {
 	height: 33px;
 	width: 100px;
@@ -171,6 +167,34 @@
 	border: none;
 	color: #FFF;
 	background-color: #74c62b;
+}
+
+.export-base button.normal {
+	margin-top: 17px;
+	box-shadow: 0px 2px 0px #acacac;
+	border-radius: 4px;
+	background-color: #74c62b;
+	border: none;
+	color: #FFFFFF;
+}
+
+.export-base .field-name p {
+	margin: 0;
+	text-align: right;
+	color: #354960;
+	font-size: 0.929em;
+	font-weight: bold;
+	line-height: 175%;
+}
+
+.export-base .field-info p {
+	margin: 0;
+	padding-left: 15px;
+	text-align: left;
+	color: #354960;
+	font-size: 0.929em;
+	font-weight: lighter;
+	line-height: 175%;
 }
 
 /* datepicker-----*/

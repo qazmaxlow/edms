@@ -103,14 +103,27 @@
                         <div class="content">
                             <div class="table-row"></div>
                             <div class="table-row">
-                                
+                                <div class="col-md-3 field-name">
+                                    <p>From:</p>
+                                    <p>To:</p>
+                                    <p>Interval:</p>
+                                    <p>Units:</p>
+                                </div>
+                                <div class="col-md-5 field-info">
+                                    <p>{{ date_start | date:'d MMM yyyy, EEE'}}</p>
+                                    <p>{{ date_end | date:'d MMM yyyy, EEE'}}</p>
+                                    <p>{{ interval }}</p>
+                                    <p>{{ unit }}</p>
+                                </div>
+                                <div class="col-md-4 field-info">
+                                    <p>{{ date_start | date:'hh:mm a' | lowercase}}</p>
+                                    <p>{{ date_end | date:'hh:mm a' | lowercase}}</p>
+                                </div>
+                            </div>
+                            <div class="table-row">
+                                <button ng-disabled="!is_downloadable()" class="normal" ng-click="download_csv()">Download</button>
                             </div>
                             <div class="table-row"></div>
-                            <p>From {{ date_start }}</p>
-                            <p>To {{ date_end }}</p>
-                            <p>Interval {{ interval }}</p>
-                            <p>Units {{ unit }}</p>
-                            <button ng-disabled="!is_downloadable()" ng-click="download_csv()">Download</button>
                         </div>
                     </div>
                 </div>
