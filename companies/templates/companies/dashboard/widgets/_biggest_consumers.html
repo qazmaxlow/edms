@@ -1,3 +1,4 @@
+{% verbatim %}
 <div class="widget-container" ng-controller="WidgetBiggestConsumers">
 <div class="widget-header row">
     <div class="widget-title col-sm-7">Biggest Consumers</div>
@@ -11,14 +12,13 @@
 <div class="widget-content row">
     <div class="widget-message">
         <div class="bc-right-box pull-right first-row">
-            <h3>% Change from last month</h3>
+            <h3>% {{isWeek ? "Change from last week" : "Change from last month"}}</h3>
         </div>
         <div class="bc-left-box auto-width first-row">
             <h3 class="description-1">Energy cost so far (HKD)</h3>
         </div>
     </div>
     <div class="bc-graph">
-        {% verbatim %}
         <table class="horizontal-bars">
             <tr ng-repeat="c in consumers.data()"><td>
                 <div class="bc-right-box pull-right">
@@ -50,7 +50,7 @@
                 </div>
             </td></tr>
         </table>
-        {% endverbatim %}
     </div>
 </div>
 </div>
+{% endverbatim %}
