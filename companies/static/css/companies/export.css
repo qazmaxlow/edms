@@ -94,7 +94,7 @@
 
 .export-base .steps .content {
 	width: 100%;
-	height: calc(100% - 36px);
+	height: calc(100% - 35px);
 	display: table;
 }
 
@@ -171,11 +171,15 @@
 
 .export-base button.normal {
 	margin-top: 17px;
-	box-shadow: 0px 2px 0px #acacac;
+	box-shadow: 0px 2px 0px #959595;
 	border-radius: 4px;
-	background-color: #74c62b;
+	background-color: #9bceda;
 	border: none;
 	color: #FFFFFF;
+}
+
+.export-base button.normal:hover {
+	background-color: #74c62b;
 }
 
 .export-base .field-name p {

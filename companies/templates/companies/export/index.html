@@ -136,8 +136,8 @@
 <script>
     angular.module("Entrak", [ "kendo.directives" ])
         .controller("ReportController", function($scope){
-            $scope.interval = null;
-            $scope.unit = null;
+            $scope.interval = "minute";
+            $scope.unit = "kwh";
 
             $scope.date_start = new Date();
             $scope.date_start.setHours(0,0,0,0)
