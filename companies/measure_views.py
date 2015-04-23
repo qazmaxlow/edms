@@ -163,7 +163,7 @@ class TopThreeConsumersList(generics.ListAPIView):
             if childs:
 
                 for child_sys in childs:
-                    c_cost = child_sys.get_total_cost(date_start, date_end, 'hour')
+                    c_cost = child_sys.get_total_cost(date_start, date_end, 'day')
                     p_cost = child_sys.get_total_cost(previous_date_start, previous_date_end, 'hour')
 
                     if c_cost:
