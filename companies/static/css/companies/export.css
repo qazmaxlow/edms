@@ -1,3 +1,247 @@
-button.active {
-    background: green;
+.export-base {
+	font-family: 'ITCAvantGardeStd-Bk', sans-serif;
+	font-size: 14px;
+	height: 443px;
+	
+	margin: 30px 40px;
 }
+
+.export-base .row {
+	margin-right: 0;
+	margin-left: 0;
+}
+
+.export-base .col-md-6, .export-base .col-md-5, .export-base .col-md-4, .export-base .col-md-3, .export-base .col-md-8 {
+	padding: 0;
+}
+
+
+.export-base .description {
+	height: 100%;
+	text-align: center;
+	border-radius: 8px 0 0 8px;
+	border-right: 1px solid #e8dfcc;
+	background-color: #faf0da;
+	-webkit-box-shadow: -2px 2px 3px rgba(0,0,0,0.1);
+    box-shadow: -2px 2px 3px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.export-base .description .yellow-bottom {
+	position: absolute;
+	background-color: #fed372;
+	bottom: 0;
+	height: 25px;
+	width: 100%;
+	border-radius: 0 0 0 8px;
+}
+
+.export-base .description img {
+	position: absolute;
+	bottom: 0;
+	width: 80%;
+  	left: 10%;
+}
+
+.export-base .steps {
+	height: 100%;
+	border-radius: 0 0 8px 0;
+	background-color: #fafafa;
+	-webkit-box-shadow: -2px 2px 3px rgba(0,0,0,0.1);
+	box-shadow: -2px 2px 3px rgba(0,0,0,0.1);
+}
+
+.export-base .select-text {
+	margin: 44px auto;
+	height: 106px;
+	width: 255px;
+	text-align: left;
+	padding: 10px 15px;
+	font-size: 1.071em;
+	color: #354960;
+	font-weight: bold;
+	background-color: #fafafa;
+	border: 1px solid #f2dbb7;
+}
+
+.export-base .header {
+	font-size: 0.929em;
+	font-weight: bold;
+	color: #354960;
+	background-color: #faf0da;
+	height: 35px;
+	line-height: 35px;
+	text-align: center;
+	border-bottom: 1px solid #f2dbb7;
+}
+
+.export-base .steps > .row {
+	height: 50%;
+}
+
+.export-base .steps > .row > div {
+	position: relative;
+	height: 100%;
+}
+
+.export-base .steps .left .header {
+	border-right: 1px solid #f2dbb7;
+}
+
+.export-base .steps .left .content {
+	border-right: 1px solid #e5e5e5;
+}
+
+.export-base .steps .content {
+	width: 100%;
+	height: calc(100% - 36px);
+	display: table;
+}
+
+.export-base .steps .content .table-row {
+	display: table-row;
+	text-align: center;
+}
+
+.export-base .steps .content .table-row:not(:first-child):not(:last-child) {
+	height: 5%;
+}
+
+.export-base .steps .content.bg-calendar {
+	background: url("/static/images/export/calendar.png") no-repeat 100% 100%;
+}
+
+.export-base .steps .content.bg-time {
+	background: url("/static/images/export/hourglass.png") no-repeat 100% 100%;
+}
+
+.export-base .steps .content.bg-unit {
+	background: url("/static/images/export/dollar.png") no-repeat 100% 100%;
+}
+
+.export-base .step-label {
+	font-size: 0.929em;
+	font-weight: bold;
+	color: #f7db9c;
+	background-color: #fbf4e5;
+	height: 34px;
+	line-height: 34px;
+	text-align: center;
+	position: absolute;
+	padding: 0 15px;
+}
+
+.export-base .date-text {
+	font-size: 1.071em;
+	font-weight: lighter;
+	color: #354960;
+	margin-bottom: 5px;
+	margin-top: 0;
+}
+
+.export-base .date-text.top-margin {
+	margin-top: 20px;
+}
+
+.export-base button {
+	height: 33px;
+	width: 100px;
+	text-align: center;
+	display: inline-block;
+}
+
+.export-base button:focus {
+	outline:0;
+}
+
+.export-base button.rect-radio {
+	font-size: 1.071em;
+	color: #354960;
+	font-weight: bold;
+	border: 1px solid #354960;
+	background-color: #FFFFFF;
+	margin: 7px;
+}
+
+.export-base button.rect-radio.active, .export-base button.rect-radio:hover {
+	border: none;
+	color: #FFF;
+	background-color: #74c62b;
+}
+
+.export-base button.normal {
+	margin-top: 17px;
+	box-shadow: 0px 2px 0px #acacac;
+	border-radius: 4px;
+	background-color: #74c62b;
+	border: none;
+	color: #FFFFFF;
+}
+
+.export-base .field-name p {
+	margin: 0;
+	text-align: right;
+	color: #354960;
+	font-size: 0.929em;
+	font-weight: bold;
+	line-height: 175%;
+}
+
+.export-base .field-info p {
+	margin: 0;
+	padding-left: 15px;
+	text-align: left;
+	color: #354960;
+	font-size: 0.929em;
+	font-weight: lighter;
+	line-height: 175%;
+}
+
+/* datepicker-----*/
+.export-base .k-widget.k-datepicker.k-header {
+	border-radius: 0;
+	border: 1px solid #354960;
+	margin: 0;
+	padding: 0;
+	height: 33px;
+}
+
+.export-base .k-widget.k-datepicker.k-header .k-picker-wrap {
+	border: none;
+	height: 100%;
+	background-color: #FFFFFF;
+	border-radius: 0;
+}
+
+.export-base .k-widget.k-datepicker.k-header input {
+	text-align: center;
+	font-size: 1.071em;
+	color: #354960;
+	font-weight: bold;
+	box-sizing: border-box;
+	height: 100%;
+}
+
+.export-base .k-widget.k-datepicker.k-header .k-select {
+	padding-top: 2px;
+}
+
+.export-base .k-widget.k-datepicker.k-header .k-select .k-icon.k-i-calendar{
+	/*todo*/
+}
+/* -----datepicker*/
+
+/* datepicker popup-----*/
+.k-animation-container .k-widget.k-calendar .k-header {
+	background-color: transparent !important;
+}
+
+.k-animation-container .k-widget.k-calendar {
+	margin: 0 !important;
+	padding: 4px !important;
+}
+
+.k-animation-container .k-widget.k-calendar table td.k-state-selected {
+  box-shadow: none !important;
+}
+/* -----datepicker popup*/
