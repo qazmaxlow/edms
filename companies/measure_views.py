@@ -164,7 +164,7 @@ class TopThreeConsumersList(generics.ListAPIView):
 
                 for child_sys in childs:
                     c_cost = SourceReadingDay.total_used([s.id for s in child_sys.sources], date_start, date_end)
-                    p_cost = SourceReadingHour.total_used([s.id for s in child_sys.sources], date_start, date_end)
+                    p_cost = SourceReadingHour.total_used([s.id for s in child_sys.sources], previous_date_start, previous_date_end)
 
                     if c_cost:
                         cost_now = c_cost[0]['total']
