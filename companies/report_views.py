@@ -131,7 +131,7 @@ def get_overnight_avg_cost(system, source_ids, start_dt, end_dt):
     # money_unit_code = unit_infos['money']
     # money_unit_rate = UnitRate.objects.filter(category_code='money', code=unit_infos['money']).first()
     money_unit_rates = UnitRate.objects.filter(category_code='money', code=unit_infos['money']).order_by('effective_date')
-    system_tz = pytz.timezone(system.timezone)
+    system_tz = system.time_zone
 
     for ix, mr in enumerate(money_unit_rates):
         c_rate_date = mr.effective_date.astimezone(system_tz)
@@ -163,15 +163,11 @@ def get_overnight_avg_cost(system, source_ids, start_dt, end_dt):
     for date_range in date_ranges:
         sd, ed, r = date_range
         mqs = []
-        num_day = (ed - sd).days
+        num_day = (ed.date() - sd.date()).days + 1
         rdays = [sd+datetime.timedelta(days=n) for n in range(num_day)]
         for rday in rdays:
-            on_sd = datetime.datetime.combine(rday, system.night_time_start)
-            on_sd = on_sd.replace(tzinfo=system_tz)
-
-            on_ed = datetime.datetime.combine(
-                rday + datetime.timedelta(days=1), system.night_time_end)
-            on_ed = on_ed.replace(tzinfo=system_tz)
+            on_sd = rday.astimezone(system_tz).replace(hour=system.night_time_start.hour)
+            on_ed = rday.astimezone(system_tz).replace(hour=system.night_time_end.hour) + relativedelta(days=1)
 
             q = MQ(datetime__gte=on_sd, datetime__lt=on_ed)
             mqs.append(q)
@@ -185,10 +181,10 @@ def get_overnight_avg_cost(system, source_ids, start_dt, end_dt):
         total_on_sum += dr_sum
 
     # dirty way to count number of days
-    total_day = (end_dt - start_dt).days
-    today = datetime.datetime.now(pytz.utc)
+    total_day = (end_dt.date() - start_dt.date()).days + 1
+    today = datetime.datetime.now(pytz.utc).astimezone(system_tz)
     if end_dt > today:
-        total_day = (today - start_dt).days
+        total_day = (today.date() - start_dt.date()).days + 1
 
     return total_on_sum / total_day
 
