@@ -167,12 +167,12 @@ class TopThreeConsumersList(generics.ListAPIView):
                     p_cost = SourceReadingHour.total_used([s.id for s in child_sys.sources], date_start, date_end)
 
                     if c_cost:
-                        cost_now = c_cost
+                        cost_now = c_cost[0]['total']
                     else:
                         cost_now = None
 
                     if p_cost:
-                        cost_before = p_cost
+                        cost_before = p_cost[0]['total']
                         percentage_change = 100*((cost_now or 0) - cost_before)/float(cost_before)
                     else:
                         cost_before = None
