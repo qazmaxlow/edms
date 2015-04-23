@@ -15,18 +15,30 @@
             </div>
         </div>
     </div>
-    <div class="widget-content row">
-        <div class="widget-message2 left-padding-15">
-            <span class="description-1 message-text">So far today you have used: </span>
-            <span class="description-4 message-text">${{ total_cost | number:0 }}</span>
+    <div class="widget-content row"><div class="col-sm-12">
+        <div class="row">
+            <div class="widget-message2 left-padding-15 col-sm-12">
+                <span class="description-1 message-text">So far today you have used: </span>
+                <span class="description-4 message-text">${{ total_cost | number:0 }}</span>
+            </div>
         </div>
         <div ng-show="realTimeSelect=='graph'">
-            <div class="legend-label yaxis-legend">kWh</div>
-            <div>
-                <div kendo-chart="realTimeChart" k-options="realTimeOptions" class="auto-width widget-graph"></div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <span class="legend-label yaxis-legend">kWh</span>
+                </div>
+                <div class="col-sm-3 col-sm-offset-6">
+                    <span class="today-mark">Today</span><span class="last-week-mark">Last week</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div kendo-chart="realTimeChart" k-options="realTimeOptions" class="auto-width widget-graph"></div>
+                </div>
             </div>
         </div>
         <div ng-show="realTimeSelect=='rates'">
+            <div class="row">
             <div class="col-sm-6 rt-left-box">
                 <div id="animationContainerMoney" class="rt-animate-money"><div id="stageMoney" class="EDGE-9220080"></div></div>
                 <div class="rt-overlay">
@@ -44,7 +56,8 @@
                     <h4 class="description-6">per day</h4>
                 </div>
             </div>
+            </div>
         </div>
-    </div>
+    </div></div>
 </div>
 {% endverbatim %}
