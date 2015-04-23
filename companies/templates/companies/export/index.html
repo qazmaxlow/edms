@@ -101,8 +101,8 @@
             $scope.download_csv = function() {
                 var url = "{% url 'companies.export.download' current_system.code %}";
                 url += '?start=' + $scope.date_start.toISOString() + '&end=' + $scope.date_end.toISOString() + '&unit=' + $scope.unit + '&interval=' + $scope.interval;
-                window.open(url, '_blank', '');
 
+                window.location.assign(url);
             }
 
     });
