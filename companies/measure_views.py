@@ -158,31 +158,56 @@ class TopThreeConsumersList(generics.ListAPIView):
                 previous_date_start = date_start - relativedelta(months=1)
                 previous_date_end = date_end - relativedelta(months=1)
 
-            current_cost = sys.get_total_cost_with_source_id(date_start, date_end)
-            previous_cost = sys.get_total_cost_with_source_id(previous_date_start, previous_date_end)
+            childs = sys.child_systems
 
-            for s in sys.sources:
-                c_cost = [c for c in current_cost if c['source_id'] == s.id]
-                p_cost = [p for p in previous_cost if p['source_id'] == s.id]
+            if childs:
 
-                if c_cost:
-                    cost_now = c_cost[0]['cost']
-                else:
-                    cost_now = None
+                for child_sys in childs:
+                    c_cost = child_sys.get_total_cost(date_start, date_end, 'hour')
+                    p_cost = child_sys.get_total_cost(previous_date_start, previous_date_end, 'hour')
 
-                if p_cost:
-                    cost_before = p_cost[0]['cost']
-                    percentage_change = 100*((cost_now or 0) - cost_before)/float(cost_before)
-                else:
-                    cost_before = None
-                    percentage_change = None
+                    if c_cost:
+                        cost_now = c_cost
+                    else:
+                        cost_now = None
 
-                json_data.append({'d_name': s['d_name'], 'd_name_tc': s['d_name_tc'], 'value': cost_now, 'previous_value': cost_before, 'percentage_change': percentage_change})
+                    if p_cost:
+                        cost_before = p_cost
+                        percentage_change = 100*((cost_now or 0) - cost_before)/float(cost_before)
+                    else:
+                        cost_before = None
+                        percentage_change = None
+
+                    json_data.append({'d_name': child_sys.full_name, 'd_name_tc': child_sys.full_name_tc, 'value': cost_now, 'previous_value': cost_before, 'percentage_change': percentage_change})
+
+            else:
+
+                current_cost = sys.get_total_cost_with_source_id(date_start, date_end)
+                previous_cost = sys.get_total_cost_with_source_id(previous_date_start, previous_date_end)
+
+                for s in sys.sources:
+                    c_cost = [c for c in current_cost if c['source_id'] == s.id]
+                    p_cost = [p for p in previous_cost if p['source_id'] == s.id]
+
+                    if c_cost:
+                        cost_now = c_cost[0]['cost']
+                    else:
+                        cost_now = None
+
+                    if p_cost:
+                        cost_before = p_cost[0]['cost']
+                        percentage_change = 100*((cost_now or 0) - cost_before)/float(cost_before)
+                    else:
+                        cost_before = None
+                        percentage_change = None
+
+                    json_data.append({'d_name': s['d_name'], 'd_name_tc': s['d_name_tc'], 'value': cost_now, 'previous_value': cost_before, 'percentage_change': percentage_change})
 
             if json_data:
                 json_data.sort(key=lambda r: ((-1*r['value'] if r['value'] else 0), (r['d_name'])))
 
             return json_data[0:3]
+
 
 class LastWeekDailyCostList(generics.ListAPIView):
 

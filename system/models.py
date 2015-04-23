@@ -134,6 +134,18 @@ class System(models.Model):
 
         return sources
 
+    @property
+    def child_systems(self):
+
+        if self.path:
+            path = '%s%s,'%(self.path,self.code)
+        else:
+            path = ',%s,'%self.code
+
+        systems = System.objects.filter(path=path).order_by('path', 'name')
+
+        return systems
+
 
     def get_all_holidays(self, timestamp_info=None):
         if timestamp_info:
