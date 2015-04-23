@@ -47,34 +47,71 @@
 {% verbatim %}
 <div ng-app="Entrak">
     <div ng-controller="ReportController">
-        <div class="row">
-            <div class="col-md-4">
-                Simply select
+        <div class="row export-base">
+            <div class="col-md-4 description">
+                <p class="select-text">Simply select the start date, the end date, the interval and the units you'd like to see in your data file.</p>
+                <div class="yellow-bottom"></div>
+                <img src="/static/images/export/et-helper.png"></img>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-8 steps">
                 <div class="row">
-                    <div class="col-md-6">
-                        <input kendo-et-date-picker="dp_date_start" k-ng-model="date_start" style="width: 220px;">
-                        <input kendo-et-date-picker="dp_date_end" k-ng-model="date_end" style="width: 220px;">
+                    <div class="col-md-6 left">
+                        <div class="step-label">Step 1</div>
+                        <div class="header">Select Time</div>
+                        <div class="content bg-calendar">
+                            <div class="table-row"></div>
+                            <div class="table-row">
+                                <h3 class="date-text">Start Date</h3>
+                                <input kendo-et-date-picker="dp_date_start" k-ng-model="date_start">
+                                <h3 class="date-text top-margin">End Date</h3>
+                                <input kendo-et-date-picker="dp_date_end" k-ng-model="date_end">
+                            </div>
+                            <div class="table-row"></div>
+                        </div>
                     </div>
                     <div class="col-md-6">
-                        <button ng-click="interval='minute'" ng-class="{ 'active': interval=='minute'}">Minute</button>
-                        <button ng-click="interval='hour'" ng-class="{ 'active': interval=='hour'}">Hour</button>
-                        <button ng-click="interval='day'" ng-class="{ 'active': interval=='day'}">Day</button>
+                        <div class="step-label">Step 2</div>
+                        <div class="header">Select Data Interval</div>
+                        <div class="content bg-time">
+                            <div class="table-row"></div>
+                            <div class="table-row">
+                                <button ng-click="interval='minute'" class="rect-radio" ng-class="{ 'active': interval=='minute'}">Minute</button><br>
+                                <button ng-click="interval='hour'" class="rect-radio" ng-class="{ 'active': interval=='hour'}">Hour</button><br>
+                                <button ng-click="interval='day'" class="rect-radio" ng-class="{ 'active': interval=='day'}">Day</button>
+                            </div>
+                            <div class="table-row"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
-                        <button ng-click="unit='kwh'" ng-class="{ 'active': unit=='kwh'}">kWh</button>
-                        <button ng-click="unit='money'" ng-class="{ 'active': unit=='money'}">Dollar</button>
-                        <button ng-click="unit='co2'" ng-class="{ 'active': unit=='co2'}">CO<sub>2</sub></button>
+                    <div class="col-md-6 left">
+                        <div class="step-label">Step 3</div>
+                        <div class="header">Select Unit</div>
+                        <div class="content bg-unit">
+                            <div class="table-row"></div>
+                            <div class="table-row">
+                                <button ng-click="unit='kwh'" class="rect-radio" ng-class="{ 'active': unit=='kwh'}">kWh</button><br>
+                                <button ng-click="unit='money'" class="rect-radio" ng-class="{ 'active': unit=='money'}">Dollar</button><br>
+                                <button ng-click="unit='co2'" class="rect-radio" ng-class="{ 'active': unit=='co2'}">CO<sub>2</sub></button>
+                            </div>
+                            <div class="table-row"></div>
+                        </div>
                     </div>
                     <div class="col-md-6">
-                        <p>From {{ date_start }}</p>
-                        <p>To {{ date_end }}</p>
-                        <p>Interval {{ interval }}</p>
-                        <p>Units {{ unit }}</p>
-                        <button ng-disabled="!is_downloadable()" ng-click="download_csv()">Download</button>
+                        <div class="step-label">Step 4</div>
+                        <div class="header">Confirm and Go!</div>
+                        <div class="content">
+                            <div class="table-row"></div>
+                            <div class="table-row">
+                                
+                            </div>
+                            <div class="table-row"></div>
+                            <p>From {{ date_start }}</p>
+                            <p>To {{ date_end }}</p>
+                            <p>Interval {{ interval }}</p>
+                            <p>Units {{ unit }}</p>
+                            <button ng-disabled="!is_downloadable()" ng-click="download_csv()">Download</button>
+                        </div>
                     </div>
                 </div>
             </div>
