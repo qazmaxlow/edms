@@ -27,7 +27,6 @@ class ExportView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(ExportView, self).get_context_data(**kwargs)
-        # context['system_code'] =
         syscode = self.kwargs['system_code']
 
         systems_info = System.get_systems_info(syscode, self.request.user.system.code)
