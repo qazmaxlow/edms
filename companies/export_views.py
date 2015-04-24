@@ -1,6 +1,6 @@
 import csv
 import calendar
-from datetime import datetime
+import datetime
 import json
 import pytz
 
@@ -76,7 +76,7 @@ class DownloadView(View):
         source_readings = reading_cls.objects(
             source_id__in=source_ids,
             datetime__gte=start_dt,
-            datetime__lt=end_dt
+            datetime__lt=end_dt + datetime.timedelta(days=1) # include the last date
         ).order_by('datetime', 'source_id')
 
         money_unit_rates = None
@@ -108,7 +108,7 @@ class DownloadView(View):
             timestamp = calendar.timegm(reading.datetime.utctimetuple())
             if system:
                 # convert time in system's timezone
-                utc_dt = datetime.utcfromtimestamp(timestamp).replace(tzinfo=pytz.utc)
+                utc_dt = datetime.datetime.utcfromtimestamp(timestamp).replace(tzinfo=pytz.utc)
                 local_dt = utc_dt.astimezone(system.time_zone)
                 timestamp = local_dt.strftime("%Y-%m-%d %H:%M")
 
