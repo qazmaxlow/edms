@@ -238,7 +238,7 @@
         var hours = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
         var per_hour_measures = {};
         $.each(hours, function(i, h) { per_hour_measures[h] = null; });
-        //$.each(hours, function(i, h) { per_hour_measures[h] = h*5+123; });
+        //$.each(hours, function(i, h) { last_week_measures[h] = h*5+54;per_hour_measures[h] = h*5+123; });
 
         $scope.realTimeSelect = 'graph';
         $scope.realTimeOptions = {
@@ -263,7 +263,10 @@
             }, {
                 type: "line",
                 name: "Last Week",
-                color: "#565656",
+                color: "#354960",
+                line: {
+                    width: 2
+                },
                 data: last_week_measures
             }],
             legend: {
@@ -714,29 +717,33 @@
             }
         }
 
-        ds.read().done(function() {
+        $scope.$watch("lastWeekStatChart", function(nVal, oVal){
+            if (angular.isDefined(nVal)){
+                ds.read().done(function() {
 
-            dayUsage = ds.data()[0];
-            nightUsage = ds.data()[1];
+                    dayUsage = ds.data()[0];
+                    nightUsage = ds.data()[1];
 
-            var dayMax = dayUsage.maximum;
-            var dayPow = (dayMax+".").indexOf(".") - 1;
+                    var dayMax = dayUsage.maximum;
+                    var dayPow = (dayMax+".").indexOf(".") - 1;
 
-            dayMaxStep = Math.ceil(dayMax/Math.pow(10, dayPow)) * Math.pow(10, dayPow);
-            dayStep = dayMaxStep / 4;
-            dayAverage = dayUsage.average;
-            dayPercentageChange = dayUsage.percentage_change;
+                    dayMaxStep = Math.ceil(dayMax/Math.pow(10, dayPow)) * Math.pow(10, dayPow);
+                    dayStep = dayMaxStep / 4;
+                    dayAverage = dayUsage.average;
+                    dayPercentageChange = dayUsage.percentage_change;
 
-            var nightMax = nightUsage.maximum;
-            var nightPow = (nightMax+".").indexOf(".") - 1;
+                    var nightMax = nightUsage.maximum;
+                    var nightPow = (nightMax+".").indexOf(".") - 1;
 
-            nightMaxStep = Math.ceil(nightMax/Math.pow(10, nightPow)) * Math.pow(10, nightPow);
-            nightStep = nightMaxStep / 4;
-            nightAverage = nightUsage.average;
-            nightPercentageChange = nightUsage.percentage_change;
+                    nightMaxStep = Math.ceil(nightMax/Math.pow(10, nightPow)) * Math.pow(10, nightPow);
+                    nightStep = nightMaxStep / 4;
+                    nightAverage = nightUsage.average;
+                    nightPercentageChange = nightUsage.percentage_change;
 
-            $scope.lastWeekStatChart.dataSource.data(dayUsage.data)
-            updateChart();
+                    $scope.lastWeekStatChart.dataSource.data(dayUsage.data)
+                    updateChart();
+                });
+            }
         });
 
 
@@ -786,8 +793,8 @@
             categoryAxis: {
                 field: "weekday",
                 majorGridLines: {
-                    color: "#ECECEC",
-                    visible: true
+                    //color: "#ECECEC",
+                    visible: false
                 },
                 labels: {
                     font: "0.857em ITCAvantGardeStd-Bk",
