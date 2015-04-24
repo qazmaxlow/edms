@@ -68,6 +68,7 @@ INSTALLED_APPS = (
     'notifications',
     'trails',
     'apis',
+    'schedulers',
 )
 
 MIDDLEWARE_CLASSES = (
