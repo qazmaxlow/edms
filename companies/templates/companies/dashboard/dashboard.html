@@ -651,7 +651,11 @@
             }, refreshPeriod);
         }
 
-        costs.read().then(updateChart);
+        $scope.$watchGroup(["soFarChartThis", "soFarChartLast"], function(nVal, oVal, scope){
+            if (angular.isDefined(nVal[0]) && angular.isDefined(nVal[1])){
+                costs.read().then(updateChart);
+            }
+        });
         refreshIntervalId = setInterval(function() {
             costs.read().then(updateChart);
         }, refreshPeriod);
