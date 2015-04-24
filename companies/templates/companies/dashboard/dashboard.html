@@ -654,11 +654,15 @@
             }, refreshPeriod);
         }
 
-        $scope.$watchGroup(["soFarChartThis", "soFarChartLast"], function(nVal, oVal, scope){
-            if (angular.isDefined(nVal[0]) && angular.isDefined(nVal[1])){
-                costs.read().then(updateChart);
-            }
-        });
+        if (angular.isDefined($scope.soFarChartThis) && angular.isDefined($scope.soFarChartLast)){
+            costs.read().then(updateChart);
+        } else {
+            $scope.$watchGroup(["soFarChartThis", "soFarChartLast"], function(nVal, oVal, scope){
+                if (angular.isDefined(nVal[0]) && angular.isDefined(nVal[1])){
+                    costs.read().then(updateChart);
+                }
+            });
+        }
         refreshIntervalId = setInterval(function() {
             costs.read().then(updateChart);
         }, refreshPeriod);
@@ -716,36 +720,6 @@
                 $scope.$digest();
             }
         }
-
-        $scope.$watch("lastWeekStatChart", function(nVal, oVal){
-            if (angular.isDefined(nVal)){
-                ds.read().done(function() {
-
-                    dayUsage = ds.data()[0];
-                    nightUsage = ds.data()[1];
-
-                    var dayMax = dayUsage.maximum;
-                    var dayPow = (dayMax+".").indexOf(".") - 1;
-
-                    dayMaxStep = Math.ceil(dayMax/Math.pow(10, dayPow)) * Math.pow(10, dayPow);
-                    dayStep = dayMaxStep / 4;
-                    dayAverage = dayUsage.average;
-                    dayPercentageChange = dayUsage.percentage_change;
-
-                    var nightMax = nightUsage.maximum;
-                    var nightPow = (nightMax+".").indexOf(".") - 1;
-
-                    nightMaxStep = Math.ceil(nightMax/Math.pow(10, nightPow)) * Math.pow(10, nightPow);
-                    nightStep = nightMaxStep / 4;
-                    nightAverage = nightUsage.average;
-                    nightPercentageChange = nightUsage.percentage_change;
-
-                    $scope.lastWeekStatChart.dataSource.data(dayUsage.data)
-                    updateChart();
-                });
-            }
-        });
-
 
         $scope.lastWeekStatOptions = {
             dataSource: {
@@ -821,6 +795,43 @@
                 },
             }
         };
+
+        function initChartData(){
+            ds.read().done(function() {
+
+                dayUsage = ds.data()[0];
+                nightUsage = ds.data()[1];
+
+                var dayMax = dayUsage.maximum;
+                var dayPow = (dayMax+".").indexOf(".") - 1;
+
+                dayMaxStep = Math.ceil(dayMax/Math.pow(10, dayPow)) * Math.pow(10, dayPow);
+                dayStep = dayMaxStep / 4;
+                dayAverage = dayUsage.average;
+                dayPercentageChange = dayUsage.percentage_change;
+
+                var nightMax = nightUsage.maximum;
+                var nightPow = (nightMax+".").indexOf(".") - 1;
+
+                nightMaxStep = Math.ceil(nightMax/Math.pow(10, nightPow)) * Math.pow(10, nightPow);
+                nightStep = nightMaxStep / 4;
+                nightAverage = nightUsage.average;
+                nightPercentageChange = nightUsage.percentage_change;
+console.log($scope.lastWeekStatChart);
+                $scope.lastWeekStatChart.dataSource.data(dayUsage.data)
+                updateChart();
+            });
+        }
+
+        if (angular.isDefined($scope.lastWeekStatChart)){
+            initChartData();
+        } else {
+            $scope.$watch("lastWeekStatChart", function(nVal, oVal){
+                if (angular.isDefined(nVal)){
+                    initChartData();
+                }
+            });
+        }
 
 
         $scope.toggle = function() {
