@@ -7,6 +7,7 @@ from . import report_views
 from . import dashboard_views
 from . import apis
 from . import measure_views, export_views, report_schedule_views
+from .views import system_views
 
 
 router = routers.DefaultRouter()
@@ -31,4 +32,6 @@ urlpatterns = patterns(
     url(r'^export/$', export_views.ExportView.as_view(), name='companies.export'),
     url(r'^export/download/$', export_views.DownloadView.as_view(), name='companies.export.download'),
     url(r'^report-schedule/$', report_schedule_views.ReportScheduleView.as_view(), name='companies.report-schedule'),
+
+    url(r'^systems/company-systems/$', system_views.CompanySystemList.as_view(), name='companies.measures.daily'),
 )
