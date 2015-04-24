@@ -150,7 +150,7 @@ $(function() {
         <nav>
             <ul id="menu-links">
                 <li id="menu-link-dashboard">
-                    <a href="{% url 'dashboard' system_code=systems.0.code %}"><img width="26" height="22" src="{% static 'images/home-icon.png' %}"><span>{% trans "Home" %}</span></a>
+                    <a href="{% url 'companies.dashboard' system_code=systems.0.code %}"><img width="26" height="22" src="{% static 'images/home-icon.png' %}"><span>{% trans "Home" %}</span></a>
                 </li>
                 <li id="menu-link-graph">
                     <a href="{% url 'graph' system_code=systems.0.code %}"><img width="26" height="22" src="{% static 'images/graph-icon.png' %}"><span>{% trans "Graph" %}</span></a>
@@ -162,13 +162,13 @@ $(function() {
                     <a href="{% url 'progress' system_code=systems.0.code %}"><img width="26" height="23" src="{% static 'images/progress-icon.png' %}"><span>{% trans "Progress" %}</span></a>
                 </li>
                 <li id="menu-link-report">
-                    <a href="{% url 'report' system_code=systems.0.code %}"><img width="26" height="24" src="{% static 'images/reports-icon.png' %}"><span>{% trans "Reports" %}</span></a>
+                    <a href="{% url 'companies.report' system_code=systems.0.code %}"><img width="26" height="24" src="{% static 'images/reports-icon.png' %}"><span>{% trans "Reports" %}</span></a>
                 </li>
                 <li id="menu-link-display">
                     <a href="{% url 'display' system_code=systems.0.code %}" target="_blank"><img width="26" height="22" src="{% static 'images/display-icon.png' %}"><span>{% trans "Display" %}</span></a>
                 </li>
                 <li id="menu-link-export">
-                    <a href="{% url 'export' system_code=systems.0.code %}"><img width="20" height="24" src="{% static 'images/data-download-icon.png' %}" style="margin-right:6px"><span>{% trans "Data Download" %}</span></a>
+                    <a href="{% url 'companies.export' system_code=systems.0.code %}"><img width="20" height="24" src="{% static 'images/data-download-icon.png' %}" style="margin-right:6px"><span>{% trans "Data Download" %}</span></a>
                 </li>
                 {% comment %}
                 <li id="menu-link-pro-v">

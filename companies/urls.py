@@ -16,8 +16,8 @@ urlpatterns = patterns(
     '',
     url('^audit/trails/$', audit_views.CompanyAuditTrailsListView.as_view()),
     url(r'^apis/', include(router.urls)),
-    url(r'^report/$', report_views.report_view, name='report'),
-    url(r'^dashboard/$', dashboard_views.dashboard_view, name='dashboard'),
+    url(r'^report/$', report_views.report_view, name='companies.report'),
+    url(r'^dashboard/$', dashboard_views.dashboard_view, name='companies.dashboard'),
     url(r'^report/summary/ajax/$', report_views.summary_ajax, name='companies.reports.summary.ajax'),
     url(r'^report/popup-report/$', report_views.popup_report_view, name='companies.reports.popup-report.custom-dates'),
     url(r'^report/popup-report/(?P<year>\d{4})/(?P<month>[a-z]{3})/$', report_views.popup_report_view, name='companies.reports.popup-report'),
@@ -28,6 +28,6 @@ urlpatterns = patterns(
     url(r'^measures/total/$', measure_views.TotalDetail.as_view(), name='companies.measures.total'),
     url(r'^measures/top_three/$', measure_views.TopThreeConsumersList.as_view(), name='companies.measures.top-three'),
     url(r'^measures/last_week_stats/$', measure_views.LastWeekDailyCostList.as_view(), name='companies.measures.last-week-stats'),
-    url(r'^export/$', export_views.ExportView.as_view(), name='export'),
+    url(r'^export/$', export_views.ExportView.as_view(), name='companies.export'),
     url(r'^export/download/$', export_views.DownloadView.as_view(), name='companies.export.download'),
 )
