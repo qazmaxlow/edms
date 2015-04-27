@@ -186,9 +186,8 @@
 
             // find the nearest 10, 100, 1000... based interget
             var pow = (maxValue+".").indexOf(".") - 1;
-            var maxStep = Math.ceil(maxValue/Math.pow(10, pow)) * Math.pow(10, pow);
-
-            var step = maxStep / 4;
+            var step = Math.ceil(maxValue/Math.pow(10, pow)) * Math.pow(10, pow) / 4;
+            var maxStep = step * 4.2;   // X4.2 but not 4 so that the top data point can always be shown fully
             $scope.realTimeChart.setOptions({valueAxis: {max: maxStep, majorUnit: step}});
         }
 
@@ -807,16 +806,16 @@
                 var dayMax = dayUsage.maximum;
                 var dayPow = (dayMax+".").indexOf(".") - 1;
 
-                dayMaxStep = Math.ceil(dayMax/Math.pow(10, dayPow)) * Math.pow(10, dayPow);
-                dayStep = dayMaxStep / 4;
+                dayStep = Math.ceil(dayMax/Math.pow(10, dayPow)) * Math.pow(10, dayPow) / 4;
+                dayMaxStep = dayStep * 4.2;// X4.2 but not 4 so that the top data point can always be shown fully
                 dayAverage = dayUsage.average;
                 dayPercentageChange = dayUsage.percentage_change;
 
                 var nightMax = nightUsage.maximum;
                 var nightPow = (nightMax+".").indexOf(".") - 1;
 
-                nightMaxStep = Math.ceil(nightMax/Math.pow(10, nightPow)) * Math.pow(10, nightPow);
-                nightStep = nightMaxStep / 4;
+                nightStep = Math.ceil(nightMax/Math.pow(10, nightPow)) * Math.pow(10, nightPow) / 4;
+                nightMaxStep = nightStep * 4.2;// X4.2 but not 4 so that the top data point can always be shown fully
                 nightAverage = nightUsage.average;
                 nightPercentageChange = nightUsage.percentage_change;
 
