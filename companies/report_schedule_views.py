@@ -4,6 +4,7 @@ from django.utils.decorators import method_decorator
 from rest_framework import generics, serializers
 
 from schedulers.models import AutoSendReportSchedular
+from system.models import System
 from utils.auth import permission_required
 
 
@@ -32,3 +33,8 @@ class ReportScheduleSerializer(serializers.ModelSerializer):
 
 class CreateReportScheduleView(generics.CreateAPIView):
     serializer_class = ReportScheduleSerializer
+
+
+class ReportScheduleTaskListView(generics.ListAPIView):
+    serializer_class = ReportScheduleSerializer
+    queryset = AutoSendReportSchedular.objects.all()
