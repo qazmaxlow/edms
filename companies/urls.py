@@ -33,5 +33,5 @@ urlpatterns = patterns(
     url(r'^export/download/$', export_views.DownloadView.as_view(), name='companies.export.download'),
     url(r'^report-schedule/$', report_schedule_views.ReportScheduleView.as_view(), name='companies.report-schedule'),
 
-    url(r'^systems/company-systems/$', system_views.CompanySystemList.as_view(), name='companies.measures.daily'),
+    url(r'^systems/company-systems/$', system_views.CompanySystemList.as_view(), name='companies.systems.company-systems'),
 )
