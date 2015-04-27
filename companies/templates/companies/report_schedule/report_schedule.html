@@ -23,6 +23,7 @@
 
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
+<link href="{% static 'css/companies/report_schedule.css' %}" rel="stylesheet">
 
 <script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
@@ -45,22 +46,31 @@
 
 {% verbatim %}
 <div ng-app="Entrak">
-    <div ng-controller="ReportScheduleController">
-        <div class="row">
+    <div ng-controller="ReportScheduleController" class="auto-report-base">
+        <div class="row steps">
             <div class="col-md-3">
                 Description
             </div>
             <div class="col-md-3">
                 <select kendo-drop-down-list
                         k-data-text-field="'fullname'"
-                        k-data-value-field="'ProductID'"
+                        k-data-value-field="'id'"
                         k-data-source="systemsDateSource"></select>
             </div>
             <div class="col-md-3">
-                <input >
+                <select kendo-drop-down-list>
+                    <option>Weekly</option>
+                    <option>Montly</option>
+                </select>
             </div>
             <div class="col-md-3">
                 <input >
+                <button>Confirm</button>
+            </div>
+        </div>
+        <div class="row records">
+            <div class="col-md-12">
+                <div kendo-grid k-options="taskGridOptions(dataItem)"></div>
             </div>
         </div>
     </div>
@@ -78,6 +88,20 @@
                         dataType: "json"
                     }
                 }
+            };
+
+            $scope.taskGridOptions = function(dataItem) {
+                return {
+                    dataSource: {
+                        transport: {
+                            read: "{% url 'companies.report-schedule.tasks' current_system.code %}"
+                        }
+                    },
+                    columns: [
+                    { field: "id", title:"ID", width: "56px" },
+                    { field: "frequency", title:"frequency", width: "110px" }
+                    ]
+                };
             };
 
     });
