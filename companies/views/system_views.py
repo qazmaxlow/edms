@@ -2,11 +2,13 @@ from rest_framework import generics
 
 from system.models import System
 
-
 from rest_framework import serializers
+
+
 class SystemSerializer(serializers.ModelSerializer):
     class Meta:
         model = System
+        fields = ('id', 'fullname')
 
 
 class CompanySystemList(generics.ListAPIView):
