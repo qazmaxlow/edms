@@ -654,15 +654,17 @@
             }, refreshPeriod);
         }
 
-        if (angular.isDefined($scope.soFarChartThis) && angular.isDefined($scope.soFarChartLast)){
-            costs.read().then(updateChart);
-        } else {
-            $scope.$watchGroup(["soFarChartThis", "soFarChartLast"], function(nVal, oVal, scope){
-                if (angular.isDefined(nVal[0]) && angular.isDefined(nVal[1])){
-                    costs.read().then(updateChart);
-                }
-            });
-        }
+        setTimeout(function(){
+            if (angular.isDefined($scope.soFarChartThis) && angular.isDefined($scope.soFarChartLast)){
+                costs.read().then(updateChart);
+            } else {
+                $scope.$watchGroup(["soFarChartThis", "soFarChartLast"], function(nVal, oVal, scope){
+                    if (angular.isDefined(nVal[0]) && angular.isDefined(nVal[1])){
+                        costs.read().then(updateChart);
+                    }
+                });
+            }
+        }, 300);
         refreshIntervalId = setInterval(function() {
             costs.read().then(updateChart);
         }, refreshPeriod);
@@ -817,22 +819,23 @@
                 nightStep = nightMaxStep / 4;
                 nightAverage = nightUsage.average;
                 nightPercentageChange = nightUsage.percentage_change;
-console.log($scope.lastWeekStatChart);
-                $scope.lastWeekStatChart.dataSource.data(dayUsage.data)
+
+                $scope.lastWeekStatChart.dataSource.data(dayUsage.data);
                 updateChart();
             });
         }
 
-        if (angular.isDefined($scope.lastWeekStatChart)){
-            initChartData();
-        } else {
-            $scope.$watch("lastWeekStatChart", function(nVal, oVal){
-                if (angular.isDefined(nVal)){
-                    initChartData();
-                }
-            });
-        }
-
+        setTimeout(function(){
+            if (angular.isDefined($scope.lastWeekStatChart)){
+                initChartData();
+            } else {
+                $scope.$watch("lastWeekStatChart", function(nVal, oVal){
+                    if (angular.isDefined(nVal)){
+                        initChartData();
+                    }
+                });
+            }
+        }, 300);
 
         $scope.toggle = function() {
             $scope.isWeekday = !$scope.isWeekday;
