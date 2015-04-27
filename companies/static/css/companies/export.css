@@ -65,12 +65,15 @@
 }
 
 .export-base .header {
+	display: table;
+	width: 100%;
+	font-family: ITCAvantGardeStd-Md;
 	font-size: 0.929em;
 	font-weight: bold;
 	color: #354960;
 	background-color: #faf0da;
 	height: 35px;
-	line-height: 35px;
+	line-height: 34px;
 	text-align: center;
 	border-bottom: 1px solid #f2dbb7;
 }
@@ -120,6 +123,7 @@
 }
 
 .export-base .step-label {
+	font-family: ITCAvantGardeStd-Md;
 	font-size: 0.929em;
 	font-weight: bold;
 	color: #f3ca71;
@@ -139,13 +143,22 @@
 	margin-top: 0;
 }
 
-.export-base .date-text.top-margin {
+.export-base .date-text.small {
+	font-size: 0.929em;
+}
+
+.export-base .second-row {
 	margin-top: 20px;
+}
+
+.export-base .inline {
+	display: inline-block;
 }
 
 .export-base button {
 	height: 33px;
 	width: 100px;
+	border-radius: 4px;
 	text-align: center;
 	display: inline-block;
 	padding: 0;
@@ -204,7 +217,7 @@
 
 /* datepicker-----*/
 .export-base .k-widget.k-datepicker.k-header {
-	border-radius: 0;
+	border-radius: 4px;
 	border: 1px solid #354960;
 	margin: 0;
 	padding: 0;
@@ -215,7 +228,7 @@
 	border: none;
 	height: 100%;
 	background-color: #FFFFFF;
-	border-radius: 0;
+	border-radius: 4px;
 }
 
 .export-base .k-widget.k-datepicker.k-header input {

@@ -8,7 +8,7 @@
 
 /*widget common-------*/
 .widget-container {
-    padding: 10px;
+    padding:  10px 10px 20px 10px;
     font-family: 'ITCAvantGardeStd-Bk', sans-serif;
     font-size: 14px;
 }
@@ -84,7 +84,7 @@
 .widget-title {
     padding-left: 10px;
     height: 40px;
-    line-height: 40px;
+    line-height: 39px;
     color: #FFF;
     font-size: 1.0em;
     font-weight: bold;
@@ -105,8 +105,8 @@
     padding: 0px;
     border: none;
     min-width: 55px;
-    height: 18px;
-    line-height: 18px;
+    height: 20px;
+    line-height: 22px;
     vertical-align: middle;
     outline:none;
 }
@@ -212,7 +212,8 @@
 }
 
 .widget-content .yaxis-legend {
-    padding: 20px 10px 5px 15px;
+    padding: 10px 10px 10px 15px;
+    display: inline-block;
 }
 /*-------widget content*/
 
@@ -223,8 +224,8 @@
     padding: 0px;
     border: none;
     width: 18px;
-    height: 18px;
-    line-height: 18px;
+    height: 20px;
+    line-height: 22px;
     vertical-align: middle;
     outline: none;
 
@@ -424,27 +425,49 @@
 
 
 /*real time widget-------*/
-.today-mark:before {
-    content: "\2011";
-    padding-right: 5px;
-    color: #81d51d;
+.no-x-padding {
+	padding-left: 0px;
+	padding-right: 0px;
 }
 
-.last-week-mark:before {
-    content: "\2011";
-    padding-right: 5px;
-    padding-left: 5px;
-    color: #565656;
+.right-legend {
+	padding-right: 12px;
+	text-align: right;
+}
+
+.dash {
+	height: 3px;
+	width: 7px;
+	margin-bottom: 2px;
+	margin-left: 15px;
+	margin-right: 5px;
+	display: inline-block;
+}
+
+.dash.today {
+	background-color: #81d51d;
+}
+
+.dash.last-week {
+	background-color: #354960;
 }
 
 .today-mark {
     color: #81d51d;
     font-weight: 600;
+    font-size: 0.857em;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: inline-block;
 }
 
 .last-week-mark {
-    color: #565656;
+    color: #354960;
     font-weight: 600;
+    font-size: 0.857em;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: inline-block;
 }
 
 .widget-message2 .message-text {
@@ -453,6 +476,10 @@
     line-height: 50px;
     display: inline-block;
     vertical-align: middle;
+}
+
+.widget-title {
+	letter-spacing: 0.04em;
 }
 
 .widget-title .main-title, .widget-title .title-date, .widget-title .title-time {
