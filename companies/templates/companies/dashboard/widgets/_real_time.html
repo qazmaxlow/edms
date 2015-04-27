@@ -2,9 +2,9 @@
 <div class="widget-container" ng-controller="WidgetRealtime">
     <div class="widget-header row">
         <div class="widget-title col-sm-9">
-            <div class="main-title">Real-Time</div>
-            <div class="title-date">{{curDate}}</div>
-            <div class="title-time">{{curTime}}</div>
+            <div class="main-title">Real-Time</div><!--
+        	--><div class="title-date">{{curDate}}</div><!--
+            --><div class="title-time">{{curTime}}</div>
         </div>
         <div class="widget-toggle col-sm-3">
             <div class="pull-right">
@@ -24,15 +24,15 @@
         </div>
         <div ng-show="realTimeSelect=='graph'">
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-sm-3 no-x-padding">
                     <span class="legend-label yaxis-legend">kWh</span>
                 </div>
-                <div class="col-sm-3 col-sm-offset-6">
-                    <span class="today-mark">Today</span><span class="last-week-mark">Last week</span>
+                <div class="col-sm-9 right-legend">
+                    <span class="dash today"></span><span class="today-mark">Today</span><span class="dash last-week"></span><span class="last-week-mark">Last week</span>
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-12 no-x-padding">
                     <div kendo-chart="realTimeChart" k-options="realTimeOptions" class="auto-width widget-graph"></div>
                 </div>
             </div>
@@ -42,14 +42,14 @@
             <div class="col-sm-6 rt-left-box">
                 <div id="animationContainerMoney" class="rt-animate-money"><div id="stageMoney" class="EDGE-9220080"></div></div>
                 <div class="rt-overlay">
-                    <h3 class="description-5 rt-top-padding">${{ total_per_day.cost | number:0 }}</h3>
+                    <h3 class="description-5 rt-top-text">${{ total_per_day.cost | number:0 }}</h3>
                     <h4 class="description-6">per day</h4>
                 </div>
             </div>
             <div class="col-sm-6 rt-right-box">
                 <div id="animationContainerCO2" class="rt-animate-co2"><div id="stageCO2" class="EDGE-18660633"></div></div>
                 <div class="rt-overlay">
-                    <div class="rt-top-padding">
+                    <div class="rt-top-text">
                         <span class="description-5">{{ total_per_day.co2 | number:0 }}</span>
                         <span class="description-4"> kg CO<sub>2</sub></span>
                     </div>

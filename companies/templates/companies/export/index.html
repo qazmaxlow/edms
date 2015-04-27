@@ -46,7 +46,7 @@
 
 {% verbatim %}
 <div ng-app="Entrak">
-    <div ng-controller="ReportController">
+    <div ng-controller="ExportController">
         <div class="row export-base">
             <div class="col-md-4 description">
                 <p class="select-text">Follow the steps on the right to download your energy data.</p>
@@ -63,7 +63,10 @@
                             <div class="table-row">
                                 <h3 class="date-text">Start Date</h3>
                                 <input kendo-et-date-picker="dp_date_start" k-ng-model="date_start" k-click-popup="true">
-                                <h3 class="date-text top-margin">End Date</h3>
+                                <div class="second-row">
+                                    <span class="date-text inline">End Date</span>
+                                    <span class="inline date-text small">(inclusive)</span>
+                                </div>
                                 <input kendo-et-date-picker="dp_date_end" k-ng-model="date_end" k-click-popup="true">
                             </div>
                             <div class="table-row"></div>
@@ -135,7 +138,7 @@
 
 <script>
     angular.module("Entrak", [ "kendo.directives" ])
-        .controller("ReportController", function($scope){
+        .controller("ExportController", function($scope){
             $scope.interval = "minute";
             $scope.unit = "kwh";
 
