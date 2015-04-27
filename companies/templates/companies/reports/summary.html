@@ -277,7 +277,8 @@ $(function() {
         	position:absolute;
         	left:0;
         	top:0;
-        	background-color:rgba(0,0,0,0.7);
+        	background-color:#354960;
+          opacity:0.9;
         	display:none;
         	z-index: 99;
         }
@@ -286,26 +287,14 @@ $(function() {
 			  left: 0;
 			  top: 0;
 			  z-index: 100;
+        display:none;
         }
         </style>
         <div class="grey_layer"></div>
-    <div id="AjaxBootStrap">
 		<div id="win_report_ajax">
-
-     	 </div>
- 	 </div>
-
+    </div>
     <div ng-app="Entrak">
     <div ng-controller="ReportControllers">
-        <button ng-click="win2.close()" ng-show="win2visible">close</button>
-        <!-- extra height for sub graphs -->
-        <div class="ttt" kendo-window="win_report" k-visible="false" k-iframe="false"
-             k-width="1200" k-height="14000" k-modal="true"
-             k-resizable="false" k-draggable="false"
-             >
-        </div>
-
-
 <div class="summary">
     <div class="row drop-down-panel-header">
         <div class="panel-header-left-menu">
@@ -418,9 +407,8 @@ $(function() {
         <img src="{% static "images/reports/sky.png" %}">
       </div>
       <div id="view_report_btn" class="view-report">
-        <img class="img-button" src="{% static "images/reports/view_report.svg" %}" ng-click="view_report()">
-        <button class="k-button" ng-click="view_report()">{% trans "View Full Report" %}</button>
-        <button class="k-button" ng-click="view_report_ajax()">TEST</button>
+        <img class="img-button" src="{% static "images/reports/view_report.svg" %}" ng-click="view_report_ajax()">
+        <button class="k-button" ng-click="view_report_ajax()">View Full Report</button>
       </div>
       <div class="flower-bg">
         <img src="{% static "images/reports/flower.png" %}">
@@ -561,31 +549,6 @@ $(function() {
                 }
 
                 return text;
-            }
-
-            $scope.view_report = function() {
-                if (!$scope.summary_report.formated_total_cost) {
-                    if ($scope.notf.getNotifications().length == 0){
-                      $scope.notf.show('No data', 'error');
-                    }
-                    return false;
-                }
-
-                var date = $scope.report_date.value();
-                var year = date.getFullYear();
-
-                var report_type = $scope.dateToolbar.getSelectedFromGroup('time').attr('id');
-                if (report_type=='custom') {
-                    var start_date = kendo.toString($scope.report_date_start.value(), 'yyyy-MM-dd')
-                    var end_date = kendo.toString($scope.report_date_end.value(), 'yyyy-MM-dd')
-                }
-                else {
-                    var start_date = kendo.toString($scope.report_date.getSelectedStartDate(), 'yyyy-MM-dd')
-                    var end_date = kendo.toString($scope.report_date.getSelectedEndDate(), 'yyyy-MM-dd')
-                }
-
-                $scope.win_report.refresh({ url: '../report/popup-report/?start_date=' + start_date + '&end_date=' + end_date + '&report_type='+report_type});
-                $scope.win_report.open().center();
             }
 			$scope.view_report_ajax = function() {
                 if (!$scope.summary_report.formated_total_cost) {
@@ -888,13 +851,16 @@ $(function() {
 
 
 		        }});
-		        $("#win_report_ajax").fadeIn();
-
+		        $("#win_report_ajax").fadeIn(function(){
+              $("html, body").animate({ scrollTop: 0 }, "slow");
+            });
+            $(".grey_layer").fadeIn();
 
 			}
 			$(".grey_layer").click(function(){
-
-			})
+        $("#win_report_ajax").fadeOut();
+        $(".grey_layer").fadeOut();
+			});
             var summary_report_ds = new kendo.data.DataSource({
                 transport: {
                     read: {
@@ -1059,13 +1025,10 @@ $(function() {
 
 </script>
 <script>
-    // hack for close window when click outside
-    $(document).on('click', '.k-overlay', function () {
-        var kendoWindow = $('.k-window-content.k-content', $(this).next('div.k-widget.k-window'));
-        if (kendoWindow == null || kendoWindow.length == 0) {
-            return;
-        }
-        kendoWindow.data('kendoWindow').close();
+    $(window).scroll(function (event) {
+    var scroll = $(window).scrollTop();
+    $(".sidebar-left").css("top",scroll);
+    $(".grey_layer").css("height",$("#win_report_ajax").css("height"));
     });
 </script>
 {% endblock %}
