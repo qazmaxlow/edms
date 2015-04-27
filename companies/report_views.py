@@ -509,7 +509,7 @@ class CompareTplHepler:
         }
 
 
-def _popup_report_view(request, system_code, year=None, month=None, report_type=None, to_pdf=False):
+def _popup_report_view(request, system_code, year=None, month=None, report_type=None, to_pdf=False, for_generate_pdf=False):
     systems_info = System.get_systems_info(system_code, request.user.system.code)
     systems = systems_info['systems']
     current_system = System.objects.get(code=system_code)
@@ -1252,6 +1252,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
 
     if to_pdf:
+        assert False
         return PDFTemplateResponse(
             request=request,
             template='companies/reports/report.html',
@@ -1271,7 +1272,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
             },
         )
 
-
+    if (for_generate_pdf):
+        return render(request, 'companies/reports/popup_report_for_pdf.html', m)
     return render(request, 'companies/reports/popup_report.html', m)
 
 
@@ -1283,6 +1285,13 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
 def download_popup_report_view(request, system_code):
     return _popup_report_view(request, system_code, to_pdf=True)
 
+@permission_required()
+def pdf_popup_report_view(request, system_code, year=None, month=None, report_type=None, to_pdf=False):
+    return _popup_report_view(request, system_code, for_generate_pdf=True)
+
+@permission_required()
+def pdf_download_popup_report_view(request, system_code):
+    return _popup_report_view(request, system_code, to_pdf=True, for_generate_pdf=True)
 
 # @permission_required()
 def download_report_view(request, system_code, start_timestamp, end_timestamp, report_type, report_layout=None):
