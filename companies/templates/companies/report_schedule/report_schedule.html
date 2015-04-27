@@ -51,7 +51,10 @@
                 Description
             </div>
             <div class="col-md-3">
-                <input >
+                <select kendo-drop-down-list
+                        k-data-text-field="'fullname'"
+                        k-data-value-field="'ProductID'"
+                        k-data-source="systemsDateSource"></select>
             </div>
             <div class="col-md-3">
                 <input >
@@ -66,7 +69,17 @@
 
 <script>
     angular.module("Entrak", [ "kendo.directives" ])
-        .controller("ReportScheduleController", function($scope){
+        .controller("ReportScheduleController", function($scope) {
+            $scope.systemsDateSource = {
+                transport: {
+                    read: {
+                        async: false,
+                        url: "{% url 'companies.systems.company-systems' current_system.code %}",
+                        type: 'GET',
+                        dataType: "json"
+                    }
+                }
+            };
 
     });
 </script>
