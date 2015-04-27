@@ -156,6 +156,7 @@
 .export-base button {
 	height: 33px;
 	width: 100px;
+	border-radius: 4px;
 	text-align: center;
 	display: inline-block;
 	padding: 0;
@@ -214,7 +215,7 @@
 
 /* datepicker-----*/
 .export-base .k-widget.k-datepicker.k-header {
-	border-radius: 0;
+	border-radius: 4px;
 	border: 1px solid #354960;
 	margin: 0;
 	padding: 0;
@@ -225,7 +226,7 @@
 	border: none;
 	height: 100%;
 	background-color: #FFFFFF;
-	border-radius: 0;
+	border-radius: 4px;
 }
 
 .export-base .k-widget.k-datepicker.k-header input {
