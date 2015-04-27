@@ -213,6 +213,7 @@
 
 .widget-content .yaxis-legend {
     padding: 20px 10px 5px 15px;
+    display: inline-block;
 }
 /*-------widget content*/
 
@@ -424,6 +425,10 @@
 
 
 /*real time widget-------*/
+.no-x-padding {
+	padding-left: 0px;
+	padding-right: 0px;
+}
 .today-mark:before {
     content: "\2011";
     padding-right: 5px;
@@ -440,11 +445,17 @@
 .today-mark {
     color: #81d51d;
     font-weight: 600;
+    padding-top: 20px;
+    padding-bottom: 5px;
+    display: inline-block;
 }
 
 .last-week-mark {
     color: #565656;
     font-weight: 600;
+    padding-top: 20px;
+    padding-bottom: 5px;
+    display: inline-block;
 }
 
 .widget-message2 .message-text {
