@@ -28,6 +28,7 @@ DEFAULT_NIGHT_TIME_END = datetime.time(7)
 
 
 class System(models.Model):
+
     code = models.CharField(max_length=100, unique=True)
     name = models.CharField(max_length=200)
     name_tc = models.CharField(max_length=200, blank=True)
@@ -60,6 +61,7 @@ class System(models.Model):
 
         return systems
 
+
     @staticmethod
     def get_system_path_components(path, system_code, start_from_code, user_systems):
         system_path_components = [code for code in path.split(',') if code !='']
@@ -82,6 +84,7 @@ class System(models.Model):
 
         return result
 
+
     @staticmethod
     def get_systems_info(system_code, user_system_code):
         systems = System.get_systems_within_root(system_code)
@@ -90,6 +93,7 @@ class System(models.Model):
 
         return {'systems': systems, 'user_systems': user_systems,
             'system_path_components': system_path_components}
+
 
     @staticmethod
     def assign_source_under_system(systems, sources):
@@ -100,6 +104,7 @@ class System(models.Model):
                 result[system] = match_sources
 
         return result
+
 
     def __unicode__(self):
         return "code: %s, name: %s"%(self.code, self.name)
@@ -134,6 +139,7 @@ class System(models.Model):
 
         return sources
 
+
     @property
     def child_systems(self):
 
@@ -166,6 +172,7 @@ class System(models.Model):
         all_holidays = set(city_holidays).union(holidays)
         return list(all_holidays)
 
+
     def get_overnight_dates(self, start_dt, end_dt):
 
         current_tz = pytz.timezone(self.timezone)
@@ -176,6 +183,7 @@ class System(models.Model):
             return start_dt.replace(hour=self.night_time_start.hour) + relativedelta(days=1), end_dt + relativedelta(hours=self.night_time_end.hour)
         else:
             return start_dt.replace(hour=self.night_time_start.hour), end_dt + relativedelta(hours=self.night_time_end.hour)
+
 
     def validate_overnight(self, dt):
 
@@ -329,6 +337,7 @@ class System(models.Model):
 
         return {'data': weekday_costs, 'total': total_values, 'number_of_days': total_days}
 
+
     def overnight_cost_by_day(self, start_dt, end_dt):
 
         source_ids = [str(source.id) for source in self.sources]
@@ -387,6 +396,7 @@ class System(models.Model):
         for k,v in OrderedDict(sorted(costs.items())).items():
             overnight_costs.append({'date':k.split(" ")[0], 'weekday':k.split(" ")[1], 'value':v})
         return {'data': overnight_costs, 'total': total_values, 'number_of_days': total_days}
+
 
 class SystemHomeImage(models.Model):
     image = models.ImageField(upload_to="system_home/%Y/%m")

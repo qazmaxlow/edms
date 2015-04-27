@@ -29,6 +29,8 @@ class DailyMeasureList(generics.ListAPIView):
 
             date_end = date_start + datetime.timedelta(days=1)
 
+            money_rate = sys.get_unit_rate(date_start, 'money')
+
             mdb_conn = connection.get_db()
             measured_entries = mdb_conn.source_reading_hour.aggregate([
                 { "$match":
@@ -46,7 +48,7 @@ class DailyMeasureList(generics.ListAPIView):
             ])
 
             results = measured_entries['result']
-            json_data = [{'datetime': m['_id'], 'value': m['value']} for m in results]
+            json_data = [{'datetime': m['_id'], 'value': m['value']*money_rate.rate} for m in results]
 
             return json_data
 
@@ -108,8 +110,7 @@ class TotalDetail(generics.RetrieveAPIView):
         syscode = self.kwargs['system_code']
         sys = System.objects.get(code=syscode)
 
-        date_start = datetime.datetime.now(pytz.utc)
-        date_start = datetime.datetime.combine(date_start, datetime.datetime.min.time())
+        date_start = datetime.datetime.now(sys.time_zone).replace(hour=0, minute=0, second=0, microsecond=0)
         date_end = date_start + datetime.timedelta(days=1)
 
         _date_start = self.request.QUERY_PARAMS.get('date_start', None)
@@ -122,6 +123,8 @@ class TotalDetail(generics.RetrieveAPIView):
         if _date_end is not None:
             date_end = datetime.datetime.fromtimestamp(int(_date_end)/1000.0, tz=pytz.utc)
 
+        print(date_start)
+        print(date_end)
 
         total_cost = sys.get_total_cost(date_start, date_end)
         total_co2 = sys.get_total_co2(date_start, date_end)
