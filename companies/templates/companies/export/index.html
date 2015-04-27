@@ -46,7 +46,7 @@
 
 {% verbatim %}
 <div ng-app="Entrak">
-    <div ng-controller="ReportController">
+    <div ng-controller="ExportController">
         <div class="row export-base">
             <div class="col-md-4 description">
                 <p class="select-text">Follow the steps on the right to download your energy data.</p>
@@ -135,7 +135,7 @@
 
 <script>
     angular.module("Entrak", [ "kendo.directives" ])
-        .controller("ReportController", function($scope){
+        .controller("ExportController", function($scope){
             $scope.interval = "minute";
             $scope.unit = "kwh";
 
