@@ -64,6 +64,12 @@
             </div>
             <div class="col-md-3">
                 <input >
+                <button>Confirm</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div kendo-grid k-options="taskGridOptions(dataItem)"></div>
             </div>
         </div>
     </div>
@@ -81,6 +87,20 @@
                         dataType: "json"
                     }
                 }
+            };
+
+            $scope.taskGridOptions = function(dataItem) {
+                return {
+                    dataSource: {
+                        transport: {
+                            read: "{% url 'companies.report-schedule.tasks' current_system.code %}"
+                        }
+                    },
+                    columns: [
+                    { field: "id", title:"ID", width: "56px" },
+                    { field: "frequency", title:"frequency", width: "110px" }
+                    ]
+                };
             };
 
     });
