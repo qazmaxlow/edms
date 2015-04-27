@@ -32,6 +32,7 @@ urlpatterns = patterns(
     url(r'^export/$', export_views.ExportView.as_view(), name='companies.export'),
     url(r'^export/download/$', export_views.DownloadView.as_view(), name='companies.export.download'),
     url(r'^report-schedule/$', report_schedule_views.ReportScheduleView.as_view(), name='companies.report-schedule'),
+    url(r'^report-schedule/create/$', report_schedule_views.CreateReportScheduleView.as_view(), name='companies.report-schedule.create'),
 
     url(r'^systems/company-systems/$', system_views.CompanySystemList.as_view(), name='companies.systems.company-systems'),
 )

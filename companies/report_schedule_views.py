@@ -1,8 +1,9 @@
 from django.views.generic import TemplateView
 from django.utils.decorators import method_decorator
 
-from system.models import System
+from rest_framework import generics, serializers
 
+from schedulers.models import AutoSendReportSchedular
 from utils.auth import permission_required
 
 
@@ -22,3 +23,12 @@ class ReportScheduleView(TemplateView):
 
         context['current_system'] = systems_info['systems'][0]
         return context
+
+
+class ReportScheduleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AutoSendReportSchedular
+
+
+class CreateReportScheduleView(generics.CreateAPIView):
+    serializer_class = ReportScheduleSerializer
