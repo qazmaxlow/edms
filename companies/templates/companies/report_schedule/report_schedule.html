@@ -73,7 +73,6 @@
             $scope.systemsDateSource = {
                 transport: {
                     read: {
-                        async: false,
                         url: "{% url 'companies.systems.company-systems' current_system.code %}",
                         type: 'GET',
                         dataType: "json"
