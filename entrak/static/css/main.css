@@ -1,4 +1,35 @@
 @font-face {
+    font-family: 'ITCAvantGardeStd';
+    src: url('../fonts/itc-avant-garde-std-bk.eot');
+    src: url('../fonts/itc-avant-garde-std-bk.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/itc-avant-garde-std-bk.woff') format('woff'),
+        url('../fonts/itc-avant-garde-std-bk.ttf') format('truetype'),
+        url('../fonts/itc-avant-garde-std-bk.svg#ITCAvantGardeStd-Bk') format('svg');
+    font-weight: 300; /*100-300 lighter*/
+    font-style: normal;
+}
+@font-face {
+    font-family: 'ITCAvantGardeStd';
+    src: url('../fonts/ITCAvantGardeStd-Md.eot');
+    src: url('../fonts/ITCAvantGardeStd-Md.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/ITCAvantGardeStd-Md.woff') format('woff'),
+        url('../fonts/ITCAvantGardeStd-Md.ttf') format('truetype');
+    font-weight: 500; /*400-500 normal*/
+    font-style: normal;
+}
+@font-face {
+    font-family: 'ITCAvantGardeStd';
+    src: url('../fonts/itc-avant-garde-std-bold.eot');
+    src: url('../fonts/itc-avant-garde-std-bold.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/itc-avant-garde-std-bold.woff') format('woff'),
+        url('../fonts/itc-avant-garde-std-bold.ttf') format('truetype'),
+        url('../fonts/itc-avant-garde-std-bold.svg#ITCAvantGardeStd-Bold') format('svg');
+    font-weight: 900; /*600-900 bold*/
+    font-style: normal;
+}
+
+/* old definition */
+@font-face {
     font-family: 'ITCAvantGardeStd-Bk';
     src: url('../fonts/itc-avant-garde-std-bk.eot');
     src: url('../fonts/itc-avant-garde-std-bk.eot?#iefix') format('embedded-opentype'),
@@ -27,6 +58,7 @@
     font-weight: normal;
     font-style: normal;
 }
+/* old definition */
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
