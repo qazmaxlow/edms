@@ -9,45 +9,46 @@
 /*widget common-------*/
 .widget-container {
     padding:  10px 10px 20px 10px;
-    font-family: 'ITCAvantGardeStd-Bk', sans-serif;
+    font-family: 'ITCAvantGardeStd', sans-serif;
     font-size: 14px;
+    -webkit-font-smoothing: antialiased;
 }
 
 .widget-container .description-1{
     color: #354960;
     font-size: 0.929em;
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .widget-container .description-2{
     color: #878787;
     font-size: 0.929em;
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .widget-container .description-3{
     color: #4B4B4B;
     font-size: 1em;
-    font-weight: lighter;
+    font-weight: 300;
     line-height: 175%;
 }
 
 .widget-container .description-4{
     color: #354960;
     font-size: 1.357em;
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .widget-container .description-5{
     color: #354960;
     font-size: 2.214em;
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .widget-container .description-6{
     color: #354960;
     font-size: 1.071em;
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .widget-content .auto-width {
@@ -82,12 +83,13 @@
 }
 
 .widget-title {
+	letter-spacing: 0.04em;
     padding-left: 10px;
     height: 40px;
     line-height: 39px;
     color: #FFF;
     font-size: 1.0em;
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .widget-toggle {
@@ -99,7 +101,7 @@
 
 .toggle-button {
     font-size: 0.857em;
-    font-weight: lighter;
+    font-weight: 300;
     background-color: #F6F6F6;
     color: #9D9D9D;
     padding: 0px;
@@ -124,7 +126,7 @@
 
 .toggle-primary {
     color: #FFF;
-    font-weight: bold;
+    font-weight: 500;
     background-color: #74C62B;
 }
 
@@ -159,13 +161,13 @@
 .widget-message .left-box {
     height: 60px;
     background-color: #FCFCFC;
-    padding: 12px 15px 11px 15px;
+    padding: 12px 10px 11px 15px;
 }
 
 .widget-message .right-box {
     height: 60px;
     background-color: #E5E8E9;
-    padding: 12px 15px 11px 15px;
+    padding: 12px 10px 11px 15px;
     background-image: url(../../images/dashboard/left-arrow-widget.png);
     background-repeat: no-repeat;
     background-position: left;
@@ -173,14 +175,14 @@
 
 .widget-message .right-box h3{
     font-size: 1.357em;
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .widget-message .right-box h4{
     margin-left: 2px;
     margin-top: 6px;
     font-size: 0.929em;
-    font-weight: lighter;
+    font-weight: 300;
 }
 /*-------widget message*/
 
@@ -207,7 +209,7 @@
 
 .widget-content .legend-label {
     font-size: 0.857em;
-    font-weight: bold;
+    font-weight: 500;
     color: #354960;
 }
 
@@ -280,7 +282,7 @@
     line-height: 1.5em;
     color: #878787;
     font-size: 0.857em;
-    font-weight: bold;
+    font-weight: 500;
     display: table-cell;
     vertical-align: middle;
 }
@@ -302,7 +304,7 @@
     margin-top: 7px;
     text-align: left;
     font-size: 1.357em;
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .horizontal-bars .bc-percent-unit {
@@ -336,7 +338,7 @@
     padding-left: 15px;
     font-size: 0.857em;
     color: #4B4B4B;
-    font-weight: bold;
+    font-weight: 500;
 
     display: table-cell;
     vertical-align: middle;
@@ -369,7 +371,7 @@
 
 .horizontal-bars .bar-row .bar-container .bar .bar-value {
     color: #FFF;
-    font-weight: bold;
+    font-weight: 500;
     font-size: 0.857em;
     text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.8);
     position: absolute;
@@ -478,10 +480,6 @@
     vertical-align: middle;
 }
 
-.widget-title {
-	letter-spacing: 0.04em;
-}
-
 .widget-title .main-title, .widget-title .title-date, .widget-title .title-time {
     display: inline-block;
 }
@@ -493,7 +491,7 @@
 }
 
 .widget-title .title-date {
-    font-weight: lighter;
+    font-weight: 300;
     font-size: 0.929em;
     color: #FFF;
     margin-left: 12px;
@@ -504,7 +502,7 @@
 }
 
 .widget-title .title-time {
-    font-weight: lighter;
+    font-weight: 300;
     font-size: 0.929em;
     color: #FFF;
     margin-left: 12px;
