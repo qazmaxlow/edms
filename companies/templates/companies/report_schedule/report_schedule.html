@@ -52,15 +52,15 @@
                 Description
             </div>
             <div class="col-md-3">
-                <select kendo-drop-down-list
+                <select kendo-drop-down-list="systemDropdown"
                         k-data-text-field="'fullname'"
                         k-data-value-field="'id'"
                         k-data-source="systemsDateSource"></select>
             </div>
             <div class="col-md-3">
-                <select kendo-drop-down-list>
-                    <option>Weekly</option>
-                    <option>Montly</option>
+                <select kendo-drop-down-list="frequencyDropdown">
+                    <option value="1">Weekly</option>
+                    <option value="2">Montly</option>
                 </select>
             </div>
             <div class="col-md-3">
@@ -90,32 +90,32 @@
                 }
             };
 
-            $scope.confirmAdd = function() {
-                var dataSource = new kendo.data.DataSource({
-                    transport: {
-                        create: {
-                            url: "{% url 'companies.report-schedule.create' current_system.code %}",
-                            type: "POST"
-                        }
+            var scheduleTaskDataSource = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        url: "{% url 'companies.report-schedule.tasks' current_system.code %}"
                     },
-                    schema: {
-                        model: { id: "id" } // identifier for map to kendo model, must be defined for create, update or delete
+                    create: {
+                        url: "{% url 'companies.report-schedule.create' current_system.code %}",
+                        type: "POST"
                     }
-                });
-                dataSource.add({frequency: 9, system: 1});
-                dataSource.sync();
-            }
+                },
+                schema: {
+                    model: { id: "id" } // identifier for map to kendo model, must be defined for create, update or delete
+                }
+            });
+
+            $scope.confirmAdd = function() {
+                scheduleTaskDataSource.add({frequency: $scope.frequencyDropdown.value(), system: $scope.systemDropdown.value()});
+                scheduleTaskDataSource.sync();
+            };
 
             $scope.taskGridOptions = function(dataItem) {
                 return {
-                    dataSource: {
-                        transport: {
-                            read: "{% url 'companies.report-schedule.tasks' current_system.code %}"
-                        }
-                    },
+                    dataSource: scheduleTaskDataSource,
                     columns: [
-                    { field: "id", title:"ID", width: "56px" },
-                    { field: "frequency", title:"frequency", width: "110px" }
+                        { field: "frequency_name", title:"frequency", width: "110px" },
+                        { field: "system.fullname", title:"system", width: "110px" }
                     ]
                 };
             };
