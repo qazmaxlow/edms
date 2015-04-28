@@ -34,7 +34,7 @@
 <script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
 
-<script type="text/javascript" charset="utf-8" src="/static/edges/dashboard/widgets/co2/edge_includes/edge.5.0.1.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="/static/edges/dashboard/widgets/money/edge_includes/edge.5.0.1.min.js"></script>
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/dashboard/widgets.css' %}">
 <style>
@@ -115,15 +115,6 @@
         var last_week_measures = [];
         for (var i = 0; i < 24; i++) last_week_measures[i] = null;
 
-        AdobeEdge.loadComposition('money', 'EDGE-9220080', {
-            scaleToFit: "none",
-            centerStage: "none",
-            minW: "0",
-            maxW: "undefined",
-            width: "328px",
-            height: "250px",
-            htmlRoot: "/static/edges/dashboard/widgets/money/"
-        }, {"dom":{}}, {"dom":{}});
         AdobeEdge.loadComposition('co2', 'EDGE-18660633', {
             scaleToFit: "none",
             centerStage: "none",
@@ -133,6 +124,21 @@
             height: "250px",
             htmlRoot: "/static/edges/dashboard/widgets/co2/"
         }, {"dom":{}}, {"style":{"${symbolSelector}":{"isStage":"true","rect":["undefined","undefined","550px","400px"],"fill":["rgba(255,255,255,1)"]}},"dom":{}});
+
+        AdobeEdge.bootstrapCallback(function (compId) {
+            if (compId != "EDGE-9220080"){
+                AdobeEdge.loadComposition('money', 'EDGE-9220080', {
+                    scaleToFit: "none",
+                    centerStage: "none",
+                    minW: "0",
+                    maxW: "undefined",
+                    width: "328px",
+                    height: "250px",
+                    htmlRoot: "/static/edges/dashboard/widgets/money/"
+                }, {"dom":{}}, {"dom":{}});
+            }
+        });
+
 
         // Reference from https://www.youtube.com/watch?feature=player_embedded&v=hrLt0Y9QAY8
         $("#stageMoney,#stageCO2").css({ // Set the transform origin so we always scale to the top left corner of the stage
