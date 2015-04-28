@@ -52,7 +52,7 @@
                 Description
             </div>
             <div class="col-md-3">
-                <select kendo-drop-down-list
+                <select kendo-drop-down-list="systemDropdown"
                         k-data-text-field="'fullname'"
                         k-data-value-field="'id'"
                         k-data-source="systemsDateSource"></select>
@@ -102,7 +102,7 @@
                         model: { id: "id" } // identifier for map to kendo model, must be defined for create, update or delete
                     }
                 });
-                dataSource.add({frequency: $scope.frequencyDropdown.value(), system: 1});
+                dataSource.add({frequency: $scope.frequencyDropdown.value(), system: $scope.systemDropdown.value()});
                 dataSource.sync();
             }
 
