@@ -90,21 +90,22 @@
                 }
             };
 
-            $scope.confirmAdd = function() {
-                var dataSource = new kendo.data.DataSource({
-                    transport: {
-                        create: {
-                            url: "{% url 'companies.report-schedule.create' current_system.code %}",
-                            type: "POST"
-                        }
-                    },
-                    schema: {
-                        model: { id: "id" } // identifier for map to kendo model, must be defined for create, update or delete
+            var scheduleTaskDataSource = new kendo.data.DataSource({
+                transport: {
+                    create: {
+                        url: "{% url 'companies.report-schedule.create' current_system.code %}",
+                        type: "POST"
                     }
-                });
-                dataSource.add({frequency: $scope.frequencyDropdown.value(), system: $scope.systemDropdown.value()});
-                dataSource.sync();
-            }
+                },
+                schema: {
+                    model: { id: "id" } // identifier for map to kendo model, must be defined for create, update or delete
+                }
+            });
+
+            $scope.confirmAdd = function() {
+                scheduleTaskDataSource.add({frequency: $scope.frequencyDropdown.value(), system: $scope.systemDropdown.value()});
+                scheduleTaskDataSource.sync();
+            };
 
             $scope.taskGridOptions = function(dataItem) {
                 return {
