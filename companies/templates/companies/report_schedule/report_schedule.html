@@ -64,7 +64,7 @@
                 </select>
             </div>
             <div class="col-md-3">
-                <input >
+                <input ng-model="taskEmail">
                 <button ng-click="confirmAdd()">Confirm</button>
             </div>
         </div>
@@ -117,7 +117,7 @@
                     {
                         frequency: $scope.frequencyDropdown.value(),
                         system: $scope.systemDropdown.value(),
-                        recievers: [{"email": "test@only.email"}]
+                        recievers: [{"email": $scope.taskEmail}]
                     });
                 scheduleTaskDataSource.sync();
             };
