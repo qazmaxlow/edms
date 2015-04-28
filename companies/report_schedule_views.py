@@ -37,6 +37,7 @@ class ReportScheduleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AutoSendReportSchedular
+        fields = ('frequency_name', 'system')
 
 
 class CreateReportScheduleView(generics.CreateAPIView):
