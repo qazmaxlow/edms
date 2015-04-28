@@ -34,7 +34,7 @@
                 ",": ",",
                 ".": ".",
                 groupSize: [3],
-                symbol: "NT$"
+                symbol: "$"
             }
         },
         calendars: {

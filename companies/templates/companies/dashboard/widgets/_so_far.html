@@ -4,15 +4,17 @@
 {% load humanize %}
 
 <div class="widget-container" ng-controller="WidgetSoFar">
+    {% verbatim %}
     <div class="widget-header row">
-        <div class="widget-title col-sm-7">Comparison</div>
+        <div class="widget-title col-sm-7">{{title}}</div>
         <div class="widget-toggle col-sm-5">
             <div class="pull-right">
-                <button ng-class="{'toggle-primary' : isWeek}" ng-click="toggle(true)" class="toggle-button button-left">Week</button><!--
-                --><button ng-class="{'toggle-primary' : !isWeek}" ng-click="toggle(false)" class="toggle-button button-right">Month</button>
+                <button ng-class="{'toggle-primary' : isWeek}" ng-click="toggle(true)" class="toggle-button button-left">{{btnLeft}}</button><!--
+                --><button ng-class="{'toggle-primary' : !isWeek}" ng-click="toggle(false)" class="toggle-button button-right">{{btnRight}}</button>
             </div>
         </div>
     </div>
+    {% endverbatim %}
     <div class="widget-content row">
         <div class="widget-message2">
             <div class='col-sm-6 eu-box'>
