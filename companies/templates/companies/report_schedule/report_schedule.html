@@ -92,6 +92,9 @@
 
             var scheduleTaskDataSource = new kendo.data.DataSource({
                 transport: {
+                    read: {
+                        url: "{% url 'companies.report-schedule.tasks' current_system.code %}"
+                    },
                     create: {
                         url: "{% url 'companies.report-schedule.create' current_system.code %}",
                         type: "POST"
@@ -109,11 +112,7 @@
 
             $scope.taskGridOptions = function(dataItem) {
                 return {
-                    dataSource: {
-                        transport: {
-                            read: "{% url 'companies.report-schedule.tasks' current_system.code %}"
-                        }
-                    },
+                    dataSource: scheduleTaskDataSource,
                     columns: [
                     { field: "id", title:"ID", width: "56px" },
                     { field: "frequency", title:"frequency", width: "110px" }
