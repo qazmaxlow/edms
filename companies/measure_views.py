@@ -163,6 +163,9 @@ class TopThreeConsumersList(generics.ListAPIView):
 
             childs = sys.child_systems
 
+            current_money_rate = sys.get_unit_rate(date_end, 'money')
+            previous_money_rate = sys.get_unit_rate(previous_date_end, 'money')
+
             if childs:
 
                 for child_sys in childs:
@@ -170,12 +173,12 @@ class TopThreeConsumersList(generics.ListAPIView):
                     p_cost = SourceReadingHour.total_used([s.id for s in child_sys.sources], previous_date_start, previous_date_end)
 
                     if c_cost:
-                        cost_now = c_cost[0]['total']
+                        cost_now = c_cost[0]['total']*current_money_rate.rate
                     else:
                         cost_now = None
 
                     if p_cost:
-                        cost_before = p_cost[0]['total']
+                        cost_before = p_cost[0]['total']*previous_money_rate.rate
                         percentage_change = 100*((cost_now or 0) - cost_before)/float(cost_before)
                     else:
                         cost_before = None
