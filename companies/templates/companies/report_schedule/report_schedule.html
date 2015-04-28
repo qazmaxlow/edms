@@ -58,9 +58,9 @@
                         k-data-source="systemsDateSource"></select>
             </div>
             <div class="col-md-3">
-                <select kendo-drop-down-list>
-                    <option>Weekly</option>
-                    <option>Montly</option>
+                <select kendo-drop-down-list="frequencyDropdown">
+                    <option value="1">Weekly</option>
+                    <option value="2">Montly</option>
                 </select>
             </div>
             <div class="col-md-3">
@@ -102,7 +102,7 @@
                         model: { id: "id" } // identifier for map to kendo model, must be defined for create, update or delete
                     }
                 });
-                dataSource.add({frequency: 9, system: 1});
+                dataSource.add({frequency: $scope.frequencyDropdown.value(), system: 1});
                 dataSource.sync();
             }
 
