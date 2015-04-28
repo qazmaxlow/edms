@@ -26,7 +26,15 @@ class ReportScheduleView(TemplateView):
         return context
 
 
+class SystemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = System
+        fields = ('fullname',)
+
+
 class ReportScheduleSerializer(serializers.ModelSerializer):
+    system = SystemSerializer()
+
     class Meta:
         model = AutoSendReportSchedular
 
