@@ -3,7 +3,7 @@ from django.utils.decorators import method_decorator
 
 from rest_framework import generics, serializers
 
-from schedulers.models import AutoSendReportSchedular
+from schedulers.models import AutoSendReportSchedular, AutoSendReportReciever
 from system.models import System
 from utils.auth import permission_required
 
@@ -32,16 +32,42 @@ class SystemSerializer(serializers.ModelSerializer):
         fields = ('fullname',)
 
 
+class RecieverSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AutoSendReportReciever
+        fields = ('email', )
+
+
 class ReportScheduleSerializer(serializers.ModelSerializer):
     system = SystemSerializer()
+    recievers = RecieverSerializer(many=True)
 
     class Meta:
         model = AutoSendReportSchedular
-        fields = ('frequency_name', 'system')
+        fields = ('frequency_name', 'system', 'recievers')
+
+
+class CreateReportScheduleSerializer(serializers.ModelSerializer):
+    recievers = RecieverSerializer(many=True, read_only=False)
+
+    class Meta:
+        model = AutoSendReportSchedular
+        fields = ('frequency', 'system', 'recievers')
+
+    def create(self, validated_data):
+        recievers_data = validated_data.pop('recievers')
+        scheduler = AutoSendReportSchedular.objects.create(**validated_data)
+
+        for reciever_item in recievers_data:
+            reciever = AutoSendReportReciever(**reciever_item)
+            reciever.scheduler = scheduler
+            reciever.save()
+        return scheduler
+
 
 
 class CreateReportScheduleView(generics.CreateAPIView):
-    serializer_class = ReportScheduleSerializer
+    serializer_class = CreateReportScheduleSerializer
 
 
 class ReportScheduleTaskListView(generics.ListAPIView):

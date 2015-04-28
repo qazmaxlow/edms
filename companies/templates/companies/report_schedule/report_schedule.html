@@ -97,7 +97,14 @@
                     },
                     create: {
                         url: "{% url 'companies.report-schedule.create' current_system.code %}",
-                        type: "POST"
+                        type: "POST",
+                        contentType: "application/json"
+                    },
+
+                    parameterMap: function(data, type) {
+                        if (type == "create") {
+                            return kendo.stringify(data);
+                        }
                     }
                 },
                 schema: {
@@ -106,7 +113,12 @@
             });
 
             $scope.confirmAdd = function() {
-                scheduleTaskDataSource.add({frequency: $scope.frequencyDropdown.value(), system: $scope.systemDropdown.value()});
+                scheduleTaskDataSource.add(
+                    {
+                        frequency: $scope.frequencyDropdown.value(),
+                        system: $scope.systemDropdown.value(),
+                        recievers: [{"email": "test@only.email"}]
+                    });
                 scheduleTaskDataSource.sync();
             };
 
