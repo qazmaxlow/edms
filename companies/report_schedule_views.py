@@ -44,7 +44,7 @@ class ReportScheduleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AutoSendReportSchedular
-        fields = ('frequency_name', 'system', 'recievers')
+        fields = ('id', 'frequency_name', 'system', 'recievers')
 
 
 class CreateReportScheduleSerializer(serializers.ModelSerializer):
