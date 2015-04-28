@@ -14,7 +14,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
 
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
-<script src="{% static 'js/csrf_ajax.js' %}"></script>
+<script src="{% static 'assets/django/js/ajax.js' %}"></script>
 <script src="{% static 'js/moment-with-locales.js' %}"></script>
 <script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
 <script src="{% static 'js/entrak-system.js' %}"></script>
@@ -64,7 +64,7 @@
             </div>
             <div class="col-md-3">
                 <input >
-                <button>Confirm</button>
+                <button ng-click="confirmAdd()">Confirm</button>
             </div>
         </div>
         <div class="row">
@@ -88,6 +88,22 @@
                     }
                 }
             };
+
+            $scope.confirmAdd = function() {
+                var dataSource = new kendo.data.DataSource({
+                    transport: {
+                        create: {
+                            url: "{% url 'companies.report-schedule.create' current_system.code %}",
+                            type: "POST"
+                        }
+                    },
+                    schema: {
+                        model: { id: "id" } // identifier for map to kendo model, must be defined for create, update or delete
+                    }
+                });
+                dataSource.add({frequency: 9, system: 1});
+                dataSource.sync();
+            }
 
             $scope.taskGridOptions = function(dataItem) {
                 return {
