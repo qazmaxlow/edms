@@ -9,7 +9,7 @@ from django.conf import settings
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'entrak.settings')
 
 app = Celery('entrak',
-             broker='amqp://guest:entrak8888@localhost')
+             broker=settings.ENTRAK_BROKER_URL)
 
 app.config_from_object('django.conf:settings')
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
