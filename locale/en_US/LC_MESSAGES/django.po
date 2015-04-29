@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-28 10:27+0000\n"
+"POT-Creation-Date: 2015-04-29 01:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgid "{0:.0f}% {1}"
 msgstr ""
 
 #: companies/report_views.py:473
-#: companies/templates/companies/dashboard/dashboard.html:878
+#: companies/templates/companies/dashboard/dashboard.html:884
 #: companies/templates/companies/reports/_report_content.html:67
 #: companies/templates/companies/reports/_report_content.html:76
 #: companies/templates/companies/reports/_report_content.html:89
@@ -36,7 +36,7 @@ msgid "more"
 msgstr ""
 
 #: companies/report_views.py:473
-#: companies/templates/companies/dashboard/dashboard.html:878
+#: companies/templates/companies/dashboard/dashboard.html:884
 #: companies/templates/companies/reports/_report_content.html:65
 #: companies/templates/companies/reports/_report_content.html:74
 #: companies/templates/companies/reports/_report_content.html:87
@@ -300,11 +300,10 @@ msgid "Turn off the socket"
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:484
-#: entrak/templates/display.html:175
 #, python-format
 msgid ""
-"Even if an appliance is off, it can still consume 10%% of normal energy. "
-"Remember to turn off the socket switch too!"
+"\"Even if an appliance is off, it can still consume 10%(percent)s of normal "
+"energy. Remember to turn off the socket switch too!\""
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:488
@@ -356,12 +355,12 @@ msgstr ""
 msgid "than two weeks ago"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:882
+#: companies/templates/companies/dashboard/dashboard.html:888
 #, fuzzy
 msgid "average weekday"
 msgstr "Weekdays"
 
-#: companies/templates/companies/dashboard/dashboard.html:882
+#: companies/templates/companies/dashboard/dashboard.html:888
 msgid "average overnight"
 msgstr ""
 
@@ -1522,6 +1521,13 @@ msgstr ""
 
 #: entrak/templates/display.html:175
 msgid "TURN OFF THE SOCKET"
+msgstr ""
+
+#: entrak/templates/display.html:175
+#, python-format
+msgid ""
+"Even if an appliance is off, it can still consume 10%% of normal energy. "
+"Remember to turn off the socket switch too!"
 msgstr ""
 
 #: entrak/templates/display.html:210 entrak/templates/graph.html:410
