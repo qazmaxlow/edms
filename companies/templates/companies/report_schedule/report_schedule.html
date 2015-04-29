@@ -155,8 +155,10 @@
                               var arr = $.map(dataItem.receivers, function(r) { return r.email; });
                               return arr.join(',');
                           }
-                        }
-                    ]
+                        },
+                        { command: ["edit", "destroy"], title: "&nbsp;", width: "250px" }
+                    ],
+                    editable: "inline"
                 };
             };
 
