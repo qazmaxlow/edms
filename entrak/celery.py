@@ -50,7 +50,7 @@ app.conf.update(
             'schedule': crontab(minute='*/5'),
         },
         'send-report-by-schedulers': {
-            'task': 'egauge.tasks.send_report_by_schedulers',
+            'task': 'companies.tasks.send_report_by_schedulers',
             'schedule': crontab(),
         },
     },
