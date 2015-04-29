@@ -127,7 +127,13 @@
                     dataSource: scheduleTaskDataSource,
                     columns: [
                         { field: "frequency_name", title:"frequency", width: "110px" },
-                        { field: "system.fullname", title:"system", width: "110px" }
+                        { field: "system.fullname", title:"system", width: "110px" },
+                        { title: "Receivers",
+                          template: function(dataItem) {
+                              var arr = $.map(dataItem.receivers, function(r) { return r.email; });
+                              return arr.join(',');
+                          }
+                        }
                     ]
                 };
             };
