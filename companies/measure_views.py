@@ -279,7 +279,7 @@ class LastWeekDailyCostList(generics.ListAPIView):
                     if (single_date.strftime("%Y-%m-%d") not in dates_with_data) \
                         and ((query_type == "overnight") or (query_type == "weekday" and single_date.weekday() <= 4)):
 
-                        last_week_stats["data"].append({"date":single_date.strftime("%Y-%m-%d"), "weekday":single_date.strftime("%a"), "value":0})
+                        last_week_stats["data"].append({"date":single_date.strftime("%Y-%m-%d"), "weekday":single_date, "value":0})
 
                 last_week_stats["data"].sort(key=lambda r: r['date'])
                 json_data.append({"is_weekday": query_type == "weekday", "average": last_week_average, "minimum": minimum, "maximum": maximum, "percentage_change": percentage_change, "data": last_week_stats["data"]})

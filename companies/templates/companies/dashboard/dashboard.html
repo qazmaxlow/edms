@@ -48,13 +48,13 @@
 {% block system_menu_target_view %}report{% endblock %}
 {% block breadcrumb_target_view %}report{% endblock %}
 
-{% block page_title %}{% trans "THE REPORTS PAGE" %}{% endblock %}
-{% block page_subtitle %}{% trans "Get all your information here at the" %}{% endblock %}
+{% block page_title %}{% trans "ENERGY DASHBOARD" %}{% endblock %}
+{% block page_subtitle %}{% trans "Grab a snapshot of your performance at the" %}{% endblock %}
 
 {% block page_content %}
 
 <div class="container" ng-app="Entrak">
-    <div class="row">
+    <div ng-cloak class="row">
         <div class="col-md-8">
             {% include "companies/dashboard/widgets/_real_time.html" with widget_id=4 %}
         </div>
@@ -62,7 +62,7 @@
             {% include "companies/dashboard/widgets/_tips.html" with widget_id=3 %}
         </div>
     </div>
-    <div class="row">
+    <div ng-cloak class="row">
         <div class="col-md-4">
           {% include "companies/dashboard/widgets/_biggest_consumers.html" with widget_id=1 %}
         </div>
@@ -111,6 +111,14 @@
     });
 
     ngapp.controller("WidgetRealtime", function($scope) {
+        $scope.title = '{% trans "Real-Time" %}';
+        $scope.btnLeft = '{% trans "Graph" %}';
+        $scope.btnRight = '{% trans "Rates" %}';
+        $scope.usedSoFar = '{% trans "So far today you have used: " %}';
+        $scope.axisToday = '{% trans "Today" %}';
+        $scope.axisLast = '{% trans "Last week" %}';
+        $scope.perDay = '{% trans "per day" %}';
+
         var today_measures = [];
         var last_week_measures = [];
         for (var i = 0; i < 24; i++) last_week_measures[i] = null;
@@ -181,7 +189,9 @@
 
         $scope.refreshHeader = function(){
             var d = new Date();
-            $scope.curDate = kendo.toString(d, "d MMMM yyyy");
+            var langCode = '{{LANGUAGE_CODE}}';
+            kendo.culture(langCode.substring(0,3)+langCode.substring(3,5).toUpperCase());
+            $scope.curDate = kendo.toString(d, "D");
             $scope.curTime = kendo.toString(d, "h:mm tt").toLowerCase();
         }
 
@@ -400,7 +410,12 @@
     });
 
     ngapp.controller("WidgetBiggestConsumers", function($scope){
-
+        $scope.title = '{% trans "Biggest Consumers" %}';
+        $scope.btnLeft = '{% trans "Week" context "dashboard" %}';
+        $scope.btnRight = '{% trans "Month" context "dashboard" %}';
+        $scope.changeText = $scope.isWeek ? '{% trans "Change from last week" %}' : '{% trans "Change from last month" %}';
+        $scope.energyCost = '{% trans "Energy cost so far" %}';
+        
         var refreshIntervalId;
         var refreshPeriod = 30000;
 
@@ -448,29 +463,30 @@
     });
 
     ngapp.controller("WidgetTips", function($scope){
+        $scope.title = '{% trans "Energy Saving Tips" %}';
         var tipsList = [{
-            shortDesc: "Put a ribbon on it",
-            longDesc: "Tie a ribbon to the vent of each aircon unit so you can easily tell if aircon has actually been turned off.",
+            shortDesc: '{% trans "Put a ribbon on it" %}',
+            longDesc: '{% trans "Tie a ribbon to the vent of each aircon unit so you can easily tell if aircon has actually been turned off." %}',
             imgPath: "/static/images/dashboard/tips-ribbon.png"
         },
         {
-            shortDesc: "Label your plugs",
-            longDesc: "Label your plugs so you can unplug appliances without accidentally turning off important things!",
+            shortDesc: '{% trans "Label your plugs" %}',
+            longDesc: '{% trans "Label your plugs so you can unplug appliances without accidentally turning off important things!" %}',
             imgPath: "/static/images/dashboard/tips-button.png"
         },
         {
-            shortDesc: "Remove a tube",
-            longDesc: "If you have more light than you need in an area, you can remove one light tube to save energy!",
+            shortDesc: '{% trans "Remove a tube" %}',
+            longDesc: '{% trans "If you have more light than you need in an area, you can remove one light tube to save energy!" %}',
             imgPath: "/static/images/dashboard/tips-lightbulbs.png"
         },
         {
-            shortDesc: "Turn off the socket",
-            longDesc: "Even if an appliance is off, it can still consume 10% of normal energy. Remember to turn off the socket switch too!",
+            shortDesc: '{% trans "Turn off the socket" %}',
+            longDesc: "{% blocktrans with percent='%' %}Even if an appliance is off, it can still consume 10{{percent}} of normal energy. Remember to turn off the socket switch too!{% endblocktrans %}",
             imgPath: "/static/images/dashboard/tips-switch-off.png"
         },
         {
-            shortDesc: "Adjust aircon temperature",
-            longDesc: "30 minutes after turning on aircon, adjust the temperature to minimize energy wastage.",
+            shortDesc: '{% trans "Adjust aircon temperature" %}',
+            longDesc: '{% trans "30 minutes after turning on aircon, adjust the temperature to minimize energy wastage." %}',
             imgPath: "/static/images/dashboard/tips-temperature.png"
         }];
 
@@ -497,6 +513,10 @@
 
 
     ngapp.controller("WidgetSoFar", function($scope){
+        $scope.title = '{% trans "Comparison" %}';
+        $scope.btnLeft = '{% trans "Week" context "dashboard" %}';
+        $scope.btnRight = '{% trans "Month" context "dashboard" %}';
+
         var refreshIntervalId;
         var refreshPeriod = 30000;
 
@@ -642,8 +662,8 @@
 
         $scope.isWeek = true;
         var setTitle = function(){
-            $scope.leftBoxTitle = $scope.isWeek ? "So far this week" : "So far this month";
-            $scope.rightBoxTitle = $scope.isWeek ? "By this time last week" : "By this time last month";
+            $scope.leftBoxTitle = $scope.isWeek ? '{% trans "So far this week" %}' : '{% trans "So far this month" %}';
+            $scope.rightBoxTitle = $scope.isWeek ? '{% trans "By this time last week" %}' : '{% trans "By this time last month" %}';
         }
 
         setTitle();
@@ -679,6 +699,10 @@
     });
 
     ngapp.controller("WidgetLastWeekStats", function($scope){
+        $scope.title = '{% trans "Last Week Stats" %}';
+        $scope.btnLeft = '{% trans "Day" %}';
+        $scope.btnRight = '{% trans "Night" %}';
+        $scope.rightBoxText = '{% trans "than two weeks ago" %}';
 
         var ds = new kendo.data.DataSource({
             transport: {
@@ -776,13 +800,19 @@
             },
             categoryAxis: {
                 field: "weekday",
+                type: "date",
                 majorGridLines: {
                     //color: "#ECECEC",
                     visible: false
                 },
                 labels: {
                     font: "0.857em ITCAvantGardeStd-Bk",
-                    color: "#4B4B4B"
+                    color: "#4B4B4B",
+
+        dateFormats: {
+            days: "ddd"
+        }
+    
                 },
                 line: {
                     color: "#ECECEC",
@@ -851,11 +881,11 @@
         }
 
         $scope.moreLessText = function(percentage_change){
-            return (percentage_change > 0) ? "more" : "less";
+            return (percentage_change > 0) ? '{% trans "more" %}' : '{% trans "less" %}';
         };
 
         $scope.currentAverage = function(){
-            return  ($scope.isWeekday ? "average weekday" : "average overnight");
+            return  ($scope.isWeekday) ? '{% trans "average weekday" %}' : '{% trans "average overnight" %}';
         };
     });
 </script>

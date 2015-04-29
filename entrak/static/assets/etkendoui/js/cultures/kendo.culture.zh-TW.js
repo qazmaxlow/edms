@@ -34,7 +34,7 @@
                 ",": ",",
                 ".": ".",
                 groupSize: [3],
-                symbol: "NT$"
+                symbol: "$"
             }
         },
         calendars: {
@@ -51,7 +51,7 @@
                 AM: ["上午","上午","上午"],
                 PM: ["下午","下午","下午"],
                 patterns: {
-                    d: "yyyy/M/d",
+                    d: "yyyy'年'M'月'd'日，'ddd",//"yyyy/M/d",
                     D: "yyyy'年'M'月'd'日'",
                     F: "yyyy'年'M'月'd'日' tt hh:mm:ss",
                     g: "yyyy/M/d tt hh:mm",

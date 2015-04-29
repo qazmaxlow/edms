@@ -177,3 +177,7 @@ ANALYTICS_TRACKING = False
 # Expire after 60 minutes
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_COOKIE_AGE = 60 * 60
+
+
+# Celery
+ENTRAK_BROKER_URL = 'amqp://guest:entrak8888@localhost' # should be removed

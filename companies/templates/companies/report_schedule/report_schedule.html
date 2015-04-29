@@ -46,26 +46,36 @@
 
 {% verbatim %}
 <div ng-app="Entrak">
-    <div ng-controller="ReportScheduleController" class="auto-report-base">
+    <div ng-cloak ng-controller="ReportScheduleController" class="auto-report-base" style="height: 420px">
         <div class="row steps">
-            <div class="col-md-3">
-                Description
+            <div class="col-md-3 description">
+                <p class="desc-text">{{description}}</p>
+                <img src="/static/images/export/et-helper.png"></img>
             </div>
             <div class="col-md-3">
-                <select kendo-drop-down-list
-                        k-data-text-field="'fullname'"
-                        k-data-value-field="'id'"
-                        k-data-source="systemsDateSource"></select>
+                <div class="step-label">{{step1}}</div>
+                <div class="header">{{step1Title}}</div>
+                <div class="content bg-step1">
+                    <select kendo-drop-down-list="systemDropdown"
+                            k-data-text-field="'fullname'"
+                            k-data-value-field="'id'"
+                            k-data-source="systemsDateSource"></select>
+                </div>
             </div>
             <div class="col-md-3">
-                <select kendo-drop-down-list>
-                    <option>Weekly</option>
-                    <option>Montly</option>
-                </select>
+                <div class="step-label">{{step2}}</div>
+                <div class="header">{{step2Title}}</div>
+                <div class="content bg-step2">
+                    <select kendo-drop-down-list="frequencyDropdown">
+                        <option value="1">{{freqWeekly}}</option>
+                        <option value="2">{{freqMonthly}}</option>
+                    </select>
+                </div>
             </div>
+
             <div class="col-md-3">
-                <input >
-                <button ng-click="confirmAdd()">Confirm</button>
+                <input ng-model="taskEmail">
+                <button ng-click="confirmAdd()">{{btnConfirm}}</button>
             </div>
         </div>
         <div class="row records">
@@ -80,6 +90,18 @@
 <script>
     angular.module("Entrak", [ "kendo.directives" ])
         .controller("ReportScheduleController", function($scope) {
+            $scope.description = '{% trans "Set the system to email you an energy report each month or week, so you can stay informaed and up to date on your energy use." %}';
+            $scope.freqWeekly = '{% trans "Weekly" %}';
+            $scope.freqMonthly = '{% trans "Monthly" %}';
+            $scope.btnConfirm = '{% trans "Confirm" %}';
+            $scope.sendTo = '{% trans "Send to:" %}';
+            $scope.step1 = '{% trans "Step 1" %}';
+            $scope.step2 = '{% trans "Step 2" %}';
+            $scope.step3 = '{% trans "Step 3" %}';
+            $scope.step1Title = '{% trans "Select Scope" %}';
+            $scope.step2Title = '{% trans "Select Frequency" %}';
+            $scope.step3Title = '{% trans "Confirm and Go" %}';
+
             $scope.systemsDateSource = {
                 transport: {
                     read: {
@@ -90,32 +112,50 @@
                 }
             };
 
-            $scope.confirmAdd = function() {
-                var dataSource = new kendo.data.DataSource({
-                    transport: {
-                        create: {
-                            url: "{% url 'companies.report-schedule.create' current_system.code %}",
-                            type: "POST"
-                        }
+            var scheduleTaskDataSource = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        url: "{% url 'companies.report-schedule.tasks' current_system.code %}"
                     },
-                    schema: {
-                        model: { id: "id" } // identifier for map to kendo model, must be defined for create, update or delete
+                    create: {
+                        url: "{% url 'companies.report-schedule.create' current_system.code %}",
+                        type: "POST",
+                        contentType: "application/json"
+                    },
+
+                    parameterMap: function(data, type) {
+                        if (type == "create") {
+                            return kendo.stringify(data);
+                        }
                     }
-                });
-                dataSource.add({frequency: 9, system: 1});
-                dataSource.sync();
-            }
+                },
+                schema: {
+                    model: { id: "id" } // identifier for map to kendo model, must be defined for create, update or delete
+                }
+            });
+
+            $scope.confirmAdd = function() {
+                scheduleTaskDataSource.add(
+                    {
+                        frequency: $scope.frequencyDropdown.value(),
+                        system: $scope.systemDropdown.value(),
+                        receivers: [{"email": $scope.taskEmail}]
+                    });
+                scheduleTaskDataSource.sync();
+            };
 
             $scope.taskGridOptions = function(dataItem) {
                 return {
-                    dataSource: {
-                        transport: {
-                            read: "{% url 'companies.report-schedule.tasks' current_system.code %}"
-                        }
-                    },
+                    dataSource: scheduleTaskDataSource,
                     columns: [
-                    { field: "id", title:"ID", width: "56px" },
-                    { field: "frequency", title:"frequency", width: "110px" }
+                        { field: "frequency_name", title:"frequency", width: "110px" },
+                        { field: "system.fullname", title:"system", width: "110px" },
+                        { title: "Receivers",
+                          template: function(dataItem) {
+                              var arr = $.map(dataItem.receivers, function(r) { return r.email; });
+                              return arr.join(',');
+                          }
+                        }
                     ]
                 };
             };

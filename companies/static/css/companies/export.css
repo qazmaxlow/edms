@@ -1,8 +1,10 @@
 .export-base {
-	font-family: 'ITCAvantGardeStd-Bk', sans-serif;
+	font-family: 'ITCAvantGardeStd', "Helvetica Neue Light",
+ 	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+ 	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
+	-webkit-font-smoothing: antialiased;
 	font-size: 14px;
 	height: 443px;
-	
 	margin: 30px 40px;
 }
 
@@ -53,13 +55,12 @@
 
 .export-base .select-text {
 	margin: 44px auto;
-	height: 64px;
-	width: 255px;
+	height: 70px;
+	width: 260px;
 	text-align: left;
 	padding: 10px 15px;
 	font-size: 1.071em;
 	color: #354960;
-	font-weight: bold;
 	background-color: #fafafa;
 	border: 1px solid #f2dbb7;
 }
@@ -67,9 +68,8 @@
 .export-base .header {
 	display: table;
 	width: 100%;
-	font-family: ITCAvantGardeStd-Md;
 	font-size: 0.929em;
-	font-weight: bold;
+	font-weight: 600;
 	color: #354960;
 	background-color: #faf0da;
 	height: 35px;
@@ -123,9 +123,8 @@
 }
 
 .export-base .step-label {
-	font-family: ITCAvantGardeStd-Md;
 	font-size: 0.929em;
-	font-weight: bold;
+	font-weight: 600;
 	color: #f3ca71;
 	background-color: #fbf4e5;
 	height: 34px;
@@ -137,7 +136,7 @@
 
 .export-base .date-text {
 	font-size: 1.071em;
-	font-weight: lighter;
+	font-weight: 300;
 	color: #354960;
 	margin-bottom: 5px;
 	margin-top: 0;
@@ -157,7 +156,7 @@
 
 .export-base button {
 	height: 33px;
-	width: 100px;
+	width: 120px;
 	border-radius: 4px;
 	text-align: center;
 	display: inline-block;
@@ -171,7 +170,6 @@
 .export-base button.rect-radio {
 	font-size: 1.071em;
 	color: #354960;
-	font-weight: bold;
 	border: 1px solid #354960;
 	background-color: #FFFFFF;
 	margin: 7px;
@@ -201,18 +199,21 @@
 	text-align: right;
 	color: #565656;
 	font-size: 0.929em;
-	font-weight: bold;
+	font-weight: 600;
 	line-height: 175%;
 }
 
 .export-base .field-info p {
 	margin: 0;
-	padding-left: 15px;
 	text-align: left;
 	color: #565656;
 	font-size: 0.929em;
-	font-weight: lighter;
+	font-weight: 300;
 	line-height: 175%;
+}
+
+.export-base .field-info.col-md-6 {
+	padding-left: 15px;
 }
 
 /* datepicker-----*/
@@ -235,7 +236,6 @@
 	text-align: center;
 	font-size: 1.071em;
 	color: #354960;
-	font-weight: bold;
 	box-sizing: border-box;
 	height: 100%;
 }
