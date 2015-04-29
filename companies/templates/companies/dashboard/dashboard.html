@@ -54,7 +54,7 @@
 {% block page_content %}
 
 <div class="container" ng-app="Entrak">
-    <div class="row">
+    <div ng-cloak class="row">
         <div class="col-md-8">
             {% include "companies/dashboard/widgets/_real_time.html" with widget_id=4 %}
         </div>
@@ -62,7 +62,7 @@
             {% include "companies/dashboard/widgets/_tips.html" with widget_id=3 %}
         </div>
     </div>
-    <div class="row">
+    <div ng-cloak class="row">
         <div class="col-md-4">
           {% include "companies/dashboard/widgets/_biggest_consumers.html" with widget_id=1 %}
         </div>
