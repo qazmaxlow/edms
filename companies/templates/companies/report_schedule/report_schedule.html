@@ -46,26 +46,36 @@
 
 {% verbatim %}
 <div ng-app="Entrak">
-    <div ng-controller="ReportScheduleController" class="auto-report-base">
+    <div ng-cloak ng-controller="ReportScheduleController" class="auto-report-base" style="height: 420px">
         <div class="row steps">
-            <div class="col-md-3">
-                Description
+            <div class="col-md-3 description">
+                <p class="desc-text">{{description}}</p>
+                <img src="/static/images/export/et-helper.png"></img>
             </div>
             <div class="col-md-3">
-                <select kendo-drop-down-list="systemDropdown"
-                        k-data-text-field="'fullname'"
-                        k-data-value-field="'id'"
-                        k-data-source="systemsDateSource"></select>
+                <div class="step-label">{{step1}}</div>
+                <div class="header">{{step1Title}}</div>
+                <div class="content bg-step1">
+                    <select kendo-drop-down-list="systemDropdown"
+                            k-data-text-field="'fullname'"
+                            k-data-value-field="'id'"
+                            k-data-source="systemsDateSource"></select>
+                </div>
             </div>
             <div class="col-md-3">
-                <select kendo-drop-down-list="frequencyDropdown">
-                    <option value="1">Weekly</option>
-                    <option value="2">Montly</option>
-                </select>
+                <div class="step-label">{{step2}}</div>
+                <div class="header">{{step2Title}}</div>
+                <div class="content bg-step2">
+                    <select kendo-drop-down-list="frequencyDropdown">
+                        <option value="1">{{freqWeekly}}</option>
+                        <option value="2">{{freqMonthly}}</option>
+                    </select>
+                </div>
             </div>
+
             <div class="col-md-3">
                 <input ng-model="taskEmail">
-                <button ng-click="confirmAdd()">Confirm</button>
+                <button ng-click="confirmAdd()">{{btnConfirm}}</button>
             </div>
         </div>
         <div class="row records">
@@ -80,6 +90,18 @@
 <script>
     angular.module("Entrak", [ "kendo.directives" ])
         .controller("ReportScheduleController", function($scope) {
+            $scope.description = '{% trans "Set the system to email you an energy report each month or week, so you can stay informaed and up to date on your energy use." %}';
+            $scope.freqWeekly = '{% trans "Weekly" %}';
+            $scope.freqMonthly = '{% trans "Monthly" %}';
+            $scope.btnConfirm = '{% trans "Confirm" %}';
+            $scope.sendTo = '{% trans "Send to:" %}';
+            $scope.step1 = '{% trans "Step 1" %}';
+            $scope.step2 = '{% trans "Step 2" %}';
+            $scope.step3 = '{% trans "Step 3" %}';
+            $scope.step1Title = '{% trans "Select Scope" %}';
+            $scope.step2Title = '{% trans "Select Frequency" %}';
+            $scope.step3Title = '{% trans "Confirm and Go" %}';
+
             $scope.systemsDateSource = {
                 transport: {
                     read: {
