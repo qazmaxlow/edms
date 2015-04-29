@@ -481,7 +481,7 @@
         },
         {
             shortDesc: '{% trans "Turn off the socket" %}',
-            longDesc: '{% trans "Even if an appliance is off, it can still consume 10% of normal energy. Remember to turn off the socket switch too!" context "dashboard" %}',
+            longDesc: "{% blocktrans with percent='%' %}Even if an appliance is off, it can still consume 10{{percent}} of normal energy. Remember to turn off the socket switch too!{% endblocktrans %}",
             imgPath: "/static/images/dashboard/tips-switch-off.png"
         },
         {

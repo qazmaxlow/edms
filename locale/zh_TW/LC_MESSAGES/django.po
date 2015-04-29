@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-28 10:27+0000\n"
+"POT-Creation-Date: 2015-04-29 01:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgid "{0:.0f}% {1}"
 msgstr "{1} {0:.0f}%"
 
 #: companies/report_views.py:473
-#: companies/templates/companies/dashboard/dashboard.html:878
+#: companies/templates/companies/dashboard/dashboard.html:884
 #: companies/templates/companies/reports/_report_content.html:67
 #: companies/templates/companies/reports/_report_content.html:76
 #: companies/templates/companies/reports/_report_content.html:89
@@ -36,7 +36,7 @@ msgid "more"
 msgstr "增加了"
 
 #: companies/report_views.py:473
-#: companies/templates/companies/dashboard/dashboard.html:878
+#: companies/templates/companies/dashboard/dashboard.html:884
 #: companies/templates/companies/reports/_report_content.html:65
 #: companies/templates/companies/reports/_report_content.html:74
 #: companies/templates/companies/reports/_report_content.html:87
@@ -301,23 +301,11 @@ msgstr "關上插座總開關"
 
 #: companies/templates/companies/dashboard/dashboard.html:484
 #, python-format
-msgctxt "dashboard"
 msgid ""
-"Even if an appliance is off, it can still consume 10%% of normal energy. "
-"Remember to turn off the socket switch too!"
+"Even if an appliance is off, it can still consume 10%(percent)s of normal "
+"energy. Remember to turn off the socket switch too!"
 msgstr ""
-"縱使電器已經關掉，如果插頭沒有拔除，仍然會消耗若10％的正常用電。以後要緊記關"
-"掉掉或拔出插頭啊。"
-
-#: entrak/templates/display.html:175
-#, python-format
-msgid ""
-"Even if an appliance is off, it can still consume 10%% of normal energy. "
-"Remember to turn off the socket switch too!"
-msgstr ""
-"就算把電器關掉，但還連接在插座上，這樣仍然會消耗5-10%%的能源。正因如此，請緊"
-"記得也把插座或拖板上的開關掣關掉！"
-
+"縱使電器已經關掉，如果插頭沒有拔除，仍然會消耗若10%(percent)s的正常用電。 以後要緊記關掉掉或拔出插頭啊。"
 
 #: companies/templates/companies/dashboard/dashboard.html:488
 msgid "Adjust aircon temperature"
@@ -367,11 +355,11 @@ msgstr "晚間"
 msgid "than two weeks ago"
 msgstr "比兩週前"
 
-#: companies/templates/companies/dashboard/dashboard.html:882
+#: companies/templates/companies/dashboard/dashboard.html:888
 msgid "average weekday"
 msgstr "平日平均用電"
 
-#: companies/templates/companies/dashboard/dashboard.html:882
+#: companies/templates/companies/dashboard/dashboard.html:888
 msgid "average overnight"
 msgstr "晚間平均用電"
 
@@ -1576,6 +1564,15 @@ msgstr ""
 msgid "TURN OFF THE SOCKET"
 msgstr ""
 
+#: entrak/templates/display.html:175
+#, python-format
+msgid ""
+"Even if an appliance is off, it can still consume 10%% of normal energy. "
+"Remember to turn off the socket switch too!"
+msgstr ""
+"就算把電器關掉，但還連接在插座上，這樣仍然會消耗5-10%%的能源。正因如此，請緊"
+"記得也把插座或拖板上的開關掣關掉！"
+
 #: entrak/templates/display.html:210 entrak/templates/graph.html:410
 #: entrak/templates/ranking.html:565
 #: printers/templates/system/printers/graph.html:417
@@ -2533,6 +2530,14 @@ msgstr "用戶沒有訪問這部份的權限。"
 #: utils/auth.py:40 utils/auth.py:61
 msgid "Please enter username and password."
 msgstr "請輸入用戶名稱和密碼"
+
+#~ msgctxt "dashboard"
+#~ msgid ""
+#~ "Even if an appliance is off, it can still consume 10%% of normal energy. "
+#~ "Remember to turn off the socket switch too!"
+#~ msgstr ""
+#~ "縱使電器已經關掉，如果插頭沒有拔除，仍然會消耗若10％的正常用電。以後要緊記"
+#~ "關掉掉或拔出插頭啊。"
 
 #~ msgid "Week total"
 #~ msgstr "全週"
