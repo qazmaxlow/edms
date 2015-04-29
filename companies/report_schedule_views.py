@@ -3,7 +3,7 @@ from django.utils.decorators import method_decorator
 
 from rest_framework import generics, serializers
 
-from schedulers.models import AutoSendReportSchedular, AutoSendReportReciever
+from schedulers.models import AutoSendReportSchedular, AutoSendReportReceiver
 from system.models import System
 from utils.auth import permission_required
 
@@ -32,36 +32,36 @@ class SystemSerializer(serializers.ModelSerializer):
         fields = ('fullname',)
 
 
-class RecieverSerializer(serializers.ModelSerializer):
+class ReceiverSerializer(serializers.ModelSerializer):
     class Meta:
-        model = AutoSendReportReciever
+        model = AutoSendReportReceiver
         fields = ('email', )
 
 
 class ReportScheduleSerializer(serializers.ModelSerializer):
     system = SystemSerializer()
-    recievers = RecieverSerializer(many=True)
+    receivers = ReceiverSerializer(many=True)
 
     class Meta:
         model = AutoSendReportSchedular
-        fields = ('id', 'frequency_name', 'system', 'recievers')
+        fields = ('id', 'frequency_name', 'system', 'receivers')
 
 
 class CreateReportScheduleSerializer(serializers.ModelSerializer):
-    recievers = RecieverSerializer(many=True, read_only=False)
+    receivers = ReceiverSerializer(many=True, read_only=False)
 
     class Meta:
         model = AutoSendReportSchedular
-        fields = ('frequency', 'system', 'recievers')
+        fields = ('frequency', 'system', 'receivers')
 
     def create(self, validated_data):
-        recievers_data = validated_data.pop('recievers')
+        receivers_data = validated_data.pop('receivers')
         scheduler = AutoSendReportSchedular.objects.create(**validated_data)
 
-        for reciever_item in recievers_data:
-            reciever = AutoSendReportReciever(**reciever_item)
-            reciever.scheduler = scheduler
-            reciever.save()
+        for receiver_item in receivers_data:
+            receiver = AutoSendReportReceiver(**receiver_item)
+            receiver.scheduler = scheduler
+            receiver.save()
         return scheduler
 
 
