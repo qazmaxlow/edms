@@ -14,6 +14,6 @@ class AutoSendReportSchedular(models.Model):
         return FREQUENCIES.get(self.frequency)
 
 
-class AutoSendReportReciever(models.Model):
-    scheduler = models.ForeignKey('AutoSendReportSchedular', related_name="recievers")
+class AutoSendReportReceiver(models.Model):
+    scheduler = models.ForeignKey('AutoSendReportSchedular', related_name="receivers")
     email = models.TextField()
