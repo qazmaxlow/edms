@@ -73,3 +73,7 @@ class CreateReportScheduleView(generics.CreateAPIView):
 class ReportScheduleTaskListView(generics.ListAPIView):
     serializer_class = ReportScheduleSerializer
     queryset = AutoSendReportSchedular.objects.all()
+
+
+class ReportScheduleTaskDestoryView(generics.DestroyAPIView):
+    queryset = AutoSendReportSchedular.objects.all()

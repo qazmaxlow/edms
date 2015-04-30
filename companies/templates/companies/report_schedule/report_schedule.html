@@ -122,7 +122,14 @@
                         type: "POST",
                         contentType: "application/json"
                     },
-
+                    destroy: {
+                        url: function (item) {
+                            var url = "{% url 'companies.report-schedule.destroy' current_system.code 999 %}";
+                            url = url.replace(999, item.id);
+                            return url;
+                        },
+                        type: "DELETE"
+                    },
                     parameterMap: function(data, type) {
                         if (type == "create") {
                             return kendo.stringify(data);
