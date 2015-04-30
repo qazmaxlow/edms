@@ -24,7 +24,6 @@
 {% block extra_script %}
 <script src="{% static 'assets/jquery/jquery-1.11.0.min.js' %}"></script>
 <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
-<script src="{% static 'assets/kendoui/js/angular-cookies.min.js' %}"></script>
 <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
 {% endblock %}
 
@@ -86,9 +85,7 @@
     <div class="demo-section k-header" ng-controller="MyCtrl">
         <div kendo-window="wndw" id="registration" k-title="'Set Up Your Account'" k-width="800" k-height="600" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
             <div class="form-horizontal form-widgets">
-                <form kendo-validator="validator" ng-submit="validate($event)" class="k-content" ng-model="isValid">
-                <input type="hidden" name="uid" ng-model="user.uid">
-                <input type="hidden" name="ucode" ng-model="user.ucode">
+                <form name="kForm" kendo-validator="validator" ng-submit="validate($event)" class="k-content" ng-model="isValid">
                 <div class="form-group">
                     <label class="control-label col-sm-4" for="firstname">First Name</label>
                     <div class="col-sm-8 col-md-6">
@@ -138,7 +135,7 @@
                 <div class="form-group">
                     <label class="control-label col-sm-4" for="email">Email</label>
                     <div class="col-sm-8 col-md-6">
-                        <input type="email" id="email" name="Email" class="k-textbox" ng-value="email" ng-disabled="true" />
+                        <input type="email" id="email" name="Email" class="k-textbox" ng-value="email" ng-readonly="true" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -206,22 +203,36 @@
     </style>
 
     <script>
-        angular.module("entrak", [ "kendo.directives", "ngCookies" ])
+        angular.module("entrak", [ "kendo.directives" ])
+            .config(['$httpProvider', function($httpProvider) {
+                $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+            }])
+
             .controller("MyCtrl", function($scope, $http){
 
                 $scope.user = {}
-                $scope.user["uid"] == "{{uid}}";
-                $scope.user["ucode"] == "{{ucode}}";
+                $scope.user.uid = "{{uid}}";
+                $scope.user.ucode = "{{ucode}}";
                 $scope.email = "{{user.email}}";
 
                 $scope.createUser = function() {
                     $http({
                         method : 'POST',
                         url : "{% url 'users.activate_account' user.id %}",
-                        data : $scope.user
+                        contentType: 'application/json; charset=utf-8',
+                        data: $scope.user,
+                    }).success(function(data, textStatus) {
+                        console.log(data);
+                        if (data.redirect) {
+                            // data.redirect contains the string URL to redirect to
+                            window.location.href = data.redirect;
+                        }
+                        else {
+                            // data.form contains the HTML for the replacement form
+                            console.log(data);
+                        }
                     })
                 }
-
 
                 $scope.validate = function(event) {
                     event.preventDefault();
@@ -234,7 +245,7 @@
                     }
                 }
 
-                setTimeout(function(){ $("#registration").data("kendoWindow").center().open(); }, 100);
+                setTimeout(function(){ $("#registration").data("kendoWindow").center().open(); }, 500);
             })
     </script>
 </div>

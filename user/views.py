@@ -10,6 +10,10 @@ from django.utils import dateparse
 from django.utils import timezone
 from operator import itemgetter
 from django.utils.translation import ugettext as _
+from django.contrib.auth import authenticate
+from django.core.urlresolvers import reverse
+from django.utils import simplejson
+from django.http import HttpResponse
 
 from egauge.manager import SourceManager
 from system.models import System
@@ -20,32 +24,47 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def activate_account(request, user_id):
 
-    user = EntrakUser.objects.get(id=user_id, is_email_verified=False)
+    user = None
+    data = {}
 
-    if request.method == 'POST':
-        user_id = request.POST.get('uid', None)
-        user_code = request.POST.get('ucode', None)
+    users = EntrakUser.objects.filter(id=user_id, is_email_verified=False)
+    if users.exists():
+        user = users[0]
+
+    if request.is_ajax() and request.method == 'POST':
+        data = simplejson.loads(request.body)
+        user_id = data.get('uid', None)
+        user_code = data.get('ucode', None)
     else:
         user_id = request.GET.get('uid', None)
         user_code = request.GET.get('ucode', None)
 
-    print(user.__dict__)
+
+    print(user)
     print(user_id)
     print(user_code)
+
 
     if user and user_id and user_code:
 
         if user.validate_activation_url(user_id.encode('ascii','ignore'), user_code.encode('ascii','ignore')):
             system = System.objects.get(id=user.system_id)
 
-            if request.method == 'POST':
-                user.first_name = request.POST.get('first_name', None)
-                user.last_name = request.POST.get('last_name', None)
-                user.department = request.POST.get('department', None)
-                user.language = request.POST.get('language', None)
-                user.password = request.POST.get('password', None)
+            if request.is_ajax() and request.method == 'POST':
+                user.first_name = data.get('first_name', None)
+                user.last_name = data.get('last_name', None)
+                user.username = user.email
+                user.department = data.get('department', None)
+                user.language = data.get('language', None)
+                user.set_password(data.get('password', None))
+                user.is_active = True
+                user.is_email_verified =  True
+                user.save()
 
-                print(u.__dict__)
+                user = authenticate(username=user.username, password=user.password)
+                url = reverse('graph', kwargs={'system_code': system.code})
+                json_data = simplejson.dumps({"redirect": url})
+                return HttpResponse({json_data}, mimetype='application/json')
 
             else:
                 m = {"uid": user_id, "ucode": user_code}
@@ -60,5 +79,5 @@ def activate_account(request, user_id):
             return redirect('/login')
 
     else:
-        request.session['login_warning_msg'] = _("Invalid user or token")
+        request.session['login_warning_msg'] = _("Invalid request")
         return redirect('/login')
