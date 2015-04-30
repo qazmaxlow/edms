@@ -1,0 +1,250 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load static %}
+{% load entrak_extras %}
+
+{% block ga_page_title %}login{% endblock %}
+
+{% block extra_head %}
+{{block.super}}
+<link rel="stylesheet" type="text/css" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/tmp/bootstrap_hack.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'assets/kendoui/styles/kendo.default.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'assets/kendoui/styles/kendo.common-bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'assets/kendoui/styles/kendo.bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'assets/kendoui/styles/kendo.dataviz.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'assets/kendoui/styles/kendo.dataviz.default.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'assets/kendoui/styles/kendo.dataviz.bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block extra_script %}
+<script src="{% static 'assets/jquery/jquery-1.11.0.min.js' %}"></script>
+<script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
+<script src="{% static 'assets/kendoui/js/angular-cookies.min.js' %}"></script>
+<script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+{% get_current_language as LANGUAGE_CODE %}
+<div class="system-info-container">
+    {% block system_info_container %}
+    <div class="system-title">{{system|get_system_full_name:LANGUAGE_CODE}}</div>
+    <div class="system-logo">
+        <div class="logo-circle-bound" style="background-image: url('{{system.logo.url}}');"></div>
+        <img src="{% static 'images/user-logo-bg.png' %}">
+    </div>
+    {% endblock %}
+
+    <div class="change-lang-block">
+        <a lang_code="zh-tw" class="{% ifequal LANGUAGE_CODE 'zh-tw' %}current-lang{% endifequal %}" href="#">繁體中文</a>
+        <span> / </span>
+        <a lang_code="en" class="{% ifequal LANGUAGE_CODE 'en' %}current-lang{% endifequal %}" href="#">ENGLISH</a>
+    </div>
+
+    <div style="display:none;">
+        <form class="change-lang-form" action="{% url 'set_language' %}" method="post">
+            {% csrf_token %}
+            <input name="language" type="hidden" value="" />
+        </form>
+    </div>
+</div>
+
+<div class="bg-container">
+    <img src="{% static 'images/login/bg.png' %}">
+</div>
+
+<div class="desc-header">{% trans "Welcome to En-trak<sup>TM</sup>" %}</div>
+<div class="desc-content">{% trans "Turning Data into Actionable Intelligence" %}</div>
+<div class="login-panel">
+    <div>{% trans "To use the En-trak monitor platform, please sign in" %}</div>
+    <form method="POST">{% csrf_token %}
+        <div>
+            <img src="{% static 'images/login/username-icon.png' %}">
+            <input type="text" name="username" placeholder='{% trans "Username" %}'>
+        </div>
+        <div>
+            <img src="{% static 'images/login/password-icon.png' %}">
+            <input type="password" name="password" placeholder='{% trans "Password" %}'>
+        </div>
+        <div class="remember-me">
+            <label for="remember_me" class="remember-me">
+                <input type="checkbox" value="remember_me" name="remember_me" class="remember-me">
+                Remember Me
+            </label>
+        </div>
+        <input type="submit" value='{% trans "Sign In" %}'>
+    </form>
+    {% if warning_msg %}
+    <div class="warning-msg">{{warning_msg}}</div>
+    {% endif %}
+</div>
+<div ng-app="entrak">
+    <div class="demo-section k-header" ng-controller="MyCtrl">
+        <div kendo-window="wndw" id="registration" k-title="'Set Up Your Account'" k-width="800" k-height="600" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
+            <div class="form-horizontal form-widgets">
+                <form kendo-validator="validator" ng-submit="validate($event)" class="k-content" ng-model="isValid">
+                <input type="hidden" name="uid" ng-model="user.uid">
+                <input type="hidden" name="ucode" ng-model="user.ucode">
+                <div class="form-group">
+                    <label class="control-label col-sm-4" for="firstname">First Name</label>
+                    <div class="col-sm-8 col-md-6">
+                        <input type="text" id="firstname" name="First Name" ng-model="user.first_name" class="k-textbox" placeholder="First Name" required validationMessage="Enter {0}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-4" for="lastname">Last Name</label>
+                    <div class="col-sm-8 col-md-6">
+                        <input type="text" id="lastname" name="Last Name" ng-model="user.last_name" class="k-textbox" placeholder="Last Name" required validationMessage="Enter {0}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-4" for="department">Department</label>
+                    <div class="col-sm-8 col-md-6">
+                        <select kendo-dropdownlist k-option-label="'--Department--'" name="department" ng-model="user.department" id="department" required data-required-msg="Select Department">
+                            <option>Administration</option>
+                            <option>Business Development</option>
+                            <option>CEO Office / Management</option>
+                            <option>Corporate Communcations</option>
+                            <option>CSR</option>
+                            <option>Customer Services</option>
+                            <option>Facilities Management</option>
+                            <option>Finance / Accounting</option>
+                            <option>Human Resources</option>
+                            <option>Information Technology</option>
+                            <option>Legal / Compliance</option>
+                            <option>Marketing</option>
+                            <option>Others</option>
+                            <option>Products</option>
+                            <option>Purchasing</option>
+                            <option>Sales</option>
+                        </select>
+                        <span class="k-invalid-msg" data-for="department"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-4" for="language">Language</label>
+                    <div class="col-sm-8 col-md-6">
+                        <select kendo-dropdownlist k-option-label="'--Language--'" name="Language" id="language" ng-model="user.language" required data-required-msg="Select Language">
+                                <option value="en_US">English</option>
+                                <option value="zh_TW">繁體中文</option>
+                            </select>
+                            <span class="k-invalid-msg" data-for="language"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-4" for="email">Email</label>
+                    <div class="col-sm-8 col-md-6">
+                        <input type="email" id="email" name="Email" class="k-textbox" ng-value="email" ng-disabled="true" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-4" for="password">Password</label>
+                    <div class="col-sm-8 col-md-6">
+                        <input type="password" id="password" name="Password" ng-model="user.password" class="k-textbox" placeholder="Set Your Password" required data-password-msg="Password not matched" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-4" for="confirm_password">Confirm Password</label>
+                    <div class="col-sm-8 col-md-6">
+                        <input type="password" id="confirm_password" name="Confirm Password" class="k-textbox" placeholder="Retype Your Password" required data-password-msg="Password not matched" />
+                    </div>
+                </div>
+                <div class="buttons-wrap">
+                    <button class="k-button k-primary k-state-default" type="submit" ng-disabled="!isValid">Create Account</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <style>
+        .form-group .k-widget,
+        .form-group .k-textbox {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .form-horizontal .control-label {
+            padding-top: 17px;
+        }
+
+        .form-group .k-input {
+            text-align: left;
+            background-color: #EFEFEF;
+        }
+
+        .form-group .k-textbox {
+            background-color: #EFEFEF;
+        }
+
+        .form-widgets {
+            width: 99%;
+        }
+
+        .k-header {
+            text-align: center;
+        }
+
+        .k-widget.k-tooltip {
+            width: 95%;
+        }
+
+        .k-valid {
+            border-color: #ccc;
+        }
+
+        .k-invalid {
+            border-color: red;
+        }
+
+        .k-overlay {
+            opacity: 0.8;
+        }
+    </style>
+
+    <script>
+        angular.module("entrak", [ "kendo.directives", "ngCookies" ])
+            .controller("MyCtrl", function($scope, $http){
+
+                $scope.user = {}
+                $scope.user["uid"] == "{{uid}}";
+                $scope.user["ucode"] == "{{ucode}}";
+                $scope.email = "{{user.email}}";
+
+                $scope.createUser = function() {
+                    $http({
+                        method : 'POST',
+                        url : "{% url 'users.activate_account' user.id %}",
+                        data : $scope.user
+                    })
+                }
+
+
+                $scope.validate = function(event) {
+                    event.preventDefault();
+
+                    if ($scope.validator.validate()) {
+                        $scope.validationClass = "valid";
+                        $scope.createUser();
+                    } else {
+                        $scope.validationClass = "invalid";
+                    }
+                }
+
+                setTimeout(function(){ $("#registration").data("kendoWindow").center().open(); }, 100);
+            })
+    </script>
+</div>
+
+<footer class="site-footer">
+    <p style="clear: both;"></p>
+    <p id="copyright">Copyright © En-trak Hong Kong Ltd 2015. All rights reserved.</p>
+    <a href="#"><img id="entrak-logo" src="{% static 'images/powered-by-logo.png' %}"></a>
+    <p class="footer-main"></p>
+    <p style="clear: both;"></p>
+</footer>
+
+{% endblock %}

@@ -72,6 +72,7 @@ urlpatterns = patterns('',
     url(r'^(?P<system_code>[\w\-]+)/', include('companies.urls')),
     url(r'^apis/', include('apis.urls')),
     url(r'^(?P<system_code>[\w\-]+)/', include('notifications.urls')),
+    url(r'^users/(?P<user_id>\d+)/', include('user.urls')),
 )
 
 if settings.DEBUG:
