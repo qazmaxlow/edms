@@ -33,6 +33,7 @@
 <!-- <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script> -->
 <script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
+<script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
 
 <script type="text/javascript" charset="utf-8" src="/static/edges/dashboard/widgets/money/edge_includes/edge.5.0.1.min.js"></script>
 
@@ -53,7 +54,11 @@
 
 {% block page_content %}
 
+{% ifequal LANGUAGE_CODE 'zh-tw' %}
+<div class="container chinese" ng-app="Entrak">
+{% else %}
 <div class="container" ng-app="Entrak">
+{% endifequal %}
     <div ng-cloak class="row">
         <div class="col-md-8">
             {% include "companies/dashboard/widgets/_real_time.html" with widget_id=4 %}

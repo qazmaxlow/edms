@@ -16,6 +16,12 @@
     -webkit-font-smoothing: antialiased;
 }
 
+.container.chinese .widget-container {	/*tmp solution for safari*/
+	font-family: "Helvetica Neue Light",
+ 	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+ 	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
+}
+
 .widget-container .description-1{
     color: #354960;
     font-size: 0.929em;

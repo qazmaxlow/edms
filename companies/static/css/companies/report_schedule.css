@@ -1,7 +1,15 @@
 .auto-report-base {
-	font-family: 'ITCAvantGardeStd', sans-serif;
+	font-family: 'ITCAvantGardeStd', "Helvetica Neue Light",
+ 	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+ 	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
 	-webkit-font-smoothing: antialiased;
 	font-size: 14px;
+}
+
+.auto-report-base.chinese {
+	font-family: "Helvetica Neue Light",
+ 	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+ 	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
 }
 
 .auto-report-base .row {
@@ -83,7 +91,6 @@
 	width: 100%;
 	height: calc(100% - 35px);
 	border-right: 1px solid #e5e5e5;
-	padding-top: 30px;
 	text-align: center;
 }
 
@@ -97,4 +104,42 @@
 
 .auto-report-base .steps .content.bg-step3 {
 	background: url("/static/images/export/dollar.png") no-repeat 100% 100%;
-}}
+}
+
+
+.auto-report-base .send-to {
+	font-size: 0.857em;
+	font-weight: 300;
+	color: #354960;
+	margin: 0;
+	height: 20px;
+	margin-top: 10px;
+}
+
+.auto-report-base button {
+	font-size: 1em;
+	height: 33px;
+	width: 100px;
+	border-radius: 4px;
+	text-align: center;
+	display: inline-block;
+	padding: 0;
+	box-shadow: 0px 2px 0px #6b9aa5;
+	background-color: #9bceda;
+	border: none;
+	color: #FFFFFF;
+}
+
+.auto-report-base button.small-btn {
+	height: 24px;
+	width: 70px;
+	font-size: 0.857em;
+}
+
+ .auto-report-base button:focus {
+	outline:0;
+}
+
+.auto-report-base button:hover {
+	background-color: #74c62b;
+}
