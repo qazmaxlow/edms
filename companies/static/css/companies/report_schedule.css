@@ -62,17 +62,25 @@
   	left: 10%;
 }
 
-.auto-report-base .steps .header {
+.auto-report-base .header {
 	width: 100%;
 	font-size: 0.929em;
 	font-weight: 600;
 	color: #354960;
-	background-color: #faf0da;
-	height: 35px;
-	line-height: 34px;
-	text-align: center;
 	border-bottom: 1px solid #f2dbb7;
 	border-right: 1px solid #f2dbb7;
+	background-color: #faf0da;
+	line-height: 34px;
+	height: 35px;
+}
+
+.auto-report-base .steps .header {
+	text-align: center;
+}
+
+.auto-report-base .records .header {
+	text-align: left;
+	padding-left: 27px;
 }
 
 .auto-report-base .steps .step-label {
@@ -106,14 +114,13 @@
 	background: url("/static/images/export/dollar.png") no-repeat 100% 100%;
 }
 
-
 .auto-report-base .send-to {
 	font-size: 0.857em;
 	font-weight: 300;
 	color: #354960;
 	margin: 0;
-	height: 20px;
-	margin-top: 10px;
+	height: 30px;
+	padding-top: 10px;
 }
 
 .auto-report-base button {
@@ -143,3 +150,29 @@
 .auto-report-base button:hover {
 	background-color: #74c62b;
 }
+
+/* dropdown-----*/
+.auto-report-base .k-widget.k-dropdown.k-header {
+	border-radius: 4px;
+	border: 1px solid #354960;
+	margin: 0;
+	padding: 0;
+	height: 33px;
+}
+
+.auto-report-base .k-widget.k-dropdown.k-header .k-dropdown-wrap {
+	border: none;
+	height: 100%;
+	background-color: #FFFFFF;
+	border-radius: 4px;
+}
+
+.auto-report-base .k-dropdown .k-dropdown-wrap .k-input {
+	text-align: center;
+	font-size: 1.071em;
+	font-weight: 600;
+	color: #354960;
+	box-sizing: border-box;
+	height: 100%;
+}
+/* -----dropdown*/
