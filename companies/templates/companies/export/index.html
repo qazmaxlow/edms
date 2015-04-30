@@ -46,7 +46,7 @@
 
 <div ng-app="Entrak">
     <div ng-controller="ExportController">
-        <div class="row export-base">
+        <div class="row export-base" ng-class="{chinese : !eng}">
             <div class="col-md-4 description">
                 <p class="select-text" ng-bind="description"></p>
                 <div class="yellow-bottom"></div>
@@ -154,8 +154,10 @@
     });
 
     ngapp.controller("ExportController", function($scope){
-        var langCode = '{{LANGUAGE_CODE}}';
+        langCode = '{{LANGUAGE_CODE}}';
         kendo.culture(langCode.substring(0,3)+langCode.substring(3,5).toUpperCase());
+        $scope.eng = langCode.indexOf("en") == 0;
+
 
         $scope.interval = "Minute";
         $scope.unit = "kWh";
