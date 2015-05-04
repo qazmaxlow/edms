@@ -29,7 +29,7 @@ class ReportScheduleView(TemplateView):
 class SystemSerializer(serializers.ModelSerializer):
     class Meta:
         model = System
-        fields = ('fullname',)
+        fields = ('id', 'fullname',)
 
 
 class ReceiverSerializer(serializers.ModelSerializer):
@@ -48,11 +48,13 @@ class ReportScheduleSerializer(serializers.ModelSerializer):
 
 
 class CreateReportScheduleSerializer(serializers.ModelSerializer):
+    system = SystemSerializer(read_only=True)
+    system_id = serializers.IntegerField(write_only=True)
     receivers = ReceiverSerializer(many=True, read_only=False)
 
     class Meta:
         model = AutoSendReportSchedular
-        fields = ('frequency', 'system', 'receivers')
+        fields = ('id', 'frequency', 'frequency_name', 'system', 'receivers', 'system_id')
 
     def create(self, validated_data):
         receivers_data = validated_data.pop('receivers')
