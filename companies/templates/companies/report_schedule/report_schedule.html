@@ -59,7 +59,7 @@
                     <select kendo-drop-down-list="systemDropdown"
                             k-data-text-field="'fullname'"
                             k-data-value-field="'id'"
-                            k-data-source="systemsDateSource"></select>
+                            k-data-source="systemsDataSource"></select>
                 </div>
             </div>
             <div class="col-md-3">
@@ -102,7 +102,7 @@
             $scope.step2Title = '{% trans "Select Frequency" %}';
             $scope.step3Title = '{% trans "Confirm and Go" %}';
 
-            $scope.systemsDateSource = {
+            $scope.systemsDataSource = {
                 transport: {
                     read: {
                         url: "{% url 'companies.systems.company-systems' current_system.code %}",
