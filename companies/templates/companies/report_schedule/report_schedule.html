@@ -145,7 +145,8 @@
                 scheduleTaskDataSource.add(
                     {
                         frequency: $scope.frequencyDropdown.value(),
-                        system: $scope.systemDropdown.value(),
+                        system_id: $scope.systemDropdown.value(),
+                        system: {},
                         receivers: [{"email": $scope.taskEmail}]
                     });
                 scheduleTaskDataSource.sync();
