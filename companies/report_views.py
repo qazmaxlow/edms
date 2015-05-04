@@ -135,7 +135,7 @@ def get_overnight_avg_cost(system, source_ids, start_dt, end_dt):
 
     for ix, mr in enumerate(money_unit_rates):
         c_rate_date = mr.effective_date.astimezone(system_tz)
-        if c_rate_date >= start_dt and c_rate_date <= end_dt:
+        if c_rate_date >= start_dt and c_rate_date < end_dt:
             try:
                 n_rate_date = money_unit_rates[ix+1].effective_date.astimezone(system_tz)
                 if n_rate_date > end_dt:
