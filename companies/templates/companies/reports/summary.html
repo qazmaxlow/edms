@@ -270,29 +270,8 @@ $(function() {
 {% endblock %}
 
 {% block page_content %}
-        <style>
-        .grey_layer{
-        	width:100%;
-        	height:9999px;
-        	position:absolute;
-        	left:0;
-        	top:0;
-        	background-color:#354960;
-          opacity:0.9;
-        	display:none;
-        	z-index: 99;
-        }
-        #win_report_ajax{
-        position:absolute;
-			  left: 0;
-			  top: 0;
-			  z-index: 100;
-        display:none;
-        }
-        </style>
-        <div class="grey_layer"></div>
-		<div id="win_report_ajax">
-    </div>
+<div class="grey_layer"></div>
+<div id="win_report_ajax"></div>
     <div ng-app="Entrak">
     <div ng-controller="ReportControllers">
 <div class="summary">
