@@ -48,9 +48,13 @@
     <div ng-controller="ExportController">
         <div class="row export-base" ng-class="{chinese : !eng}">
             <div class="col-md-4 description">
-                <p class="select-text" ng-bind="description"></p>
+                <p class="select-text">
+                    <img src="/static/images/export/left-quote.png"></img>
+                    <span ng-bind="description"></span>
+                    <img src="/static/images/export/right-quote.png"></img>
+                </p>
                 <div class="yellow-bottom"></div>
-                <img src="/static/images/export/et-helper.png"></img>
+                <img class="main-img" src="/static/images/export/entrak-illu.png"></img>
             </div>
             <div class="col-md-8 steps">
                 {% verbatim %}
