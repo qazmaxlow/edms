@@ -222,7 +222,6 @@
                         contentType: 'application/json; charset=utf-8',
                         data: $scope.user,
                     }).success(function(data, textStatus) {
-                        console.log(data);
                         if (data.redirect) {
                             // data.redirect contains the string URL to redirect to
                             window.location.href = data.redirect;
