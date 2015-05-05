@@ -153,6 +153,14 @@
                         type: "POST",
                         contentType: "application/json"
                     },
+                    update: {
+                        url: function (item) {
+                            var url = "{% url 'companies.report-schedule.update' current_system.code 999 %}";
+                            return url.replace(999, item.id);
+                        },
+                        type: "PUT",
+                        contentType: "application/json"
+                    },
                     destroy: {
                         url: function (item) {
                             var url = "{% url 'companies.report-schedule.destroy' current_system.code 999 %}";
@@ -163,6 +171,9 @@
                     },
                     parameterMap: function(data, type) {
                         if (type == "create") {
+                            return kendo.stringify(data);
+                        }
+                        if (type == "update") {
                             return kendo.stringify(data);
                         }
                     }
