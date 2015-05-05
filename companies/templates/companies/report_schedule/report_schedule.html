@@ -173,7 +173,7 @@
                     dataSource: scheduleTaskDataSource,
                     columns: [
                         { field: "frequency_name", title:"frequency", width: "110px" },
-                        { field: "system_id", title:"system", width: "110px",
+                        { field: "system_id", title:"system", width: "110px", editor: systemDropDownEditor,
                           template: function(dataItem) {
                               return $.grep(company_systems, function(e) {
                                   return e.id == dataItem.system_id
@@ -191,6 +191,15 @@
                     editable: "inline"
                 };
             };
+
+            function systemDropDownEditor(container, options) {
+                $('<input required data-text-field="fullname" data-value-field="id" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        autoBind: false,
+                        dataSource: $scope.systemsDataSource
+                    });
+            }
 
     });
 </script>
