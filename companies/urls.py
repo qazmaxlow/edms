@@ -7,7 +7,7 @@ from . import report_views
 from . import dashboard_views
 from . import apis
 from . import measure_views, export_views, report_schedule_views
-from .views import system_views
+from .views import system_views, user_views
 
 
 router = routers.DefaultRouter()
@@ -40,4 +40,6 @@ urlpatterns = patterns(
 
 
     url(r'^systems/company-systems/$', system_views.CompanySystemList.as_view(), name='companies.systems.company-systems'),
+
+    url(r'^users/authenticated-user/$', user_views.CompanyAuthenticatedUserView.as_view(), name='companies.users.authenticated-user'),
 )
