@@ -102,15 +102,19 @@
             $scope.step2Title = '{% trans "Select Frequency" %}';
             $scope.step3Title = '{% trans "Confirm and Go" %}';
 
-            $scope.systemsDataSource = {
+            $scope.systemsDataSource = new kendo.data.DataSource({
                 transport: {
                     read: {
+                        async: false,
                         url: "{% url 'companies.systems.company-systems' current_system.code %}",
                         type: 'GET',
                         dataType: "json"
                     }
                 }
-            };
+            });
+
+            $scope.systemsDataSource.read();
+            var company_systems = $scope.systemsDataSource.data();
 
             var scheduleTaskDataSource = new kendo.data.DataSource({
                 transport: {
@@ -157,7 +161,13 @@
                     dataSource: scheduleTaskDataSource,
                     columns: [
                         { field: "frequency_name", title:"frequency", width: "110px" },
-                        { field: "system.fullname", title:"system", width: "110px" },
+                        { field: "system_id", title:"system", width: "110px",
+                          template: function(dataItem) {
+                              return $.grep(company_systems, function(e) {
+                                  return e.id == dataItem.system_id
+                              })[0].fullname;
+                          }
+                        },
                         { title: "Receivers",
                           template: function(dataItem) {
                               var arr = $.map(dataItem.receivers, function(r) { return r.email; });
