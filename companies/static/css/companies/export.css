@@ -1,9 +1,17 @@
 .export-base {
-	font-family: 'ITCAvantGardeStd', sans-serif;
+	font-family: 'ITCAvantGardeStd', "Helvetica Neue Light",
+ 	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+ 	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
 	-webkit-font-smoothing: antialiased;
 	font-size: 14px;
 	height: 443px;
 	margin: 30px 40px;
+}
+
+.export-base.chinese {
+	font-family: "Helvetica Neue Light",
+ 	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+ 	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
 }
 
 .export-base .row {
@@ -154,7 +162,7 @@
 
 .export-base button {
 	height: 33px;
-	width: 100px;
+	width: 120px;
 	border-radius: 4px;
 	text-align: center;
 	display: inline-block;
@@ -181,7 +189,7 @@
 
 .export-base button.normal {
 	margin-top: 17px;
-	box-shadow: 0px 2px 0px #959595;
+	box-shadow: 0px 2px 0px #6b9aa5;
 	border-radius: 4px;
 	background-color: #9bceda;
 	border: none;
@@ -203,12 +211,15 @@
 
 .export-base .field-info p {
 	margin: 0;
-	padding-left: 15px;
 	text-align: left;
 	color: #565656;
 	font-size: 0.929em;
 	font-weight: 300;
 	line-height: 175%;
+}
+
+.export-base .field-info.col-md-6 {
+	padding-left: 15px;
 }
 
 /* datepicker-----*/

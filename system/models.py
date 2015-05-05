@@ -331,7 +331,7 @@ class System(models.Model):
                         rate = ur["rate"]
                         break
 
-                weekday_costs.append({'date':reading_datetime.strftime("%Y-%m-%d"), 'weekday':reading_datetime.strftime("%a"), 'value':reading["value"]*rate})
+                weekday_costs.append({'date':reading_datetime.strftime("%Y-%m-%d"), 'weekday':reading_datetime, 'value':reading["value"]*rate})
                 total_days += 1
                 total_values += reading["value"]*rate
 
@@ -378,7 +378,7 @@ class System(models.Model):
             reading_datetime = reading["_id"]["datetime"].astimezone(system_tz)
 
             if dt:
-                key = dt.strftime("%Y-%m-%d %a")
+                key = dt.strftime("%Y-%m-%d")
                 for ur in money_unit_rates:
                     if reading_datetime.strftime("%Y-%m-%d") >= ur["date"]:
                         rate = ur["rate"]
@@ -394,7 +394,8 @@ class System(models.Model):
 
         overnight_costs = []
         for k,v in OrderedDict(sorted(costs.items())).items():
-            overnight_costs.append({'date':k.split(" ")[0], 'weekday':k.split(" ")[1], 'value':v})
+            dt = system_tz.localize(datetime.datetime.strptime(k, "%Y-%m-%d"))
+            overnight_costs.append({'date':k, 'weekday':dt, 'value':v})
         return {'data': overnight_costs, 'total': total_values, 'number_of_days': total_days}
 
 

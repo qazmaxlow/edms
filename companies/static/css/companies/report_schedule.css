@@ -1,7 +1,15 @@
 .auto-report-base {
-	font-family: 'ITCAvantGardeStd', sans-serif;
+	font-family: 'ITCAvantGardeStd', "Helvetica Neue Light",
+ 	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+ 	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
 	-webkit-font-smoothing: antialiased;
 	font-size: 14px;
+}
+
+.auto-report-base.chinese {
+	font-family: "Helvetica Neue Light",
+ 	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+ 	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
 }
 
 .auto-report-base .row {
@@ -54,17 +62,25 @@
   	left: 10%;
 }
 
-.auto-report-base .steps .header {
+.auto-report-base .header {
 	width: 100%;
 	font-size: 0.929em;
 	font-weight: 600;
 	color: #354960;
-	background-color: #faf0da;
-	height: 35px;
-	line-height: 34px;
-	text-align: center;
 	border-bottom: 1px solid #f2dbb7;
 	border-right: 1px solid #f2dbb7;
+	background-color: #faf0da;
+	line-height: 34px;
+	height: 35px;
+}
+
+.auto-report-base .steps .header {
+	text-align: center;
+}
+
+.auto-report-base .records .header {
+	text-align: left;
+	padding-left: 27px;
 }
 
 .auto-report-base .steps .step-label {
@@ -83,7 +99,6 @@
 	width: 100%;
 	height: calc(100% - 35px);
 	border-right: 1px solid #e5e5e5;
-	padding-top: 30px;
 	text-align: center;
 }
 
@@ -97,4 +112,67 @@
 
 .auto-report-base .steps .content.bg-step3 {
 	background: url("/static/images/export/dollar.png") no-repeat 100% 100%;
-}}
+}
+
+.auto-report-base .content .label-top {
+	font-size: 0.857em;
+	font-weight: 300;
+	color: #354960;
+	margin: 0;
+	height: 30px;
+	padding-top: 10px;
+}
+
+.auto-report-base button {
+	font-size: 1em;
+	height: 33px;
+	width: 100px;
+	border-radius: 4px;
+	text-align: center;
+	display: inline-block;
+	padding: 0;
+	box-shadow: 0px 2px 0px #6b9aa5;
+	background-color: #9bceda;
+	border: none;
+	color: #FFFFFF;
+}
+
+.auto-report-base button.small-btn {
+	height: 24px;
+	width: 70px;
+	font-size: 0.857em;
+}
+
+ .auto-report-base button:focus {
+	outline:0;
+}
+
+.auto-report-base button:hover {
+	background-color: #74c62b;
+}
+
+/* dropdown-----*/
+.auto-report-base .k-widget.k-dropdown.k-header {
+	border-radius: 4px;
+	border: 1px solid #354960;
+	margin: 0;
+	padding: 0;
+	height: 33px;
+}
+
+.auto-report-base .k-widget.k-dropdown.k-header .k-dropdown-wrap {
+	border: none;
+	height: 100%;
+	background-color: #FFFFFF;
+	border-radius: 4px;
+}
+
+.auto-report-base .k-dropdown .k-dropdown-wrap .k-input {
+	text-align: center;
+	font-size: 1.071em;
+	font-weight: 600;
+	color: #354960;
+	box-sizing: border-box;
+	height: 100%;
+}
+/* -----dropdown*/

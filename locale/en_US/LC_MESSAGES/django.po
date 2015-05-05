@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-29 01:43+0000\n"
+"POT-Creation-Date: 2015-04-29 08:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -302,8 +302,8 @@ msgstr ""
 #: companies/templates/companies/dashboard/dashboard.html:484
 #, python-format
 msgid ""
-"\"Even if an appliance is off, it can still consume 10%(percent)s of normal "
-"energy. Remember to turn off the socket switch too!\""
+"Even if an appliance is off, it can still consume 10%(percent)s of normal "
+"energy. Remember to turn off the socket switch too!"
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:488
@@ -372,16 +372,168 @@ msgid "CO<sub>2</sub>"
 msgstr ""
 
 #: companies/templates/companies/export/index.html:38
+msgid "Data Download Center"
+msgstr ""
+
+#: companies/templates/companies/export/index.html:39
+msgid "Get all your historical energy data at the"
+msgstr ""
+
+#: companies/templates/companies/export/index.html:99
+#: companies/templates/companies/export/index.html:121
+msgid "CO<sub>2</sub> (kg)"
+msgstr ""
+
+#: companies/templates/companies/export/index.html:163
+msgid "Follow the steps on the right to download your energy data."
+msgstr ""
+
+#: companies/templates/companies/export/index.html:164
+#: companies/templates/companies/report_schedule/report_schedule.html:98
+msgid "Step 1"
+msgstr ""
+
+#: companies/templates/companies/export/index.html:165
+#: companies/templates/companies/report_schedule/report_schedule.html:99
+msgid "Step 2"
+msgstr ""
+
+#: companies/templates/companies/export/index.html:166
+#: companies/templates/companies/report_schedule/report_schedule.html:100
+msgid "Step 3"
+msgstr ""
+
+#: companies/templates/companies/export/index.html:167
+msgid "Step 4"
+msgstr ""
+
+#: companies/templates/companies/export/index.html:168
+msgid "Select Time"
+msgstr ""
+
+#: companies/templates/companies/export/index.html:169
+msgid "Select Data Interval"
+msgstr ""
+
+#: companies/templates/companies/export/index.html:170
+msgid "Select Unit"
+msgstr ""
+
+#: companies/templates/companies/export/index.html:171
+msgid "Confirm and Go!"
+msgstr ""
+
+#: companies/templates/companies/export/index.html:173
+msgid "Start Date"
+msgstr ""
+
+#: companies/templates/companies/export/index.html:174
+msgid "End Date"
+msgstr ""
+
+#: companies/templates/companies/export/index.html:175
+msgid "(inclusive)"
+msgstr ""
+
+#: companies/templates/companies/export/index.html:176
+msgid "Minute"
+msgstr ""
+
+#: companies/templates/companies/export/index.html:177
+msgid "Hour"
+msgstr ""
+
+#: companies/templates/companies/export/index.html:178
+msgctxt "export"
+msgid "Day"
+msgstr ""
+
+#: companies/templates/companies/export/index.html:179
+msgid "Cost ($)"
+msgstr ""
+
+#: companies/templates/companies/export/index.html:180
+#: companies/templates/companies/reports/summary.html:410
+#: entrak/templates/report.html:788 entrak/templates/report.html.py:821
+#: entrak/templates/report.html:862
+msgid "From:"
+msgstr ""
+
+#: companies/templates/companies/export/index.html:181
+msgctxt "export"
+msgid "To:"
+msgstr ""
+
+#: companies/templates/companies/export/index.html:182
+msgid "Interval:"
+msgstr ""
+
+#: companies/templates/companies/export/index.html:183
+msgid "Units:"
+msgstr ""
+
+#: companies/templates/companies/export/index.html:184
+#: companies/templates/companies/reports/popup_report_pdf.html:633
+#: entrak/templates/page_base.html:171 entrak/templates/report.html:713
+#: entrak/templates/report.html.py:893
+msgid "Download"
+msgstr ""
+
+#: companies/templates/companies/export/index.html:185
+msgid "am"
+msgstr ""
+
+#: companies/templates/companies/export/index.html:186
+msgid "pm"
+msgstr ""
+
 #: companies/templates/companies/report_schedule/report_schedule.html:38
 msgid "THE DOWNLOAD PAGE"
 msgstr ""
 
-#: companies/templates/companies/export/index.html:39
 #: companies/templates/companies/report_schedule/report_schedule.html:39
 #: companies/templates/companies/reports/popup_report_pdf.html:45
 #: companies/templates/companies/reports/summary.html:90
 #: entrak/templates/report.html:81 entrak/templates/testing_code.html:66
 msgid "Get all your information here at the"
+msgstr ""
+
+#: companies/templates/companies/report_schedule/report_schedule.html:93
+msgid ""
+"Set the system to email you an energy report each month or week, so you can "
+"stay informaed and up to date on your energy use."
+msgstr ""
+
+#: companies/templates/companies/report_schedule/report_schedule.html:94
+msgid "Weekly"
+msgstr ""
+
+#: companies/templates/companies/report_schedule/report_schedule.html:95
+msgid "Monthly"
+msgstr ""
+
+#: companies/templates/companies/report_schedule/report_schedule.html:96
+#: entrak/templates/alert_settings.html:52
+#: entrak/templates/alert_settings.html:67
+#: entrak/templates/alert_settings.html:1086
+#: entrak/templates/general_settings.html:378
+msgid "Confirm"
+msgstr ""
+
+#: companies/templates/companies/report_schedule/report_schedule.html:97
+msgid "Send to:"
+msgstr ""
+
+#: companies/templates/companies/report_schedule/report_schedule.html:101
+msgid "Select Scope"
+msgstr ""
+
+#: companies/templates/companies/report_schedule/report_schedule.html:102
+msgid "Select Frequency"
+msgstr ""
+
+#: companies/templates/companies/report_schedule/report_schedule.html:103
+msgid "Confirm and Go"
 msgstr ""
 
 #: companies/templates/companies/reports/_report_content.html:19
@@ -862,12 +1014,6 @@ msgid ""
 "accurate for accounting purposes."
 msgstr ""
 
-#: companies/templates/companies/reports/popup_report_pdf.html:633
-#: entrak/templates/page_base.html:171 entrak/templates/report.html:713
-#: entrak/templates/report.html.py:893
-msgid "Download"
-msgstr ""
-
 #: companies/templates/companies/reports/summary.html:47
 #: entrak/templates/graph.html:90 entrak/templates/graph.html.py:106
 #: entrak/templates/graph.html:132 entrak/templates/ranking.html:349
@@ -1093,12 +1239,6 @@ msgstr ""
 msgid "Energy data - kWh"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:410
-#: entrak/templates/report.html:788 entrak/templates/report.html.py:821
-#: entrak/templates/report.html:862
-msgid "From:"
-msgstr ""
-
 #: companies/templates/companies/reports/summary.html:411
 #: entrak/templates/report.html:789 entrak/templates/report.html.py:822
 #: entrak/templates/report.html:863
@@ -1255,13 +1395,6 @@ msgstr ""
 #: entrak/templates/general_settings.html:366
 #: entrak/templates/general_settings.html:377
 msgid "Cancel"
-msgstr ""
-
-#: entrak/templates/alert_settings.html:52
-#: entrak/templates/alert_settings.html:67
-#: entrak/templates/alert_settings.html:1086
-#: entrak/templates/general_settings.html:378
-msgid "Confirm"
 msgstr ""
 
 #: entrak/templates/alert_settings.html:59

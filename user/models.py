@@ -41,10 +41,14 @@ class EntrakUser(AbstractUser):
 
     @property
     def activation_url(self):
+
         utc_time_now = datetime.now()
         utc_timestamp = (utc_time_now - datetime(1970,1,1)).total_seconds()
         encrypter = EntrakEncrypter(self.salt)
-        return "https://en-trak.com/users/1/activate?uid=%s&ucode=%s"%(encrypter.encode(str(self.id)), encrypter.encode(str(utc_timestamp)))
+        uid = encrypter.encode(str(self.id))
+        ucode = encrypter.encode(str(utc_timestamp))
+
+        return "https://data.en-trak.com/users/%d/activate?uid=%s&ucode=%s"%(self.id, uid, ucode)
 
 
     def validate_activation_url(self, uid, ucode):
@@ -58,6 +62,7 @@ class EntrakUser(AbstractUser):
             return (user_id == str(self.id) and (datetime.now() - utc_dt).days < 2)
 
         except TypeError as e:
+            print(e)
             return False
 
 

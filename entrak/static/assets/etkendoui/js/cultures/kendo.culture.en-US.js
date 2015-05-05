@@ -51,7 +51,7 @@
                 AM: ["AM","am","AM"],
                 PM: ["PM","pm","PM"],
                 patterns: {
-                    d: "M/d/yyyy",
+                    d: "d MMMM yyyy, ddd",//"M/d/yyyy",
                     D: "d MMMM yyyy",// D: "dddd, MMMM dd, yyyy",
                     F: "dddd, MMMM dd, yyyy h:mm:ss tt",
                     g: "M/d/yyyy h:mm tt",

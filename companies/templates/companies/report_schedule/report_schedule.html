@@ -56,6 +56,7 @@
                 <div class="step-label">{{step1}}</div>
                 <div class="header">{{step1Title}}</div>
                 <div class="content bg-step1">
+                    <div class="label-top"></div>
                     <select kendo-drop-down-list="systemDropdown"
                             k-data-text-field="'fullname'"
                             k-data-value-field="'id'"
@@ -66,20 +67,28 @@
                 <div class="step-label">{{step2}}</div>
                 <div class="header">{{step2Title}}</div>
                 <div class="content bg-step2">
+                    <div class="label-top"></div>
                     <select kendo-drop-down-list="frequencyDropdown">
                         <option value="1">{{freqWeekly}}</option>
                         <option value="2">{{freqMonthly}}</option>
                     </select>
                 </div>
             </div>
-
             <div class="col-md-3">
-                <input ng-model="taskEmail">
-                <button ng-click="confirmAdd()">{{btnConfirm}}</button>
+                <div class="step-label">{{step3}}</div>
+                <div class="header">{{step3Title}}</div>
+                <div class="content bg-step3">
+                    <h4 class="label-top">{{sendTo}}</h4>
+                    <input ng-model="taskEmail">
+                    <div>
+                        <button ng-click="confirmAdd()">{{btnConfirm}}</button>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row records">
             <div class="col-md-12">
+                <div class="header">{{recordTitle}}</div>
                 <div kendo-grid k-options="taskGridOptions(dataItem)"></div>
             </div>
         </div>
@@ -101,6 +110,9 @@
             $scope.step1Title = '{% trans "Select Scope" %}';
             $scope.step2Title = '{% trans "Select Frequency" %}';
             $scope.step3Title = '{% trans "Confirm and Go" %}';
+
+            $scope.recordTitle = '{% trans "Manage Automated Reports" %}';
+
 
             $scope.systemsDataSource = new kendo.data.DataSource({
                 transport: {

@@ -222,6 +222,9 @@ def summary_ajax(request, system_code):
     source_ids = [str(source.id) for source in sources]
     all_holidays = current_system.get_all_holidays()
 
+    # end_dt is at time 00:00:00 which excluded the last day
+    # add 1 more day to end_dt for actual calculation
+    end_dt = end_dt + relativedelta(days=1)
     day_source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingDay, start_dt, end_dt)
 
 

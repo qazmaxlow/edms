@@ -9,9 +9,17 @@
 /*widget common-------*/
 .widget-container {
     padding:  10px 10px 20px 10px;
-    font-family: "ITCAvantGardeStd", sans-serif;
+	font-family: 'ITCAvantGardeStd', "Helvetica Neue Light",
+ 	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+ 	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
     font-size: 14px;
     -webkit-font-smoothing: antialiased;
+}
+
+.container.chinese .widget-container {	/*tmp solution for safari*/
+	font-family: "Helvetica Neue Light",
+ 	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+ 	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
 }
 
 .widget-container .description-1{
