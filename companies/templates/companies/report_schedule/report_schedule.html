@@ -60,7 +60,7 @@
                     <select kendo-drop-down-list="systemDropdown"
                             k-data-text-field="'fullname'"
                             k-data-value-field="'id'"
-                            k-data-source="systemsDateSource"></select>
+                            k-data-source="systemsDataSource"></select>
                 </div>
             </div>
             <div class="col-md-3">
@@ -113,15 +113,20 @@
 
             $scope.recordTitle = '{% trans "Manage Automated Reports" %}';
 
-            $scope.systemsDateSource = {
+
+            $scope.systemsDataSource = new kendo.data.DataSource({
                 transport: {
                     read: {
+                        async: false,
                         url: "{% url 'companies.systems.company-systems' current_system.code %}",
                         type: 'GET',
                         dataType: "json"
                     }
                 }
-            };
+            });
+
+            $scope.systemsDataSource.read();
+            var company_systems = $scope.systemsDataSource.data();
 
             var scheduleTaskDataSource = new kendo.data.DataSource({
                 transport: {
@@ -133,7 +138,14 @@
                         type: "POST",
                         contentType: "application/json"
                     },
-
+                    destroy: {
+                        url: function (item) {
+                            var url = "{% url 'companies.report-schedule.destroy' current_system.code 999 %}";
+                            url = url.replace(999, item.id);
+                            return url;
+                        },
+                        type: "DELETE"
+                    },
                     parameterMap: function(data, type) {
                         if (type == "create") {
                             return kendo.stringify(data);
@@ -149,7 +161,8 @@
                 scheduleTaskDataSource.add(
                     {
                         frequency: $scope.frequencyDropdown.value(),
-                        system: $scope.systemDropdown.value(),
+                        system_id: $scope.systemDropdown.value(),
+                        system: {},
                         receivers: [{"email": $scope.taskEmail}]
                     });
                 scheduleTaskDataSource.sync();
@@ -160,14 +173,22 @@
                     dataSource: scheduleTaskDataSource,
                     columns: [
                         { field: "frequency_name", title:"frequency", width: "110px" },
-                        { field: "system.fullname", title:"system", width: "110px" },
+                        { field: "system_id", title:"system", width: "110px",
+                          template: function(dataItem) {
+                              return $.grep(company_systems, function(e) {
+                                  return e.id == dataItem.system_id
+                              })[0].fullname;
+                          }
+                        },
                         { title: "Receivers",
                           template: function(dataItem) {
                               var arr = $.map(dataItem.receivers, function(r) { return r.email; });
                               return arr.join(',');
                           }
-                        }
-                    ]
+                        },
+                        { command: ["edit", "destroy"], title: "&nbsp;", width: "250px" }
+                    ],
+                    editable: "inline"
                 };
             };
 
