@@ -186,7 +186,7 @@
                 return {
                     dataSource: scheduleTaskDataSource,
                     columns: [
-                        { field: "frequency_id", title:"frequency", width: "110px",
+                        { field: "frequency_id", title:"frequency", width: "110px", editor: frequencyDropDownEditor,
                           template: function(dataItem) {
                               return $.grep(frequencies, function(e) {
                                   return e.id == dataItem.frequency_id
@@ -218,6 +218,15 @@
                     .kendoDropDownList({
                         autoBind: false,
                         dataSource: $scope.systemsDataSource
+                    });
+            }
+
+            function frequencyDropDownEditor(container, options) {
+                $('<input required data-text-field="name" data-value-field="id" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        autoBind: false,
+                        dataSource: $scope.frequencyDataSource
                     });
             }
 
