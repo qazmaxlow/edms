@@ -71,6 +71,15 @@ class CreateReportScheduleSerializer(serializers.ModelSerializer):
         return scheduler
 
 
+class UpdateReportScheduleSerializer(serializers.ModelSerializer):
+    system_id = serializers.IntegerField(write_only=True)
+    receivers = ReceiverSerializer(many=True, read_only=True)
+    frequency_id = serializers.IntegerField(source='frequency')
+
+    class Meta:
+        model = AutoSendReportSchedular
+        fields = ('id', 'frequency_id', 'receivers', 'system_id')
+
 
 class CreateReportScheduleView(generics.CreateAPIView):
     serializer_class = CreateReportScheduleSerializer
@@ -82,6 +91,11 @@ class ReportScheduleTaskListView(generics.ListAPIView):
 
 
 class ReportScheduleTaskDestoryView(generics.DestroyAPIView):
+    queryset = AutoSendReportSchedular.objects.all()
+
+
+class ReportScheduleTaskUpdateView(generics.UpdateAPIView):
+    serializer_class = UpdateReportScheduleSerializer
     queryset = AutoSendReportSchedular.objects.all()
 
 
