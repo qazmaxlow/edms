@@ -60,7 +60,7 @@
                     <select kendo-drop-down-list="systemDropdown"
                             k-data-text-field="'fullname'"
                             k-data-value-field="'id'"
-                            k-data-source="systemsDateSource"></select>
+                            k-data-source="systemsDataSource"></select>
                 </div>
             </div>
             <div class="col-md-3">
@@ -68,9 +68,10 @@
                 <div class="header">{{step2Title}}</div>
                 <div class="content bg-step2">
                     <div class="label-top"></div>
-                    <select kendo-drop-down-list="frequencyDropdown">
-                        <option value="1">{{freqWeekly}}</option>
-                        <option value="2">{{freqMonthly}}</option>
+                    <select kendo-drop-down-list="frequencyDropdown"
+                            k-data-text-field="'name'"
+                            k-data-value-field="'id'"
+                            k-data-source="frequencyDataSource"></select>
                     </select>
                 </div>
             </div>
@@ -100,8 +101,6 @@
     angular.module("Entrak", [ "kendo.directives" ])
         .controller("ReportScheduleController", function($scope) {
             $scope.description = '{% trans "Set the system to email you an energy report each month or week, so you can stay informaed and up to date on your energy use." %}';
-            $scope.freqWeekly = '{% trans "Weekly" %}';
-            $scope.freqMonthly = '{% trans "Monthly" %}';
             $scope.btnConfirm = '{% trans "Confirm" %}';
             $scope.sendTo = '{% trans "Send to:" %}';
             $scope.step1 = '{% trans "Step 1" %}';
@@ -113,15 +112,36 @@
 
             $scope.recordTitle = '{% trans "Manage Automated Reports" %}';
 
-            $scope.systemsDateSource = {
+
+            $scope.systemsDataSource = new kendo.data.DataSource({
                 transport: {
                     read: {
+                        async: false,
                         url: "{% url 'companies.systems.company-systems' current_system.code %}",
                         type: 'GET',
                         dataType: "json"
                     }
                 }
-            };
+            });
+
+            $scope.frequencyDataSource = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        async: false,
+                        url: "{% url 'companies.report-schedule.frequencies' current_system.code %}",
+                        type: 'GET',
+                        dataType: "json"
+                    }
+                }
+            });
+
+
+            $scope.systemsDataSource.read();
+            var company_systems = $scope.systemsDataSource.data();
+
+            $scope.frequencyDataSource.read();
+            var frequencies = $scope.frequencyDataSource.data();
+
 
             var scheduleTaskDataSource = new kendo.data.DataSource({
                 transport: {
@@ -133,9 +153,27 @@
                         type: "POST",
                         contentType: "application/json"
                     },
-
+                    update: {
+                        url: function (item) {
+                            var url = "{% url 'companies.report-schedule.update' current_system.code 999 %}";
+                            return url.replace(999, item.id);
+                        },
+                        type: "PUT",
+                        contentType: "application/json"
+                    },
+                    destroy: {
+                        url: function (item) {
+                            var url = "{% url 'companies.report-schedule.destroy' current_system.code 999 %}";
+                            url = url.replace(999, item.id);
+                            return url;
+                        },
+                        type: "DELETE"
+                    },
                     parameterMap: function(data, type) {
                         if (type == "create") {
+                            return kendo.stringify(data);
+                        }
+                        if (type == "update") {
                             return kendo.stringify(data);
                         }
                     }
@@ -148,8 +186,8 @@
             $scope.confirmAdd = function() {
                 scheduleTaskDataSource.add(
                     {
-                        frequency: $scope.frequencyDropdown.value(),
-                        system: $scope.systemDropdown.value(),
+                        frequency_id: $scope.frequencyDropdown.value(),
+                        system_id: $scope.systemDropdown.value(),
                         receivers: [{"email": $scope.taskEmail}]
                     });
                 scheduleTaskDataSource.sync();
@@ -159,17 +197,49 @@
                 return {
                     dataSource: scheduleTaskDataSource,
                     columns: [
-                        { field: "frequency_name", title:"frequency", width: "110px" },
-                        { field: "system.fullname", title:"system", width: "110px" },
+                        { field: "frequency_id", title:"frequency", width: "110px", editor: frequencyDropDownEditor,
+                          template: function(dataItem) {
+                              return $.grep(frequencies, function(e) {
+                                  return e.id == dataItem.frequency_id
+                              })[0].name;
+                          }
+                        },
+                        { field: "system_id", title:"system", width: "110px", editor: systemDropDownEditor,
+                          template: function(dataItem) {
+                              return $.grep(company_systems, function(e) {
+                                  return e.id == dataItem.system_id
+                              })[0].fullname;
+                          }
+                        },
                         { title: "Receivers",
                           template: function(dataItem) {
                               var arr = $.map(dataItem.receivers, function(r) { return r.email; });
                               return arr.join(',');
                           }
-                        }
-                    ]
+                        },
+                        { command: ["edit", "destroy"], title: "&nbsp;", width: "250px" }
+                    ],
+                    editable: "inline"
                 };
             };
+
+            function systemDropDownEditor(container, options) {
+                $('<input required data-text-field="fullname" data-value-field="id" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        autoBind: false,
+                        dataSource: $scope.systemsDataSource
+                    });
+            }
+
+            function frequencyDropDownEditor(container, options) {
+                $('<input required data-text-field="name" data-value-field="id" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        autoBind: false,
+                        dataSource: $scope.frequencyDataSource
+                    });
+            }
 
     });
 </script>

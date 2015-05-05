@@ -28,14 +28,14 @@
                 {% ifequal LANGUAGE_CODE 'zh-tw' %}
                     {% verbatim %}
                     <span class="description-2">{{rightBoxText}}</span><div class="clearfix"></div>
-                    <h4 class="pull-left" ng-class="{'red-text' : percentage_change > 0, 'green-text' : percentage_change <= 0}"> {{moreLessText()}} </h4>
+                    <h4 class="pull-left" ng-class="{'red-text' : percentage_change > 0, 'green-text' : percentage_change <= 0}"> {{moreLessText}} </h4>
                     <h3 class="pull-left" ng-class="{'red-text' : percentage_change > 0, 'green-text' : percentage_change <= 0}">{{percentage_change | abs | entrakNumber}}</h3>
                     <h4 class="pull-left" ng-class="{'red-text' : percentage_change > 0, 'green-text' : percentage_change <= 0}">%</h4>
                     {% endverbatim %}
                 {% else %}
                     {% verbatim %}
                     <h3 class="pull-left" ng-class="{'red-text' : percentage_change > 0, 'green-text' : percentage_change <= 0}">{{percentage_change | abs | entrakNumber}}</h3>
-                    <h4 class="pull-left" ng-class="{'red-text' : percentage_change > 0, 'green-text' : percentage_change <= 0}">% {{moreLessText()}} </h4>
+                    <h4 class="pull-left" ng-class="{'red-text' : percentage_change > 0, 'green-text' : percentage_change <= 0}">% {{moreLessText}} </h4>
                     <div class="clearfix"></div>
                     <span class="description-2">{{rightBoxText}}</span>
                     {% endverbatim %}

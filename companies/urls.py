@@ -33,7 +33,10 @@ urlpatterns = patterns(
     url(r'^export/download/$', export_views.DownloadView.as_view(), name='companies.export.download'),
     url(r'^report-schedule/$', report_schedule_views.ReportScheduleView.as_view(), name='companies.report-schedule'),
     url(r'^report-schedule/create/$', report_schedule_views.CreateReportScheduleView.as_view(), name='companies.report-schedule.create'),
+    url(r'^report-schedule/update/(?P<pk>[0-9]+)/$', report_schedule_views.ReportScheduleTaskUpdateView.as_view(), name='companies.report-schedule.update'),
+    url(r'^report-schedule/destroy/(?P<pk>[0-9]+)/$', report_schedule_views.ReportScheduleTaskDestoryView.as_view(), name='companies.report-schedule.destroy'),
     url(r'^report-schedule/tasks/$', report_schedule_views.ReportScheduleTaskListView.as_view(), name='companies.report-schedule.tasks'),
+    url(r'^report-schedule/frequencies/$', report_schedule_views.FrequencyList.as_view(), name='companies.report-schedule.frequencies'),
 
 
     url(r'^systems/company-systems/$', system_views.CompanySystemList.as_view(), name='companies.systems.company-systems'),

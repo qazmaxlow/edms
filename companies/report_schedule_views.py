@@ -1,7 +1,10 @@
 from django.views.generic import TemplateView
 from django.utils.decorators import method_decorator
 
-from rest_framework import generics, serializers
+from rest_framework import generics, serializers, status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
 
 from schedulers.models import AutoSendReportSchedular, AutoSendReportReceiver
 from system.models import System
@@ -29,7 +32,7 @@ class ReportScheduleView(TemplateView):
 class SystemSerializer(serializers.ModelSerializer):
     class Meta:
         model = System
-        fields = ('fullname',)
+        fields = ('id', 'fullname',)
 
 
 class ReceiverSerializer(serializers.ModelSerializer):
@@ -39,20 +42,23 @@ class ReceiverSerializer(serializers.ModelSerializer):
 
 
 class ReportScheduleSerializer(serializers.ModelSerializer):
-    system = SystemSerializer()
     receivers = ReceiverSerializer(many=True)
+    system_id = serializers.IntegerField(source='system.id')
+    frequency_id = serializers.IntegerField(source='frequency')
 
     class Meta:
         model = AutoSendReportSchedular
-        fields = ('id', 'frequency_name', 'system', 'receivers')
+        fields = ('id', 'frequency_id', 'receivers', 'system_id')
 
 
 class CreateReportScheduleSerializer(serializers.ModelSerializer):
+    system_id = serializers.IntegerField(write_only=True)
     receivers = ReceiverSerializer(many=True, read_only=False)
+    frequency_id = serializers.IntegerField(source='frequency')
 
     class Meta:
         model = AutoSendReportSchedular
-        fields = ('frequency', 'system', 'receivers')
+        fields = ('id', 'frequency_id', 'receivers', 'system_id')
 
     def create(self, validated_data):
         receivers_data = validated_data.pop('receivers')
@@ -65,6 +71,15 @@ class CreateReportScheduleSerializer(serializers.ModelSerializer):
         return scheduler
 
 
+class UpdateReportScheduleSerializer(serializers.ModelSerializer):
+    system_id = serializers.IntegerField(write_only=True)
+    receivers = ReceiverSerializer(many=True, read_only=True)
+    frequency_id = serializers.IntegerField(source='frequency')
+
+    class Meta:
+        model = AutoSendReportSchedular
+        fields = ('id', 'frequency_id', 'receivers', 'system_id')
+
 
 class CreateReportScheduleView(generics.CreateAPIView):
     serializer_class = CreateReportScheduleSerializer
@@ -73,3 +88,20 @@ class CreateReportScheduleView(generics.CreateAPIView):
 class ReportScheduleTaskListView(generics.ListAPIView):
     serializer_class = ReportScheduleSerializer
     queryset = AutoSendReportSchedular.objects.all()
+
+
+class ReportScheduleTaskDestoryView(generics.DestroyAPIView):
+    queryset = AutoSendReportSchedular.objects.all()
+
+
+class ReportScheduleTaskUpdateView(generics.UpdateAPIView):
+    serializer_class = UpdateReportScheduleSerializer
+    queryset = AutoSendReportSchedular.objects.all()
+
+
+from constants.schedulers import FREQUENCIES # will refactor
+
+class FrequencyList(APIView):
+    def get(self, request, *args, **kwargs):
+        response = Response(FREQUENCIES, status=status.HTTP_200_OK)
+        return response
