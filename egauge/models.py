@@ -4,7 +4,9 @@ from mongoengine.document import EmbeddedDocument
 from mongoengine.fields import *
 from mongoengine import connection
 
+
 SOURCE_TZ_HK = u'Asia/Hong_Kong'
+
 
 class SourceMember(EmbeddedDocument):
     id = ObjectIdField()
@@ -12,6 +14,7 @@ class SourceMember(EmbeddedDocument):
     xml_url = StringField(max_length=120)
     tz = StringField(max_length=50, default=SOURCE_TZ_HK)
     operator = StringField(max_length=1)
+
 
 class Source(Document):
     name = StringField(max_length=200)
@@ -25,6 +28,7 @@ class Source(Document):
     tz = StringField(max_length=50, default=SOURCE_TZ_HK)
     source_members = ListField(EmbeddedDocumentField(SourceMember))
     active = BooleanField(default=True)
+
 
 class BaseSourceReading(Document):
     meta = {
@@ -87,6 +91,7 @@ class BaseSourceReading(Document):
 class SourceReadingMin(BaseSourceReading):
     pass
 
+
 class SourceReadingMinInvalid(Document):
     source_id = ObjectIdField()
     datetime = DateTimeField()
@@ -94,17 +99,22 @@ class SourceReadingMinInvalid(Document):
     name = StringField(max_length=200)
     tz = StringField(max_length=50, default=SOURCE_TZ_HK)
 
+
 class SourceReadingHour(BaseSourceReading):
     pass
+
 
 class SourceReadingDay(BaseSourceReading):
     pass
 
+
 class SourceReadingWeek(BaseSourceReading):
     pass
 
+
 class SourceReadingMonth(BaseSourceReading):
     pass
+
 
 class SourceReadingYear(BaseSourceReading):
     pass
