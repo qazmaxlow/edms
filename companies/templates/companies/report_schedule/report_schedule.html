@@ -50,7 +50,7 @@
         <div class="row steps">
             <div class="col-md-3 description">
                 <p class="desc-text">{{description}}</p>
-                <img src="/static/images/export/et-helper.png"></img>
+                <img src="/static/images/report-schedule/report-icon.png"></img>
             </div>
             <div class="col-md-3">
                 <div class="step-label">{{step1}}</div>
@@ -81,7 +81,7 @@
                 <div class="content bg-step3">
                     <h4 class="label-top">{{sendTo}}</h4>
                     <div id="rs-emailList"></div>
-                    <input ng-model="taskEmail" readonly>
+                    <input ng-model="taskEmail" >
                     <div>
                         <button ng-click="confirmAdd()">{{btnConfirm}}</button>
                     </div>
@@ -223,7 +223,14 @@
                     }
                 },
 
+                readOnly: function(readonly){
+                    this.wrapper.attr("aria-readonly", readonly);
+                },
+
                 open: function(){
+                    if (this.wrapper.attr("aria-readonly") == "true")
+                        return;
+
                     var input = this.container.find("INPUT");
                     this.updatePopup();
                     input.val("");
@@ -243,7 +250,7 @@
             etDropDown.value(["1@hahah.com", "2@yahoo.com"]);
             etDropDown.addItem("yahoo@gmail.com");
             console.log(etDropDown.value());
-
+            etDropDown.readOnly(true);
 
             $scope.description = '{% trans "Set the system to email you an energy report each month or week, so you can stay informaed and up to date on your energy use." %}';
             $scope.btnConfirm = '{% trans "Confirm" %}';
