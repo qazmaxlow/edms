@@ -753,6 +753,7 @@
                 $scope.average = nightAverage;
                 $scope.percentage_change = nightPercentageChange;
             }
+            $scope.moreLessText = ($scope.percentage_change > 0) ? '{% trans "more" %}' : '{% trans "less" %}';
 
             $scope.lastWeekStatChart.refresh();
             if(!$scope.$$phase) {
