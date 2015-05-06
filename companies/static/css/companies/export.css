@@ -181,7 +181,12 @@
 	margin: 7px;
 }
 
-.export-base button.rect-radio.active, .export-base button.rect-radio:hover {
+.export-base button.rect-radio:disabled {
+	border-color: #cdcdcd;
+	color: #cdcdcd;
+}
+
+.export-base button.rect-radio.active, .export-base button.rect-radio:hover:enabled {
 	border: none;
 	color: #FFF;
 	background-color: #74c62b;
