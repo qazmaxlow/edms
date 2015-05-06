@@ -122,12 +122,7 @@
                 that.wrapper = $(that.wrapper);
                 that.wrapper.appendTo(elm);
 
-                that.items = [];
-                if ($.isArray(data)){
-                    that.items = data;
-                } else if (!data){
-                    that.items = [data];
-                }
+                that.value(data);
 
                 that.container = $("<DIV/>").attr(ARIA_HIDDEN, "true").addClass("k-et-dropdown-container").appendTo(body);
                 var options = {};
@@ -177,8 +172,14 @@
             EtDropDown.prototype = {
                 ITEM: '<DIV><SPAN></SPAN><SPAN class="k-select"><SPAN class="k-icon k-i-arrow-s"></SPAN></SPAN></DIV>',
 
-                value: function(){
-                    return this.items;
+                value: function(data){
+                    if (data == null){
+                        return this.items;
+                    } else if ($.isArray(data)){
+                        this.items = data;
+                    } else {
+                        this.items = [data];
+                    }
                 },
 
                 addItem: function(item){
@@ -239,6 +240,7 @@
 
             var etDropDown = new EtDropDown($("#rs-emailList"), ["asdf@hahah.com", "bbb@yahoo.com"]);
             console.log(etDropDown.value());
+            etDropDown.value(["1@hahah.com", "2@yahoo.com"]);
             etDropDown.addItem("yahoo@gmail.com");
             console.log(etDropDown.value());
 
