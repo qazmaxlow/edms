@@ -112,14 +112,15 @@
                 ns = ".kendoEtDropDown",
                 MOUSEDOWN = "mousedown" + ns,
                 KEYDOWN = "keydown" + ns,
-                CLICK = "click" + ns,
-                wrapper = '<SPAN unselectable="on" class="k-widget k-dropdown k-header"><SPAN unselectable="on" class="k-dropdown-wrap k-state-default">'
+                CLICK = "click" + ns;
+                
+                that.wrapper = '<SPAN unselectable="on" class="k-widget k-dropdown k-header"><SPAN unselectable="on" class="k-dropdown-wrap k-state-default">'
                             + '<SPAN unselectable="on" class="k-input"></SPAN>' 
                             + '<SPAN unselectable="on" class="k-select"><SPAN unselectable="on" class="k-icon k-i-arrow-s"></SPAN></SPAN>'
                             + '</SPAN></SPAN>';
 
-                wrapper = $(wrapper);
-                wrapper.appendTo(elm);
+                that.wrapper = $(that.wrapper);
+                that.wrapper.appendTo(elm);
 
                 that.items = [];
                 if ($.isArray(data)){
@@ -133,7 +134,7 @@
                 options.animation = {};
                 options.name = "Popup";
                 options.isRtl = kendo.support.isRtl(options.anchor);
-                options.anchor = wrapper;
+                options.anchor = that.wrapper;
 
                 that.popup = new kendo.ui.Popup(that.container, options);
 
@@ -163,7 +164,7 @@
                     }
                 });
                 
-                wrapper.on(MOUSEDOWN, function(){
+                that.wrapper.on(MOUSEDOWN, function(){
                     if (that.popup.visible()){
                         that.close();
                     } else {
@@ -185,6 +186,7 @@
                         item = item.trim();
                         if (this.items.indexOf(item) == -1){
                             this.items.push(item);
+                            this.updateTextbox();
                             return true;
                         }
                     }
@@ -197,6 +199,7 @@
                         if (i != -1){
                             this.items.splice(i, 1);
                         }
+                        this.updateTextbox();
                     }
                 },
 
@@ -208,6 +211,14 @@
                         var item = $(this.ITEM);
                         item.find("span:first").html(this.items[i]);
                         item.appendTo(list);
+                    }
+                },
+
+                updateTextbox: function(){
+                    if (this.items.length == 1){
+                        this.wrapper.find(".k-input").text(this.items[0]);
+                    } else {
+                        this.wrapper.find(".k-input").text(this.items.length + " Users");
                     }
                 },
 
