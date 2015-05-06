@@ -52,7 +52,7 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'rest_framework',
     'rest_framework.authtoken',
-    'token_url',
+    'url_token',
     'south',
     'egauge',
     'system',
