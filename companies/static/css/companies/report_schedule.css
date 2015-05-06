@@ -58,8 +58,10 @@
 .auto-report-base .steps .description img {
 	position: absolute;
 	bottom: 0;
-	width: 80%;
-  	left: 10%;
+	left: 0;
+	width: calc(100% - 54px);
+	margin-right: 27px;
+	margin-left: 27px;
 }
 
 .auto-report-base .header {
