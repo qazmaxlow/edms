@@ -81,7 +81,7 @@
                 <div class="content bg-step3">
                     <h4 class="label-top">{{sendTo}}</h4>
                     <div id="rs-emailList"></div>
-<!--                     <input ng-model="taskEmail"> -->
+                    <input ng-model="taskEmail" readonly>
                     <div>
                         <button ng-click="confirmAdd()">{{btnConfirm}}</button>
                     </div>
@@ -228,6 +228,8 @@
 
             var etDropDown = new EtDropDown($("#rs-emailList"), ["asdf@hahah.com", "bbb@yahoo.com"]);
             console.log(etDropDown.value());
+            etDropDown.addItem("yahoo@gmail.com");
+            console.log(etDropDown.value());
 
 
             $scope.description = '{% trans "Set the system to email you an energy report each month or week, so you can stay informaed and up to date on your energy use." %}';
@@ -242,6 +244,31 @@
 
             $scope.recordTitle = '{% trans "Manage Automated Reports" %}';
 
+            var userDataSource = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        async: false,
+                        url: "{% url 'companies.users.authenticated-user' current_system.code %}",
+                        type: 'GET',
+                        dataType: "json"
+                    }
+                },
+                schema: {
+                    // Fix for single result
+                    data: function(response) {
+                        return [response];
+                    }
+                }
+            });
+
+            userDataSource.read();
+            var authenticated_user = userDataSource.data()[0];
+            if (authenticated_user){
+                $scope.taskEmail = authenticated_user.email; // set default task value
+            } else {
+                $scope.taskEmail = "";
+            }
+            
 
             $scope.systemsDataSource = new kendo.data.DataSource({
                 transport: {
