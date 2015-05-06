@@ -80,7 +80,7 @@
                 <div class="header">{{step3Title}}</div>
                 <div class="content bg-step3">
                     <h4 class="label-top">{{sendTo}}</h4>
-                    <input ng-model="taskEmail">
+                    <input ng-model="taskEmail" readonly>
                     <div>
                         <button ng-click="confirmAdd()">{{btnConfirm}}</button>
                     </div>
@@ -112,6 +112,26 @@
 
             $scope.recordTitle = '{% trans "Manage Automated Reports" %}';
 
+            var userDataSource = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        async: false,
+                        url: "{% url 'companies.users.authenticated-user' current_system.code %}",
+                        type: 'GET',
+                        dataType: "json"
+                    }
+                },
+                schema: {
+                    // Fix for single result
+                    data: function(response) {
+                        return [response];
+                    }
+                }
+            });
+
+            userDataSource.read();
+            var authenticated_user = userDataSource.data()[0];
+            $scope.taskEmail = authenticated_user.email; // set default task value
 
             $scope.systemsDataSource = new kendo.data.DataSource({
                 transport: {
