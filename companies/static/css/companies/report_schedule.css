@@ -178,3 +178,64 @@
 	height: 100%;
 }
 /* -----dropdown*/
+
+/* etdropdown-----*/
+.k-et-dropdown-container.k-popup {
+	padding: 5px 0;
+	border-radius: 4px;
+	background-color: #FFFFFF;
+	webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.298039);
+  	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.298039);
+}
+
+.k-et-dropdown-container .k-itemList {
+	display: table;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.k-et-dropdown-container .k-itemList .k-itemRow {
+	display: table-row;
+	height: 25px;
+	line-height: 25px;
+}
+
+.k-et-dropdown-container .k-itemList .k-itemRow:not(:first-child){
+	border-top: 1px solid #555555;
+}
+
+.k-et-dropdown-container .k-itemList .k-itemRow .k-item {
+	padding-left: 5px;
+	display: table-cell;
+}
+
+.k-et-dropdown-container .k-itemList .k-itemRow .k-select {
+	display: table-cell;
+	padding-right: 5px;
+	width: 18px;
+}
+
+.k-et-dropdown-container .k-editPanel {
+	border-top: 2px solid #dddddd;
+}
+
+.k-et-dropdown-container .k-editPanel .add-btn {
+	margin: 5px 5px 5px 0px;
+	font-size: 1em;
+	height: 20px;
+	width: 50px;
+	text-align: center;
+	padding: 0;
+	box-shadow: 0px 1px 0px #6b9aa5;
+	background-color: #9bceda;
+	border: none;
+	border-radius: 4px;
+	color: #354960;
+}
+
+.k-et-dropdown-container .k-editPanel input {
+	margin: 5px;
+	width: calc(100% - 65px);
+  	box-sizing: border-box;
+}
+/* -----etdropdown*/
