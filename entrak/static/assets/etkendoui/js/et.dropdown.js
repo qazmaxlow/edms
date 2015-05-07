@@ -21,7 +21,8 @@ var EtDropDown = function(elm, data){
 
     that.options = {
         readOnly: false,
-        itemDisplayName: "e-mails"
+        itemDisplayName: "e-mails",
+        ignoreCase: true
     };
 
     that.value(data);
@@ -92,7 +93,16 @@ EtDropDown.prototype = {
     addItem: function(item){
         if (item && item.trim()){
             item = item.trim();
-            if (this.items.indexOf(item) == -1){
+            if (this.options.ignoreCase){
+                for (var i=0; i<this.items.length; i++){
+                    if (this.items[i].toLowerCase() == item.toLowerCase()){
+                        return false;
+                    }
+                }
+                this.items.push(item);
+                this.updateTextbox();
+                return true;
+            } else if (this.items.indexOf(item) == -1){
                 this.items.push(item);
                 this.updateTextbox();
                 return true;
