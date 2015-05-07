@@ -27,6 +27,9 @@ e) mongodb
 
     **2. run mongodb daemon mode: http://docs.mongodb.org/manual/tutorial/manage-mongodb-processes/
 
+After setting up Postreq server and mongodb, you could create the share folder between you local and remote ubuntu:
+	1. In you local Vagrantfile setting up the share folder
+	<img src="http://i1077.photobucket.com/albums/w472/Teddy_Lun/setup4_zpscd2usa3p.png"/>
 f) celery
     1. brew install rabbitmq
     2. run rabbitmq
@@ -34,13 +37,14 @@ f) celery
     4. config to run different quene for different tasks (ref: entrak/celery.py, example: task_starter, recover, recap)
     5. run celery worker (worker for processing task) AND beat (beat for fire periodic task)
 
+    for Ubuntu:
     if no `brew` command: (Reference:https://github.com/Homebrew/linuxbrew)
     	1. *install Linuxbrew: `ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/linuxbrew/go/install)"`
     	2.`vi ~/.bashrc`
-		3. Add to your .bashrc or .zshrc:
-			export PATH="$HOME/.linuxbrew/bin:$PATH"
-			export MANPATH="$HOME/.linuxbrew/share/man:$MANPATH"
-			export INFOPATH="$HOME/.linuxbrew/share/info:$INFOPATH"
+	3. Add to your .bashrc or .zshrc:
+		export PATH="$HOME/.linuxbrew/bin:$PATH"
+		export MANPATH="$HOME/.linuxbrew/share/man:$MANPATH"
+		export INFOPATH="$HOME/.linuxbrew/share/info:$INFOPATH"
 
 g) nginx
     1. sudo pip install uwsgi (http://uwsgi-docs.readthedocs.org/en/latest/tutorials/Django_and_nginx.html)
@@ -48,6 +52,7 @@ g) nginx
 h) wkhtmltopdf
     1. http://wkhtmltopdf.org/downloads.html
     2. pip install pdfkit
+    
 
 RESTART SERVER:
 
