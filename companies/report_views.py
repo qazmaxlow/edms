@@ -27,6 +27,8 @@ from utils.auth import permission_required
 from utils import calculation
 from utils.utils import Utils
 
+from entrak.auth.decorators import require_passes_test
+
 
 # oops! change to write better API later
 from entrak.report_views import __generate_report_data
@@ -509,7 +511,8 @@ class CompareTplHepler:
 
 
 def _popup_report_view(request, system_code, year=None, month=None, report_type=None, to_pdf=False):
-    systems_info = System.get_systems_info(system_code, request.user.system.code)
+    # systems_info = System.get_systems_info(system_code, request.user.system.code)
+    systems_info = System.get_systems_info(system_code, system_code) # in fact just using systems no user systems
     systems = systems_info['systems']
     current_system = System.objects.get(code=system_code)
     sources = SourceManager.get_sources(current_system)
@@ -1073,6 +1076,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         if 'last_year_this_month' in g and g['last_year_this_month']['money']:
             change_in_money = g['currentTotalMoney']- g['last_year_this_month']['money']
 
+
         data_info = {
             'total_energy': g['currentTotalEnergy'],
             'co2_val': g['currentTotalCo2'],
@@ -1274,7 +1278,9 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     return render(request, 'companies/reports/popup_report.html', m)
 
 
-@permission_required()
+from tokens.models import UrlToken
+@require_passes_test(
+    lambda r: UrlToken.objects.check_token_by_request(r) or r.user.is_authenticated())
 def popup_report_view(request, system_code, year=None, month=None, report_type=None, to_pdf=False):
     return _popup_report_view(request, system_code)
 
