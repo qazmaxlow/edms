@@ -19,6 +19,7 @@ from egauge.manager import SourceManager
 from system.models import System
 from user.models import EntrakUser
 from django.views.decorators.csrf import csrf_exempt
+from utils.utils import Utils
 
 
 @csrf_exempt
@@ -27,7 +28,7 @@ def activate_account(request, user_id):
     user = None
     data = {}
 
-    users = EntrakUser.objects.filter(id=user_id, is_email_verified=False)
+    users = EntrakUser.objects.filter(id=user_id, is_email_verified=False, is_personal_account=True)
     if users.exists():
         user = users[0]
 
@@ -38,11 +39,6 @@ def activate_account(request, user_id):
     else:
         user_id = request.GET.get('uid', None)
         user_code = request.GET.get('ucode', None)
-
-
-    print(user)
-    print(user_id)
-    print(user_code)
 
 
     if user and user_id and user_code:
@@ -63,8 +59,7 @@ def activate_account(request, user_id):
 
                 user = authenticate(username=user.username, password=user.password)
                 url = reverse('graph', kwargs={'system_code': system.code})
-                json_data = simplejson.dumps({"redirect": url})
-                return HttpResponse({json_data}, mimetype='application/json')
+                return Utils.json_response({"redirect": url})
 
             else:
                 m = {"uid": user_id, "ucode": user_code}
@@ -81,3 +76,12 @@ def activate_account(request, user_id):
     else:
         request.session['login_warning_msg'] = _("Invalid request")
         return redirect('/login')
+
+
+def send_email(request, user_id):
+
+    users = EntrakUser.objects.filter(id=user_id, is_email_verified=False, is_personal_account=True)
+
+    if users.exists():
+        user = users[0]
+        user.send_activation_email()

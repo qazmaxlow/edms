@@ -5,6 +5,12 @@ from Crypto.Cipher import AES
 from datetime import datetime
 from entrak.encrypter import EntrakEncrypter
 
+# For sending email with template
+from django.core.mail import send_mail
+from django.template.loader import get_template
+from django.template import Context
+from django.core.mail import EmailMultiAlternatives
+
 
 USER_ROLE_ADMIN_LEVEL   = 100
 USER_ROLE_VIEWER_LEVEL  = 1
@@ -66,3 +72,21 @@ class EntrakUser(AbstractUser):
             return False
 
 
+    def send_activation_email(self):
+
+        plaintext = get_template('activation_email.txt')
+        htmly     = get_template('activation_email.html')
+
+        d = Context({
+                'full_name': self.fullname,
+                'url': self.activation_url,
+            })
+
+        subject, from_email, to_email = 'Thanks for signing up!', "info@en-trak.com", [self.email]
+
+        text_content = plaintext.render(d)
+        html_content = htmly.render(d)
+
+        msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()

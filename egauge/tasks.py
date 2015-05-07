@@ -36,12 +36,16 @@ def recover_min_reading_for_xml_url(xml_url):
 
 @shared_task(ignore_result=True)
 def force_retrieve_reading(start_dt, end_dt, system_codes):
-    #SourceManager.force_retrieve_reading(start_dt, end_dt, system_codes, force_retrieve_hour_reading)
-    SourceManager.force_retrieve_reading(start_dt, end_dt, system_codes)
+    SourceManager.force_retrieve_reading(start_dt, end_dt, system_codes,
+        True, force_retrieve_hour_reading, force_retrieve_source_with_members_hour_reading)
 
 @shared_task(ignore_result=True)
 def force_retrieve_hour_reading(all_grouped_sources, start_dt, hour_idx):
     SourceManager.force_retrieve_hour_reading(all_grouped_sources, start_dt, hour_idx)
+
+@shared_task(ignore_result=True)
+def force_retrieve_source_with_members_hour_reading(all_sources_with_members, start_dt, hour_idx):
+    SourceManager.force_retrieve_source_with_members_hour_reading(all_sources_with_members, start_dt, hour_idx)
 
 
 import csv
