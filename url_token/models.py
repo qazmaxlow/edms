@@ -27,11 +27,16 @@ class UrlTokenManager(models.Manager):
         return self.create(token_key=token_key, created_by=user, expiration_days=expiration_days)
 
 
-class UrlToken(models.Model):
+class Token(models.Model):
     token_key = models.CharField(max_length=40, unique=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL)
     created_time = models.DateTimeField(auto_now_add=True)
     expiration_days = models.PositiveIntegerField()
     extra_data =  models.TextField(null=True) # suppose using json format
+
+
+class UrlToken(Token):
+    class Meta:
+        proxy = True
 
     objects = UrlTokenManager()
