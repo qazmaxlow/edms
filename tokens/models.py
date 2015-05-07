@@ -67,7 +67,7 @@ class Token(models.Model):
     @property
     def is_expired(self):
         expiration_date = self.created_time + datetime.timedelta(days=self.expiration_days)
-        return expiration_date <= timezone.now()
+        return expiration_date > timezone.now()
 
 
 class UrlToken(Token):
