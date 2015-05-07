@@ -992,8 +992,10 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
     def weekend_filter(tv):
         t, v = tv
-        wd = datetime.datetime.fromtimestamp(t, pytz.utc).weekday()
-        return wd >= 5 and wd <=6
+        dt = datetime.datetime.fromtimestamp(t, pytz.utc).astimezone(current_system_tz)
+        wd = dt.weekday()
+        all_holidays = system.get_all_holidays()
+        return (wd >= 5 and wd <=6) or dt.date() in all_holidays
 
     only_weekend_readings = filter(weekend_filter, combined_readings.items())
 
