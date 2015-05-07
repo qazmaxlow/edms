@@ -1247,9 +1247,21 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
     m['overnight'] = overnight_usage
 
+    if current_system.night_time_start.minute > 29:
+        tmpDateStart = datetime.datetime.combine(datetime.date.today(), current_system.night_time_start) + datetime.timedelta(hours=1)    
+        tmpDateStart = tmpDateStart.time()
+    else:
+        tmpDateStart = current_system.night_time_start
+
+    if current_system.night_time_end.minute > 29:
+        tmpDateEnd = datetime.datetime.combine(datetime.date.today(), current_system.night_time_end) + datetime.timedelta(hours=1)
+        tmpDateEnd = tmpDateEnd.time()
+    else:
+        tmpDateEnd = current_system.night_time_end
+
     m['overnight_timerange_text'] = "{0} - {1}".format(
-        current_system.night_time_start.strftime('%l%p').strip(),
-        current_system.night_time_end.strftime('%l%p').strip())
+        tmpDateStart.strftime('%l%p').strip(),
+        tmpDateEnd.strftime('%l%p').strip())
 
     # holidays
     m['holidays_json'] = json.dumps(report_data['holidays'])
