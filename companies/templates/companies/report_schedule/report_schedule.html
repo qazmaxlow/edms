@@ -47,7 +47,7 @@
 
 {% verbatim %}
 <div ng-app="Entrak">
-    <div ng-cloak ng-controller="ReportScheduleController" class="auto-report-base" style="height: 420px">
+    <div ng-cloak ng-controller="ReportScheduleController" class="auto-report-base" ><!-- style="height: 420px" -->
         <div class="row steps">
             <div class="col-md-3 description">
                 <p class="desc-text">{{description}}</p>
@@ -83,7 +83,7 @@
                     <h4 class="label-top">{{sendTo}}</h4>
                     <div id="rs-emailList"></div>
                     <input ng-model="taskEmail" >
-                    <div>
+                    <div class="btn-container">
                         <button ng-click="confirmAdd()">{{btnConfirm}}</button>
                     </div>
                 </div>
