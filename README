@@ -25,11 +25,13 @@ e) mongodb
     OR
     1b. Following the steps to install mongodb on: http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/
 
-    **2. run mongodb daemon mode: http://docs.mongodb.org/manual/tutorial/manage-mongodb-processes/
+    2. run mongodb daemon mode: http://docs.mongodb.org/manual/tutorial/manage-mongodb-processes/
 
 After setting up Postreq server and mongodb, you could create the share folder between you local and remote ubuntu:
-	1. In you local Vagrantfile setting up the share folder
-	<img src="http://i1077.photobucket.com/albums/w472/Teddy_Lun/setup4_zpscd2usa3p.png"/>
+	1. In you local Vagrantfile setting up the share folder:
+	`config.vm.synced_folder "vagrant", "/home/vagrant/app"`
+	"vagrant" is your local folder which same directory with Vagrantfile and  "/home/vagrant/app" remote path on ubuntu
+	
 f) celery
     1. brew install rabbitmq
     2. run rabbitmq
