@@ -239,6 +239,8 @@
                 scheduleTaskDataSource.sync();
             };
 
+            var receivers_editor = receiversEditor;
+            // var receivers_editor = null;
             $scope.taskGridOptions = function(dataItem) {
                 return {
                     dataSource: scheduleTaskDataSource,
@@ -257,7 +259,7 @@
                               })[0].fullname;
                           }
                         },
-                        { title: "Receivers",
+                        { field: "receivers", title: "Receivers", editor: receivers_editor,
                           template: function(dataItem) {
                               var arr = $.map(dataItem.receivers, function(r) { return r.email; });
                               return arr.join(',');
@@ -285,6 +287,19 @@
                         autoBind: false,
                         dataSource: $scope.frequencyDataSource
                     });
+            }
+
+            function receiversEditor(container, options) {
+                var emails = $.map(options.model.receivers, function(r, i) { return r.email;});
+                $('<div id="edit_email_popup"></div>')
+                    .appendTo(container);
+
+                var e = new EtDropDown($('#edit_email_popup'), emails);
+                options.model.receivers = ['123', '34234'];
+                // options.model.trigger('change');
+                console.log(container);
+                console.log(this);
+
             }
 
     });
