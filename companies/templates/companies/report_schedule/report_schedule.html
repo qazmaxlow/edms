@@ -226,11 +226,20 @@
             });
 
             $scope.confirmAdd = function() {
+                var emails = [];
+                if ($scope.user_group == 'manager') {
+                    emails = $.map(etDropDown.value(), function(email, i) {
+                        return {"email": email};
+                    });
+                }
+                else {
+                    emails.push({"email": $scope.taskEmail});
+                }
                 scheduleTaskDataSource.add(
                     {
                         frequency_id: $scope.frequencyDropdown.value(),
                         system_id: $scope.systemDropdown.value(),
-                        receivers: [{"email": $scope.taskEmail}]
+                        receivers: emails
                     });
                 scheduleTaskDataSource.sync();
             };
