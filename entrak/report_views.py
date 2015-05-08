@@ -353,12 +353,11 @@ def __generate_report_data(systems, report_type, start_timestamp, end_timestamp)
             datetime__gte=dt_info['last_same_period_start_dt'],
             datetime__lt=dt_info['last_same_period_end_dt']).sum('value')
 
-        target_info['last_year_this_month'] = {
-            'enegry': last_year_this_month_enegry,
-            'money': calculation.transform_reading(
-                money_unit_code,
-                time.mktime(dt_info['last_same_period_start_dt'].timetuple()), last_year_this_month_enegry, money_unit_rates)
-        }
+        target_info['last_year_this_month']['enegry'] += last_year_this_month_enegry
+        target_info['last_year_this_month']['money'] += calculation.transform_reading(
+            money_unit_code,
+            time.mktime(dt_info['last_same_period_start_dt'].timetuple()), last_year_this_month_enegry, money_unit_rates)
+
         for timestamp, val in readings.items():
             reading_dt = Utils.utc_dt_from_utc_timestamp(timestamp)
             for name, bound_info in timestamp_info.items():
