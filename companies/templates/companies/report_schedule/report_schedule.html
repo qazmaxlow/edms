@@ -81,8 +81,8 @@
                 <div class="header">{{step3Title}}</div>
                 <div class="content bg-step3">
                     <h4 class="label-top">{{sendTo}}</h4>
-                    <div id="rs-emailList"></div>
-                    <input ng-model="taskEmail" >
+                    <div id="rs-emailList" ng-show="user_group == 'manager'"></div>
+                    <input ng-model="taskEmail" ng-show="user_group == 'viewer'">
                     <div class="btn-container">
                         <button ng-click="confirmAdd()">{{btnConfirm}}</button>
                     </div>
@@ -147,7 +147,13 @@
             } else {
                 $scope.taskEmail = "";
             }
-            
+
+            if (authenticated_user.role_level==100) {
+                $scope.user_group = 'manager';
+            }
+            else {
+                $scope.user_group = 'viewer';
+            }
 
             $scope.systemsDataSource = new kendo.data.DataSource({
                 transport: {
