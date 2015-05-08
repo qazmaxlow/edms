@@ -103,12 +103,7 @@
     angular.module("Entrak", [ "kendo.directives" ])
         .controller("ReportScheduleController", function($scope) {
 
-            var etDropDown = new EtDropDown($("#rs-emailList"), ["asdf@hahah.com", "bbb@yahoo.com"]);
-            console.log(etDropDown.value());
-            etDropDown.value(["1@hahah.com", "2@yahoo.com"]);
-            etDropDown.addItem("yahoo@gmail.com");
-            console.log(etDropDown.value());
-            //default values
+            var etDropDown = new EtDropDown($("#rs-emailList"), []);
             etDropDown.setOptions({readOnly: false, itemDisplayName: "e-mails", ignoreCase: true});
 
             $scope.description = '{% trans "Set the system to email you an energy report each month or week, so you can stay informaed and up to date on your energy use." %}';
