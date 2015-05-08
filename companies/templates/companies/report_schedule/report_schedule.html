@@ -296,6 +296,7 @@
 
                 var e = new EtDropDown($('#edit_email_popup'), emails);
                 options.model.receivers = ['123', '34234'];
+                options.model.dirty = true; // this means the model didn't sync
                 // options.model.trigger('change');
                 console.log(container);
                 console.log(this);
