@@ -21,7 +21,6 @@ from user.models import EntrakUser
 from django.views.decorators.csrf import csrf_exempt
 from utils.utils import Utils
 from rest_framework import generics
-from user.serializers import UserSerializer
 
 
 @csrf_exempt
@@ -128,10 +127,14 @@ def update_account(request, user_id):
         return "Invalid request"
 
 
-def send_email(request, user_id):
+def send_validation_email(request, user_id):
 
-    users = EntrakUser.objects.filter(id=user_id, is_email_verified=False, is_personal_account=True)
+    if request.user.is_superuser:
 
-    if users.exists():
-        user = users[0]
-        user.send_activation_email()
+        users = EntrakUser.objects.filter(id=user_id, is_email_verified=False, is_personal_account=True)
+
+        if users.exists():
+            user = users[0]
+            user.send_activation_email()
+
+
