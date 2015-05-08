@@ -4,7 +4,7 @@ var EtDropDown = function(elm, data){
     keys = kendo.keys,
     support = kendo.support,
     ARIA_HIDDEN = "aria-hidden",
-    EMPTYITEMLIST = '<div class="k-popup-content"><div class="k-itemList"></div></div><div class="k-editPanel"><input></input><button class="add-btn">Add</button></div>',
+    EMPTYITEMLIST = '<div class="k-itemList"></div><div class="k-editPanel"><input></input><button class="add-btn">Add</button></div>',
     SPAN = "<SPAN/>",
     ns = ".kendoEtDropDown",
     MOUSEDOWN = "mousedown" + ns,
@@ -30,6 +30,8 @@ var EtDropDown = function(elm, data){
     that.container = $("<DIV/>").attr(ARIA_HIDDEN, "true").addClass("k-et-dropdown-container").appendTo(body);
     var opt = {};
     opt.animation = {};
+    opt.origin = "bottom center";
+    opt.position = "top center";
     opt.name = "Popup";
     opt.isRtl = kendo.support.isRtl(opt.anchor);
     opt.anchor = that.wrapper;
@@ -78,7 +80,8 @@ var EtDropDown = function(elm, data){
 };
 
 EtDropDown.prototype = {
-    ITEM: '<DIV class="k-itemRow"><SPAN class="k-item"></SPAN><SPAN class="k-select"><SPAN class="k-icon k-delete"></SPAN></SPAN></DIV>',
+    ITEM: '<DIV class="k-itemRow"><DIV class="k-highlight"><SPAN class="k-item"></SPAN>'
+         + '<SPAN class="k-select"><SPAN class="k-icon k-delete"></SPAN></SPAN></DIV></DIV>',
 
     value: function(data){
         if (data == null){

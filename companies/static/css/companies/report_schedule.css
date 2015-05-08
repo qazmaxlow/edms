@@ -25,12 +25,11 @@
 .auto-report-base .steps {
 	margin: 28px 7px 0 7px;
 	border-bottom: 2px solid #cecac3;
-	height: 50%;
+	height: 180px;
 }
 
 .auto-report-base .records {
 	margin: 34px 7px 0 7px;
-	height: 50%;
 }
 
 .auto-report-base .steps .col-md-3 {
@@ -116,6 +115,10 @@
 	background: url("/static/images/report-schedule/email-icon.png") no-repeat 100% 100%;
 }
 
+.auto-report-base .steps .content.bg-step3 .btn-container {
+	padding-top:22px;
+}
+
 .auto-report-base .content .label-top {
 	font-size: 0.857em;
 	font-weight: 300;
@@ -181,48 +184,66 @@
 
 /* etdropdown-----*/
 .k-et-dropdown-container.k-popup {
-	padding: 5px 0;
-	border-radius: 4px;
+	min-width: 260px;
+	border-radius: 8px;
 	background-color: #FFFFFF;
-	webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.298039);
-  	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.298039);
 }
 
 .k-et-dropdown-container .k-itemList {
-	display: table;
-	border-collapse: collapse;
 	width: 100%;
 }
 
 .k-et-dropdown-container .k-itemList .k-itemRow {
-	display: table-row;
-	height: 25px;
-	line-height: 25px;
+	height: 27px;
+	line-height: 26px;
+	padding: 4px 12px;
+}
+
+.k-et-dropdown-container .k-itemList .k-highlight {
+	display: table;
+	width: 100%;
+	border-radius: 4px;
+}
+
+.k-et-dropdown-container .k-itemList .k-highlight:hover {
+	background-color: #e8e8e8;
 }
 
 .k-et-dropdown-container .k-itemList .k-itemRow:not(:first-child){
-	border-top: 1px solid #dddddd;
+	border-top: 1px solid #cdcdcd;
 }
 
 .k-et-dropdown-container .k-itemList .k-itemRow .k-item {
-	padding-left: 10px;
+	padding-left: 8px;
 	display: table-cell;
 	color: #354960;
-	font-size: 0.857em;
+	font-size: 0.929em;
+	font-weight: 300;
+	white-space: nowrap;
 }
 
 .k-et-dropdown-container .k-itemList .k-itemRow .k-select {
 	display: table-cell;
-	padding-right: 5px;
 	width: 18px;
 }
 
+.k-et-dropdown-container .k-select .k-icon {
+	opacity: 0.6;
+}
+
+.k-et-dropdown-container .k-highlight:hover .k-select .k-icon {
+	opacity: 1;
+}
+
 .k-et-dropdown-container .k-editPanel {
-	border-top: 2px solid #dddddd;
+	border-top: 2px solid #cdcdcd;
+	height: 61px;
 }
 
 .k-et-dropdown-container .k-editPanel .add-btn {
-	margin: 5px 10px 5px 0px;
+	outline: none;
+	margin-top: 7px;
+	margin-right: 12px;
 	height: 20px;
 	width: 50px;
 	text-align: center;
@@ -231,19 +252,28 @@
 	background-color: #9bceda;
 	border: none;
 	border-radius: 4px;
-	color: #354960;
+	color: #ffffff;
 	font-size: 1em;
+	font-weight: 300;
+}
+
+.k-et-dropdown-container .k-editPanel .add-btn:hover {
+	background-color: #74c62b;
+	color: #ffffff;
 }
 
 .k-et-dropdown-container .k-editPanel input {
-	padding: 1px 3px;
+	padding: 0px 3px;
+	height: 35px;
+	line-height: 33px;
 	outline: none;
-	margin: 5px 10px;
+	margin: 12px;
 	border-radius: 4px;
-	border: 1px solid #dddddd;
-	background-color: #aaaaaa;
-	width: calc(100% - 80px);
+	border: 1px solid #354960;
+	color: #354960;
+	font-weight: 300;
+	background-color: #ededed;
+	width: calc(100% - 86px);
   	box-sizing: border-box;
-
 }
 /* -----etdropdown*/

@@ -54,6 +54,7 @@ INSTALLED_APPS = (
     'rest_framework.authtoken',
     'south',
     'egauge',
+    'tokens',
     'system',
     'user',
     'baseline',
