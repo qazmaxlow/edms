@@ -31,7 +31,7 @@ USER_LANGUAGES      = (
 class EntrakUser(AbstractUser):
 
     system = models.ForeignKey('system.System', blank=True, null=True)
-    role_level = models.PositiveSmallIntegerField(max_length=20, choices=USER_ROLE_CHOICES, default=USER_ROLE_VIEWER_LEVEL)
+    role_level = models.PositiveSmallIntegerField(max_length=20, choices=USER_ROLE_CHOICES, default=USER_ROLE_VIEWER_LEVEL)  # will be deprecated
     label = models.CharField(max_length=300, blank=True)
     department = models.CharField(max_length=100, blank=True)
     language = models.CharField(max_length=10, choices=USER_LANGUAGES, default=ENGLISH)
