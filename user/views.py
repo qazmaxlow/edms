@@ -20,6 +20,8 @@ from system.models import System
 from user.models import EntrakUser
 from django.views.decorators.csrf import csrf_exempt
 from utils.utils import Utils
+from rest_framework import generics
+from user.serializers import UserSerializer
 
 
 @csrf_exempt
@@ -43,7 +45,7 @@ def activate_account(request, user_id):
 
     if user and user_id and user_code:
 
-        if user.validate_activation_url(user_id.encode('ascii','ignore'), user_code.encode('ascii','ignore')):
+        if user.validate_id_and_code(user_id.encode('ascii','ignore'), user_code.encode('ascii','ignore')):
             system = System.objects.get(id=user.system_id)
 
             if request.is_ajax() and request.method == 'POST':
@@ -76,6 +78,54 @@ def activate_account(request, user_id):
     else:
         request.session['login_warning_msg'] = _("Invalid request")
         return redirect('/login')
+
+
+def update_account(request, user_id):
+
+    user = None
+    data = simplejson.loads(request.body)
+
+    users = EntrakUser.objects.filter(id=user_id, is_email_verified=False, is_personal_account=True)
+    if users.exists():
+        user = users[0]
+
+    if user and data:
+
+        first_name = data.get('first_name', None)
+        last_name = data.get('last_name', None)
+        department = data.get('department', None)
+        language = data.get('language', None)
+
+        current_password = data.get('current_passowrd', None)
+        password = data.get('passowrd', None)
+        confirm_password = data.get('confirm_passowrd', None)
+
+        if first_name and last_name and department and language:
+
+            user.first_name = first_name
+            user.last_name = last_name
+            user.department = department
+            user.language = language
+            user.save()
+
+            return "User profile updated successfully"
+
+        elif current_passowrd and password and confirm_passowrd:
+
+            if password == confirm_password:
+                o_user = authenticate(username=user.username, password=current_passowrd)
+
+                if o_user:
+                    user.set_password(password)
+                    user.save()
+                    return "Password updated successfully"
+                else:
+                    return "Current password is incorrect"
+            else:
+                return "Password and confirm password must be the same"
+
+    else:
+        return "Invalid request"
 
 
 def send_email(request, user_id):
