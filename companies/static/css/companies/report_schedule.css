@@ -156,6 +156,65 @@
 	background-color: #74c62b;
 }
 
+/************lower part widget************/
+.auto-report-base .k-grid.k-widget{
+	margin-top: 0px;
+	padding:0px;
+	margin-bottom: 0px;
+
+}
+.auto-report-base .k-block, .k-widget, .k-input, .k-content, .k-textbox, .k-group, .k-content, .k-header, .k-filter-row > th, .k-editable-area, .k-separator, .k-colorpicker .k-i-arrow-s, .k-textbox > input, .k-autocomplete, .k-dropdown-wrap, .k-toolbar, .k-group-footer td, .k-grid-footer, .k-footer-template td, .k-state-default, .k-state-default .k-select, .k-state-disabled, .k-grid-header, .k-grid-header-wrap, .k-grid-header-locked, .k-grid-footer-locked, .k-grid-content-locked, .k-grid td, .k-grid td.k-state-selected, .k-grid-footer-wrap, .k-pager-wrap, .k-pager-wrap .k-link, .k-pager-refresh, .k-grouping-header, .k-grouping-header .k-group-indicator, .k-panelbar > .k-item > .k-link, .k-panel > .k-item > .k-link, .k-panelbar .k-panel, .k-panelbar .k-content, .k-treemap-tile, .k-calendar th, .k-slider-track, .k-splitbar, .k-dropzone-active, .k-tiles, .k-toolbar, .k-tooltip, .k-button-group .k-tool, .k-upload-files{
+	border-color: white;
+
+}
+
+.auto-report-base .k-widget, .k-grid td{
+	border: 0px;
+}
+
+.auto-report-base .k-header{
+	border-color: #cccccc;
+}
+
+.auto-report-base th.k-header.ng-scope{
+	color: #838383;
+	font-size: 0.929em;
+	text-align: center;
+}
+
+.auto-report-base .k-grid td{
+	color: #354960;
+	font-weight: bold;
+	font-size: 0.929em;
+	text-align: center;
+}
+
+.auto-report-base a.k-button.k-button-icontext{
+	margin: 0 10px;
+	height: 20px;
+	box-shadow: 0px 2px 0px #6b9aa5;
+	font-size: 0.857em;
+	padding: 0px;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.auto-report-base span.k-icon.k-edit{
+	display: none;
+}
+
+.auto-report-base span.k-icon.k-delete{
+	display: none;
+}
+
+.auto-report-base span.k-icon.k-update{
+	display: none;
+}
+
+.auto-report-base span.k-icon.k-cancel{
+	display: none;
+}
+/************end of lower part widget************/
+
 /* dropdown-----*/
 .auto-report-base .k-widget.k-dropdown.k-header {
 	border-radius: 4px;

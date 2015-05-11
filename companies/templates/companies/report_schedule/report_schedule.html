@@ -24,7 +24,6 @@
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
 <link href="{% static 'css/companies/report_schedule.css' %}" rel="stylesheet">
-
 <script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/et.dropdown.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
@@ -233,27 +232,34 @@
                 return {
                     dataSource: scheduleTaskDataSource,
                     columns: [
-                        { field: "frequency_id", title:"frequency", width: "110px", editor: frequencyDropDownEditor,
-                          template: function(dataItem) {
-                              return $.grep(frequencies, function(e) {
-                                  return e.id == dataItem.frequency_id
-                              })[0].name;
-                          }
-                        },
-                        { field: "system_id", title:"system", width: "110px", editor: systemDropDownEditor,
+                        { field: "scope_id", title:"Scope", width: "26%", editor: systemDropDownEditor,
                           template: function(dataItem) {
                               return $.grep(company_systems, function(e) {
                                   return e.id == dataItem.system_id
                               })[0].fullname;
                           }
                         },
-                        { title: "Receivers",
+                        { field: "frequency_id", title:"Frequency", width: "12%", editor: frequencyDropDownEditor,
+                          template: function(dataItem) {
+                              return $.grep(frequencies, function(e) {
+                                  return e.id == dataItem.frequency_id
+                              })[0].name;
+                          }
+                        },
+                        { field: "email_id", title:"Email", width: "20%", editor: frequencyDropDownEditor,
+                          template: function(dataItem) {
+                              return $.grep(frequencies, function(e) {
+                                  return e.id == dataItem.frequency_id
+                              })[0].name;
+                          }
+                        },
+/*                       { title: "Receivers",
                           template: function(dataItem) {
                               var arr = $.map(dataItem.receivers, function(r) { return r.email; });
                               return arr.join(',');
                           }
-                        },
-                        { command: ["edit", "destroy"], title: "&nbsp;", width: "250px" }
+                        },*/
+                         { command: ["edit", "destroy"], title: "Action", width: "160px" }
                     ],
                     editable: "inline"
                 };

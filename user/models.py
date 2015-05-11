@@ -34,7 +34,7 @@ class EntrakUser(AbstractUser):
     role_level = models.PositiveSmallIntegerField(max_length=20, choices=USER_ROLE_CHOICES, default=USER_ROLE_VIEWER_LEVEL)
     label = models.CharField(max_length=300, blank=True)
     department = models.CharField(max_length=100, blank=True)
-    language = models.CharField(max_length=10, choices=USER_LANGUAGES, default=ENGLISH)
+    language = models.CharField(max_length=10, default=ENGLISH)
     is_email_verified = models.BooleanField(default=False)
     is_personal_account = models.BooleanField(default=False)
     salt = models.CharField(max_length=32, blank=True)
