@@ -62,7 +62,10 @@ class CreateReportScheduleSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         receivers_data = validated_data.pop('receivers')
-        scheduler = AutoSendReportSchedular.objects.create(**validated_data)
+        scheduler = AutoSendReportSchedular(**validated_data)
+        request = self.context.get('request')
+        scheduler.created_by = request.user
+        scheduler.save()
 
         for receiver_item in receivers_data:
             receiver = AutoSendReportReceiver(**receiver_item)
