@@ -1,0 +1,161 @@
+
+.k-overlay {
+  background-color: #354960;
+  opacity: 0.9 !important;
+}
+
+.k-widget.k-window {
+    border-radius: 8px;
+    border: none;
+    padding: 0;
+}
+
+.k-window .k-window-titlebar {
+    border-radius: 8px 8px 0 0;
+    border: none;
+    height: 40px;
+    line-height: 40px;
+    background-color: #9bceda;
+    padding: 0;
+}
+
+.k-window .k-window-title {
+    color: #ffffff; 
+    text-align: center;
+}
+
+.k-window .k-window-title,
+.activate-acc {
+    font-family: 'ITCAvantGardeStd', "Helvetica Neue Light",
+    "Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+    "Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-size: 14px;
+}
+
+
+div.activate-acc.k-window-content {
+    padding: 40px 0 0 66px;
+}
+
+.activate-acc .sub-header-container {
+    padding-right: 60px;
+    text-align: left;
+    padding-bottom: 6px;
+}
+
+.activate-acc .sub-header {
+    font-size: 1em;
+    color: #434343;
+    font-weight: 600;
+}
+
+.activate-acc .warn-text {
+    float: right;
+    color: #e05d5d;
+    font-weight: 300;
+    font-size: 0.786em;
+    padding-top: 3px;
+}
+
+.activate-acc .separator {
+    margin-bottom: 22px;
+    margin-top: 22px;
+    margin-right: 66px;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.activate-acc .form-group {
+    margin: 14px 0 0 0 ;
+    height: 35px;
+    line-height: 35px;
+    text-align: left;
+}
+
+.activate-acc .form-group .control-label {
+    margin-left: 50px;
+    width: 115px;
+    text-align: left;
+    padding: 0;
+    line-height: 100%;
+    vertical-align: middle;
+    font-size: 1em;
+    color: #354960;
+    font-weight: 500;
+}
+
+.activate-acc .form-group .k-textbox:focus {
+    box-shadow: none;
+}
+
+.activate-acc .form-group .k-textbox {
+    width: 220px;
+    outline: none;
+    border-radius: 4px;
+    border: 1px solid #354960;
+    height: 32px;
+    line-height: 32px;
+    font-size: 1.071em;
+    color: #354960;
+    font-weight: 300;
+    margin: 0;
+    vertical-align: middle;
+}
+
+.activate-acc .form-note {
+    text-align: left;
+    padding-left: 50px;
+    padding-top: 5px;
+    font-size: 0.786em;
+    font-weight: 300;
+    color: #6c6c6c;
+}
+
+.activate-acc .form-note .note-label {
+    font-weight: 500;
+}
+
+.activate-acc .form-group .k-invalid-msg {
+    background-color: transparent;
+    border: none;
+    margin: 0 5px;
+    color: #e05d5d;
+    font-size: 0.786em;
+    font-weight: 300;
+    vertical-align: middle;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+.activate-acc .form-group .k-invalid-msg .k-icon {
+    display: none;
+}
+
+.activate-acc .k-button {
+    height: 34px;
+    width: 150px;
+    box-shadow: 0px 2px 0px #6b9aa5;
+    background-color: #9bceda;
+    border: none;
+    font-size: 1em;
+    color: #FFFFFF;
+    border-radius: 4px;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.activate-acc .k-button:disabled {
+    border-color: #dedede;
+    background-color: #dedede;
+    cursor: default;
+}
+
+.activate-acc .k-button:hover:enabled {
+    background-color: #74c62b;
+}
+
+.activate-acc .buttons-wrap {
+    padding-right: 66px;
+}
