@@ -252,7 +252,21 @@
                               return arr.join(',');
                           }
                         },
-                        { command: ["edit", "destroy"], title: "Action", width: "160px" }
+                        { 
+                            command: [{
+                                name: "edit",
+                                text: {
+                                    edit: "Edit",
+                                    update: "Confirm",
+                                    cancel: "Cancel"
+                                }
+                            }, {
+                                name: "destroy",
+                                text: "Delete"
+                            }], 
+                            title: "Actions", 
+                            width: "160px" 
+                        }
                     ],
                     editable: "inline"
                 };

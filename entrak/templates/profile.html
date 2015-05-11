@@ -11,7 +11,6 @@
 {{block.super}}
 {% get_current_language as LANGUAGE_CODE %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
 
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
 <script src="{% static 'assets/django/js/ajax.js' %}"></script>
@@ -23,7 +22,9 @@
 
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
-<link href="{% static 'css/companies/report_schedule.css' %}" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static 'css/kendo.entrak.theme.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/my_profile.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/custom_control.css' %}">
 
 <script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
@@ -46,16 +47,17 @@
 
 {% verbatim %}
 <div ng-app="entrak">
-    <div class="k-header" ng-controller="MyCtrl">Admin Profile
+    <div class="profile" ng-controller="MyCtrl">
+        <div class="k-header">My Profile</div>
         <div class="form-horizontal form-widgets">
             <form name="kForm" kendo-validator="validator" ng-submit="validate($event)" class="k-content" ng-model="isValid">
             <div class="form-group">
-                <label class="control-label col-sm-2" for="firstname">First Name</label>
-                <div class="col-sm-4">
-                    <input type="text" id="firstname" name="First Name" ng-model="user.first_name" class="k-textbox" placeholder="First Name" required validationMessage="Enter {0}"/>
+                <div class="col-sm-6">
+                    <label class="control-label" for="firstname">First Name:</label>
+                    <input type="text" id="firstname" name="First Name" ng-model="user.first_name" class="k-textbox normal-tb" placeholder="First Name" required validationMessage="Enter {0}"/>
                 </div>
-                <label class="control-label col-sm-2" for="department">Department</label>
-                <div class="col-sm-4">
+                <div class="col-sm-6">
+                    <label class="control-label right" for="department">Department:</label>
                     <select kendo-dropdownlist k-option-label="'--Department--'" name="department" ng-model="user.department" id="department" required data-required-msg="Select Department">
                         <option>Administration</option>
                         <option>Business Development</option>
@@ -78,12 +80,12 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-sm-2" for="lastname">Last Name</label>
-                <div class="col-sm-4">
-                    <input type="text" id="lastname" name="Last Name" ng-model="user.last_name" class="k-textbox" placeholder="Last Name" required validationMessage="Enter {0}"/>
+                <div class="col-sm-6">
+                    <label class="control-label" for="lastname">Last Name:</label>
+                    <input type="text" id="lastname" name="Last Name" ng-model="user.last_name" class="k-textbox normal-tb" placeholder="Last Name" required validationMessage="Enter {0}"/>
                 </div>
-                <label class="control-label col-sm-2" for="language">Language</label>
-                <div class="col-sm-4">
+                <div class="col-sm-6">
+                    <label class="control-label right" for="language">Language:</label>
                     <select kendo-dropdownlist k-option-label="'--Language--'" name="Language" id="language" ng-model="user.language" required data-required-msg="Select Language">
                             <option value="en_US">English</option>
                             <option value="zh_TW">繁體中文</option>
@@ -92,15 +94,20 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-sm-2" for="email">Email</label>
-                <div class="col-sm-4">
-                    {{email}}
+                <div class="col-sm-12">
+                    <label class="control-label" for="email">Email:</label>
+                    <span class="email-display">
+                        {{email}}
+                    </span>
                 </div>
             </div>
             <div class="buttons-wrap">
-            <button class="k-button k-primary k-state-default" ng-click="resetPassword()">Change Password</button>
-            <button class="k-button k-primary k-state-default" type="reset" ng-disabled="!isValid">Cancel</button>
-            <button class="k-button k-primary k-state-default" type="submit" ng-disabled="!isValid">Save Changes</button>
+                <button class="k-button normal-btn" type="reset" ng-disabled="!isValid">Cancel</button>
+                <button class="k-button normal-btn" type="submit" ng-disabled="!isValid">Save Changes</button>
+            </div>
+            <div class="separator"></div>
+            <div class="buttons-wrap">
+                <button class="k-button normal-btn" ng-click="resetPassword()">Change Password</button>
             </div>
             </form>
         </div>
@@ -112,29 +119,29 @@
                 <div class="form-group">
                     <label class="label-align-left" for="current_password">Current Password</label>
                     <div class="col-sm-12">
-                        <input type="password" id="current_password" name="Current Password" ng-model="user.current_password" class="k-textbox" placeholder="Set Your Password" required data-password-msg="Password not matched" />
+                        <input type="password" id="current_password" name="Current Password" ng-model="user.current_password" class="k-textbox normal-tb" placeholder="Set Your Password" required data-password-msg="Password not matched" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="label-align-left" for="password">New Password</label>
                     <div class="col-sm-12">
-                        <input type="password" id="new_password" name="New Password" ng-model="user.password" class="k-textbox" placeholder="Set Your Password" required data-password-msg="Password not matched" />
+                        <input type="password" id="new_password" name="New Password" ng-model="user.password" class="k-textbox normal-tb" placeholder="Set Your Password" required data-password-msg="Password not matched" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="label-align-left" for="confirm_password">Confirm Password</label>
                     <div class="col-sm-12">
-                        <input type="password" id="confirm_password" name="Confirm Password" class="k-textbox" placeholder="Retype Your Password" required data-password-msg="Password not matched" />
+                        <input type="password" id="confirm_password" name="Confirm Password" class="k-textbox normal-tb" placeholder="Retype Your Password" required data-password-msg="Password not matched" />
                     </div>
                 </div>
                 <div class="buttons-wrap">
-                    <button class="k-button k-primary k-state-default" type="submit" ng-disabled="!isValid">Save</button>
+                    <button class="k-button normal-btn" type="submit" ng-disabled="!isValid">Save</button>
                 </div>
                 </form>
             </div>
         </div>
 {% endverbatim %}
-
+<!--
 <style>
     .form-group .k-widget,
     .form-group .k-textbox {
@@ -162,7 +169,7 @@
         padding-top: 7px;
         padding-left: 15px;
     }
-</style>
+</style>-->
 
  <script>
         angular.module("entrak", [ "kendo.directives" ])
