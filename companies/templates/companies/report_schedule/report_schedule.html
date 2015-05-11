@@ -104,6 +104,7 @@
         .controller("ReportScheduleController", function($scope) {
             var etDropDown = new EtDropDown($("#rs-emailList"), []);
             etDropDown.setOptions({readOnly: false, itemDisplayName: "e-mails", ignoreCase: true, onchange: function(){console.log("onchange");}});
+
             $scope.description = '{% trans "Set the system to email you an energy report each month or week, so you can stay informaed and up to date on your energy use." %}';
             $scope.btnConfirm = '{% trans "Confirm" %}';
             $scope.sendTo = '{% trans "Send to:" %}';

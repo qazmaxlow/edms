@@ -136,5 +136,3 @@ def send_validation_email(request, user_id):
         if users.exists():
             user = users[0]
             user.send_activation_email()
-
-
