@@ -19,7 +19,7 @@ class CompanyAuthenticatedUserView(generics.RetrieveAPIView):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = EntrakUser
-        fields = ('id', 'fullname', 'department', 'language', 'email', 'is_email_verified', 'is_personal_account')
+        fields = ('id', 'username', 'fullname', 'department', 'language', 'email', 'is_email_verified', 'is_personal_account')
 
 
 class UserListView(generics.ListAPIView):

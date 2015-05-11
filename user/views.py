@@ -14,16 +14,16 @@ from django.contrib.auth import authenticate
 from django.core.urlresolvers import reverse
 from django.utils import simplejson
 from django.http import HttpResponse
+from django.http import HttpResponseForbidden
+from django.http import HttpResponseBadRequest
 
 from egauge.manager import SourceManager
 from system.models import System
 from user.models import EntrakUser
-from django.views.decorators.csrf import csrf_exempt
 from utils.utils import Utils
 from rest_framework import generics
 
 
-@csrf_exempt
 def activate_account(request, user_id):
 
     user = None
@@ -127,9 +127,9 @@ def update_account(request, user_id):
         return "Invalid request"
 
 
-def send_validation_email(request, user_id):
+def send_invitation_email(request, user_id):
 
-    if request.user.is_superuser:
+    if request.user.is_manager():
 
         users = EntrakUser.objects.filter(id=user_id, is_email_verified=False, is_personal_account=True)
 
@@ -137,4 +137,20 @@ def send_validation_email(request, user_id):
             user = users[0]
             user.send_activation_email()
 
+            return HttpResponse('<h3>Email Sent</h3>')
 
+        else:
+            return HttpResponseBadRequest('<h3>Invalid Request</h3>')
+
+
+    return HttpResponseForbidden('<h3>Not authorized</h3>')
+
+
+def create_individual_users(request):
+    data = simplejson.loads(request.body)
+    print(data)
+    pass
+
+
+def create_shared_user(request):
+    pass

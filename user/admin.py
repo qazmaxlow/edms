@@ -21,8 +21,8 @@ class EntrakUserCreationForm(UserCreationForm):
         model = EntrakUser
 
 class EntrakUserAdmin(UserAdmin):
-    list_display = UserAdmin.list_display + ('label', 'system', 'role_level', 'api_token', 'send_activation_email', 'is_email_verified', 'is_personal_account')
-    list_editable = ('label', 'system', 'role_level', 'is_email_verified', 'is_personal_account')
+    list_display = UserAdmin.list_display + ('label', 'system', 'role_level', 'api_token', 'send_activation_email', 'language', 'is_email_verified', 'is_personal_account')
+    list_editable = ('label', 'system', 'role_level', 'language', 'is_email_verified', 'is_personal_account')
 
     add_form = EntrakUserCreationForm
 
@@ -34,7 +34,7 @@ class EntrakUserAdmin(UserAdmin):
         if obj.is_email_verified:
             return '---'
         else:
-            return '<a href="/user/%d/send_activation_email">Send Email</a>' % (obj.id)
+            return '<a href="/users/%d/send_invitation_email">Send Email</a>' % (obj.id)
 
     send_activation_email.allow_tags = True
 
