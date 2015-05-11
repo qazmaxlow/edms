@@ -278,11 +278,17 @@
                 $('<div id="edit_email_popup"></div>')
                     .appendTo(container);
                 var e = new EtDropDown($('#edit_email_popup'), emails);
-                options.model.receivers = ['123', '34234'];
-                options.model.dirty = true; // this means the model didn't sync
-                // options.model.trigger('change');
-                console.log(container);
-                console.log(this);
+                e.setOptions({
+                    readOnly: false,
+                    itemDisplayName: "e-mails",
+                    ignoreCase: true,
+                    onchange: function() {
+                        options.model.receivers = $.map(e.value(), function(email, i) {
+                            return {"email": email};
+                        });
+                        options.model.dirty = true;
+                    }
+                });
             }
     });
 </script>
