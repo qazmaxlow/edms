@@ -169,7 +169,7 @@
 	margin-bottom: 0px;
 
 }
-.auto-report-base  .k-grid-header
+.auto-report-base .k-grid-header
 {
    padding: 0 !important;
 }
@@ -194,6 +194,7 @@
 	color: #838383;
 	font-size: 0.929em;
 	text-align: center;
+	height: 39px;
 }
 
 .auto-report-base th.k-header.ng-scope:first-child{
@@ -206,6 +207,7 @@
 	font-weight: bold;
 	font-size: 0.929em;
 	text-align: center;
+	height: 50px;
 }
 
 .auto-report-base .k-grid td:first-child{
@@ -220,12 +222,24 @@
 	padding: 0px;
 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 	text-decoration: none;
+	background-image: none;
+	background-color: #9bceda;
+	border-color: #9bceda;
+}
+.auto-report-base a.k-button.k-button-icontext.k-grid-edit:hover, a.k-button.k-button-icontext.k-grid-delete:hover,  a.k-button.k-button-icontext.k-grid-update:hover,  a.k-button.k-button-icontext.k-grid-cancel:hover{
+	background-color: #74c62b;
+	border-color: #74c62b;
+}
+
+
+.auto-report-base a.k-button.k-button-icontext:focus:active{
+	box-shadow: 0px 2px 0px #6b9aa5;
+	color: white;
 }
 .auto-report-base a.k-button.k-button-icontext:focus{
 	box-shadow: 0px 2px 0px #6b9aa5;
 	color: white;
 }
-
 .auto-report-base span.k-icon.k-edit{
 	display: none;
 }
@@ -241,6 +255,11 @@
 .auto-report-base span.k-icon.k-cancel{
 	display: none;
 }
+
+.auto-report-base .k-grid-header th.k-header{
+	vertical-align: middle;
+}
+
 /************end of lower part widget************/
 
 /* dropdown-----*/
