@@ -169,7 +169,7 @@
 	margin-bottom: 0px;
 
 }
-.auto-report-base  .k-grid-header
+.auto-report-base .k-grid-header
 {
    padding: 0 !important;
 }
@@ -194,6 +194,7 @@
 	color: #838383;
 	font-size: 0.929em;
 	text-align: center;
+	height: 39px;
 }
 
 .auto-report-base th.k-header.ng-scope:first-child{
@@ -206,6 +207,7 @@
 	font-weight: bold;
 	font-size: 0.929em;
 	text-align: center;
+	height: 50px;
 }
 
 .auto-report-base .k-grid td:first-child{
@@ -253,6 +255,11 @@
 .auto-report-base span.k-icon.k-cancel{
 	display: none;
 }
+
+.auto-report-base .k-grid-header th.k-header{
+	vertical-align: middle;
+}
+
 /************end of lower part widget************/
 
 /* dropdown-----*/
