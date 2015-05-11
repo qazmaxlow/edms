@@ -124,3 +124,31 @@
   	box-sizing: border-box;
 }
 /* -----etdropdown*/
+
+/* k-button -----*/
+.k-button.normal-btn {
+    height: 34px;
+    width: 150px;
+    box-shadow: 0px 2px 0px #6b9aa5;
+    background-color: #9bceda;
+    border: none;
+    font-size: 1em;
+    color: #FFFFFF;
+    border-radius: 4px;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.k-button.normal-btn:disabled {
+    border-color: #888888;
+    background-color: #888888;
+    color: #ffffff;
+    cursor: default;
+}
+
+.k-button.normal-btn:hover:enabled {
+    background-color: #74c62b;
+}
+/* -----k-button*/
