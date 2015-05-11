@@ -31,7 +31,7 @@ USER_LANGUAGES      = (
 class EntrakUser(AbstractUser):
 
     system = models.ForeignKey('system.System', blank=True, null=True)
-    role_level = models.PositiveSmallIntegerField(max_length=20, choices=USER_ROLE_CHOICES, default=USER_ROLE_VIEWER_LEVEL)
+    role_level = models.PositiveSmallIntegerField(max_length=20, choices=USER_ROLE_CHOICES, default=USER_ROLE_VIEWER_LEVEL)  # will be deprecated
     label = models.CharField(max_length=300, blank=True)
     department = models.CharField(max_length=100, blank=True)
     language = models.CharField(max_length=10, choices=USER_LANGUAGES, default=ENGLISH)
@@ -57,7 +57,7 @@ class EntrakUser(AbstractUser):
         return "https://data.en-trak.com/users/%d/activate?uid=%s&ucode=%s"%(self.id, uid, ucode)
 
 
-    def validate_activation_url(self, uid, ucode):
+    def validate_id_and_code(self, uid, ucode, days=2):
 
         try:
             encrypter = EntrakEncrypter(self.salt)
@@ -65,7 +65,7 @@ class EntrakUser(AbstractUser):
             utc_timestamp = encrypter.decode(ucode)
             utc_dt = datetime.fromtimestamp(float(utc_timestamp))
 
-            return (user_id == str(self.id) and (datetime.now() - utc_dt).days < 2)
+            return (user_id == str(self.id) and (datetime.now() - utc_dt).days < days)
 
         except TypeError as e:
             print(e)

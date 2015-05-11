@@ -11,6 +11,7 @@ class Migration(SchemaMigration):
 
         # Changing field 'EntrakUser.language'
         db.alter_column(u'user_entrakuser', 'language', self.gf('django.db.models.fields.CharField')(max_length=10))
+        orm.EntrakUser.objects.update(language='en_US')
 
     def backwards(self, orm):
 
