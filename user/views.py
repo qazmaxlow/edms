@@ -44,7 +44,7 @@ def activate_account(request, user_id):
 
     if user and user_id and user_code:
 
-        if user.validate_id_and_code(user_id.encode('ascii','ignore'), user_code.encode('ascii','ignore')):
+        if user.validate_activation_url(user_id.encode('ascii','ignore'), user_code.encode('ascii','ignore')):
             system = System.objects.get(id=user.system_id)
 
             if request.is_ajax() and request.method == 'POST':
@@ -117,11 +117,11 @@ def update_account(request, user_id):
                 if o_user:
                     user.set_password(password)
                     user.save()
-                    return "Password updated successfully"
+                    return HttpResponse("Password updated successfully")
                 else:
-                    return "Current password is incorrect"
+                    return HttpResponseBadRequest("Current password is incorrect")
             else:
-                return "Password and confirm password must be the same"
+                return HttpResponseBadRequest("Password and confirm password must be the same")
 
     else:
         return "Invalid request"
@@ -148,9 +148,16 @@ def send_invitation_email(request, user_id):
 
 def create_individual_users(request):
     data = simplejson.loads(request.body)
-    print(data)
-    pass
+    if data and 'models' in data.keys():
+        print(data['models'])
+    else:
+        print(data)
+
 
 
 def create_shared_user(request):
-    pass
+    data = simplejson.loads(request.body)
+    if data and 'models' in data.keys():
+        print(data['models'])
+    else:
+        print(data)
