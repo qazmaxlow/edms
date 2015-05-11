@@ -102,7 +102,6 @@
 <script>
     angular.module("Entrak", [ "kendo.directives" ])
         .controller("ReportScheduleController", function($scope) {
-
             var etDropDown = new EtDropDown($("#rs-emailList"), []);
             etDropDown.setOptions({readOnly: false, itemDisplayName: "e-mails", ignoreCase: true, onchange: function(){console.log("onchange");}});
 
@@ -115,9 +114,7 @@
             $scope.step1Title = '{% trans "Select Scope" %}';
             $scope.step2Title = '{% trans "Select Frequency" %}';
             $scope.step3Title = '{% trans "Confirm and Go" %}';
-
             $scope.recordTitle = '{% trans "Manage Automated Reports" %}';
-
             var userDataSource = new kendo.data.DataSource({
                 transport: {
                     read: {
@@ -134,7 +131,6 @@
                     }
                 }
             });
-
             userDataSource.read();
             var authenticated_user = userDataSource.data()[0];
             if (authenticated_user){
@@ -142,14 +138,12 @@
             } else {
                 $scope.taskEmail = "";
             }
-
             if (authenticated_user.role_level==100) {
                 $scope.user_group = 'manager';
             }
             else {
                 $scope.user_group = 'viewer';
             }
-
             $scope.systemsDataSource = new kendo.data.DataSource({
                 transport: {
                     read: {
@@ -160,7 +154,6 @@
                     }
                 }
             });
-
             $scope.frequencyDataSource = new kendo.data.DataSource({
                 transport: {
                     read: {
@@ -171,15 +164,10 @@
                     }
                 }
             });
-
-
             $scope.systemsDataSource.read();
             var company_systems = $scope.systemsDataSource.data();
-
             $scope.frequencyDataSource.read();
             var frequencies = $scope.frequencyDataSource.data();
-
-
             var scheduleTaskDataSource = new kendo.data.DataSource({
                 transport: {
                     read: {
@@ -219,7 +207,6 @@
                     model: { id: "id" } // identifier for map to kendo model, must be defined for create, update or delete
                 }
             });
-
             $scope.confirmAdd = function() {
                 var emails = [];
                 if ($scope.user_group == 'manager') {
@@ -238,39 +225,38 @@
                     });
                 scheduleTaskDataSource.sync();
             };
-
             var receivers_editor = receiversEditor;
             // var receivers_editor = null;
             $scope.taskGridOptions = function(dataItem) {
                 return {
                     dataSource: scheduleTaskDataSource,
                     columns: [
-                        { field: "frequency_id", title:"frequency", width: "110px", editor: frequencyDropDownEditor,
+                        { field: "system_id", title:"Scope", width: "26%", editor: systemDropDownEditor,
+                              template: function(dataItem) {
+                              return $.grep(company_systems, function(e) {
+                                  return e.id == dataItem.system_id
+                              })[0].fullname;
+                          }
+                        },
+                        { field: "frequency_id", title:"Frequency", width: "12%", editor: frequencyDropDownEditor,
                           template: function(dataItem) {
                               return $.grep(frequencies, function(e) {
                                   return e.id == dataItem.frequency_id
                               })[0].name;
                           }
                         },
-                        { field: "system_id", title:"system", width: "110px", editor: systemDropDownEditor,
-                          template: function(dataItem) {
-                              return $.grep(company_systems, function(e) {
-                                  return e.id == dataItem.system_id
-                              })[0].fullname;
-                          }
-                        },
-                        { field: "receivers", title: "Receivers", editor: receivers_editor,
+                        
+                        { field: "receivers", title: "Email", width: "20%", editor: receivers_editor,
                           template: function(dataItem) {
                               var arr = $.map(dataItem.receivers, function(r) { return r.email; });
                               return arr.join(',');
                           }
                         },
-                        { command: ["edit", "destroy"], title: "&nbsp;", width: "250px" }
+                        { command: ["edit", "destroy"], title: "Action", width: "160px" }
                     ],
                     editable: "inline"
                 };
             };
-
             function systemDropDownEditor(container, options) {
                 $('<input required data-text-field="fullname" data-value-field="id" data-bind="value:' + options.field + '"/>')
                     .appendTo(container)
@@ -279,7 +265,6 @@
                         dataSource: $scope.systemsDataSource
                     });
             }
-
             function frequencyDropDownEditor(container, options) {
                 $('<input required data-text-field="name" data-value-field="id" data-bind="value:' + options.field + '"/>')
                     .appendTo(container)
@@ -288,21 +273,17 @@
                         dataSource: $scope.frequencyDataSource
                     });
             }
-
             function receiversEditor(container, options) {
                 var emails = $.map(options.model.receivers, function(r, i) { return r.email;});
                 $('<div id="edit_email_popup"></div>')
                     .appendTo(container);
-
                 var e = new EtDropDown($('#edit_email_popup'), emails);
                 options.model.receivers = ['123', '34234'];
                 options.model.dirty = true; // this means the model didn't sync
                 // options.model.trigger('change');
                 console.log(container);
                 console.log(this);
-
             }
-
     });
 </script>
 {% endblock %}
