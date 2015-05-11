@@ -86,10 +86,15 @@ EtDropDown.prototype = {
     value: function(data){
         if (data == null){
             return this.items;
-        } else if ($.isArray(data)){
+        }
+
+        if ($.isArray(data)){
             this.items = data;
         } else {
             this.items = [data];
+        }
+        if (this.options.onchange && typeof this.options.onchange == "function"){
+            this.options.onchange();
         }
     },
 
@@ -104,10 +109,16 @@ EtDropDown.prototype = {
                 }
                 this.items.push(item);
                 this.updateTextbox();
+                if (this.options.onchange && typeof this.options.onchange == "function"){
+                    this.options.onchange();
+                }
                 return true;
             } else if (this.items.indexOf(item) == -1){
                 this.items.push(item);
                 this.updateTextbox();
+                if (this.options.onchange && typeof this.options.onchange == "function"){
+                    this.options.onchange();
+                }
                 return true;
             }
         }
@@ -119,8 +130,11 @@ EtDropDown.prototype = {
             var i = this.items.indexOf(item);
             if (i != -1){
                 this.items.splice(i, 1);
+                this.updateTextbox();
+                if (this.options.onchange && typeof this.options.onchange == "function"){
+                    this.options.onchange();
+                }
             }
-            this.updateTextbox();
         }
     },
 
