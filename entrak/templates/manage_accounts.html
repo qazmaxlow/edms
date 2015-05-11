@@ -1,0 +1,138 @@
+{% extends "page_base.html" %}
+
+{% load i18n %}
+{% load entrak_extras %}
+{% load static %}
+{% load humanize %}
+
+{% block ga_page_title %}report{% endblock %}
+
+{% block extra_head %}
+{{block.super}}
+{% get_current_language as LANGUAGE_CODE %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
+
+<script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
+<script src="{% static 'assets/django/js/ajax.js' %}"></script>
+<script src="{% static 'js/moment-with-locales.js' %}"></script>
+<script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
+<script src="{% static 'js/entrak-system.js' %}"></script>
+<script src="{% static 'js/entrak-utils.js' %}"></script>
+<script src="{% static 'js/report-generator.js' %}"></script>
+
+<link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
+<link href="{% static 'css/companies/report_schedule.css' %}" rel="stylesheet">
+
+<script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
+<script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
+<script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
+
+{% endblock %}
+
+{% block selected-menu-link-id %}menu-link-export{% endblock %}
+{% block system_menu_target_view %}report{% endblock %}
+{% block breadcrumb_target_view %}report{% endblock %}
+
+{% block page_title %}{% trans "THE DOWNLOAD PAGE" %}{% endblock %}
+{% block page_subtitle %}{% trans "Get all your information here at the" %}{% endblock %}
+
+{% block extra_script %}
+{{block.super}}
+{% endblock %}
+
+{% block page_content %}
+
+{% verbatim %}
+<div id="example" ng-app="Entrak">
+    <div ng-controller="MyCtrl">
+        <kendo-grid options="mainGridOptions">
+        </kendo-grid>
+    </div>
+</div>
+
+<script id="rowTemplate" type="text/x-kendo-tmpl">
+    # if (is_email_verified == true) { #
+    <tr data-uid="#: uid #">
+        <td> ${fullname} </td>
+        <td> ${email} </td>
+        <td> ${department} </td>
+        <td> ${language} </td>
+        <td> <button class='k-button' ng-click=removeUser(dataItem)>Delete</button> </td>
+    </tr>
+    # } else { #
+    <tr data-uid="#: uid #">
+        <td> Account Not Activated </td>
+        <td> ${email} </td>
+        <td colspan="2"> <button class='k-button' ng-click=resendEmail(dataItem)>Resend Activation Email</button> </td>
+        <td> <button class='k-button' ng-click=removeUser(dataItem)>Delete</button> </td>
+    </tr>
+    # } #
+</script>
+{% endverbatim %}
+
+<script>
+    angular.module("Entrak", [ "kendo.directives" ])
+        .controller("MyCtrl", function($scope){
+
+            var users = new kendo.data.DataSource({
+                type: "odata",
+                transport: {
+                    read: {
+                        async: false,
+                        url: "{% url 'companies.users' system.code %}",
+                        type: 'GET',
+                        dataType: "json"
+                    }
+                },
+                schema: {
+                    data: function (data) {
+                        return data;
+                    },
+                    total: function (data) {
+                        return data['odata.count'];
+                    },
+                    model: {
+                        fields: {
+                            id: { type: "number" },
+                            fullname: { type: "string" },
+                            department: { type: "string" },
+                            language: { type: "string" },
+                            email: { type: "string" },
+                            is_email_verified: { type: "boolean" },
+                            is_personal_account: { type: "boolean" }
+                        }
+                    }
+                },
+                pageSize: 20,
+            });
+
+            users.read();
+
+            $scope.mainGridOptions = {
+                dataSource: users,
+                sortable: true,
+                columns: [
+                    { field: "fullname", title: "Full Name", width: "200px" },
+                    { field: "email", title: "Email", width: "80px" },
+                    { field: "department", title: "Department", width: "80px" },
+                    { field: "language", title: "Language", width: "80px" },
+                    { title: "Action", width: "60px" }
+                ],
+                rowTemplate: kendo.template($("#rowTemplate").html()),
+            }
+
+            $scope.resendEmail = function(dataItem) {
+                console.log("Resending Activation Email");
+                return false;
+            }
+
+            $scope.removeUser = function(dataItem) {
+                console.log("DELETED");
+                console.log(dataItem);
+                return false;
+            }
+        })
+</script>
+{% endblock %}

@@ -31,6 +31,7 @@ After setting up Postreq server and mongodb, you could create the share folder b
     1. In you local Vagrantfile setting up the share folder:
     `config.vm.synced_folder "vagrant", "/home/vagrant/app"`
     "vagrant" is your local folder which same directory with Vagrantfile and  "/home/vagrant/app" remote path on ubuntu
+<<<<<<< HEAD
     
     After the installation of postgres and mongodb, configurate the database in /entrak/settings.py 
 
@@ -47,6 +48,10 @@ After setting up Postreq server and mongodb, you could create the share folder b
 
     For MongoDB:
     connect('entrak', tz_aware=True)
+=======
+
+
+>>>>>>> origin/develop
 f) celery
     1. brew install rabbitmq
     2. run rabbitmq
@@ -58,7 +63,7 @@ f) celery
     if no `brew` command: (Reference:https://github.com/Homebrew/linuxbrew)
         1. *install Linuxbrew: `ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/linuxbrew/go/install)"`
         2.`vi ~/.bashrc`
-    3. Add to your .bashrc or .zshrc:
+        3. Add to your .bashrc or .zshrc:
         export PATH="$HOME/.linuxbrew/bin:$PATH"
         export MANPATH="$HOME/.linuxbrew/share/man:$MANPATH"
         export INFOPATH="$HOME/.linuxbrew/share/info:$INFOPATH"
@@ -69,7 +74,7 @@ g) nginx
 h) wkhtmltopdf
     1. http://wkhtmltopdf.org/downloads.html
     2. pip install pdfkit
-    
+
 
 RESTART SERVER:
 
