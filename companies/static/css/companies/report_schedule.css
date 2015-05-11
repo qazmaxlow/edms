@@ -220,12 +220,24 @@
 	padding: 0px;
 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 	text-decoration: none;
+	background-image: none;
+	background-color: #9bceda;
+	border-color: #9bceda;
+}
+.auto-report-base a.k-button.k-button-icontext.k-grid-edit:hover, a.k-button.k-button-icontext.k-grid-delete:hover,  a.k-button.k-button-icontext.k-grid-update:hover,  a.k-button.k-button-icontext.k-grid-cancel:hover{
+	background-color: #74c62b;
+	border-color: #74c62b;
+}
+
+
+.auto-report-base a.k-button.k-button-icontext:focus:active{
+	box-shadow: 0px 2px 0px #6b9aa5;
+	color: white;
 }
 .auto-report-base a.k-button.k-button-icontext:focus{
 	box-shadow: 0px 2px 0px #6b9aa5;
 	color: white;
 }
-
 .auto-report-base span.k-icon.k-edit{
 	display: none;
 }
