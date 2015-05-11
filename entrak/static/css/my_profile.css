@@ -14,6 +14,8 @@
 	width: 1002px;
 	padding: 0;
 	border-radius: 8px;
+
+	background-color: #FCFCFC;
 }
 
 .profile.chinese {
@@ -35,6 +37,11 @@
 
 .profile .form-widgets .k-content {
 	border-radius: 0 0 8px 8px;
+	background-color: transparent;
+}
+
+.profile .k-widget.k-dropdown.k-header {
+	width: 220px;
 }
 
 .profile .k-textbox.normal-tb, .profile .k-widget.k-dropdown.k-header .k-dropdown-wrap {
@@ -70,15 +77,24 @@
 }
 
 .profile .buttons-wrap {
-	padding-left: 74px;
-	padding-top: 18px;
-	padding-bottom: 18px;
+	padding: 18px 155px 18px 74px;
 	width: 100%;
 	border-radius: 8px;
+}
+
+.profile .buttons-wrap.right {
+	text-align: right;
 }
 
 .profile .separator {
 	width: 90%;
 	border-bottom: 1px solid #e1e1e1;
 	margin: 0 5%;
+}
+
+.profile .buttons-wrap .k-button.cancel, .profile .buttons-wrap .k-button.cancel:hover {
+	color: #d5d5d5;
+	background-color: transparent;
+	border-color: transparent;
+	box-shadow: none;
 }
