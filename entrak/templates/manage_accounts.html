@@ -316,12 +316,13 @@
 
             $scope.resendAndClose = function() {
                 if (!$scope.isEmailResent) {
+                    url = "{% url 'users.send_invitation_email' user.id %}"
                     console.log("Resending Activation Email");
                     $http({
                         method : 'GET',
-                        url : "{% url 'users.send_invitation_email' user.id %}",
+                        url : url.replace('{{user.id}}', $scope.resendEmailId),
                         contentType: 'application/html; charset=utf-8',
-                        data: etDropDown.value(),
+                        data: $scope.resendEmailAddress,
                     }).success(function(data) {
                         $scope.isEmailResent = true;
                         $scope.resendEmailMessage = "The invitation has been sent out.";
@@ -332,13 +333,14 @@
                 } else {
                     $scope.isEmailResent = false;
                     $scope.resendEmailMessage = "";
-                    $("#resendEmail").data("kendoWindow").close();
+                    $("#resendEmailWindow").data("kendoWindow").close();
                 }
 
                 return false;
             }
 
             $scope.resendEmail = function(dataItem) {
+                $scope.resendEmailId = dataItem.id;
                 $scope.resendEmailAddress = dataItem.email;
                 $("#resendEmailWindow").data("kendoWindow").center().open();
             }
