@@ -54,7 +54,7 @@
         <img class="info-icon" src="/static/images/info-icon.png"></img>
         <kendo-grid options="priGridOptions">
         </kendo-grid>
-        <div kendo-window="createUserAccountWindow" id="createUserAccountWindow" k-title="'Create Account'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
+        <div kendo-window="createUserAccountWindow" id="createUserAccountWindow" k-title="'Create Account'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak>
             <div class="form-horizontal form-widgets">
                 <form name="kForm" class="k-content">
                 <div id="rs-emailList"></div>
@@ -65,7 +65,7 @@
                 </form>
             </div>
         </div>
-        <div kendo-window="resendEmailWindow" id="resendEmailWindow" k-title="'Resend Activation Email'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
+        <div kendo-window="resendEmailWindow" id="resendEmailWindow" k-title="'Resend Activation Email'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak>
             <div class="form-horizontal form-widgets">
                 <form name="kForm" class="k-content">
                 <div ng-cloak ng-bind="resendEmailAddress"></div>
@@ -118,7 +118,7 @@
         <button class='k-button normal-btn sharedAcc' ng-click="clickCreateSharedAccount()">Create Shared Account</button>
         <kendo-grid options="secGridOptions" class="sharedAcc">
         </kendo-grid>
-        <div kendo-window="createSharedAccountWindow" id="createSharedAccountWindow" k-title="'Create Account'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
+        <div kendo-window="createSharedAccountWindow" id="createSharedAccountWindow" k-title="'Create Account'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak>
             <div class="form-horizontal form-widgets">
                 <form name="kForm" kendo-validator="validator" ng-submit="validate($event)" class="k-content">
                 <div class="form-group">
