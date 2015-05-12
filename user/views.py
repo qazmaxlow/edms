@@ -16,6 +16,7 @@ from django.utils import simplejson
 from django.http import HttpResponse
 from django.http import HttpResponseForbidden
 from django.http import HttpResponseBadRequest
+from django.db import IntegrityError
 
 from egauge.manager import SourceManager
 from system.models import System
@@ -150,44 +151,42 @@ def create_individual_users(request):
     try:
 
         data = simplejson.loads(request.body)
-        keys = data.keys()
 
-        if keys and 'models' in keys:
-            if all(d in keys['models'] for d in ('email', 'is_personal_account', 'system_id')):
-                for k in keys['models']:
-                    u = EntrakUser.objects.new(email=k['email'], system_id=k['system_id'], is_personal_account=True)
-                    u.save()
-                    u.send_activation_email(0)
+        if data.keys() and 'models' in data.keys():
+            required_keys = set(['email', 'is_personal_account', 'system_id'])
 
-                return HttpResponse('Invitation sent successfully')
+            for k in data['models']:
+                if required_keys.issubset(set(k.keys())):
+                    u = EntrakUser.objects.create(username=k['email'], email=k['email'], system_id=k['system_id'], is_personal_account=True)
+                    u.send_activation_email()
+                else:
+                    raise Exception('Invalid request')
 
-            else:
-                raise Exception('Invalid request')
-
+            return HttpResponse('Invitation sent successfully')
         else:
             raise Exception('Invalid request')
-    except Exception as e:
-        print(e)
+    except IntegrityError as e:
+        return HttpResponseBadRequest("Username is taken already.")
 
 
 def create_shared_user(request):
     try:
 
         data = simplejson.loads(request.body)
-        keys = data.keys()
 
-        if keys and 'models' in keys:
-            if all(d in keys['models'] for d in ('username', 'password', 'system_id')):
-                for k in keys['models']:
-                    u = EntrakUser.objects.new(username=k['username'], system_id=k['system_id'], is_personal_account=False)
+        if data.keys() and 'models' in data.keys():
+            required_keys = set(['username', 'password', 'system_id'])
+
+            for k in data['models']:
+                if required_keys.issubset(set(k.keys())):
+                    u = EntrakUser.objects.create(username=k['username'], system_id=k['system_id'], is_personal_account=False)
                     u.set_password(k['password'])
                     u.save()
+                else:
+                    raise Exception('Invalid request')
 
-            else:
-                raise Exception('Invalid request')
-
+                return HttpResponse('Shared account created successfully')
         else:
             raise Exception('Invalid request')
-    except Exception as e:
-        print(e)
-        return HttpResponseBadRequest(e)
+    except IntegrityError as e:
+        return HttpResponseBadRequest("Username is taken already.")
