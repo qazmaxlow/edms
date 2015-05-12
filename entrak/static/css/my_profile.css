@@ -1,3 +1,6 @@
+#page-container #menu {
+	height: 100%;
+}
 
 .profile {
 	font-family: 'ITCAvantGardeStd', "Helvetica Neue Light",
@@ -33,6 +36,10 @@
     height: 40px;
     line-height: 40px;
     border: none;
+}
+
+.profile .col-sm-6 {
+	padding-right: 0;
 }
 
 .profile .form-widgets .k-content {
@@ -92,9 +99,33 @@
 	margin: 0 5%;
 }
 
-.profile .buttons-wrap .k-button.cancel, .profile .buttons-wrap .k-button.cancel:hover {
+.profile .buttons-wrap .k-button.cancel,
+.profile .buttons-wrap .k-button.cancel:hover,
+.profile .buttons-wrap .k-button.cancel:focus:not(:disabled):not(.k-state-disabled)
+ {
 	color: #d5d5d5;
 	background-color: transparent;
 	border-color: transparent;
 	box-shadow: none;
+}
+
+.profile .buttons-wrap .k-button.cancel:disabled {
+	display: none;
+}
+
+.profile .k-invalid-msg {
+    background-color: transparent;
+    border: none;
+    margin: 0;
+    color: #e05d5d;
+    font-size: 0.786em;
+    font-weight: 300;
+    vertical-align: middle;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+
+}
+
+.profile .k-invalid-msg .k-icon {
+    display: none;
 }

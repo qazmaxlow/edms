@@ -141,6 +141,10 @@
     cursor: pointer;
 }
 
+.k-button.normal-btn:focus:not(:disabled):not(.k-state-disabled) {
+	box-shadow: 0px 2px 0px #6b9aa5;
+}
+
 .k-button.normal-btn:disabled {
     border-color: #d5d5d5;
     background-color: #d5d5d5;
