@@ -84,6 +84,9 @@ class EntrakUser(AbstractUser):
 
     def send_activation_email(self):
 
+        self.salt = self.get_or_create_salt
+        self.save()
+
         plaintext = get_template('activation_email.txt')
         htmly     = get_template('activation_email.html')
 
