@@ -2,12 +2,35 @@
 	height: 100%;
 }
 
-.k-widget.k-window {
-	padding-left: 0;
-	padding-right: 0;
+.k-window .k-window-title, .profile {
+	font-family: 'ITCAvantGardeStd', "Helvetica Neue Light",
+	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
+	-webkit-font-smoothing: antialiased;
+	font-size: 14px;
 }
 
-.k-header {
+.profile.chinese {
+	font-family: "Helvetica Neue Light",
+ 	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+ 	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
+ 	-webkit-font-smoothing: antialiased;
+	font-size: 14px;
+}
+
+.profile.profile-container {
+	box-shadow: -2px 4px 5px 0 #e8e8e8;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 25px;
+	margin-bottom: 50px;
+	width: 1002px;
+	padding: 0;
+	border-radius: 8px;
+	background-color: #FCFCFC;
+}
+
+.profile .k-header {
 	border-radius: 8px 8px 0 0;
     background-color: #9BCEDA;
     color: #FFFFFF;
@@ -18,41 +41,9 @@
     border: none;
 }
 
-.changepwd {
-	font-family: 'ITCAvantGardeStd', "Helvetica Neue Light",
-	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
-	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
-	-webkit-font-smoothing: antialiased;
-	font-size: 14px;
-}
-
-.profile {
-	font-family: 'ITCAvantGardeStd', "Helvetica Neue Light",
-	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
-	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
-	-webkit-font-smoothing: antialiased;
-	font-size: 14px;
-
-	box-shadow: -2px 4px 5px 0 #e8e8e8;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 25px;
-	margin-bottom: 50px;
-	width: 1002px;
-	padding: 0;
-	border-radius: 8px;
-
-	background-color: #FCFCFC;
-}
-
-.profile.chinese, .changepwd.chinese {
-	font-family: "Helvetica Neue Light",
- 	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
- 	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
-}
-
-.profile .col-sm-6 {
+.profile .col-sm-6, .profile .col-sm-12 {
 	padding-right: 0;
+	padding-left: 0;
 }
 
 .profile .form-widgets .k-content {
@@ -136,9 +127,39 @@
     vertical-align: middle;
     box-shadow: none;
     -webkit-box-shadow: none;
-
 }
 
 .profile .k-invalid-msg .k-icon {
     display: none;
+}
+
+
+/* change password -----*/
+.profile.k-window-content {
+	padding: 0;
+}
+
+.profile .form-group {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.profile .form-group .popup-input {
+	margin-top: 5px;
+	margin-left: 74px;	
+}
+
+.profile .down-err-txt .form-group .k-invalid-msg {
+	margin-left: 74px;
+}
+
+.profile .down-err-txt .form-group {
+	height: 70px;
+}
+
+.profile.profile-popup .buttons-wrap {
+	box-sizing: border-box;
+	padding: 18px 74px 18px 0;
+	width: 100%;
+	text-align: right;
 }

@@ -47,10 +47,10 @@
 
 {% verbatim %}
 <div ng-app="entrak">
-    <div class="profile" ng-controller="MyCtrl">
+    <div class="profile profile-container" ng-controller="MyCtrl">
         <div class="k-header">My Profile</div>
         <div class="form-horizontal form-widgets">
-            <form name="kForm" kendo-validator="validator" ng-submit="validate($event)" class="k-content" ng-model="isValid">
+            <form name="kForm" kendo-validator="validator" ng-submit="validate($event, false)" class="k-content" ng-model="isValid">
             <div class="form-group">
                 <div class="col-sm-6">
                     <label class="control-label" for="firstname">First Name:</label>
@@ -101,7 +101,7 @@
             </div>
             <div class="buttons-wrap right">
                 <button class="k-button normal-btn cancel" ng-click="resetInput()" ng-disabled="!userChanged">Cancel</button>
-                <button class="k-button normal-btn" ng-disabled="!isValid || !userChanged">Save Changes</button>
+                <button class="k-button normal-btn" type="submit" ng-disabled="!isValid || !userChanged">Save Changes</button>
             </div>
             <div class="separator"></div>
             <div class="buttons-wrap">
@@ -109,35 +109,37 @@
             </div>
             </form>
         </div>
-    </div>
 
-    <div class="ng-cloak changepwd" kendo-window="wndw" id="resetPassword" k-title="'Change Password'" k-width="400" k-height="400" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
-            <div class="form-horizontal form-widgets" style="width:500px">
-                <form name="kForm" kendo-validator="validator" ng-submit="validate($event)" class="k-content" ng-model="isValid">
+
+    <div class="ng-cloak profile profile-popup" kendo-window="wndw" id="resetPassword" k-title="'Change Password'" k-width="368" k-height="360" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
+            <div class="form-horizontal form-widgets">
+                <form name="kForm" kendo-validator="pwdValidator" k-options="validOptions" ng-submit="validate($event, true)" class="k-content down-err-txt" ng-model="isPwdValid">
                 <div class="form-group">
-                    <label class="label-align-left" for="current_password">Current Password</label>
+                    <label class="control-label" for="current_password">Current Password</label>
                     <div class="col-sm-12">
-                        <input type="password" id="current_password" name="Current Password" ng-model="user.current_password" class="k-textbox normal-tb" placeholder="Set Your Password" required data-password-msg="Password not matched" />
+                        <input type="password" id="current_password" name="Current Password" ng-model="user.current_password" class="k-textbox normal-tb popup-input" placeholder="Set Your Password" required data-required-msg="required field" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="label-align-left" for="password">New Password</label>
+                    <label class="control-label" for="password">New Password</label>
                     <div class="col-sm-12">
-                        <input type="password" id="new_password" name="New Password" ng-model="user.password" class="k-textbox normal-tb" placeholder="Set Your Password" required data-password-msg="Password not matched" />
+                        <input type="password" id="new_password" name="New Password" ng-model="user.password" class="k-textbox normal-tb popup-input" placeholder="Set Your Password" required data-required-msg="required field" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="label-align-left" for="confirm_password">Confirm Password</label>
+                    <label class="control-label" for="confirm_password">Confirm Password</label>
                     <div class="col-sm-12">
-                        <input type="password" id="confirm_password" name="Confirm Password" class="k-textbox normal-tb" placeholder="Retype Your Password" required data-password-msg="Password not matched" />
+                        <input type="password" id="confirm_password" name="Confirm Password" class="k-textbox normal-tb popup-input" placeholder="Retype Your Password" required data-required-msg="required field" ng-model="user.confirm_password"/>
                     </div>
                 </div>
                 <div class="buttons-wrap">
-                    <button class="k-button normal-btn" type="submit" ng-disabled="!isValid">Save</button>
+                    <button class="k-button normal-btn" type="submit" ng-disabled="!isPwdValid">Save</button>
                 </div>
                 </form>
             </div>
-        </div>
+    </div>
+
+    </div>
 {% endverbatim %}
 
  <script>
@@ -157,15 +159,22 @@
                 $scope.user.language = "{{user.language}}";
 
                 $scope.origUser = {};
-                angular.copy($scope.user, $scope.origUser);
+                $scope.origUser.first_name = $scope.user.first_name;
+                $scope.origUser.last_name = $scope.user.last_name;
+                $scope.origUser.department = $scope.user.department;
+                $scope.origUser.language = $scope.user.language;
                 $scope.userChanged = false;
                 $scope.email = "{{user.email}}"
 
                 $scope.resetInput = function() {
-                    angular.copy($scope.origUser, $scope.user);
+                    $scope.user.first_name = $scope.origUser.first_name;
+                    $scope.user.last_name = $scope.origUser.last_name;
+                    $scope.user.department = $scope.origUser.department;
+                    $scope.user.language = $scope.origUser.language;
                 }
 
                 $scope.updateUser = function() {
+                    console.log("updateUser");
                     $http({
                         method : 'POST',
                         url : "{% url 'users.update_account' user.id %}",
@@ -175,26 +184,53 @@
                         if (data.redirect) {
                             // data.redirect contains the string URL to redirect to
                             window.location.href = data.redirect;
-                        }
-                        else {
+                        } else {
                             // data.form contains the HTML for the replacement form
                             console.log(data);
                         }
                     })
                 }
 
-                $scope.validate = function(event) {
+                $scope.validOptions = {
+                    rules: {
+                        matchpwd: function(input){
+                            if ($(input).prop("id") == "confirm_password"){
+                                return ($("#new_password").val() == $("#confirm_password").val());
+                            } else {
+                                return true;
+                            }
+                        }
+                    },
+                    messages: {
+                        matchpwd: "Password do not match"
+                    }
+                }
+
+                $scope.validate = function(event, isChangePwd) {
                     event.preventDefault();
 
-                    if ($scope.validator.validate()) {
-                        $scope.validationClass = "valid";
-                        $scope.updateUser();
+                    $scope.user.isChangePwd = isChangePwd;
+                    if (isChangePwd){
+                        if ($scope.pwdValidator.validate()) {
+                            $scope.validationClass = "valid";
+                            $scope.updateUser();
+                        } else {
+                            $scope.validationClass = "invalid";
+                        }
                     } else {
-                        $scope.validationClass = "invalid";
+                        if ($scope.validator.validate()) {
+                            $scope.validationClass = "valid";
+                            $scope.updateUser();
+                        } else {
+                            $scope.validationClass = "invalid";
+                        }
                     }
                 }
 
                 $scope.resetPassword = function(event) {
+                    $scope.user.confirm_password = null;
+                    $scope.user.password = null;
+                    $scope.user.current_password = null;
                     $("#resetPassword").data("kendoWindow").center().open();
                 }
 
