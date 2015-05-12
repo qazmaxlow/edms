@@ -111,7 +111,7 @@
         </div>
     </div>
 
-    <div class="ng-cloak" kendo-window="wndw" id="resetPassword" k-title="'Set Password'" k-width="600" k-height="400" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
+    <div class="ng-cloak changepwd" kendo-window="wndw" id="resetPassword" k-title="'Change Password'" k-width="400" k-height="400" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
             <div class="form-horizontal form-widgets" style="width:500px">
                 <form name="kForm" kendo-validator="validator" ng-submit="validate($event)" class="k-content" ng-model="isValid">
                 <div class="form-group">
@@ -153,10 +153,8 @@
                 $scope.user['id'] = {{user.id}};
                 $scope.user['first_name'] = '{{user.first_name}}';
                 $scope.user['last_name'] = '{{user.last_name}}';
-                //TODO/////////
                 $scope.user.department = "{{user.department}}";
                 $scope.user.language = "{{user.language}}";
-                ///////////////
 
                 $scope.origUser = {};
                 angular.copy($scope.user, $scope.origUser);
@@ -211,6 +209,7 @@
                     }
                 });
 
+                //TODO handle dropdown prefill null value case
                 //setTimeout(function(){$("#department").data("kendoDropDownList").value(null);},300);
             });
 
