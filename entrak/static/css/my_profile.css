@@ -3,7 +3,8 @@
 }
 
 .k-widget.k-window {
-	
+	padding-left: 0;
+	padding-right: 0;
 }
 
 .k-header {
@@ -17,10 +18,18 @@
     border: none;
 }
 
+.changepwd {
+	font-family: 'ITCAvantGardeStd', "Helvetica Neue Light",
+	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
+	-webkit-font-smoothing: antialiased;
+	font-size: 14px;
+}
+
 .profile {
 	font-family: 'ITCAvantGardeStd', "Helvetica Neue Light",
- 	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
- 	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
+	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
 	-webkit-font-smoothing: antialiased;
 	font-size: 14px;
 
@@ -36,7 +45,7 @@
 	background-color: #FCFCFC;
 }
 
-.profile.chinese {
+.profile.chinese, .changepwd.chinese {
 	font-family: "Helvetica Neue Light",
  	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
  	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
