@@ -95,12 +95,13 @@ def update_account(request, user_id):
         last_name = data.get('last_name', None)
         department = data.get('department', None)
         language = data.get('language', None)
+        is_change_pwd = data.get('isChangePwd', False)
 
         current_password = data.get('current_passowrd', None)
         password = data.get('passowrd', None)
         confirm_password = data.get('confirm_passowrd', None)
 
-        if first_name and last_name and department and language:
+        if first_name and last_name and department and language and not is_change_pwd:
 
             user.first_name = first_name
             user.last_name = last_name
@@ -110,7 +111,7 @@ def update_account(request, user_id):
 
             return HttpResponse("User profile updated successfully")
 
-        elif current_passowrd and password and confirm_passowrd:
+        elif current_passowrd and password and confirm_passowrd and is_change_pwd:
 
             if password == confirm_password:
                 o_user = authenticate(username=user.username, password=current_passowrd)
