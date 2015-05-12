@@ -63,7 +63,7 @@ class EntrakUser(AbstractUser):
     def get_or_create_salt(self):
         if not self.salt or self.salt == "":
             self.salt = uuid.uuid4().hex
-            self.save
+            self.save()
         return self.salt
 
 
@@ -77,7 +77,7 @@ class EntrakUser(AbstractUser):
 
             return (user_id == str(self.id) and (datetime.now() - utc_dt).days < 2)
 
-        except TypeError as e:
+        except TypeError, ValueError as e:
             print(e)
             return False
 
