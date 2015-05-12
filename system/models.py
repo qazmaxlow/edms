@@ -21,10 +21,12 @@ from unit.models import UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
 
 from system.constants import CITY_ALL
 from system.constants import CORPORATE
+from system.constants import EDUCATION
+from system.constants import COMPANY_TYPES
 from system.constants import DEFAULT_NIGHT_TIME_END
 from system.constants import DEFAULT_NIGHT_TIME_START
-from system.constants import SCHOOL
 from system.constants import SOURCE_TZ_HK
+
 
 UNIT_IMG_DIR = os.path.join(BASE_DIR, 'entrak', 'static', 'images', 'unit')
 
@@ -46,7 +48,7 @@ class System(models.Model):
     timezone = models.CharField(max_length=50, default=SOURCE_TZ_HK)
     population = models.PositiveIntegerField(default=1)
     area_sqfoot = models.PositiveIntegerField(blank=True, null=True)
-    company_type = models.PositiveIntegerField(default=CORPORATE)
+    company_type = models.PositiveIntegerField(choices=COMPANY_TYPES, default=CORPORATE)
     first_record = models.DateTimeField()
     night_time_start = models.TimeField(default=DEFAULT_NIGHT_TIME_START)
     night_time_end = models.TimeField(default=DEFAULT_NIGHT_TIME_END)

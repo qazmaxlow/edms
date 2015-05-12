@@ -35,10 +35,24 @@
     background-color: #9BCEDA;
     color: #FFFFFF;
     font-size: 1em;
-    padding-left: 15px;
     height: 40px;
     line-height: 40px;
     border: none;
+}
+
+.profile .k-header .header-tab {
+    border-right: 1px solid #FFFFFF;
+    padding: 0 10px;
+    display: inline-block;
+}
+
+.profile .k-header .header-tab:first-child {
+	border-radius: 8px 0 0 0;
+}
+
+.profile .k-header .header-tab:hover,
+.profile .k-header .header-tab.selected-tab{
+	background: linear-gradient(to bottom, #aee428, #67cd18);
 }
 
 .profile .col-sm-6, .profile .col-sm-12 {

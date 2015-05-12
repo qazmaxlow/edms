@@ -48,7 +48,10 @@
 {% verbatim %}
 <div ng-app="entrak">
     <div class="profile profile-container" ng-controller="MyCtrl">
-        <div class="k-header">My Profile</div>
+        <div class="k-header">
+            <div class="header-tab selected-tab">My Profile</div><!--
+            --><div class="header-tab">Manage Accounts</div>
+        </div>
         <div class="form-horizontal form-widgets">
             <form name="kForm" kendo-validator="validator" ng-submit="validate($event, false)" class="k-content" ng-model="isValid">
             <div class="form-group">
