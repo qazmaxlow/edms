@@ -53,25 +53,24 @@ class EntrakUser(AbstractUser):
         utc_time_now = datetime.now()
         utc_timestamp = (utc_time_now - datetime(1970,1,1)).total_seconds()
 
-        self.create_salt_unless_defined()
-
-        encrypter = EntrakEncrypter(self.salt)
+        encrypter = EntrakEncrypter(self.get_or_create_salt)
         uid = encrypter.encode(str(self.id))
         ucode = encrypter.encode(str(utc_timestamp))
 
         return "https://data.en-trak.com/users/%d/activate?uid=%s&ucode=%s"%(self.id, uid, ucode)
 
-
-    def create_salt_unless_defined(self):
+    @property
+    def get_or_create_salt(self):
         if not self.salt or self.salt == "":
             self.salt = uuid.uuid4().hex
             self.save
+        return self.salt
 
 
     def validate_activation_url(self, uid, ucode):
 
         try:
-            encrypter = EntrakEncrypter(self.salt)
+            encrypter = EntrakEncrypter(self.get_or_create_salt)
             user_id = encrypter.decode(uid)
             utc_timestamp = encrypter.decode(ucode)
             utc_dt = datetime.fromtimestamp(float(utc_timestamp))
