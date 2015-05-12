@@ -45,7 +45,7 @@
 
 <div id="myApp" ng-app="Entrak">
     <div ng-controller="myCtrl">
-        <button class='k-button' ng-click="createUserAccountWindow.center().open()">Create User Account</button>
+        <button class='k-button' ng-click="clickCreateUserAccount()">Create User Account</button>
         <kendo-grid options="priGridOptions">
         </kendo-grid>
         <div kendo-window="createUserAccountWindow" id="createUserAccountWindow" k-title="'Create Account'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
@@ -65,21 +65,33 @@
                 <div ng-cloak ng-bind="resendEmailAddress"></div>
                 <div ng-cloak ng-bind="resendEmailMessage"></div>
                 <div class="buttons-wrap">
-                    <button class="k-button k-primary k-state-default" ng-click="resendAndClose">{{resendEmailButtonText}}</button>
+                    <button class="k-button k-primary k-state-default" ng-click="resendAndClose()">{{resendEmailButtonText}}</button>
                 </div>
                 </form>
             </div>
         </div>
-        <button class='k-button' ng-click="createSharedAccountWindow.center().open()">Create Shared Account</button>
+        <button class='k-button' ng-click="clickCreateSharedAccount()">Create Shared Account</button>
         <kendo-grid options="secGridOptions">
         </kendo-grid>
         <div kendo-window="createSharedAccountWindow" id="createSharedAccountWindow" k-title="'Create Account'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
             <div class="form-horizontal form-widgets">
                 <form name="kForm" kendo-validator="validator" ng-submit="validate($event)" class="k-content">
-                <div id="rs-emailList"></div>
-                <div class="buttons-wrap">
-                    <button class="k-button k-primary k-state-default" type="submit" ng-disabled="!isValid">Send</button>
+                <div class="form-group">
+                    <label class="control-label" for="username">Username:</label>
+                    <input type="username" id="username" name="Username" ng-model="user.username" class="k-textbox" placeholder="Username" required data-required-msg="required field" />
                 </div>
+                <div class="form-group">
+                    <label class="control-label" for="password">Password:</label>
+                    <input type="password" id="password" name="Password" ng-model="user.password" class="k-textbox" placeholder="Password" required data-required-msg="required field" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="confirm_password">Confirm Password:</label>
+                    <input type="password" id="confirm_password" name="Confirm Password" class="k-textbox" placeholder="Retype Password" required data-required-msg="required field" />
+                </div>
+                <div class="buttons-wrap">
+                    <button class="k-button k-primary k-state-default" type="submit" ng-click="createSharedAccountAndClose()">{{sharedAccountButtonText}}</button>
+                </div>
+                <div ng-bind="sharedAccountMessage"></div>
                 </form>
             </div>
         </div>
@@ -149,19 +161,34 @@
                             is_email_verified: { type: "boolean" },
                             is_personal_account: { type: "boolean" }
                         }
-                    }
+                    },
+                    errors: "error" // twitter's response is { "error": "Invalid query" }
                 },
-                filter: {field: "is_personal_account", operator: "eq", value: true }
+                filter: {field: "is_personal_account", operator: "eq", value: true },
+                error: function(e) {
+                    console.log(e.errors); // displays "Invalid query"
+                    $scope.userAccountMessage = e.xhr.responseText;
+                }
             });
 
             var shared_users = new kendo.data.DataSource({
-                type: "odata",
+                batch: true,
                 transport: {
                     read: {
                         async: true,
                         url: "{% url 'companies.users' system.code %}",
                         type: 'GET',
                         dataType: "json"
+                    },
+                    create: {
+                        url: "{% url 'users.create_shared_user' %}",
+                        type: "POST",
+                        contentType: "application/json"
+                    },
+                    parameterMap: function (options, operation) {
+                        if (operation == "create") {
+                            return kendo.stringify(options);
+                        }
                     }
                 },
                 schema: {
@@ -179,10 +206,18 @@
                             is_email_verified: { type: "boolean" },
                             is_personal_account: { type: "boolean" }
                         }
-                    }
+                    },
+                    errors: "error" // twitter's response is { "error": "Invalid query" }
                 },
-                filter: {field: "is_personal_account", operator: "eq", value: false }
+                filter: {field: "is_personal_account", operator: "eq", value: false },
+                error: function(e) {
+                    console.log(e.errors); // displays "Invalid query"
+                    $scope.sharedAccountMessage = e.xhr.responseText;
+                }
             });
+
+            $scope.userAccountMessage = null;
+            $scope.sharedAccountMessage = null;
 
             $scope.priGridOptions = {
                 dataSource: individual_users,
@@ -214,6 +249,18 @@
             $scope.resendEmailButtonText = "Send";
             $scope.isEmailResent = false;
 
+            $scope.sharedAccountButtonText = "Create"
+            $scope.isAccountCreated = false;
+
+            $scope.clickCreateUserAccount = function() {
+                $scope.isEmailSent = false;
+                $("#createUserAccountWindow").data("kendoWindow").center().open();
+            }
+
+            $scope.clickCreateSharedAccount = function() {
+                $("#createSharedAccountWindow").data("kendoWindow").center().open();
+            }
+
             $scope.sendAndGoDashboard = function() {
                 if (!$scope.isEmailSent) {
                     emails = etDropDown.value();
@@ -223,7 +270,8 @@
                         {
                             email: emails[i],
                             system_id: system_id,
-                            is_individual_user: true
+                            is_email_verified: false,
+                            is_personal_account: true
                         });
                     }
 
@@ -240,6 +288,31 @@
 
                 return false;
             }
+
+            $scope.createSharedAccountAndClose = function() {
+                if (!$scope.isAccountCreated) {
+                    system_id = {{system.id}};
+                    shared_users.add({
+                        username: $('#username')[0].value,
+                        system_id: system_id,
+                        password: $('#password')[0].value
+                    });
+
+                    if (shared_users.sync() && $scope.sharedAccountMessage == "" ) {
+                        $scope.isAccountCreated = true;
+                        $scope.sharedAccountMessage = "Great you just created a shared account";
+                        $scope.sharedAccountButtonText = "Close";
+                    }
+
+                } else {
+                    $scope.isAccountCreated = true;
+                    console.log("Shared account created");
+
+                }
+
+                return false;
+            }
+
 
             $scope.resendAndClose = function() {
                 if (!$scope.isEmailResent) {
