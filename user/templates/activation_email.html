@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,7 +19,6 @@
     .invite
     {
       font-weight:bold;
-
       color:#354960;
     }
     .description
@@ -59,11 +60,9 @@
     <div class="background">
         <img alt="actionIcon" src="https://test-dms.en-trak.com{% static 'images/invite-icon.png' %}" />
         <br/>
-        <div class="invite">You have been invited to create an admin account<br>
-            for your organization's En-trak Energy Monitoring System.
+        <div class="invite">{{heading|linebreaks}}
         </div>
-        <div class="description">With En-trak you can see when, where and how you are spending<br>
-          your energy dollars, enabling effective energy management.
+        <div class="description">{{description|linebreaks}}
         </div>
         <a href="{{url}}"><button class="create">Create En-trak Account</button></a>
     </div>

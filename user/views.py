@@ -60,8 +60,9 @@ def activate_account(request, user_id):
                 user.save()
 
                 user = authenticate(username=user.username, password=user.password)
-                url = reverse('graph', kwargs={'system_code': system.code})
-                return Utils.json_response({"redirect": url})
+                dashboard_url = reverse('dashboard', kwargs={'system_code': system.code})
+                settings_url = reverse('settings', kwargs={'system_code': system.code})
+                return Utils.json_response({"dashboard_url": dashboard_url, "settings_url": settings_url})
 
             else:
                 m = {"uid": user_id, "ucode": user_code}
