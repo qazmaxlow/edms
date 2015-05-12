@@ -52,6 +52,7 @@
         </div>
 
         <button class='k-button normal-btn userAcc' ng-click="clickCreateUserAccount()">Create User Account</button>
+        <img class="info-icon" src="/static/images/info-icon.png"></img>
         <kendo-grid options="priGridOptions">
         </kendo-grid>
         <div kendo-window="createUserAccountWindow" id="createUserAccountWindow" k-title="'Create Account'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
@@ -77,7 +78,7 @@
             </div>
         </div>
         <button class='k-button normal-btn sharedAcc' ng-click="clickCreateSharedAccount()">Create Shared Account</button>
-        <kendo-grid options="secGridOptions">
+        <kendo-grid options="secGridOptions" class="sharedAcc">
         </kendo-grid>
         <div kendo-window="createSharedAccountWindow" id="createSharedAccountWindow" k-title="'Create Account'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
             <div class="form-horizontal form-widgets">
@@ -107,18 +108,19 @@
 <script id="rowTemplate" type="text/x-kendo-tmpl">
     # if (is_email_verified == true) { #
     <tr data-uid="#: uid #">
-        <td> ${fullname} </td>
+        <td class='empty-img'> ${fullname} </td>
         <td> ${email} </td>
-        <td> ${department} </td>
         <td> ${language} </td>
-        <td> <button class='k-button' ng-click='removeAccount(dataItem)'>Delete</button> </td>
+        <td> ${department} </td>
+        <td> <img class='delete-icon' src='/static/images/delete-icon.png' ng-click='removeAccount(dataItem)'></img> </td>
     </tr>
     # } else { #
     <tr data-uid="#: uid #">
-        <td> Account Not Activated </td>
+        <td> <img class='attention-icon' src='/static/images/attention-icon.png'></img><span>Account Not Activated</span></td>
         <td> ${email} </td>
-        <td colspan='2'> <button class='k-button' ng-click='resendEmail(dataItem)'>Resend Activation Email</button> </td>
-        <td> <button class='k-button' ng-click='removeAccount(dataItem)'>Delete</button> </td>
+        <td> </td>
+        <td> <button class='k-button normal-btn' ng-click='resendEmail(dataItem)'>Resend Activation Email</button> </td>
+        <td> <img class='delete-icon' src='/static/images/delete-icon.png' ng-click='removeAccount(dataItem)'></img> </td>
     </tr>
     # } #
 </script>
@@ -219,11 +221,11 @@
                 dataSource: individual_users,
                 sortable: true,
                 columns: [
-                    { field: "fullname", title: "Full Name", width: "200px" },
-                    { field: "email", title: "Email", width: "80px" },
-                    { field: "department", title: "Department", width: "80px" },
-                    { field: "language", title: "Language", width: "80px" },
-                    { title: "Delete", width: "60px" }
+                    { field: "fullname", title: "Full Name" },
+                    { field: "email", title: "Email" },
+                    { field: "language", title: "Language", width: "150px" },
+                    { field: "department", title: "Department", width: "190px" },
+                    { title: "Delete", width: "63px" }
                 ],
                 rowTemplate: kendo.template($("#rowTemplate").html()),
             }
@@ -232,9 +234,9 @@
                 dataSource: shared_users,
                 sortable: true,
                 columns: [
-                    { field: "username", title: "User Name", width: "400px" },
-                    { title: "Password", width: "100px", template: "<button class='k-button'>Change password</button>"},
-                    { title: "Action", width: "60px", template: "<button class='k-button' ng-click='removeAccount(dataItem)'>Delete</button>" }
+                    { field: "username", title: "User Name" },
+                    { title: "Password", width: "190px", template: "<button class='k-button normal-btn'>Change password</button>"},
+                    { title: "Delete", width: "63px", template: '<img class="delete-icon" src="/static/images/delete-icon.png" ng-click="removeAccount(dataItem)"></img>'}
                 ],
             }
 
