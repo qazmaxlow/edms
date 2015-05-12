@@ -84,7 +84,7 @@ def update_account(request, user_id):
     user = None
     data = simplejson.loads(request.body)
 
-    users = EntrakUser.objects.filter(id=user_id, is_email_verified=False, is_personal_account=True)
+    users = EntrakUser.objects.filter(id=user_id, is_personal_account=True)
     if users.exists():
         user = users[0]
 
@@ -147,12 +147,27 @@ def send_invitation_email(request, user_id):
 
 
 def create_individual_users(request):
-    data = simplejson.loads(request.body)
-    if data and 'models' in data.keys():
-        print(data['models'])
-    else:
-        print(data)
+    try:
 
+        data = simplejson.loads(request.body)
+        keys = data.keys()
+
+        if keys and 'models' in keys:
+            if all(d in keys['models'] for d in ('email', 'is_personal_account', 'system_id')):
+                for k in keys['models']:
+                    u = EntrakUser.objects.new(email=k['email'], system_id=k['system_id'], is_personal_account=True)
+                    u.save()
+                    u.send_activation_email(0)
+
+                return HttpResponse('Invitation sent successfully')
+
+            else:
+                raise Exception('Invalid request')
+
+        else:
+            raise Exception('Invalid request')
+    except Exception as e:
+        print(e)
 
 
 def create_shared_user(request):
