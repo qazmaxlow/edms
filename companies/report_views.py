@@ -628,6 +628,24 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     m['report_date_text'] = report_date_text
     m['report_day_diff'] = (report_end_date - report_date).days
 
+    compare_type = report_type
+    if compare_type == 'month':
+        last_start_dt = report_date - relativedelta(months=1)
+        last_end_dt = report_end_date - relativedelta(months=1)
+    elif compare_type == 'week':
+        last_start_dt = report_date - datetime.timedelta(days=7)
+        last_end_dt = report_end_date - datetime.timedelta(days=7)
+    elif compare_type == 'quarter':
+        last_start_dt = report_date - relativedelta(months=3)
+        last_end_dt = report_end_date - relativedelta(months=3)
+    elif compare_type == 'year':
+        last_start_dt = report_date - relativedelta(years=1)
+        last_end_dt = report_end_date - relativedelta(years=1)
+    elif compare_type == 'custom':
+        date_delta = report_date - start_dt
+        last_end_dt = report_end_date - datetime.timedelta(days=1)
+        last_start_dt = last_end_dt - date_delta
+
     sources = SourceManager.get_sources(current_system)
     source_ids = [str(source.id) for source in sources]
 
@@ -1225,7 +1243,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     overnight_usage = {}
     overnight_bill = sum([ g['currentOvernightInfo']['average'] for g in group_data])
     # overnight_usage['bill'] = overnight_bill * money_unit_rate.rate
-    overnight_usage['bill'] = get_overnight_avg_cost(current_system, source_ids, report_date, report_end_date)
+    overnight_usage['bill'] = get_overnight_avg_cost(current_system, source_ids, report_date, report_end_date + datetime.timedelta(days=1))
+    last_overnight_usage = get_overnight_avg_cost(current_system, source_ids, last_start_dt, last_end_dt + datetime.timedelta(days=1))
 
     overnight_beginning_usage = sum([ g['beginningOvernightInfo']['average'] for g in group_data])
     overnight_average_usage = sum([ g['currentOvernightInfo']['average'] for g in group_data])
@@ -1235,8 +1254,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
     # average_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
     overnight_compare_last = None
-    if overnight_last_usage > 0:
-        overnight_compare_last = float(overnight_current_usage - overnight_last_usage)/overnight_last_usage*100
+    if last_overnight_usage > 0:
+        overnight_compare_last = float(overnight_usage['bill'] - last_overnight_usage)/last_overnight_usage*100
 
     overnight_usage['compare_last_helper'] = CompareTplHepler(overnight_compare_last)
 
