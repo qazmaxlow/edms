@@ -48,51 +48,59 @@
 {% verbatim %}
 <div ng-app="Entrak">
     <div ng-cloak ng-controller="ReportScheduleController" class="auto-report-base" ><!-- style="height: 420px" -->
-        <div class="row steps">
-            <div class="col-md-3 description">
-                <p class="desc-text">{{description}}</p>
-                <img src="/static/images/report-schedule/report-icon.png"></img>
-            </div>
-            <div class="col-md-3">
-                <div class="step-label">{{step1}}</div>
-                <div class="header">{{step1Title}}</div>
-                <div class="content bg-step1">
-                    <div class="label-top"></div>
-                    <select kendo-drop-down-list="systemDropdown"
-                            k-data-text-field="'fullname'"
-                            k-data-value-field="'id'"
-                            k-data-source="systemsDataSource"></select>
+        <div id="report-schedule-container">
+            <div class="row drop-down-panel-header">
+                <div class="panel-header-left-menu">
+                    <h3 panel="monthly-report">{{viewReportTitle}}</h3><!--
+                    --><h3 panel="automatedreport">{{automatedReportTitle}}</h3>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="step-label">{{step2}}</div>
-                <div class="header">{{step2Title}}</div>
-                <div class="content bg-step2">
-                    <div class="label-top"></div>
-                    <select kendo-drop-down-list="frequencyDropdown"
-                            k-data-text-field="'name'"
-                            k-data-value-field="'id'"
-                            k-data-source="frequencyDataSource"></select>
-                    </select>
+
+            <div class="row steps">
+                <div class="col-md-3 description">
+                    <p class="desc-text">{{description}}</p>
+                    <img src="/static/images/report-schedule/report-icon.png"></img>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="step-label">{{step3}}</div>
-                <div class="header">{{step3Title}}</div>
-                <div class="content bg-step3">
-                    <h4 class="label-top">{{sendTo}}</h4>
-                    <div id="rs-emailList" ng-show="user_group == 'manager'"></div>
-                    <input ng-model="taskEmail" ng-show="user_group == 'viewer'">
-                    <div class="btn-container">
-                        <button ng-click="confirmAdd()">{{btnConfirm}}</button>
+                <div class="col-md-3">
+                    <div class="step-label">{{step1}}</div>
+                    <div class="header">{{step1Title}}</div>
+                    <div class="content bg-step1">
+                        <div class="label-top"></div>
+                        <select kendo-drop-down-list="systemDropdown"
+                                k-data-text-field="'fullname'"
+                                k-data-value-field="'id'"
+                                k-data-source="systemsDataSource"></select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="step-label">{{step2}}</div>
+                    <div class="header">{{step2Title}}</div>
+                    <div class="content bg-step2">
+                        <div class="label-top"></div>
+                        <select kendo-drop-down-list="frequencyDropdown"
+                                k-data-text-field="'name'"
+                                k-data-value-field="'id'"
+                                k-data-source="frequencyDataSource"></select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="step-label">{{step3}}</div>
+                    <div class="header">{{step3Title}}</div>
+                    <div class="content bg-step3">
+                        <h4 class="label-top">{{sendTo}}</h4>
+                        <div id="rs-emailList" ng-show="user_group == 'manager'"></div>
+                        <input ng-model="taskEmail" ng-show="user_group == 'viewer'">
+                        <div class="btn-container">
+                            <button ng-click="confirmAdd()">{{btnConfirm}}</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row records">
-            <div class="col-md-12">
-                <div class="header">{{recordTitle}}</div>
-                <div kendo-grid k-options="taskGridOptions(dataItem)"></div>
+            <div class="row records">
+                <div class="col-md-12">
+                    <div class="header">{{recordTitle}}</div>
+                    <div kendo-grid k-options="taskGridOptions(dataItem)"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -102,6 +110,9 @@
 <script>
     angular.module("Entrak", [ "kendo.directives" ])
         .controller("ReportScheduleController", function($scope) {
+
+            $scope.viewReportTitle = '{% trans "View Reports" %}';
+            $scope.automatedReportTitle = '{% trans "Automated Reports" %}';
             var etDropDown = new EtDropDown($("#rs-emailList"), []);
             etDropDown.setOptions({readOnly: false, itemDisplayName: "e-mails", ignoreCase: true, onchange: function(){console.log("onchange");}});
 
