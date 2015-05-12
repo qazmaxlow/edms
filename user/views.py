@@ -157,7 +157,6 @@ def create_individual_users(request):
 
             for k in data['models']:
                 if required_keys.issubset(set(k.keys())):
-                    print(k)
                     u = EntrakUser.objects.create(username=k['email'], email=k['email'], system_id=k['system_id'], is_personal_account=True)
                     u.send_activation_email()
                 else:
@@ -168,9 +167,6 @@ def create_individual_users(request):
             raise Exception('Invalid request')
     except IntegrityError as e:
         return HttpResponseBadRequest("Username is taken already.")
-    except Exception as e:
-        print(e)
-        return HttpResponseBadRequest(e)
 
 
 def create_shared_user(request):
@@ -194,6 +190,3 @@ def create_shared_user(request):
             raise Exception('Invalid request')
     except IntegrityError as e:
         return HttpResponseBadRequest("Username is taken already.")
-    except Exception as e:
-        print(e)
-        return HttpResponseBadRequest(e)
