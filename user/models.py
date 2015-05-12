@@ -77,7 +77,7 @@ class EntrakUser(AbstractUser):
 
             return (user_id == str(self.id) and (datetime.now() - utc_dt).days < 2)
 
-        except TypeError, ValueError as e:
+        except (TypeError, ValueError) as e:
             print(e)
             return False
 
