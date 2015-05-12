@@ -60,8 +60,8 @@ def activate_account(request, user_id):
                 user.save()
 
                 user = authenticate(username=user.username, password=user.password)
-                dashboard_url = reverse('dashboard', kwargs={'system_code': system.code})
-                settings_url = reverse('settings', kwargs={'system_code': system.code})
+                dashboard_url = reverse('companies.dashboard', kwargs={'system_code': system.code})
+                settings_url = reverse('manage_accounts', kwargs={'system_code': system.code})
                 return Utils.json_response({"dashboard_url": dashboard_url, "settings_url": settings_url})
 
             else:
@@ -138,7 +138,7 @@ def send_invitation_email(request, user_id):
 
         if users.exists():
             user = users[0]
-            user.send_activation_email()
+            user.send_activation_email(request.user)
 
             return HttpResponse('<h3>Email Sent</h3>')
 

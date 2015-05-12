@@ -23,7 +23,8 @@
 
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
-<link href="{% static 'css/companies/report_schedule.css' %}" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static 'css/custom_control.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/manage_account.css' %}">
 
 <script src="{% static 'assets/etkendoui/js/et.dropdown.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
@@ -44,8 +45,13 @@
 {% verbatim %}
 
 <div id="myApp" ng-app="Entrak">
-    <div ng-controller="myCtrl">
-        <button class='k-button' ng-click="clickCreateUserAccount()">Create User Account</button>
+    <div ng-controller="myCtrl" class="manage-acc">
+        <div class="k-header">
+            <div class="header-tab">My Profile</div><!--
+            --><div class="header-tab selected-tab">Manage Accounts</div>
+        </div>
+
+        <button class='k-button normal-btn userAcc' ng-click="clickCreateUserAccount()">Create User Account</button>
         <kendo-grid options="priGridOptions">
         </kendo-grid>
         <div kendo-window="createUserAccountWindow" id="createUserAccountWindow" k-title="'Create Account'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
@@ -70,7 +76,7 @@
                 </form>
             </div>
         </div>
-        <button class='k-button' ng-click="clickCreateSharedAccount()">Create Shared Account</button>
+        <button class='k-button normal-btn sharedAcc' ng-click="clickCreateSharedAccount()">Create Shared Account</button>
         <kendo-grid options="secGridOptions">
         </kendo-grid>
         <div kendo-window="createSharedAccountWindow" id="createSharedAccountWindow" k-title="'Create Account'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
@@ -356,6 +362,8 @@
             $scope.resendEmail = function(dataItem) {
                 $scope.resendEmailId = dataItem.id;
                 $scope.resendEmailAddress = dataItem.email;
+                $scope.resendEmailButtonText = "Send";
+                $scope.resendEmailMessage = "";
                 $("#resendEmailWindow").data("kendoWindow").center().open();
             }
 

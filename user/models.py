@@ -82,7 +82,7 @@ class EntrakUser(AbstractUser):
             return False
 
 
-    def send_activation_email(self):
+    def send_activation_email(self, on_behalf_of=None):
 
         self.salt = self.get_or_create_salt
         self.save()
@@ -93,8 +93,8 @@ class EntrakUser(AbstractUser):
         if self.is_manager():
             heading = "You have been invited to create an admin account\nfor your organization’s En-trak Energy Monitoring System."
             description = "With En-trak you can see when, where and how you are spending\nyour energy dollars, enabling effective energy management."
-        else:
-            heading = self.fullname
+        elif on_behalf_of:
+            heading = on_behalf_of.fullname
             description = "has invited you to create an account for\nyour organization’s En-trak Energy Monitoring System."
 
         d = Context({
