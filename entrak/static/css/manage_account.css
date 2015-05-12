@@ -1,0 +1,63 @@
+
+.profile.chinese {
+	font-family: "Helvetica Neue Light",
+ 	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+ 	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
+ 	-webkit-font-smoothing: antialiased;
+	font-size: 14px;
+}
+
+.manage-acc {
+	font-family: 'ITCAvantGardeStd', "Helvetica Neue Light",
+	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
+	-webkit-font-smoothing: antialiased;
+	font-size: 14px;
+
+	box-shadow: -2px 4px 5px 0 #e8e8e8;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 25px;
+	margin-bottom: 50px;
+	width: 1002px;
+	padding: 0;
+	border-radius: 8px;
+	background-color: #FCFCFC;
+}
+
+.manage-acc .k-header {
+	border-radius: 8px 8px 0 0;
+    background-color: #9BCEDA;
+    color: #FFFFFF;
+    font-size: 1em;
+    height: 40px;
+    line-height: 40px;
+    border: none;
+}
+
+.manage-acc .k-header .header-tab {
+    border-right: 1px solid #FFFFFF;
+    padding: 0 10px;
+    display: inline-block;
+}
+
+.manage-acc .k-header .header-tab:first-child {
+	border-radius: 8px 0 0 0;
+}
+
+.manage-acc .k-header .header-tab:hover,
+.manage-acc .k-header .header-tab.selected-tab{
+	background: linear-gradient(to bottom, #aee428, #67cd18);
+}
+
+.manage-acc .k-button.userAcc {
+	margin-top: 26px;
+	margin-bottom: 17px;
+	margin-left: 26px;
+}
+
+.manage-acc .k-button.sharedAcc {
+	margin-top: 54px;
+	margin-bottom: 17px;
+	margin-left: 26px;
+}
