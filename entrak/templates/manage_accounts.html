@@ -19,7 +19,6 @@
 <script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
 <script src="{% static 'js/entrak-system.js' %}"></script>
 <script src="{% static 'js/entrak-utils.js' %}"></script>
-<script src="{% static 'js/report-generator.js' %}"></script>
 
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
@@ -51,7 +50,7 @@
             --><div class="header-tab selected-tab">Manage Accounts</div>
         </div>
 
-        <button class='k-button normal-btn userAcc' ng-click="clickCreateUserAccount()">Create User Account</button>
+        <button class='k-button normal-btn userAcc' ng-click="showCreateUserAccountWindow()">Create User Account</button>
         <kendo-grid options="priGridOptions">
         </kendo-grid>
         <div kendo-window="createUserAccountWindow" id="createUserAccountWindow" k-title="'Create Account'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
@@ -60,7 +59,7 @@
                 <div id="rs-emailList"></div>
                 <div ng-cloak ng-bind="userAccountMessage"></div>
                 <div class="buttons-wrap">
-                    <button class="k-button k-primary k-state-default" ng-click="sendAndGoDashboard()">{{userAccountButtonText}}</button>
+                    <button class="k-button k-primary k-state-default" ng-click="createUserAccount()">{{userAccountButtonText}}</button>
                 </div>
                 </form>
             </div>
@@ -71,12 +70,51 @@
                 <div ng-cloak ng-bind="resendEmailAddress"></div>
                 <div ng-cloak ng-bind="resendEmailMessage"></div>
                 <div class="buttons-wrap">
-                    <button class="k-button k-primary k-state-default" ng-click="resendAndClose()">{{resendEmailButtonText}}</button>
+                    <button class="k-button k-primary k-state-default" ng-click="resendEmail()">{{resendEmailButtonText}}</button>
                 </div>
                 </form>
             </div>
         </div>
-        <button class='k-button normal-btn sharedAcc' ng-click="clickCreateSharedAccount()">Create Shared Account</button>
+        <div kendo-window="confirmDeleteWindow" id="confirmDeleteWindow" k-title="'Delete Account'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
+            <div class="form-horizontal form-widgets">
+                <form name="kForm" class="k-content">
+                Are you sure you want to delete
+                <div ng-cloak ng-bind="removeAccountEmail"></div>
+                <div ng-cloak ng-bind="removeAccountMessage"></div>
+                <div class="buttons-wrap">
+                    <button class="k-button k-primary k-state-default" ng-click="removeAccount()">Confirm</button>
+                </div>
+                </form>
+            </div>
+        </div>
+        <div class="ng-cloak profile profile-popup" kendo-window="resetPasswordWindow" id="resetPasswordWindow" k-title="'Change Password'" k-width="368" k-height="360" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
+            <div class="form-horizontal form-widgets">
+                <form name="kForm" kendo-validator="pwdValidator" k-options="validOptions" ng-submit="validate($event, true)" class="k-content down-err-txt" ng-model="isPwdValid">
+                <div class="form-group">
+                    <label class="control-label" for="current_password">Current Password</label>
+                    <div class="col-sm-12">
+                        <input type="password" id="current_password" name="Current Password" ng-model="resetPwdUser.current_password" class="k-textbox normal-tb popup-input" placeholder="Set Your Password" required data-required-msg="required field" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="password">New Password</label>
+                    <div class="col-sm-12">
+                        <input type="password" id="new_password" name="New Password" ng-model="resetPwdUser.password" class="k-textbox normal-tb popup-input" placeholder="Set Your Password" required data-required-msg="required field" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="confirm_password">Confirm Password</label>
+                    <div class="col-sm-12">
+                        <input type="password" id="confirm_password" name="Confirm Password" class="k-textbox normal-tb popup-input" placeholder="Retype Your Password" required data-required-msg="required field" ng-model="resetPwdUser.confirm_password"/>
+                    </div>
+                </div>
+                <div class="buttons-wrap">
+                    <button class="k-button normal-btn" type="submit" ng-disabled="!isPwdValid">Save</button>
+                </div>
+                </form>
+            </div>
+        </div>
+        <button class='k-button normal-btn sharedAcc' ng-click="showCreateSharedAccountWindow()">Create Shared Account</button>
         <kendo-grid options="secGridOptions">
         </kendo-grid>
         <div kendo-window="createSharedAccountWindow" id="createSharedAccountWindow" k-title="'Create Account'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
@@ -84,18 +122,18 @@
                 <form name="kForm" kendo-validator="validator" ng-submit="validate($event)" class="k-content">
                 <div class="form-group">
                     <label class="control-label" for="username">Username:</label>
-                    <input type="username" id="username" name="Username" ng-model="user.username" class="k-textbox" placeholder="Username" required data-required-msg="required field" />
+                    <input type="username" id="username" name="Username" ng-model="user.username" class="k-textbox normal-tb" placeholder="Username" required data-required-msg="required field" />
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="password">Password:</label>
-                    <input type="password" id="password" name="Password" ng-model="user.password" class="k-textbox" placeholder="Password" required data-required-msg="required field" />
+                    <input type="password" id="password" name="Password" ng-model="user.password" class="k-textbox normal-tb" placeholder="Password" required data-required-msg="required field" />
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="confirm_password">Confirm Password:</label>
-                    <input type="password" id="confirm_password" name="Confirm Password" class="k-textbox" placeholder="Retype Password" required data-required-msg="required field" />
+                    <input type="password" id="confirm_password" name="Confirm Password" class="k-textbox normal-tb" placeholder="Retype Password" required data-required-msg="required field" />
                 </div>
                 <div class="buttons-wrap">
-                    <button class="k-button k-primary k-state-default" ng-click="createSharedAccountAndClose()">{{sharedAccountButtonText}}</button>
+                    <button class="k-button k-primary k-state-default" ng-click="createSharedAccount()">{{sharedAccountButtonText}}</button>
                 </div>
                 <div ng-bind="sharedAccountMessage"></div>
                 </form>
@@ -111,14 +149,14 @@
         <td> ${email} </td>
         <td> ${department} </td>
         <td> ${language} </td>
-        <td> <button class='k-button' ng-click='removeAccount(dataItem)'>Delete</button> </td>
+        <td> <button class='k-button' ng-click='confirmDeleteAccount(dataItem)'>Delete</button> </td>
     </tr>
     # } else { #
     <tr data-uid="#: uid #">
         <td> Account Not Activated </td>
         <td> ${email} </td>
         <td colspan='2'> <button class='k-button' ng-click='resendEmail(dataItem)'>Resend Activation Email</button> </td>
-        <td> <button class='k-button' ng-click='removeAccount(dataItem)'>Delete</button> </td>
+        <td> <button class='k-button' ng-click='confirmDeleteAccount(dataItem)'>Delete</button> </td>
     </tr>
     # } #
 </script>
@@ -233,8 +271,8 @@
                 sortable: true,
                 columns: [
                     { field: "username", title: "User Name", width: "400px" },
-                    { title: "Password", width: "100px", template: "<button class='k-button'>Change password</button>"},
-                    { title: "Action", width: "60px", template: "<button class='k-button' ng-click='removeAccount(dataItem)'>Delete</button>" }
+                    { title: "Password", width: "100px", template: "<button class='k-button' ng-click='showResetPasswordWindow()'>Change password</button>"},
+                    { title: "Action", width: "60px", template: "<button class='k-button' ng-click='confirmDeleteAccount(dataItem)'>Delete</button>" }
                 ],
             }
 
@@ -248,21 +286,21 @@
             $scope.sharedAccountButtonText = "Create"
             $scope.isAccountCreated = false;
 
-            $scope.clickCreateUserAccount = function() {
+            $scope.showCreateUserAccountWindow = function() {
                 $scope.isEmailSent = false;
                 $scope.userAccountMessage == "";
                 $scope.userAccountButtonText = "Send";
                 $("#createUserAccountWindow").data("kendoWindow").center().open();
             }
 
-            $scope.clickCreateSharedAccount = function() {
+            $scope.showCreateSharedAccountWindow = function() {
                 $scope.isAccountCreated = false;
                 $scope.sharedAccountMessage == "";
                 $scope.sharedAccountButtonText = "Create";
                 $("#createSharedAccountWindow").data("kendoWindow").center().open();
             }
 
-            $scope.sendAndGoDashboard = function() {
+            $scope.createUserAccount = function() {
                 if (!$scope.isEmailSent) {
                     emails = etDropDown.value();
                     system_id = {{system.id}};
@@ -288,12 +326,6 @@
                         });
                     individual_users.read();
 
-                    if ( $scope.userAccountMessage == "" ) {
-
-
-                    }
-
-
 
                 } else {
                     console.log("Redirecting to Dashboard");
@@ -303,7 +335,7 @@
                 return false;
             }
 
-            $scope.createSharedAccountAndClose = function() {
+            $scope.createSharedAccount = function() {
                 if (!$scope.isAccountCreated) {
                     system_id = {{system.id}};
                     shared_users.add({
@@ -327,14 +359,13 @@
                 } else {
                     $scope.isAccountCreated = true;
                     console.log("Shared account created");
-
                 }
 
                 return false;
             }
 
 
-            $scope.resendAndClose = function() {
+            $scope.resendEmail = function() {
                 if (!$scope.isEmailResent) {
                     url = "{% url 'users.send_invitation_email' user.id %}"
                     console.log("Resending Activation Email");
@@ -367,10 +398,34 @@
                 $("#resendEmailWindow").data("kendoWindow").center().open();
             }
 
-            $scope.removeAccount = function(dataItem) {
+            $scope.confirmDeleteAccount = function(dataItem) {
+                $scope.removeAccountId = dataItem.id;
+                $scope.removeAccountEmail = dataItem.email;
+                $scope.removeAccountMessage = "";
+                $("#confirmDeleteWindow").data("kendoWindow").center().open();
+            }
+
+            $scope.removeAccount = function() {
+                url = "{% url 'users.send_invitation_email' user.id %}"
+                    console.log("Resending Activation Email");
+                    $http({
+                        method : 'GET',
+                        url : url.replace('{{user.id}}', $scope.removeAccountId),
+                        contentType: 'application/html; charset=utf-8',
+                        data: $scope.resendEmailAddress,
+                    }).success(function(data) {
+                        $scope.isEmailResent = true;
+                        $scope.resendEmailMessage = "The invitation has been sent out.";
+                        $scope.resendEmailButtonText = "Close";
+                    }).error(function(data) {
+                        console.log(data);
+                    })
                 console.log("DELETED");
-                console.log(dataItem);
                 return false;
+            }
+
+            $scope.showResetPasswordWindow = function() {
+                $("#resetPasswordWindow").data("kendoWindow").center().open();
             }
         })
 </script>
