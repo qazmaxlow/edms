@@ -208,7 +208,7 @@
 
                 $scope.validate = function(event, isChangePwd) {
                     event.preventDefault();
-console.log(isChangePwd);
+
                     $scope.user.isChangePwd = isChangePwd;
                     if (isChangePwd){
                         if ($scope.pwdValidator.validate()) {
