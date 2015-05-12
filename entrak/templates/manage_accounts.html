@@ -356,6 +356,8 @@
             $scope.resendEmail = function(dataItem) {
                 $scope.resendEmailId = dataItem.id;
                 $scope.resendEmailAddress = dataItem.email;
+                $scope.resendEmailButtonText = "Send";
+                $scope.resendEmailMessage = "";
                 $("#resendEmailWindow").data("kendoWindow").center().open();
             }
 

@@ -61,7 +61,7 @@ def activate_account(request, user_id):
 
                 user = authenticate(username=user.username, password=user.password)
                 dashboard_url = reverse('companies.dashboard', kwargs={'system_code': system.code})
-                settings_url = reverse('general_settings', kwargs={'system_code': system.code})
+                settings_url = reverse('manage_accounts', kwargs={'system_code': system.code})
                 return Utils.json_response({"dashboard_url": dashboard_url, "settings_url": settings_url})
 
             else:
