@@ -101,7 +101,7 @@
             </div>
             <div class="buttons-wrap right">
                 <button class="k-button normal-btn cancel" ng-click="resetInput()" ng-disabled="!userChanged">Cancel</button>
-                <button class="k-button normal-btn" type="submit" ng-disabled="!isValid || !userChanged">Save Changes</button>
+                <button class="k-button normal-btn" ng-click="updateUser()" ng-disabled="!isValid || !userChanged">Save Changes</button>
             </div>
             <div class="separator"></div>
             <div class="buttons-wrap">
@@ -144,11 +144,13 @@
         angular.module("entrak", [ "kendo.directives" ])
             .config(['$httpProvider', function($httpProvider) {
                 $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+                $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+                $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
             }])
-
             .controller("MyCtrl", function($scope, $http){
 
                 $scope.user = {};
+                $scope.user['id'] = {{user.id}};
                 $scope.user['first_name'] = '{{user.first_name}}';
                 $scope.user['last_name'] = '{{user.last_name}}';
                 //TODO/////////

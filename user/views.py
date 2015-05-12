@@ -107,7 +107,7 @@ def update_account(request, user_id):
             user.language = language
             user.save()
 
-            return "User profile updated successfully"
+            return HttpResponse("User profile updated successfully")
 
         elif current_passowrd and password and confirm_passowrd:
 
@@ -124,7 +124,7 @@ def update_account(request, user_id):
                 return HttpResponseBadRequest("Password and confirm password must be the same")
 
     else:
-        return "Invalid request"
+        return HttpResponseBadRequest("Invalid request")
 
 
 def send_invitation_email(request, user_id):
@@ -156,8 +156,23 @@ def create_individual_users(request):
 
 
 def create_shared_user(request):
-    data = simplejson.loads(request.body)
-    if data and 'models' in data.keys():
-        print(data['models'])
-    else:
-        print(data)
+    try:
+
+        data = simplejson.loads(request.body)
+        keys = data.keys()
+
+        if keys and 'models' in keys:
+            if all(d in keys['models'] for d in ('username', 'password', 'system_id')):
+                for k in keys['models']:
+                    u = EntrakUser.objects.new(username=k['username'], system_id=k['system_id'], is_personal_account=False)
+                    u.set_password(k['password'])
+                    u.save()
+
+            else:
+                raise Exception('Invalid request')
+
+        else:
+            raise Exception('Invalid request')
+    except Exception as e:
+        print(e)
+        return HttpResponseBadRequest(e)

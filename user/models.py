@@ -1,4 +1,6 @@
 # coding=UTF-8
+import uuid
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from Crypto.Cipher import AES
@@ -50,11 +52,20 @@ class EntrakUser(AbstractUser):
 
         utc_time_now = datetime.now()
         utc_timestamp = (utc_time_now - datetime(1970,1,1)).total_seconds()
+
+        self.create_salt_unless_defined()
+
         encrypter = EntrakEncrypter(self.salt)
         uid = encrypter.encode(str(self.id))
         ucode = encrypter.encode(str(utc_timestamp))
 
         return "https://data.en-trak.com/users/%d/activate?uid=%s&ucode=%s"%(self.id, uid, ucode)
+
+
+    def create_salt_unless_defined(self):
+        if not self.salt or self.salt == "":
+            self.salt = uuid.uuid4().hex
+            self.save
 
 
     def validate_activation_url(self, uid, ucode):
