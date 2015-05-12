@@ -1,4 +1,6 @@
 # coding=UTF-8
+import uuid
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from Crypto.Cipher import AES
@@ -34,7 +36,7 @@ class EntrakUser(AbstractUser):
     role_level = models.PositiveSmallIntegerField(max_length=20, choices=USER_ROLE_CHOICES, default=USER_ROLE_VIEWER_LEVEL)
     label = models.CharField(max_length=300, blank=True)
     department = models.CharField(max_length=100, blank=True)
-    language = models.CharField(max_length=10, choices=USER_LANGUAGES, default=ENGLISH)
+    language = models.CharField(max_length=10, default=ENGLISH)
     is_email_verified = models.BooleanField(default=False)
     is_personal_account = models.BooleanField(default=False)
     salt = models.CharField(max_length=32, blank=True)
@@ -50,11 +52,20 @@ class EntrakUser(AbstractUser):
 
         utc_time_now = datetime.now()
         utc_timestamp = (utc_time_now - datetime(1970,1,1)).total_seconds()
+
+        self.create_salt_unless_defined()
+
         encrypter = EntrakEncrypter(self.salt)
         uid = encrypter.encode(str(self.id))
         ucode = encrypter.encode(str(utc_timestamp))
 
         return "https://data.en-trak.com/users/%d/activate?uid=%s&ucode=%s"%(self.id, uid, ucode)
+
+
+    def create_salt_unless_defined(self):
+        if not self.salt or self.salt == "":
+            self.salt = uuid.uuid4().hex
+            self.save
 
 
     def validate_activation_url(self, uid, ucode):
@@ -90,3 +101,8 @@ class EntrakUser(AbstractUser):
         msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
         msg.attach_alternative(html_content, "text/html")
         msg.send()
+
+
+    def is_manager(self):
+        # TODO: switch to Django group permission checking
+        return self.role_level >= USER_ROLE_ADMIN_LEVEL

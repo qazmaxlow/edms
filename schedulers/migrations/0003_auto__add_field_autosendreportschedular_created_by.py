@@ -8,15 +8,16 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding field 'AutoSendReportSchedular.created_by'
+        db.add_column(u'schedulers_autosendreportschedular', 'created_by',
+                      self.gf('django.db.models.fields.related.ForeignKey')(default=1, to=orm['user.EntrakUser']),
+                      keep_default=False)
 
-        # Changing field 'EntrakUser.language'
-        db.alter_column(u'user_entrakuser', 'language', self.gf('django.db.models.fields.CharField')(max_length=10))
-        orm.EntrakUser.objects.update(language='en_US')
 
     def backwards(self, orm):
+        # Deleting field 'AutoSendReportSchedular.created_by'
+        db.delete_column(u'schedulers_autosendreportschedular', 'created_by_id')
 
-        # Changing field 'EntrakUser.language'
-        db.alter_column(u'user_entrakuser', 'language', self.gf('django.db.models.fields.PositiveSmallIntegerField')())
 
     models = {
         u'auth.group': {
@@ -39,11 +40,27 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
+        u'schedulers.autosendreportreceiver': {
+            'Meta': {'object_name': 'AutoSendReportReceiver'},
+            'email': ('django.db.models.fields.TextField', [], {}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'scheduler': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'receivers'", 'to': u"orm['schedulers.AutoSendReportSchedular']"})
+        },
+        u'schedulers.autosendreportschedular': {
+            'Meta': {'object_name': 'AutoSendReportSchedular'},
+            'created_by': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.EntrakUser']"}),
+            'created_time': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'frequency': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'last_execute_time': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'system': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['system.System']"})
+        },
         u'system.system': {
             'Meta': {'object_name': 'System'},
             'area_sqfoot': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'city': ('django.db.models.fields.CharField', [], {'default': "'hk'", 'max_length': '200'}),
             'code': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
+            'company_type': ('django.db.models.fields.PositiveIntegerField', [], {'default': '1'}),
             'first_record': ('django.db.models.fields.DateTimeField', [], {}),
             'full_name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'blank': 'True'}),
             'full_name_tc': ('django.db.models.fields.CharField', [], {'max_length': '200', 'blank': 'True'}),
@@ -90,4 +107,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['user']
+    complete_apps = ['schedulers']

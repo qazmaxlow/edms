@@ -62,7 +62,10 @@ class CreateReportScheduleSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         receivers_data = validated_data.pop('receivers')
-        scheduler = AutoSendReportSchedular.objects.create(**validated_data)
+        scheduler = AutoSendReportSchedular(**validated_data)
+        request = self.context.get('request')
+        scheduler.created_by = request.user
+        scheduler.save()
 
         for receiver_item in receivers_data:
             receiver = AutoSendReportReceiver(**receiver_item)
@@ -73,12 +76,29 @@ class CreateReportScheduleSerializer(serializers.ModelSerializer):
 
 class UpdateReportScheduleSerializer(serializers.ModelSerializer):
     system_id = serializers.IntegerField(write_only=True)
-    receivers = ReceiverSerializer(many=True, read_only=True)
+    receivers = ReceiverSerializer(many=True, read_only=False)
     frequency_id = serializers.IntegerField(source='frequency')
 
     class Meta:
         model = AutoSendReportSchedular
         fields = ('id', 'frequency_id', 'receivers', 'system_id')
+
+    def update(self, instance, validated_attrs):
+        receivers_data = validated_attrs.pop('receivers')
+
+        # assert False
+        for attr, value in validated_attrs.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        # delete all first and then create the emails back
+        instance.receivers.all().delete()
+        for receiver_item in receivers_data:
+            receiver = AutoSendReportReceiver(**receiver_item)
+            receiver.scheduler = instance
+            receiver.save()
+
+        return instance
 
 
 class CreateReportScheduleView(generics.CreateAPIView):

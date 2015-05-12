@@ -2,12 +2,73 @@
 <html>
 <head>
     <title>Testing</title>
+    <style>
+    body
+    {
+      font-family:"Century Gothic",Helvetica, Sans Serif;
+        text-align:center;
+    }
+    .background
+    {
+        padding-top:25px;
+        padding-bottom:40px;
+        background-color:#EFEFEF;
+    }
+    .invite
+    {
+      font-weight:bold;
+
+      color:#354960;
+    }
+    .description
+    {
+      font-size:0.938em;
+      color:#354960;
+    }
+    .create
+    {
+      background-color:#93CFD9;
+      border-color:#93CFD9;
+      margin-top:25px;
+      font-size:0.938em;
+      font-weight:bold;
+      border-radius:8px;
+      border:0;
+      cursor:pointer;
+      height:34px;
+      color:white;
+    }
+    .slogan
+    {
+      font-weight:bold;
+      color:#8dc63F;
+      font-size:0.813em;
+    }
+    .link
+    {
+      color:#8dc63F;
+      font-size:0.813em;
+    }
+    a{
+      text-decoration:none;
+    }
+    </style>
 </head>
 <body>
-Dear {{full_name}},
-{{url}}
+    <a href="http://www.en-trak.com/"><img src="1"></a>
+    <div class="background">
+        <div class="invite">You have been invited to create an admin account<br>
+            for your organization's En-trak Energy Monitoring System.
+        </div>
+        <div class="description">With En-trak you can see when, where and how you are spending<br>
+          your energy dollars, enabling effective energy management.
+        </div>
+        <a href="{{url}}"><button class="create">Create En-trak Account</button></a>
+    </div>
+    <p class="slogan">Turning Data into Actionable Intelligence</p>
+    <a href="http://www.en-trak.com/"><p class="link">www.en-trak.com</p></a>
+    <a href="https://www.facebook.com/entrak.hk"><img alt="Facebook" src=""></a>
+    <a href="https://www.linkedin.com/company/3575449?trk=tyah&amp;trkInfo=idx%3A2-1-3%2CtarId%3A1422595228736%2Ctas%3Aen-trak"><img alt="Linkedin" src=""></a>
+
 </body>
 </html>
-
-
-

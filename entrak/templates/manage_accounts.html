@@ -1,0 +1,280 @@
+{% extends "page_base.html" %}
+
+{% load i18n %}
+{% load entrak_extras %}
+{% load static %}
+{% load humanize %}
+
+{% block ga_page_title %}report{% endblock %}
+
+{% block extra_head %}
+{{block.super}}
+{% get_current_language as LANGUAGE_CODE %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
+
+<script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
+<script src="{% static 'assets/django/js/ajax.js' %}"></script>
+<script src="{% static 'js/moment-with-locales.js' %}"></script>
+<script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
+<script src="{% static 'js/entrak-system.js' %}"></script>
+<script src="{% static 'js/entrak-utils.js' %}"></script>
+<script src="{% static 'js/report-generator.js' %}"></script>
+
+<link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
+<link href="{% static 'css/companies/report_schedule.css' %}" rel="stylesheet">
+
+<script src="{% static 'assets/etkendoui/js/et.dropdown.js' %}"></script>
+<script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
+<script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
+
+
+{% endblock %}
+
+{% block page_title %}{% trans "THE SETTINGS PAGE" %}{% endblock %}
+{% block page_subtitle %}{% trans "Find out what you can set here at" %}{% endblock %}
+
+{% block extra_script %}
+{{block.super}}
+{% endblock %}
+
+{% block page_content %}
+
+{% verbatim %}
+
+<div id="myApp" ng-app="Entrak">
+    <div ng-controller="myCtrl">
+        <button class='k-button' ng-click="createUserAccountWindow.center().open()">Create User Account</button>
+        <kendo-grid options="priGridOptions">
+        </kendo-grid>
+        <div kendo-window="createUserAccountWindow" id="createUserAccountWindow" k-title="'Create Account'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
+            <div class="form-horizontal form-widgets">
+                <form name="kForm" class="k-content">
+                <div id="rs-emailList"></div>
+                <div ng-cloak ng-bind="userAccountMessage"></div>
+                <div class="buttons-wrap">
+                    <button class="k-button k-primary k-state-default" ng-click="sendAndGoDashboard()">{{userAccountButtonText}}</button>
+                </div>
+                </form>
+            </div>
+        </div>
+        <div kendo-window="resendEmailWindow" id="resendEmailWindow" k-title="'Resend Activation Email'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
+            <div class="form-horizontal form-widgets">
+                <form name="kForm" class="k-content">
+                <div ng-cloak ng-bind="resendEmailAddress"></div>
+                <div ng-cloak ng-bind="resendEmailMessage"></div>
+                <div class="buttons-wrap">
+                    <button class="k-button k-primary k-state-default" ng-click="resendAndClose">{{resendEmailButtonText}}</button>
+                </div>
+                </form>
+            </div>
+        </div>
+        <button class='k-button' ng-click="createSharedAccountWindow.center().open()">Create Shared Account</button>
+        <kendo-grid options="secGridOptions">
+        </kendo-grid>
+        <div kendo-window="createSharedAccountWindow" id="createSharedAccountWindow" k-title="'Create Account'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
+            <div class="form-horizontal form-widgets">
+                <form name="kForm" kendo-validator="validator" ng-submit="validate($event)" class="k-content">
+                <div id="rs-emailList"></div>
+                <div class="buttons-wrap">
+                    <button class="k-button k-primary k-state-default" type="submit" ng-disabled="!isValid">Send</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script id="rowTemplate" type="text/x-kendo-tmpl">
+    # if (is_email_verified == true) { #
+    <tr data-uid="#: uid #">
+        <td> ${fullname} </td>
+        <td> ${email} </td>
+        <td> ${department} </td>
+        <td> ${language} </td>
+        <td> <button class='k-button' ng-click='removeAccount(dataItem)'>Delete</button> </td>
+    </tr>
+    # } else { #
+    <tr data-uid="#: uid #">
+        <td> Account Not Activated </td>
+        <td> ${email} </td>
+        <td colspan='2'> <button class='k-button' ng-click='resendEmail(dataItem)'>Resend Activation Email</button> </td>
+        <td> <button class='k-button' ng-click='removeAccount(dataItem)'>Delete</button> </td>
+    </tr>
+    # } #
+</script>
+{% endverbatim %}
+
+<script>
+    angular.module("Entrak", [ "kendo.directives" ])
+        .controller("myCtrl", function($scope, $http){
+
+            var etDropDown = new EtDropDown($("#rs-emailList"), ['hotdogxz@gmail.com', 'hotdogxz@hotmail.com']);
+
+            var individual_users = new kendo.data.DataSource({
+                batch: true,
+                transport: {
+                    read: {
+                        async: true,
+                        url: "{% url 'companies.users' system.code %}",
+                        type: 'GET',
+                        dataType: "json"
+                    },
+                    create: {
+                        url: "{% url 'users.create_individual_users' %}",
+                        type: "POST",
+                        contentType: "application/json"
+                    },
+                    parameterMap: function (options, operation) {
+                        if (operation == "create") {
+                            return kendo.stringify(options);
+                        }
+                    }
+                },
+                schema: {
+                    data: function (data) {
+                        return data;
+                    },
+                    total: function (data) {
+                        return data['odata.count'];
+                    },
+                    model: {
+                        fields: {
+                            id: { type: "number" },
+                            fullname: { type: "string" },
+                            department: { type: "string" },
+                            language: { type: "string" },
+                            email: { type: "string" },
+                            is_email_verified: { type: "boolean" },
+                            is_personal_account: { type: "boolean" }
+                        }
+                    }
+                },
+                filter: {field: "is_personal_account", operator: "eq", value: true }
+            });
+
+            var shared_users = new kendo.data.DataSource({
+                type: "odata",
+                transport: {
+                    read: {
+                        async: true,
+                        url: "{% url 'companies.users' system.code %}",
+                        type: 'GET',
+                        dataType: "json"
+                    }
+                },
+                schema: {
+                    data: function (data) {
+                        return data;
+                    },
+                    total: function (data) {
+                        return data['odata.count'];
+                    },
+                    model: {
+                        id: "id",
+                        fields: {
+                            id: { type: "number" },
+                            username: { type: "string" },
+                            is_email_verified: { type: "boolean" },
+                            is_personal_account: { type: "boolean" }
+                        }
+                    }
+                },
+                filter: {field: "is_personal_account", operator: "eq", value: false }
+            });
+
+            $scope.priGridOptions = {
+                dataSource: individual_users,
+                sortable: true,
+                columns: [
+                    { field: "fullname", title: "Full Name", width: "200px" },
+                    { field: "email", title: "Email", width: "80px" },
+                    { field: "department", title: "Department", width: "80px" },
+                    { field: "language", title: "Language", width: "80px" },
+                    { title: "Delete", width: "60px" }
+                ],
+                rowTemplate: kendo.template($("#rowTemplate").html()),
+            }
+
+            $scope.secGridOptions = {
+                dataSource: shared_users,
+                sortable: true,
+                columns: [
+                    { field: "username", title: "User Name", width: "400px" },
+                    { title: "Password", width: "100px", template: "<button class='k-button'>Change password</button>"},
+                    { title: "Action", width: "60px", template: "<button class='k-button' ng-click='removeAccount(dataItem)'>Delete</button>" }
+                ],
+            }
+
+            $scope.userAccountMessage = "";
+            $scope.userAccountButtonText = "Send";
+            $scope.isEmailSent = false;
+
+            $scope.resendEmailButtonText = "Send";
+            $scope.isEmailResent = false;
+
+            $scope.sendAndGoDashboard = function() {
+                if (!$scope.isEmailSent) {
+                    emails = etDropDown.value();
+                    system_id = {{system.id}};
+                    for (i = 0; i < emails.length; i++) {
+                        individual_users.add(
+                        {
+                            email: emails[i],
+                            system_id: system_id,
+                            is_individual_user: true
+                        });
+                    }
+
+                    individual_users.sync();
+
+                    $scope.isEmailSent = true;
+                    $scope.userAccountMessage = "Great, the invitation has been sent out.";
+                    $scope.userAccountButtonText = "Go to Dashboard";
+
+                } else {
+                    console.log("Redirecting to Dashboard");
+                    window.location.href = "{% url 'companies.dashboard' system.code %}"
+                }
+
+                return false;
+            }
+
+            $scope.resendAndClose = function() {
+                if (!$scope.isEmailResent) {
+                    console.log("Resending Activation Email");
+                    $http({
+                        method : 'GET',
+                        url : "{% url 'users.send_invitation_email' user.id %}",
+                        contentType: 'application/html; charset=utf-8',
+                        data: etDropDown.value(),
+                    }).success(function(data) {
+                        $scope.isEmailResent = true;
+                        $scope.resendEmailMessage = "The invitation has been sent out.";
+                        $scope.userAccountButtonText = "Close";
+                    }).error(function(data) {
+                        console.log(data);
+                    })
+                } else {
+                    $scope.isEmailResent = false;
+                    $scope.resendEmailMessage = "";
+                    $("#resendEmail").data("kendoWindow").close();
+                }
+
+                return false;
+            }
+
+            $scope.resendEmail = function(dataItem) {
+                $scope.resendEmailAddress = dataItem.email;
+                $("#resendEmailWindow").data("kendoWindow").center().open();
+            }
+
+            $scope.removeAccount = function(dataItem) {
+                console.log("DELETED");
+                console.log(dataItem);
+                return false;
+            }
+        })
+</script>
+{% endblock %}

@@ -4,25 +4,54 @@ a) git clone source code
     1. git clone https://entrak@bitbucket.org/entrak/entrak.git
 
 b) pip
-    1. download get-pip.py (http://pip.readthedocs.org/en/latest/installing.html)
-    2. python get-pip.py
+    1. `sudo apt-get install python-pip` for downloading pip (http://pip.readthedocs.org/en/latest/installing.html)
 
 c) virtualenv, virtualenv-wrapper
-    1. pip install virtualenvwrapper
-    2. edit ~/.profile
+    1. sudo pip install virtualenvwrapper
+    2. sudo vim ~/.profile
         export WORKON_HOME=/app/ENV
         source /usr/local/bin/virtualenvwrapper.sh
-    3. pip install -r pip_requirements.txt
+    3. sudo pip install -r pip_requirements.txt
 
-d) install MySQL OR PostreqSQL
+d) install PostreqSQL (http://geonode.readthedocs.org/en/2.0/tutorials/admin/install/install_postgresql.html)
+    1. Create the file /etc/apt/sources.list.d/pgdg.list, and add a line for the repository
+       `deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main`
+    2. `wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -`
+    3. `sudo apt-get update`
+    4. `sudo apt-get install postgresql-9.3`
 
 e) mongodb
-    1a. brew install mongodb
+    1a. `brew install mongodb`
     OR
-    1b. apt-get install mongodb (http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/)
+    1b. Following the steps to install mongodb on: http://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/
 
-    2. run mongodb daemon mode
+    2. run mongodb daemon mode: http://docs.mongodb.org/manual/tutorial/manage-mongodb-processes/
 
+After setting up Postreq server and mongodb, you could create the share folder between you local and remote ubuntu:
+    1. In you local Vagrantfile setting up the share folder:
+    `config.vm.synced_folder "vagrant", "/home/vagrant/app"`
+    "vagrant" is your local folder which same directory with Vagrantfile and  "/home/vagrant/app" remote path on ubuntu
+<<<<<<< HEAD
+    
+    After the installation of postgres and mongodb, configurate the database in /entrak/settings.py 
+
+    For postgres database:
+    DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'entrak',
+        'USER': 'yourUserName',
+        'PASSWORD': 'yourPassword',
+        'HOST': 'localhost',
+        }
+    }
+
+    For MongoDB:
+    connect('entrak', tz_aware=True)
+=======
+
+
+>>>>>>> origin/develop
 f) celery
     1. brew install rabbitmq
     2. run rabbitmq
@@ -30,12 +59,22 @@ f) celery
     4. config to run different quene for different tasks (ref: entrak/celery.py, example: task_starter, recover, recap)
     5. run celery worker (worker for processing task) AND beat (beat for fire periodic task)
 
+    for Ubuntu:
+    if no `brew` command: (Reference:https://github.com/Homebrew/linuxbrew)
+        1. *install Linuxbrew: `ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/linuxbrew/go/install)"`
+        2.`vi ~/.bashrc`
+        3. Add to your .bashrc or .zshrc:
+        export PATH="$HOME/.linuxbrew/bin:$PATH"
+        export MANPATH="$HOME/.linuxbrew/share/man:$MANPATH"
+        export INFOPATH="$HOME/.linuxbrew/share/info:$INFOPATH"
+
 g) nginx
     1. sudo pip install uwsgi (http://uwsgi-docs.readthedocs.org/en/latest/tutorials/Django_and_nginx.html)
 
 h) wkhtmltopdf
     1. http://wkhtmltopdf.org/downloads.html
     2. pip install pdfkit
+
 
 RESTART SERVER:
 

@@ -1,0 +1,217 @@
+{% extends "page_base.html" %}
+
+{% load i18n %}
+{% load entrak_extras %}
+{% load static %}
+{% load humanize %}
+
+{% block ga_page_title %}report{% endblock %}
+
+{% block extra_head %}
+{{block.super}}
+{% get_current_language as LANGUAGE_CODE %}
+
+
+<script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
+<script src="{% static 'assets/django/js/ajax.js' %}"></script>
+<script src="{% static 'js/moment-with-locales.js' %}"></script>
+<script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
+<script src="{% static 'js/entrak-system.js' %}"></script>
+<script src="{% static 'js/entrak-utils.js' %}"></script>
+<script src="{% static 'js/report-generator.js' %}"></script>
+
+<link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static 'css/kendo.entrak.theme.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/my_profile.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/custom_control.css' %}">
+
+<script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
+<script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
+<script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
+
+{% endblock %}
+
+{% block selected-menu-link-id %}menu-link-export{% endblock %}
+{% block system_menu_target_view %}report{% endblock %}
+{% block breadcrumb_target_view %}report{% endblock %}
+
+{% block page_title %}{% trans "THE DOWNLOAD PAGE" %}{% endblock %}
+{% block page_subtitle %}{% trans "Get all your information here at the" %}{% endblock %}
+
+{% block extra_script %}
+{{block.super}}
+{% endblock %}
+
+{% block page_content %}
+
+{% verbatim %}
+<div ng-app="entrak">
+    <div class="profile" ng-controller="MyCtrl">
+        <div class="k-header">My Profile</div>
+        <div class="form-horizontal form-widgets">
+            <form name="kForm" kendo-validator="validator" ng-submit="validate($event)" class="k-content" ng-model="isValid">
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <label class="control-label" for="firstname">First Name:</label>
+                    <input type="text" id="firstname" name="First Name" ng-model="user.first_name" class="k-textbox normal-tb" placeholder="First Name" required validationMessage="required field"/>
+                </div>
+                <div class="col-sm-6">
+                    <label class="control-label right" for="department">Department:</label>
+                    <select kendo-dropdownlist k-option-label="'--Department--'" name="department" ng-model="user.department" id="department" required data-required-msg="required field">
+                        <option>Administration</option>
+                        <option>Business Development</option>
+                        <option>CEO Office / Management</option>
+                        <option>Corporate Communcations</option>
+                        <option>CSR</option>
+                        <option>Customer Services</option>
+                        <option>Facilities Management</option>
+                        <option>Finance / Accounting</option>
+                        <option>Human Resources</option>
+                        <option>Information Technology</option>
+                        <option>Legal / Compliance</option>
+                        <option>Marketing</option>
+                        <option>Others</option>
+                        <option>Products</option>
+                        <option>Purchasing</option>
+                        <option>Sales</option>
+                    </select>
+                    <span class="k-invalid-msg" data-for="department"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <label class="control-label" for="lastname">Last Name:</label>
+                    <input type="text" id="lastname" name="Last Name" ng-model="user.last_name" class="k-textbox normal-tb" placeholder="Last Name" required validationMessage="required field"/>
+                </div>
+                <div class="col-sm-6">
+                    <label class="control-label right" for="language">Language:</label>
+                    <select kendo-dropdownlist k-option-label="'--Language--'" name="language" id="language" ng-model="user.language" required data-required-msg="required field">
+                        <option value="en_US">English</option>
+                        <option value="zh_TW">繁體中文</option>
+                    </select>
+                    <span class="k-invalid-msg" data-for="language"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <label class="control-label" for="email">Email:</label>
+                    <span class="email-display" ng-bind="email"></span>
+                </div>
+            </div>
+            <div class="buttons-wrap right">
+                <button class="k-button normal-btn cancel" ng-click="resetInput()" ng-disabled="!userChanged">Cancel</button>
+                <button class="k-button normal-btn" ng-disabled="!isValid || !userChanged">Save Changes</button>
+            </div>
+            <div class="separator"></div>
+            <div class="buttons-wrap">
+                <button class="k-button normal-btn" ng-click="resetPassword()">Change Password</button>
+            </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="ng-cloak changepwd" kendo-window="wndw" id="resetPassword" k-title="'Change Password'" k-width="400" k-height="400" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
+            <div class="form-horizontal form-widgets" style="width:500px">
+                <form name="kForm" kendo-validator="validator" ng-submit="validate($event)" class="k-content" ng-model="isValid">
+                <div class="form-group">
+                    <label class="label-align-left" for="current_password">Current Password</label>
+                    <div class="col-sm-12">
+                        <input type="password" id="current_password" name="Current Password" ng-model="user.current_password" class="k-textbox normal-tb" placeholder="Set Your Password" required data-password-msg="Password not matched" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="label-align-left" for="password">New Password</label>
+                    <div class="col-sm-12">
+                        <input type="password" id="new_password" name="New Password" ng-model="user.password" class="k-textbox normal-tb" placeholder="Set Your Password" required data-password-msg="Password not matched" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="label-align-left" for="confirm_password">Confirm Password</label>
+                    <div class="col-sm-12">
+                        <input type="password" id="confirm_password" name="Confirm Password" class="k-textbox normal-tb" placeholder="Retype Your Password" required data-password-msg="Password not matched" />
+                    </div>
+                </div>
+                <div class="buttons-wrap">
+                    <button class="k-button normal-btn" type="submit" ng-disabled="!isValid">Save</button>
+                </div>
+                </form>
+            </div>
+        </div>
+{% endverbatim %}
+
+ <script>
+        angular.module("entrak", [ "kendo.directives" ])
+            .config(['$httpProvider', function($httpProvider) {
+                $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+                $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+                $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+            }])
+            .controller("MyCtrl", function($scope, $http){
+
+                $scope.user = {};
+                $scope.user['id'] = {{user.id}};
+                $scope.user['first_name'] = '{{user.first_name}}';
+                $scope.user['last_name'] = '{{user.last_name}}';
+                $scope.user.department = "{{user.department}}";
+                $scope.user.language = "{{user.language}}";
+
+                $scope.origUser = {};
+                angular.copy($scope.user, $scope.origUser);
+                $scope.userChanged = false;
+                $scope.email = "{{user.email}}"
+
+                $scope.resetInput = function() {
+                    angular.copy($scope.origUser, $scope.user);
+                }
+
+                $scope.updateUser = function() {
+                    $http({
+                        method : 'POST',
+                        url : "{% url 'users.update_account' user.id %}",
+                        contentType: 'application/json; charset=utf-8',
+                        data: $scope.user,
+                    }).success(function(data, textStatus) {
+                        if (data.redirect) {
+                            // data.redirect contains the string URL to redirect to
+                            window.location.href = data.redirect;
+                        }
+                        else {
+                            // data.form contains the HTML for the replacement form
+                            console.log(data);
+                        }
+                    })
+                }
+
+                $scope.validate = function(event) {
+                    event.preventDefault();
+
+                    if ($scope.validator.validate()) {
+                        $scope.validationClass = "valid";
+                        $scope.updateUser();
+                    } else {
+                        $scope.validationClass = "invalid";
+                    }
+                }
+
+                $scope.resetPassword = function(event) {
+                    $("#resetPassword").data("kendoWindow").center().open();
+                }
+
+                $scope.$watchGroup(["user.first_name", "user.last_name", "user.department", "user.language"], function(nVal, oVal, scope){
+                    if ($scope.user.first_name == $scope.origUser.first_name
+                        && $scope.user.last_name == $scope.origUser.last_name
+                        && $scope.user.department == $scope.origUser.department
+                        && $scope.user.language == $scope.origUser.language){
+                        $scope.userChanged = false;
+                    } else {
+                        $scope.userChanged = true;
+                    }
+                });
+
+                //TODO handle dropdown prefill null value case
+                //setTimeout(function(){$("#department").data("kendoDropDownList").value(null);},300);
+            });
+
+    </script>
+{% endblock %}

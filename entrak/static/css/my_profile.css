@@ -1,0 +1,144 @@
+#page-container #menu {
+	height: 100%;
+}
+
+.k-widget.k-window {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.k-header {
+	border-radius: 8px 8px 0 0;
+    background-color: #9BCEDA;
+    color: #FFFFFF;
+    font-size: 1em;
+    padding-left: 15px;
+    height: 40px;
+    line-height: 40px;
+    border: none;
+}
+
+.changepwd {
+	font-family: 'ITCAvantGardeStd', "Helvetica Neue Light",
+	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
+	-webkit-font-smoothing: antialiased;
+	font-size: 14px;
+}
+
+.profile {
+	font-family: 'ITCAvantGardeStd', "Helvetica Neue Light",
+	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
+	-webkit-font-smoothing: antialiased;
+	font-size: 14px;
+
+	box-shadow: -2px 4px 5px 0 #e8e8e8;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 25px;
+	margin-bottom: 50px;
+	width: 1002px;
+	padding: 0;
+	border-radius: 8px;
+
+	background-color: #FCFCFC;
+}
+
+.profile.chinese, .changepwd.chinese {
+	font-family: "Helvetica Neue Light",
+ 	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+ 	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
+}
+
+.profile .col-sm-6 {
+	padding-right: 0;
+}
+
+.profile .form-widgets .k-content {
+	border-radius: 0 0 8px 8px;
+	background-color: transparent;
+}
+
+.profile .k-widget.k-dropdown.k-header {
+	width: 220px;
+}
+
+.profile .k-textbox.normal-tb, .profile .k-widget.k-dropdown.k-header .k-dropdown-wrap {
+	background-color: #e8e8e8;
+}
+
+.profile .form-group:first-child{
+	margin-top: 34px;
+}
+
+.profile .form-group {
+	margin-bottom: 15px;
+}
+
+.profile .control-label {
+	padding-left: 74px;
+	width: 180px;
+	text-align: left;
+	font-size: 1em;
+	font-weight: 600;
+	color: #354960;
+}
+
+.profile .control-label.right {
+	width: 106px;
+	padding-left: 0px;
+}
+
+.profile .email-display {
+	font-size: 1em;
+	font-weight: 300;
+	color: #6c6c6c;
+}
+
+.profile .buttons-wrap {
+	padding: 18px 155px 18px 74px;
+	width: 100%;
+	border-radius: 8px;
+}
+
+.profile .buttons-wrap.right {
+	text-align: right;
+}
+
+.profile .separator {
+	width: 90%;
+	border-bottom: 1px solid #e1e1e1;
+	margin: 0 5%;
+}
+
+.profile .buttons-wrap .k-button.cancel,
+.profile .buttons-wrap .k-button.cancel:hover,
+.profile .buttons-wrap .k-button.cancel:focus:not(:disabled):not(.k-state-disabled)
+ {
+	color: #d5d5d5;
+	background-color: transparent;
+	border-color: transparent;
+	box-shadow: none;
+}
+
+.profile .buttons-wrap .k-button.cancel:disabled {
+	display: none;
+}
+
+.profile .k-invalid-msg {
+    background-color: transparent;
+    border: none;
+    margin: 0;
+    color: #e05d5d;
+    font-size: 0.786em;
+    font-weight: 300;
+    vertical-align: middle;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+
+}
+
+.profile .k-invalid-msg .k-icon {
+    display: none;
+}

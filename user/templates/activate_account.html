@@ -19,9 +19,13 @@
 <link rel="stylesheet" type="text/css" href="{% static 'assets/kendoui/styles/kendo.dataviz.bootstrap.min.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/custom_control.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/kendo.entrak.theme.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/activate_account.css' %}">
 {% endblock %}
 
 {% block extra_script %}
+<script src="{% static 'assets/django/js/ajax.js' %}"></script>
 <script src="{% static 'assets/jquery/jquery-1.11.0.min.js' %}"></script>
 <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
 <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
@@ -83,124 +87,81 @@
 </div>
 <div ng-app="entrak">
     <div class="demo-section k-header" ng-controller="MyCtrl">
-        <div kendo-window="wndw" id="registration" k-title="'Set Up Your Account'" k-width="800" k-height="600" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
+        <div kendo-window="wndw" id="registration" class="activate-acc" k-title="'Create your En-trak Account'" k-width="620" k-height="600" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
             <div class="form-horizontal form-widgets">
-                <form name="kForm" kendo-validator="validator" ng-submit="validate($event)" class="k-content" ng-model="isValid">
-                <div class="form-group">
-                    <label class="control-label col-sm-4" for="firstname">First Name</label>
-                    <div class="col-sm-8 col-md-6">
-                        <input type="text" id="firstname" name="First Name" ng-model="user.first_name" class="k-textbox" placeholder="First Name" required validationMessage="Enter {0}"/>
-                    </div>
+                <form name="kForm" kendo-validator="validator" ng-submit="validate($event)" class="k-content" ng-model="isValid" k-options="validOptions">
+                <div class="sub-header-container">
+                    <span class="sub-header">Basic Information</span>
+                    <span class="warn-text">All fields are required</span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-sm-4" for="lastname">Last Name</label>
-                    <div class="col-sm-8 col-md-6">
-                        <input type="text" id="lastname" name="Last Name" ng-model="user.last_name" class="k-textbox" placeholder="Last Name" required validationMessage="Enter {0}"/>
-                    </div>
+                    <label class="control-label" for="firstname">First Name:</label>
+                    <input type="text" id="firstname" name="First Name" ng-model="user.first_name" class="k-textbox normal-tb" placeholder="First Name" required validationMessage="required field"/>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-sm-4" for="department">Department</label>
-                    <div class="col-sm-8 col-md-6">
-                        <select kendo-dropdownlist k-option-label="'--Department--'" name="department" ng-model="user.department" id="department" required data-required-msg="Select Department">
-                            <option>Administration</option>
-                            <option>Business Development</option>
-                            <option>CEO Office / Management</option>
-                            <option>Corporate Communcations</option>
-                            <option>CSR</option>
-                            <option>Customer Services</option>
-                            <option>Facilities Management</option>
-                            <option>Finance / Accounting</option>
-                            <option>Human Resources</option>
-                            <option>Information Technology</option>
-                            <option>Legal / Compliance</option>
-                            <option>Marketing</option>
-                            <option>Others</option>
-                            <option>Products</option>
-                            <option>Purchasing</option>
-                            <option>Sales</option>
-                        </select>
-                        <span class="k-invalid-msg" data-for="department"></span>
-                    </div>
+                    <label class="control-label" for="lastname">Last Name:</label>
+                    <input type="text" id="lastname" name="Last Name" ng-model="user.last_name" class="k-textbox normal-tb" placeholder="Last Name" required validationMessage="required field"/>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-sm-4" for="language">Language</label>
-                    <div class="col-sm-8 col-md-6">
-                        <select kendo-dropdownlist k-option-label="'--Language--'" name="Language" id="language" ng-model="user.language" required data-required-msg="Select Language">
-                                <option value="en_US">English</option>
-                                <option value="zh_TW">繁體中文</option>
-                            </select>
-                            <span class="k-invalid-msg" data-for="language"></span>
-                    </div>
+                    <label class="control-label" for="department">Department:</label>
+                    <select kendo-dropdownlist k-option-label="'--Department--'" name="department" ng-model="user.department" id="department" required data-required-msg="required field">
+                        <option>Administration</option>
+                        <option>Business Development</option>
+                        <option>CEO Office / Management</option>
+                        <option>Corporate Communcations</option>
+                        <option>CSR</option>
+                        <option>Customer Services</option>
+                        <option>Facilities Management</option>
+                        <option>Finance / Accounting</option>
+                        <option>Human Resources</option>
+                        <option>Information Technology</option>
+                        <option>Legal / Compliance</option>
+                        <option>Marketing</option>
+                        <option>Others</option>
+                        <option>Products</option>
+                        <option>Purchasing</option>
+                        <option>Sales</option>
+                    </select>
+                    <span class="k-invalid-msg" data-for="department"></span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-sm-4" for="email">Email</label>
-                    <div class="col-sm-8 col-md-6">
-                        <input type="email" id="email" name="Email" class="k-textbox" ng-value="email" ng-readonly="true" />
-                    </div>
+                    <label class="control-label" for="language">Language:</label>
+                    <select kendo-dropdownlist k-option-label="'--Language--'" name="language" id="language" ng-model="user.language" required data-required-msg="required field">
+                        <option value="en_US">English</option>
+                        <option value="zh_TW">繁體中文</option>
+                    </select>
+                    <span class="k-invalid-msg" data-for="language"></span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-sm-4" for="password">Password</label>
-                    <div class="col-sm-8 col-md-6">
-                        <input type="password" id="password" name="Password" ng-model="user.password" class="k-textbox" placeholder="Set Your Password" required data-password-msg="Password not matched" />
-                    </div>
+                    <label class="control-label" data-for="email">Email:</label>
+                    <span ng-bind="email" name"email"></span>
+                        <!-- 
+                        <input type="email" id="email" name="Email" class="k-textbox" ng-value="email" ng-readonly="true" /> -->
+                </div>
+                <div class="form-note">
+                    <span class="note-label">Please note: </span>
+                    <span>You will be using this email to login the En-trak Platform.</span>
+                </div>
+                <div class="separator"></div>
+                <div class="sub-header-container">
+                    <span class="sub-header">Password</span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-sm-4" for="confirm_password">Confirm Password</label>
-                    <div class="col-sm-8 col-md-6">
-                        <input type="password" id="confirm_password" name="Confirm Password" class="k-textbox" placeholder="Retype Your Password" required data-password-msg="Password not matched" />
-                    </div>
+                    <label class="control-label" for="password">Password:</label>
+                    <input type="password" id="password" name="Password" ng-model="user.password" class="k-textbox normal-tb" placeholder="Set Your Password" required data-required-msg="required field" />
                 </div>
+                <div class="form-group">
+                    <label class="control-label" for="confirm_password">Confirm Password:</label>
+                    <input type="password" id="confirm_password" name="Confirm Password" class="k-textbox normal-tb" placeholder="Retype Your Password" required data-required-msg="required field" />
+                </div>
+                <div class="separator"></div>
                 <div class="buttons-wrap">
-                    <button class="k-button k-primary k-state-default" type="submit" ng-disabled="!isValid">Create Account</button>
+                    <button class="k-button normal-btn" type="submit" ng-disabled="!isValid">Create Account</button>
                 </div>
                 </form>
             </div>
         </div>
     </div>
-    <style>
-        .form-group .k-widget,
-        .form-group .k-textbox {
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        .form-horizontal .control-label {
-            padding-top: 17px;
-        }
-
-        .form-group .k-input {
-            text-align: left;
-            background-color: #EFEFEF;
-        }
-
-        .form-group .k-textbox {
-            background-color: #EFEFEF;
-        }
-
-        .form-widgets {
-            width: 99%;
-        }
-
-        .k-header {
-            text-align: center;
-        }
-
-        .k-widget.k-tooltip {
-            width: 95%;
-        }
-
-        .k-valid {
-            border-color: #ccc;
-        }
-
-        .k-invalid {
-            border-color: red;
-        }
-
-        .k-overlay {
-            opacity: 0.8;
-        }
-    </style>
 
     <script>
         angular.module("entrak", [ "kendo.directives" ])
@@ -231,6 +192,21 @@
                             console.log(data);
                         }
                     })
+                }
+
+                $scope.validOptions = {
+                    rules: {
+                        matchpwd: function(input){
+                            if ($(input).prop("id") == "confirm_password"){
+                                return ($("#password").val() == $("#confirm_password").val());
+                            } else {
+                                return true;
+                            }
+                        }
+                    },
+                    messages: {
+                        matchpwd: "Password do not match"
+                    }
                 }
 
                 $scope.validate = function(event) {

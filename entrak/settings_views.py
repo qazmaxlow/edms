@@ -225,3 +225,33 @@ def delete_user_view(request, system_code=None):
         user.delete()
 
     return Utils.json_response({'success': True})
+
+
+@permission_required(USER_ROLE_ADMIN_LEVEL)
+@ensure_csrf_cookie
+def profile_view(request, system_code=None):
+    systems_info = System.get_systems_info(system_code, request.user.system.code)
+    users = EntrakUser.objects.filter(
+        system_id__in=[system.id for system in systems_info["systems"]]
+    ).select_related('system_name').order_by('id')
+
+    m = systems_info
+    m['user'] = request.user
+
+    m.update(csrf(request))
+
+    return render(request, 'profile.html', m)
+
+
+@permission_required(USER_ROLE_ADMIN_LEVEL)
+@ensure_csrf_cookie
+def manage_accounts_view(request, system_code=None):
+
+    systems_info = System.get_systems_info(system_code, request.user.system.code)
+    system = System.objects.get(code=system_code)
+
+    m = systems_info
+    m["system"] = system
+    m.update(csrf(request))
+
+    return render(request, 'manage_accounts.html', m)

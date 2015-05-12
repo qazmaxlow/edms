@@ -25,6 +25,9 @@
 <link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
 <link href="{% static 'css/companies/export.css' %}" rel="stylesheet">
 
+<script src="{% static 'js/moment-with-locales.js' %}"></script>
+<script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
+
 <script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
@@ -66,12 +69,12 @@
                             <div class="table-row"></div>
                             <div class="table-row">
                                 <h3 class="date-text">{{startDate}}</h3>
-                                <input kendo-et-date-picker="dp_date_start" k-ng-model="date_start" k-click-popup="true" k-format="'D'">
+                                <input id="export-start-date" kendo-et-date-picker="dp_date_start" k-ng-model="date_start" k-click-popup="true" k-format="'D'" >
                                 <div class="second-row">
                                     <span class="date-text inline">{{endDate}}</span>
                                     <span class="inline date-text small">{{inclusive}}</span>
                                 </div>
-                                <input kendo-et-date-picker="dp_date_end" k-ng-model="date_end" k-click-popup="true" k-format="'D'">
+                                <input id="export-end-date" kendo-et-date-picker="dp_date_end" k-ng-model="date_end" k-click-popup="true" k-format="'D'">
                             </div>
                             <div class="table-row"></div>
                         </div>
@@ -82,8 +85,8 @@
                         <div class="content bg-time">
                             <div class="table-row"></div>
                             <div class="table-row">
-                                <button ng-click="interval='Minute'" class="rect-radio" ng-class="{ 'active': interval=='Minute'}">{{minute}}</button><br>
-                                <button ng-click="interval='Hour'" class="rect-radio" ng-class="{ 'active': interval=='Hour'}">{{hour}}</button><br>
+                                <button ng-disabled="disableLv =='Minute' || disableLv == 'Hour'" ng-click="interval='Minute'" class="rect-radio" ng-class="{ 'active': interval=='Minute'}">{{minute}}</button><br>
+                                <button ng-disabled="disableLv == 'Hour'" ng-click="interval='Hour'" class="rect-radio" ng-class="{ 'active': interval=='Hour'}">{{hour}}</button><br>
                                 <button ng-click="interval='Day'" class="rect-radio" ng-class="{ 'active': interval=='Day'}">{{day}}</button>
                             </div>
                             <div class="table-row"></div>
@@ -162,7 +165,6 @@
         kendo.culture(langCode.substring(0,3)+langCode.substring(3,5).toUpperCase());
         $scope.eng = langCode.indexOf("en") == 0;
 
-
         $scope.interval = "Minute";
         $scope.unit = "kWh";
 
@@ -195,6 +197,27 @@
         $scope.date_start.setHours(0,0,0,0)
         $scope.date_end = new Date($scope.date_start);
         $scope.date_end.setDate($scope.date_end.getDate()+1);
+
+        $scope.disableLv = "";
+        $scope.$watchGroup(["date_start", "date_end"], function(nVal, oVal, scope){console.log($("#export-end-date"));
+            // $("#export-end-date").data("kendoDatePicker").min(nVal[0]);
+            // $("#export-start-date").data("kendoEtDatePicker").max(nVal[1]);
+            // $("#export-start-date").datepicker("option", "maxDate", nVal[1]);
+            // $("#export-end-date").datepicker("option", "minDate", nVal[0]);
+
+            var diff = moment(nVal[1]).diff(moment(nVal[0]), "days") + 1;
+            if (diff > 62){
+                $scope.disableLv = "Hour";
+                if ($scope.interval != "Day"){
+                    $scope.interval = "Day";
+                }
+            } else if (diff > 7){
+                $scope.disableLv = "Minute";
+                if ($scope.interval == "Minute"){
+                    $scope.interval = "Hour";
+                }
+            }
+        });
 
         $scope.displayTxt = function(txt){
             if (txt == "Minute"){

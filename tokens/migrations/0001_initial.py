@@ -8,15 +8,22 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding model 'Token'
+        db.create_table(u'tokens_token', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('token_key', self.gf('django.db.models.fields.CharField')(unique=True, max_length=40)),
+            ('created_by', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['user.EntrakUser'])),
+            ('created_time', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('expiration_days', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('extra_data', self.gf('django.db.models.fields.TextField')(null=True)),
+        ))
+        db.send_create_signal(u'tokens', ['Token'])
 
-        # Changing field 'EntrakUser.language'
-        db.alter_column(u'user_entrakuser', 'language', self.gf('django.db.models.fields.CharField')(max_length=10))
-        orm.EntrakUser.objects.update(language='en_US')
 
     def backwards(self, orm):
+        # Deleting model 'Token'
+        db.delete_table(u'tokens_token')
 
-        # Changing field 'EntrakUser.language'
-        db.alter_column(u'user_entrakuser', 'language', self.gf('django.db.models.fields.PositiveSmallIntegerField')())
 
     models = {
         u'auth.group': {
@@ -64,6 +71,15 @@ class Migration(SchemaMigration):
             'timezone': ('django.db.models.fields.CharField', [], {'default': "u'Asia/Hong_Kong'", 'max_length': '50'}),
             'unit_info': ('django.db.models.fields.TextField', [], {'default': "'{}'"})
         },
+        u'tokens.token': {
+            'Meta': {'object_name': 'Token'},
+            'created_by': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.EntrakUser']"}),
+            'created_time': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'expiration_days': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'extra_data': ('django.db.models.fields.TextField', [], {'null': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'token_key': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '40'})
+        },
         u'user.entrakuser': {
             'Meta': {'object_name': 'EntrakUser'},
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
@@ -90,4 +106,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['user']
+    complete_apps = ['tokens']

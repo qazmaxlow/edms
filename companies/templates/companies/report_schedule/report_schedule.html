@@ -26,6 +26,7 @@
 <link href="{% static 'css/companies/report_schedule.css' %}" rel="stylesheet">
 
 <script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
+<script src="{% static 'assets/etkendoui/js/et.dropdown.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
 
@@ -46,7 +47,7 @@
 
 {% verbatim %}
 <div ng-app="Entrak">
-    <div ng-cloak ng-controller="ReportScheduleController" class="auto-report-base" style="height: 420px">
+    <div ng-cloak ng-controller="ReportScheduleController" class="auto-report-base" ><!-- style="height: 420px" -->
         <div class="row steps">
             <div class="col-md-3 description">
                 <p class="desc-text">{{description}}</p>
@@ -80,9 +81,9 @@
                 <div class="header">{{step3Title}}</div>
                 <div class="content bg-step3">
                     <h4 class="label-top">{{sendTo}}</h4>
-                    <div id="rs-emailList"></div>
-                    <input ng-model="taskEmail" >
-                    <div>
+                    <div id="rs-emailList" ng-show="user_group == 'manager'"></div>
+                    <input ng-model="taskEmail" ng-show="user_group == 'viewer'">
+                    <div class="btn-container">
                         <button ng-click="confirmAdd()">{{btnConfirm}}</button>
                     </div>
                 </div>
@@ -101,156 +102,8 @@
 <script>
     angular.module("Entrak", [ "kendo.directives" ])
         .controller("ReportScheduleController", function($scope) {
-            var EtDropDown = function(elm, data){
-                var that = this,
-                body = document.body,
-                keys = kendo.keys,
-                support = kendo.support,
-                ARIA_HIDDEN = "aria-hidden",
-                EMPTYITEMLIST = '<div class="k-itemList"></div><div class=""><input></input><button class="add-btn">Add</button></div>',
-                SPAN = "<SPAN/>",
-                ns = ".kendoEtDropDown",
-                MOUSEDOWN = "mousedown" + ns,
-                KEYDOWN = "keydown" + ns,
-                CLICK = "click" + ns;
-                
-                that.wrapper = '<SPAN unselectable="on" class="k-widget k-dropdown k-header"><SPAN unselectable="on" class="k-dropdown-wrap k-state-default">'
-                            + '<SPAN unselectable="on" class="k-input"></SPAN>' 
-                            + '<SPAN unselectable="on" class="k-select"><SPAN unselectable="on" class="k-icon k-i-arrow-s"></SPAN></SPAN>'
-                            + '</SPAN></SPAN>';
-
-                that.wrapper = $(that.wrapper);
-                that.wrapper.appendTo(elm);
-
-                that.value(data);
-
-                that.container = $("<DIV/>").attr(ARIA_HIDDEN, "true").addClass("k-et-dropdown-container").appendTo(body);
-                var options = {};
-                options.animation = {};
-                options.name = "Popup";
-                options.isRtl = kendo.support.isRtl(options.anchor);
-                options.anchor = that.wrapper;
-
-                that.popup = new kendo.ui.Popup(that.container, options);
-
-                var div = $("<DIV/>").attr("id", kendo.guid()).appendTo(that.popup.element);//.on(MOUSEDOWN, preventDefault);
-                div.html(EMPTYITEMLIST);
-
-                that.container.on(KEYDOWN, function(e){
-                    if (e.keyCode == keys.ESC) {
-                        that.popup.close();
-                        return;
-                    }
-                });
-
-                that.container.find(".add-btn").on(CLICK, function(){
-                    if (that.addItem(that.container.find("INPUT").val())){
-                        that.container.find("INPUT").val("");
-                        that.updatePopup();
-                    }
-                });
-
-                that.container.find(".k-itemList").on(CLICK, function(e){
-                    var target = $(e.target);
-                    if (target.hasClass("k-select") || target.hasClass("k-icon")){
-                        var item = target.closest("DIV").find("span:first").text();
-                        that.removeItem(item);
-                        that.updatePopup();
-                    }
-                });
-                
-                that.wrapper.on(MOUSEDOWN, function(){
-                    if (that.popup.visible()){
-                        that.close();
-                    } else {
-                        that.open();    
-                    }
-                });
-
-            };
-
-            EtDropDown.prototype = {
-                ITEM: '<DIV><SPAN></SPAN><SPAN class="k-select"><SPAN class="k-icon k-i-arrow-s"></SPAN></SPAN></DIV>',
-
-                value: function(data){
-                    if (data == null){
-                        return this.items;
-                    } else if ($.isArray(data)){
-                        this.items = data;
-                    } else {
-                        this.items = [data];
-                    }
-                },
-
-                addItem: function(item){
-                    if (item && item.trim()){
-                        item = item.trim();
-                        if (this.items.indexOf(item) == -1){
-                            this.items.push(item);
-                            this.updateTextbox();
-                            return true;
-                        }
-                    }
-                    return false;
-                },
-
-                removeItem: function(item){
-                    if (item){
-                        var i = this.items.indexOf(item);
-                        if (i != -1){
-                            this.items.splice(i, 1);
-                        }
-                        this.updateTextbox();
-                    }
-                },
-
-                updatePopup: function(){
-                    var list = $(this.popup.element).find(".k-itemList");
-                    list.html("");
-
-                    for (var i=0; i<this.items.length; i++){
-                        var item = $(this.ITEM);
-                        item.find("span:first").html(this.items[i]);
-                        item.appendTo(list);
-                    }
-                },
-
-                updateTextbox: function(){
-                    if (this.items.length == 1){
-                        this.wrapper.find(".k-input").text(this.items[0]);
-                    } else {
-                        this.wrapper.find(".k-input").text(this.items.length + " Users");
-                    }
-                },
-
-                readOnly: function(readonly){
-                    this.wrapper.attr("aria-readonly", readonly);
-                },
-
-                open: function(){
-                    if (this.wrapper.attr("aria-readonly") == "true")
-                        return;
-
-                    var input = this.container.find("INPUT");
-                    this.updatePopup();
-                    input.val("");
-                    this.popup.open();
-                    setTimeout(function(){
-                        input.focus();
-                    }, 200);
-                },
-
-                close: function(){
-                    this.popup.close();
-                }
-            }
-
-            var etDropDown = new EtDropDown($("#rs-emailList"), ["asdf@hahah.com", "bbb@yahoo.com"]);
-            console.log(etDropDown.value());
-            etDropDown.value(["1@hahah.com", "2@yahoo.com"]);
-            etDropDown.addItem("yahoo@gmail.com");
-            console.log(etDropDown.value());
-            etDropDown.readOnly(true);
+            var etDropDown = new EtDropDown($("#rs-emailList"), []);
+            etDropDown.setOptions({readOnly: false, itemDisplayName: "e-mails", ignoreCase: true, onchange: function(){console.log("onchange");}});
 
             $scope.description = '{% trans "Set the system to email you an energy report each month or week, so you can stay informaed and up to date on your energy use." %}';
             $scope.btnConfirm = '{% trans "Confirm" %}';
@@ -261,9 +114,7 @@
             $scope.step1Title = '{% trans "Select Scope" %}';
             $scope.step2Title = '{% trans "Select Frequency" %}';
             $scope.step3Title = '{% trans "Confirm and Go" %}';
-
             $scope.recordTitle = '{% trans "Manage Automated Reports" %}';
-
             var userDataSource = new kendo.data.DataSource({
                 transport: {
                     read: {
@@ -280,7 +131,6 @@
                     }
                 }
             });
-
             userDataSource.read();
             var authenticated_user = userDataSource.data()[0];
             if (authenticated_user){
@@ -288,8 +138,12 @@
             } else {
                 $scope.taskEmail = "";
             }
-            
-
+            if (authenticated_user.role_level==100) {
+                $scope.user_group = 'manager';
+            }
+            else {
+                $scope.user_group = 'viewer';
+            }
             $scope.systemsDataSource = new kendo.data.DataSource({
                 transport: {
                     read: {
@@ -300,7 +154,6 @@
                     }
                 }
             });
-
             $scope.frequencyDataSource = new kendo.data.DataSource({
                 transport: {
                     read: {
@@ -311,15 +164,10 @@
                     }
                 }
             });
-
-
             $scope.systemsDataSource.read();
             var company_systems = $scope.systemsDataSource.data();
-
             $scope.frequencyDataSource.read();
             var frequencies = $scope.frequencyDataSource.data();
-
-
             var scheduleTaskDataSource = new kendo.data.DataSource({
                 transport: {
                     read: {
@@ -359,47 +207,70 @@
                     model: { id: "id" } // identifier for map to kendo model, must be defined for create, update or delete
                 }
             });
-
             $scope.confirmAdd = function() {
+                var emails = [];
+                if ($scope.user_group == 'manager') {
+                    emails = $.map(etDropDown.value(), function(email, i) {
+                        return {"email": email};
+                    });
+                }
+                else {
+                    emails.push({"email": $scope.taskEmail});
+                }
                 scheduleTaskDataSource.add(
                     {
                         frequency_id: $scope.frequencyDropdown.value(),
                         system_id: $scope.systemDropdown.value(),
-                        receivers: [{"email": $scope.taskEmail}]
+                        receivers: emails
                     });
                 scheduleTaskDataSource.sync();
             };
-
+            var receivers_editor = receiversEditor;
+            // var receivers_editor = null;
             $scope.taskGridOptions = function(dataItem) {
                 return {
                     dataSource: scheduleTaskDataSource,
                     columns: [
-                        { field: "frequency_id", title:"frequency", width: "110px", editor: frequencyDropDownEditor,
+                        { field: "system_id", title:"Scope", width: "26%", editor: systemDropDownEditor,
+                              template: function(dataItem) {
+                              return $.grep(company_systems, function(e) {
+                                  return e.id == dataItem.system_id
+                              })[0].fullname;
+                          }
+                        },
+                        { field: "frequency_id", title:"Frequency", width: "12%", editor: frequencyDropDownEditor,
                           template: function(dataItem) {
                               return $.grep(frequencies, function(e) {
                                   return e.id == dataItem.frequency_id
                               })[0].name;
                           }
                         },
-                        { field: "system_id", title:"system", width: "110px", editor: systemDropDownEditor,
-                          template: function(dataItem) {
-                              return $.grep(company_systems, function(e) {
-                                  return e.id == dataItem.system_id
-                              })[0].fullname;
-                          }
-                        },
-                        { title: "Receivers",
+                        
+                        { field: "receivers", title: "Email", width: "20%", editor: receivers_editor,
                           template: function(dataItem) {
                               var arr = $.map(dataItem.receivers, function(r) { return r.email; });
                               return arr.join(',');
                           }
                         },
-                        { command: ["edit", "destroy"], title: "&nbsp;", width: "250px" }
+                        { 
+                            command: [{
+                                name: "edit",
+                                text: {
+                                    edit: "Edit",
+                                    update: "Confirm",
+                                    cancel: "Cancel"
+                                }
+                            }, {
+                                name: "destroy",
+                                text: "Delete"
+                            }], 
+                            title: "Actions", 
+                            width: "160px" 
+                        }
                     ],
                     editable: "inline"
                 };
             };
-
             function systemDropDownEditor(container, options) {
                 $('<input required data-text-field="fullname" data-value-field="id" data-bind="value:' + options.field + '"/>')
                     .appendTo(container)
@@ -408,7 +279,6 @@
                         dataSource: $scope.systemsDataSource
                     });
             }
-
             function frequencyDropDownEditor(container, options) {
                 $('<input required data-text-field="name" data-value-field="id" data-bind="value:' + options.field + '"/>')
                     .appendTo(container)
@@ -417,7 +287,23 @@
                         dataSource: $scope.frequencyDataSource
                     });
             }
-
+            function receiversEditor(container, options) {
+                var emails = $.map(options.model.receivers, function(r, i) { return r.email;});
+                $('<div id="edit_email_popup"></div>')
+                    .appendTo(container);
+                var e = new EtDropDown($('#edit_email_popup'), emails);
+                e.setOptions({
+                    readOnly: false,
+                    itemDisplayName: "e-mails",
+                    ignoreCase: true,
+                    onchange: function() {
+                        options.model.receivers = $.map(e.value(), function(email, i) {
+                            return {"email": email};
+                        });
+                        options.model.dirty = true;
+                    }
+                });
+            }
     });
 </script>
 {% endblock %}

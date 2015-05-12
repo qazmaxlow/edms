@@ -54,6 +54,7 @@ INSTALLED_APPS = (
     'rest_framework.authtoken',
     'south',
     'egauge',
+    'tokens',
     'system',
     'user',
     'baseline',
@@ -154,7 +155,7 @@ LOGGING = {
     },
 }
 
-EMAIL_HOST = 'en-trak.com'
+EMAIL_HOST = 'mail.station191.com'
 EMAIL_HOST_USER = 'alert@en-trak.com'
 EMAIL_HOST_PASSWORD = 'entrak8888'
 EMAIL_USE_TLS = True

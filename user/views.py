@@ -14,15 +14,16 @@ from django.contrib.auth import authenticate
 from django.core.urlresolvers import reverse
 from django.utils import simplejson
 from django.http import HttpResponse
+from django.http import HttpResponseForbidden
+from django.http import HttpResponseBadRequest
 
 from egauge.manager import SourceManager
 from system.models import System
 from user.models import EntrakUser
-from django.views.decorators.csrf import csrf_exempt
 from utils.utils import Utils
+from rest_framework import generics
 
 
-@csrf_exempt
 def activate_account(request, user_id):
 
     user = None
@@ -78,10 +79,115 @@ def activate_account(request, user_id):
         return redirect('/login')
 
 
-def send_email(request, user_id):
+def update_account(request, user_id):
 
-    users = EntrakUser.objects.filter(id=user_id, is_email_verified=False, is_personal_account=True)
+    user = None
+    data = simplejson.loads(request.body)
 
+    users = EntrakUser.objects.filter(id=user_id, is_personal_account=True)
     if users.exists():
         user = users[0]
-        user.send_activation_email()
+
+    if user and data:
+
+        first_name = data.get('first_name', None)
+        last_name = data.get('last_name', None)
+        department = data.get('department', None)
+        language = data.get('language', None)
+
+        current_password = data.get('current_passowrd', None)
+        password = data.get('passowrd', None)
+        confirm_password = data.get('confirm_passowrd', None)
+
+        if first_name and last_name and department and language:
+
+            user.first_name = first_name
+            user.last_name = last_name
+            user.department = department
+            user.language = language
+            user.save()
+
+            return HttpResponse("User profile updated successfully")
+
+        elif current_passowrd and password and confirm_passowrd:
+
+            if password == confirm_password:
+                o_user = authenticate(username=user.username, password=current_passowrd)
+
+                if o_user:
+                    user.set_password(password)
+                    user.save()
+                    return HttpResponse("Password updated successfully")
+                else:
+                    return HttpResponseBadRequest("Current password is incorrect")
+            else:
+                return HttpResponseBadRequest("Password and confirm password must be the same")
+
+    else:
+        return HttpResponseBadRequest("Invalid request")
+
+
+def send_invitation_email(request, user_id):
+
+    if request.user.is_manager():
+
+        users = EntrakUser.objects.filter(id=user_id, is_email_verified=False, is_personal_account=True)
+
+        if users.exists():
+            user = users[0]
+            user.send_activation_email()
+
+            return HttpResponse('<h3>Email Sent</h3>')
+
+        else:
+            return HttpResponseBadRequest('<h3>Invalid Request</h3>')
+
+
+    return HttpResponseForbidden('<h3>Not authorized</h3>')
+
+
+def create_individual_users(request):
+    try:
+
+        data = simplejson.loads(request.body)
+        keys = data.keys()
+
+        if keys and 'models' in keys:
+            if all(d in keys['models'] for d in ('email', 'is_personal_account', 'system_id')):
+                for k in keys['models']:
+                    u = EntrakUser.objects.new(email=k['email'], system_id=k['system_id'], is_personal_account=True)
+                    u.save()
+                    u.send_activation_email(0)
+
+                return HttpResponse('Invitation sent successfully')
+
+            else:
+                raise Exception('Invalid request')
+
+        else:
+            raise Exception('Invalid request')
+    except Exception as e:
+        print(e)
+
+
+def create_shared_user(request):
+    try:
+
+        data = simplejson.loads(request.body)
+        keys = data.keys()
+
+        if keys and 'models' in keys:
+            if all(d in keys['models'] for d in ('username', 'password', 'system_id')):
+                for k in keys['models']:
+                    u = EntrakUser.objects.new(username=k['username'], system_id=k['system_id'], is_personal_account=False)
+                    u.set_password(k['password'])
+                    u.save()
+
+            else:
+                raise Exception('Invalid request')
+
+        else:
+            raise Exception('Invalid request')
+    except Exception as e:
+        print(e)
+        return HttpResponseBadRequest(e)
