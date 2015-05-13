@@ -178,6 +178,9 @@
 	margin-top: 30px;
 	margin-bottom: 12px;
 	text-align: center;
+	font-size: 1em;
+	font-weight: 600;
+	color: #434343;
 }
 
 .popup-window .k-content #userEmail {
@@ -199,5 +202,16 @@
 
 .popup-window #userEmail .k-dropdown.k-header {
 	width: 264px;
+}
+
+#createUserAccountWindow .k-content .submitted-text {
+	text-align: center;
+	font-size: 0.929em;
+	font-weight: 500;
+	color: #FFC90E;
+}
+
+#createUserAccountWindow .k-content .submitted-text.error-text{
+	color: #e05d5d;
 }
 /* ----- popup */

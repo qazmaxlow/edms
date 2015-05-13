@@ -59,7 +59,7 @@
                 <form name="kForm" class="k-content">
                     <div class="popup-text">Send an invitation link to:</div>
                     <div id="userEmail"></div>
-                    <div ng-cloak ng-bind="userAccountMessage"></div>
+                    <div class="submitted-text" ng-class="error-text : !isEmailSent" ng-bind="userAccountMessage"></div>
                     <div class="buttons-wrap">
                         <button class="k-button normal-btn" ng-disabled="!hasEmail" ng-click="createUserAccount()">{{userAccountButtonText}}</button>
                     </div>
@@ -330,6 +330,7 @@
                             $scope.userAccountButtonText = "Go to Dashboard";
                         })
                         .fail(function(e) {
+                            $scope.isEmailSent = false;
                             console.log(e);
                             $scope.userAccountMessage = e.responseText;
                         });
