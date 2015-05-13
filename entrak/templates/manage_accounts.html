@@ -66,7 +66,7 @@
                 </form>
             </div>
         </div>
-        <div kendo-window="resendEmailWindow" id="resendEmailWindow" k-title="'Resend Activation Email'" k-width="400"class="popup-window" k-actions="['Custom']" k-height="155" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
+        <div kendo-window="resendEmailWindow" id="resendEmailWindow" k-title="'Resend Activation Email'" k-width="400"class="popup-window" k-options="resendOpt" k-height="155" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
             <div class="form-horizontal form-widgets">
                 <form name="kForm" class="k-content">
                     <div class="title-text">Send the activation link to</div>
@@ -295,13 +295,27 @@
             $scope.sharedAccountButtonText = "Create"
             $scope.isAccountCreated = false;
 
-            $scope.closeResend = function(){
-                if ($scope.isResending)
-                    return;
+            $scope.closeResend = function(e){
+                if ($scope.isResending){
+                    e.preventDefault();
+                    return false;
+                }
+                    
 
                 $scope.isEmailResent = false;
                 $scope.resendEmailMessage = "";
-                $("#resendEmailWindow").data("kendoWindow").close();
+                // $("#resendEmailWindow").data("kendoWindow").close();
+            }
+
+            $scope.resendOpt = {
+                close: function(e){
+                        if ($scope.isResending){
+                            e.preventDefault();
+                            return false;
+                        }
+                            $scope.isEmailResent = false;
+                            $scope.resendEmailMessage = "";
+                    }
             }
 
             $scope.showCreateUserAccountWindow = function() {
@@ -411,21 +425,15 @@
                         console.log(data);
                     })
                 } else {
-                    $scope.closeResend();
+                    $scope.isEmailResent = false;
+                    $scope.resendEmailMessage = "";
+                    $("#resendEmailWindow").data("kendoWindow").close();
                 }
 
                 return false;
             }
 
-            var setClose = false;
             $scope.showResendEmail = function(dataItem) {
-                if (!setClose){
-                    $("#resendEmailWindow").data("kendoWindow").wrapper.find(".k-i-custom").click(function(e){
-                        $scope.closeResend();
-                    });
-                    setClose = true;
-                }
-                
                 $scope.isEmailResent = false;
                 $scope.resendEmailId = dataItem.id;
                 $scope.resendEmailAddress = dataItem.email;
