@@ -21,7 +21,8 @@ var EtDropDown = function(elm, data){
 
     that.options = {
         readOnly: false,
-        itemDisplayName: "e-mails",
+        itemDisplayName: "Emails",
+        emptyItemText: "Add Email",
         ignoreCase: true
     };
 
@@ -93,6 +94,8 @@ EtDropDown.prototype = {
         } else {
             this.items = [data];
         }
+        this.updateTextbox();
+        
         if (this.options.onchange && typeof this.options.onchange == "function"){
             this.options.onchange();
         }
@@ -150,7 +153,9 @@ EtDropDown.prototype = {
     },
 
     updateTextbox: function(){
-        if (this.items.length == 1){
+        if (this.items.length == 0 && this.options.emptyItemText){
+            this.wrapper.find(".k-input").text(this.options.emptyItemText);
+        } else if (this.items.length == 1){
             this.wrapper.find(".k-input").text(this.items[0]);
         } else {
             this.wrapper.find(".k-input").text(this.items.length + " " + this.options.itemDisplayName);
