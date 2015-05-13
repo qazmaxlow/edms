@@ -2,6 +2,7 @@ import datetime
 
 from django.core.mail import EmailMultiAlternatives
 from django.core.mail import send_mail
+from django.contrib.sites.models import Site
 from django.template.loader import render_to_string
 from django.utils import timezone
 
@@ -30,9 +31,10 @@ def send_report_by_schedulers():
             if send_mail_date < timezone.now():
                 from tokens.models import UrlToken
 
+                site = Site.objects.get_current()
                 url_token = UrlToken.objects.create_url_token(scheduler.created_by, expiration_days=10)
                 report_token = url_token.token_key
-                report_url = 'http://127.0.0.1:8000/adidas/report/popup-report/?start_date=2015-04-01&end_date=2015-04-30&report_type=month&tk=%s' % report_token
+                report_url = 'https://%s/adidas/report/popup-report/?start_date=2015-04-01&end_date=2015-04-30&report_type=month&tk=%s' % (site.domain, report_token)
 
                 email = r.email
 
