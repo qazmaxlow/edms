@@ -14,6 +14,8 @@
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
 <script src="{% static 'js/mustache.js-master/mustache.js' %}"></script>
 <script src="{% static 'js/jquery.bpopup.min.js' %}"></script>
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/custom_control.css' %}">
 {% endblock %}
 
 {% block page_title %}{% trans "THE SETTINGS PAGE" %}{% endblock %}
@@ -315,7 +317,10 @@ $(function() {
 {% block page_content %}
 
 <div class="account-section settings-section">
-    <div class="section-header">{% trans "Manage Accounts" %}</div>
+    <div class="section-header">
+        <div class="header-tab">{% trans "My Profile" %}</div><!--
+        --><div class="header-tab selected-tab">{% trans "Manage Accounts" %}</div>
+    </div>
     <div class="section-desc">{% trans "Use the form below to manage or create new user accounts" %}</div>
     <div class="admin-account-title">{% trans "Admin Account" %}</div>
     <div class="account-table admin-account-table">

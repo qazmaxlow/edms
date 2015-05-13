@@ -11,19 +11,44 @@
 }
 
 .account-section {
-    margin-left: 20px;
-    width: 95%;
+    box-shadow: -2px 4px 5px 0 #e8e8e8;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 25px;
+    margin-bottom: 50px;
+    width: 1002px;
+    padding: 0;
+    border-radius: 8px;
+    background-color: #FCFCFC;
+
+    font-family: 'ITCAvantGardeStd', "Helvetica Neue Light",
+    "Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+    "Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-size: 14px;
 }
 
-.section-header{
-    margin-top: 28px;
-    padding-top: 7px;
-    padding-bottom: 7px;
-    background-color: #e2e2e2;
-    font-size: 13pt;
-    color: #354960;
-    padding-left: 10px;
+.section-header {
+    border-radius: 8px 8px 0 0;
+    background-color: #9BCEDA;
+    color: #FFFFFF;
+    font-size: 1em;
+    height: 40px;
+    line-height: 40px;
+    border: none;
 }
+
+.section-header .header-tab {
+    border-right: 1px solid #FFFFFF;
+    padding: 0 10px;
+    display: inline-block;
+}
+
+.section-header .header-tab:hover,
+.section-header .header-tab.selected-tab{
+    background: linear-gradient(to bottom, #aee428, #67cd18);
+}
+
 .section-desc{
     font-size: 10pt;
     color: #354960;

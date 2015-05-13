@@ -135,8 +135,6 @@
                 <div class="form-group">
                     <label class="control-label" data-for="email">Email:</label>
                     <span ng-bind="email" name"email"></span>
-                        <!-- 
-                        <input type="email" id="email" name="Email" class="k-textbox" ng-value="email" ng-readonly="true" /> -->
                 </div>
                 <div class="form-note">
                     <span class="note-label">Please note: </span>
@@ -156,10 +154,24 @@
                 </div>
                 <div class="separator"></div>
                 <div class="buttons-wrap">
-                    <button class="k-button normal-btn" type="submit" ng-disabled="!isValid">Create Account</button>
+                    <button class="k-button normal-btn" ng-disabled="!isValid">Create Account</button>
                 </div>
                 </form>
             </div>
+        </div>
+
+        <!-- create account yes/no popup -->
+        <div kendo-window="wndw" id="postRegistration" class="activate-acc post-activate" k-title="'Create your En-trak Account'" k-width="600" k-height="320" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
+            <img src="/static/images/account-created-icon.png"></img>
+            <div class="congrat-msg">Congrats, your account is ready to use!</div>
+            <div class="separator"></div>
+            <div class="info-msg">As the Admin you are able to create additional User Accounts.</div>
+            <div class="question">Do you want to create an User Account now?</div>
+            <div class="buttons-wrap">
+                <button class="k-button normal-btn" ng-click="goCreateAdditionAcc(true)">Yes</button>
+                <button class="k-button normal-btn" ng-click="goCreateAdditionAcc(false)">No</button>
+            </div>
+            <div class="sub-text">You can also later create or manage accounts in the settings page.</div>
         </div>
     </div>
 
@@ -167,11 +179,12 @@
         angular.module("entrak", [ "kendo.directives" ])
             .config(['$httpProvider', function($httpProvider) {
                 $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+                $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+                $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
             }])
-
             .controller("MyCtrl", function($scope, $http){
 
-                $scope.user = {}
+                $scope.user = {};
                 $scope.user.uid = "{{uid}}";
                 $scope.user.ucode = "{{ucode}}";
                 $scope.email = "{{user.email}}";
@@ -183,15 +196,27 @@
                         contentType: 'application/json; charset=utf-8',
                         data: $scope.user,
                     }).success(function(data, textStatus) {
-                        if (data.redirect) {
-                            // data.redirect contains the string URL to redirect to
-                            window.location.href = data.redirect;
-                        }
-                        else {
-                            // data.form contains the HTML for the replacement form
-                            console.log(data);
-                        }
-                    })
+                        $scope.yesUrl = data.settings_url;
+                        $scope.noUrl = data.dashboard_url;
+                        // if (data.redirect) {
+                        //     // data.redirect contains the string URL to redirect to
+                        //     console.log(data.redirect);
+                        //     // window.location.href = data.redirect;
+                        // } else {
+                        //     // data.form contains the HTML for the replacement form
+                        //     console.log(data);
+                        // }
+                        $("#postRegistration").data("kendoWindow").center().open();
+                        $("#registration").data("kendoWindow").close();
+                    });
+                }
+
+                $scope.goCreateAdditionAcc = function(clickYes){
+                    if (clickYes && $scope.yesUrl){
+                        window.location.href = $scope.yesUrl;
+                    } else if ($scope.noUrl){
+                        window.location.href = $scope.noUrl;
+                    }
                 }
 
                 $scope.validOptions = {
