@@ -257,8 +257,9 @@ $(function() {
     <div class="row drop-down-panel-header">
         <div class="panel-header-left-menu">
             <h3 panel="monthly-report">
-                {% trans "View Report" %}</h3><h3 panel="download-data">
-                {% trans "Download Data" %}</h3>
+                <a>{% trans "View Report" %}</a></h3><!-- <h3 panel="download-data">
+                {% trans "Download Data" %}</h3> --><h3>
+                <a href="{% url 'companies.report-schedule' system_code=systems.0.code %}">{% trans "Automated Reports" %}</a></h3>
         </div>
     </div>
     <div id="panel-content">
@@ -379,7 +380,7 @@ $(function() {
         </div>
 
 
-        <div id="download-raw-data">
+        <!-- <div id="download-raw-data">
             <div class="row dl-data-title">{% trans "Here you can download your energy use data to files in .csv format." %}</div>
             <div class="row dl-data-title">{% trans "Simply select the start date, end date and the units that you would like to obtain from the system." %}</div>
             <div class="row customize-section-title"><span>1</span>{% trans "Choose your date" %}</div>
@@ -417,7 +418,7 @@ $(function() {
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
 
 <span kendo-notification="notf" k-allow-hide-after="0" k-append-to="'#view_report_btn'"></span>

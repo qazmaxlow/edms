@@ -51,8 +51,7 @@
         <div id="report-schedule-container">
             <div class="row drop-down-panel-header">
                 <div class="panel-header-left-menu">
-                    <h3 panel="monthly-report">{{viewReportTitle}}</h3><!--
-                    --><h3 panel="automatedreport">{{automatedReportTitle}}</h3>
+                    <h3><a href="/fujixerox-cp3/report">{{viewReportTitle}}</a></h3><h3 class="automatedreport"><a href="#">{{automatedReportTitle}}</a></h3>
                 </div>
             </div>
 
@@ -110,6 +109,8 @@
 <script>
     angular.module("Entrak", [ "kendo.directives" ])
         .controller("ReportScheduleController", function($scope) {
+
+           
 
             $scope.viewReportTitle = '{% trans "View Reports" %}';
             $scope.automatedReportTitle = '{% trans "Automated Reports" %}';
@@ -315,6 +316,40 @@
                     }
                 });
             }
+
+
+           
+
+
+    });
+</script>
+
+<script>
+    $(function() {
+           $(".panel-header-left-menu h3").each(function(btnIdx) {
+                $(this).click({btnIdx: btnIdx}, function(event) {
+                    var btnIdx = event.data.btnIdx;
+
+                    $(".panel-header-left-menu h3").removeClass('selected-tab');
+                    $(this).addClass('selected-tab');
+
+                    var panelContentHeight;
+                    if (btnIdx === 0) {
+                        panelContentHeight = '162px';
+                    } else if (btnIdx === 1) {
+                        panelContentHeight = '608px';
+                        dlRawDataSelected();
+                    }
+                    $("#panel-content").css("height", panelContentHeight);
+
+                    // var targetPanel = $($('#panel-content>div')[btnIdx]);
+                    // if (targetPanel.css("display") == 'none') {
+                    //     $('#panel-content>div').fadeOut();
+                    //     targetPanel.fadeIn();
+                    // }
+                });
+            });
+            $(".panel-header-left-menu h3:eq(1)").click();
     });
 </script>
 {% endblock %}
