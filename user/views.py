@@ -168,7 +168,7 @@ def create_individual_users(request):
         else:
             raise Exception('Invalid request')
     except IntegrityError as e:
-        return HttpResponseBadRequest("Username is taken already.")
+        return HttpResponseBadRequest("Username has already been taken.")
 
 
 def create_shared_user(request):
