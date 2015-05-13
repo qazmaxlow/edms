@@ -137,7 +137,7 @@
                 <div class="buttons-wrap">
                     <button class="k-button normal-btn" type="submit">{{sharedAccountButtonText}}</button>
                 </div>
-                <div k-bind="sharedAccountMessage"></div>
+                <div ng-bind="sharedAccountMessage"></div>
                 </form>
             </div>
         </div>
@@ -347,6 +347,7 @@
                         })
                         .fail(function(e) {
                             $scope.userAccountMessage = e.responseJSON.join("<br/>");
+                            individual_users.cancelChanges();
                             console.log(e);
                         });
 
@@ -385,8 +386,9 @@
                             $scope.sharedAccountButtonText = "Close";
                         })
                         .fail(function(e) {
-                            console.log(e);
                             $scope.sharedAccountMessage = e.responseJSON.join("<br/>");
+                            shared_users.cancelChanges();
+                            console.log(e);
                         });
                 } else if ($scope.sharedAccountButtonText == "Close") {
                     $("#createSharedAccountWindow").data("kendoWindow").close();
