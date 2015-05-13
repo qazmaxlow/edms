@@ -121,21 +121,22 @@
         </kendo-grid>
         <div kendo-window="createSharedAccountWindow" id="createSharedAccountWindow" k-title="'Create Account'" k-width="380" k-height="380" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak class="popup-window">
             <div class="form-horizontal form-widgets">
-                <form name="kForm" kendo-validator="validator" ng-submit="validate($event)" class="k-content">
+                <form name="kForm" kendo-validator="sharedAccValidator" k-options="validOpt" ng-submit="validate($event)" class="k-content down-err-txt" ng-model="sharedAccValid">
                 <div class="form-group">
                     <label class="control-label" for="username">Username:</label>
                     <input type="username" id="username" name="Username" ng-model="user.username" class="k-textbox normal-tb" placeholder="Username" required data-required-msg="required field" />
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="password">Password:</label>
-                    <input type="password" id="password" name="Password" ng-model="user.password" class="k-textbox normal-tb" placeholder="Password" required data-required-msg="required field" />
+                    <label class="control-label" for="share_password">Password:</label>
+                    <input type="password" id="share_password" name="Password" ng-model="user.password" class="k-textbox normal-tb" placeholder="Password" required data-required-msg="required field" />
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="confirm_password">Confirm Password:</label>
-                    <input type="password" id="confirm_password" name="Confirm Password" class="k-textbox normal-tb" placeholder="Retype Password" required data-required-msg="required field" />
+                    <label class="control-label" for="share_confirm_password">Confirm Password:</label>
+                    <input type="password" id="share_confirm_password" name="Confirm Password" class="k-textbox normal-tb" placeholder="Retype Password" required data-required-msg="required field" />
                 </div>
                 <div class="buttons-wrap">
-                    <button class="k-button normal-btn" ng-click="createSharedAccount()">{{sharedAccountButtonText}}</button>
+                    <button ng-disabled="!sharedAccValid" class="k-button normal-btn">{{sharedAccountButtonText}}</button>
+                    <button ng-show="true" class="k-button normal-btn cancel" ng-click="createSharedAccountWindow.close()">Cancel</button>
                 </div>
                 <div ng-bind="sharedAccountMessage"></div>
                 </form>
@@ -176,6 +177,31 @@
                     $scope.$apply();
                 }
             }});
+
+            $scope.validOpt = {
+                rules: {
+                    matchpwd: function(input){
+                        if ($(input).prop("id") == "share_confirm_password"){
+                            return ($("#share_password").val() == $("#share_confirm_password").val());
+                        } else {
+                            return true;
+                        }
+                    }
+                },
+                messages: {
+                    matchpwd: "Password do not match"
+                }
+            }
+
+            $scope.validate = function(event) {
+                event.preventDefault();
+                if ($scope.sharedAccValidator.validate()) {
+                    $scope.validationClass = "valid";
+                    $scope.createSharedAccount();
+                } else {
+                    $scope.validationClass = "invalid";
+                }
+            }
 
             var individual_users = new kendo.data.DataSource({
                 batch: true,
@@ -362,7 +388,7 @@
                     shared_users.add({
                         username: $('#username')[0].value,
                         system_id: system_id,
-                        password: $('#password')[0].value
+                        password: $('#share_password')[0].value
                     });
 
                     shared_users.sync()
