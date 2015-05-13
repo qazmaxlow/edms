@@ -1,5 +1,5 @@
 
-.profile.chinese {
+.manage-acc.chinese, .k-window-title.chinese {
 	font-family: "Helvetica Neue Light",
  	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
  	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
@@ -7,13 +7,15 @@
 	font-size: 14px;
 }
 
-.manage-acc {
+.manage-acc, .k-window-title {
 	font-family: 'ITCAvantGardeStd', "Helvetica Neue Light",
 	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
 	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
 	-webkit-font-smoothing: antialiased;
 	font-size: 14px;
+}
 
+.manage-acc {
 	box-shadow: -2px 4px 5px 0 #e8e8e8;
 	margin-left: auto;
 	margin-right: auto;
@@ -166,3 +168,76 @@
 .manage-acc .k-grid.sharedAcc tr td:first-child {
 	padding-left: 23px;
 }
+
+/* popup -----*/
+.popup-window.k-content {
+	padding: 0;
+}
+
+.popup-window.k-content .popup-text {
+	margin-top: 30px;
+	margin-bottom: 12px;
+	text-align: center;
+	font-size: 1em;
+	font-weight: 600;
+	color: #434343;
+}
+
+.popup-window.k-content #userEmail {
+	text-align: center;
+	margin-bottom: 15px;
+}
+
+.popup-window.k-content .buttons-wrap {
+	text-align: center;
+	padding-top: 15px;
+}
+
+.popup-window.k-content .buttons-wrap .k-button {
+	min-width: 70px;
+}
+
+.popup-window .k-widget.k-dropdown.k-header .k-dropdown-wrap {
+	background-color: #e8e8e8;
+}
+
+.popup-window #userEmail .k-dropdown.k-header {
+	width: 264px;
+}
+
+#createUserAccountWindow .k-content .submitted-text {
+	text-align: center;
+	font-size: 0.929em;
+	font-weight: 500;
+	color: #FDB913;
+}
+
+#createUserAccountWindow .k-content .submitted-text.error-text {
+	color: #e05d5d;
+}
+
+
+.popup-window.k-content .title-text {
+	text-align: center;
+	font-size: 1em;
+	color: #354960;
+	font-weight: 600;
+	margin-top: 20px;
+}
+
+.popup-window.k-content .content-text {
+	text-align: center;
+	font-size: 1.071em;
+	color: #354960;
+	font-weight: 300;
+	margin-top: 16px;
+}
+
+.popup-window.k-content .action-msg {
+	margin-top: 15px;
+	text-align: center;
+	font-size: 1.071em;
+	font-weight: 500;
+	color: #FDB913;
+}
+/* ----- popup */
