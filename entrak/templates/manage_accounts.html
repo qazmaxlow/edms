@@ -66,27 +66,27 @@
                 </form>
             </div>
         </div>
-        <div kendo-window="resendEmailWindow" id="resendEmailWindow" k-title="'Resend Activation Email'" k-width="400"class="popup-window" k-height="155" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
+        <div kendo-window="resendEmailWindow" id="resendEmailWindow" k-title="'Resend Activation Email'" k-width="400"class="popup-window" k-options="resendOpt" k-height="155" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
             <div class="form-horizontal form-widgets">
                 <form name="kForm" class="k-content">
                     <div class="title-text">Send the activation link to</div>
                     <div ng-cloak class="content-text" ng-bind="resendEmailAddress"></div>
                     <div class="buttons-wrap">
-                        <button ng-cloak class="k-button normal-btn" ng-click="resendEmail()">{{resendEmailButtonText}}</button>
+                        <button ng-cloak ng-disabled="isResending" class="k-button normal-btn" ng-click="resendEmail()">{{resendEmailButtonText}}</button>
                     </div>
                     <div ng-cloak class="action-msg" ng-bind="resendEmailMessage"></div>
                 </form>
             </div>
         </div>
-        <div kendo-window="confirmDeleteWindow" id="confirmDeleteWindow" k-title="'Delete Account'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
+        <div kendo-window="confirmDeleteWindow" class="popup-window" id="confirmDeleteWindow" k-title="'Delete Account'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
             <div class="form-horizontal form-widgets">
-                Are you sure you want to delete
-                <div ng-cloak ng-bind="removeAccountEmail"></div>
-                <div ng-cloak ng-bind="removeAccountMessage"></div>
+                <div class="title-text">Are you sure you want to delete</div>
+                <div ng-cloak class="content-text" ng-bind="removeAccountEmail"></div>
                 <div class="buttons-wrap">
-                    <button class="k-button k-primary k-state-default" ng-click="confirmDeleteWindow.close()">Cancel</button>
-                    <button class="k-button k-primary k-state-default" ng-click="removeAccount()">Confirm</button>
+                    <button class="k-button normal-btn cancel" ng-click="confirmDeleteWindow.close()">Cancel</button>
+                    <button class="k-button normal-btn" ng-click="removeAccount()">Confirm</button>
                 </div>
+                <div ng-cloak class="action-msg" ng-bind="removeAccountMessage"></div>
             </div>
         </div>
         <div class="ng-cloak profile profile-popup" kendo-window="resetPasswordWindow" id="resetPasswordWindow" k-title="'Change Password'" k-width="368" k-height="360" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
@@ -158,7 +158,7 @@
         <td> <img class='attention-icon' src='/static/images/attention-icon.png'></img><span>Account Not Activated</span></td>
         <td> ${email} </td>
         <td> </td>
-        <td> <button class='k-button normal-btn' ng-click='resendEmail(dataItem)'>Resend Activation Email</button> </td>
+        <td> <button class='k-button normal-btn' ng-click='showResendEmail(dataItem)'>Resend Activation Email</button> </td>
         <td> <img class='delete-icon' src='/static/images/delete-icon.png' ng-click='confirmDeleteAccount(dataItem)'></img> </td>
     </tr>
     # } #
@@ -292,6 +292,29 @@
             $scope.sharedAccountButtonText = "Create"
             $scope.isAccountCreated = false;
 
+            $scope.closeResend = function(e){
+                if ($scope.isResending){
+                    e.preventDefault();
+                    return false;
+                }
+                    
+
+                $scope.isEmailResent = false;
+                $scope.resendEmailMessage = "";
+                // $("#resendEmailWindow").data("kendoWindow").close();
+            }
+
+            $scope.resendOpt = {
+                close: function(e){
+                        if ($scope.isResending){
+                            e.preventDefault();
+                            return false;
+                        }
+                            $scope.isEmailResent = false;
+                            $scope.resendEmailMessage = "";
+                    }
+            }
+
             $scope.showCreateUserAccountWindow = function() {
                 $scope.userAccountMessage = "";
                 $scope.userAccountButtonText = "Send";
@@ -379,10 +402,13 @@
                 return false;
             }
 
-
             $scope.resendEmail = function() {
                 if (!$scope.isEmailResent) {
-                    url = "{% url 'users.send_invitation_email' 99999 %}"
+                    if ($scope.isResending)
+                        return;
+
+                    $scope.isResending = true;
+                    url = "{% url 'users.send_invitation_email' 99999 %}";
                     console.log("Resending Activation Email");
                     $http({
                         method : 'GET',
@@ -391,9 +417,14 @@
                         data: $scope.resendEmailAddress,
                     }).success(function(data) {
                         $scope.isEmailResent = true;
+                        $scope.isResending = false;
                         $scope.resendEmailMessage = "The invitation has been sent out.";
                         $scope.resendEmailButtonText = "Close";
+                        console.log("send success");
                     }).error(function(data) {
+                        $scope.isEmailResent = false;
+                        $scope.isResending = false;
+                        console.log("send error");
                         console.log(data);
                     })
                 } else {
@@ -405,7 +436,8 @@
                 return false;
             }
 
-            $scope.resendEmail = function(dataItem) {
+            $scope.showResendEmail = function(dataItem) {
+                $scope.isEmailResent = false;
                 $scope.resendEmailId = dataItem.id;
                 $scope.resendEmailAddress = dataItem.email;
                 $scope.resendEmailButtonText = "Send";
@@ -429,7 +461,6 @@
                         contentType: 'application/html; charset=utf-8',
                         data: $scope.resendEmailAddress,
                     }).success(function(data) {
-                        $scope.isEmailResent = true;
                         $scope.resendEmailMessage = "The invitation has been sent out.";
                         $scope.resendEmailButtonText = "Close";
                     }).error(function(data) {
