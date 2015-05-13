@@ -1,3 +1,6 @@
+from dateutil import relativedelta
+
+from django.utils import timezone
 from django.views.generic import TemplateView
 from django.utils.decorators import method_decorator
 
@@ -5,7 +8,7 @@ from rest_framework import generics, serializers, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-
+from constants import schedulers as scheduler_constants
 from schedulers.models import AutoSendReportSchedular, AutoSendReportReceiver
 from system.models import System
 from utils.auth import permission_required
@@ -63,6 +66,14 @@ class CreateReportScheduleSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         receivers_data = validated_data.pop('receivers')
         scheduler = AutoSendReportSchedular(**validated_data)
+        execute_time = timezone.now()
+        if scheduler.frequency == scheduler_constants.MONTHLY:
+            execute_time = timezone.now() + relativedelta.relativedelta(day=1, months=1)
+        elif scheduler.frequency == scheduler_constants.WEEKLY:
+            execute_time = timezone.now() + relativedelta.relativedelta(days=1, weekday=relativedelta.SU)
+
+        scheduler.last_execute_time = execute_time
+
         request = self.context.get('request')
         scheduler.created_by = request.user
         scheduler.save()
