@@ -158,25 +158,25 @@ class CreateIndividualUserView(generics.CreateAPIView):
 
     def post(self, request, format=None):
 
-        data = simplejson.loads(request.body)
+        data = request.data
+        required_keys = set(['email', 'is_personal_account', 'system_id'])
 
-        if data.keys() and 'models' in data.keys():
-            required_keys = set(['email', 'is_personal_account', 'system_id'])
-
-            for k in data['models']:
-                if required_keys.issubset(set(k.keys())):
-                    try:
-                        u = EntrakUser.objects.create(username=k['email'], email=k['email'], system_id=k['system_id'], is_personal_account=True)
-                        u.send_activation_email(request.user)
-                    except IntegrityError as e:
-                        raise serializers.ValidationError("Username %s is taken already." % k['username'])
-                else:
-                    raise Exception('Invalid request')
-
-                user = UserSerializer(u)
-                return Response(user.data)
+        if required_keys.issubset(set(data.keys())):
+            try:
+                u = EntrakUser.objects.create(
+                        username=data['email'],
+                        email=data['email'],
+                        system_id=data['system_id'],
+                        is_personal_account=True
+                    )
+                u.send_activation_email(request.user)
+            except IntegrityError as e:
+                raise serializers.ValidationError("Username %s is taken already." % data['username'])
         else:
             raise Exception('Invalid request')
+
+        user = UserSerializer(u)
+        return Response(user.data)
 
 
 class CreateSharedUserView(generics.CreateAPIView):
@@ -185,23 +185,18 @@ class CreateSharedUserView(generics.CreateAPIView):
 
     def post(self, request, format=None):
 
-        data = simplejson.loads(request.body)
+        data = request.data
+        required_keys = set(['username', 'password', 'system_id'])
 
-        if data.keys() and 'models' in data.keys():
-            required_keys = set(['username', 'password', 'system_id'])
-
-            for k in data['models']:
-                if required_keys.issubset(set(k.keys())):
-                    try:
-                        u = EntrakUser.objects.create(username=k['username'], system_id=k['system_id'], is_personal_account=False)
-                        u.set_password(k['password'])
-                        u.save()
-                    except IntegrityError as e:
-                        raise serializers.ValidationError("Username %s is taken already." % k['username'])
-                else:
-                    raise Exception('Invalid request')
-
-                user = UserSerializer(u)
-                return Response(user.data)
+        if required_keys.issubset(set(data.keys())):
+            try:
+                u = EntrakUser.objects.create(username=data['username'], system_id=data['system_id'], is_personal_account=False)
+                u.set_password(data['password'])
+                u.save()
+            except IntegrityError as e:
+                raise serializers.ValidationError("Username %s is taken already." % data['username'])
         else:
             raise Exception('Invalid request')
+
+        user = UserSerializer(u)
+        return Response(user.data)
