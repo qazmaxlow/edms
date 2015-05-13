@@ -16,13 +16,16 @@ from django.utils import simplejson
 from django.http import HttpResponse
 from django.http import HttpResponseForbidden
 from django.http import HttpResponseBadRequest
-from django.db import IntegrityError
+from django.db.utils import IntegrityError
+from rest_framework.response import Response
 
 from egauge.manager import SourceManager
 from system.models import System
 from user.models import EntrakUser
 from utils.utils import Utils
 from rest_framework import generics
+from companies.views.user_views import UserSerializer
+from rest_framework import serializers
 
 
 def activate_account(request, user_id):
@@ -149,46 +152,51 @@ def send_invitation_email(request, user_id):
     return HttpResponseForbidden('<h3>Not authorized</h3>')
 
 
-def create_individual_users(request):
-    try:
+class CreateIndividualUserView(generics.CreateAPIView):
 
-        data = simplejson.loads(request.body)
+    serializer_class = UserSerializer
 
-        if data.keys() and 'models' in data.keys():
-            required_keys = set(['email', 'is_personal_account', 'system_id'])
+    def post(self, request, format=None):
 
-            for k in data['models']:
-                if required_keys.issubset(set(k.keys())):
-                    u = EntrakUser.objects.create(username=k['email'], email=k['email'], system_id=k['system_id'], is_personal_account=True)
-                    u.send_activation_email(request.user)
-                else:
-                    raise Exception('Invalid request')
+        data = request.data
+        required_keys = set(['email', 'is_personal_account', 'system_id'])
 
-            return HttpResponse('Invitation sent successfully')
+        if required_keys.issubset(set(data.keys())):
+            try:
+                u = EntrakUser.objects.create(
+                        username=data['email'],
+                        email=data['email'],
+                        system_id=data['system_id'],
+                        is_personal_account=True
+                    )
+                u.send_activation_email(request.user)
+            except IntegrityError as e:
+                raise serializers.ValidationError("Username %s is taken already." % data['username'])
         else:
             raise Exception('Invalid request')
-    except IntegrityError as e:
-        return HttpResponseBadRequest("Username has already been taken.")
+
+        user = UserSerializer(u)
+        return Response(user.data)
 
 
-def create_shared_user(request):
-    try:
+class CreateSharedUserView(generics.CreateAPIView):
 
-        data = simplejson.loads(request.body)
+    serializer_class = UserSerializer
 
-        if data.keys() and 'models' in data.keys():
-            required_keys = set(['username', 'password', 'system_id'])
+    def post(self, request, format=None):
 
-            for k in data['models']:
-                if required_keys.issubset(set(k.keys())):
-                    u = EntrakUser.objects.create(username=k['username'], system_id=k['system_id'], is_personal_account=False)
-                    u.set_password(k['password'])
-                    u.save()
-                else:
-                    raise Exception('Invalid request')
+        data = request.data
+        required_keys = set(['username', 'password', 'system_id'])
 
-                return HttpResponse('Shared account created successfully')
+        if required_keys.issubset(set(data.keys())):
+            try:
+                u = EntrakUser.objects.create(username=data['username'], system_id=data['system_id'], is_personal_account=False)
+                u.set_password(data['password'])
+                u.save()
+            except IntegrityError as e:
+                raise serializers.ValidationError("Username %s is taken already." % data['username'])
         else:
             raise Exception('Invalid request')
-    except IntegrityError as e:
-        return HttpResponseBadRequest("Username is taken already.")
+
+        user = UserSerializer(u)
+        return Response(user.data)
