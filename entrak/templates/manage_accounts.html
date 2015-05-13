@@ -59,7 +59,7 @@
                 <form name="kForm" class="k-content">
                     <div class="popup-text">Send an invitation link to:</div>
                     <div id="userEmail"></div>
-                    <div class="submitted-text" ng-class="error-text : !isEmailSent" ng-bind="userAccountMessage"></div>
+                    <div class="submitted-text" ng-class="{'error-text' : !isEmailSent}" ng-bind="userAccountMessage"></div>
                     <div class="buttons-wrap">
                         <button class="k-button normal-btn" ng-disabled="!hasEmail" ng-click="createUserAccount()">{{userAccountButtonText}}</button>
                     </div>
@@ -325,6 +325,7 @@
 
                     individual_users.sync()
                         .done(function() {
+                            console.log("done");
                             $scope.isEmailSent = true;
                             $scope.userAccountMessage = "Great, the invitation has been sent out.";
                             $scope.userAccountButtonText = "Go to Dashboard";
