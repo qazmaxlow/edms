@@ -161,17 +161,27 @@
         </div>
 
         <!-- create account yes/no popup -->
-        <div kendo-window="wndw" id="postRegistration" class="activate-acc post-activate" k-title="'Create your En-trak Account'" k-width="600" k-height="320" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
-            <img src="/static/images/account-created-icon.png"></img>
-            <div class="congrat-msg">Congrats, your account is ready to use!</div>
-            <div class="separator"></div>
-            <div class="info-msg">As the Admin you are able to create additional User Accounts.</div>
-            <div class="question">Do you want to create an User Account now?</div>
-            <div class="buttons-wrap">
-                <button class="k-button normal-btn" ng-click="goCreateAdditionAcc(true)">Yes</button>
-                <button class="k-button normal-btn" ng-click="goCreateAdditionAcc(false)">No</button>
+        <div kendo-window="wndw" id="postRegistration" class="activate-acc post-activate" k-title="isAdmin ? 'Create New Accounts' : 'Get Started'" k-width="600" k-height="320" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
+            <div ng-show="isAdmin">
+                <img src="/static/images/account-created-icon.png"></img>
+                <div class="congrat-msg">Congrats, your account is ready to use!</div>
+                <div class="separator"></div>
+                <div class="info-msg">As the Admin you are able to create additional User Accounts.</div>
+                <div class="question">Do you want to create User Accounts now?</div>
+                <div class="buttons-wrap">
+                    <button class="k-button normal-btn" ng-click="goCreateAdditionAcc(true)">Yes</button>
+                    <button class="k-button normal-btn" ng-click="goCreateAdditionAcc(false)">No</button>
+                </div>
+                <div class="sub-text">You can also later create or manage accounts in the settings page.</div>
             </div>
-            <div class="sub-text">You can also later create or manage accounts in the settings page.</div>
+            <div class="normal-user" ng-show="!isAdmin">
+                <img src="/static/images/account-created-icon.png"></img>
+                <div class="congrat-msg">Congrats, your account is ready to use!</div>
+                <div class="separator"></div>
+                <div class="buttons-wrap">
+                    <button class="k-button normal-btn" ng-click="goCreateAdditionAcc(false)">Get Started</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -196,6 +206,7 @@
                         contentType: 'application/json; charset=utf-8',
                         data: $scope.user,
                     }).success(function(data, textStatus) {
+                        $scope.isAdmin = data.is_manager;
                         $scope.yesUrl = data.settings_url;
                         $scope.noUrl = data.dashboard_url;
                         // if (data.redirect) {
