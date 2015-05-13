@@ -1,6 +1,8 @@
 import datetime
 
+from django.core.mail import EmailMultiAlternatives
 from django.core.mail import send_mail
+from django.template.loader import render_to_string
 from django.utils import timezone
 
 from celery import shared_task
@@ -26,15 +28,24 @@ def send_report_by_schedulers():
                 send_mail_date += datetime.timedelta(days=30)
 
             if send_mail_date < timezone.now():
-                # from tokens.models import UrlToken
-                # UrlToken.objects.create_url_token(self.request.user, expiration_days=10)
+                from tokens.models import UrlToken
+
+                url_token = UrlToken.objects.create_url_token(scheduler.created_by, expiration_days=10)
+                report_token = url_token.token_key
+                report_url = 'http://127.0.0.1:8000/adidas/report/popup-report/?start_date=2015-04-01&end_date=2015-04-30&report_type=month&tk=%s' % report_token
 
                 email = r.email
-                send_mail(
-                    'auto report title',
-                    'auto report content',
-                    'noreply-en-trak.com',
-                    [email],
-                    fail_silently=False)
+
+                ctx_dict = { 'report_url': report_url }
+                subject = 'Your En-trak report is ready'
+                from_email = 'noreply-en-trak.com'
+
+                message_txt = render_to_string('companies/report_schedule/autoreport_email.txt', ctx_dict)
+
+                email_message = EmailMultiAlternatives(subject, message_txt, from_email, [email])
+                message_html = render_to_string('companies/report_schedule/autoreport_email.html', ctx_dict)
+                email_message.attach_alternative(message_html, 'text/html')
+                email_message.send()
+
                 scheduler.last_execute_time = timezone.now()
                 scheduler.save()
