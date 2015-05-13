@@ -178,18 +178,22 @@
 	margin-top: 30px;
 	margin-bottom: 12px;
 	text-align: center;
+	font-size: 1em;
+	font-weight: 600;
+	color: #434343;
 }
 
 .popup-window .k-content #userEmail {
 	text-align: center;
+	margin-bottom: 15px;
 }
 
 .popup-window .k-content .buttons-wrap {
 	text-align: center;
-	margin: 30px 0;
+	padding-top: 15px;
 }
 
-.popup-window .k-content .buttons-wrap .k-button{
+.popup-window .k-content .buttons-wrap .k-button {
 	min-width: 70px;
 }
 
@@ -200,4 +204,47 @@
 .popup-window #userEmail .k-dropdown.k-header {
 	width: 264px;
 }
+
+#createUserAccountWindow .k-content .submitted-text {
+	text-align: center;
+	font-size: 0.929em;
+	font-weight: 500;
+	color: #FDB913;
+}
+
+#createUserAccountWindow .k-content .submitted-text.error-text {
+	color: #e05d5d;
+}
+
+
+#resendEmailWindow .k-content .buttons-wrap .k-button.grey-style {
+	background-color: #d5d5d5;
+	box-shadow: 0px 2px 0px #888888;
+}
+
+.popup-window .k-content .title-text {
+	text-align: center;
+	font-size: 1em;
+	color: #354960;
+	font-weight: 600;
+	margin-top: 20px;
+}
+
+.popup-window .k-content .content-text {
+	text-align: center;
+	font-size: 1.071em;
+	color: #354960;
+	font-weight: 300;
+	margin-top: 16px;
+}
+
+.popup-window .k-content .action-msg {
+	margin-top: 15px;
+	text-align: center;
+	font-size: 1.071em;
+	font-weight: 500;
+	color: #FDB913;
+}
+
+
 /* ----- popup */
