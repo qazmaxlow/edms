@@ -296,7 +296,7 @@
 
             $scope.showCreateUserAccountWindow = function() {
                 $scope.isEmailSent = false;
-                $scope.userAccountMessage == "";
+                $scope.userAccountMessage = "";
                 $scope.userAccountButtonText = "Send";
                 etDropDown.value([]);
                 $("#createUserAccountWindow").data("kendoWindow").center().open();
@@ -304,7 +304,7 @@
 
             $scope.showCreateSharedAccountWindow = function() {
                 $scope.isAccountCreated = false;
-                $scope.sharedAccountMessage == "";
+                $scope.sharedAccountMessage = "";
                 $scope.sharedAccountButtonText = "Create";
                 $("#createSharedAccountWindow").data("kendoWindow").center().open();
             }
@@ -313,7 +313,7 @@
                 if (!$scope.isEmailSent) {
                     emails = etDropDown.value();
                     system_id = {{system.id}};
-                    for (i = 0; i < emails.length; i++) {
+                    for (i = 0; i < emails.length; i++) { 
                         individual_users.add(
                         {
                             email: emails[i],
