@@ -78,14 +78,13 @@
         </div>
         <div kendo-window="confirmDeleteWindow" id="confirmDeleteWindow" k-title="'Delete Account'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
             <div class="form-horizontal form-widgets">
-                <form name="kForm" class="k-content">
                 Are you sure you want to delete
                 <div ng-cloak ng-bind="removeAccountEmail"></div>
                 <div ng-cloak ng-bind="removeAccountMessage"></div>
                 <div class="buttons-wrap">
+                    <button class="k-button k-primary k-state-default" ng-click="confirmDeleteWindow.close()">Cancel</button>
                     <button class="k-button k-primary k-state-default" ng-click="removeAccount()">Confirm</button>
                 </div>
-                </form>
             </div>
         </div>
         <div class="ng-cloak profile profile-popup" kendo-window="resetPasswordWindow" id="resetPasswordWindow" k-title="'Change Password'" k-width="368" k-height="360" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
@@ -369,11 +368,11 @@
 
             $scope.resendEmail = function() {
                 if (!$scope.isEmailResent) {
-                    url = "{% url 'users.send_invitation_email' user.id %}"
+                    url = "{% url 'users.send_invitation_email' 99999 %}"
                     console.log("Resending Activation Email");
                     $http({
                         method : 'GET',
-                        url : url.replace('{{user.id}}', $scope.resendEmailId),
+                        url : url.replace('99999', $scope.resendEmailId),
                         contentType: 'application/html; charset=utf-8',
                         data: $scope.resendEmailAddress,
                     }).success(function(data) {
@@ -408,11 +407,11 @@
             }
 
             $scope.removeAccount = function() {
-                url = "{% url 'users.send_invitation_email' user.id %}"
+                url = "{% url 'users.send_invitation_email' 99999 %}"
                     console.log("Resending Activation Email");
                     $http({
-                        method : 'GET',
-                        url : url.replace('{{user.id}}', $scope.removeAccountId),
+                        method : 'POST',
+                        url : url.replace('99999', $scope.removeAccountId),
                         contentType: 'application/html; charset=utf-8',
                         data: $scope.resendEmailAddress,
                     }).success(function(data) {
