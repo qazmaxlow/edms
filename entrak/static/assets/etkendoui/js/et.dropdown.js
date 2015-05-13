@@ -26,7 +26,11 @@ var EtDropDown = function(elm, data){
         ignoreCase: true
     };
 
-    that.value(data);
+    if (data == null){
+        that.value([]);
+    } else {
+        that.value(data);    
+    }
 
     that.container = $("<DIV/>").attr(ARIA_HIDDEN, "true").addClass("k-et-dropdown-container").appendTo(body);
     var opt = {};
@@ -95,7 +99,7 @@ EtDropDown.prototype = {
             this.items = [data];
         }
         this.updateTextbox();
-        
+
         if (this.options.onchange && typeof this.options.onchange == "function"){
             this.options.onchange();
         }

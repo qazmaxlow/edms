@@ -54,14 +54,14 @@
         <img class="info-icon" src="/static/images/info-icon.png"></img>
         <kendo-grid options="priGridOptions">
         </kendo-grid>
-        <div kendo-window="createUserAccountWindow" class="popup-window" id="createUserAccountWindow" k-title="'Create Account'" k-width="400" k-height="190" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak>
+        <div kendo-window="createUserAccountWindow" class="popup-window" id="createUserAccountWindow" k-title="'Create Individual Account'" k-width="400" k-height="190" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak>
             <div class="form-horizontal form-widgets">
                 <form name="kForm" class="k-content">
                     <div class="popup-text">Send an invitation link to:</div>
                     <div id="userEmail"></div>
                     <div ng-cloak ng-bind="userAccountMessage"></div>
                     <div class="buttons-wrap">
-                        <button class="k-button normal-btn" ng-click="createUserAccount()">{{userAccountButtonText}}</button>
+                        <button class="k-button normal-btn" ng-disabled="!hasEmail" ng-click="createUserAccount()">{{userAccountButtonText}}</button>
                     </div>
                 </form>
             </div>
@@ -169,7 +169,13 @@
     angular.module("Entrak", [ "kendo.directives" ])
         .controller("myCtrl", function($scope, $http){
 
-            var etDropDown = new EtDropDown($("#userEmail"), ['hotdogxz@gmail.com', 'hotdogxz@hotmail.com']);
+            var etDropDown = new EtDropDown($("#userEmail"));
+            etDropDown.setOptions({onchange: function(){
+                $scope.hasEmail = etDropDown.value().length > 0;
+                if(!$scope.$$phase) {
+                    $scope.$apply();
+                }
+            }});
 
             var individual_users = new kendo.data.DataSource({
                 batch: true,
@@ -293,6 +299,7 @@
                 $scope.isEmailSent = false;
                 $scope.userAccountMessage == "";
                 $scope.userAccountButtonText = "Send";
+                etDropDown.value([]);
                 $("#createUserAccountWindow").data("kendoWindow").center().open();
             }
 
@@ -324,7 +331,7 @@
                             $scope.userAccountButtonText = "Go to Dashboard";
                         })
                         .fail(function(e) {
-                            console.log(e)
+                            console.log(e);
                             $scope.userAccountMessage = e.responseText;
                         });
                     individual_users.read();
@@ -332,7 +339,7 @@
 
                 } else {
                     console.log("Redirecting to Dashboard");
-                    window.location.href = "{% url 'companies.dashboard' system.code %}"
+                    window.location.href = "{% url 'companies.dashboard' system.code %}";
                 }
 
                 return false;
