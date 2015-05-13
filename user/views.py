@@ -16,13 +16,16 @@ from django.utils import simplejson
 from django.http import HttpResponse
 from django.http import HttpResponseForbidden
 from django.http import HttpResponseBadRequest
-from django.db import IntegrityError
+from django.db.utils import IntegrityError
+from rest_framework.response import Response
 
 from egauge.manager import SourceManager
 from system.models import System
 from user.models import EntrakUser
 from utils.utils import Utils
 from rest_framework import generics
+from companies.views.user_views import UserSerializer
+from rest_framework import serializers
 
 
 def activate_account(request, user_id):
@@ -149,8 +152,11 @@ def send_invitation_email(request, user_id):
     return HttpResponseForbidden('<h3>Not authorized</h3>')
 
 
-def create_individual_users(request):
-    try:
+class CreateIndividualUserView(generics.CreateAPIView):
+
+    serializer_class = UserSerializer
+
+    def post(self, request, format=None):
 
         data = simplejson.loads(request.body)
 
@@ -159,20 +165,25 @@ def create_individual_users(request):
 
             for k in data['models']:
                 if required_keys.issubset(set(k.keys())):
-                    u = EntrakUser.objects.create(username=k['email'], email=k['email'], system_id=k['system_id'], is_personal_account=True)
-                    u.send_activation_email(request.user)
+                    try:
+                        u = EntrakUser.objects.create(username=k['email'], email=k['email'], system_id=k['system_id'], is_personal_account=True)
+                        u.send_activation_email(request.user)
+                    except IntegrityError as e:
+                        raise serializers.ValidationError("Username %s is taken already." % k['username'])
                 else:
                     raise Exception('Invalid request')
 
-            return HttpResponse('Invitation sent successfully')
+                user = UserSerializer(u)
+                return Response(user.data)
         else:
             raise Exception('Invalid request')
-    except IntegrityError as e:
-        return HttpResponseBadRequest("Username has already been taken.")
 
 
-def create_shared_user(request):
-    try:
+class CreateSharedUserView(generics.CreateAPIView):
+
+    serializer_class = UserSerializer
+
+    def post(self, request, format=None):
 
         data = simplejson.loads(request.body)
 
@@ -181,14 +192,16 @@ def create_shared_user(request):
 
             for k in data['models']:
                 if required_keys.issubset(set(k.keys())):
-                    u = EntrakUser.objects.create(username=k['username'], system_id=k['system_id'], is_personal_account=False)
-                    u.set_password(k['password'])
-                    u.save()
+                    try:
+                        u = EntrakUser.objects.create(username=k['username'], system_id=k['system_id'], is_personal_account=False)
+                        u.set_password(k['password'])
+                        u.save()
+                    except IntegrityError as e:
+                        raise serializers.ValidationError("Username %s is taken already." % k['username'])
                 else:
                     raise Exception('Invalid request')
 
-                return HttpResponse('Shared account created successfully')
+                user = UserSerializer(u)
+                return Response(user.data)
         else:
             raise Exception('Invalid request')
-    except IntegrityError as e:
-        return HttpResponseBadRequest("Username is taken already.")
