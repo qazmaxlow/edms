@@ -1,15 +1,15 @@
 .auto-report-base {
 	font-family: 'ITCAvantGardeStd', "Helvetica Neue Light",
- 	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
- 	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
+	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
 	-webkit-font-smoothing: antialiased;
 	font-size: 14px;
 }
 
 .auto-report-base.chinese {
 	font-family: "Helvetica Neue Light",
- 	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
- 	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
+	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
 }
 
 .auto-report-base .row {
@@ -41,7 +41,7 @@
 	text-align: center;
 	border-right: 1px solid #e8dfcc;
 	background-color: #faf0da;
-    position: relative;
+	position: relative;
 }
 
 .auto-report-base .steps .description .desc-text {
@@ -149,7 +149,7 @@
 	font-size: 0.857em;
 }
 
- .auto-report-base button:focus {
+.auto-report-base button:focus {
 	outline:0;
 }
 
@@ -176,7 +176,7 @@
 }
 .auto-report-base .k-grid-header
 {
-    padding: 0 !important;
+	padding: 0 !important;
 
 }
 .auto-report-base .k-grid-content{
@@ -267,22 +267,37 @@
 	vertical-align: middle;
 }
 
- .auto-report-base .k-widget *{
- 	box-sizing: border-box;
- }
+.auto-report-base .k-widget *{
+	box-sizing: border-box;
+}
+
 
 
 .auto-report-base #report-schedule-container{
 	min-height: 630px;
-    box-shadow: -2px 4px 5px 0 #e8e8e8;
+	box-shadow: -2px 4px 5px 0 #e8e8e8;
 	margin-left: auto;
 	margin-right: auto;
-    margin-top: 25px;
-    margin-bottom: 50px;
+	margin-top: 25px;
+	margin-bottom: 50px;
 	/* position: relative; */
 	width: 1002px;
 	/* padding: 0 15px; */
 	background-color: #FCFCFC;
+}
+
+.auto-report-base .panel-header-left-menu h3{
+	padding: 0px;
+}
+.auto-report-base .panel-header-left-menu h3 a{
+	display: block;
+	padding: 9px 18px;
+	color: white;
+	font-weight: lighter;
+	font-size: 11pt;
+}
+.auto-report-base .panel-header-left-menu h3 a:hover,.auto-report-base .panel-header-left-menu h3 a:focus{
+	text-decoration: none;
 }
 /************end of lower part widget************/
 
@@ -404,6 +419,6 @@
 	font-weight: 300;
 	background-color: #ededed;
 	width: calc(100% - 86px);
-  	box-sizing: border-box;
+	box-sizing: border-box;
 }
 /* -----etdropdown*/
