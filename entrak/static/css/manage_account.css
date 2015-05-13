@@ -1,5 +1,5 @@
 
-.profile.chinese {
+.manage-acc.chinese, .k-window-title.chinese {
 	font-family: "Helvetica Neue Light",
  	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
  	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
@@ -7,13 +7,15 @@
 	font-size: 14px;
 }
 
-.manage-acc {
+.manage-acc, .k-window-title {
 	font-family: 'ITCAvantGardeStd', "Helvetica Neue Light",
 	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
 	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
 	-webkit-font-smoothing: antialiased;
 	font-size: 14px;
+}
 
+.manage-acc {
 	box-shadow: -2px 4px 5px 0 #e8e8e8;
 	margin-left: auto;
 	margin-right: auto;
@@ -166,3 +168,28 @@
 .manage-acc .k-grid.sharedAcc tr td:first-child {
 	padding-left: 23px;
 }
+
+/* popup -----*/
+.popup-window.k-content {
+	padding: 0;
+}
+
+.popup-window .k-content .popup-text {
+	margin-top: 30px;
+	margin-bottom: 12px;
+	text-align: center;
+}
+
+.popup-window .k-content #userEmail {
+	text-align: center;
+}
+
+.popup-window .k-content .buttons-wrap {
+	text-align: center;
+	margin: 30px 0;
+}
+
+.popup-window .k-content .buttons-wrap .k-button{
+	min-width: 70px;
+}
+/* ----- popup */
