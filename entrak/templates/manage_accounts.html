@@ -66,10 +66,10 @@
                 </form>
             </div>
         </div>
-        <div kendo-window="resendEmailWindow" id="resendEmailWindow" k-title="'Resend Activation Email'" k-width="400"class="popup-window" k-options="resendOpt" k-height="155" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
+        <div kendo-window="resendEmailWindow" id="resendEmailWindow" k-title="'Resend Invitation'" k-width="400"class="popup-window" k-options="resendOpt" k-height="155" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
             <div class="form-horizontal form-widgets">
                 <form name="kForm" class="k-content">
-                    <div class="title-text">Send the activation link to</div>
+                    <div class="title-text">Send email invitation to</div>
                     <div ng-cloak class="content-text" ng-bind="resendEmailAddress"></div>
                     <div class="buttons-wrap">
                         <button ng-cloak ng-disabled="isResending" class="k-button normal-btn" ng-click="resendEmail()">{{resendEmailButtonText}}</button>
@@ -116,10 +116,10 @@
                 </form>
             </div>
         </div>
-        <button class='k-button normal-btn sharedAcc' ng-click="clickCreateSharedAccount()">Create Shared Account</button>
+        <button class='k-button normal-btn sharedAcc' ng-click="showCreateSharedAccountWindow()">Create Shared Account</button>
         <kendo-grid options="secGridOptions" class="sharedAcc">
         </kendo-grid>
-        <div kendo-window="createSharedAccountWindow" id="createSharedAccountWindow" k-title="'Create Account'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak class="popup-window">
+        <div kendo-window="createSharedAccountWindow" id="createSharedAccountWindow" k-title="'Create Account'" k-width="380" k-height="380" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak class="popup-window">
             <div class="form-horizontal form-widgets">
                 <form name="kForm" kendo-validator="validator" ng-submit="validate($event)" class="k-content">
                 <div class="form-group">
@@ -158,7 +158,7 @@
         <td> <img class='attention-icon' src='/static/images/attention-icon.png'></img><span>Account Not Activated</span></td>
         <td> ${email} </td>
         <td> </td>
-        <td> <button class='k-button normal-btn' ng-click='showResendEmail(dataItem)'>Resend Activation Email</button> </td>
+        <td> <button class='k-button normal-btn' ng-click='showResendEmail(dataItem)'>Resend Invitation</button> </td>
         <td> <img class='delete-icon' src='/static/images/delete-icon.png' ng-click='confirmDeleteAccount(dataItem)'></img> </td>
     </tr>
     # } #
@@ -292,20 +292,8 @@
             $scope.resendEmailButtonText = "Send";
             $scope.isEmailResent = false;
 
-            $scope.sharedAccountButtonText = "Create"
+            $scope.sharedAccountButtonText = "Create";
             $scope.isAccountCreated = false;
-
-            $scope.closeResend = function(e){
-                if ($scope.isResending){
-                    e.preventDefault();
-                    return false;
-                }
-                    
-
-                $scope.isEmailResent = false;
-                $scope.resendEmailMessage = "";
-                // $("#resendEmailWindow").data("kendoWindow").close();
-            }
 
             $scope.resendOpt = {
                 close: function(e){
@@ -313,9 +301,9 @@
                             e.preventDefault();
                             return false;
                         }
-                            $scope.isEmailResent = false;
-                            $scope.resendEmailMessage = "";
-                    }
+                        $scope.isEmailResent = false;
+                        $scope.resendEmailMessage = "";
+                      }
             }
 
             $scope.showCreateUserAccountWindow = function() {
@@ -360,8 +348,6 @@
                             $scope.userAccountMessage = e.responseText;
                         });
                     individual_users.read();
-
-
                 } else {
                     console.log("Redirecting to Dashboard");
                     window.location.href = "{% url 'companies.dashboard' system.code %}";
