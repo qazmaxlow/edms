@@ -78,15 +78,15 @@
                 </form>
             </div>
         </div>
-        <div kendo-window="confirmDeleteWindow" id="confirmDeleteWindow" k-title="'Delete Account'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
+        <div kendo-window="confirmDeleteWindow" class="popup-window" id="confirmDeleteWindow" k-title="'Delete Account'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
             <div class="form-horizontal form-widgets">
-                Are you sure you want to delete
-                <div ng-cloak ng-bind="removeAccountEmail"></div>
-                <div ng-cloak ng-bind="removeAccountMessage"></div>
+                <div class="title-text">Are you sure you want to delete</div>
+                <div ng-cloak class="content-text" ng-bind="removeAccountEmail"></div>
                 <div class="buttons-wrap">
-                    <button class="k-button k-primary k-state-default" ng-click="confirmDeleteWindow.close()">Cancel</button>
-                    <button class="k-button k-primary k-state-default" ng-click="removeAccount()">Confirm</button>
+                    <button class="k-button normal-btn cancel" ng-click="confirmDeleteWindow.close()">Cancel</button>
+                    <button class="k-button normal-btn" ng-click="removeAccount()">Confirm</button>
                 </div>
+                <div ng-cloak class="action-msg" ng-bind="removeAccountMessage"></div>
             </div>
         </div>
         <div class="ng-cloak profile profile-popup" kendo-window="resetPasswordWindow" id="resetPasswordWindow" k-title="'Change Password'" k-width="368" k-height="360" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">

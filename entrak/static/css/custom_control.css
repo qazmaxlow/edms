@@ -158,6 +158,19 @@
 .k-button.normal-btn:hover:enabled {
     background-color: #74c62b;
 }
+
+.k-button.normal-btn.cancel,
+.k-button.normal-btn.cancel:hover,
+.k-button.normal-btn.cancel:focus:not(:disabled):not(.k-state-disabled) {
+	color: #d5d5d5;
+	background-color: transparent;
+	border-color: transparent;
+	box-shadow: none;
+}
+
+.k-button.normal-btn.cancel:disabled {
+	visibility: hidden;
+}
 /* -----k-button*/
 
 /* k-textbox -----*/
