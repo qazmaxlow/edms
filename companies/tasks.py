@@ -5,6 +5,7 @@ from django.utils import timezone
 
 from celery import shared_task
 
+from constants import schedulers as scheduler_constants
 from schedulers.models import AutoSendReportSchedular
 from tokens.models import UrlToken
 
@@ -19,7 +20,10 @@ def send_report_by_schedulers():
         # receiver_emails = [ r.email for r in scheduler.receivers ]
         for r in scheduler.receivers.all():
             send_mail_date = scheduler.last_execute_time
-            # send_mail_date += datetime.timedelta(days=7)
+            if scheduler.frequency == scheduler_constants.WEEKLY:
+                send_mail_date += datetime.timedelta(days=7)
+            elif scheduler.frequency == scheduler_constants.MONTHLY:
+                send_mail_date += datetime.timedelta(days=30)
 
             if send_mail_date < timezone.now():
                 # from tokens.models import UrlToken

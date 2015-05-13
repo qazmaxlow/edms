@@ -19,6 +19,11 @@ d) install PostreqSQL (http://geonode.readthedocs.org/en/2.0/tutorials/admin/ins
     2. `wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -`
     3. `sudo apt-get update`
     4. `sudo apt-get install postgresql-9.3`
+  
+    5.   Connect to server: 
+
+    *psql -h 127.0.0.1 -U postgres* 
+
 
 e) mongodb
     1a. `brew install mongodb`
@@ -31,8 +36,7 @@ After setting up Postreq server and mongodb, you could create the share folder b
     1. In you local Vagrantfile setting up the share folder:
     `config.vm.synced_folder "vagrant", "/home/vagrant/app"`
     "vagrant" is your local folder which same directory with Vagrantfile and  "/home/vagrant/app" remote path on ubuntu
-<<<<<<< HEAD
-    
+   
     After the installation of postgres and mongodb, configurate the database in /entrak/settings.py 
 
     For postgres database:
@@ -48,7 +52,7 @@ After setting up Postreq server and mongodb, you could create the share folder b
 
     For MongoDB:
     connect('entrak', tz_aware=True)
-=======
+
 
 
 >>>>>>> origin/develop

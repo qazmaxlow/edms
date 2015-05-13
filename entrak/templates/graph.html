@@ -501,7 +501,7 @@ $(function() {
         $(this).click({connectedPanel: subMenuPanel[eleIdx]}, function (event) {
             $(".panel-header-left-menu h3").removeClass('selected-tab');
             $(this).addClass('selected-tab');
-            
+
             var connectedPanel = $(event.data.connectedPanel);
             if (!(connectedPanel.hasClass('selected-submenu'))) {
                 subMenuPanel.filter(".selected-submenu").removeClass('selected-submenu').hide();
@@ -658,7 +658,7 @@ $(function() {
 {% endblock %}
 
 {% block page_title %}{% trans "THE GRAPH SECTION" %}{% endblock %}
-{% block page_subtitle %}{% trans "Check this out!" %}{% endblock %}
+{% block page_subtitle %}{% trans "Explore your energy use with the" %}{% endblock %}
 
 {% block page_content %}
 <div class="panel-component">
@@ -688,7 +688,7 @@ $(function() {
         <p class='trip-unit-desc'></p>
         <ul id="source-choice">
             <div class="choice-panel">
-                <div class="choice-header">{% trans "Compare between end-use types" %} 
+                <div class="choice-header">{% trans "Compare between end-use types" %}
                     <span>{% trans "(Max 5)" %}</span>
                     <span id="source-choice-clear" class="choice-clear">{% trans "Clear all" %}</span>
                 </div>
