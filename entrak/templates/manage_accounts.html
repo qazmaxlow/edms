@@ -66,14 +66,15 @@
                 </form>
             </div>
         </div>
-        <div kendo-window="resendEmailWindow" id="resendEmailWindow" k-title="'Resend Activation Email'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak>
+        <div kendo-window="resendEmailWindow" id="resendEmailWindow" k-title="'Resend Activation Email'" k-width="400"class="popup-window" k-height="155" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
             <div class="form-horizontal form-widgets">
                 <form name="kForm" class="k-content">
-                <div ng-cloak ng-bind="resendEmailAddress"></div>
-                <div ng-cloak ng-bind="resendEmailMessage"></div>
-                <div class="buttons-wrap">
-                    <button class="k-button k-primary k-state-default" ng-click="resendEmail()">{{resendEmailButtonText}}</button>
-                </div>
+                    <div class="title-text">Send the activation link to</div>
+                    <div ng-cloak class="content-text" ng-bind="resendEmailAddress"></div>
+                    <div class="buttons-wrap">
+                        <button ng-cloak class="k-button normal-btn" ng-click="resendEmail()">{{resendEmailButtonText}}</button>
+                    </div>
+                    <div ng-cloak class="action-msg" ng-bind="resendEmailMessage"></div>
                 </form>
             </div>
         </div>
