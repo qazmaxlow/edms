@@ -613,6 +613,9 @@ $(function() {
                     $scope.monthSelectorOptions.select = $scope.report_type; // could bind?
                     $scope.report_date.options.select = $scope.report_type;
 
+                    // hack? the date value didn't update inside the date picker that needs to set manually
+                    $scope.report_date.value($scope.default_date);
+
                     start_date = $scope.report_date.getSelectedStartDate();
                     end_date = $scope.report_date.getSelectedEndDate();
                 }
