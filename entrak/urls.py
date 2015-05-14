@@ -8,6 +8,9 @@ from entrak import settings
 
 from django.contrib import admin
 from trails import trails, apis
+
+import user
+
 admin.autodiscover()
 router = routers.SimpleRouter()
 router.register(r'audit/trails', apis.MonthlySet, base_name='trail')
@@ -75,8 +78,8 @@ urlpatterns = patterns('',
     url(r'^apis/', include('apis.urls')),
     url(r'^(?P<system_code>[\w\-]+)/', include('notifications.urls')),
     url(r'^users/(?P<user_id>\d+)/', include('user.urls')),
-    url(r'^users/create_individual_users', 'user.views.create_individual_users', name='users.create_individual_users'),
-    url(r'^users/create_shared_user', 'user.views.create_shared_user', name='users.create_shared_user'),
+    url(r'^users/create_individual_users', user.views.CreateIndividualUserView.as_view(), name='users.create_individual_users'),
+    url(r'^users/create_shared_user', user.views.CreateSharedUserView.as_view(), name='users.create_shared_user'),
 )
 
 if settings.DEBUG:

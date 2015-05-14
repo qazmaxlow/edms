@@ -2272,3 +2272,19 @@ iframe {
   -webkit-animation: load-spinner 1.1s infinite ease;
   animation: load-spinner 1.1s infinite ease;
 }
+
+.panel-header-left-menu h3{
+    padding: 0px;
+}
+
+.panel-header-left-menu h3 a{
+    display: block;
+    padding: 9px 18px;
+    color: white;
+    font-weight: lighter;
+    font-size: 11pt;
+}
+
+.panel-header-left-menu h3 a:hover, .panel-header-left-menu h3 a:focus{
+    text-decoration: none;
+}

@@ -1,0 +1,66 @@
+{% load static %}<!DOCTYPE html>
+<html>
+<head>
+    <title>Auto-report</title>
+</head>
+<body style="font-family: &quot;Century Gothic&quot;,Helvetica, Sans Serif;text-align: center;">
+  <style>
+    body {
+      font-family:"Century Gothic",Helvetica, Sans Serif;
+        text-align:center;
+    }
+    .background {
+        padding-top:25px;
+        padding-bottom:40px;
+        background-color:#EFEFEF;
+    }
+    .invite {
+      font-weight:bold;
+      color:#354960;
+    }
+    .description {
+      font-size:0.938em;
+      color:#354960;
+    }
+    .create {
+      background-color:#93CFD9;
+      border-color:#93CFD9;
+      margin-top:25px;
+      font-size:0.938em;
+      font-weight:bold;
+      border-radius:8px;
+      border:0;
+      cursor:pointer;
+      height:34px;
+      color:white;
+    }
+    .slogan {
+      font-weight:bold;
+      color:#8dc63F;
+      font-size:0.813em;
+    }
+    .link {
+      color:#8dc63F;
+      font-size:0.813em;
+    }
+    a {
+      text-decoration:none;
+    }
+  </style>
+    <a href="https://www.en-trak.com/" style="text-decoration: none;"><img src="https://{{ site.domain }}{% static 'images/product-logo.png' %}"></a>
+    <div class="background" style="padding-top: 25px;padding-bottom: 40px;background-color: #EFEFEF;">
+        <img alt="actionIcon" src="https://{{ site.domain }}{% static 'images/companies/report_schedule/mail/top_icon.png' %}">
+        <br>
+        <div class="invite" style="font-weight: bold;color: #354960;">{{heading|linebreaks}}
+        </div>
+        <div class="description" style="font-size: 0.938em;color: #354960;">{{description|linebreaks}}
+        </div>
+        <a href="{{ report_url|safe }}" style="text-decoration: none;"><button class="create" style="background-color: #93CFD9;border-color: #93CFD9;margin-top: 25px;font-size: 0.938em;font-weight: bold;border-radius: 8px;border: 0;cursor: pointer;height: 34px;color: white;">View Report</button></a>
+    </div>
+    <p class="slogan" style="font-weight: bold;color: #8dc63F;font-size: 0.813em;">Turning Data into Actionable Intelligence</p>
+    <a href="http://www.en-trak.com/" style="text-decoration: none;"><p class="link" style="color: #8dc63F;font-size: 0.813em;">www.en-trak.com</p></a>
+    <a href="https://www.facebook.com/entrak.hk" style="text-decoration: none;"><img alt="Facebook" src="https://test-dms.en-trak.com{% static 'images/fb-icon.png' %}"></a>
+    <a href="https://www.linkedin.com/company/3575449?trk=tyah&amp;trkInfo=idx%3A2-1-3%2CtarId%3A1422595228736%2Ctas%3Aen-trak" style="text-decoration: none;"><img alt="Linkedin" src="https://test-dms.en-trak.com{% static 'images/linkedin-icon.png' %}"></a>
+
+</body>
+</html>

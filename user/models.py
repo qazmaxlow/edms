@@ -12,6 +12,7 @@ from django.core.mail import send_mail
 from django.template.loader import get_template
 from django.template import Context
 from django.core.mail import EmailMultiAlternatives
+from django.utils.translation import ugettext as _
 
 
 USER_ROLE_ADMIN_LEVEL   = 100
