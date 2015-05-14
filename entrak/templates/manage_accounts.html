@@ -119,7 +119,7 @@
         <button class='k-button normal-btn sharedAcc' ng-click="showCreateSharedAccountWindow()">Create Shared Account</button>
         <kendo-grid options="secGridOptions" class="sharedAcc">
         </kendo-grid>
-        <div kendo-window="createSharedAccountWindow" id="createSharedAccountWindow" k-title="'Create Account'" k-width="380" k-height="380" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak class="popup-window">
+        <div kendo-window="createSharedAccountWindow" id="createSharedAccountWindow" k-title="'Create Account'" k-width="380" k-height="380" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak class="popup-window" k-options="createShareOpt">
             <div class="form-horizontal form-widgets">
                 <form name="kForm" kendo-validator="sharedAccValidator" k-options="validOpt" ng-submit="validate($event)" class="k-content down-err-txt" ng-model="sharedAccValid">
                 <div class="form-group">
@@ -134,11 +134,11 @@
                     <label class="control-label" for="share_confirm_password">Confirm Password:</label>
                     <input type="password" id="share_confirm_password" name="Confirm Password" class="k-textbox normal-tb" placeholder="Retype Password" required data-required-msg="required field" />
                 </div>
+                <div class="submitted-text" ng-class="{'error-text' : !isShareCreated}" ng-bind="sharedAccountMessage"></div>
                 <div class="buttons-wrap">
-                    <button ng-disabled="!sharedAccValid" class="k-button normal-btn">{{sharedAccountButtonText}}</button>
-                    <button ng-show="true" class="k-button normal-btn cancel" ng-click="createSharedAccountWindow.close()">Cancel</button>
+                    <button ng-disabled="!isShareCreated && !sharedAccValid || isShareCreating" class="k-button normal-btn">{{sharedAccountButtonText}}</button>
+                    <button ng-disabled="isShareCreating" ng-show="!isShareCreated" class="k-button normal-btn cancel" ng-click="createSharedAccountWindow.close()">Cancel</button>
                 </div>
-                <div ng-bind="sharedAccountMessage"></div>
                 </form>
             </div>
         </div>
@@ -284,10 +284,6 @@
             });
 
 
-
-            $scope.sharedAccountMessage = null;
-            $scope.sharedAccountButtonText = "Create"
-
             $scope.priGridOptions = {
                 dataSource: individual_users,
                 sortable: true,
@@ -337,6 +333,19 @@
                       }
             }
 
+            $scope.sharedAccountMessage = "";
+            $scope.sharedAccountButtonText = "Create";
+            $scope.createShareOpt = {
+                close: function(e){
+                        if ($scope.isShareCreating){
+                            e.preventDefault();
+                            return false;
+                        }
+                        $scope.isShareCreated = false;
+                        $scope.sharedAccountMessage = "";
+                      }
+            }
+
             $scope.showCreateUserAccountWindow = function() {
                 $scope.userAccountMessage = "";
                 $scope.userAccountButtonText = "Send";
@@ -349,6 +358,11 @@
             $scope.showCreateSharedAccountWindow = function() {
                 $scope.sharedAccountMessage = "";
                 $scope.sharedAccountButtonText = "Create";
+                $scope.isShareCreated = false;
+                $scope.isShareCreating = false;
+                $("#username").val("");
+                $("#share_password").val("");
+                $("#share_confirm_password").val("");
                 $("#createSharedAccountWindow").data("kendoWindow").center().open();
             }
 
@@ -401,30 +415,41 @@
 
 
             $scope.createSharedAccount = function() {
-                if ($scope.sharedAccountButtonText == "Create") {
+                if (!$scope.isShareCreated) {
+                    $scope.isShareCreating = true;
                     system_id = {{system.id}};
                     shared_users.add({
-                        username: $('#username')[0].value,
+                        username: $('#username').val(),
                         system_id: system_id,
-                        password: $('#share_password')[0].value,
-                        confirm_password: $('share_confirm_password')[0].value
+                        password: $('#share_password').val(),
+                        confirm_password: $('share_confirm_password').val()
                     });
 
                     shared_users.sync()
                         .done(function() {
+                            console.log("done");
                             $scope.$apply(function(){
-                                $scope.sharedAccountMessage = "Great you just created a shared account";
-                                $scope.sharedAccountButtonText = "Close";
+                                $scope.isShareCreating = false;
+                                $scope.isShareCreated = true;
+                                $scope.sharedAccountMessage = "Great, you just created a shared account.";
+                                $scope.sharedAccountButtonText = "OK";
                             });
                         })
                         .fail(function(e) {
                             $scope.$apply(function(){
-                                $scope.sharedAccountMessage = e.responseJSON.join("<br/>");
+                                $scope.isShareCreating = false;
+                                $scope.isShareCreated = false;
+                                if (e.responseJSON){
+                                    $scope.sharedAccountMessage = e.responseJSON.join("<br/>");
+                                } else {
+                                    $scope.sharedAccountMessage = e.responseText;
+                                }
                                 shared_users.cancelChanges();
                             });
                             console.log(e);
                         });
-                } else if ($scope.sharedAccountButtonText == "Close") {
+                } else if ($scope.isShareCreated) {
+                    $scope.isShareCreating = false;
                     $("#createSharedAccountWindow").data("kendoWindow").close();
                     $scope.sharedAccountButtonText = "Create";
                     $scope.sharedAccountMessage = "";
@@ -459,12 +484,12 @@
                         $scope.isEmailResent = true;
                         $scope.isResending = false;
                         $scope.resendEmailMessage = "The invitation has been sent out.";
-                        $scope.resendEmailButtonText = "Close";
+                        $scope.resendEmailButtonText = "OK";
                         console.log("send success");
                     }).error(function(data) {
                         $scope.isEmailResent = false;
                         $scope.isResending = false;
-                        $scope.resendEmailMessage = data.responseText;
+                        $scope.resendEmailMessage = "Unable to send inviation";
                         console.log("send error");
                         console.log(data);
                     })
@@ -495,7 +520,7 @@
                         data: $scope.resendEmailAddress,
                     }).success(function(data) {
                         $scope.resendEmailMessage = "The invitation has been sent out.";
-                        $scope.resendEmailButtonText = "Close";
+                        $scope.resendEmailButtonText = "OK";
                     }).error(function(data) {
                         console.log(data);
                     })
