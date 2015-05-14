@@ -295,11 +295,60 @@
 	color: white;
 	font-weight: lighter;
 	font-size: 11pt;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 .auto-report-base .panel-header-left-menu h3 a:hover,.auto-report-base .panel-header-left-menu h3 a:focus{
 	text-decoration: none;
 }
 /************end of lower part widget************/
+
+/* k-button -----*/
+.k-button.normal-btn {
+    height: 34px;
+    white-space: nowrap;
+    padding: 0 10px;
+    background-color: #9bceda;
+    border: none;
+    font-size: 1em;
+    color: #FFFFFF;
+    border-radius: 4px;
+    text-align: center;
+    margin: 0;
+    cursor: pointer;
+}
+
+.k-button.normal-btn,
+.k-button.normal-btn:focus:active,
+.k-button.normal-btn:focus:not(:disabled):not(.k-state-disabled),
+.k-button.normal-btn:focus:active:not(:disabled):not(.k-state-disabled) {
+	box-shadow: 0px 2px 0px #6b9aa5;
+}
+
+.k-button.normal-btn:disabled {
+    border-color: #d5d5d5;
+    background-color: #d5d5d5;
+    box-shadow: 0px 2px 0px #888888;
+    color: #ffffff;
+    cursor: default;
+}
+
+.k-button.normal-btn:hover:enabled {
+    background-color: #74c62b;
+}
+
+.k-button.normal-btn.cancel,
+.k-button.normal-btn.cancel:hover,
+.k-button.normal-btn.cancel:focus:not(:disabled):not(.k-state-disabled) {
+	color: #d5d5d5;
+	background-color: transparent;
+	border-color: transparent;
+	box-shadow: none;
+}
+
+.k-button.normal-btn.cancel:disabled {
+	visibility: hidden;
+}
+/* -----k-button*/
 
 /* dropdown-----*/
 .auto-report-base .k-widget.k-dropdown.k-header {

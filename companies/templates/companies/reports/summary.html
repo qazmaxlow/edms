@@ -200,7 +200,7 @@ $(function() {
             }
             $("#panel-content").css("height", panelContentHeight);
 
-            var targetPanel = $($('#panel-content>div')[btnIdx]);
+            var targetPanel = $($('#panel-content>div')[btnIdx]);   //switch between View-Reports and Download-data
             if (targetPanel.css("display") == 'none') {
                 $('#panel-content>div').fadeOut();
                 targetPanel.fadeIn();
