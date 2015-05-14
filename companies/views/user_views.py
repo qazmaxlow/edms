@@ -28,7 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
     language = LanguageField()
     class Meta:
         model = EntrakUser
-        fields = ('id', 'username', 'fullname', 'department', 'language', 'email', 'is_email_verified', 'is_personal_account')
+        fields = ('id', 'username', 'fullname', 'department', 'language', 'email', 'is_email_verified', 'is_personal_account', 'is_active')
 
 
 class UserListView(generics.ListAPIView):
