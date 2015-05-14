@@ -464,6 +464,7 @@
                     }).error(function(data) {
                         $scope.isEmailResent = false;
                         $scope.isResending = false;
+                        $scope.resendEmailMessage = data.responseText;
                         console.log("send error");
                         console.log(data);
                     })
