@@ -204,7 +204,6 @@
             }
 
             var individual_users = new kendo.data.DataSource({
-                batch: true,
                 transport: {
                     read: {
                         async: true,
@@ -246,7 +245,6 @@
             });
 
             var shared_users = new kendo.data.DataSource({
-                batch: true,
                 transport: {
                     read: {
                         async: true,
@@ -286,7 +284,10 @@
             });
 
             $scope.userAccountMessage = null;
+            $scope.userAccountButtonText = "Send";
+
             $scope.sharedAccountMessage = null;
+            $scope.sharedAccountButtonText = "Create"
 
             $scope.priGridOptions = {
                 dataSource: individual_users,
@@ -311,15 +312,8 @@
                 ],
             }
 
-            $scope.userAccountMessage = "";
-            $scope.userAccountButtonText = "Send";
-            $scope.isEmailSent = false;
-
             $scope.resendEmailButtonText = "Send";
             $scope.isEmailResent = false;
-
-            $scope.sharedAccountButtonText = "Create";
-            $scope.isAccountCreated = false;
 
             $scope.resendOpt = {
                 close: function(e){
@@ -333,7 +327,6 @@
             }
 
             $scope.showCreateUserAccountWindow = function() {
-                $scope.isEmailSent = false;
                 $scope.userAccountMessage = "";
                 $scope.userAccountButtonText = "Send";
                 etDropDown.value([]);
@@ -341,17 +334,16 @@
             }
 
             $scope.showCreateSharedAccountWindow = function() {
-                $scope.isAccountCreated = false;
                 $scope.sharedAccountMessage = "";
                 $scope.sharedAccountButtonText = "Create";
                 $("#createSharedAccountWindow").data("kendoWindow").center().open();
             }
 
             $scope.createUserAccount = function() {
-                if (!$scope.isEmailSent) {
+                if ($scope.userAccountButtonText == "Send") {
                     emails = etDropDown.value();
                     system_id = {{system.id}};
-                    for (i = 0; i < emails.length; i++) { 
+                    for (i = 0; i < emails.length; i++) {
                         individual_users.add(
                         {
                             email: emails[i],
@@ -364,17 +356,15 @@
                     individual_users.sync()
                         .done(function() {
                             console.log("done");
-                            $scope.isEmailSent = true;
                             $scope.userAccountMessage = "Great, the invitation has been sent out.";
                             $scope.userAccountButtonText = "Go to Dashboard";
                         })
                         .fail(function(e) {
-                            $scope.isEmailSent = false;
+                            $scope.userAccountMessage = e.responseJSON.join("<br/>");
+                            individual_users.cancelChanges();
                             console.log(e);
-                            $scope.userAccountMessage = e.responseText;
                         });
-                    individual_users.read();
-                } else {
+                } else if ($scope.userAccountButtonText == "Go to Dashboard") {
                     console.log("Redirecting to Dashboard");
                     window.location.href = "{% url 'companies.dashboard' system.code %}";
                 }
@@ -382,8 +372,9 @@
                 return false;
             }
 
+
             $scope.createSharedAccount = function() {
-                if (!$scope.isAccountCreated) {
+                if ($scope.sharedAccountButtonText == "Create") {
                     system_id = {{system.id}};
                     shared_users.add({
                         username: $('#username')[0].value,
@@ -393,19 +384,22 @@
 
                     shared_users.sync()
                         .done(function() {
-                            $scope.isAccountCreated = true;
-                            $scope.sharedAccountMessage = "Great you just created a shared account";
-                            $scope.sharedAccountButtonText = "Close";
+                            $scope.$apply(function(){
+                                $scope.sharedAccountMessage = "Great you just created a shared account";
+                                $scope.sharedAccountButtonText = "Close";    
+                            });
                         })
                         .fail(function(e) {
-                            console.log(e)
-                            $scope.sharedAccountMessage = e.responseText;
+                            $scope.$apply(function(){
+                                $scope.sharedAccountMessage = e.responseJSON.join("<br/>");
+                                shared_users.cancelChanges();
+                            });
+                            console.log(e);
                         });
-                    shared_users.read();
-
-                } else {
-                    $scope.isAccountCreated = true;
-                    console.log("Shared account created");
+                } else if ($scope.sharedAccountButtonText == "Close") {
+                    $("#createSharedAccountWindow").data("kendoWindow").close();
+                    $scope.sharedAccountButtonText = "Create";
+                    $scope.sharedAccountMessage = "";
                 }
 
                 return false;
