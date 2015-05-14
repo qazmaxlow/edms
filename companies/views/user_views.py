@@ -16,6 +16,7 @@ class CompanyAuthenticatedUserView(generics.RetrieveAPIView):
     def get_object(self):
         return self.request.user
 
+
 class LanguageField(serializers.CharField):
     def to_representation(self, value):
         lang = [item for item in USER_LANGUAGES if item[0] == value]
@@ -23,6 +24,7 @@ class LanguageField(serializers.CharField):
             return super(LanguageField, self).to_representation(lang[0][1])
         else:
             return super(LanguageField, self).to_representation(USER_LANGUAGES[0][1])
+
 
 class UserSerializer(serializers.ModelSerializer):
     language = LanguageField()
