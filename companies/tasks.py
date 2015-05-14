@@ -6,6 +6,7 @@ from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 from django.template.loader import render_to_string
+from django.utils import formats
 from django.utils import timezone
 
 from celery import shared_task
@@ -24,7 +25,7 @@ def send_report_by_schedulers():
 
         # receiver_emails = [ r.email for r in scheduler.receivers ]
         for r in scheduler.receivers.all():
-            if scheduler.execute_time >= timezone.now():
+            if scheduler.execute_time >= timezone.now() or True:
                 from tokens.models import UrlToken
 
                 site = Site.objects.get_current()
@@ -41,10 +42,12 @@ def send_report_by_schedulers():
                     last_report_day = execute_time + relativedelta.relativedelta(day=1, days=-1)
                     first_report_day = execute_time + relativedelta.relativedelta(day=1, months=-1)
                     report_type = 'month'
+                    report_date_text = formats.date_format(first_report_day, 'YEAR_MONTH_FORMAT')
                 elif scheduler.frequency == scheduler_constants.WEEKLY:
                     last_report_day = execute_time + relativedelta.relativedelta(days=-1)
                     first_report_day = execute_time + relativedelta.relativedelta(days=-7)
                     report_type = 'week'
+                    report_date_text = formats.date_format(first_report_day, 'DATE_FORMAT')
 
                 report_url = 'https://%s%s?start_date=%s&end_date=%s&report_type=%s&tk=%s' % (site.domain, url, first_report_day.strftime('%Y-%m-%d'), last_report_day.strftime('%Y-%m-%d'), report_type, report_token)
 
@@ -53,6 +56,7 @@ def send_report_by_schedulers():
                 ctx_dict = {
                     'site': site,
                     'report_url': report_url,
+                    'report_date_text': report_date_text,
                 }
                 subject = 'Your En-trak report is ready'
                 from_email = 'noreply-en-trak.com'

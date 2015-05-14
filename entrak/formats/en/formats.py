@@ -1,4 +1,6 @@
 # -*- encoding: utf-8 -*-
+DATE_FORMAT = 'j M Y'
 YEAR_FORMAT = 'Y'
 MONTH_DAY_FORMAT = 'j M'
 SHORT_MONTH_FORMAT = 'M'
+YEAR_MONTH_FORMAT = 'M Y'
