@@ -53,6 +53,7 @@ def send_report_by_schedulers():
                 ctx_dict = {
                     'site': site,
                     'report_url': report_url,
+                    'report_date': first_report_day,
                 }
                 subject = 'Your En-trak report is ready'
                 from_email = 'noreply-en-trak.com'

@@ -51,10 +51,9 @@
     <div class="background" style="padding-top: 25px;padding-bottom: 40px;background-color: #EFEFEF;">
         <img alt="actionIcon" src="https://{{ site.domain }}{% static 'images/companies/report_schedule/mail/top_icon.png' %}">
         <br>
-        <div class="invite" style="font-weight: bold;color: #354960;">{{heading|linebreaks}}
-        </div>
-        <div class="description" style="font-size: 0.938em;color: #354960;">{{description|linebreaks}}
-        </div>
+        <div class="invite" style="font-weight: bold;color: #354960;">Your energy report for</div>
+        <div class="description" style="font-size: 0.938em;color: #354960;">En-trak Headquarter - {{ report_date|date:"YEAR_MONTH_FORMAT" }}</div>
+        <div class="invite" style="font-weight: bold;color: #354960;">is ready for your review</div>
         <a href="{{ report_url|safe }}" style="text-decoration: none;"><button class="create" style="background-color: #93CFD9;border-color: #93CFD9;margin-top: 25px;font-size: 0.938em;font-weight: bold;border-radius: 8px;border: 0;cursor: pointer;height: 34px;color: white;">View Report</button></a>
         <p>This link will expire 72 hours after sending
           If you wish to view this report after that period,
