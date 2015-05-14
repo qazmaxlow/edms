@@ -14,4 +14,4 @@ class AutoSendReportSchedular(models.Model):
 
 class AutoSendReportReceiver(models.Model):
     scheduler = models.ForeignKey('AutoSendReportSchedular', related_name="receivers")
-    email = models.TextField()
+    email = models.EmailField()
