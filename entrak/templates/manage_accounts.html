@@ -232,9 +232,9 @@
             $scope.validateChangePwd = function(event) {
                 event.preventDefault();
 
-                if ($scope.sharedAccValidator.validate()) {
+                if ($scope.pwdValidator.validate()) {
                     $scope.validationClass = "valid";
-                    $scope.createSharedAccount();
+                    $scope.removeAccount();
                 } else {
                     $scope.validationClass = "invalid";
                 }
@@ -252,6 +252,14 @@
                         url: "{% url 'users.create_individual_users' %}",
                         type: "POST",
                         contentType: "application/json"
+                    },
+                    destroy: {
+                        url: function (item) {
+                            var url = "{% url 'users.disable_account' 99999 %}";
+                            url = url.replace(99999, item.id);
+                            return url;
+                        },
+                        type: "DELETE"
                     },
                     parameterMap: function (options, operation) {
                         if (operation == "create") {
@@ -297,6 +305,14 @@
                         url: "{% url 'users.create_shared_user' %}",
                         type: "POST",
                         contentType: "application/json"
+                    },
+                    destroy: {
+                        url: function (item) {
+                            var url = "{% url 'users.disable_account' 99999 %}";
+                            url = url.replace(99999, item.id);
+                            return url;
+                        },
+                        type: "DELETE"
                     },
                     parameterMap: function (options, operation) {
                         if (operation == "create") {
@@ -575,6 +591,7 @@
                 $scope.removeAccountId = dataItem.id;
                 $scope.removeAccountEmail = dataItem.username;
                 $scope.removeAccountMessage = "";
+                $scope.isPersonalAccount = dataItem.is_personal_account;
                 $scope.isDeleted = false;
                 $scope.isDeleting = false;
                 $("#confirmDeleteWindow").data("kendoWindow").center().open();
@@ -584,20 +601,45 @@
                 if (!$scope.isDeleting){
                     $scope.isDeleting = true;
 
-                    //TODO call delete
-                    //xxxxxx
+                    var ds = null;
+                    if ($scope.isPersonalAccount) {
+                        ds = individual_users;
+                    } else {
+                        ds = shared_users;
+                    }
+                    var raw = ds.data();
+                    var length = raw.length;
+                    var item, i;
+                    for(i=length-1; i>=0; i--){
+                        item = raw[i];
+                        if (item.username == $scope.removeAccountEmail){
+                            ds.remove(item);
+                        }
+                    }
 
-                    //TODO
-                    //in success callback
-                    $scope.isDeleting = false;
-                    $scope.isDeleted = true;
-                    $scope.removeAccountMessage = "xxxxxx";
 
-                    //TODO
-                    //in error callback
-                    $scope.isDeleting = false;
-                    $scope.isDeleted = false;
-                    $scope.removeAccountMessage = "xxxxxx";
+                    ds.sync()
+                        .done(function() {
+                            console.log("done");
+                            $scope.$apply(function(){
+                                $scope.isDeleting = false;
+                                $scope.isDeleted = true;
+                                $scope.removeAccountMessage = "xxxxxx";
+                            });
+                        })
+                        .fail(function(e) {
+                            $scope.$apply(function(){
+                                $scope.isDeleting = false;
+                                $scope.isDeleted = false;
+                                if (e.responseJSON){
+                                    $scope.sharedAccountMessage = e.responseJSON.join("<br/>");
+                                } else {
+                                    $scope.sharedAccountMessage = e.responseText;
+                                }
+                                ds.cancelChanges();
+                            });
+                            console.log(e);
+                        });
                 }
 
                 // url = "{% url 'users.send_invitation_email' 99999 %}"
@@ -619,10 +661,6 @@
 
             $scope.showResetPasswordWindow = function() {
                 $("#resetPasswordWindow").data("kendoWindow").center().open();
-            }
-
-            $scope.resetPasswordWindow = function() {
-
             }
         })
 </script>
