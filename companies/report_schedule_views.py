@@ -1,3 +1,4 @@
+import datetime
 from dateutil import relativedelta
 
 from django.utils import timezone
@@ -64,17 +65,20 @@ class CreateReportScheduleSerializer(serializers.ModelSerializer):
         fields = ('id', 'frequency_id', 'receivers', 'system_id')
 
     def create(self, validated_data):
+        request = self.context.get('request')
+
         receivers_data = validated_data.pop('receivers')
         scheduler = AutoSendReportSchedular(**validated_data)
-        execute_time = timezone.now()
+        user_tz = request.user.system.time_zone
+        execute_time = timezone.now().astimezone(user_tz).replace(
+            hour=0, minute=0, second=0, microsecond=0)
+
         if scheduler.frequency == scheduler_constants.MONTHLY:
-            execute_time = timezone.now() + relativedelta.relativedelta(day=1, months=1)
+            execute_time = execute_time + relativedelta.relativedelta(day=1, months=1)
         elif scheduler.frequency == scheduler_constants.WEEKLY:
-            execute_time = timezone.now() + relativedelta.relativedelta(days=1, weekday=relativedelta.SU)
+            execute_time = execute_time + relativedelta.relativedelta(days=1, weekday=relativedelta.SU)
 
-        scheduler.last_execute_time = execute_time
-
-        request = self.context.get('request')
+        scheduler.execute_time = execute_time
         scheduler.created_by = request.user
         scheduler.save()
 

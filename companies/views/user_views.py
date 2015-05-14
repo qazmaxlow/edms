@@ -16,6 +16,7 @@ class CompanyAuthenticatedUserView(generics.RetrieveAPIView):
     def get_object(self):
         return self.request.user
 
+
 class LanguageField(serializers.CharField):
     def to_representation(self, value):
         lang = [item for item in USER_LANGUAGES if item[0] == value]
@@ -24,11 +25,12 @@ class LanguageField(serializers.CharField):
         else:
             return super(LanguageField, self).to_representation(USER_LANGUAGES[0][1])
 
+
 class UserSerializer(serializers.ModelSerializer):
     language = LanguageField()
     class Meta:
         model = EntrakUser
-        fields = ('id', 'username', 'fullname', 'department', 'language', 'email', 'is_email_verified', 'is_personal_account')
+        fields = ('id', 'username', 'fullname', 'department', 'language', 'email', 'is_email_verified', 'is_personal_account', 'is_active')
 
 
 class UserListView(generics.ListAPIView):

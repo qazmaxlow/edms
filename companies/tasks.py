@@ -1,11 +1,12 @@
 import datetime
-from dateutil.relativedelta import relativedelta
+from dateutil import relativedelta
 
 from django.core.mail import EmailMultiAlternatives
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 from django.template.loader import render_to_string
+from django.utils import formats
 from django.utils import timezone
 
 from celery import shared_task
@@ -24,13 +25,7 @@ def send_report_by_schedulers():
 
         # receiver_emails = [ r.email for r in scheduler.receivers ]
         for r in scheduler.receivers.all():
-            send_mail_date = scheduler.last_execute_time
-            if scheduler.frequency == scheduler_constants.WEEKLY:
-                send_mail_date += datetime.timedelta(days=7)
-            elif scheduler.frequency == scheduler_constants.MONTHLY:
-                send_mail_date += datetime.timedelta(days=30)
-
-            if send_mail_date < timezone.now():
+            if scheduler.execute_time >= timezone.now() or True:
                 from tokens.models import UrlToken
 
                 site = Site.objects.get_current()
@@ -40,15 +35,29 @@ def send_report_by_schedulers():
                 owner = scheduler.created_by
                 url = reverse('companies.reports.popup-report.custom-dates', kwargs={ 'system_code': owner.system.code })
 
-                today = timezone.now()
-                last_report_day = today + relativedelta(day=1, months=+1, days=-1)
-                first_report_day = today + relativedelta(day=1)
+                user_tz = scheduler.created_by.system.time_zone
+                execute_time = scheduler.execute_time.astimezone(user_tz)
 
-                report_url = 'https://%s%s?start_date=%s&end_date=%s&report_type=month&tk=%s' % (site.domain, url, first_report_day.strftime('%Y-%m-%d'), last_report_day.strftime('%Y-%m-%d'), report_token)
+                if scheduler.frequency == scheduler_constants.MONTHLY:
+                    last_report_day = execute_time + relativedelta.relativedelta(day=1, days=-1)
+                    first_report_day = execute_time + relativedelta.relativedelta(day=1, months=-1)
+                    report_type = 'month'
+                    report_date_text = formats.date_format(first_report_day, 'YEAR_MONTH_FORMAT')
+                elif scheduler.frequency == scheduler_constants.WEEKLY:
+                    last_report_day = execute_time + relativedelta.relativedelta(days=-1)
+                    first_report_day = execute_time + relativedelta.relativedelta(days=-7)
+                    report_type = 'week'
+                    report_date_text = formats.date_format(first_report_day, 'DATE_FORMAT')
+
+                report_url = 'https://%s%s?start_date=%s&end_date=%s&report_type=%s&tk=%s' % (site.domain, url, first_report_day.strftime('%Y-%m-%d'), last_report_day.strftime('%Y-%m-%d'), report_type, report_token)
 
                 email = r.email
 
-                ctx_dict = { 'report_url': report_url }
+                ctx_dict = {
+                    'site': site,
+                    'report_url': report_url,
+                    'report_date_text': report_date_text,
+                }
                 subject = 'Your En-trak report is ready'
                 from_email = 'noreply-en-trak.com'
 
@@ -59,5 +68,9 @@ def send_report_by_schedulers():
                 email_message.attach_alternative(message_html, 'text/html')
                 email_message.send()
 
-                scheduler.last_execute_time = timezone.now()
+                if scheduler.frequency == scheduler_constants.MONTHLY:
+                    next_execute_time = execute_time + relativedelta.relativedelta(day=1, months=1)
+                elif scheduler.frequency == scheduler_constants.WEEKLY:
+                    next_execute_time = execute_time + relativedelta.relativedelta(days=1, weekday=relativedelta.SU)
+                scheduler.execute_time = next_execute_time
                 scheduler.save()

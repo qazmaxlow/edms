@@ -51,7 +51,7 @@
         </div>
 
         <button class='k-button normal-btn userAcc' ng-click="showCreateUserAccountWindow()">Create User Account</button>
-        <img class="info-icon" src="/static/images/info-icon.png"></img>
+        <img kendo-tooltip k-options="tooltipOpt" class="info-icon" src="/static/images/info-icon.png"></img>
         <kendo-grid options="priGridOptions">
         </kendo-grid>
         <div kendo-window="createUserAccountWindow" class="popup-window" id="createUserAccountWindow" k-title="'Create Individual Account'" k-options="createOpt" k-width="400" k-height="190" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak>
@@ -78,50 +78,47 @@
                 </form>
             </div>
         </div>
-        <div kendo-window="confirmDeleteWindow" class="popup-window" id="confirmDeleteWindow" k-title="'Delete Account'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
+        <div kendo-window="confirmDeleteWindow" class="popup-window" id="confirmDeleteWindow" k-title="'Delete Account'" k-options="deleteOpt" k-width="400" k-height="160" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
             <div class="form-horizontal form-widgets">
                 <div class="title-text">Are you sure you want to delete</div>
                 <div ng-cloak class="content-text" ng-bind="removeAccountEmail"></div>
                 <div class="buttons-wrap">
-                    <button class="k-button normal-btn cancel" ng-click="confirmDeleteWindow.close()">Cancel</button>
-                    <button class="k-button normal-btn" ng-click="removeAccount()">Confirm</button>
+                    <button ng-disabled="isDeleted || isDeleting" ng-cloak class="k-button normal-btn cancel" ng-click="confirmDeleteWindow.close()">Cancel</button>
+                    <button ng-disabled="isDeleted || isDeleting" ng-cloak class="k-button normal-btn" ng-click="removeAccount()">Confirm</button>
                 </div>
-                <div ng-cloak class="action-msg" ng-bind="removeAccountMessage"></div>
+                <div ng-cloak class="action-msg" ng-class="{'error-text' : !isDeleted}" ng-bind="removeAccountMessage"></div>
             </div>
         </div>
-        <div class="ng-cloak profile profile-popup" kendo-window="resetPasswordWindow" id="resetPasswordWindow" k-title="'Change Password'" k-width="368" k-height="360" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
+
+        <div kendo-window="resetPasswordWindow" id="resetPasswordWindow" k-title="'Change Password'" k-width="380" k-height="300" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak class="popup-window" k-options="changePwdOpt">
             <div class="form-horizontal form-widgets">
-                <form name="kForm" kendo-validator="pwdValidator" k-options="validOptions" ng-submit="validate($event, true)" class="k-content down-err-txt" ng-model="isPwdValid">
+                <form name="kForm" kendo-validator="pwdValidator" k-options="validOpt" ng-submit="validateChangePwd($event)" class="k-content down-err-txt" ng-model="isPwdValid">
+<!--                 <div class="form-group">
+                    <label class="control-label" for="cur_change_pwd">Password</label>
+                    <input type="password" id="cur_change_pwd" name="Current Password" ng-model="resetPwdUser.current_password" class="k-textbox normal-tb" placeholder="Set Your Password" required data-required-msg="required field" />
+                </div> -->
                 <div class="form-group">
-                    <label class="control-label" for="current_password">Current Password</label>
-                    <div class="col-sm-12">
-                        <input type="password" id="current_password" name="Current Password" ng-model="resetPwdUser.current_password" class="k-textbox normal-tb popup-input" placeholder="Set Your Password" required data-required-msg="required field" />
-                    </div>
+                    <label class="control-label" for="new_change_pwd">New Password</label>
+                    <input type="password" id="new_change_pwd" name="New Password" ng-model="resetPwdUser.password" class="k-textbox normal-tb" placeholder="Password" required data-required-msg="required field" />
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="password">New Password</label>
-                    <div class="col-sm-12">
-                        <input type="password" id="new_password" name="New Password" ng-model="resetPwdUser.password" class="k-textbox normal-tb popup-input" placeholder="Set Your Password" required data-required-msg="required field" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label" for="confirm_password">Confirm Password</label>
-                    <div class="col-sm-12">
-                        <input type="password" id="confirm_password" name="Confirm Password" class="k-textbox normal-tb popup-input" placeholder="Retype Your Password" required data-required-msg="required field" ng-model="resetPwdUser.confirm_password"/>
-                    </div>
+                    <label class="control-label" for="confirm_change_pwd">Confirm Password</label>
+                    <input type="password" id="confirm_change_pwd" name="Confirm Password" class="k-textbox normal-tb" placeholder="Retype Password" required data-required-msg="required field" ng-model="resetPwdUser.confirm_password"/>
                 </div>
                 <div class="buttons-wrap">
-                    <button class="k-button normal-btn" type="submit" ng-disabled="!isPwdValid">Save</button>
+                    <button ng-disabled="!isPwdChanged && !isPwdValid || isPwdChanging" class="k-button normal-btn" type="submit">{{changePwdButtonText}}</button>
                 </div>
+                <div class="submitted-text" ng-class="{'error-text' : !isPwdChanged}" ng-bind="changePwdMessage"></div>
                 </form>
             </div>
         </div>
+
         <button class='k-button normal-btn sharedAcc' ng-click="showCreateSharedAccountWindow()">Create Shared Account</button>
         <kendo-grid options="secGridOptions" class="sharedAcc">
         </kendo-grid>
-        <div kendo-window="createSharedAccountWindow" id="createSharedAccountWindow" k-title="'Create Account'" k-width="380" k-height="380" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak class="popup-window">
+        <div kendo-window="createSharedAccountWindow" id="createSharedAccountWindow" k-title="'Create Account'" k-width="380" k-height="380" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak class="popup-window" k-options="createShareOpt">
             <div class="form-horizontal form-widgets">
-                <form name="kForm" kendo-validator="sharedAccValidator" k-options="validOpt" ng-submit="validate($event)" class="k-content down-err-txt" ng-model="sharedAccValid">
+                <form name="kForm" kendo-validator="sharedAccValidator" k-options="validOpt" ng-submit="validateShare($event)" class="k-content down-err-txt" ng-model="sharedAccValid">
                 <div class="form-group">
                     <label class="control-label" for="username">Username:</label>
                     <input type="username" id="username" name="Username" ng-model="user.username" class="k-textbox normal-tb" placeholder="Username" required data-required-msg="required field" />
@@ -135,10 +132,10 @@
                     <input type="password" id="share_confirm_password" name="Confirm Password" class="k-textbox normal-tb" placeholder="Retype Password" required data-required-msg="required field" />
                 </div>
                 <div class="buttons-wrap">
-                    <button ng-disabled="!sharedAccValid" class="k-button normal-btn">{{sharedAccountButtonText}}</button>
-                    <button ng-show="true" class="k-button normal-btn cancel" ng-click="createSharedAccountWindow.close()">Cancel</button>
+                    <button ng-disabled="!isShareCreated && !sharedAccValid || isShareCreating" class="k-button normal-btn" type="submit">{{sharedAccountButtonText}}</button>
+                    <button ng-disabled="isShareCreating" ng-show="!isShareCreated" class="k-button normal-btn cancel" ng-click="createSharedAccountWindow.close()">Cancel</button>
                 </div>
-                <div ng-bind="sharedAccountMessage"></div>
+                <div class="submitted-text" ng-class="{'error-text' : !isShareCreated}" ng-bind="sharedAccountMessage"></div>
                 </form>
             </div>
         </div>
@@ -178,26 +175,53 @@
                 }
             }});
 
+            $scope.tooltipOpt = {
+                position: "right",
+                animation: {
+                    open: {
+                        effects: "fade:in",
+                        duration: 500
+                    }
+                },
+                width: 255,
+                height: 60,
+                content: "Individual Account enjoys a higher level of security, more control and better functionality. We encourage usage of User Account."
+            };
+
             $scope.validOpt = {
                 rules: {
                     matchpwd: function(input){
                         if ($(input).prop("id") == "share_confirm_password"){
                             return ($("#share_password").val() == $("#share_confirm_password").val());
+                        } else if ($(input).prop("id") == "confirm_change_pwd"){
+                            return ($("#new_change_pwd").val() == $("#confirm_change_pwd").val());
                         } else {
                             return true;
                         }
                     }
                 },
                 messages: {
-                    matchpwd: "Password do not match"
+                    matchpwd: "Password does not match"
                 }
             }
 
-            $scope.validate = function(event) {
+            $scope.validateShare = function(event) {
                 event.preventDefault();
+
                 if ($scope.sharedAccValidator.validate()) {
                     $scope.validationClass = "valid";
                     $scope.createSharedAccount();
+                } else {
+                    $scope.validationClass = "invalid";
+                }
+            }
+
+            $scope.validateChangePwd = function(event) {
+                event.preventDefault();
+
+                if ($scope.pwdValidator.validate()) {
+                    $scope.validationClass = "valid";
+                    $scope.removeAccount();
                 } else {
                     $scope.validationClass = "invalid";
                 }
@@ -216,6 +240,14 @@
                         type: "POST",
                         contentType: "application/json"
                     },
+                    destroy: {
+                        url: function (item) {
+                            var url = "{% url 'users.disable_account' 99999 %}";
+                            url = url.replace(99999, item.id);
+                            return url;
+                        },
+                        type: "DELETE"
+                    },
                     parameterMap: function (options, operation) {
                         if (operation == "create") {
                             return kendo.stringify(options);
@@ -230,18 +262,23 @@
                         return data['odata.count'];
                     },
                     model: {
+                        id: "id",
                         fields: {
                             id: { type: "number" },
                             fullname: { type: "string" },
                             department: { type: "string" },
                             language: { type: "string" },
                             email: { type: "string" },
+                            is_active: { type: "boolean" },
                             is_email_verified: { type: "boolean" },
                             is_personal_account: { type: "boolean" }
                         }
                     }
                 },
-                filter: {field: "is_personal_account", operator: "eq", value: true }
+                filter: [
+                    {field: "is_active", operator: "eq", value: true },
+                    {field: "is_personal_account", operator: "eq", value: true }
+                ]
             });
 
             var shared_users = new kendo.data.DataSource({
@@ -256,6 +293,14 @@
                         url: "{% url 'users.create_shared_user' %}",
                         type: "POST",
                         contentType: "application/json"
+                    },
+                    destroy: {
+                        url: function (item) {
+                            var url = "{% url 'users.disable_account' 99999 %}";
+                            url = url.replace(99999, item.id);
+                            return url;
+                        },
+                        type: "DELETE"
                     },
                     parameterMap: function (options, operation) {
                         if (operation == "create") {
@@ -275,18 +320,18 @@
                         fields: {
                             id: { type: "number" },
                             username: { type: "string" },
+                            is_active: { type: "boolean" },
                             is_email_verified: { type: "boolean" },
                             is_personal_account: { type: "boolean" }
                         }
                     }
                 },
-                filter: {field: "is_personal_account", operator: "eq", value: false }
+                filter: [
+                    {field: "is_active", operator: "eq", value: true },
+                    {field: "is_personal_account", operator: "eq", value: false }
+                ]
             });
 
-
-
-            $scope.sharedAccountMessage = null;
-            $scope.sharedAccountButtonText = "Create"
 
             $scope.priGridOptions = {
                 dataSource: individual_users,
@@ -337,6 +382,44 @@
                       }
             }
 
+            $scope.sharedAccountMessage = "";
+            $scope.sharedAccountButtonText = "Create";
+            $scope.createShareOpt = {
+                close: function(e){
+                        if ($scope.isShareCreating){
+                            e.preventDefault();
+                            return false;
+                        }
+                        $scope.isShareCreated = false;
+                        $scope.sharedAccountMessage = "";
+                      }
+            }
+
+            $scope.removeAccountMessage = "";
+            $scope.deleteOpt = {
+                close: function(e){
+                        if ($scope.isDeleting){
+                            e.preventDefault();
+                            return false;
+                        }
+                        $scope.isDeleted = false;
+                        $scope.removeAccountMessage = "";
+                      }
+            }
+
+            $scope.changePwdMessage = "";
+            $scope.changePwdButtonText = "Save";
+            $scope.changePwdOpt = {
+                close: function(e){
+                        if ($scope.isPwdChanging){
+                            e.preventDefault();
+                            return false;
+                        }
+                        $scope.isPwdChanged = false;
+                        $scope.changePwdMessage = "";
+                      }
+            }
+
             $scope.showCreateUserAccountWindow = function() {
                 $scope.userAccountMessage = "";
                 $scope.userAccountButtonText = "Send";
@@ -349,6 +432,11 @@
             $scope.showCreateSharedAccountWindow = function() {
                 $scope.sharedAccountMessage = "";
                 $scope.sharedAccountButtonText = "Create";
+                $scope.isShareCreated = false;
+                $scope.isShareCreating = false;
+                $("#username").val("");
+                $("#share_password").val("");
+                $("#share_confirm_password").val("");
                 $("#createSharedAccountWindow").data("kendoWindow").center().open();
             }
 
@@ -399,32 +487,42 @@
                 return false;
             }
 
-
             $scope.createSharedAccount = function() {
-                if ($scope.sharedAccountButtonText == "Create") {
+                if (!$scope.isShareCreated) {
+                    $scope.isShareCreating = true;
                     system_id = {{system.id}};
                     shared_users.add({
-                        username: $('#username')[0].value,
+                        username: $('#username').val(),
                         system_id: system_id,
-                        password: $('#share_password')[0].value,
-                        confirm_password: $('#share_confirm_password')[0].value
+                        password: $('#share_password').val(),
+                        confirm_password: $('#share_confirm_password').val()
                     });
 
                     shared_users.sync()
                         .done(function() {
+                            console.log("done");
                             $scope.$apply(function(){
-                                $scope.sharedAccountMessage = "Great you just created a shared account";
-                                $scope.sharedAccountButtonText = "Close";
+                                $scope.isShareCreating = false;
+                                $scope.isShareCreated = true;
+                                $scope.sharedAccountMessage = "Great, you just created a shared account.";
+                                $scope.sharedAccountButtonText = "OK";
                             });
                         })
                         .fail(function(e) {
                             $scope.$apply(function(){
-                                $scope.sharedAccountMessage = e.responseJSON.join("<br/>");
+                                $scope.isShareCreating = false;
+                                $scope.isShareCreated = false;
+                                if (e.responseJSON){
+                                    $scope.sharedAccountMessage = e.responseJSON.join("<br/>");
+                                } else {
+                                    $scope.sharedAccountMessage = e.responseText;
+                                }
                                 shared_users.cancelChanges();
                             });
                             console.log(e);
                         });
-                } else if ($scope.sharedAccountButtonText == "Close") {
+                } else if ($scope.isShareCreated) {
+                    $scope.isShareCreating = false;
                     $("#createSharedAccountWindow").data("kendoWindow").close();
                     $scope.sharedAccountButtonText = "Create";
                     $scope.sharedAccountMessage = "";
@@ -459,12 +557,12 @@
                         $scope.isEmailResent = true;
                         $scope.isResending = false;
                         $scope.resendEmailMessage = "The invitation has been sent out.";
-                        $scope.resendEmailButtonText = "Close";
+                        $scope.resendEmailButtonText = "OK";
                         console.log("send success");
                     }).error(function(data) {
                         $scope.isEmailResent = false;
                         $scope.isResending = false;
-                        $scope.resendEmailMessage = data.responseText;
+                        $scope.resendEmailMessage = "Unable to send inviation";
                         console.log("send error");
                         console.log(data);
                     })
@@ -477,28 +575,74 @@
                 return false;
             }
 
-
             $scope.confirmDeleteAccount = function(dataItem) {
                 $scope.removeAccountId = dataItem.id;
                 $scope.removeAccountEmail = dataItem.username;
                 $scope.removeAccountMessage = "";
+                $scope.isPersonalAccount = dataItem.is_personal_account;
+                $scope.isDeleted = false;
+                $scope.isDeleting = false;
                 $("#confirmDeleteWindow").data("kendoWindow").center().open();
             }
 
             $scope.removeAccount = function() {
-                url = "{% url 'users.send_invitation_email' 99999 %}"
-                    console.log("Resending Activation Email");
-                    $http({
-                        method : 'POST',
-                        url : url.replace('99999', $scope.removeAccountId),
-                        contentType: 'application/html; charset=utf-8',
-                        data: $scope.resendEmailAddress,
-                    }).success(function(data) {
-                        $scope.resendEmailMessage = "The invitation has been sent out.";
-                        $scope.resendEmailButtonText = "Close";
-                    }).error(function(data) {
-                        console.log(data);
-                    })
+                if (!$scope.isDeleting){
+                    $scope.isDeleting = true;
+
+                    var ds = null;
+                    if ($scope.isPersonalAccount) {
+                        ds = individual_users;
+                    } else {
+                        ds = shared_users;
+                    }
+                    var raw = ds.data();
+                    var length = raw.length;
+                    var item, i;
+                    for(i=length-1; i>=0; i--){
+                        item = raw[i];
+                        if (item.username == $scope.removeAccountEmail){
+                            ds.remove(item);
+                        }
+                    }
+
+
+                    ds.sync()
+                        .done(function() {
+                            console.log("done");
+                            $scope.$apply(function(){
+                                $scope.isDeleting = false;
+                                $scope.isDeleted = true;
+                                $scope.removeAccountMessage = "Account deleted.";
+                            });
+                        })
+                        .fail(function(e) {
+                            $scope.$apply(function(){
+                                $scope.isDeleting = false;
+                                $scope.isDeleted = false;
+                                if (e.responseJSON){
+                                    $scope.sharedAccountMessage = e.responseJSON.join("<br/>");
+                                } else {
+                                    $scope.sharedAccountMessage = e.responseText;
+                                }
+                                ds.cancelChanges();
+                            });
+                            console.log(e);
+                        });
+                }
+
+                // url = "{% url 'users.send_invitation_email' 99999 %}"
+                //     console.log("Resending Activation Email");
+                //     $http({
+                //         method : 'POST',
+                //         url : url.replace('99999', $scope.removeAccountId),
+                //         contentType: 'application/html; charset=utf-8',
+                //         data: $scope.resendEmailAddress,
+                //     }).success(function(data) {
+                //         $scope.resendEmailMessage = "The invitation has been sent out.";
+                //         $scope.resendEmailButtonText = "OK";
+                //     }).error(function(data) {
+                //         console.log(data);
+                //     })
                 console.log("DELETED");
                 return false;
             }
