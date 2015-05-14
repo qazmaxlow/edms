@@ -1,6 +1,7 @@
 import datetime
 import json
 import pytz
+import re
 
 from dateutil.relativedelta import relativedelta
 from django.core.context_processors import csrf
@@ -18,6 +19,8 @@ from django.http import HttpResponseForbidden
 from django.http import HttpResponseBadRequest
 from django.db.utils import IntegrityError
 from rest_framework.response import Response
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 from egauge.manager import SourceManager
 from system.models import System
@@ -26,6 +29,8 @@ from utils.utils import Utils
 from rest_framework import generics
 from companies.views.user_views import UserSerializer
 from rest_framework import serializers
+
+PASSWORD_REGEX = re.compile(r'^.*(?=.{8,})(?=.*[A-Za-z]+)(?=.*\d).*$')
 
 
 def activate_account(request, user_id):
@@ -157,6 +162,7 @@ def send_invitation_email(request, user_id):
     return HttpResponseForbidden('<h3>Not authorized</h3>')
 
 
+@permission_classes((IsAuthenticated,))
 class CreateIndividualUserView(generics.CreateAPIView):
 
     serializer_class = UserSerializer
@@ -184,6 +190,7 @@ class CreateIndividualUserView(generics.CreateAPIView):
         return Response(user.data)
 
 
+@permission_classes((IsAuthenticated,))
 class CreateSharedUserView(generics.CreateAPIView):
 
     serializer_class = UserSerializer
@@ -191,22 +198,30 @@ class CreateSharedUserView(generics.CreateAPIView):
     def post(self, request, format=None):
 
         data = request.data
-        required_keys = set(['username', 'password', 'system_id'])
+        required_keys = set(['username', 'password', 'confirm_password', 'system_id'])
 
-        if required_keys.issubset(set(data.keys())):
-            try:
-                u = EntrakUser.objects.create(username=data['username'], system_id=data['system_id'], is_personal_account=False)
-                u.set_password(data['password'])
-                u.save()
-            except IntegrityError as e:
-                raise serializers.ValidationError("Username %s is taken already." % data['username'])
-        else:
+        if not required_keys.issubset(set(data.keys())):
             raise Exception('Invalid request')
+
+        # validations
+        if data['password'] != data['confirm_password']:
+            raise serializers.ValidationError("Password does not match")
+
+        if PASSWORD_REGEX.search(data['password']) is None:
+            raise serializers.ValidationError("Password must be at least 8 characters long and contains at least one character and one number")
+
+        try:
+            u = EntrakUser.objects.create(username=data['username'], system_id=data['system_id'], is_personal_account=False)
+            u.set_password(data['password'])
+            u.save()
+        except IntegrityError as e:
+            raise serializers.ValidationError("Username %s is taken already." % data['username'])
 
         user = UserSerializer(u)
         return Response(user.data)
 
 
+@permission_classes((IsAuthenticated,))
 class DeleteUserView(generics.DestroyAPIView):
 
     serializer_class = UserSerializer
