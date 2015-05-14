@@ -48,6 +48,7 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.sites',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'rest_framework',
@@ -182,3 +183,6 @@ SESSION_COOKIE_AGE = 60 * 60
 
 # Celery
 ENTRAK_BROKER_URL = 'amqp://guest:entrak8888@localhost' # should be removed
+
+# Site
+SITE_ID = 1
