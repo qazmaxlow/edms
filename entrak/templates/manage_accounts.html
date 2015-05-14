@@ -307,7 +307,7 @@
                 sortable: true,
                 columns: [
                     { field: "username", title: "User Name" },
-                    { title: "Password", width: "190px", template: "<button class='k-button normal-btn'>Change password</button>"},
+                    { title: "Password", width: "190px", template: "<button class='k-button normal-btn' ng-click='showResetPasswordWindow()'>Change password</button>"},
                     { title: "Delete", width: "63px", template: '<img class="delete-icon" src="/static/images/delete-icon.png" ng-click="confirmDeleteAccount(dataItem)"></img>'}
                 ],
             }
@@ -379,14 +379,15 @@
                     shared_users.add({
                         username: $('#username')[0].value,
                         system_id: system_id,
-                        password: $('#share_password')[0].value
+                        password: $('#share_password')[0].value,
+                        confirm_password: $('share_confirm_password')[0].value
                     });
 
                     shared_users.sync()
                         .done(function() {
                             $scope.$apply(function(){
                                 $scope.sharedAccountMessage = "Great you just created a shared account";
-                                $scope.sharedAccountButtonText = "Close";    
+                                $scope.sharedAccountButtonText = "Close";
                             });
                         })
                         .fail(function(e) {
@@ -450,7 +451,7 @@
 
             $scope.confirmDeleteAccount = function(dataItem) {
                 $scope.removeAccountId = dataItem.id;
-                $scope.removeAccountEmail = dataItem.email;
+                $scope.removeAccountEmail = dataItem.username;
                 $scope.removeAccountMessage = "";
                 $("#confirmDeleteWindow").data("kendoWindow").center().open();
             }

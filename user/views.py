@@ -63,9 +63,14 @@ def activate_account(request, user_id):
                 user.save()
 
                 user = authenticate(username=user.username, password=user.password)
+
                 dashboard_url = reverse('companies.dashboard', kwargs={'system_code': system.code})
                 settings_url = reverse('manage_accounts', kwargs={'system_code': system.code})
-                return Utils.json_response({"dashboard_url": dashboard_url, "settings_url": settings_url})
+
+                if user.is_manager():
+                    return Utils.json_response({"is_manager": True, "dashboard_url": dashboard_url, "settings_url": settings_url})
+                else:
+                    return Utils.json_response({"is_manager": False, "dashboard_url": dashboard_url})
 
             else:
                 m = {"uid": user_id, "ucode": user_code}
@@ -171,7 +176,7 @@ class CreateIndividualUserView(generics.CreateAPIView):
                     )
                 u.send_activation_email(request.user)
             except IntegrityError as e:
-                raise serializers.ValidationError("Username %s is taken already." % data['username'])
+                raise serializers.ValidationError("Username %s is taken already." % data['email'])
         else:
             raise Exception('Invalid request')
 
@@ -180,6 +185,29 @@ class CreateIndividualUserView(generics.CreateAPIView):
 
 
 class CreateSharedUserView(generics.CreateAPIView):
+
+    serializer_class = UserSerializer
+
+    def post(self, request, format=None):
+
+        data = request.data
+        required_keys = set(['username', 'password', 'system_id'])
+
+        if required_keys.issubset(set(data.keys())):
+            try:
+                u = EntrakUser.objects.create(username=data['username'], system_id=data['system_id'], is_personal_account=False)
+                u.set_password(data['password'])
+                u.save()
+            except IntegrityError as e:
+                raise serializers.ValidationError("Username %s is taken already." % data['username'])
+        else:
+            raise Exception('Invalid request')
+
+        user = UserSerializer(u)
+        return Response(user.data)
+
+
+class DeleteUserView(generics.DestroyAPIView):
 
     serializer_class = UserSerializer
 
