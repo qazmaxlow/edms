@@ -78,7 +78,7 @@ class CreateReportScheduleSerializer(serializers.ModelSerializer):
         elif scheduler.frequency == scheduler_constants.WEEKLY:
             execute_time = execute_time + relativedelta.relativedelta(days=1, weekday=relativedelta.SU)
 
-        scheduler.last_execute_time = execute_time
+        scheduler.execute_time = execute_time
         scheduler.created_by = request.user
         scheduler.save()
 
