@@ -89,33 +89,7 @@
                 <div ng-cloak class="action-msg" ng-class="{'error-text' : !isDeleted}" ng-bind="removeAccountMessage"></div>
             </div>
         </div>
-        <!-- <div class="ng-cloak profile profile-popup" kendo-window="" id="" k-title="''" k-width="368" k-height="360" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
-            <div class="form-horizontal form-widgets">
-                <form name="kForm" kendo-validator="" k-options="" ng-submit="validate($event, true)" class="k-content down-err-txt" ng-model="isPwdValid">
-                <div class="form-group">
-                    <label class="control-label" for="current_password">Current Password</label>
-                    <div class="col-sm-12">
-                        <input type="password" id="current_password" name="Current Password" ng-model="" class="k-textbox normal-tb popup-input" placeholder="Set Your Password" required data-required-msg="required field" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label" for="password">New Password</label>
-                    <div class="col-sm-12">
-                        <input type="password" id="new_password" name="New Password" ng-model="" class="k-textbox normal-tb popup-input" placeholder="Set Your Password" required data-required-msg="required field" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label" for="confirm_password">Confirm Password</label>
-                    <div class="col-sm-12">
-                        <input type="password" id="confirm_password" name="Confirm Password" class="k-textbox normal-tb popup-input" placeholder="Retype Your Password" required data-required-msg="required field" ng-model="resetPwdUser.confirm_password"/>
-                    </div>
-                </div>
-                <div class="buttons-wrap">
-                    <button class="k-button normal-btn" type="submit" ng-disabled="!isPwdValid">Save</button>
-                </div>
-                </form>
-            </div>
-        </div> -->
+        
         <div kendo-window="resetPasswordWindow" id="resetPasswordWindow" k-title="'Change Password'" k-width="380" k-height="380" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak class="popup-window" k-options="changePwdOpt">
             <div class="form-horizontal form-widgets">
                 <form name="kForm" kendo-validator="pwdValidator" k-options="validOpt" ng-submit="validateChangePwd($event)" class="k-content down-err-txt" ng-model="isPwdValid">
@@ -206,10 +180,6 @@
                 animation: {
                     open: {
                         effects: "fade:in",
-                        duration: 500
-                    },
-                    close: {
-                        effects: "fade:out",
                         duration: 500
                     }
                 },
