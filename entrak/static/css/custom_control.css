@@ -147,7 +147,8 @@
 	box-shadow: 0px 2px 0px #6b9aa5;
 }
 
-.k-button.normal-btn:disabled {
+.k-button.normal-btn:disabled,
+.k-button.normal-btn.cancel:disabled {
     border-color: #d5d5d5;
     background-color: #d5d5d5;
     box-shadow: 0px 2px 0px #888888;
@@ -160,16 +161,12 @@
 }
 
 .k-button.normal-btn.cancel,
-.k-button.normal-btn.cancel:hover,
+.k-button.normal-btn.cancel:hover:enabled,
 .k-button.normal-btn.cancel:focus:not(:disabled):not(.k-state-disabled) {
 	color: #d5d5d5;
 	background-color: transparent;
 	border-color: transparent;
 	box-shadow: none;
-}
-
-.k-button.normal-btn.cancel:disabled {
-	visibility: hidden;
 }
 /* -----k-button*/
 

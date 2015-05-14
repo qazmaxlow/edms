@@ -205,14 +205,14 @@
 	width: 264px;
 }
 
-#createUserAccountWindow .k-content .submitted-text {
+.popup-window .k-content .submitted-text {
 	text-align: center;
 	font-size: 0.929em;
 	font-weight: 500;
 	color: #FDB913;
 }
 
-#createUserAccountWindow .k-content .submitted-text.error-text {
+.k-content .submitted-text.error-text {
 	color: #e05d5d;
 }
 
@@ -292,9 +292,14 @@
 
 #createSharedAccountWindow .buttons-wrap {
 	padding-right: 50px;
+	height: 49px;
 }
 
 #createSharedAccountWindow .buttons-wrap .k-button {
 	float: right;
+}
+
+.popup-window.k-content .k-textbox {
+	background-color: #e8e8e8;
 }
 /* ----- popup */
