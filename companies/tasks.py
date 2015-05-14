@@ -24,7 +24,7 @@ def send_report_by_schedulers():
 
         # receiver_emails = [ r.email for r in scheduler.receivers ]
         for r in scheduler.receivers.all():
-            send_mail_date = scheduler.last_execute_time
+            send_mail_date = scheduler.execute_time
             if scheduler.frequency == scheduler_constants.WEEKLY:
                 send_mail_date += datetime.timedelta(days=7)
             elif scheduler.frequency == scheduler_constants.MONTHLY:
@@ -41,7 +41,7 @@ def send_report_by_schedulers():
                 url = reverse('companies.reports.popup-report.custom-dates', kwargs={ 'system_code': owner.system.code })
 
                 user_tz = scheduler.created_by.system.time_zone
-                execute_time = scheduler.last_execute_time.astimezone(user_tz)
+                execute_time = scheduler.execute_time.astimezone(user_tz)
 
                 if scheduler.frequency == scheduler_constants.MONTHLY:
                     last_report_day = execute_time + relativedelta(day=1, days=-1)
@@ -70,5 +70,5 @@ def send_report_by_schedulers():
                 email_message.attach_alternative(message_html, 'text/html')
                 email_message.send()
 
-                scheduler.last_execute_time = timezone.now()
+                scheduler.execute_time = timezone.now()
                 scheduler.save()
