@@ -41,14 +41,21 @@ def send_report_by_schedulers():
                 url = reverse('companies.reports.popup-report.custom-dates', kwargs={ 'system_code': owner.system.code })
 
                 today = timezone.now()
-                last_report_day = today + relativedelta(day=1, months=+1, days=-1)
-                first_report_day = today + relativedelta(day=1)
+                if scheduler.frequency == scheduler_constants.MONTHLY:
+                    last_report_day = today + relativedelta(day=1, days=-1)
+                    first_report_day = today + relativedelta(day=1, months=-1)
+                elif scheduler.frequency == scheduler_constants.WEEKLY:
+                    last_report_day = today + relativedelta(days=-1)
+                    first_report_day = today + relativedelta(days=-7)
 
                 report_url = 'https://%s%s?start_date=%s&end_date=%s&report_type=month&tk=%s' % (site.domain, url, first_report_day.strftime('%Y-%m-%d'), last_report_day.strftime('%Y-%m-%d'), report_token)
 
                 email = r.email
 
-                ctx_dict = { 'report_url': report_url }
+                ctx_dict = {
+                    'site': site,
+                    'report_url': report_url,
+                }
                 subject = 'Your En-trak report is ready'
                 from_email = 'noreply-en-trak.com'
 
