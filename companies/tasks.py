@@ -40,15 +40,19 @@ def send_report_by_schedulers():
                 owner = scheduler.created_by
                 url = reverse('companies.reports.popup-report.custom-dates', kwargs={ 'system_code': owner.system.code })
 
-                today = timezone.now()
-                if scheduler.frequency == scheduler_constants.MONTHLY:
-                    last_report_day = today + relativedelta(day=1, days=-1)
-                    first_report_day = today + relativedelta(day=1, months=-1)
-                elif scheduler.frequency == scheduler_constants.WEEKLY:
-                    last_report_day = today + relativedelta(days=-1)
-                    first_report_day = today + relativedelta(days=-7)
+                user_tz = scheduler.created_by.system.time_zone
+                execute_time = scheduler.last_execute_time.astimezone(user_tz)
 
-                report_url = 'https://%s%s?start_date=%s&end_date=%s&report_type=month&tk=%s' % (site.domain, url, first_report_day.strftime('%Y-%m-%d'), last_report_day.strftime('%Y-%m-%d'), report_token)
+                if scheduler.frequency == scheduler_constants.MONTHLY:
+                    last_report_day = execute_time + relativedelta(day=1, days=-1)
+                    first_report_day = execute_time + relativedelta(day=1, months=-1)
+                    report_type = 'month'
+                elif scheduler.frequency == scheduler_constants.WEEKLY:
+                    last_report_day = execute_time + relativedelta(days=-1)
+                    first_report_day = execute_time + relativedelta(days=-7)
+                    report_type = 'week'
+
+                report_url = 'https://%s%s?start_date=%s&end_date=%s&report_type=%s&tk=%s' % (site.domain, url, first_report_day.strftime('%Y-%m-%d'), last_report_day.strftime('%Y-%m-%d'), report_type, report_token)
 
                 email = r.email
 
