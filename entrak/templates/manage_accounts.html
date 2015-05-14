@@ -78,15 +78,15 @@
                 </form>
             </div>
         </div>
-        <div kendo-window="confirmDeleteWindow" class="popup-window" id="confirmDeleteWindow" k-title="'Delete Account'" k-width="400" k-height="226" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
+        <div kendo-window="confirmDeleteWindow" class="popup-window" id="confirmDeleteWindow" k-title="'Delete Account'" k-options="deleteOpt" k-width="400" k-height="160" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
             <div class="form-horizontal form-widgets">
                 <div class="title-text">Are you sure you want to delete</div>
                 <div ng-cloak class="content-text" ng-bind="removeAccountEmail"></div>
                 <div class="buttons-wrap">
-                    <button class="k-button normal-btn cancel" ng-click="confirmDeleteWindow.close()">Cancel</button>
-                    <button class="k-button normal-btn" ng-click="removeAccount()">Confirm</button>
+                    <button ng-disabled="isDeleted || isDeleting" ng-cloak class="k-button normal-btn cancel" ng-click="confirmDeleteWindow.close()">Cancel</button>
+                    <button ng-disabled="isDeleted || isDeleting" ng-cloak class="k-button normal-btn" ng-click="removeAccount()">Confirm</button>
                 </div>
-                <div ng-cloak class="action-msg" ng-bind="removeAccountMessage"></div>
+                <div ng-cloak class="action-msg" ng-class="{'error-text' : !isDeleted}" ng-bind="removeAccountMessage"></div>
             </div>
         </div>
         <div class="ng-cloak profile profile-popup" kendo-window="resetPasswordWindow" id="resetPasswordWindow" k-title="'Change Password'" k-width="368" k-height="360" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
@@ -134,11 +134,11 @@
                     <label class="control-label" for="share_confirm_password">Confirm Password:</label>
                     <input type="password" id="share_confirm_password" name="Confirm Password" class="k-textbox normal-tb" placeholder="Retype Password" required data-required-msg="required field" />
                 </div>
-                <div class="submitted-text" ng-class="{'error-text' : !isShareCreated}" ng-bind="sharedAccountMessage"></div>
                 <div class="buttons-wrap">
                     <button ng-disabled="!isShareCreated && !sharedAccValid || isShareCreating" class="k-button normal-btn" type="submit">{{sharedAccountButtonText}}</button>
                     <button ng-disabled="isShareCreating" ng-show="!isShareCreated" class="k-button normal-btn cancel" ng-click="createSharedAccountWindow.close()">Cancel</button>
                 </div>
+                <div class="submitted-text" ng-class="{'error-text' : !isShareCreated}" ng-bind="sharedAccountMessage"></div>
                 </form>
             </div>
         </div>
@@ -346,6 +346,18 @@
                       }
             }
 
+            $scope.removeAccountMessage = "";
+            $scope.deleteOpt = {
+                close: function(e){
+                        if ($scope.isDeleting){
+                            e.preventDefault();
+                            return false;
+                        }
+                        $scope.isDeleted = false;
+                        $scope.removeAccountMessage = "";
+                      }
+            }
+
             $scope.showCreateUserAccountWindow = function() {
                 $scope.userAccountMessage = "";
                 $scope.userAccountButtonText = "Send";
@@ -412,7 +424,6 @@
 
                 return false;
             }
-
 
             $scope.createSharedAccount = function() {
                 if (!$scope.isShareCreated) {
@@ -502,28 +513,48 @@
                 return false;
             }
 
-
             $scope.confirmDeleteAccount = function(dataItem) {
                 $scope.removeAccountId = dataItem.id;
                 $scope.removeAccountEmail = dataItem.username;
                 $scope.removeAccountMessage = "";
+                $scope.isDeleted = false;
+                $scope.isDeleting = false;
                 $("#confirmDeleteWindow").data("kendoWindow").center().open();
             }
 
             $scope.removeAccount = function() {
-                url = "{% url 'users.send_invitation_email' 99999 %}"
-                    console.log("Resending Activation Email");
-                    $http({
-                        method : 'POST',
-                        url : url.replace('99999', $scope.removeAccountId),
-                        contentType: 'application/html; charset=utf-8',
-                        data: $scope.resendEmailAddress,
-                    }).success(function(data) {
-                        $scope.resendEmailMessage = "The invitation has been sent out.";
-                        $scope.resendEmailButtonText = "OK";
-                    }).error(function(data) {
-                        console.log(data);
-                    })
+                if (!$scope.isDeleting){
+                    $scope.isDeleting = true;
+
+                    //TODO call delete
+                    //xxxxxx
+
+                    //TODO
+                    //in success callback
+                    $scope.isDeleting = false;
+                    $scope.isDeleted = true;
+                    $scope.removeAccountMessage = "xxxxxx";
+
+                    //TODO
+                    //in error callback
+                    $scope.isDeleting = false;
+                    $scope.isDeleted = false;
+                    $scope.removeAccountMessage = "xxxxxx";
+                }
+
+                // url = "{% url 'users.send_invitation_email' 99999 %}"
+                //     console.log("Resending Activation Email");
+                //     $http({
+                //         method : 'POST',
+                //         url : url.replace('99999', $scope.removeAccountId),
+                //         contentType: 'application/html; charset=utf-8',
+                //         data: $scope.resendEmailAddress,
+                //     }).success(function(data) {
+                //         $scope.resendEmailMessage = "The invitation has been sent out.";
+                //         $scope.resendEmailButtonText = "OK";
+                //     }).error(function(data) {
+                //         console.log(data);
+                //     })
                 console.log("DELETED");
                 return false;
             }
