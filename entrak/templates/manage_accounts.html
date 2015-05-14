@@ -236,12 +236,16 @@
                             department: { type: "string" },
                             language: { type: "string" },
                             email: { type: "string" },
+                            is_active: { type: "boolean" },
                             is_email_verified: { type: "boolean" },
                             is_personal_account: { type: "boolean" }
                         }
                     }
                 },
-                filter: {field: "is_personal_account", operator: "eq", value: true }
+                filter: [
+                    {field: "is_active", operator: "eq", value: true },
+                    {field: "is_personal_account", operator: "eq", value: true }
+                ]
             });
 
             var shared_users = new kendo.data.DataSource({
@@ -275,12 +279,16 @@
                         fields: {
                             id: { type: "number" },
                             username: { type: "string" },
+                            is_active: { type: "boolean" },
                             is_email_verified: { type: "boolean" },
                             is_personal_account: { type: "boolean" }
                         }
                     }
                 },
-                filter: {field: "is_personal_account", operator: "eq", value: false }
+                filter: [
+                    {field: "is_active", operator: "eq", value: true },
+                    {field: "is_personal_account", operator: "eq", value: false }
+                ]
             });
 
 
