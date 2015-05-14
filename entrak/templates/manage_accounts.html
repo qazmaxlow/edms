@@ -203,6 +203,16 @@
 
             $scope.tooltipOpt = {
                 position: "right",
+                animation: {
+                    open: {
+                        effects: "fade:in",
+                        duration: 500
+                    },
+                    close: {
+                        effects: "fade:out",
+                        duration: 500
+                    }
+                },
                 width: 255,
                 // autoHide: false,
                 height: 60,
