@@ -89,19 +89,19 @@
                 <div ng-cloak class="action-msg" ng-class="{'error-text' : !isDeleted}" ng-bind="removeAccountMessage"></div>
             </div>
         </div>
-        <div class="ng-cloak profile profile-popup" kendo-window="resetPasswordWindow" id="resetPasswordWindow" k-title="'Change Password'" k-width="368" k-height="360" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
+        <!-- <div class="ng-cloak profile profile-popup" kendo-window="" id="" k-title="''" k-width="368" k-height="360" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
             <div class="form-horizontal form-widgets">
-                <form name="kForm" kendo-validator="pwdValidator" k-options="validOptions" ng-submit="validate($event, true)" class="k-content down-err-txt" ng-model="isPwdValid">
+                <form name="kForm" kendo-validator="" k-options="" ng-submit="validate($event, true)" class="k-content down-err-txt" ng-model="isPwdValid">
                 <div class="form-group">
                     <label class="control-label" for="current_password">Current Password</label>
                     <div class="col-sm-12">
-                        <input type="password" id="current_password" name="Current Password" ng-model="resetPwdUser.current_password" class="k-textbox normal-tb popup-input" placeholder="Set Your Password" required data-required-msg="required field" />
+                        <input type="password" id="current_password" name="Current Password" ng-model="" class="k-textbox normal-tb popup-input" placeholder="Set Your Password" required data-required-msg="required field" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="password">New Password</label>
                     <div class="col-sm-12">
-                        <input type="password" id="new_password" name="New Password" ng-model="resetPwdUser.password" class="k-textbox normal-tb popup-input" placeholder="Set Your Password" required data-required-msg="required field" />
+                        <input type="password" id="new_password" name="New Password" ng-model="" class="k-textbox normal-tb popup-input" placeholder="Set Your Password" required data-required-msg="required field" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -115,13 +115,36 @@
                 </div>
                 </form>
             </div>
+        </div> -->
+        <div kendo-window="resetPasswordWindow" id="resetPasswordWindow" k-title="'Change Password'" k-width="380" k-height="380" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak class="popup-window" k-options="changePwdOpt">
+            <div class="form-horizontal form-widgets">
+                <form name="kForm" kendo-validator="pwdValidator" k-options="validOpt" ng-submit="validateChangePwd($event)" class="k-content down-err-txt" ng-model="isPwdValid">
+                <div class="form-group">
+                    <label class="control-label" for="cur_change_pwd">Password</label>
+                    <input type="password" id="cur_change_pwd" name="Current Password" ng-model="resetPwdUser.current_password" class="k-textbox normal-tb" placeholder="Set Your Password" required data-required-msg="required field" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="new_change_pwd">New Password</label>
+                    <input type="password" id="new_change_pwd" name="New Password" ng-model="resetPwdUser.password" class="k-textbox normal-tb" placeholder="Password" required data-required-msg="required field" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="confirm_change_pwd">Confirm Password</label>
+                    <input type="password" id="confirm_change_pwd" name="Confirm Password" class="k-textbox normal-tb" placeholder="Retype Password" required data-required-msg="required field" ng-model="resetPwdUser.confirm_password"/>
+                </div>
+                <div class="buttons-wrap">
+                    <button ng-disabled="!isPwdChanged && !isPwdValid || isPwdChanging" class="k-button normal-btn" type="submit">{{changePwdButtonText}}</button>
+                </div>
+                <div class="submitted-text" ng-class="{'error-text' : !isPwdChanged}" ng-bind="changePwdMessage"></div>
+                </form>
+            </div>
         </div>
+
         <button class='k-button normal-btn sharedAcc' ng-click="showCreateSharedAccountWindow()">Create Shared Account</button>
         <kendo-grid options="secGridOptions" class="sharedAcc">
         </kendo-grid>
         <div kendo-window="createSharedAccountWindow" id="createSharedAccountWindow" k-title="'Create Account'" k-width="380" k-height="380" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak class="popup-window" k-options="createShareOpt">
             <div class="form-horizontal form-widgets">
-                <form name="kForm" kendo-validator="sharedAccValidator" k-options="validOpt" ng-submit="validate($event)" class="k-content down-err-txt" ng-model="sharedAccValid">
+                <form name="kForm" kendo-validator="sharedAccValidator" k-options="validOpt" ng-submit="validateShare($event)" class="k-content down-err-txt" ng-model="sharedAccValid">
                 <div class="form-group">
                     <label class="control-label" for="username">Username:</label>
                     <input type="username" id="username" name="Username" ng-model="user.username" class="k-textbox normal-tb" placeholder="Username" required data-required-msg="required field" />
@@ -183,6 +206,8 @@
                     matchpwd: function(input){
                         if ($(input).prop("id") == "share_confirm_password"){
                             return ($("#share_password").val() == $("#share_confirm_password").val());
+                        } else if ($(input).prop("id") == "confirm_change_pwd"){
+                            return ($("#new_change_pwd").val() == $("#confirm_change_pwd").val());
                         } else {
                             return true;
                         }
@@ -193,8 +218,20 @@
                 }
             }
 
-            $scope.validate = function(event) {
+            $scope.validateShare = function(event) {
                 event.preventDefault();
+
+                if ($scope.sharedAccValidator.validate()) {
+                    $scope.validationClass = "valid";
+                    $scope.createSharedAccount();
+                } else {
+                    $scope.validationClass = "invalid";
+                }
+            }
+
+            $scope.validateChangePwd = function(event) {
+                event.preventDefault();
+
                 if ($scope.sharedAccValidator.validate()) {
                     $scope.validationClass = "valid";
                     $scope.createSharedAccount();
@@ -363,6 +400,19 @@
                         }
                         $scope.isDeleted = false;
                         $scope.removeAccountMessage = "";
+                      }
+            }
+
+            $scope.changePwdMessage = "";
+            $scope.changePwdButtonText = "Save";
+            $scope.changePwdOpt = {
+                close: function(e){
+                        if ($scope.isPwdChanging){
+                            e.preventDefault();
+                            return false;
+                        }
+                        $scope.isPwdChanged = false;
+                        $scope.changePwdMessage = "";
                       }
             }
 
@@ -569,6 +619,10 @@
 
             $scope.showResetPasswordWindow = function() {
                 $("#resetPasswordWindow").data("kendoWindow").center().open();
+            }
+
+            $scope.resetPasswordWindow = function() {
+
             }
         })
 </script>
