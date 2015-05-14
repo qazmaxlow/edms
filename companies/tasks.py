@@ -1,5 +1,5 @@
 import datetime
-from dateutil.relativedelta import relativedelta
+from dateutil import relativedelta
 
 from django.core.mail import EmailMultiAlternatives
 from django.core.mail import send_mail
@@ -38,12 +38,12 @@ def send_report_by_schedulers():
                 execute_time = scheduler.execute_time.astimezone(user_tz)
 
                 if scheduler.frequency == scheduler_constants.MONTHLY:
-                    last_report_day = execute_time + relativedelta(day=1, days=-1)
-                    first_report_day = execute_time + relativedelta(day=1, months=-1)
+                    last_report_day = execute_time + relativedelta.relativedelta(day=1, days=-1)
+                    first_report_day = execute_time + relativedelta.relativedelta(day=1, months=-1)
                     report_type = 'month'
                 elif scheduler.frequency == scheduler_constants.WEEKLY:
-                    last_report_day = execute_time + relativedelta(days=-1)
-                    first_report_day = execute_time + relativedelta(days=-7)
+                    last_report_day = execute_time + relativedelta.relativedelta(days=-1)
+                    first_report_day = execute_time + relativedelta.relativedelta(days=-7)
                     report_type = 'week'
 
                 report_url = 'https://%s%s?start_date=%s&end_date=%s&report_type=%s&tk=%s' % (site.domain, url, first_report_day.strftime('%Y-%m-%d'), last_report_day.strftime('%Y-%m-%d'), report_type, report_token)
@@ -64,5 +64,9 @@ def send_report_by_schedulers():
                 email_message.attach_alternative(message_html, 'text/html')
                 email_message.send()
 
-                scheduler.execute_time = timezone.now()
+                if scheduler.frequency == scheduler_constants.MONTHLY:
+                    next_execute_time = execute_time + relativedelta.relativedelta(day=1, months=1)
+                elif scheduler.frequency == scheduler_constants.WEEKLY:
+                    next_execute_time = execute_time + relativedelta.relativedelta(days=1, weekday=relativedelta.SU)
+                scheduler.execute_time = next_execute_time
                 scheduler.save()
