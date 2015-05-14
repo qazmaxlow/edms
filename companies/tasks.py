@@ -3,6 +3,7 @@ from dateutil.relativedelta import relativedelta
 
 from django.core.mail import EmailMultiAlternatives
 from django.core.mail import send_mail
+from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 from django.template.loader import render_to_string
 from django.utils import timezone
@@ -36,11 +37,14 @@ def send_report_by_schedulers():
                 url_token = UrlToken.objects.create_url_token(scheduler.created_by, expiration_days=10)
                 report_token = url_token.token_key
 
+                owner = scheduler.created_by
+                url = reverse('companies.reports.popup-report.custom-dates', kwargs={ 'system_code': owner.system.code })
+
                 today = timezone.now()
                 last_report_day = today + relativedelta(day=1, months=+1, days=-1)
                 first_report_day = today + relativedelta(day=1)
 
-                report_url = 'https://%s/adidas/report/popup-report/?start_date=%s&end_date=%s&report_type=month&tk=%s' % (site.domain, first_report_day.strftime('%Y-%m-%d'), last_report_day.strftime('%Y-%m-%d'), report_token)
+                report_url = 'https://%s%s?start_date=%s&end_date=%s&report_type=month&tk=%s' % (site.domain, url, first_report_day.strftime('%Y-%m-%d'), last_report_day.strftime('%Y-%m-%d'), report_token)
 
                 email = r.email
 
