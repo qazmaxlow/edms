@@ -24,13 +24,7 @@ def send_report_by_schedulers():
 
         # receiver_emails = [ r.email for r in scheduler.receivers ]
         for r in scheduler.receivers.all():
-            send_mail_date = scheduler.execute_time
-            if scheduler.frequency == scheduler_constants.WEEKLY:
-                send_mail_date += datetime.timedelta(days=7)
-            elif scheduler.frequency == scheduler_constants.MONTHLY:
-                send_mail_date += datetime.timedelta(days=30)
-
-            if send_mail_date < timezone.now():
+            if scheduler.execute_time >= timezone.now():
                 from tokens.models import UrlToken
 
                 site = Site.objects.get_current()
