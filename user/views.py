@@ -21,6 +21,9 @@ from django.db.utils import IntegrityError
 from rest_framework.response import Response
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import APIException
+from rest_framework.exceptions import ParseError
 
 from egauge.manager import SourceManager
 from system.models import System
@@ -172,19 +175,19 @@ class CreateIndividualUserView(generics.CreateAPIView):
         data = request.data
         required_keys = set(['email', 'is_personal_account', 'system_id'])
 
-        if required_keys.issubset(set(data.keys())):
-            try:
-                u = EntrakUser.objects.create(
-                        username=data['email'],
-                        email=data['email'],
-                        system_id=data['system_id'],
-                        is_personal_account=True
-                    )
-                u.send_activation_email(request.user)
-            except IntegrityError as e:
-                raise serializers.ValidationError("Username %s is taken already." % data['email'])
-        else:
-            raise Exception('Invalid request')
+        if not required_keys.issubset(set(data.keys())):
+            raise ParseError('Invalid request')
+
+        try:
+            u = EntrakUser.objects.create(
+                    username=data['email'],
+                    email=data['email'],
+                    system_id=data['system_id'],
+                    is_personal_account=True
+                )
+            u.send_activation_email(request.user)
+        except IntegrityError as e:
+            raise serializers.ValidationError("Username %s is taken already." % data['email'])
 
         user = UserSerializer(u)
         return Response(user.data)
@@ -201,7 +204,7 @@ class CreateSharedUserView(generics.CreateAPIView):
         required_keys = set(['username', 'password', 'confirm_password', 'system_id'])
 
         if not required_keys.issubset(set(data.keys())):
-            raise Exception('Invalid request')
+            raise ParseError('Invalid request')
 
         # validations
         if data['password'] != data['confirm_password']:
@@ -225,21 +228,28 @@ class CreateSharedUserView(generics.CreateAPIView):
 class DeleteUserView(generics.DestroyAPIView):
 
     serializer_class = UserSerializer
+    queryset = EntrakUser.objects.all()
 
-    def post(self, request, format=None):
+    def delete(self):
 
-        data = request.data
-        required_keys = set(['username', 'password', 'system_id'])
+        data = self.request.data
+        request_user = self.request.user
+        user_to_be_deleted = EntrakUser.objects.get(id=self.kwargs['user_id'])
 
-        if required_keys.issubset(set(data.keys())):
-            try:
-                u = EntrakUser.objects.create(username=data['username'], system_id=data['system_id'], is_personal_account=False)
-                u.set_password(data['password'])
-                u.save()
-            except IntegrityError as e:
-                raise serializers.ValidationError("Username %s is taken already." % data['username'])
-        else:
-            raise Exception('Invalid request')
+        systems_info = System.get_systems_info(user_to_be_deleted.system.code, request_user.system.code)
 
-        user = UserSerializer(u)
-        return Response(user.data)
+        if not system_info or not request_user.is_manager():
+            raise PermissionDenied()
+
+        required_keys = set(['id', 'username', 'system_id'])
+
+        if not required_keys.issubset(set(data.keys())):
+            raise ParseError("Invalid Request")
+
+        if user_to_be_deleted.id == data['id'] and user_to_be_deleted.username == data['username'] and user_to_be_deleted.system_id == data['system_id']:
+            raise ParseError("Invalid Request")
+
+        user_to_be_deleted.is_active = False
+        user_to_be_deleted.save()
+
+        return user_to_be_deleted
