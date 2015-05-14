@@ -79,6 +79,7 @@
                         <select kendo-drop-down-list="frequencyDropdown"
                                 k-data-text-field="'name'"
                                 k-data-value-field="'id'"
+                                k-on-change="validate(data)"
                                 k-data-source="frequencyDataSource"></select>
                     </div>
                 </div>
@@ -90,7 +91,7 @@
                         <div id="rs-emailList" ng-show="user_group == 'manager'"></div>
                         <input ng-model="taskEmail" ng-show="user_group == 'viewer'">
                         <div class="btn-container">
-                            <button ng-click="confirmAdd()">{{btnConfirm}}</button>
+                            <button class="k-button normal-btn" ng-click="confirmAdd()" ng-disabled="isDisabled" ng-model="isDisabled">{{btnConfirm}}</button>
                         </div>
                     </div>
                 </div>
@@ -110,12 +111,23 @@
     angular.module("Entrak", [ "kendo.directives" ])
         .controller("ReportScheduleController", function($scope) {
 
-           
-
             $scope.viewReportTitle = '{% trans "View Reports" %}';
             $scope.automatedReportTitle = '{% trans "Automated Reports" %}';
             var etDropDown = new EtDropDown($("#rs-emailList"), []);
-            etDropDown.setOptions({readOnly: false, itemDisplayName: "e-mails", ignoreCase: true, onchange: function(){console.log("onchange");}});
+            $scope.isDisabled = true;
+            etDropDown.setOptions({readOnly: false, itemDisplayName: "e-mails", ignoreCase: true, onchange: function(){
+                console.log("onchange");
+
+                $scope.$apply(function(){
+                     if ($scope.systemDropdown.value() > 0 && $scope.frequencyDropdown.value() > 0 && etDropDown.value().length > 0){
+                        console.log(etDropDown.value().length);
+                        $scope.isDisabled = false;
+                    }else{
+                         $scope.isDisabled = true;
+                    }
+                });
+
+            }});
 
             $scope.description = '{% trans "Set the system to email you an energy report each month or week, so you can stay informaed and up to date on your energy use." %}';
             $scope.btnConfirm = '{% trans "Confirm" %}';
@@ -237,6 +249,8 @@
                     });
                 scheduleTaskDataSource.sync();
             };
+
+
             var receivers_editor = receiversEditor;
             // var receivers_editor = null;
             $scope.taskGridOptions = function(dataItem) {
@@ -317,10 +331,6 @@
                 });
             }
 
-
-           
-
-
     });
 </script>
 
@@ -332,21 +342,6 @@
 
                     $(".panel-header-left-menu h3").removeClass('selected-tab');
                     $(this).addClass('selected-tab');
-
-                    var panelContentHeight;
-                    if (btnIdx === 0) {
-                        panelContentHeight = '162px';
-                    } else if (btnIdx === 1) {
-                        panelContentHeight = '608px';
-                        dlRawDataSelected();
-                    }
-                    $("#panel-content").css("height", panelContentHeight);
-
-                    // var targetPanel = $($('#panel-content>div')[btnIdx]);
-                    // if (targetPanel.css("display") == 'none') {
-                    //     $('#panel-content>div').fadeOut();
-                    //     targetPanel.fadeIn();
-                    // }
                 });
             });
             $(".panel-header-left-menu h3:eq(1)").click();
