@@ -54,14 +54,14 @@
         <img class="info-icon" src="/static/images/info-icon.png"></img>
         <kendo-grid options="priGridOptions">
         </kendo-grid>
-        <div kendo-window="createUserAccountWindow" class="popup-window" id="createUserAccountWindow" k-title="'Create Individual Account'" k-width="400" k-height="190" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak>
+        <div kendo-window="createUserAccountWindow" class="popup-window" id="createUserAccountWindow" k-title="'Create Individual Account'" k-options="createOpt" k-width="400" k-height="190" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak>
             <div class="form-horizontal form-widgets">
                 <form name="kForm" class="k-content">
                     <div class="popup-text">Send an invitation link to:</div>
                     <div id="userEmail"></div>
-                    <div class="submitted-text" ng-class="{'error-text' : !isEmailSent}" ng-bind="userAccountMessage"></div>
+                    <div class="submitted-text" ng-class="{'error-text' : !isCreated}" ng-bind="userAccountMessage"></div>
                     <div class="buttons-wrap">
-                        <button class="k-button normal-btn" ng-disabled="!hasEmail" ng-click="createUserAccount()">{{userAccountButtonText}}</button>
+                        <button class="k-button normal-btn" ng-disabled="!isCreated && !hasEmail || isCreating" ng-click="createUserAccount()">{{userAccountButtonText}}</button>
                     </div>
                 </form>
             </div>
@@ -283,8 +283,7 @@
                 filter: {field: "is_personal_account", operator: "eq", value: false }
             });
 
-            $scope.userAccountMessage = null;
-            $scope.userAccountButtonText = "Send";
+
 
             $scope.sharedAccountMessage = null;
             $scope.sharedAccountButtonText = "Create"
@@ -314,7 +313,6 @@
 
             $scope.resendEmailButtonText = "Send";
             $scope.isEmailResent = false;
-
             $scope.resendOpt = {
                 close: function(e){
                         if ($scope.isResending){
@@ -326,9 +324,24 @@
                       }
             }
 
+            $scope.userAccountMessage = "";
+            $scope.userAccountButtonText = "Send";
+            $scope.createOpt = {
+                close: function(e){
+                        if ($scope.isCreating){
+                            e.preventDefault();
+                            return false;
+                        }
+                        $scope.isCreated = false;
+                        $scope.userAccountMessage = "";
+                      }
+            }
+
             $scope.showCreateUserAccountWindow = function() {
                 $scope.userAccountMessage = "";
                 $scope.userAccountButtonText = "Send";
+                $scope.isCreated = false;
+                $scope.isCreating = false;
                 etDropDown.value([]);
                 $("#createUserAccountWindow").data("kendoWindow").center().open();
             }
@@ -340,7 +353,8 @@
             }
 
             $scope.createUserAccount = function() {
-                if ($scope.userAccountButtonText == "Send") {
+                if (!$scope.isCreated) {
+                    $scope.isCreating = true;
                     emails = etDropDown.value();
                     system_id = {{system.id}};
                     for (i = 0; i < emails.length; i++) {
@@ -356,15 +370,28 @@
                     individual_users.sync()
                         .done(function() {
                             console.log("done");
-                            $scope.userAccountMessage = "Great, the invitation has been sent out.";
-                            $scope.userAccountButtonText = "Go to Dashboard";
+                            $scope.$apply(function(){
+                                $scope.isCreating = false;
+                                $scope.isCreated = true;
+                                $scope.userAccountMessage = "Great, the invitation has been sent out.";
+                                $scope.userAccountButtonText = "Go to Dashboard";
+                            });
                         })
                         .fail(function(e) {
-                            $scope.userAccountMessage = e.responseJSON.join("<br/>");
-                            individual_users.cancelChanges();
+                            $scope.$apply(function(){
+                                $scope.isCreating = false;
+                                $scope.isCreated = false;
+                                if (e.responseJSON){
+                                    $scope.userAccountMessage = e.responseJSON.join("<br/>");
+                                } else {
+                                    $scope.userAccountMessage = e.responseText;
+                                }
+                                individual_users.cancelChanges();
+                            });
                             console.log(e);
                         });
-                } else if ($scope.userAccountButtonText == "Go to Dashboard") {
+                } else if ($scope.isCreated) {
+                    $scope.isCreating = false;
                     console.log("Redirecting to Dashboard");
                     window.location.href = "{% url 'companies.dashboard' system.code %}";
                 }
@@ -406,6 +433,15 @@
                 return false;
             }
 
+            $scope.showResendEmail = function(dataItem) {
+                $scope.isEmailResent = false;
+                $scope.resendEmailId = dataItem.id;
+                $scope.resendEmailAddress = dataItem.email;
+                $scope.resendEmailButtonText = "Send";
+                $scope.resendEmailMessage = "";
+                $("#resendEmailWindow").data("kendoWindow").center().open();
+            }
+
             $scope.resendEmail = function() {
                 if (!$scope.isEmailResent) {
                     if ($scope.isResending)
@@ -440,14 +476,6 @@
                 return false;
             }
 
-            $scope.showResendEmail = function(dataItem) {
-                $scope.isEmailResent = false;
-                $scope.resendEmailId = dataItem.id;
-                $scope.resendEmailAddress = dataItem.email;
-                $scope.resendEmailButtonText = "Send";
-                $scope.resendEmailMessage = "";
-                $("#resendEmailWindow").data("kendoWindow").center().open();
-            }
 
             $scope.confirmDeleteAccount = function(dataItem) {
                 $scope.removeAccountId = dataItem.id;
