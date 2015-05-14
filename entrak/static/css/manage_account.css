@@ -1,5 +1,5 @@
-
-.manage-acc.chinese, .k-window-title.chinese {
+.manage-acc.chinese,
+.k-window-title.chinese {
 	font-family: "Helvetica Neue Light",
  	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
  	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
@@ -311,3 +311,23 @@
 	background-color: #e8e8e8;
 }
 /* ----- popup */
+
+/* tooltip ------ */
+.k-widget.k-tooltip {
+	background-color: #FFFFFF;
+}
+.k-widget.k-tooltip .k-callout-w {
+	border-right-color: #FFFFFF;
+	left: -11px;
+}
+
+.k-widget.k-tooltip .k-tooltip-content {
+	font-size: 0.857em;
+	font-weight: 500;
+	line-height: 1.6;
+	color: #4a4a4a;
+	text-align: left;
+	padding-top: 2px;
+	padding-left: 3px;
+}
+/* ------ tooltip */

@@ -51,7 +51,7 @@
         </div>
 
         <button class='k-button normal-btn userAcc' ng-click="showCreateUserAccountWindow()">Create User Account</button>
-        <img class="info-icon" src="/static/images/info-icon.png"></img>
+        <img kendo-tooltip k-options="tooltipOpt" class="info-icon" src="/static/images/info-icon.png"></img>
         <kendo-grid options="priGridOptions">
         </kendo-grid>
         <div kendo-window="createUserAccountWindow" class="popup-window" id="createUserAccountWindow" k-title="'Create Individual Account'" k-options="createOpt" k-width="400" k-height="190" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak>
@@ -200,6 +200,14 @@
                     $scope.$apply();
                 }
             }});
+
+            $scope.tooltipOpt = {
+                position: "right",
+                width: 255,
+                // autoHide: false,
+                height: 60,
+                content: "Individual Account enjoys a higher level of security, more control and better functionality. We encourage usage of User Account."
+            };
 
             $scope.validOpt = {
                 rules: {
