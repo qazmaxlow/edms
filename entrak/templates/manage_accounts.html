@@ -302,7 +302,8 @@
                             url = url.replace(99999, item.id);
                             return url;
                         },
-                        type: "PUT"
+                        type: "PUT",
+                        contentType: "application/json"
                     },
                     destroy: {
                         url: function (item) {
@@ -314,6 +315,8 @@
                     },
                     parameterMap: function (options, operation) {
                         if (operation == "create") {
+                            return kendo.stringify(options);
+                        } else if (operation == "update") {
                             return kendo.stringify(options);
                         }
                     }
@@ -648,38 +651,43 @@
             }
 
             $scope.showResetPasswordWindow = function(dataItem) {
+
                 $("#resetPasswordWindow").data("kendoWindow").center().open();
-                $scope.resetPasswordItem = dataItem;
-            }
+                $scope.resetPasswordItem = {};
 
-            $scope.resetPassword = function() {
+                $scope.resetPassword = function() {
+                    console.log(dataItem);
+                    console.log($scope.resetPasswordItem);
+                    dataItem.set('new_password', $scope.resetPasswordItem.new_password );
+                    dataItem.set('confirm_password', $scope.resetPasswordItem.confirm_password );
+                    console.log(shared_users.hasChanges());
 
-                console.log($scope.resetPasswordItem);
-                $scope.resetPasswordItem.set('new_password', 'aaa')
-                $scope.resetPasswordItem.set('confirm_password', 'aaa')
-                console.log(shared_users.hasChanges());
-
-                shared_users.sync()
-                    .done(function() {
-                        console.log("password resetted");
-                        $scope.$apply(function(){
-                            $scope.changePwdMessage = "Password changed";
-                        });
-                    })
-                    .fail(function(e) {
-                        $scope.$apply(function(){
-                            $scope.isDeleting = false;
-                            $scope.isDeleted = false;
-                            if (e.responseJSON){
-                                $scope.changePwdMessage = e.responseJSON.join("<br/>");
-                            } else {
-                                $scope.changePwdMessage = e.responseText;
-                            }
+                    shared_users.sync()
+                        .done(function() {
+                            console.log("password resetted");
+                            $scope.$apply(function(){
+                                $scope.changePwdMessage = "Password changed";
+                            });
+                        })
+                        .fail(function(e) {
+                            $scope.$apply(function(){
+                                $scope.isDeleting = false;
+                                $scope.isDeleted = false;
+                                if (e.responseJSON && e.responseJSON.constructor === Array) {
+                                    $scope.changePwdMessage = e.responseJSON.join("<br/>");
+                                } else if ('non_field_errors' in e.responseJSON) {
+                                    $scope.changePwdMessage = e.responseJSON['non_field_errors'].join("<br/>");
+                                } else {
+                                    $scope.changePwdMessage = e.responseText;
+                                };
+                            });
                             shared_users.cancelChanges();
+                            console.log(e);
                         });
-                        console.log(e);
-                    });
+                }
             }
+
+
         })
 </script>
 {% endblock %}

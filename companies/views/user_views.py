@@ -38,6 +38,14 @@ class UserSerializer(serializers.ModelSerializer):
 
     language = LanguageField(required=False)
     username = serializers.CharField(validators=[validators.UniqueValidator(queryset=EntrakUser.objects.all())])
+
+    class Meta:
+        model = EntrakUser
+        fields = ['id', 'username', 'fullname', 'department', 'language', 'email', 'is_email_verified', 'is_personal_account', 'is_active']
+
+
+class resetPasswordSerializer(serializers.ModelSerializer):
+
     new_password = serializers.CharField(write_only=True)
     confirm_password = serializers.CharField(write_only=True)
 
@@ -49,10 +57,10 @@ class UserSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if data['new_password'] and data['confirm_password']:
-            if data['password'] != data.pop('confirm_password'):
+            if data['new_password'] != data.pop('confirm_password'):
                 raise serializers.ValidationError("Passwords do not match")
 
-            if PASSWORD_REGEX.search(data['password']) is None:
+            if PASSWORD_REGEX.search(data['new_password']) is None:
                 raise serializers.ValidationError("Password must be at least 8 characters long and contains at least one character and one number")
 
         return data
