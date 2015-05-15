@@ -102,6 +102,10 @@
                     <div kendo-grid k-options="taskGridOptions(dataItem)"></div>
                 </div>
             </div>
+            <div kendo-window="deleteGridRowWin" k-title="'Delete'"
+                 k-visible="false" k-modal="true">
+              <button ng-click="confirmDelete()">Confirm</button>
+            </div>
 {% endverbatim %}            
         </div>
     </div>
@@ -288,8 +292,20 @@
                                     cancel: "Cancel"
                                 }
                             }, {
-                                name: "destroy",
-                                text: "Delete"
+                                name: "mydestroy",
+                                text: "Delete",
+                                click: function(e) {
+                                    var tr = $(e.target).closest("tr"); // get the current table row (tr)
+                                    var data = this.dataItem(tr);
+
+                                    var that = this;
+                                    $scope.confirmDelete = function() {
+                                        that._removeRow(tr);
+                                        $scope.deleteGridRowWin.close()
+                                    };
+
+                                    $scope.deleteGridRowWin.center().open();
+                                }
                             }], 
                             title: "Actions", 
                             width: "160px" 
