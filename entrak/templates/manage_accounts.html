@@ -100,11 +100,11 @@
                 </div> -->
                 <div class="form-group">
                     <label class="control-label" for="new_change_pwd">New Password</label>
-                    <input type="password" id="new_change_pwd" name="New Password" ng-model="resetPwdUser.password" class="k-textbox normal-tb" placeholder="Password" required data-required-msg="required field" />
+                    <input type="password" id="new_change_pwd" name="New Password" ng-model="resetPasswordItem.new_password" class="k-textbox normal-tb" placeholder="Password" required data-required-msg="required field" />
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="confirm_change_pwd">Confirm Password</label>
-                    <input type="password" id="confirm_change_pwd" name="Confirm Password" class="k-textbox normal-tb" placeholder="Retype Password" required data-required-msg="required field" ng-model="resetPwdUser.confirm_password"/>
+                    <input type="password" id="confirm_change_pwd" name="Confirm Password" class="k-textbox normal-tb" placeholder="Retype Password" required data-required-msg="required field" ng-model="resetPasswordItem.confirm_password"/>
                 </div>
                 <div class="buttons-wrap">
                     <button ng-disabled="!isPwdChanged && !isPwdValid || isPwdChanging" class="k-button normal-btn" type="submit">{{changePwdButtonText}}</button>
@@ -223,7 +223,7 @@
 
                 if ($scope.pwdValidator.validate()) {
                     $scope.validationClass = "valid";
-                    $scope.removeAccount();
+                    $scope.resetPassword();
                 } else {
                     $scope.validationClass = "invalid";
                 }
@@ -296,6 +296,14 @@
                         type: "POST",
                         contentType: "application/json"
                     },
+                    update: {
+                        url: function (item) {
+                            var url = "{% url 'users.update_account' 99999 %}";
+                            url = url.replace(99999, item.id);
+                            return url;
+                        },
+                        type: "DELETE"
+                    },
                     destroy: {
                         url: function (item) {
                             var url = "{% url 'users.disable_account' 99999 %}";
@@ -353,7 +361,7 @@
                 sortable: true,
                 columns: [
                     { field: "username", title: "User Name" },
-                    { title: "Password", width: "190px", template: "<button class='k-button normal-btn' ng-click='showResetPasswordWindow()'>Change password</button>"},
+                    { title: "Password", width: "190px", template: "<button class='k-button normal-btn' ng-click='showResetPasswordWindow(dataItem)'>Change password</button>"},
                     { title: "Delete", width: "63px", template: '<img class="delete-icon" src="/static/images/delete-icon.png" ng-click="confirmDeleteAccount(dataItem)"></img>'}
                 ],
             }
@@ -649,8 +657,13 @@
                 return false;
             }
 
-            $scope.showResetPasswordWindow = function() {
+            $scope.showResetPasswordWindow = function(dataItem) {
                 $("#resetPasswordWindow").data("kendoWindow").center().open();
+                $scope.resetPasswordItem = dataItem;
+            }
+
+            $scope.resetPassword = function() {
+
             }
         })
 </script>

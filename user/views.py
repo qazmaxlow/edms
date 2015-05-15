@@ -52,7 +52,6 @@ def activate_account(request, user_id):
         user_id = request.GET.get('uid', None)
         user_code = request.GET.get('ucode', None)
 
-
     if user and user_id and user_code:
 
         if user.validate_activation_url(user_id.encode('ascii','ignore'), user_code.encode('ascii','ignore')):
@@ -69,7 +68,7 @@ def activate_account(request, user_id):
                 user.is_email_verified =  True
                 user.save()
 
-                user = authenticate(username=user.username, password=user.password)
+                authenticate(username=user.username, password=user.password)
 
                 dashboard_url = reverse('companies.dashboard', kwargs={'system_code': system.code})
                 settings_url = reverse('manage_accounts', kwargs={'system_code': system.code})
@@ -248,3 +247,9 @@ class DeleteUserView(generics.DestroyAPIView):
 
         user = UserSerializer(user_to_be_deleted)
         return Response(user.data)
+
+
+class UpdateUserView(generics.UpdateAPIView):
+    serializer_class = UserSerializer
+    permission_classes = (IsAuthenticated,)
+    queryset = EntrakUser.objects.all()
