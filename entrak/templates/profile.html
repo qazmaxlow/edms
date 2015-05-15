@@ -41,13 +41,14 @@
 
 {% block page_content %}
 
-{% verbatim %}
+
 <div ng-app="entrak">
     <div class="profile profile-container" ng-controller="MyCtrl">
         <div class="k-header">
             <div class="header-tab selected-tab">My Profile</div><!--
-            --><div class="header-tab">Manage Accounts</div>
+            --><div class="header-tab"><a href="{% url 'manage_accounts' system_code=systems.0.code %}">Manage Accounts</a></div>
         </div>
+        {% verbatim %}
         <div class="form-horizontal form-widgets">
             <form name="kForm" kendo-validator="validator" ng-submit="validate($event, false)" class="k-content" ng-model="isValid">
             <div class="form-group">
@@ -108,8 +109,8 @@
             </div>
             </form>
         </div>
-
-
+        {% endverbatim %}
+    {% verbatim %}
     <div class="ng-cloak profile profile-popup" kendo-window="wndw" id="resetPassword" k-title="'Change Password'" k-width="368" k-height="360" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
             <div class="form-horizontal form-widgets">
                 <form name="kForm" kendo-validator="pwdValidator" k-options="validOptions" ng-submit="validate($event, true)" class="k-content down-err-txt" ng-model="isPwdValid">
@@ -137,9 +138,9 @@
                 </form>
             </div>
     </div>
-
+    {% endverbatim %}
     </div>
-{% endverbatim %}
+
 
  <script>
         angular.module("entrak", [ "kendo.directives" ])
