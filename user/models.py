@@ -97,7 +97,7 @@ class EntrakUser(AbstractUser):
         plaintext = get_template('activation_email.txt')
         htmly     = get_template('activation_email.html')
 
-        if self.is_manager():
+        if self.is_manager:
             heading = "You have been invited to create an admin account\nfor your organization’s En-trak Energy Monitoring System."
             description = "With En-trak you can see when, where and how you are spending\nyour energy dollars, enabling effective energy management."
         elif on_behalf_of:
