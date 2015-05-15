@@ -35,7 +35,7 @@ var EtDropDown = function(elm, data){
     } else {
         that.value(data);    
     }
-    
+
     var opt = {};
     opt.animation = {};
     opt.origin = "bottom center";
@@ -181,10 +181,10 @@ EtDropDown.prototype = {
             this.wrapper.find(".k-input").text(this.items[0]);
         } else {
             this.wrapper.find(".k-input").text(this.items.length + " " + this.options.itemDisplayName);
-        }console.log(this.options.buttonText);console.log(this.wrapper.find(".add-btn").length);
+        }
 
         if (this.container)
-        this.container.find(".add-btn").text(this.options.buttonText);
+            this.container.find(".add-btn").text(this.options.buttonText);
     },
 
     setOptions: function(opt){
