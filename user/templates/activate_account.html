@@ -192,6 +192,13 @@
                 $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
             }])
             .controller("MyCtrl", function($scope, $http){
+                var langCode = '{{LANGUAGE_CODE}}';
+                console.log(langCode);
+                if (langCode.indexOf("en") == 0){
+                    $("body").removeClass("chinese");
+                } else {
+                    $("body").addClass("chinese");
+                }
 
                 $scope.user = {};
                 $scope.user.uid = "{{uid}}";
