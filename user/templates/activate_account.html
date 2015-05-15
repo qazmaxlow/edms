@@ -25,8 +25,8 @@
 {% endblock %}
 
 {% block extra_script %}
-<script src="{% static 'assets/django/js/ajax.js' %}"></script>
 <script src="{% static 'assets/jquery/jquery-1.11.0.min.js' %}"></script>
+<script src="{% static 'assets/django/js/ajax.js' %}"></script>
 <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
 <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
 {% endblock %}
@@ -161,7 +161,7 @@
         </div>
 
         <!-- create account yes/no popup -->
-        <div kendo-window="wndw" id="postRegistration" class="activate-acc post-activate" k-title="{% trans 'Get Started' %}" k-width="600" k-height="260" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
+        <div kendo-window="wndw" id="postRegistration" class="activate-acc post-activate" k-title="normalUserTitle" k-width="600" k-height="260" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
             <div class="normal-user">
                 <img src="/static/images/account-created-icon.png"></img>
                 <div class="congrat-msg">{% trans 'Congrats, your account is ready to use!' %}</div>
@@ -170,7 +170,7 @@
                 </div>
             </div>
         </div>
-        <div kendo-window="wndw" id="postRegistrationAdmin" class="activate-acc post-activate" k-title="{% trans 'Create New Accounts' %}" k-width="600" k-height="320" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
+        <div kendo-window="wndw" id="postRegistrationAdmin" class="activate-acc post-activate" k-title="adminUserTitle" k-width="600" k-height="320" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
             <img src="/static/images/account-created-icon.png"></img>
             <div class="congrat-msg">{% trans 'Congrats, your account is ready to use!' %}</div>
             <div class="separator"></div>
@@ -201,6 +201,8 @@
                 }
 
                 $scope.createAccTitle = {% trans "'Create your En-trak Account'" %};
+                $scope.normalUserTitle = {% trans "'Get Started'" %};
+                $scope.adminUserTitle = {% trans "'Create New Accounts'" %};
                 $scope.defaultDepartment = "--" + {% trans "'Department'" %} + "--";
                 $scope.defaultLanguage = "--" + {% trans "'Language'" %} + "--";
 
