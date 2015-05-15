@@ -41,15 +41,16 @@
 
 {% block page_content %}
 
-{% verbatim %}
 
 <div id="myApp" ng-app="Entrak">
     <div ng-controller="myCtrl" class="manage-acc">
         <div class="k-header">
-            <div class="header-tab">My Profile</div><!--
+            <div class="header-tab">
+                <a href="{% url 'profile' system_code=systems.0.code %}">My Profile</a>
+            </div><!--
             --><div class="header-tab selected-tab">Manage Accounts</div>
         </div>
-
+{% verbatim %}
         <button class='k-button normal-btn userAcc' ng-click="showCreateUserAccountWindow()">Create User Account</button>
         <img kendo-tooltip k-options="tooltipOpt" class="info-icon" src="/static/images/info-icon.png"></img>
         <kendo-grid options="priGridOptions">
@@ -139,9 +140,10 @@
                 </form>
             </div>
         </div>
+{% endverbatim %}
     </div>
 </div>
-
+{% verbatim %}
 <script id="rowTemplate" type="text/x-kendo-tmpl">
     # if (is_email_verified == true) { #
     <tr data-uid="#: uid #">
