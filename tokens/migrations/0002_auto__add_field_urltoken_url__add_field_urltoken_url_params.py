@@ -8,21 +8,23 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'UrlToken'
-        db.create_table(u'tokens_urltoken', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('token_key', self.gf('django.db.models.fields.CharField')(unique=True, max_length=40)),
-            ('created_by', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['user.EntrakUser'])),
-            ('created_time', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('expiration_days', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('extra_data', self.gf('django.db.models.fields.TextField')(null=True)),
-        ))
-        db.send_create_signal(u'tokens', ['UrlToken'])
+        # Adding field 'UrlToken.url'
+        db.add_column(u'tokens_urltoken', 'url',
+                      self.gf('django.db.models.fields.URLField')(default='', max_length=200),
+                      keep_default=False)
+
+        # Adding field 'UrlToken.url_params'
+        db.add_column(u'tokens_urltoken', 'url_params',
+                      self.gf('django.db.models.fields.TextField')(null=True),
+                      keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting model 'UrlToken'
-        db.delete_table(u'tokens_urltoken')
+        # Deleting field 'UrlToken.url'
+        db.delete_column(u'tokens_urltoken', 'url')
+
+        # Deleting field 'UrlToken.url_params'
+        db.delete_column(u'tokens_urltoken', 'url_params')
 
 
     models = {
@@ -79,7 +81,9 @@ class Migration(SchemaMigration):
             'expiration_days': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'extra_data': ('django.db.models.fields.TextField', [], {'null': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'token_key': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '40'})
+            'token_key': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '40'}),
+            'url': ('django.db.models.fields.URLField', [], {'max_length': '200'}),
+            'url_params': ('django.db.models.fields.TextField', [], {'null': 'True'})
         },
         u'user.entrakuser': {
             'Meta': {'object_name': 'EntrakUser'},
