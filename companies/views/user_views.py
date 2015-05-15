@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from user.models import EntrakUser
 from system.models import System
 from user.models import USER_LANGUAGES
+from user.models import USER_ROLE_VIEWER_LEVEL
 
 PASSWORD_REGEX = re.compile(r'^.*(?=.{8,})(?=.*[A-Za-z]+)(?=.*\d).*$')
 
@@ -66,4 +67,4 @@ class UserListView(generics.ListAPIView):
         sys = System.objects.get(code=syscode)
         syss = System.get_systems_within_root(syscode)
 
-        return EntrakUser.objects.filter(is_active=True, system_id__in=[s.id for s in syss])
+        return EntrakUser.objects.filter(is_active=True, role_level=USER_ROLE_VIEWER_LEVEL, system_id__in=[s.id for s in syss])
