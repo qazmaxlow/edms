@@ -68,6 +68,12 @@ class EntrakUser(AbstractUser):
         return self.salt
 
 
+    @property
+    def is_manager(self):
+        # TODO: switch to Django group permission checking
+        return self.role_level >= USER_ROLE_ADMIN_LEVEL
+
+
     def validate_activation_url(self, uid, ucode):
 
         try:
@@ -113,7 +119,3 @@ class EntrakUser(AbstractUser):
         msg.attach_alternative(html_content, "text/html")
         msg.send()
 
-
-    def is_manager(self):
-        # TODO: switch to Django group permission checking
-        return self.role_level >= USER_ROLE_ADMIN_LEVEL
