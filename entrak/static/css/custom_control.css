@@ -84,7 +84,7 @@
 
 .k-et-dropdown-container .k-editPanel {
 	border-top: 2px solid #cdcdcd;
-	height: 61px;
+	height: 81px;
 }
 
 .k-et-dropdown-container .k-editPanel .add-btn {
@@ -108,13 +108,26 @@
 	background-color: #74c62b;
 	color: #ffffff;
 }
+/***** invalid message *****/
 
+.k-et-dropdown-container .invalid-msg{
+	color: #e05d5d;
+	font-size: 0.786em;
+	font-weight: 300;
+	display: inline-block;
+	margin-left: 12px;
+}
+.k-et-dropdown-container .valid-msg{
+	display: none;
+}
+
+/***** end of invalid message *****/
 .k-et-dropdown-container .k-editPanel input {
 	padding: 0px 3px;
 	height: 35px;
 	line-height: 33px;
 	outline: none;
-	margin: 12px;
+	margin: 25px 12px 0px 12px;
 	border-radius: 4px;
 	border: 1px solid #354960;
 	color: #354960;

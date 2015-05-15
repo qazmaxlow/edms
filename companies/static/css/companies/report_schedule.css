@@ -238,7 +238,6 @@
 	border-color: #74c62b;
 }
 
-
 .auto-report-base a.k-button.k-button-icontext:focus:active{
 	box-shadow: 0px 2px 0px #6b9aa5;
 	color: white;
@@ -271,7 +270,6 @@
 .auto-report-base .k-widget *{
 	box-sizing: border-box;
 }
-
 
 
 .auto-report-base #report-schedule-container{
@@ -474,14 +472,14 @@
 /* -----etdropdown*/
 /***** invalid message *****/
 
-.invalid-msg{
+.k-et-dropdown-container .invalid-msg{
 	color: #e05d5d;
 	font-size: 0.786em;
 	font-weight: 300;
 	display: inline-block;
 	margin-left: 12px;
 }
- .valid-msg{
+.k-et-dropdown-container .valid-msg{
 	display: none;
 }
 
