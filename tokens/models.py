@@ -74,4 +74,7 @@ class AbstractToken(models.Model):
 
 
 class UrlToken(AbstractToken):
+    url = models.URLField(max_length=200)
+    url_params = models.TextField(null=True) # suppose using json format
+
     objects = UrlTokenManager()
