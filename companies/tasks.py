@@ -6,6 +6,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
+from django.http import QueryDict
 from django.template.loader import render_to_string
 from django.utils import formats
 from django.utils import timezone
@@ -55,8 +56,12 @@ def send_report_by_schedulers():
                 url_params_json = json.dumps(url_params)
                 url_token = UrlToken.objects.create_url_token(scheduler.created_by, expiration_days=10, url=url, url_params=url_params_json)
 
-                report_token = url_token.token_key
-                report_url = 'https://%s%s?start_date=%s&end_date=%s&report_type=%s&tk=%s' % (site.domain, url, first_report_day.strftime('%Y-%m-%d'), last_report_day.strftime('%Y-%m-%d'), report_type, report_token)
+                # report_token = url_token.token_key
+                qd = QueryDict('', mutable=True)
+                qd.update(url_params)
+                qd.update({'tk': url_token.token_key})
+
+                report_url = 'https://%s%s?%s' % (site.domain, url, qd.urlencode())
 
                 email = r.email
 
