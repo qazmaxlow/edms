@@ -232,7 +232,7 @@ def delete_user_view(request, system_code=None):
     return Utils.json_response({'success': True})
 
 
-@permission_required(USER_ROLE_ADMIN_LEVEL)
+@permission_required()
 @ensure_csrf_cookie
 def profile_view(request, system_code=None):
     systems_info = System.get_systems_info(system_code, request.user.system.code)
