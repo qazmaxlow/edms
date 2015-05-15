@@ -1,4 +1,5 @@
 import datetime
+import json
 import hashlib
 import random
 import re
@@ -37,7 +38,7 @@ class UrlTokenManager(models.Manager):
         )
 
 
-    def check_token(self, token_key):
+    def check_token(self, token_key, request):
         """
         Validate an token key.
         If the key is valid and has not expired, return the ``User``
@@ -49,7 +50,11 @@ class UrlTokenManager(models.Manager):
         if SHA1_RE.search(token_key):
             try:
                 token = self.get(token_key=token_key)
-                return not token.is_expired
+                GET = request.GET.dict()
+                GET.pop('tk')
+                url_params = json.loads(token.url_params)
+
+                return (token.url == request.path) and (GET == url_params) and (not token.is_expired)
             except self.model.DoesNotExist:
                 return False
 
@@ -58,7 +63,7 @@ class UrlTokenManager(models.Manager):
     def check_token_by_request(self, request):
         token_key = request.GET.get('tk')
         if token_key:
-            return self.check_token(token_key)
+            return self.check_token(token_key, request)
         else:
             return False
 
