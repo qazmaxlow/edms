@@ -38,16 +38,18 @@ class UrlTokenManager(models.Manager):
         )
 
 
-    def check_token(self, token_key, request):
+    def check_token_by_request(self, request):
         """
         Validate an token key.
         If the key is valid and has not expired, return the ``User``
         If the key is not valid or has expired, return ``False``.
         """
+        token_key = request.GET.get('tk')
+
         # Make sure the key we're trying conforms to the pattern of a
         # SHA1 hash; if it doesn't, no point trying to look it up in
         # the database.
-        if SHA1_RE.search(token_key):
+        if token_key and SHA1_RE.search(token_key):
             try:
                 token = self.get(token_key=token_key)
                 GET = request.GET.dict()
@@ -57,13 +59,6 @@ class UrlTokenManager(models.Manager):
                 return (token.url == request.path) and (GET == url_params) and (not token.is_expired)
             except self.model.DoesNotExist:
                 return False
-
-        return False
-
-    def check_token_by_request(self, request):
-        token_key = request.GET.get('tk')
-        if token_key:
-            return self.check_token(token_key, request)
         else:
             return False
 
