@@ -27,7 +27,7 @@ def send_report_by_schedulers():
 
         # receiver_emails = [ r.email for r in scheduler.receivers ]
         for r in scheduler.receivers.all():
-            if scheduler.execute_time >= timezone.now() or True:
+            if scheduler.execute_time >= timezone.now():
                 from tokens.models import UrlToken
 
                 site = Site.objects.get_current()
