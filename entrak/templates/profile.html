@@ -100,14 +100,14 @@
                 </div>
             </div>
             <div class="buttons-wrap right">
-                <button class="k-button normal-btn cancel" ng-click="resetInput()" ng-disabled="!userChanged">Cancel</button>
-                <button class="k-button normal-btn" type="submit" ng-disabled="!isValid || !userChanged">Save Changes</button>
-            </div>
-            <div class="separator"></div>
-            <div class="buttons-wrap">
-                <button class="k-button normal-btn" ng-click="resetPassword()">Change Password</button>
+                <button class="k-button normal-btn cancel" ng-click="resetInput()" ng-disabled="!userChanged || isUpdating">Cancel</button>
+                <button class="k-button normal-btn" type="submit" ng-disabled="!isValid || !userChanged || isUpdating">Save Changes</button>
             </div>
             </form>
+            <div class="separator"></div>
+            <div class="buttons-wrap">
+                <button class="k-button normal-btn" ng-disabled="isUpdating" ng-click="resetPassword()">Change Password</button>
+            </div>
         </div>
         {% endverbatim %}
     {% verbatim %}
@@ -133,7 +133,7 @@
                     </div>
                 </div>
                 <div class="buttons-wrap">
-                    <button class="k-button normal-btn" type="submit" ng-disabled="!isPwdValid">Save</button>
+                    <button class="k-button normal-btn" type="submit" ng-disabled="!isPwdValid || isUpdating">Save</button>
                 </div>
                 </form>
             </div>
@@ -158,11 +158,15 @@
                 $scope.user.department = "{{user.department}}";
                 $scope.user.language = "{{user.language}}";
 
-                $scope.origUser = {};
-                $scope.origUser.first_name = $scope.user.first_name;
-                $scope.origUser.last_name = $scope.user.last_name;
-                $scope.origUser.department = $scope.user.department;
-                $scope.origUser.language = $scope.user.language;
+                $scope.copyOriginUser = function(){
+                    $scope.origUser = {};
+                    $scope.origUser.first_name = $scope.user.first_name;
+                    $scope.origUser.last_name = $scope.user.last_name;
+                    $scope.origUser.department = $scope.user.department;
+                    $scope.origUser.language = $scope.user.language;
+                }
+                
+                $scope.copyOriginUser();
                 $scope.userChanged = false;
                 $scope.email = "{{user.email}}"
 
@@ -173,7 +177,7 @@
                     $scope.user.language = $scope.origUser.language;
                 }
 
-                $scope.updateUser = function() {
+                $scope.updateUser = function(isChangePwd) {
                     console.log("updateUser");
                     $http({
                         method : 'POST',
@@ -181,6 +185,12 @@
                         contentType: 'application/json; charset=utf-8',
                         data: $scope.user,
                     }).success(function(data, textStatus) {
+                        $scope.isUpdating = false;
+                        $scope.copyOriginUser();
+                        if (!isChangePwd){
+                            $scope.userChanged = false;
+                        }
+
                         if (data.redirect) {
                             // data.redirect contains the string URL to redirect to
                             window.location.href = data.redirect;
@@ -188,7 +198,10 @@
                             // data.form contains the HTML for the replacement form
                             console.log(data);
                         }
-                    })
+                    }).error(function(data){
+                        $scope.isUpdating = false;
+                        console.log(data);
+                    });
                 }
 
                 $scope.validOptions = {
@@ -208,21 +221,23 @@
 
                 $scope.validate = function(event, isChangePwd) {
                     event.preventDefault();
-
+                    $scope.isUpdating = true;
                     $scope.user.isChangePwd = isChangePwd;
                     if (isChangePwd){
                         if ($scope.pwdValidator.validate()) {
                             $scope.validationClass = "valid";
-                            $scope.updateUser();
+                            $scope.updateUser(isChangePwd);
                         } else {
                             $scope.validationClass = "invalid";
+                            $scope.isUpdating = false;
                         }
                     } else {
                         if ($scope.validator.validate()) {
                             $scope.validationClass = "valid";
-                            $scope.updateUser();
+                            $scope.updateUser(isChangePwd);
                         } else {
                             $scope.validationClass = "invalid";
+                            $scope.isUpdating = false;
                         }
                     }
                 }
