@@ -218,17 +218,18 @@
                         contentType: 'application/json; charset=utf-8',
                         data: $scope.user,
                     }).success(function(data, textStatus) {
-                        $scope.isAdmin = data.is_manager;
                         $scope.yesUrl = data.settings_url;
                         $scope.noUrl = data.dashboard_url;
 
                         if (data.is_manager){
-                            $("#postRegistration").data("kendoWindow").center().open();
-                        } else {
                             $("#postRegistrationAdmin").data("kendoWindow").center().open();
-                        }
-                        
+                        } else {
+                            $("#postRegistration").data("kendoWindow").center().open();
+                        }                        
                         $("#registration").data("kendoWindow").close();
+                    }).error(function(data){
+                        console.log("createUser fail:");
+                        console.log(data);
                     });
                 }
 
