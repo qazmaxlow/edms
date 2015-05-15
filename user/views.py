@@ -12,6 +12,7 @@ from django.utils import timezone
 from operator import itemgetter
 from django.utils.translation import ugettext as _
 from django.contrib.auth import authenticate
+from django.contrib.auth import login
 from django.core.urlresolvers import reverse
 from django.utils import simplejson
 from django.http import HttpResponse
@@ -69,6 +70,8 @@ def activate_account(request, user_id):
                 user.save()
 
                 user = authenticate(username=user.username, password=data.get('password', None))
+                if user is not None:
+                    login(request, user)
 
                 dashboard_url = reverse('companies.dashboard', kwargs={'system_code': system.code})
                 settings_url = reverse('manage_accounts', kwargs={'system_code': system.code})
