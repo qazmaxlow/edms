@@ -57,12 +57,15 @@ class UrlTokenManager(models.Manager):
             return False
 
 
-class Token(models.Model):
+class AbstractToken(models.Model):
     token_key = models.CharField(max_length=40, unique=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL)
     created_time = models.DateTimeField(auto_now_add=True)
     expiration_days = models.PositiveIntegerField()
     extra_data =  models.TextField(null=True) # suppose using json format
+
+    class Meta:
+        abstract = True
 
     @property
     def is_expired(self):
@@ -70,8 +73,5 @@ class Token(models.Model):
         return timezone.now() > expiration_date
 
 
-class UrlToken(Token):
-    class Meta:
-        proxy = True
-
+class UrlToken(AbstractToken):
     objects = UrlTokenManager()
