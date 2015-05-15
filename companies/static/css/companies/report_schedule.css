@@ -1,7 +1,7 @@
 .auto-report-base {
 	font-family: 'ITCAvantGardeStd', "Helvetica Neue Light",
 	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
-	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
+	"Microsoft Yahei", "å¾®è½¯é›…é»‘", å®‹ä½“, SimSun , STXihei, "åŽæ–‡ç»†é»‘", sans-serif;
 	-webkit-font-smoothing: antialiased;
 	font-size: 14px;
 }
@@ -9,7 +9,7 @@
 .auto-report-base.chinese {
 	font-family: "Helvetica Neue Light",
 	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
-	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
+	"Microsoft Yahei", "å¾®è½¯é›…é»‘", å®‹ä½“, SimSun , STXihei, "åŽæ–‡ç»†é»‘", sans-serif;
 }
 
 .auto-report-base .row {
@@ -296,7 +296,7 @@
 	color: white;
 	font-weight: lighter;
 	font-size: 11pt;
-	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New", "Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New", "Microsoft Yahei", "å¾®è½¯é›…é»‘", å®‹ä½“, SimSun , STXihei, "åŽæ–‡ç»†é»‘", sans-serif;
 }
 .auto-report-base .panel-header-left-menu h3 a:hover,.auto-report-base .panel-header-left-menu h3 a:focus{
 	text-decoration: none;
@@ -432,7 +432,7 @@
 
 .k-et-dropdown-container .k-editPanel {
 	border-top: 2px solid #cdcdcd;
-	height: 61px;
+	height: 81px;
 }
 
 .k-et-dropdown-container .k-editPanel .add-btn {
@@ -462,7 +462,7 @@
 	height: 35px;
 	line-height: 33px;
 	outline: none;
-	margin: 12px;
+	margin: 25px 12px 0px 12px;
 	border-radius: 4px;
 	border: 1px solid #354960;
 	color: #354960;
@@ -472,3 +472,17 @@
 	box-sizing: border-box;
 }
 /* -----etdropdown*/
+/***** invalid message *****/
+
+.invalid-msg{
+	color: #e05d5d;
+	font-size: 0.786em;
+	font-weight: 300;
+	display: inline-block;
+	margin-left: 12px;
+}
+ .valid-msg{
+	display: none;
+}
+
+/***** end of invalid message *****/
