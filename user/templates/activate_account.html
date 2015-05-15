@@ -25,8 +25,8 @@
 {% endblock %}
 
 {% block extra_script %}
-<script src="{% static 'assets/django/js/ajax.js' %}"></script>
 <script src="{% static 'assets/jquery/jquery-1.11.0.min.js' %}"></script>
+<script src="{% static 'assets/django/js/ajax.js' %}"></script>
 <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
 <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
 {% endblock %}
@@ -87,100 +87,100 @@
 </div>
 <div ng-app="entrak">
     <div class="demo-section k-header" ng-controller="MyCtrl">
-        <div kendo-window="wndw" id="registration" class="activate-acc" k-title="'Create your En-trak Account'" k-width="620" k-height="600" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
+        <div kendo-window="wndw" id="registration" class="activate-acc" k-title="createAccTitle" k-width="620" k-height="600" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
             <div class="form-horizontal form-widgets">
                 <form name="kForm" kendo-validator="validator" ng-submit="validate($event)" class="k-content" ng-model="isValid" k-options="validOptions">
                 <div class="sub-header-container">
-                    <span class="sub-header">Basic Information</span>
-                    <span class="warn-text">All fields are required</span>
+                    <span class="sub-header">{% trans "Basic Information" %}</span>
+                    <span class="warn-text">{% trans "All fields are required" %}</span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="firstname">First Name:</label>
-                    <input type="text" id="firstname" name="First Name" ng-model="user.first_name" class="k-textbox normal-tb" placeholder="First Name" required validationMessage="required field"/>
+                    <label class="control-label" for="firstname">{% trans "First Name" %}:</label>
+                    <input type="text" id="firstname" name="First Name" ng-model="user.first_name" class="k-textbox normal-tb" placeholder="{% trans 'First Name' %}" required validationMessage="required field"/>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="lastname">Last Name:</label>
-                    <input type="text" id="lastname" name="Last Name" ng-model="user.last_name" class="k-textbox normal-tb" placeholder="Last Name" required validationMessage="required field"/>
+                    <label class="control-label" for="lastname">{% trans "Last Name" %}:</label>
+                    <input type="text" id="lastname" name="Last Name" ng-model="user.last_name" class="k-textbox normal-tb" placeholder="{% trans 'Last Name' %}" required validationMessage="required field"/>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="department">Department:</label>
-                    <select kendo-dropdownlist k-option-label="'--Department--'" name="department" ng-model="user.department" id="department" required data-required-msg="required field">
-                        <option>Administration</option>
-                        <option>Business Development</option>
-                        <option>CEO Office / Management</option>
-                        <option>Corporate Communcations</option>
-                        <option>CSR</option>
-                        <option>Customer Services</option>
-                        <option>Facilities Management</option>
-                        <option>Finance / Accounting</option>
-                        <option>Human Resources</option>
-                        <option>Information Technology</option>
-                        <option>Legal / Compliance</option>
-                        <option>Marketing</option>
-                        <option>Others</option>
-                        <option>Products</option>
-                        <option>Purchasing</option>
-                        <option>Sales</option>
+                    <label class="control-label" for="department">{% trans "Department" %}:</label>
+                    <select class="department" kendo-dropdownlist k-option-label="defaultDepartment" name="department" ng-model="user.department" id="department" required data-required-msg="required field">
+                        <option>{% trans "Administration" %}</option>
+                        <option>{% trans "Business Development" %}</option>
+                        <option>{% trans "CEO Office / Management" %}</option>
+                        <option>{% trans "orporate Communcations" %}</option>
+                        <option>{% trans "CSR" %}</option>
+                        <option>{% trans "Customer Services" %}</option>
+                        <option>{% trans "Facilities Managemen" %}</option>
+                        <option>{% trans "Finance / Accounting" %}</option>
+                        <option>{% trans "Human Resources" %}</option>
+                        <option>{% trans "Information Technology" %}</option>
+                        <option>{% trans "Legal / Compliance" %}</option>
+                        <option>{% trans "Marketing" %}</option>
+                        <option>{% trans "Others" %}</option>
+                        <option>{% trans "Products" %}</option>
+                        <option>{% trans "Purchasing" %}</option>
+                        <option>{% trans "Sales" %}</option>
                     </select>
                     <span class="k-invalid-msg" data-for="department"></span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="language">Language:</label>
-                    <select kendo-dropdownlist k-option-label="'--Language--'" name="language" id="language" ng-model="user.language" required data-required-msg="required field">
+                    <label class="control-label" for="language">{% trans "Language" %}:</label>
+                    <select kendo-dropdownlist k-option-label="defaultLanguage" name="language" id="language" ng-model="user.language" required data-required-msg="required field">
                         <option value="en_US">English</option>
                         <option value="zh_TW">繁體中文</option>
                     </select>
                     <span class="k-invalid-msg" data-for="language"></span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" data-for="email">Email:</label>
+                    <label class="control-label" data-for="email">{% trans "Email" %}:</label>
                     <span ng-bind="email" name"email"></span>
                 </div>
                 <div class="form-note">
-                    <span class="note-label">Please note: </span>
-                    <span>You will be using this email to login the En-trak Platform.</span>
+                    <span class="note-label">{% trans "Please note" %}: </span>
+                    <span>{% trans "You will be using this email to login the En-trak Platform." %}</span>
                 </div>
                 <div class="separator"></div>
                 <div class="sub-header-container">
-                    <span class="sub-header">Password</span>
+                    <span class="sub-header">{% trans "Password" %}</span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="password">Password:</label>
-                    <input type="password" id="password" name="Password" ng-model="user.password" class="k-textbox normal-tb" placeholder="Set Your Password" required data-required-msg="required field" />
+                    <label class="control-label" for="password">{% trans "Password" %}:</label>
+                    <input type="password" id="password" name="Password" ng-model="user.password" class="k-textbox normal-tb" placeholder="{% trans 'Set Your Password' %}" required data-required-msg="required field" />
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="confirm_password">Confirm Password:</label>
-                    <input type="password" id="confirm_password" name="Confirm Password" class="k-textbox normal-tb" placeholder="Retype Your Password" required data-required-msg="required field" />
+                    <label class="control-label" for="confirm_password">{% trans "Confirm Password" %}:</label>
+                    <input type="password" id="confirm_password" name="Confirm Password" class="k-textbox normal-tb" placeholder="{% trans 'Retype Your Password' %}" required data-required-msg="required field" />
                 </div>
                 <div class="separator"></div>
                 <div class="buttons-wrap">
-                    <button class="k-button normal-btn" ng-disabled="!isValid">Create Account</button>
+                    <button class="k-button normal-btn" ng-disabled="!isValid">{% trans "Create Account" %}</button>
                 </div>
                 </form>
             </div>
         </div>
 
         <!-- create account yes/no popup -->
-        <div kendo-window="wndw" id="postRegistration" class="activate-acc post-activate" k-title="'Get Started'" k-width="600" k-height="260" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
+        <div kendo-window="wndw" id="postRegistration" class="activate-acc post-activate" k-title="normalUserTitle" k-width="600" k-height="260" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
             <div class="normal-user">
                 <img src="/static/images/account-created-icon.png"></img>
-                <div class="congrat-msg">Congrats, your account is ready to use!</div>
+                <div class="congrat-msg">{% trans 'Congrats, your account is ready to use!' %}</div>
                 <div class="buttons-wrap">
-                    <button class="k-button normal-btn" ng-click="goCreateAdditionAcc(false)">Get Started</button>
+                    <button class="k-button normal-btn" ng-click="goCreateAdditionAcc(false)">{% trans 'Get Started' %}</button>
                 </div>
             </div>
         </div>
-        <div kendo-window="wndw" id="postRegistrationAdmin" class="activate-acc post-activate" k-title="'Create New Accounts'" k-width="600" k-height="320" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
+        <div kendo-window="wndw" id="postRegistrationAdmin" class="activate-acc post-activate" k-title="adminUserTitle" k-width="600" k-height="320" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
             <img src="/static/images/account-created-icon.png"></img>
-            <div class="congrat-msg">Congrats, your account is ready to use!</div>
+            <div class="congrat-msg">{% trans 'Congrats, your account is ready to use!' %}</div>
             <div class="separator"></div>
-            <div class="info-msg">As the Admin you are able to create additional User Accounts.</div>
-            <div class="question">Do you want to create User Accounts now?</div>
+            <div class="info-msg">{% trans 'As the Admin you are able to create additional User Accounts.' %}</div>
+            <div class="question">{% trans 'Do you want to create User Accounts now?' %}</div>
             <div class="buttons-wrap">
-                <button class="k-button normal-btn" ng-click="goCreateAdditionAcc(true)">Yes</button>
-                <button class="k-button normal-btn" ng-click="goCreateAdditionAcc(false)">No</button>
+                <button class="k-button normal-btn" ng-click="goCreateAdditionAcc(true)">{% trans "Yes" %}</button>
+                <button class="k-button normal-btn" ng-click="goCreateAdditionAcc(false)">{% trans "No" %}</button>
             </div>
-            <div class="sub-text">You can also later create or manage accounts in the settings page.</div>
+            <div class="sub-text">{% trans "You can also later create or manage accounts in the settings page." %}</div>
         </div>
     </div>
 
@@ -192,6 +192,19 @@
                 $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
             }])
             .controller("MyCtrl", function($scope, $http){
+                var langCode = '{{LANGUAGE_CODE}}';
+                console.log(langCode);
+                if (langCode.indexOf("en") == 0){
+                    $("body").removeClass("chinese");
+                } else {
+                    $("body").addClass("chinese");
+                }
+
+                $scope.createAccTitle = {% trans "'Create your En-trak Account'" %};
+                $scope.normalUserTitle = {% trans "'Get Started'" %};
+                $scope.adminUserTitle = {% trans "'Create New Accounts'" %};
+                $scope.defaultDepartment = "--" + {% trans "'Department'" %} + "--";
+                $scope.defaultLanguage = "--" + {% trans "'Language'" %} + "--";
 
                 $scope.user = {};
                 $scope.user.uid = "{{uid}}";
@@ -205,17 +218,18 @@
                         contentType: 'application/json; charset=utf-8',
                         data: $scope.user,
                     }).success(function(data, textStatus) {
-                        $scope.isAdmin = data.is_manager;
                         $scope.yesUrl = data.settings_url;
                         $scope.noUrl = data.dashboard_url;
 
                         if (data.is_manager){
-                            $("#postRegistration").data("kendoWindow").center().open();
-                        } else {
                             $("#postRegistrationAdmin").data("kendoWindow").center().open();
-                        }
-                        
+                        } else {
+                            $("#postRegistration").data("kendoWindow").center().open();
+                        }                        
                         $("#registration").data("kendoWindow").close();
+                    }).error(function(data){
+                        console.log("createUser fail:");
+                        console.log(data);
                     });
                 }
 
@@ -238,7 +252,7 @@
                         }
                     },
                     messages: {
-                        matchpwd: "Password do not match"
+                        matchpwd: {% trans "'Password does not match'" %}
                     }
                 }
 

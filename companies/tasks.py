@@ -1,10 +1,12 @@
 import datetime
+import json
 from dateutil import relativedelta
 
 from django.core.mail import EmailMultiAlternatives
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
+from django.http import QueryDict
 from django.template.loader import render_to_string
 from django.utils import formats
 from django.utils import timezone
@@ -25,16 +27,13 @@ def send_report_by_schedulers():
 
         # receiver_emails = [ r.email for r in scheduler.receivers ]
         for r in scheduler.receivers.all():
-            if scheduler.execute_time >= timezone.now() or True:
+            if scheduler.execute_time >= timezone.now():
                 from tokens.models import UrlToken
 
                 site = Site.objects.get_current()
-                url_token = UrlToken.objects.create_url_token(scheduler.created_by, expiration_days=10)
-                report_token = url_token.token_key
 
                 owner = scheduler.created_by
                 url = reverse('companies.reports.popup-report.custom-dates', kwargs={ 'system_code': owner.system.code })
-
                 user_tz = scheduler.created_by.system.time_zone
                 execute_time = scheduler.execute_time.astimezone(user_tz)
 
@@ -49,7 +48,20 @@ def send_report_by_schedulers():
                     report_type = 'week'
                     report_date_text = formats.date_format(first_report_day, 'DATE_FORMAT')
 
-                report_url = 'https://%s%s?start_date=%s&end_date=%s&report_type=%s&tk=%s' % (site.domain, url, first_report_day.strftime('%Y-%m-%d'), last_report_day.strftime('%Y-%m-%d'), report_type, report_token)
+                url_params = {
+                    'start_date': first_report_day.strftime('%Y-%m-%d'),
+                    'end_date' : last_report_day.strftime('%Y-%m-%d'),
+                    'report_type': report_type
+                }
+                url_params_json = json.dumps(url_params)
+                url_token = UrlToken.objects.create_url_token(scheduler.created_by, expiration_days=10, url=url, url_params=url_params_json)
+
+                # report_token = url_token.token_key
+                qd = QueryDict('', mutable=True)
+                qd.update(url_params)
+                qd.update({'tk': url_token.token_key})
+
+                report_url = 'https://%s%s?%s' % (site.domain, url, qd.urlencode())
 
                 email = r.email
 
