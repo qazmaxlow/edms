@@ -67,11 +67,11 @@
     <form method="POST">{% csrf_token %}
         <div>
             <img src="{% static 'images/login/username-icon.png' %}">
-            <input type="text" name="username" placeholder='{% trans "Username" %}'>
+            <input type="text" name="username">
         </div>
         <div>
             <img src="{% static 'images/login/password-icon.png' %}">
-            <input type="password" name="password" placeholder='{% trans "Password" %}'>
+            <input type="password" name="password" >
         </div>
         <div class="remember-me">
             <label for="remember_me" class="remember-me">
@@ -96,15 +96,15 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="firstname">{% trans "First Name" %}:</label>
-                    <input type="text" id="firstname" name="First Name" ng-model="user.first_name" class="k-textbox normal-tb" placeholder="{% trans 'First Name' %}" required validationMessage="required field"/>
+                    <input type="text" id="firstname" name="First Name" ng-model="user.first_name" class="k-textbox normal-tb" required validationMessage="{% trans '*Required field' %}"/>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="lastname">{% trans "Last Name" %}:</label>
-                    <input type="text" id="lastname" name="Last Name" ng-model="user.last_name" class="k-textbox normal-tb" placeholder="{% trans 'Last Name' %}" required validationMessage="required field"/>
+                    <input type="text" id="lastname" name="Last Name" ng-model="user.last_name" class="k-textbox normal-tb" required validationMessage="{% trans '*Required field' %}"/>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="department">{% trans "Department" %}:</label>
-                    <select class="department" kendo-dropdownlist k-option-label="defaultDepartment" name="department" ng-model="user.department" id="department" required data-required-msg="required field">
+                    <select class="department" kendo-dropdownlist k-option-label="defaultDepartment" name="department" ng-model="user.department" id="department" required data-required-msg="{% trans '*Required field' %}">
                         <option>{% trans "Administration" %}</option>
                         <option>{% trans "Business Development" %}</option>
                         <option>{% trans "CEO Office / Management" %}</option>
@@ -126,7 +126,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="language">{% trans "Language" %}:</label>
-                    <select kendo-dropdownlist k-option-label="defaultLanguage" name="language" id="language" ng-model="user.language" required data-required-msg="required field">
+                    <select kendo-dropdownlist k-option-label="defaultLanguage" name="language" id="language" ng-model="user.language" required data-required-msg="{% trans '*Required field' %}">
                         <option value="en_US">English</option>
                         <option value="zh_TW">繁體中文</option>
                     </select>
@@ -142,15 +142,15 @@
                 </div>
                 <div class="separator"></div>
                 <div class="sub-header-container">
-                    <span class="sub-header">{% trans "Password" %}</span>
+                    <span class="sub-header">{% trans "Password" context "activate_title" %}</span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="password">{% trans "Password" %}:</label>
-                    <input type="password" id="password" name="Password" ng-model="user.password" class="k-textbox normal-tb" placeholder="{% trans 'Set Your Password' %}" required data-required-msg="required field" />
+                    <label class="control-label" for="password">{% trans "Password" context "activate_input" %}:</label>
+                    <input type="password" id="password" name="Password" ng-model="user.password" class="k-textbox normal-tb" required data-required-msg="{% trans '*Required field' %}" />
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="confirm_password">{% trans "Confirm Password" %}:</label>
-                    <input type="password" id="confirm_password" name="Confirm Password" class="k-textbox normal-tb" placeholder="{% trans 'Retype Your Password' %}" required data-required-msg="required field" />
+                    <label class="control-label" for="confirm_password">{% trans "Confirm Password" context "activate" %}:</label>
+                    <input type="password" id="confirm_password" name="Confirm Password" class="k-textbox normal-tb" required data-required-msg="{% trans '*Required field' %}" />
                 </div>
                 <div class="separator"></div>
                 <div class="buttons-wrap">
@@ -200,9 +200,9 @@
                     $("body").addClass("chinese");
                 }
 
-                $scope.createAccTitle = {% trans "'Create your En-trak Account'" %};
-                $scope.normalUserTitle = {% trans "'Get Started'" %};
-                $scope.adminUserTitle = {% trans "'Create New Accounts'" %};
+                $scope.createAccTitle = {% trans "'Create En-trak Account'" %};
+                $scope.normalUserTitle = {% trans "'Create En-trak Account'" %};
+                $scope.adminUserTitle = {% trans "'Create En-trak Accounts'" %};
                 $scope.defaultDepartment = "--" + {% trans "'Department'" %} + "--";
                 $scope.defaultLanguage = "--" + {% trans "'Language'" %} + "--";
 
@@ -252,7 +252,7 @@
                         }
                     },
                     messages: {
-                        matchpwd: {% trans "'Password does not match'" %}
+                        matchpwd: "{% trans '*Passwords do not match' %}"
                     }
                 }
 
