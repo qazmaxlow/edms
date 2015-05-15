@@ -19,7 +19,6 @@ from django.http import HttpResponseForbidden
 from django.http import HttpResponseBadRequest
 from django.db.utils import IntegrityError
 from rest_framework.response import Response
-from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.exceptions import APIException
@@ -53,7 +52,6 @@ def activate_account(request, user_id):
         user_id = request.GET.get('uid', None)
         user_code = request.GET.get('ucode', None)
 
-
     if user and user_id and user_code:
 
         if user.validate_activation_url(user_id.encode('ascii','ignore'), user_code.encode('ascii','ignore')):
@@ -70,7 +68,7 @@ def activate_account(request, user_id):
                 user.is_email_verified =  True
                 user.save()
 
-                user = authenticate(username=user.username, password=user.password)
+                authenticate(username=user.username, password=user.password)
 
                 dashboard_url = reverse('companies.dashboard', kwargs={'system_code': system.code})
                 settings_url = reverse('manage_accounts', kwargs={'system_code': system.code})
@@ -165,10 +163,10 @@ def send_invitation_email(request, user_id):
     return HttpResponseForbidden('<h3>Not authorized</h3>')
 
 
-@permission_classes((IsAuthenticated,))
 class CreateIndividualUserView(generics.CreateAPIView):
 
     serializer_class = UserSerializer
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request, format=None):
 
@@ -193,10 +191,10 @@ class CreateIndividualUserView(generics.CreateAPIView):
         return Response(user.data)
 
 
-@permission_classes((IsAuthenticated,))
 class CreateSharedUserView(generics.CreateAPIView):
 
     serializer_class = UserSerializer
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request, format=None):
 
@@ -224,32 +222,34 @@ class CreateSharedUserView(generics.CreateAPIView):
         return Response(user.data)
 
 
-@permission_classes((IsAuthenticated,))
+# @permission_classes((IsAuthenticated,))
 class DeleteUserView(generics.DestroyAPIView):
 
     serializer_class = UserSerializer
+    permission_classes = (IsAuthenticated,)
     queryset = EntrakUser.objects.all()
+    lookup_field = 'user_id'
+    lookup_url_kwarg = 'user_id'
 
-    def delete(self):
+    def delete(self, request, *args, **kwargs):
 
         data = self.request.data
         request_user = self.request.user
         user_to_be_deleted = EntrakUser.objects.get(id=self.kwargs['user_id'])
 
-        systems_info = System.get_systems_info(user_to_be_deleted.system.code, request_user.system.code)
+        system_info = System.get_systems_info(user_to_be_deleted.system.code, request_user.system.code)
 
         if not system_info or not request_user.is_manager():
             raise PermissionDenied()
 
-        required_keys = set(['id', 'username', 'system_id'])
-
-        if not required_keys.issubset(set(data.keys())):
-            raise ParseError("Invalid Request")
-
-        if user_to_be_deleted.id == data['id'] and user_to_be_deleted.username == data['username'] and user_to_be_deleted.system_id == data['system_id']:
-            raise ParseError("Invalid Request")
-
         user_to_be_deleted.is_active = False
         user_to_be_deleted.save()
 
-        return user_to_be_deleted
+        user = UserSerializer(user_to_be_deleted)
+        return Response(user.data)
+
+
+class UpdateUserView(generics.UpdateAPIView):
+    serializer_class = UserSerializer
+    permission_classes = (IsAuthenticated,)
+    queryset = EntrakUser.objects.all()

@@ -32,7 +32,7 @@
 
 {% endblock %}
 
-{% block selected-menu-link-id %}menu-link-export{% endblock %}
+{% block selected-menu-link-id %}menu-link-report{% endblock %}
 {% block system_menu_target_view %}report{% endblock %}
 {% block breadcrumb_target_view %}report{% endblock %}
 
@@ -45,16 +45,16 @@
 
 {% block page_content %}
 
-{% verbatim %}
+
 <div ng-app="Entrak">
     <div ng-cloak ng-controller="ReportScheduleController" class="auto-report-base" ><!-- style="height: 420px" -->
         <div id="report-schedule-container">
             <div class="row drop-down-panel-header">
                 <div class="panel-header-left-menu">
-                    <h3><a href="/fujixerox-cp3/report">{{viewReportTitle}}</a></h3><h3 class="automatedreport"><a href="#">{{automatedReportTitle}}</a></h3>
+                    <h3><a href="{% url 'companies.report' system_code=systems.0.code %}" ng-bind="viewReportTitle"></a></h3><h3 class="automatedreport"><a href="#" ng-bind="automatedReportTitle"></a></h3>
                 </div>
             </div>
-
+{% verbatim %}
             <div class="row steps">
                 <div class="col-md-3 description">
                     <p class="desc-text">{{description}}</p>
@@ -102,10 +102,11 @@
                     <div kendo-grid k-options="taskGridOptions(dataItem)"></div>
                 </div>
             </div>
+{% endverbatim %}            
         </div>
     </div>
 </div>
-{% endverbatim %}
+
 
 <script>
     angular.module("Entrak", [ "kendo.directives" ])

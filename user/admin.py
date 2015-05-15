@@ -31,7 +31,7 @@ class EntrakUserAdmin(UserAdmin):
         return Token.objects.get_or_create(user=obj)[0]
 
     def send_activation_email(self, obj):
-        if obj.is_email_verified:
+        if obj.is_email_verified or not obj.is_personal_account:
             return '---'
         else:
             return '<a href="/users/%d/send_invitation_email">Send Email</a>' % (obj.id)

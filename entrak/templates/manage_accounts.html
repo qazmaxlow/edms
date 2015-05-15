@@ -41,15 +41,16 @@
 
 {% block page_content %}
 
-{% verbatim %}
 
 <div id="myApp" ng-app="Entrak">
     <div ng-controller="myCtrl" class="manage-acc">
         <div class="k-header">
-            <div class="header-tab">My Profile</div><!--
+            <div class="header-tab">
+                <a href="{% url 'profile' system_code=systems.0.code %}">My Profile</a>
+            </div><!--
             --><div class="header-tab selected-tab">Manage Accounts</div>
         </div>
-
+{% verbatim %}
         <button class='k-button normal-btn userAcc' ng-click="showCreateUserAccountWindow()">Create User Account</button>
         <img kendo-tooltip k-options="tooltipOpt" class="info-icon" src="/static/images/info-icon.png"></img>
         <kendo-grid options="priGridOptions">
@@ -89,21 +90,21 @@
                 <div ng-cloak class="action-msg" ng-class="{'error-text' : !isDeleted}" ng-bind="removeAccountMessage"></div>
             </div>
         </div>
-        
-        <div kendo-window="resetPasswordWindow" id="resetPasswordWindow" k-title="'Change Password'" k-width="380" k-height="380" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak class="popup-window" k-options="changePwdOpt">
+
+        <div kendo-window="resetPasswordWindow" id="resetPasswordWindow" k-title="'Change Password'" k-width="380" k-height="300" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak class="popup-window" k-options="changePwdOpt">
             <div class="form-horizontal form-widgets">
                 <form name="kForm" kendo-validator="pwdValidator" k-options="validOpt" ng-submit="validateChangePwd($event)" class="k-content down-err-txt" ng-model="isPwdValid">
-                <div class="form-group">
+<!--                 <div class="form-group">
                     <label class="control-label" for="cur_change_pwd">Password</label>
                     <input type="password" id="cur_change_pwd" name="Current Password" ng-model="resetPwdUser.current_password" class="k-textbox normal-tb" placeholder="Set Your Password" required data-required-msg="required field" />
-                </div>
+                </div> -->
                 <div class="form-group">
                     <label class="control-label" for="new_change_pwd">New Password</label>
-                    <input type="password" id="new_change_pwd" name="New Password" ng-model="resetPwdUser.password" class="k-textbox normal-tb" placeholder="Password" required data-required-msg="required field" />
+                    <input type="password" id="new_change_pwd" name="New Password" ng-model="resetPasswordItem.new_password" class="k-textbox normal-tb" placeholder="Password" required data-required-msg="required field" />
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="confirm_change_pwd">Confirm Password</label>
-                    <input type="password" id="confirm_change_pwd" name="Confirm Password" class="k-textbox normal-tb" placeholder="Retype Password" required data-required-msg="required field" ng-model="resetPwdUser.confirm_password"/>
+                    <input type="password" id="confirm_change_pwd" name="Confirm Password" class="k-textbox normal-tb" placeholder="Retype Password" required data-required-msg="required field" ng-model="resetPasswordItem.confirm_password"/>
                 </div>
                 <div class="buttons-wrap">
                     <button ng-disabled="!isPwdChanged && !isPwdValid || isPwdChanging" class="k-button normal-btn" type="submit">{{changePwdButtonText}}</button>
@@ -139,9 +140,10 @@
                 </form>
             </div>
         </div>
+{% endverbatim %}
     </div>
 </div>
-
+{% verbatim %}
 <script id="rowTemplate" type="text/x-kendo-tmpl">
     # if (is_email_verified == true) { #
     <tr data-uid="#: uid #">
@@ -184,7 +186,6 @@
                     }
                 },
                 width: 255,
-                // autoHide: false,
                 height: 60,
                 content: "Individual Account enjoys a higher level of security, more control and better functionality. We encourage usage of User Account."
             };
@@ -222,7 +223,7 @@
 
                 if ($scope.pwdValidator.validate()) {
                     $scope.validationClass = "valid";
-                    $scope.removeAccount();
+                    $scope.resetPassword();
                 } else {
                     $scope.validationClass = "invalid";
                 }
@@ -263,6 +264,7 @@
                         return data['odata.count'];
                     },
                     model: {
+                        id: "id",
                         fields: {
                             id: { type: "number" },
                             fullname: { type: "string" },
@@ -293,6 +295,14 @@
                         url: "{% url 'users.create_shared_user' %}",
                         type: "POST",
                         contentType: "application/json"
+                    },
+                    update: {
+                        url: function (item) {
+                            var url = "{% url 'users.update_account' 99999 %}";
+                            url = url.replace(99999, item.id);
+                            return url;
+                        },
+                        type: "DELETE"
                     },
                     destroy: {
                         url: function (item) {
@@ -351,7 +361,7 @@
                 sortable: true,
                 columns: [
                     { field: "username", title: "User Name" },
-                    { title: "Password", width: "190px", template: "<button class='k-button normal-btn' ng-click='showResetPasswordWindow()'>Change password</button>"},
+                    { title: "Password", width: "190px", template: "<button class='k-button normal-btn' ng-click='showResetPasswordWindow(dataItem)'>Change password</button>"},
                     { title: "Delete", width: "63px", template: '<img class="delete-icon" src="/static/images/delete-icon.png" ng-click="confirmDeleteAccount(dataItem)"></img>'}
                 ],
             }
@@ -612,7 +622,7 @@
                             $scope.$apply(function(){
                                 $scope.isDeleting = false;
                                 $scope.isDeleted = true;
-                                $scope.removeAccountMessage = "xxxxxx";
+                                $scope.removeAccountMessage = "Account deleted.";
                             });
                         })
                         .fail(function(e) {
@@ -647,8 +657,13 @@
                 return false;
             }
 
-            $scope.showResetPasswordWindow = function() {
+            $scope.showResetPasswordWindow = function(dataItem) {
                 $("#resetPasswordWindow").data("kendoWindow").center().open();
+                $scope.resetPasswordItem = dataItem;
+            }
+
+            $scope.resetPassword = function() {
+
             }
         })
 </script>
