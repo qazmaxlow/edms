@@ -16,7 +16,7 @@ class UrlTokenManager(models.Manager):
     and for cleaning out expired tokens.
     """
 
-    def create_url_token(self, user, expiration_days, url, url_params):
+    def create_url_token(self, user, expiration_days, url, url_params=None):
         """
         Create a ``UrlToken`` for a given
         ``url`` and ``days``, and return the ``UrlToken``.
