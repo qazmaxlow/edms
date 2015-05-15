@@ -1,4 +1,5 @@
 import datetime
+import json
 from dateutil import relativedelta
 
 from django.core.mail import EmailMultiAlternatives
@@ -32,9 +33,6 @@ def send_report_by_schedulers():
 
                 owner = scheduler.created_by
                 url = reverse('companies.reports.popup-report.custom-dates', kwargs={ 'system_code': owner.system.code })
-                url_token = UrlToken.objects.create_url_token(scheduler.created_by, expiration_days=10, url=url)
-                report_token = url_token.token_key
-
                 user_tz = scheduler.created_by.system.time_zone
                 execute_time = scheduler.execute_time.astimezone(user_tz)
 
@@ -49,6 +47,15 @@ def send_report_by_schedulers():
                     report_type = 'week'
                     report_date_text = formats.date_format(first_report_day, 'DATE_FORMAT')
 
+                url_params = {
+                    'start_date': first_report_day.strftime('%Y-%m-%d'),
+                    'end_date' : last_report_day.strftime('%Y-%m-%d'),
+                    'report_type': report_type
+                }
+                url_params_json = json.dumps(url_params)
+                url_token = UrlToken.objects.create_url_token(scheduler.created_by, expiration_days=10, url=url, url_params=url_params_json)
+
+                report_token = url_token.token_key
                 report_url = 'https://%s%s?start_date=%s&end_date=%s&report_type=%s&tk=%s' % (site.domain, url, first_report_day.strftime('%Y-%m-%d'), last_report_day.strftime('%Y-%m-%d'), report_type, report_token)
 
                 email = r.email
