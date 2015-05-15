@@ -5,6 +5,7 @@ var EtDropDown = function(elm, data){
     support = kendo.support,
     ARIA_HIDDEN = "aria-hidden",
     EMPTYITEMLIST = '<div class="k-itemList"></div><div class="k-editPanel"><input></input><button class="add-btn">Add</button></div>',
+    // EMPTYITEMLIST = '<div class="k-itemList"></div><div class="k-editPanel"><input></input><button class="add-btn">Add</button><label class="valid-msg">Invalid</label></div>',
     SPAN = "<SPAN/>",
     ns = ".kendoEtDropDown",
     MOUSEDOWN = "mousedown" + ns,
@@ -46,11 +47,26 @@ var EtDropDown = function(elm, data){
     var div = $("<DIV/>").attr("id", kendo.guid()).appendTo(that.popup.element);//.on(MOUSEDOWN, preventDefault);
     div.html(EMPTYITEMLIST);
 
+    // function validateEmail(sEmail) {
+    //     var filter = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+    //     if (filter.test(sEmail)) {
+    //         return true;
+    //     }
+    //     else {
+    //         return false;
+    //     }
+    // }
+
     function addAction(){
-        if (that.addItem(that.container.find("INPUT").val())){
-            that.container.find("INPUT").val("");
-            that.updatePopup();
-        }        
+        // if (validateEmail(that.container.find("INPUT").val())){
+            if (that.addItem(that.container.find("INPUT").val())){
+                $(".invalid-msg").removeClass("invalid-msg").addClass("valid-msg");
+                that.container.find("INPUT").val("");
+                that.updatePopup();
+            }        
+        // } else {
+        //     $(".valid-msg").addClass("invalid-msg").removeClass("valid-msg");
+        // }
     }
 
     that.container.on(KEYDOWN, function(e){

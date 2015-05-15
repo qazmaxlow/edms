@@ -68,12 +68,12 @@ def activate_account(request, user_id):
                 user.is_email_verified =  True
                 user.save()
 
-                authenticate(username=user.username, password=user.password)
+                user = authenticate(username=user.username, password=data.get('password', None))
 
                 dashboard_url = reverse('companies.dashboard', kwargs={'system_code': system.code})
                 settings_url = reverse('manage_accounts', kwargs={'system_code': system.code})
 
-                if user.is_manager():
+                if user.is_manager:
                     return Utils.json_response({"is_manager": True, "dashboard_url": dashboard_url, "settings_url": settings_url})
                 else:
                     return Utils.json_response({"is_manager": False, "dashboard_url": dashboard_url})
@@ -146,7 +146,7 @@ def update_account(request, user_id):
 
 def send_invitation_email(request, user_id):
 
-    if request.user.is_manager():
+    if request.user.is_manager:
 
         users = EntrakUser.objects.filter(id=user_id, is_email_verified=False, is_personal_account=True)
 
@@ -239,7 +239,7 @@ class DeleteUserView(generics.DestroyAPIView):
 
         system_info = System.get_systems_info(user_to_be_deleted.system.code, request_user.system.code)
 
-        if not system_info or not request_user.is_manager():
+        if not system_info or not request_user.is_manager:
             raise PermissionDenied()
 
         user_to_be_deleted.is_active = False
@@ -252,4 +252,21 @@ class DeleteUserView(generics.DestroyAPIView):
 class UpdateUserView(generics.UpdateAPIView):
     serializer_class = UserSerializer
     permission_classes = (IsAuthenticated,)
-    queryset = EntrakUser.objects.all()
+    lookup_field = 'user_id'
+    lookup_url_kwarg = 'user_id'
+
+    def put(self, request, *args, **kwargs):
+
+        request_user = self.request.user
+        user = EntrakUser.objects.get(id=self.kwargs['user_id'])
+
+        system_info = System.get_systems_info(user.system.code, request_user.system.code)
+
+        if not system_info or not request_user.is_manager:
+            raise PermissionDenied()
+
+        serializer = UserSerializer(user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        raise serializers.ValidationError(serializer.errors)
