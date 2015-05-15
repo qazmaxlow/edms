@@ -82,7 +82,7 @@
         <div kendo-window="confirmDeleteWindow" class="popup-window" id="confirmDeleteWindow" k-title="'Delete Account'" k-options="deleteOpt" k-width="400" k-height="160" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
             <div class="form-horizontal form-widgets">
                 <div class="title-text">Are you sure you want to delete</div>
-                <div ng-cloak class="content-text" ng-bind="removeAccountEmail"></div>
+                <div ng-cloak class="content-text" ng-bind="removeAccountItem.username"></div>
                 <div class="buttons-wrap">
                     <button ng-disabled="isDeleted || isDeleting" ng-cloak class="k-button normal-btn cancel" ng-click="confirmDeleteWindow.close()">Cancel</button>
                     <button ng-disabled="isDeleted || isDeleting" ng-cloak class="k-button normal-btn" ng-click="removeAccount()">Confirm</button>
@@ -185,7 +185,7 @@
                         duration: 500
                     }
                 },
-                width: 255,
+                width: 265,
                 height: 60,
                 content: "Individual Account enjoys a higher level of security, more control and better functionality. We encourage usage of User Account."
             };
@@ -298,11 +298,11 @@
                     },
                     update: {
                         url: function (item) {
-                            var url = "{% url 'users.update_account' 99999 %}";
+                            var url = "{% url 'users.patch_account' 99999 %}";
                             url = url.replace(99999, item.id);
                             return url;
                         },
-                        type: "DELETE"
+                        type: "PUT"
                     },
                     destroy: {
                         url: function (item) {
@@ -586,10 +586,8 @@
             }
 
             $scope.confirmDeleteAccount = function(dataItem) {
-                $scope.removeAccountId = dataItem.id;
-                $scope.removeAccountEmail = dataItem.username;
+                $scope.removeAccountItem = dataItem;
                 $scope.removeAccountMessage = "";
-                $scope.isPersonalAccount = dataItem.is_personal_account;
                 $scope.isDeleted = false;
                 $scope.isDeleting = false;
                 $("#confirmDeleteWindow").data("kendoWindow").center().open();
@@ -600,21 +598,13 @@
                     $scope.isDeleting = true;
 
                     var ds = null;
-                    if ($scope.isPersonalAccount) {
+                    if ($scope.removeAccountItem.is_personal_account) {
                         ds = individual_users;
                     } else {
                         ds = shared_users;
                     }
-                    var raw = ds.data();
-                    var length = raw.length;
-                    var item, i;
-                    for(i=length-1; i>=0; i--){
-                        item = raw[i];
-                        if (item.username == $scope.removeAccountEmail){
-                            ds.remove(item);
-                        }
-                    }
 
+                    ds.remove($scope.removeAccountItem);
 
                     ds.sync()
                         .done(function() {
@@ -630,9 +620,9 @@
                                 $scope.isDeleting = false;
                                 $scope.isDeleted = false;
                                 if (e.responseJSON){
-                                    $scope.sharedAccountMessage = e.responseJSON.join("<br/>");
+                                    $scope.removeAccountMessage = e.responseJSON.join("<br/>");
                                 } else {
-                                    $scope.sharedAccountMessage = e.responseText;
+                                    $scope.removeAccountMessage = e.responseText;
                                 }
                                 ds.cancelChanges();
                             });
@@ -664,6 +654,31 @@
 
             $scope.resetPassword = function() {
 
+                console.log($scope.resetPasswordItem);
+                $scope.resetPasswordItem.set('new_password', 'aaa')
+                $scope.resetPasswordItem.set('confirm_password', 'aaa')
+                console.log(shared_users.hasChanges());
+
+                shared_users.sync()
+                    .done(function() {
+                        console.log("password resetted");
+                        $scope.$apply(function(){
+                            $scope.changePwdMessage = "Password changed";
+                        });
+                    })
+                    .fail(function(e) {
+                        $scope.$apply(function(){
+                            $scope.isDeleting = false;
+                            $scope.isDeleted = false;
+                            if (e.responseJSON){
+                                $scope.changePwdMessage = e.responseJSON.join("<br/>");
+                            } else {
+                                $scope.changePwdMessage = e.responseText;
+                            }
+                            shared_users.cancelChanges();
+                        });
+                        console.log(e);
+                    });
             }
         })
 </script>
