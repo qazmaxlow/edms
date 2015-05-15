@@ -29,11 +29,11 @@ def send_report_by_schedulers():
                 from tokens.models import UrlToken
 
                 site = Site.objects.get_current()
-                url_token = UrlToken.objects.create_url_token(scheduler.created_by, expiration_days=10)
-                report_token = url_token.token_key
 
                 owner = scheduler.created_by
                 url = reverse('companies.reports.popup-report.custom-dates', kwargs={ 'system_code': owner.system.code })
+                url_token = UrlToken.objects.create_url_token(scheduler.created_by, expiration_days=10, url=url)
+                report_token = url_token.token_key
 
                 user_tz = scheduler.created_by.system.time_zone
                 execute_time = scheduler.execute_time.astimezone(user_tz)
