@@ -421,6 +421,7 @@
                         }
                         $scope.isDeleted = false;
                         $scope.removeAccountMessage = "";
+                        clearTimeout($scope.deleteTimer);
                       }
             }
 
@@ -593,6 +594,7 @@
             }
 
             $scope.confirmDeleteAccount = function(dataItem) {
+                clearTimeout($scope.deleteTimer);
                 $scope.removeAccountItem = dataItem;
                 $scope.removeAccountMessage = "";
                 $scope.isDeleted = false;
@@ -620,6 +622,9 @@
                                 $scope.isDeleting = false;
                                 $scope.isDeleted = true;
                                 $scope.removeAccountMessage = '{% trans "Account deleted." %}';
+                                $scope.deleteTimer = setTimeout(function(){
+                                    $("#confirmDeleteWindow").data("kendoWindow").close();    
+                                }, 2000);
                             });
                         })
                         .fail(function(e) {
