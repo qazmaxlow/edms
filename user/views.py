@@ -31,6 +31,7 @@ from user.models import EntrakUser
 from utils.utils import Utils
 from rest_framework import generics
 from companies.views.user_views import UserSerializer
+from companies.views.user_views import resetPasswordSerializer
 from rest_framework import serializers
 
 PASSWORD_REGEX = re.compile(r'^.*(?=.{8,})(?=.*[A-Za-z]+)(?=.*\d).*$')
@@ -253,7 +254,7 @@ class DeleteUserView(generics.DestroyAPIView):
 
 
 class UpdateUserView(generics.UpdateAPIView):
-    serializer_class = UserSerializer
+    serializer_class = resetPasswordSerializer
     permission_classes = (IsAuthenticated,)
     lookup_field = 'user_id'
     lookup_url_kwarg = 'user_id'
@@ -268,8 +269,15 @@ class UpdateUserView(generics.UpdateAPIView):
         if not system_info or not request_user.is_manager:
             raise PermissionDenied()
 
-        serializer = UserSerializer(user, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        raise serializers.ValidationError(serializer.errors)
+        request_data = {
+            'username': user.username,
+            'new_password': request.data.get('new_password', None),
+            'confirm_password': request.data.get('confirm_password', None)
+        }
+
+        serializer = resetPasswordSerializer(user, data=request_data)
+
+        serializer.is_valid(raise_exception=True)
+        user.set_password(request.data.get('new_password', None))
+        user.save()
+        return Response(serializer.data)

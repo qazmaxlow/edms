@@ -46,104 +46,103 @@
     <div ng-controller="myCtrl" class="manage-acc">
         <div class="k-header">
             <div class="header-tab">
-                <a href="{% url 'profile' system_code=systems.0.code %}">My Profile</a>
+                <a href="{% url 'profile' system_code=systems.0.code %}">{% trans "My Profile" %}</a>
             </div><!--
-            --><div class="header-tab selected-tab">Manage Accounts</div>
+            --><div class="header-tab selected-tab">{% trans "Manage Accounts" %}</div>
         </div>
-{% verbatim %}
-        <button class='k-button normal-btn userAcc' ng-click="showCreateUserAccountWindow()">Create User Account</button>
+
+        <button class='k-button normal-btn userAcc' ng-click="showCreateUserAccountWindow()">{% trans "Create User Account" %}</button>
         <img kendo-tooltip k-options="tooltipOpt" class="info-icon" src="/static/images/info-icon.png"></img>
         <kendo-grid options="priGridOptions">
         </kendo-grid>
-        <div kendo-window="createUserAccountWindow" class="popup-window" id="createUserAccountWindow" k-title="'Create Individual Account'" k-options="createOpt" k-width="400" k-height="190" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak>
+        <div kendo-window="createUserAccountWindow" class="popup-window" id="createUserAccountWindow" k-title="'{% trans "Create Individual Account" %}'" k-options="createOpt" k-width="400" k-height="190" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak>
             <div class="form-horizontal form-widgets">
                 <form name="kForm" class="k-content">
-                    <div class="popup-text">Send an invitation link to:</div>
+                    <div class="popup-text">{% trans "Send an invitation link to:" %}</div>
                     <div id="userEmail"></div>
                     <div class="submitted-text" ng-class="{'error-text' : !isCreated}" ng-bind="userAccountMessage"></div>
                     <div class="buttons-wrap">
-                        <button class="k-button normal-btn" ng-disabled="!isCreated && !hasEmail || isCreating" ng-click="createUserAccount()">{{userAccountButtonText}}</button>
+                        <button class="k-button normal-btn" ng-disabled="!isCreated && !hasEmail || isCreating" ng-click="createUserAccount()" ng-bind="userAccountButtonText"></button>
                     </div>
                 </form>
             </div>
         </div>
-        <div kendo-window="resendEmailWindow" id="resendEmailWindow" k-title="'Resend Invitation'" k-width="400"class="popup-window" k-options="resendOpt" k-height="155" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
+        <div kendo-window="resendEmailWindow" id="resendEmailWindow" k-title="'{% trans "Resend Account Invitation" %}'" k-width="400"class="popup-window" k-options="resendOpt" k-height="155" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
             <div class="form-horizontal form-widgets">
                 <form name="kForm" class="k-content">
-                    <div class="title-text">Send email invitation to</div>
+                    <div class="title-text">{% trans "Send the account invitation to" %}</div>
                     <div ng-cloak class="content-text" ng-bind="resendEmailAddress"></div>
                     <div class="buttons-wrap">
-                        <button ng-cloak ng-disabled="isResending" class="k-button normal-btn" ng-click="resendEmail()">{{resendEmailButtonText}}</button>
+                        <button ng-cloak ng-disabled="isResending" class="k-button normal-btn" ng-click="resendEmail()" ng-bind="resendEmailButtonText"></button>
                     </div>
                     <div ng-cloak class="action-msg" ng-bind="resendEmailMessage"></div>
                 </form>
             </div>
         </div>
-        <div kendo-window="confirmDeleteWindow" class="popup-window" id="confirmDeleteWindow" k-title="'Delete Account'" k-options="deleteOpt" k-width="400" k-height="160" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
+        <div kendo-window="confirmDeleteWindow" class="popup-window" id="confirmDeleteWindow" k-title="'{% trans "Delete Account" %}'" k-options="deleteOpt" k-width="400" k-height="160" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
             <div class="form-horizontal form-widgets">
-                <div class="title-text">Are you sure you want to delete</div>
+                <div class="title-text">{% trans "Are you sure you want to delete" %}</div>
                 <div ng-cloak class="content-text" ng-bind="removeAccountItem.username"></div>
                 <div class="buttons-wrap">
-                    <button ng-disabled="isDeleted || isDeleting" ng-cloak class="k-button normal-btn cancel" ng-click="confirmDeleteWindow.close()">Cancel</button>
-                    <button ng-disabled="isDeleted || isDeleting" ng-cloak class="k-button normal-btn" ng-click="removeAccount()">Confirm</button>
+                    <button ng-disabled="isDeleted || isDeleting" ng-cloak class="k-button normal-btn cancel" ng-click="confirmDeleteWindow.close()">{% trans "Cancel" %}</button>
+                    <button ng-disabled="isDeleted || isDeleting" ng-cloak class="k-button normal-btn" ng-click="removeAccount()">{% trans "Confirm" %}</button>
                 </div>
                 <div ng-cloak class="action-msg" ng-class="{'error-text' : !isDeleted}" ng-bind="removeAccountMessage"></div>
             </div>
         </div>
 
-        <div kendo-window="resetPasswordWindow" id="resetPasswordWindow" k-title="'Change Password'" k-width="380" k-height="300" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak class="popup-window" k-options="changePwdOpt">
+        <div kendo-window="resetPasswordWindow" id="resetPasswordWindow" k-title="'{% trans "Change Password" %}'" k-width="380" k-height="300" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak class="popup-window" k-options="changePwdOpt">
             <div class="form-horizontal form-widgets">
                 <form name="kForm" kendo-validator="pwdValidator" k-options="validOpt" ng-submit="validateChangePwd($event)" class="k-content down-err-txt" ng-model="isPwdValid">
 <!--                 <div class="form-group">
                     <label class="control-label" for="cur_change_pwd">Password</label>
-                    <input type="password" id="cur_change_pwd" name="Current Password" ng-model="resetPwdUser.current_password" class="k-textbox normal-tb" placeholder="Set Your Password" required data-required-msg="required field" />
+                    <input type="password" id="cur_change_pwd" name="Current Password" ng-model="resetPwdUser.current_password" class="k-textbox normal-tb" placeholder="Set Your Password" required data-required-msg="{% trans '*Required field' %}" />
                 </div> -->
                 <div class="form-group">
-                    <label class="control-label" for="new_change_pwd">New Password</label>
-                    <input type="password" id="new_change_pwd" name="New Password" ng-model="resetPasswordItem.new_password" class="k-textbox normal-tb" placeholder="Password" required data-required-msg="required field" />
+                    <label class="control-label" for="new_change_pwd">{% trans "New Password" %}</label>
+                    <input type="password" id="new_change_pwd" name="New Password" ng-model="resetPasswordItem.new_password" class="k-textbox normal-tb" required data-required-msg="{% trans '*Required field' %}" />
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="confirm_change_pwd">Confirm Password</label>
-                    <input type="password" id="confirm_change_pwd" name="Confirm Password" class="k-textbox normal-tb" placeholder="Retype Password" required data-required-msg="required field" ng-model="resetPasswordItem.confirm_password"/>
+                    <label class="control-label" for="confirm_change_pwd">{% trans "Confirm Password" %}</label>
+                    <input type="password" id="confirm_change_pwd" name="Confirm Password" class="k-textbox normal-tb" required data-required-msg="{% trans '*Required field' %}" ng-model="resetPasswordItem.confirm_password"/>
                 </div>
                 <div class="buttons-wrap">
-                    <button ng-disabled="!isPwdChanged && !isPwdValid || isPwdChanging" class="k-button normal-btn" type="submit">{{changePwdButtonText}}</button>
+                    <button ng-disabled="!isPwdChanged && !isPwdValid || isPwdChanging" class="k-button normal-btn" type="submit" ng-bind="changePwdButtonText"></button>
                 </div>
                 <div class="submitted-text" ng-class="{'error-text' : !isPwdChanged}" ng-bind="changePwdMessage"></div>
                 </form>
             </div>
         </div>
 
-        <button class='k-button normal-btn sharedAcc' ng-click="showCreateSharedAccountWindow()">Create Shared Account</button>
+        <button class='k-button normal-btn sharedAcc' ng-click="showCreateSharedAccountWindow()">{% trans "Create Shared Account" %}</button>
         <kendo-grid options="secGridOptions" class="sharedAcc">
         </kendo-grid>
-        <div kendo-window="createSharedAccountWindow" id="createSharedAccountWindow" k-title="'Create Account'" k-width="380" k-height="380" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak class="popup-window" k-options="createShareOpt">
+        <div kendo-window="createSharedAccountWindow" id="createSharedAccountWindow" k-title="'{% trans "Create Account" %}'" k-width="380" k-height="380" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false" ng-cloak class="popup-window" k-options="createShareOpt">
             <div class="form-horizontal form-widgets">
                 <form name="kForm" kendo-validator="sharedAccValidator" k-options="validOpt" ng-submit="validateShare($event)" class="k-content down-err-txt" ng-model="sharedAccValid">
                 <div class="form-group">
-                    <label class="control-label" for="username">Username:</label>
-                    <input type="username" id="username" name="Username" ng-model="user.username" class="k-textbox normal-tb" placeholder="Username" required data-required-msg="required field" />
+                    <label class="control-label" for="username">{% trans "Username" %}:</label>
+                    <input type="username" id="username" name="Username" ng-model="user.username" class="k-textbox normal-tb" required data-required-msg="{% trans '*Required field' %}" />
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="share_password">Password:</label>
-                    <input type="password" id="share_password" name="Password" ng-model="user.password" class="k-textbox normal-tb" placeholder="Password" required data-required-msg="required field" />
+                    <label class="control-label" for="share_password">{% trans "Password" %}:</label>
+                    <input type="password" id="share_password" name="Password" ng-model="user.password" class="k-textbox normal-tb" required data-required-msg="{% trans '*Required field' %}" />
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="share_confirm_password">Confirm Password:</label>
-                    <input type="password" id="share_confirm_password" name="Confirm Password" class="k-textbox normal-tb" placeholder="Retype Password" required data-required-msg="required field" />
+                    <label class="control-label" for="share_confirm_password">{% trans "Confirm Password" %}:</label>
+                    <input type="password" id="share_confirm_password" name="Confirm Password" class="k-textbox normal-tb" required data-required-msg="{% trans '*Required field' %}" />
                 </div>
                 <div class="buttons-wrap">
-                    <button ng-disabled="!isShareCreated && !sharedAccValid || isShareCreating" class="k-button normal-btn" type="submit">{{sharedAccountButtonText}}</button>
-                    <button ng-disabled="isShareCreating" ng-show="!isShareCreated" class="k-button normal-btn cancel" ng-click="createSharedAccountWindow.close()">Cancel</button>
+                    <button ng-disabled="!isShareCreated && !sharedAccValid || isShareCreating" class="k-button normal-btn" type="submit" ng-bind="sharedAccountButtonText"></button>
+                    <button ng-disabled="isShareCreating" ng-show="!isShareCreated" class="k-button normal-btn cancel" ng-click="createSharedAccountWindow.close()">{% trans "Cancel" %}</button>
                 </div>
                 <div class="submitted-text" ng-class="{'error-text' : !isShareCreated}" ng-bind="sharedAccountMessage"></div>
                 </form>
             </div>
         </div>
-{% endverbatim %}
     </div>
 </div>
-{% verbatim %}
+
 <script id="rowTemplate" type="text/x-kendo-tmpl">
     # if (is_email_verified == true) { #
     <tr data-uid="#: uid #">
@@ -155,27 +154,32 @@
     </tr>
     # } else { #
     <tr data-uid="#: uid #">
-        <td> <img class='attention-icon' src='/static/images/attention-icon.png'></img><span>Account Not Activated</span></td>
+        <td> <img class='attention-icon' src='/static/images/attention-icon.png'></img><span>{% trans "Account Not Activated" %}</span></td>
         <td> ${email} </td>
         <td> </td>
-        <td> <button class='k-button normal-btn' ng-click='showResendEmail(dataItem)'>Resend Invitation</button> </td>
+        <td> <button class='k-button normal-btn' ng-click='showResendEmail(dataItem)'>{% trans "Resend Invitation" %}</button> </td>
         <td> <img class='delete-icon' src='/static/images/delete-icon.png' ng-click='confirmDeleteAccount(dataItem)'></img> </td>
     </tr>
     # } #
 </script>
-{% endverbatim %}
+
 
 <script>
     angular.module("Entrak", [ "kendo.directives" ])
         .controller("myCtrl", function($scope, $http){
 
             var etDropDown = new EtDropDown($("#userEmail"));
-            etDropDown.setOptions({onchange: function(){
-                $scope.hasEmail = etDropDown.value().length > 0;
-                if(!$scope.$$phase) {
-                    $scope.$apply();
-                }
-            }});
+            etDropDown.setOptions({
+                onchange: function(){
+                    $scope.hasEmail = etDropDown.value().length > 0;
+                    if(!$scope.$$phase) {
+                        $scope.$apply();
+                    }
+                },
+                itemDisplayName: '{% trans "Emails" context "dropdown" %}',
+                emptyItemText: '{% trans "Add Email" context "dropdown" %}',
+                buttonText: '{% trans "Add" context "dropdown" %}'
+            });
 
             $scope.tooltipOpt = {
                 position: "right",
@@ -186,8 +190,8 @@
                     }
                 },
                 width: 265,
-                height: 60,
-                content: "Individual Account enjoys a higher level of security, more control and better functionality. We encourage usage of User Account."
+                height: 75,
+                content: '{% trans "User Accounts enjoy a higher level of security, more control, and better functionality than Shared Accounts. We encourage you to create User Accounts." %}'
             };
 
             $scope.validOpt = {
@@ -203,7 +207,7 @@
                     }
                 },
                 messages: {
-                    matchpwd: "Password does not match"
+                    matchpwd: "{% trans '*Passwords do not match' %}"
                 }
             }
 
@@ -302,7 +306,8 @@
                             url = url.replace(99999, item.id);
                             return url;
                         },
-                        type: "PUT"
+                        type: "PUT",
+                        contentType: "application/json"
                     },
                     destroy: {
                         url: function (item) {
@@ -314,6 +319,8 @@
                     },
                     parameterMap: function (options, operation) {
                         if (operation == "create") {
+                            return kendo.stringify(options);
+                        } else if (operation == "update") {
                             return kendo.stringify(options);
                         }
                     }
@@ -347,11 +354,11 @@
                 dataSource: individual_users,
                 sortable: true,
                 columns: [
-                    { field: "fullname", title: "Full Name" },
-                    { field: "email", title: "Email" },
-                    { field: "language", title: "Language", width: "150px" },
-                    { field: "department", title: "Department", width: "190px" },
-                    { title: "Delete", width: "63px" }
+                    { field: "fullname", title: '{% trans "Full Name" %}' },
+                    { field: "email", title: '{% trans "Email" %}' },
+                    { field: "language", title: '{% trans "Language" context "grid" %}', width: "150px" },
+                    { field: "department", title: '{% trans "Department" %}', width: "190px" },
+                    { title: '{% trans "Delete" %}', width: "63px" }
                 ],
                 rowTemplate: kendo.template($("#rowTemplate").html()),
             }
@@ -360,13 +367,13 @@
                 dataSource: shared_users,
                 sortable: true,
                 columns: [
-                    { field: "username", title: "User Name" },
-                    { title: "Password", width: "190px", template: "<button class='k-button normal-btn' ng-click='showResetPasswordWindow(dataItem)'>Change password</button>"},
-                    { title: "Delete", width: "63px", template: '<img class="delete-icon" src="/static/images/delete-icon.png" ng-click="confirmDeleteAccount(dataItem)"></img>'}
+                    { field: "username", title: '{% trans "User Name" %}' },
+                    { title: '{% trans "Password" %}', width: "190px", template: "<button class='k-button normal-btn' ng-click='showResetPasswordWindow(dataItem)'>{% trans "Change password" %}</button>"},
+                    { title: '{% trans "Delete" %}', width: "63px", template: '<img class="delete-icon" src="/static/images/delete-icon.png" ng-click="confirmDeleteAccount(dataItem)"></img>'}
                 ],
             }
 
-            $scope.resendEmailButtonText = "Send";
+            $scope.resendEmailButtonText = '{% trans "Send" %}';
             $scope.isEmailResent = false;
             $scope.resendOpt = {
                 close: function(e){
@@ -380,7 +387,7 @@
             }
 
             $scope.userAccountMessage = "";
-            $scope.userAccountButtonText = "Send";
+            $scope.userAccountButtonText = '{% trans "Send" %}';;
             $scope.createOpt = {
                 close: function(e){
                         if ($scope.isCreating){
@@ -393,7 +400,7 @@
             }
 
             $scope.sharedAccountMessage = "";
-            $scope.sharedAccountButtonText = "Create";
+            $scope.sharedAccountButtonText = '{% trans "Create" %}';
             $scope.createShareOpt = {
                 close: function(e){
                         if ($scope.isShareCreating){
@@ -414,11 +421,12 @@
                         }
                         $scope.isDeleted = false;
                         $scope.removeAccountMessage = "";
+                        clearTimeout($scope.deleteTimer);
                       }
             }
 
             $scope.changePwdMessage = "";
-            $scope.changePwdButtonText = "Save";
+            $scope.changePwdButtonText = '{% trans "Save" %}';
             $scope.changePwdOpt = {
                 close: function(e){
                         if ($scope.isPwdChanging){
@@ -432,7 +440,7 @@
 
             $scope.showCreateUserAccountWindow = function() {
                 $scope.userAccountMessage = "";
-                $scope.userAccountButtonText = "Send";
+                $scope.userAccountButtonText = '{% trans "Send" %}';;
                 $scope.isCreated = false;
                 $scope.isCreating = false;
                 etDropDown.value([]);
@@ -441,7 +449,7 @@
 
             $scope.showCreateSharedAccountWindow = function() {
                 $scope.sharedAccountMessage = "";
-                $scope.sharedAccountButtonText = "Create";
+                $scope.sharedAccountButtonText = '{% trans "Create" %}';;
                 $scope.isShareCreated = false;
                 $scope.isShareCreating = false;
                 $("#username").val("");
@@ -471,8 +479,8 @@
                             $scope.$apply(function(){
                                 $scope.isCreating = false;
                                 $scope.isCreated = true;
-                                $scope.userAccountMessage = "Great, the invitation has been sent out.";
-                                $scope.userAccountButtonText = "Go to Dashboard";
+                                $scope.userAccountMessage = '{% trans "Great, the invitation has been sent out." %}';
+                                $scope.userAccountButtonText = '{% trans "Go to Graph" %}';
                             });
                         })
                         .fail(function(e) {
@@ -514,8 +522,8 @@
                             $scope.$apply(function(){
                                 $scope.isShareCreating = false;
                                 $scope.isShareCreated = true;
-                                $scope.sharedAccountMessage = "Great, you just created a shared account.";
-                                $scope.sharedAccountButtonText = "OK";
+                                $scope.sharedAccountMessage = '{% trans "Great, you just created a shared account." %}';
+                                $scope.sharedAccountButtonText = '{% trans "OK" %}';
                             });
                         })
                         .fail(function(e) {
@@ -534,7 +542,7 @@
                 } else if ($scope.isShareCreated) {
                     $scope.isShareCreating = false;
                     $("#createSharedAccountWindow").data("kendoWindow").close();
-                    $scope.sharedAccountButtonText = "Create";
+                    $scope.sharedAccountButtonText = '{% trans "Create" %}';
                     $scope.sharedAccountMessage = "";
                 }
 
@@ -545,7 +553,7 @@
                 $scope.isEmailResent = false;
                 $scope.resendEmailId = dataItem.id;
                 $scope.resendEmailAddress = dataItem.email;
-                $scope.resendEmailButtonText = "Send";
+                $scope.resendEmailButtonText = '{% trans "Send" %}';
                 $scope.resendEmailMessage = "";
                 $("#resendEmailWindow").data("kendoWindow").center().open();
             }
@@ -566,13 +574,13 @@
                     }).success(function(data) {
                         $scope.isEmailResent = true;
                         $scope.isResending = false;
-                        $scope.resendEmailMessage = "The invitation has been sent out.";
-                        $scope.resendEmailButtonText = "OK";
+                        $scope.resendEmailMessage = '{% trans "The invitation has been sent out." %}';
+                        $scope.resendEmailButtonText = '{% trans "OK" %}';
                         console.log("send success");
                     }).error(function(data) {
                         $scope.isEmailResent = false;
                         $scope.isResending = false;
-                        $scope.resendEmailMessage = "Unable to send inviation";
+                        $scope.resendEmailMessage = '{% trans "Unable to send inviation" %}';
                         console.log("send error");
                         console.log(data);
                     })
@@ -586,6 +594,7 @@
             }
 
             $scope.confirmDeleteAccount = function(dataItem) {
+                clearTimeout($scope.deleteTimer);
                 $scope.removeAccountItem = dataItem;
                 $scope.removeAccountMessage = "";
                 $scope.isDeleted = false;
@@ -612,7 +621,10 @@
                             $scope.$apply(function(){
                                 $scope.isDeleting = false;
                                 $scope.isDeleted = true;
-                                $scope.removeAccountMessage = "Account deleted.";
+                                $scope.removeAccountMessage = '{% trans "Account deleted." %}';
+                                $scope.deleteTimer = setTimeout(function(){
+                                    $("#confirmDeleteWindow").data("kendoWindow").close();    
+                                }, 2000);
                             });
                         })
                         .fail(function(e) {
@@ -648,38 +660,44 @@
             }
 
             $scope.showResetPasswordWindow = function(dataItem) {
+
                 $("#resetPasswordWindow").data("kendoWindow").center().open();
-                $scope.resetPasswordItem = dataItem;
-            }
+                $scope.resetPasswordItem = {};
 
-            $scope.resetPassword = function() {
+                $scope.resetPassword = function() {
+                    console.log(dataItem);
+                    console.log($scope.resetPasswordItem);
+                    dataItem.set('new_password', $scope.resetPasswordItem.new_password );
+                    dataItem.set('confirm_password', $scope.resetPasswordItem.confirm_password );
+                    console.log(shared_users.hasChanges());
 
-                console.log($scope.resetPasswordItem);
-                $scope.resetPasswordItem.set('new_password', 'aaa')
-                $scope.resetPasswordItem.set('confirm_password', 'aaa')
-                console.log(shared_users.hasChanges());
+                    shared_users.sync()
+                        .done(function() {
+                            console.log("password resetted");
+                            $scope.$apply(function(){
+                                $scope.changePwdMessage = '{% trans "Password changed" %}';
+                            });
+                        })
+                        .fail(function(e) {
+                            $scope.$apply(function(){
+                                $scope.isDeleting = false;
+                                $scope.isDeleted = false;
+                                if (e.responseJSON && e.responseJSON.constructor === Array) {
+                                    $scope.changePwdMessage = e.responseJSON.join("<br/>");
+                                } else if ('non_field_errors' in e.responseJSON) {
+                                    $scope.changePwdMessage = e.responseJSON['non_field_errors'].join("<br/>");
+                                } else {
+                                    $scope.changePwdMessage = e.responseText;
+                                };
+                            });
 
-                shared_users.sync()
-                    .done(function() {
-                        console.log("password resetted");
-                        $scope.$apply(function(){
-                            $scope.changePwdMessage = "Password changed";
-                        });
-                    })
-                    .fail(function(e) {
-                        $scope.$apply(function(){
-                            $scope.isDeleting = false;
-                            $scope.isDeleted = false;
-                            if (e.responseJSON){
-                                $scope.changePwdMessage = e.responseJSON.join("<br/>");
-                            } else {
-                                $scope.changePwdMessage = e.responseText;
-                            }
                             shared_users.cancelChanges();
+                            console.log(e);
                         });
-                        console.log(e);
-                    });
+                }
             }
+
+
         })
 </script>
 {% endblock %}

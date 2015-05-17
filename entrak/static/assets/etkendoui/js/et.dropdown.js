@@ -4,7 +4,7 @@ var EtDropDown = function(elm, data){
     keys = kendo.keys,
     support = kendo.support,
     ARIA_HIDDEN = "aria-hidden",
-    EMPTYITEMLIST = '<div class="k-itemList"></div><div class="k-editPanel"><input></input><button class="add-btn">Add</button></div>',
+    EMPTYITEMLIST = '<div class="k-itemList"></div><div class="k-editPanel"><input></input><button class="add-btn"></button></div>',
     // EMPTYITEMLIST = '<div class="k-itemList"></div><div class="k-editPanel"><input></input><button class="add-btn">Add</button><label class="valid-msg">Invalid</label></div>',
     SPAN = "<SPAN/>",
     ns = ".kendoEtDropDown",
@@ -24,8 +24,11 @@ var EtDropDown = function(elm, data){
         readOnly: false,
         itemDisplayName: "Emails",
         emptyItemText: "Add Email",
+        buttonText: "Add",
         ignoreCase: true
     };
+
+    that.container = $("<DIV/>").attr(ARIA_HIDDEN, "true").addClass("k-et-dropdown-container").appendTo(body);
 
     if (data == null){
         that.value([]);
@@ -33,7 +36,6 @@ var EtDropDown = function(elm, data){
         that.value(data);    
     }
 
-    that.container = $("<DIV/>").attr(ARIA_HIDDEN, "true").addClass("k-et-dropdown-container").appendTo(body);
     var opt = {};
     opt.animation = {};
     opt.origin = "bottom center";
@@ -114,7 +116,7 @@ EtDropDown.prototype = {
         } else {
             this.items = [data];
         }
-        this.updateTextbox();
+        this.updateText();
 
         if (this.options.onchange && typeof this.options.onchange == "function"){
             this.options.onchange();
@@ -131,14 +133,14 @@ EtDropDown.prototype = {
                     }
                 }
                 this.items.push(item);
-                this.updateTextbox();
+                this.updateText();
                 if (this.options.onchange && typeof this.options.onchange == "function"){
                     this.options.onchange();
                 }
                 return true;
             } else if (this.items.indexOf(item) == -1){
                 this.items.push(item);
-                this.updateTextbox();
+                this.updateText();
                 if (this.options.onchange && typeof this.options.onchange == "function"){
                     this.options.onchange();
                 }
@@ -153,7 +155,7 @@ EtDropDown.prototype = {
             var i = this.items.indexOf(item);
             if (i != -1){
                 this.items.splice(i, 1);
-                this.updateTextbox();
+                this.updateText();
                 if (this.options.onchange && typeof this.options.onchange == "function"){
                     this.options.onchange();
                 }
@@ -172,7 +174,7 @@ EtDropDown.prototype = {
         }
     },
 
-    updateTextbox: function(){
+    updateText: function(){
         if (this.items.length == 0 && this.options.emptyItemText){
             this.wrapper.find(".k-input").text(this.options.emptyItemText);
         } else if (this.items.length == 1){
@@ -180,6 +182,9 @@ EtDropDown.prototype = {
         } else {
             this.wrapper.find(".k-input").text(this.items.length + " " + this.options.itemDisplayName);
         }
+
+        if (this.container)
+            this.container.find(".add-btn").text(this.options.buttonText);
     },
 
     setOptions: function(opt){
@@ -190,7 +195,7 @@ EtDropDown.prototype = {
             });
         }
         that.wrapper.attr("aria-readonly", that.options.readOnly);
-        that.updateTextbox();
+        that.updateText();
     },
 
     open: function(){
