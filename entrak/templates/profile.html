@@ -46,7 +46,7 @@
     <div class="profile profile-container" ng-controller="MyCtrl">
         <div class="k-header">
             <div class="header-tab selected-tab">{% trans "My Profile" %}</div><!--
-            -->{% if user.is_manager %}<div class="header-tab"><a href="{% url 'manage_accounts' system_code=systems.0.code %}">{% trans "Manage Accounts" %}</a></div>{% endif %}
+            -->{% if user.is_manager == True %}<div class="header-tab"><a href="{% url 'manage_accounts' system_code=systems.0.code %}">{% trans "Manage Accounts" %}</a></div>{% endif %}
         </div>
 
         <div class="form-horizontal form-widgets">

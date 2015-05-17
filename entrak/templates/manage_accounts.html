@@ -498,8 +498,8 @@
                         });
                 } else if ($scope.isCreated) {
                     $scope.isCreating = false;
-                    console.log("Redirecting to Dashboard");
-                    window.location.href = "{% url 'companies.dashboard' system.code %}";
+                    console.log("Redirecting to Graph");
+                    window.location.href = "{% url 'graph' system.code %}";
                 }
 
                 return false;

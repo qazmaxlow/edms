@@ -74,7 +74,7 @@ def activate_account(request, user_id):
                 if user is not None:
                     login(request, user)
 
-                dashboard_url = reverse('companies.dashboard', kwargs={'system_code': system.code})
+                dashboard_url = reverse('graph', kwargs={'system_code': system.code})
                 settings_url = reverse('manage_accounts', kwargs={'system_code': system.code})
 
                 if user.is_manager:

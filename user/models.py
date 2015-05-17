@@ -13,6 +13,7 @@ from django.template.loader import get_template
 from django.template import Context
 from django.core.mail import EmailMultiAlternatives
 from django.utils.translation import ugettext as _
+from entrak.settings_common import LANG_CODE_EN, LANG_CODE_TC
 
 
 USER_ROLE_ADMIN_LEVEL   = 100
@@ -22,12 +23,9 @@ USER_ROLE_CHOICES = (
     (USER_ROLE_VIEWER_LEVEL, 'viewer'),
 )
 
-ENGLISH     = "en_US"
-CHINESE     = "zh_TW"
-
 USER_LANGUAGES      = (
-    (ENGLISH, u'English'),
-    (CHINESE, u'繁體中文'),
+    (LANG_CODE_EN, u'English'),
+    (LANG_CODE_TC, u'繁體中文'),
 )
 
 
@@ -37,7 +35,7 @@ class EntrakUser(AbstractUser):
     role_level = models.PositiveSmallIntegerField(max_length=20, choices=USER_ROLE_CHOICES, default=USER_ROLE_VIEWER_LEVEL)
     label = models.CharField(max_length=300, blank=True)
     department = models.CharField(max_length=100, blank=True)
-    language = models.CharField(max_length=10, choices=USER_LANGUAGES, default=ENGLISH)
+    language = models.CharField(max_length=10, choices=USER_LANGUAGES, default=LANG_CODE_EN)
     is_email_verified = models.BooleanField(default=False)
     is_personal_account = models.BooleanField(default=False)
     salt = models.CharField(max_length=32, blank=True)
