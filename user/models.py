@@ -96,9 +96,11 @@ class EntrakUser(AbstractUser):
         htmly     = get_template('activation_email.html')
 
         if self.is_manager:
+            title = "Invitation to Create Admin Account"
             heading = "You have been invited to create an admin account\nfor your organization’s En-trak Energy Monitoring System."
             description = "With En-trak you can see when, where and how you are spending\nyour energy dollars, enabling effective energy management."
         elif on_behalf_of:
+            title = "Invitation to Create User Account"
             heading = on_behalf_of.fullname
             description = "has invited you to create an account for\nyour organization’s En-trak Energy Monitoring System."
 
@@ -108,7 +110,7 @@ class EntrakUser(AbstractUser):
                 'description': description,
             })
 
-        subject, from_email, to_email = 'Thanks for signing up!', "info@en-trak.com", [self.email]
+        subject, from_email, to_email = title, "info@en-trak.com", [self.email]
 
         text_content = plaintext.render(d)
         html_content = htmly.render(d)
