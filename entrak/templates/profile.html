@@ -32,8 +32,8 @@
 
 {% endblock %}
 
-{% block page_title %}{% trans "THE SETTINGS PAGE" %}{% endblock %}
-{% block page_subtitle %}{% trans "Find out what you can set here at" %}{% endblock %}
+{% block page_title %}{% trans "SETTINGS" %}{% endblock %}
+{% block page_subtitle %}{% trans "Manage your system access with" %}{% endblock %}
 
 {% block extra_script %}
 {{block.super}}
@@ -110,7 +110,7 @@
             </div>
         </div>
 
-    <div class="ng-cloak profile profile-popup" kendo-window="wndw" id="resetPassword" k-title="'{% trans "Change Password" %}'" k-width="368" k-height="360" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
+    <div class="ng-cloak profile profile-popup" kendo-window="wndw" id="resetPassword" k-title="'{% trans "Change Password" %}'" k-width="368" k-height="370" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
             <div class="form-horizontal form-widgets">
                 <form name="kForm" kendo-validator="pwdValidator" k-options="validOptions" ng-submit="validate($event, true)" class="k-content down-err-txt" ng-model="isPwdValid">
                 <div class="form-group">
@@ -134,6 +134,7 @@
                 <div class="buttons-wrap">
                     <button class="k-button normal-btn" type="submit" ng-disabled="!isPwdValid || isUpdating">{% trans "Save" %}</button>
                 </div>
+                <div ng-cloak ng-class="{'error-text' : !isUpdated}" class="action-msg" ng-bind="changePwdMessage"></div>
                 </form>
             </div>
     </div>
@@ -169,7 +170,8 @@
                 
                 $scope.copyOriginUser();
                 $scope.userChanged = false;
-                $scope.email = "{{user.email}}"
+                $scope.isUpdated = false;
+                $scope.email = "{{user.email}}";
 
                 $scope.resetInput = function() {
                     $scope.user.first_name = $scope.origUser.first_name;
@@ -186,10 +188,13 @@
                         contentType: 'application/json; charset=utf-8',
                         data: $scope.user,
                     }).success(function(data, textStatus) {
+                        $scope.isUpdated = true;
                         $scope.isUpdating = false;
                         $scope.copyOriginUser();
                         if (!isChangePwd){
                             $scope.userChanged = false;
+                        } else {
+                            $scope.changePwdMessage = "{% trans 'Password changed.' %}";
                         }
 
                         if (data.redirect) {
@@ -200,7 +205,9 @@
                             console.log(data);
                         }
                     }).error(function(data){
+                        $scope.isUpdated = false;
                         $scope.isUpdating = false;
+                        $scope.changePwdMessage = data;
                         console.log(data);
                     });
                 }
@@ -247,6 +254,8 @@
                     $scope.user.confirm_password = null;
                     $scope.user.password = null;
                     $scope.user.current_password = null;
+                    $scope.isUpdated = false;
+                    $scope.changePwdMessage = "";
                     $("#resetPassword").data("kendoWindow").center().open();
                 }
 
@@ -260,10 +269,6 @@
                         $scope.userChanged = true;
                     }
                 });
-
-                //TODO handle dropdown prefill null value case
-                //setTimeout(function(){$("#department").data("kendoDropDownList").value(null);},300);
             });
-
     </script>
 {% endblock %}

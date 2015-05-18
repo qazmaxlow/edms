@@ -87,7 +87,7 @@
 </div>
 <div ng-app="entrak">
     <div class="demo-section k-header" ng-controller="MyCtrl">
-        <div kendo-window="wndw" id="registration" class="activate-acc" k-title="createAccTitle" k-width="620" k-height="600" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
+        <div kendo-window="wndw" id="registration" class="activate-acc" k-title="createAccTitle" k-width="620" k-height="620" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
             <div class="form-horizontal form-widgets">
                 <form name="kForm" kendo-validator="validator" ng-submit="validate($event)" class="k-content" ng-model="isValid" k-options="validOptions">
                 <div class="sub-header-container">
@@ -153,6 +153,9 @@
                     <input type="password" id="confirm_password" name="Confirm Password" class="k-textbox normal-tb" required data-required-msg="{% trans '*Required field' %}" />
                 </div>
                 <div class="separator"></div>
+                <div id="serverMessage" class="buttons-wrap server-message">
+                </div>
+                <div class="clearfix"></div>
                 <div class="buttons-wrap">
                     <button class="k-button normal-btn" ng-disabled="!isValid">{% trans "Create Account" %}</button>
                 </div>
@@ -225,11 +228,12 @@
                             $("#postRegistrationAdmin").data("kendoWindow").center().open();
                         } else {
                             $("#postRegistration").data("kendoWindow").center().open();
-                        }                        
+                        }
                         $("#registration").data("kendoWindow").close();
                     }).error(function(data){
                         console.log("createUser fail:");
                         console.log(data);
+                        $("#serverMessage").html(data['error']);
                     });
                 }
 
