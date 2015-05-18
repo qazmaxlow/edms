@@ -38,24 +38,27 @@
       height:60px;
     }
     .header-logo{
-      position: absolute;
-      right: 8px;
-      top:125px;
+      position: relative;
+      /* right: 8px; */
+      right: 0;
+      float: right;
+      bottom: 205px;
     }
     .header-video{
-      position: absolute;
-      right: 8px;
-      top:184px;
+      position: relative;
+      float: right;
       z-index: 100;
     }
     .thank{
       font-size: 1.313em;
       font-weight: bold;
       padding-top: 40px;
+      z-index: 1;
     }
     .description{
       padding-top: 36px;
       padding-bottom: 66px;
+      z-index: 1;
     }
     .enquiry{
       padding-top: 32px;
@@ -118,17 +121,18 @@
     <a href="http://www.en-trak.com/" style="text-decoration: none;"><img class="left logo" src="https://test-dms.en-trak.com{% static 'images/product-logo.png' %}" style="position: absolute;left: 24px;"></a>
     <div class="dummy" style="height: 60px;"></div>
     <div class="background_green white" style="background-color: #8dc63F;color: white;">
-        <img class="header-logo" src="https://test-dms.en-trak.com{% static 'images/header-logo.png' %}" style="position: absolute;right: 8px;top: 125px;">
-        <div class="header-video" style="position: absolute;right: 8px;top: 184px;z-index: 100;"><a href="#" style="text-decoration: none;"><img src="https://test-dms.en-trak.com{% static 'images/header-video.png' %}"></a></div>
         <div class="thank left" style="position: relative;left: 24px;font-size: 1.313em;font-weight: bold;padding-top: 40px;">
           Thank you for creating an account with En-trak.<br>
           Now let's manage your energy use!
         </div>
+        <a class="header-video" href="#" style="text-decoration: none;"><img src="https://test-dms.en-trak.com{% static 'images/header-video.png' %}"></a>
         <div class="description left" style="position: relative;left: 24px;padding-top: 36px;padding-bottom: 66px;">
           En-trak shows you when, where,<br>
           and how you use your energy.<br>
           This video will show you how it's done!
         </div>
+
+        <img class="header-logo" src="https://test-dms.en-trak.com{% static 'images/header-logo.png' %}">
     </div>
     <div class="background_white enquiry_thank" style="font-size: 0.875em;">
         <div class="enquiry left" style="position: relative;left: 24px;padding-top: 32px;">
