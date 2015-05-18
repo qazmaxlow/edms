@@ -660,50 +660,50 @@
             }
 
             $scope.showResetPasswordWindow = function(dataItem) {
-
                 $("#resetPasswordWindow").data("kendoWindow").center().open();
                 $scope.resetPasswordItem = {};
-
-                $scope.resetPassword = function() {
-                    // console.log(dataItem);
-                    // console.log($scope.resetPasswordItem);
-                    dataItem.set('new_password', $scope.resetPasswordItem.new_password );
-                    dataItem.set('confirm_password', $scope.resetPasswordItem.confirm_password );
-                    //console.log(shared_users.hasChanges());
-
-                    shared_users.sync()
-                        .done(function() {
-                            console.log("password resetted");
-                            $scope.isPwdChanging = false;
-                            $scope.isPwdChanged = true;
-                            if(!$scope.$$phase) {
-                                $scope.$apply(function(){
-                                    $scope.changePwdMessage = '{% trans "Password changed." %}';
-                                });
-                            } else {
-                                $scope.changePwdMessage = '{% trans "Password changed." %}';
-                            }
-                        })
-                        .fail(function(e) {
-                            $scope.$apply(function(){
-                                $scope.isPwdChanging = false;
-                                $scope.isPwdChanged = false;
-                                if (e.responseJSON && e.responseJSON.constructor === Array) {
-                                    $scope.changePwdMessage = e.responseJSON.join("<br/>");
-                                } else if ('non_field_errors' in e.responseJSON) {
-                                    $scope.changePwdMessage = e.responseJSON['non_field_errors'].join("<br/>");
-                                } else {
-                                    $scope.changePwdMessage = e.responseText;
-                                };
-                            });
-
-                            shared_users.cancelChanges();
-                            // console.log(e);
-                        });
-                }
+                $scope.selectedData = dataItem;
             }
 
+            $scope.resetPassword = function() {
+                // console.log($scope.resetPasswordItem);
+                // console.log($scope.selectedData);
 
+                $scope.selectedData.set('new_password', $scope.resetPasswordItem.new_password );
+                $scope.selectedData.set('confirm_password', $scope.resetPasswordItem.confirm_password );
+                // console.log($scope.selectedData);
+                // console.log(shared_users.hasChanges());
+
+                shared_users.sync()
+                    .done(function() {
+                        console.log("password resetted");
+                        $scope.isPwdChanging = false;
+                        $scope.isPwdChanged = true;
+                        if(!$scope.$$phase) {
+                            $scope.$apply(function(){
+                                $scope.changePwdMessage = '{% trans "Password changed." %}';
+                            });
+                        } else {
+                            $scope.changePwdMessage = '{% trans "Password changed." %}';
+                        }
+                    })
+                    .fail(function(e) {
+                        $scope.$apply(function(){
+                            $scope.isPwdChanging = false;
+                            $scope.isPwdChanged = false;
+                            if (e.responseJSON && e.responseJSON.constructor === Array) {
+                                $scope.changePwdMessage = e.responseJSON.join("<br/>");
+                            } else if ('non_field_errors' in e.responseJSON) {
+                                $scope.changePwdMessage = e.responseJSON['non_field_errors'].join("<br/>");
+                            } else {
+                                $scope.changePwdMessage = e.responseText;
+                            };
+                        });
+
+                        // shared_users.cancelChanges();
+                        // console.log(e);
+                    });
+            }
         })
 </script>
 {% endblock %}
