@@ -34,6 +34,8 @@ def send_report_by_schedulers():
 
                 owner = scheduler.created_by
                 url = reverse('companies.reports.popup-report.custom-dates', kwargs={ 'system_code': owner.system.code })
+                # build regex to match both report page and dowload page view
+                url_regex = r'^%s(download/)?$' % url
                 user_tz = scheduler.created_by.system.time_zone
                 execute_time = scheduler.execute_time.astimezone(user_tz)
 
@@ -54,7 +56,7 @@ def send_report_by_schedulers():
                     'report_type': report_type
                 }
                 url_params_json = json.dumps(url_params)
-                url_token = UrlToken.objects.create_url_token(scheduler.created_by, expiration_days=10, url=url, url_params=url_params_json)
+                url_token = UrlToken.objects.create_url_token(scheduler.created_by, expiration_days=10, url=url_regex, url_params=url_params_json)
 
                 # report_token = url_token.token_key
                 qd = QueryDict('', mutable=True)

@@ -56,7 +56,8 @@ class UrlTokenManager(models.Manager):
                 GET.pop('tk')
                 url_params = json.loads(token.url_params)
 
-                return (token.url == request.path) and (GET == url_params) and (not token.is_expired)
+                url_regex = re.compile(token.url)
+                return url_regex.match(request.path) and (GET == url_params) and (not token.is_expired)
             except self.model.DoesNotExist:
                 return False
         else:

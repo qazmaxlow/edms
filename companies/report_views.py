@@ -1299,7 +1299,9 @@ from tokens.models import UrlToken
 def popup_report_view(request, system_code, year=None, month=None, report_type=None, to_pdf=False):
     return _popup_report_view(request, system_code)
 
-@permission_required()
+# @permission_required()
+@require_passes_test(
+    lambda r: UrlToken.objects.check_token_by_request(r) or r.user.is_authenticated())
 def download_popup_report_view(request, system_code):
     return _popup_report_view(request, system_code, to_pdf=True)
 
