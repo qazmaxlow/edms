@@ -494,7 +494,7 @@
                                 }
                                 individual_users.cancelChanges();
                             });
-                            console.log(e);
+                            // console.log(e);
                         });
                 } else if ($scope.isCreated) {
                     $scope.isCreating = false;
@@ -537,7 +537,7 @@
                                 }
                                 shared_users.cancelChanges();
                             });
-                            console.log(e);
+                            // console.log(e);
                         });
                 } else if ($scope.isShareCreated) {
                     $scope.isShareCreating = false;
@@ -582,7 +582,7 @@
                         $scope.isResending = false;
                         $scope.resendEmailMessage = '{% trans "Unable to send inviation" %}';
                         console.log("send error");
-                        console.log(data);
+                        // console.log(data);
                     })
                 } else {
                     $scope.isEmailResent = false;
@@ -638,7 +638,7 @@
                                 }
                                 ds.cancelChanges();
                             });
-                            console.log(e);
+                            // console.log(e);
                         });
                 }
 
@@ -665,23 +665,29 @@
                 $scope.resetPasswordItem = {};
 
                 $scope.resetPassword = function() {
-                    console.log(dataItem);
-                    console.log($scope.resetPasswordItem);
+                    // console.log(dataItem);
+                    // console.log($scope.resetPasswordItem);
                     dataItem.set('new_password', $scope.resetPasswordItem.new_password );
                     dataItem.set('confirm_password', $scope.resetPasswordItem.confirm_password );
-                    console.log(shared_users.hasChanges());
+                    //console.log(shared_users.hasChanges());
 
                     shared_users.sync()
                         .done(function() {
                             console.log("password resetted");
-                            $scope.$apply(function(){
-                                $scope.changePwdMessage = '{% trans "Password changed" %}';
-                            });
+                            $scope.isPwdChanging = false;
+                            $scope.isPwdChanged = true;
+                            if(!$scope.$$phase) {
+                                $scope.$apply(function(){
+                                    $scope.changePwdMessage = '{% trans "Password changed." %}';
+                                });
+                            } else {
+                                $scope.changePwdMessage = '{% trans "Password changed." %}';
+                            }
                         })
                         .fail(function(e) {
                             $scope.$apply(function(){
-                                $scope.isDeleting = false;
-                                $scope.isDeleted = false;
+                                $scope.isPwdChanging = false;
+                                $scope.isPwdChanged = false;
                                 if (e.responseJSON && e.responseJSON.constructor === Array) {
                                     $scope.changePwdMessage = e.responseJSON.join("<br/>");
                                 } else if ('non_field_errors' in e.responseJSON) {
@@ -692,7 +698,7 @@
                             });
 
                             shared_users.cancelChanges();
-                            console.log(e);
+                            // console.log(e);
                         });
                 }
             }
