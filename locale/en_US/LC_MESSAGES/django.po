@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-15 13:34+0000\n"
+"POT-Creation-Date: 2015-05-18 02:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -212,7 +212,7 @@ msgid "Real-Time"
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:119
-#: entrak/templates/page_base.html:156
+#: entrak/templates/page_base.html:153
 msgid "Graph"
 msgstr ""
 
@@ -476,7 +476,7 @@ msgstr ""
 
 #: companies/templates/companies/export/index.html:192
 #: companies/templates/companies/reports/popup_report_pdf.html:633
-#: entrak/templates/page_base.html:171 entrak/templates/report.html:713
+#: entrak/templates/page_base.html:168 entrak/templates/report.html:713
 #: entrak/templates/report.html.py:893
 msgid "Download"
 msgstr ""
@@ -1346,11 +1346,11 @@ msgstr ""
 msgid "Marina Bay Sands"
 msgstr ""
 
-#: entrak/settings_common.py:112
+#: entrak/settings_common.py:113
 msgid "English"
 msgstr ""
 
-#: entrak/settings_common.py:113
+#: entrak/settings_common.py:114
 msgid "Traditional Chinese"
 msgstr ""
 
@@ -1917,8 +1917,8 @@ msgid "Set Password"
 msgstr ""
 
 #: entrak/templates/general_settings.html:35
-#: entrak/templates/manage_accounts.html:358
-#: entrak/templates/manage_accounts.html:369
+#: entrak/templates/manage_accounts.html:361
+#: entrak/templates/manage_accounts.html:372
 msgid "Delete"
 msgstr ""
 
@@ -1975,7 +1975,7 @@ msgstr ""
 #: entrak/templates/general_settings.html:331
 #: entrak/templates/general_settings.html:350 entrak/templates/login.html:70
 #: entrak/templates/manage_accounts.html:128
-#: entrak/templates/manage_accounts.html:368
+#: entrak/templates/manage_accounts.html:371
 msgid "Password"
 msgstr ""
 
@@ -2010,8 +2010,8 @@ msgid "Confirm Password"
 msgstr ""
 
 #: entrak/templates/general_settings.html:387
-#: entrak/templates/manage_accounts.html:522
-#: entrak/templates/manage_accounts.html:574
+#: entrak/templates/manage_accounts.html:526
+#: entrak/templates/manage_accounts.html:578
 msgid "OK"
 msgstr ""
 
@@ -2285,112 +2285,108 @@ msgstr ""
 msgid "*Passwords do not match"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:354
+#: entrak/templates/manage_accounts.html:357
 msgid "Full Name"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:355 entrak/templates/profile.html:98
+#: entrak/templates/manage_accounts.html:358 entrak/templates/profile.html:98
 #: user/templates/activate_account.html:136
 msgid "Email"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:356
+#: entrak/templates/manage_accounts.html:359
 msgctxt "grid"
 msgid "Language"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:357 entrak/templates/profile.html:60
+#: entrak/templates/manage_accounts.html:360 entrak/templates/profile.html:60
 #: user/templates/activate_account.html:106
 msgid "Department"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:367
+#: entrak/templates/manage_accounts.html:370
 #, fuzzy
 msgid "User Name"
 msgstr "Weekdays"
 
-#: entrak/templates/manage_accounts.html:368
+#: entrak/templates/manage_accounts.html:371
 msgid "Change password"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:373
-#: entrak/templates/manage_accounts.html:387
-#: entrak/templates/manage_accounts.html:439
-#: entrak/templates/manage_accounts.html:552
+#: entrak/templates/manage_accounts.html:376
+#: entrak/templates/manage_accounts.html:390
+#: entrak/templates/manage_accounts.html:443
+#: entrak/templates/manage_accounts.html:556
 msgid "Send"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:400
-#: entrak/templates/manage_accounts.html:448
-#: entrak/templates/manage_accounts.html:541
+#: entrak/templates/manage_accounts.html:403
+#: entrak/templates/manage_accounts.html:452
+#: entrak/templates/manage_accounts.html:545
 msgid "Create"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:425 entrak/templates/profile.html:135
+#: entrak/templates/manage_accounts.html:429 entrak/templates/profile.html:135
 msgid "Save"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:478
+#: entrak/templates/manage_accounts.html:482
 msgid "Great, the invitation has been sent out."
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:479
+#: entrak/templates/manage_accounts.html:483
 msgid "Go to Graph"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:521
+#: entrak/templates/manage_accounts.html:525
 msgid "Great, you just created a shared account."
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:573
+#: entrak/templates/manage_accounts.html:577
 msgid "The invitation has been sent out."
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:579
+#: entrak/templates/manage_accounts.html:583
 msgid "Unable to send inviation"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:619
+#: entrak/templates/manage_accounts.html:624
 msgid "Account deleted."
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:670
+#: entrak/templates/manage_accounts.html:678
 msgid "Password changed"
 msgstr ""
 
-#: entrak/templates/page_base.html:153
-msgid "Dashboard"
-msgstr ""
-
-#: entrak/templates/page_base.html:159
+#: entrak/templates/page_base.html:156
 msgid "Ranking"
 msgstr ""
 
-#: entrak/templates/page_base.html:162
+#: entrak/templates/page_base.html:159
 msgid "Progress"
 msgstr ""
 
-#: entrak/templates/page_base.html:165
+#: entrak/templates/page_base.html:162
 msgid "Reports"
 msgstr ""
 
-#: entrak/templates/page_base.html:168
+#: entrak/templates/page_base.html:165
 msgid "Display"
 msgstr ""
 
-#: entrak/templates/page_base.html:180
+#: entrak/templates/page_base.html:177
 msgid "Alert"
 msgstr ""
 
-#: entrak/templates/page_base.html:184
+#: entrak/templates/page_base.html:181
 msgid "Paper"
 msgstr ""
 
-#: entrak/templates/page_base.html:188
+#: entrak/templates/page_base.html:185
 msgid "Logout"
 msgstr ""
 
-#: entrak/templates/page_base.html:245
+#: entrak/templates/page_base.html:242
 msgid "You are viewing:"
 msgstr ""
 
@@ -2790,11 +2786,46 @@ msgstr ""
 msgid "This is an overall"
 msgstr ""
 
-#: user/views.py:93
+#: user/models.py:99
+msgid "invitation email manager title"
+msgstr "Invitation to Create Admin Account"
+
+#: user/models.py:100
+msgid "invitation email manager heading"
+msgstr ""
+"You have been invited to create an admin account\n"
+"for your organization’s En-trak Energy Monitoring System."
+
+#: user/models.py:101
+msgid "invitation email manager description"
+msgstr ""
+"With En-trak you can see when, where and how you are spending\n"
+"your energy dollars, enabling effective energy management."
+
+#: user/models.py:103
+msgid "invitation email user title"
+msgstr "Invitation to Create User Account"
+
+#: user/models.py:104
+#, python-brace-format
+msgid "{0} invitation email user heading"
+msgstr "{0}"
+
+#: user/models.py:105
+msgid "invitation email user description"
+msgstr ""
+"has invited you to create an account for\n"
+"your organization’s En-trak Energy Monitoring System."
+
+#: user/models.py:111
+msgid "invitation email button"
+msgstr "Create En-trak Account"
+
+#: user/views.py:94
 msgid "Invalid user or token"
 msgstr ""
 
-#: user/views.py:97
+#: user/views.py:98
 msgid "Invalid request"
 msgstr ""
 

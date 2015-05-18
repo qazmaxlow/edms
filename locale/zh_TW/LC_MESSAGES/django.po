@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-15 13:34+0000\n"
+"POT-Creation-Date: 2015-05-18 02:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -209,7 +209,7 @@ msgid "Real-Time"
 msgstr "實時"
 
 #: companies/templates/companies/dashboard/dashboard.html:119
-#: entrak/templates/page_base.html:156
+#: entrak/templates/page_base.html:153
 msgid "Graph"
 msgstr "圖表"
 
@@ -476,7 +476,7 @@ msgstr "單位:"
 
 #: companies/templates/companies/export/index.html:192
 #: companies/templates/companies/reports/popup_report_pdf.html:633
-#: entrak/templates/page_base.html:171 entrak/templates/report.html:713
+#: entrak/templates/page_base.html:168 entrak/templates/report.html:713
 #: entrak/templates/report.html.py:893
 msgid "Download"
 msgstr "下載"
@@ -1366,11 +1366,11 @@ msgstr "新加坡機場"
 msgid "Marina Bay Sands"
 msgstr "濱海灣金沙"
 
-#: entrak/settings_common.py:112
+#: entrak/settings_common.py:113
 msgid "English"
 msgstr "英文"
 
-#: entrak/settings_common.py:113
+#: entrak/settings_common.py:114
 msgid "Traditional Chinese"
 msgstr "繁體中文"
 
@@ -2000,8 +2000,8 @@ msgid "Set Password"
 msgstr "建立密碼"
 
 #: entrak/templates/general_settings.html:35
-#: entrak/templates/manage_accounts.html:358
-#: entrak/templates/manage_accounts.html:369
+#: entrak/templates/manage_accounts.html:361
+#: entrak/templates/manage_accounts.html:372
 msgid "Delete"
 msgstr "刪除"
 
@@ -2058,7 +2058,7 @@ msgstr "用戶名稱"
 #: entrak/templates/general_settings.html:331
 #: entrak/templates/general_settings.html:350 entrak/templates/login.html:70
 #: entrak/templates/manage_accounts.html:128
-#: entrak/templates/manage_accounts.html:368
+#: entrak/templates/manage_accounts.html:371
 msgid "Password"
 msgstr "密碼"
 
@@ -2093,8 +2093,8 @@ msgid "Confirm Password"
 msgstr "確認新密碼"
 
 #: entrak/templates/general_settings.html:387
-#: entrak/templates/manage_accounts.html:522
-#: entrak/templates/manage_accounts.html:574
+#: entrak/templates/manage_accounts.html:526
+#: entrak/templates/manage_accounts.html:578
 msgid "OK"
 msgstr "確認"
 
@@ -2370,111 +2370,107 @@ msgstr ""
 msgid "*Passwords do not match"
 msgstr "*登錄密碼不相同"
 
-#: entrak/templates/manage_accounts.html:354
+#: entrak/templates/manage_accounts.html:357
 msgid "Full Name"
 msgstr "名字"
 
-#: entrak/templates/manage_accounts.html:355 entrak/templates/profile.html:98
+#: entrak/templates/manage_accounts.html:358 entrak/templates/profile.html:98
 #: user/templates/activate_account.html:136
 msgid "Email"
 msgstr "電郵"
 
-#: entrak/templates/manage_accounts.html:356
+#: entrak/templates/manage_accounts.html:359
 msgctxt "grid"
 msgid "Language"
 msgstr "語言"
 
-#: entrak/templates/manage_accounts.html:357 entrak/templates/profile.html:60
+#: entrak/templates/manage_accounts.html:360 entrak/templates/profile.html:60
 #: user/templates/activate_account.html:106
 msgid "Department"
 msgstr "部門"
 
-#: entrak/templates/manage_accounts.html:367
+#: entrak/templates/manage_accounts.html:370
 msgid "User Name"
 msgstr "用戶名稱"
 
-#: entrak/templates/manage_accounts.html:368
+#: entrak/templates/manage_accounts.html:371
 msgid "Change password"
 msgstr "更換密碼"
 
-#: entrak/templates/manage_accounts.html:373
-#: entrak/templates/manage_accounts.html:387
-#: entrak/templates/manage_accounts.html:439
-#: entrak/templates/manage_accounts.html:552
+#: entrak/templates/manage_accounts.html:376
+#: entrak/templates/manage_accounts.html:390
+#: entrak/templates/manage_accounts.html:443
+#: entrak/templates/manage_accounts.html:556
 msgid "Send"
 msgstr "寄出"
 
-#: entrak/templates/manage_accounts.html:400
-#: entrak/templates/manage_accounts.html:448
-#: entrak/templates/manage_accounts.html:541
+#: entrak/templates/manage_accounts.html:403
+#: entrak/templates/manage_accounts.html:452
+#: entrak/templates/manage_accounts.html:545
 msgid "Create"
 msgstr "建立"
 
-#: entrak/templates/manage_accounts.html:425 entrak/templates/profile.html:135
+#: entrak/templates/manage_accounts.html:429 entrak/templates/profile.html:135
 msgid "Save"
 msgstr "儲存"
 
-#: entrak/templates/manage_accounts.html:478
+#: entrak/templates/manage_accounts.html:482
 msgid "Great, the invitation has been sent out."
 msgstr "已發出邀請電郵"
 
-#: entrak/templates/manage_accounts.html:479
+#: entrak/templates/manage_accounts.html:483
 msgid "Go to Graph"
 msgstr "回到圖表"
 
-#: entrak/templates/manage_accounts.html:521
+#: entrak/templates/manage_accounts.html:525
 msgid "Great, you just created a shared account."
 msgstr "您已成功建立一個共享賬戶"
 
-#: entrak/templates/manage_accounts.html:573
+#: entrak/templates/manage_accounts.html:577
 msgid "The invitation has been sent out."
 msgstr "已發出邀請電郵"
 
-#: entrak/templates/manage_accounts.html:579
+#: entrak/templates/manage_accounts.html:583
 msgid "Unable to send inviation"
 msgstr "無發發出邀請電郵"
 
-#: entrak/templates/manage_accounts.html:619
+#: entrak/templates/manage_accounts.html:624
 msgid "Account deleted."
 msgstr "賬戶已刪除"
 
-#: entrak/templates/manage_accounts.html:670
+#: entrak/templates/manage_accounts.html:678
 msgid "Password changed"
 msgstr "密碼已變更"
 
-#: entrak/templates/page_base.html:153
-msgid "Dashboard"
-msgstr "首頁"
-
-#: entrak/templates/page_base.html:159
+#: entrak/templates/page_base.html:156
 msgid "Ranking"
 msgstr "用電量排行榜"
 
-#: entrak/templates/page_base.html:162
+#: entrak/templates/page_base.html:159
 msgid "Progress"
 msgstr "進度"
 
-#: entrak/templates/page_base.html:165
+#: entrak/templates/page_base.html:162
 msgid "Reports"
 msgstr "能源使用報告"
 
-#: entrak/templates/page_base.html:168
+#: entrak/templates/page_base.html:165
 msgid "Display"
 msgstr "顯示模式"
 
-#: entrak/templates/page_base.html:180
+#: entrak/templates/page_base.html:177
 msgid "Alert"
 msgstr "提示"
 
-#: entrak/templates/page_base.html:184
+#: entrak/templates/page_base.html:181
 msgid "Paper"
 msgstr ""
 
-#: entrak/templates/page_base.html:188
+#: entrak/templates/page_base.html:185
 msgid "Logout"
 msgstr "登出"
 
-#: entrak/templates/page_base.html:245
+#: entrak/templates/page_base.html:242
 msgid "You are viewing:"
 msgstr "你正在檢視:"
 
@@ -2885,11 +2881,44 @@ msgstr "今天到目前目止，你消耗了電力共"
 msgid "This is an overall"
 msgstr ""
 
-#: user/views.py:93
+#: user/models.py:99
+msgid "invitation email manager title"
+msgstr "邀請建立管理員帳戶"
+
+#: user/models.py:100
+msgid "invitation email manager heading"
+msgstr ""
+"你被邀請在 貴公司的 En-trak 能源監察系統\n"
+"建立一個管理員帳戶"
+
+#: user/models.py:101
+msgid "invitation email manager description"
+msgstr " "
+
+#: user/models.py:103
+msgid "invitation email user title"
+msgstr "Invitation to Create User Account"
+
+#: user/models.py:104
+#, python-brace-format
+msgid "{0} invitation email user heading"
+msgstr "{0}"
+
+#: user/models.py:105
+msgid "invitation email user description"
+msgstr ""
+"邀請您在 貴公司的 En-trak 能源監察系統\n"
+"建立一個帳戶"
+
+#: user/models.py:111
+msgid "invitation email button"
+msgstr "建立En-trak帳戶"
+
+#: user/views.py:94
 msgid "Invalid user or token"
 msgstr ""
 
-#: user/views.py:97
+#: user/views.py:98
 msgid "Invalid request"
 msgstr ""
 
@@ -3029,6 +3058,9 @@ msgstr "用戶沒有訪問這部份的權限。"
 #: utils/auth.py:40 utils/auth.py:61
 msgid "Please enter username and password."
 msgstr "請輸入用戶名稱和密碼"
+
+#~ msgid "Dashboard"
+#~ msgstr "首頁"
 
 #~ msgctxt "activate"
 #~ msgid "Username"
