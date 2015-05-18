@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-18 04:12+0000\n"
+"POT-Creation-Date: 2015-05-18 05:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2286,7 +2286,7 @@ msgid ""
 "functionality than Shared Accounts. We encourage you to create User Accounts."
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:210 entrak/templates/profile.html:219
+#: entrak/templates/manage_accounts.html:210 entrak/templates/profile.html:226
 #: user/templates/activate_account.html:255
 msgid "*Passwords do not match"
 msgstr ""
@@ -2360,8 +2360,8 @@ msgstr ""
 msgid "Account deleted."
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:678
-msgid "Password changed"
+#: entrak/templates/manage_accounts.html:678 entrak/templates/profile.html:197
+msgid "Password changed."
 msgstr ""
 
 #: entrak/templates/page_base.html:156
@@ -2481,11 +2481,11 @@ msgstr ""
 msgid "Current Password"
 msgstr ""
 
-#: entrak/templates/profile.html:159 user/templates/activate_account.html:206
+#: entrak/templates/profile.html:160 user/templates/activate_account.html:206
 msgid "'Department'"
 msgstr ""
 
-#: entrak/templates/profile.html:160 user/templates/activate_account.html:207
+#: entrak/templates/profile.html:161 user/templates/activate_account.html:207
 msgid "'Language'"
 msgstr ""
 
@@ -2863,12 +2863,14 @@ msgstr "Invitation to Create Admin Account"
 #: user/models.py:101
 msgid "invitation email manager heading"
 msgstr ""
-"You have been invited to create an admin account for your organization’s En-trak Energy Monitoring System."
+"You have been invited to create an admin account for your organization’s En-"
+"trak Energy Monitoring System."
 
 #: user/models.py:102
 msgid "invitation email manager description"
 msgstr ""
-"With En-trak you can see when, where and how you are spending your energy dollars, enabling effective energy management."
+"With En-trak you can see when, where and how you are spending your energy "
+"dollars, enabling effective energy management."
 
 #: user/models.py:104
 msgid "invitation email user title"
@@ -2882,7 +2884,8 @@ msgstr "{0}"
 #: user/models.py:106
 msgid "invitation email user description"
 msgstr ""
-"has invited you to create an account for your organization’s En-trak Energy Monitoring System."
+"has invited you to create an account for your organization’s En-trak Energy "
+"Monitoring System."
 
 #: user/models.py:114
 msgid "invitation email button"

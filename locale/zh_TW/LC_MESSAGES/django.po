@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-18 04:12+0000\n"
+"POT-Creation-Date: 2015-05-18 05:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1388,7 +1388,7 @@ msgstr "耗電情況提示"
 
 #: entrak/templates/alert_settings.html:36
 msgid "We'll keep you in touch with"
-msgstr "想知道系統可以提醒你些什麼，請看看"
+msgstr "我們時刻為您通報異常情況"
 
 #: entrak/templates/alert_settings.html:44
 #, python-format
@@ -2182,7 +2182,7 @@ msgstr "圖表"
 
 #: entrak/templates/graph.html:661
 msgid "Explore your energy use with the"
-msgstr "要知道現在用電情況，請看看"
+msgstr "想發掘更多實時用電資料，請看看"
 
 #: entrak/templates/graph.html:671 entrak/templates/ranking.html:555
 #: printers/templates/system/printers/graph.html:662
@@ -2283,11 +2283,11 @@ msgstr "登入"
 
 #: entrak/templates/manage_accounts.html:35 entrak/templates/profile.html:35
 msgid "SETTINGS"
-msgstr "系統設置"
+msgstr "設置"
 
 #: entrak/templates/manage_accounts.html:36 entrak/templates/profile.html:36
 msgid "Manage your system access with"
-msgstr ""
+msgstr "要管理系統及登入賬號，請到"
 
 #: entrak/templates/manage_accounts.html:54
 msgid "Create User Account"
@@ -2371,7 +2371,7 @@ msgstr ""
 "用戶賬戶比共享賬戶更安全可靠及享受更好的功能，可控性更高。我們鼓勵您建立用戶"
 "賬戶！"
 
-#: entrak/templates/manage_accounts.html:210 entrak/templates/profile.html:219
+#: entrak/templates/manage_accounts.html:210 entrak/templates/profile.html:226
 #: user/templates/activate_account.html:255
 msgid "*Passwords do not match"
 msgstr "*登錄密碼不相同"
@@ -2444,8 +2444,8 @@ msgstr "無發發出邀請電郵"
 msgid "Account deleted."
 msgstr "賬戶已刪除"
 
-#: entrak/templates/manage_accounts.html:678
-msgid "Password changed"
+#: entrak/templates/manage_accounts.html:678 entrak/templates/profile.html:197
+msgid "Password changed."
 msgstr "密碼已變更"
 
 #: entrak/templates/page_base.html:156
@@ -2564,11 +2564,11 @@ msgstr "儲存"
 msgid "Current Password"
 msgstr "當前密碼"
 
-#: entrak/templates/profile.html:159 user/templates/activate_account.html:206
+#: entrak/templates/profile.html:160 user/templates/activate_account.html:206
 msgid "'Department'"
 msgstr "'部門'"
 
-#: entrak/templates/profile.html:160 user/templates/activate_account.html:207
+#: entrak/templates/profile.html:161 user/templates/activate_account.html:207
 msgid "'Language'"
 msgstr "'語言'"
 
