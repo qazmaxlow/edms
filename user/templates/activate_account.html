@@ -105,22 +105,22 @@
                 <div class="form-group">
                     <label class="control-label" for="department">{% trans "Department" %}:</label>
                     <select class="department" kendo-dropdownlist k-option-label="defaultDepartment" name="department" ng-model="user.department" id="department" required data-required-msg="{% trans '*Required field' %}">
-                        <option>{% trans "Administration" %}</option>
-                        <option>{% trans "Business Development" %}</option>
-                        <option>{% trans "CEO Office / Management" %}</option>
-                        <option>{% trans "orporate Communcations" %}</option>
-                        <option>{% trans "CSR" %}</option>
-                        <option>{% trans "Customer Services" %}</option>
-                        <option>{% trans "Facilities Managemen" %}</option>
-                        <option>{% trans "Finance / Accounting" %}</option>
-                        <option>{% trans "Human Resources" %}</option>
-                        <option>{% trans "Information Technology" %}</option>
-                        <option>{% trans "Legal / Compliance" %}</option>
-                        <option>{% trans "Marketing" %}</option>
-                        <option>{% trans "Others" %}</option>
-                        <option>{% trans "Products" %}</option>
-                        <option>{% trans "Purchasing" %}</option>
-                        <option>{% trans "Sales" %}</option>
+                        <option value="Administration">{% trans "Administration" %}</option>
+                        <option value="Business Development">{% trans "Business Development" %}</option>
+                        <option value="CEO Office / Management">{% trans "CEO Office / Management" %}</option>
+                        <option value="Corporate Communications">{% trans "Corporate Communications" %}</option>
+                        <option value="CSR">{% trans "CSR" %}</option>
+                        <option value="Customer Services">{% trans "Customer Services" %}</option>
+                        <option value="Facilities Management">{% trans "Facilities Management" %}</option>
+                        <option value="Finance / Accounting">{% trans "Finance / Accounting" %}</option>
+                        <option value="Human Resources">{% trans "Human Resources" %}</option>
+                        <option value="Information Technology">{% trans "Information Technology" %}</option>
+                        <option value="Legal / Compliance">{% trans "Legal / Compliance" %}</option>
+                        <option value="Marketing">{% trans "Marketing" %}</option>
+                        <option value="Others">{% trans "Others" %}</option>
+                        <option value="Products">{% trans "Products" %}</option>
+                        <option value="Purchasing">{% trans "Purchasing" %}</option>
+                        <option value="Sales">{% trans "Sales" %}</option>
                     </select>
                     <span class="k-invalid-msg" data-for="department"></span>
                 </div>
@@ -267,7 +267,10 @@
                     }
                 }
 
-                setTimeout(function(){ $("#registration").data("kendoWindow").center().open(); }, 500);
+                setTimeout(function(){
+                    $("#registration").data("kendoWindow").center().open();
+                    $("#department").data("kendoDropDownList").value(null);
+                }, 500);
             })
     </script>
 </div>
