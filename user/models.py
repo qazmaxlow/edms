@@ -13,6 +13,7 @@ from django.template.loader import get_template
 from django.template import Context
 from django.core.mail import EmailMultiAlternatives
 from django.utils.translation import ugettext as _
+from django.utils import translation
 from entrak.settings_common import LANG_CODE_EN, LANG_CODE_TC
 
 
@@ -103,6 +104,8 @@ class EntrakUser(AbstractUser):
             title = _("invitation email user title")
             heading = _("{0} invitation email user heading").format(on_behalf_of.fullname)
             description = _("invitation email user description")
+
+        translation.activate(LANG_CODE_EN)
 
         d = Context({
                 'url': self.activation_url,
