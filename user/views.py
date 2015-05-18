@@ -60,6 +60,10 @@ def activate_account(request, user_id):
             system = System.objects.get(id=user.system_id)
 
             if request.is_ajax() and request.method == 'POST':
+
+                if PASSWORD_REGEX.search(data.get('password', None)) is None:
+                    return HttpResponse(json.dumps({"error": "Password must be at least 8 characters long and contains at least one character and one number"}), content_type="application/json", status=500)
+
                 user.first_name = data.get('first_name', None)
                 user.last_name = data.get('last_name', None)
                 user.username = user.email
@@ -142,7 +146,7 @@ def update_account(request, user_id):
                 else:
                     return HttpResponseBadRequest("Current password is incorrect")
             else:
-                return HttpResponseBadRequest("Password and confirm password must be the same")
+                return HttpResponseBadRequest("Passwords do not match")
 
         else:
             return HttpResponseBadRequest("Invalid request")
