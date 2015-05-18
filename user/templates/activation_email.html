@@ -22,11 +22,13 @@
     .invite {
       font-weight:bold;
       color:#354960;
+      max-width:450px;
+      margin: auto;
     }
     .description {
       font-size:0.938em;
       color:#354960;
-      max-width:350px;
+      max-width:450px;
       margin: auto;
     }
     .create {
@@ -65,12 +67,12 @@
     <a href="http://www.en-trak.com/" style="text-decoration: none;"><img src="https://test-dms.en-trak.com{% static 'images/product-logo.png' %}"></a>
     <table width="100%" cellpadding="25" border="0" align="center">
       <tr>
-        <td bgcolor="#EFEFEF" style="background-color: #EFEFEF;">
+        <td bgcolor="#EFEFEF" style="background-color: #EFEFEF; max-width:450px; margin: auto;">
         <img alt="actionIcon" src="https://test-dms.en-trak.com{% static 'images/invite-icon.png' %}">
         <br>
         <div class="invite" style="font-weight: bold;color: #354960;">{{heading|linebreaks}}
         </div>
-        <div class="description" style="font-size: 0.938em;color: #354960; max-width:350px; margin: auto;">{{description|linebreaks}}
+        <div class="description" style="font-size: 0.938em;color: #354960; max-width:450px; margin: auto;">{{description|linebreaks}}
         </div>
 
         <!--[if mso]>
