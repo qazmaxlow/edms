@@ -116,9 +116,9 @@ def update_account(request, user_id):
         language = data.get('language', None)
         is_change_pwd = data.get('isChangePwd', False)
 
-        current_password = data.get('current_passowrd', None)
-        password = data.get('passowrd', None)
-        confirm_password = data.get('confirm_passowrd', None)
+        current_password = data.get('current_password', None)
+        password = data.get('password', None)
+        confirm_password = data.get('confirm_password', None)
 
         if first_name and last_name and department and language and not is_change_pwd:
 
@@ -130,10 +130,10 @@ def update_account(request, user_id):
 
             return HttpResponse("User profile updated successfully")
 
-        elif current_passowrd and password and confirm_passowrd and is_change_pwd:
+        elif current_password and password and confirm_password and is_change_pwd:
 
             if password == confirm_password:
-                o_user = authenticate(username=user.username, password=current_passowrd)
+                o_user = authenticate(username=user.username, password=current_password)
 
                 if o_user:
                     user.set_password(password)
@@ -143,6 +143,9 @@ def update_account(request, user_id):
                     return HttpResponseBadRequest("Current password is incorrect")
             else:
                 return HttpResponseBadRequest("Password and confirm password must be the same")
+
+        else:
+            return HttpResponseBadRequest("Invalid request")
 
     else:
         return HttpResponseBadRequest("Invalid request")
@@ -226,7 +229,6 @@ class CreateSharedUserView(generics.CreateAPIView):
         return Response(user.data)
 
 
-# @permission_classes((IsAuthenticated,))
 class DeleteUserView(generics.DestroyAPIView):
 
     serializer_class = UserSerializer
@@ -266,14 +268,16 @@ class UpdateUserView(generics.UpdateAPIView):
 
         system_info = System.get_systems_info(user.system.code, request_user.system.code)
 
-        if not system_info or not request_user.is_manager:
-            raise PermissionDenied()
-
         request_data = {
             'username': user.username,
             'new_password': request.data.get('new_password', None),
             'confirm_password': request.data.get('confirm_password', None)
         }
+
+        if user.id == request_user.id:
+            request_data['current_password'] = request.data.get('current_password', None)
+        elif not system_info or not request_user.is_manager:
+            raise PermissionDenied()
 
         serializer = resetPasswordSerializer(user, data=request_data)
 
@@ -281,3 +285,13 @@ class UpdateUserView(generics.UpdateAPIView):
         user.set_password(request.data.get('new_password', None))
         user.save()
         return Response(serializer.data)
+
+
+class GetUserView(generics.RetrieveAPIView):
+    serializer_class = resetPasswordSerializer
+    permission_classes = (IsAuthenticated,)
+    lookup_field = 'user_id'
+    lookup_url_kwarg = 'user_id'
+
+    def get(self, request, *args, **kwargs):
+        pass
