@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-18 02:35+0000\n"
+"POT-Creation-Date: 2015-05-18 02:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2478,6 +2478,70 @@ msgstr "你正在檢視:"
 msgid "First Name"
 msgstr "名字"
 
+#: entrak/templates/profile.html:62 user/templates/activate_account.html:108
+msgid "Administration"
+msgstr "行政"
+
+#: entrak/templates/profile.html:63 user/templates/activate_account.html:109
+msgid "Business Development"
+msgstr "業務發展"
+
+#: entrak/templates/profile.html:64 user/templates/activate_account.html:110
+msgid "CEO Office / Management"
+msgstr "行政總裁辦公室 / 管理層"
+
+#: entrak/templates/profile.html:65 user/templates/activate_account.html:111
+msgid "Corporate Communications"
+msgstr "企業傳訊"
+
+#: entrak/templates/profile.html:66 user/templates/activate_account.html:112
+msgid "CSR"
+msgstr "企業社會責任"
+
+#: entrak/templates/profile.html:67 user/templates/activate_account.html:113
+msgid "Customer Services"
+msgstr "客戶服務"
+
+#: entrak/templates/profile.html:68 user/templates/activate_account.html:114
+msgid "Facilities Management"
+msgstr "設施管理"
+
+#: entrak/templates/profile.html:69 user/templates/activate_account.html:115
+msgid "Finance / Accounting"
+msgstr "財務 / 會計"
+
+#: entrak/templates/profile.html:70 user/templates/activate_account.html:116
+msgid "Human Resources"
+msgstr "人力資源"
+
+#: entrak/templates/profile.html:71 user/templates/activate_account.html:117
+msgid "Information Technology"
+msgstr "資訊科技"
+
+#: entrak/templates/profile.html:72 user/templates/activate_account.html:118
+msgid "Legal / Compliance"
+msgstr "法務 / 合規"
+
+#: entrak/templates/profile.html:73 user/templates/activate_account.html:119
+msgid "Marketing"
+msgstr "市場營銷"
+
+#: entrak/templates/profile.html:74 user/templates/activate_account.html:120
+msgid "Others"
+msgstr "其他"
+
+#: entrak/templates/profile.html:75 user/templates/activate_account.html:121
+msgid "Products"
+msgstr "產品"
+
+#: entrak/templates/profile.html:76 user/templates/activate_account.html:122
+msgid "Purchasing"
+msgstr "採購"
+
+#: entrak/templates/profile.html:77 user/templates/activate_account.html:123
+msgid "Sales"
+msgstr "銷售"
+
 #: entrak/templates/profile.html:84 user/templates/activate_account.html:102
 msgid "Last Name"
 msgstr "姓氏"
@@ -2881,36 +2945,36 @@ msgstr "今天到目前目止，你消耗了電力共"
 msgid "This is an overall"
 msgstr ""
 
-#: user/models.py:99
+#: user/models.py:100
 msgid "invitation email manager title"
 msgstr "邀請建立管理員帳戶"
 
-#: user/models.py:100
+#: user/models.py:101
 msgid "invitation email manager heading"
 msgstr ""
 "你被邀請在 貴公司的 En-trak 能源監察系統\n"
 "建立一個管理員帳戶"
 
-#: user/models.py:101
+#: user/models.py:102
 msgid "invitation email manager description"
 msgstr " "
 
-#: user/models.py:103
+#: user/models.py:104
 msgid "invitation email user title"
 msgstr "邀請建立用戶帳戶"
 
-#: user/models.py:104
+#: user/models.py:105
 #, python-brace-format
 msgid "{0} invitation email user heading"
 msgstr "{0}"
 
-#: user/models.py:105
+#: user/models.py:106
 msgid "invitation email user description"
 msgstr ""
 "邀請您在 貴公司的 En-trak 能源監察系統\n"
 "建立一個帳戶"
 
-#: user/models.py:111
+#: user/models.py:114
 msgid "invitation email button"
 msgstr "建立En-trak帳戶"
 
@@ -2925,70 +2989,6 @@ msgstr ""
 #: user/templates/activate_account.html:94
 msgid "Basic Information"
 msgstr "基本資料"
-
-#: user/templates/activate_account.html:108
-msgid "Administration"
-msgstr ""
-
-#: user/templates/activate_account.html:109
-msgid "Business Development"
-msgstr ""
-
-#: user/templates/activate_account.html:110
-msgid "CEO Office / Management"
-msgstr ""
-
-#: user/templates/activate_account.html:111
-msgid "orporate Communcations"
-msgstr ""
-
-#: user/templates/activate_account.html:112
-msgid "CSR"
-msgstr ""
-
-#: user/templates/activate_account.html:113
-msgid "Customer Services"
-msgstr ""
-
-#: user/templates/activate_account.html:114
-msgid "Facilities Managemen"
-msgstr ""
-
-#: user/templates/activate_account.html:115
-msgid "Finance / Accounting"
-msgstr ""
-
-#: user/templates/activate_account.html:116
-msgid "Human Resources"
-msgstr ""
-
-#: user/templates/activate_account.html:117
-msgid "Information Technology"
-msgstr ""
-
-#: user/templates/activate_account.html:118
-msgid "Legal / Compliance"
-msgstr ""
-
-#: user/templates/activate_account.html:119
-msgid "Marketing"
-msgstr ""
-
-#: user/templates/activate_account.html:120
-msgid "Others"
-msgstr ""
-
-#: user/templates/activate_account.html:121
-msgid "Products"
-msgstr ""
-
-#: user/templates/activate_account.html:122
-msgid "Purchasing"
-msgstr ""
-
-#: user/templates/activate_account.html:123
-msgid "Sales"
-msgstr ""
 
 #: user/templates/activate_account.html:140
 msgid "Please note"
