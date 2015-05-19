@@ -62,7 +62,7 @@ def activate_account(request, user_id):
             if request.is_ajax() and request.method == 'POST':
 
                 if PASSWORD_REGEX.search(data.get('password', None)) is None:
-                    return HttpResponse(json.dumps({"error": "Password must be at least 8 characters long and contains at least one character and one number"}), content_type="application/json", status=500)
+                    return HttpResponse(json.dumps({"error": "Password must be at least 8 characters long and contains at least one character and one number"}), content_type="application/json", status=400)
 
                 user.first_name = data.get('first_name', None)
                 user.last_name = data.get('last_name', None)
@@ -269,7 +269,6 @@ class UpdateUserView(generics.UpdateAPIView):
 
         request_user = self.request.user
         user = EntrakUser.objects.get(id=self.kwargs['user_id'])
-
         system_info = System.get_systems_info(user.system.code, request_user.system.code)
 
         request_data = {
@@ -297,5 +296,5 @@ class GetUserView(generics.RetrieveAPIView):
     lookup_field = 'user_id'
     lookup_url_kwarg = 'user_id'
 
-    def get(self, request, *args, **kwargs):
-        pass
+    def get_object(self):
+        return self.request.user

@@ -65,6 +65,7 @@ class resetPasswordSerializer(serializers.ModelSerializer):
 
         return data
 
+
 class UserListView(generics.ListAPIView):
 
     serializer_class = UserSerializer

@@ -96,6 +96,8 @@ class EntrakUser(AbstractUser):
         plaintext = get_template('activation_email.txt')
         htmly     = get_template('activation_email.html')
 
+        translation.activate(LANG_CODE_EN)
+
         if self.is_manager:
             title = _("invitation email manager title")
             heading = _("invitation email manager heading")
@@ -104,8 +106,6 @@ class EntrakUser(AbstractUser):
             title = _("invitation email user title")
             heading = _("{0} invitation email user heading").format(on_behalf_of.fullname)
             description = _("invitation email user description")
-
-        translation.activate(LANG_CODE_EN)
 
         d = Context({
                 'url': self.activation_url,
