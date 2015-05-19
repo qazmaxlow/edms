@@ -113,7 +113,7 @@
                 </form>
             </div>
         </div>
-
+        {% if system.is_education == True %}
         <button class='k-button normal-btn sharedAcc' ng-click="showCreateSharedAccountWindow()">{% trans "Create Shared Account" %}</button>
         <kendo-grid options="secGridOptions" class="sharedAcc">
         </kendo-grid>
@@ -140,6 +140,7 @@
                 </form>
             </div>
         </div>
+        {% endif %}
     </div>
 </div>
 
@@ -623,7 +624,7 @@
                                 $scope.isDeleted = true;
                                 $scope.removeAccountMessage = '{% trans "Account deleted." %}';
                                 $scope.deleteTimer = setTimeout(function(){
-                                    $("#confirmDeleteWindow").data("kendoWindow").close();    
+                                    $("#confirmDeleteWindow").data("kendoWindow").close();
                                 }, 2000);
                             });
                         })
