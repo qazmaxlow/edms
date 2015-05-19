@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-18 05:31+0000\n"
+"POT-Creation-Date: 2015-05-19 08:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -391,17 +391,17 @@ msgid "Follow the steps on the right to download your energy data."
 msgstr "請按照右方的步驟下載你的能源數據。"
 
 #: companies/templates/companies/export/index.html:172
-#: companies/templates/companies/report_schedule/report_schedule.html:140
+#: companies/templates/companies/report_schedule/report_schedule.html:144
 msgid "Step 1"
 msgstr "1."
 
 #: companies/templates/companies/export/index.html:173
-#: companies/templates/companies/report_schedule/report_schedule.html:141
+#: companies/templates/companies/report_schedule/report_schedule.html:145
 msgid "Step 2"
 msgstr "2."
 
 #: companies/templates/companies/export/index.html:174
-#: companies/templates/companies/report_schedule/report_schedule.html:142
+#: companies/templates/companies/report_schedule/report_schedule.html:146
 msgid "Step 3"
 msgstr "3."
 
@@ -501,24 +501,24 @@ msgstr "耗電情況提示"
 msgid "Get all your information here at the"
 msgstr "想知道你在電力消耗方面的詳細分析，請看看"
 
-#: companies/templates/companies/report_schedule/report_schedule.html:119
+#: companies/templates/companies/report_schedule/report_schedule.html:123
 #, fuzzy
 msgid "View Reports"
 msgstr "報告"
 
-#: companies/templates/companies/report_schedule/report_schedule.html:120
+#: companies/templates/companies/report_schedule/report_schedule.html:124
 #: companies/templates/companies/reports/summary.html:262
 #, fuzzy
 msgid "Automated Reports"
 msgstr "下載報告"
 
-#: companies/templates/companies/report_schedule/report_schedule.html:137
+#: companies/templates/companies/report_schedule/report_schedule.html:141
 msgid ""
 "Set the system to email you an energy report each month or week, so you can "
 "stay informaed and up to date on your energy use."
 msgstr ""
 
-#: companies/templates/companies/report_schedule/report_schedule.html:138
+#: companies/templates/companies/report_schedule/report_schedule.html:142
 #: entrak/templates/alert_settings.html:52
 #: entrak/templates/alert_settings.html:67
 #: entrak/templates/alert_settings.html:1086
@@ -527,26 +527,26 @@ msgstr ""
 msgid "Confirm"
 msgstr "確認"
 
-#: companies/templates/companies/report_schedule/report_schedule.html:139
+#: companies/templates/companies/report_schedule/report_schedule.html:143
 #, fuzzy
 msgid "Send to:"
 msgstr "寄給"
 
-#: companies/templates/companies/report_schedule/report_schedule.html:143
+#: companies/templates/companies/report_schedule/report_schedule.html:147
 msgid "Select Scope"
 msgstr ""
 
-#: companies/templates/companies/report_schedule/report_schedule.html:144
+#: companies/templates/companies/report_schedule/report_schedule.html:148
 #, fuzzy
 msgid "Select Frequency"
 msgstr "選擇你要的單位"
 
-#: companies/templates/companies/report_schedule/report_schedule.html:145
+#: companies/templates/companies/report_schedule/report_schedule.html:149
 #, fuzzy
 msgid "Confirm and Go"
 msgstr "再輸入新密碼以作確認"
 
-#: companies/templates/companies/report_schedule/report_schedule.html:146
+#: companies/templates/companies/report_schedule/report_schedule.html:150
 #, fuzzy
 msgid "Manage Automated Reports"
 msgstr "下載報告"
@@ -2048,13 +2048,13 @@ msgid "Admin Account"
 msgstr "管理員賬戶"
 
 #: entrak/templates/general_settings.html:329
-#: entrak/templates/general_settings.html:348 entrak/templates/login.html:66
+#: entrak/templates/general_settings.html:348 entrak/templates/login.html:123
 #: entrak/templates/manage_accounts.html:124
 msgid "Username"
 msgstr "用戶名稱"
 
 #: entrak/templates/general_settings.html:331
-#: entrak/templates/general_settings.html:350 entrak/templates/login.html:70
+#: entrak/templates/general_settings.html:350 entrak/templates/login.html:127
 #: entrak/templates/manage_accounts.html:128
 #: entrak/templates/manage_accounts.html:371
 msgid "Password"
@@ -2265,21 +2265,52 @@ msgstr "由："
 msgid "to:"
 msgstr "至："
 
-#: entrak/templates/login.html:58 user/templates/activate_account.html:63
+#: entrak/templates/login.html:47
+msgid "The reset password link has been sent to your email."
+msgstr "已發出重設密碼電郵"
+
+#: entrak/templates/login.html:53
+msgid "This email is not linked to any existing account."
+msgstr "此電郵沒有連結到任何賬號"
+
+#: entrak/templates/login.html:68
+msgid "Forget Password"
+msgstr "忘記密碼"
+
+#: entrak/templates/login.html:115 user/templates/activate_account.html:63
 msgid "Welcome to En-trak<sup>TM</sup>"
 msgstr "En-trak<sup>TM</sup> 歡迎您"
 
-#: entrak/templates/login.html:59 user/templates/activate_account.html:64
+#: entrak/templates/login.html:116 user/templates/activate_account.html:64
 msgid "Turning Data into Actionable Intelligence"
 msgstr "轉化數據為實際行動"
 
-#: entrak/templates/login.html:61 user/templates/activate_account.html:66
+#: entrak/templates/login.html:118 user/templates/activate_account.html:66
 msgid "To use the En-trak monitor platform, please sign in"
 msgstr "要使用 En-trak 能源管理系統，請先登入"
 
-#: entrak/templates/login.html:78 user/templates/activate_account.html:82
+#: entrak/templates/login.html:132
+msgid "Remember Me"
+msgstr "記住我"
+
+#: entrak/templates/login.html:135 user/templates/activate_account.html:82
 msgid "Sign In"
 msgstr "登入"
+
+#: entrak/templates/login.html:137
+msgid "Forgot your password?"
+msgstr "忘記密碼？"
+
+#: entrak/templates/login.html:155
+msgid "Please enter your email"
+msgstr "請輸入你的電郵"
+
+#: entrak/templates/login.html:158 entrak/templates/manage_accounts.html:376
+#: entrak/templates/manage_accounts.html:390
+#: entrak/templates/manage_accounts.html:443
+#: entrak/templates/manage_accounts.html:556
+msgid "Send"
+msgstr "寄出"
 
 #: entrak/templates/manage_accounts.html:35 entrak/templates/profile.html:35
 msgid "SETTINGS"
@@ -2336,7 +2367,7 @@ msgid "Create Shared Account"
 msgstr "建立共享賬戶"
 
 #: entrak/templates/manage_accounts.html:120
-#: user/templates/activate_account.html:157
+#: user/templates/activate_account.html:160
 msgid "Create Account"
 msgstr "建立賬戶"
 
@@ -2372,7 +2403,7 @@ msgstr ""
 "賬戶！"
 
 #: entrak/templates/manage_accounts.html:210 entrak/templates/profile.html:226
-#: user/templates/activate_account.html:255
+#: user/templates/activate_account.html:259
 msgid "*Passwords do not match"
 msgstr "*登錄密碼不相同"
 
@@ -2402,13 +2433,6 @@ msgstr "用戶名稱"
 #: entrak/templates/manage_accounts.html:371
 msgid "Change password"
 msgstr "更換密碼"
-
-#: entrak/templates/manage_accounts.html:376
-#: entrak/templates/manage_accounts.html:390
-#: entrak/templates/manage_accounts.html:443
-#: entrak/templates/manage_accounts.html:556
-msgid "Send"
-msgstr "寄出"
 
 #: entrak/templates/manage_accounts.html:403
 #: entrak/templates/manage_accounts.html:452
@@ -2444,7 +2468,8 @@ msgstr "無發發出邀請電郵"
 msgid "Account deleted."
 msgstr "賬戶已刪除"
 
-#: entrak/templates/manage_accounts.html:678 entrak/templates/profile.html:197
+#: entrak/templates/manage_accounts.html:684
+#: entrak/templates/manage_accounts.html:687 entrak/templates/profile.html:197
 msgid "Password changed."
 msgstr "密碼已變更"
 
@@ -2564,11 +2589,11 @@ msgstr "儲存"
 msgid "Current Password"
 msgstr "當前密碼"
 
-#: entrak/templates/profile.html:160 user/templates/activate_account.html:206
+#: entrak/templates/profile.html:160 user/templates/activate_account.html:209
 msgid "'Department'"
 msgstr "'部門'"
 
-#: entrak/templates/profile.html:161 user/templates/activate_account.html:207
+#: entrak/templates/profile.html:161 user/templates/activate_account.html:210
 msgid "'Language'"
 msgstr "'語言'"
 
@@ -2980,11 +3005,11 @@ msgstr "邀請您在 貴公司的 En-trak 能源監察系統建立一個帳戶"
 msgid "invitation email button"
 msgstr "建立En-trak帳戶"
 
-#: user/views.py:94
+#: user/views.py:98
 msgid "Invalid user or token"
 msgstr ""
 
-#: user/views.py:98
+#: user/views.py:102
 msgid "Invalid request"
 msgstr ""
 
@@ -3015,41 +3040,41 @@ msgctxt "activate"
 msgid "Confirm Password"
 msgstr "確認密碼"
 
-#: user/templates/activate_account.html:167
-#: user/templates/activate_account.html:175
+#: user/templates/activate_account.html:170
+#: user/templates/activate_account.html:178
 msgid "Congrats, your account is ready to use!"
 msgstr "恭喜您，你的賬戶已成功開通！"
 
-#: user/templates/activate_account.html:169
+#: user/templates/activate_account.html:172
 msgid "Get Started"
 msgstr "開始使用En-trak 系統"
 
-#: user/templates/activate_account.html:177
+#: user/templates/activate_account.html:180
 msgid "As the Admin you are able to create additional User Accounts."
 msgstr "作為系統管理員，你可以建立更多的用戶賬戶！"
 
-#: user/templates/activate_account.html:178
+#: user/templates/activate_account.html:181
 msgid "Do you want to create User Accounts now?"
 msgstr "您現在要建立用戶賬戶嗎？"
 
-#: user/templates/activate_account.html:180
+#: user/templates/activate_account.html:183
 msgid "Yes"
 msgstr "是"
 
-#: user/templates/activate_account.html:181
+#: user/templates/activate_account.html:184
 msgid "No"
 msgstr "否"
 
-#: user/templates/activate_account.html:183
+#: user/templates/activate_account.html:186
 msgid "You can also later create or manage accounts in the settings page."
 msgstr "您可以稍後在設置頁面建立或管理賬戶"
 
-#: user/templates/activate_account.html:203
-#: user/templates/activate_account.html:204
+#: user/templates/activate_account.html:206
+#: user/templates/activate_account.html:207
 msgid "'Create En-trak Account'"
 msgstr "'建立En-trak 賬戶'"
 
-#: user/templates/activate_account.html:205
+#: user/templates/activate_account.html:208
 msgid "'Create En-trak Accounts'"
 msgstr "'建立En-trak 賬戶'"
 
