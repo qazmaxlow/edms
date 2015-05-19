@@ -34,11 +34,16 @@ from rest_framework import generics
 from companies.views.user_views import UserSerializer
 from companies.views.user_views import resetPasswordSerializer
 from rest_framework import serializers
+from django.utils import translation
+from entrak.settings_common import LANG_CODE_EN, LANG_CODE_TC
 
 PASSWORD_REGEX = re.compile(r'^.*(?=.{8,})(?=.*[A-Za-z]+)(?=.*\d).*$')
 
 
 def activate_account(request, user_id):
+
+    # always activate the account in English
+    translation.activate(LANG_CODE_EN)
 
     user = None
     data = {}
@@ -77,8 +82,8 @@ def activate_account(request, user_id):
 
                 user = authenticate(username=user.username, password=data.get('password', None))
                 if user is not None:
-                    translation.activate(request.user.language)
                     login(request, user)
+                    translation.activate(user.language)
 
                 dashboard_url = reverse('graph', kwargs={'system_code': system.code})
                 settings_url = reverse('manage_accounts', kwargs={'system_code': system.code})
