@@ -104,9 +104,13 @@
             </div>
             <div kendo-window="deleteGridRowWin" k-title="'Delete'"
                  k-visible="false" k-modal="true">
-              <button class="k-button normal-btn" ng-click="confirmDelete()">Confirm</button>
+              <div>Are you sure want to delete?</div>
+              <div>
+                <button class="k-button normal-btn cancel" ng-click="deleteGridRowWin.close()">Cancel</button>
+                <button class="k-button normal-btn" ng-click="confirmDelete()">Confirm</button>
+              </div>
             </div>
-{% endverbatim %}            
+{% endverbatim %}
         </div>
     </div>
 </div>
