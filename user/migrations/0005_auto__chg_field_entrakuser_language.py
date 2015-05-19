@@ -11,11 +11,12 @@ class Migration(SchemaMigration):
 
         # Changing field 'EntrakUser.language'
         db.alter_column(u'user_entrakuser', 'language', self.gf('django.db.models.fields.CharField')(max_length=10))
-        orm.EntrakUser.objects.update(language='en_US')
+        orm.EntrakUser.objects.update(language='en')
 
     def backwards(self, orm):
 
         # Changing field 'EntrakUser.language'
+        orm.EntrakUser.objects.update(language='1')
         db.alter_column(u'user_entrakuser', 'language', self.gf('django.db.models.fields.PositiveSmallIntegerField')())
 
     models = {
@@ -78,7 +79,7 @@ class Migration(SchemaMigration):
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'label': ('django.db.models.fields.CharField', [], {'max_length': '300', 'blank': 'True'}),
-            'language': ('django.db.models.fields.CharField', [], {'default': "'en_US'", 'max_length': '10'}),
+            'language': ('django.db.models.fields.CharField', [], {'default': "'en'", 'max_length': '10'}),
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
