@@ -19,6 +19,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseForbidden
 from django.http import HttpResponseBadRequest
 from django.db.utils import IntegrityError
+from django.utils import translation
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
@@ -76,6 +77,7 @@ def activate_account(request, user_id):
 
                 user = authenticate(username=user.username, password=data.get('password', None))
                 if user is not None:
+                    translation.activate(request.user.language)
                     login(request, user)
 
                 dashboard_url = reverse('graph', kwargs={'system_code': system.code})
