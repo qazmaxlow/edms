@@ -2,8 +2,11 @@
 from mongoengine.document import Document
 from mongoengine.document import EmbeddedDocument
 from mongoengine.fields import *
+from mongoengine import connection
+
 
 SOURCE_TZ_HK = u'Asia/Hong_Kong'
+
 
 class SourceMember(EmbeddedDocument):
     id = ObjectIdField()
@@ -11,6 +14,7 @@ class SourceMember(EmbeddedDocument):
     xml_url = StringField(max_length=120)
     tz = StringField(max_length=50, default=SOURCE_TZ_HK)
     operator = StringField(max_length=1)
+
 
 class Source(Document):
     name = StringField(max_length=200)
@@ -25,6 +29,7 @@ class Source(Document):
     source_members = ListField(EmbeddedDocumentField(SourceMember))
     active = BooleanField(default=True)
 
+
 class BaseSourceReading(Document):
     meta = {
         'abstract': True,
@@ -37,8 +42,55 @@ class BaseSourceReading(Document):
     datetime = DateTimeField()
     value = FloatField()
 
+    @classmethod
+    def total_used(cls, source_ids, start_dt, end_dt):
+
+        mdb_conn = connection.get_db()
+        collection_name = cls._meta['collection']
+
+        return getattr(mdb_conn, collection_name).aggregate([
+            { "$match":
+                {
+                    "source_id": {"$in": source_ids},
+                    "datetime": {"$gte": start_dt, "$lt": end_dt }
+                }
+            },
+            { "$group":
+                {
+                    "_id": None,
+                    "total": {"$sum": "$value"}
+                }
+            }
+        ])['result']
+
+    @classmethod
+    def total_used_with_source_id(cls, source_ids, start_dt, end_dt):
+
+        mdb_conn = connection.get_db()
+        collection_name = cls._meta['collection']
+
+        return getattr(mdb_conn, collection_name).aggregate([
+            { "$match":
+                {
+                    "source_id": {"$in": source_ids},
+                    "datetime": {"$gte": start_dt, "$lt": end_dt }
+                }
+            },
+            { "$group":
+                {
+                    "_id": "$source_id",
+                    "total": {"$sum": "$value"}
+                }
+            },
+            { "$sort" :
+                { "total" : -1 }
+            }
+        ])['result']
+
+
 class SourceReadingMin(BaseSourceReading):
     pass
+
 
 class SourceReadingMinInvalid(Document):
     source_id = ObjectIdField()
@@ -47,17 +99,22 @@ class SourceReadingMinInvalid(Document):
     name = StringField(max_length=200)
     tz = StringField(max_length=50, default=SOURCE_TZ_HK)
 
+
 class SourceReadingHour(BaseSourceReading):
     pass
+
 
 class SourceReadingDay(BaseSourceReading):
     pass
 
+
 class SourceReadingWeek(BaseSourceReading):
     pass
 
+
 class SourceReadingMonth(BaseSourceReading):
     pass
+
 
 class SourceReadingYear(BaseSourceReading):
     pass

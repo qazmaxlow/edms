@@ -63,7 +63,7 @@ body{
     font-weight: bold;
     color: #354960;
 }
-sup { 
+sup {
     vertical-align: super;
     font-size: 8pt;
 }
@@ -77,7 +77,7 @@ sup {
 
 .login-panel {
     width: 460px;
-    height: 225px;
+    height: 255px;
     margin-left: auto;
     margin-right: auto;
     border-top-left-radius: .6em;
@@ -139,7 +139,7 @@ input[type="submit"]{
     font-size: 9pt;
     padding-top: 5px;
     height:17px;
-    width: 257px;    
+    width: 257px;
     margin-left: 112px;
     margin-right: auto;
     margin-top: 7px;
@@ -152,4 +152,28 @@ input[type="submit"]{
     position: absolute;
     width: 100%;
     bottom: 0px;
+}
+
+label.remember-me {
+    display: block;
+    padding-left: 15px;
+    text-indent: -15px;
+    top: -5px;
+}
+
+input.remember-me {
+    width: 13px;
+    height: 15px;
+    padding: 0;
+    margin:0;
+    vertical-align: bottom;
+    position: relative;
+    top: -1px;
+    *overflow: hidden;
+}
+
+div.remember-me {
+    height: 20px;
+    padding-top: 15px;
+    padding-bottom: 0px;
 }

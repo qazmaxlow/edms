@@ -70,6 +70,7 @@ def alert_settings_view(request, system_code=None):
 
     return render(request, 'alert_settings.html', m)
 
+
 @permission_required(USER_ROLE_ADMIN_LEVEL)
 def set_alert_view(request, system_code=None):
     system_id = request.POST.get('system_id')
@@ -119,6 +120,7 @@ def set_alert_view(request, system_code=None):
 
     return Utils.json_response({'success': True, 'alert': alert.to_info(), 'is_edit': is_edit})
 
+
 @permission_required(USER_ROLE_ADMIN_LEVEL)
 def remove_alert_view(request, system_code=None):
     alert_id = request.POST.get('alert_id')
@@ -128,6 +130,7 @@ def remove_alert_view(request, system_code=None):
         Alert.objects.filter(id=alert_id).delete()
 
     return Utils.json_response({'success': True})
+
 
 @permission_required(USER_ROLE_ADMIN_LEVEL)
 @ensure_csrf_cookie
@@ -157,6 +160,7 @@ def general_settings_view(request, system_code=None):
     m.update(csrf(request))
 
     return render(request, 'general_settings.html', m)
+
 
 @permission_required()
 def set_user_info_view(request, system_code=None):
@@ -216,6 +220,7 @@ def set_user_info_view(request, system_code=None):
 
     return Utils.json_response(result)
 
+
 @permission_required(USER_ROLE_ADMIN_LEVEL)
 def delete_user_view(request, system_code=None):
     user = EntrakUser.objects.get(id=request.POST.get('id'))
@@ -225,3 +230,33 @@ def delete_user_view(request, system_code=None):
         user.delete()
 
     return Utils.json_response({'success': True})
+
+
+@permission_required()
+@ensure_csrf_cookie
+def profile_view(request, system_code=None):
+    systems_info = System.get_systems_info(system_code, request.user.system.code)
+    users = EntrakUser.objects.filter(
+        system_id__in=[system.id for system in systems_info["systems"]]
+    ).select_related('system_name').order_by('id')
+
+    m = systems_info
+    m['user'] = request.user
+
+    m.update(csrf(request))
+
+    return render(request, 'profile.html', m)
+
+
+@permission_required(USER_ROLE_ADMIN_LEVEL)
+@ensure_csrf_cookie
+def manage_accounts_view(request, system_code=None):
+
+    systems_info = System.get_systems_info(system_code, request.user.system.code)
+    system = System.objects.get(code=system_code)
+
+    m = systems_info
+    m["system"] = system
+    m.update(csrf(request))
+
+    return render(request, 'manage_accounts.html', m)

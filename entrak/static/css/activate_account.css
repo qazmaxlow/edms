@@ -1,0 +1,194 @@
+
+.k-overlay {
+  background-color: #354960;
+  opacity: 0.9 !important;
+}
+
+.k-window .k-window-title,
+.activate-acc {
+    font-family: 'ITCAvantGardeStd', "Helvetica Neue Light",
+    "Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+    "Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-size: 14px;
+}
+
+
+.chinese .k-window .k-window-title,
+.chinese .activate-acc {
+    font-family: "Helvetica Neue Light",
+    "Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+    "Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-size: 14px;
+}
+
+
+div.activate-acc.k-window-content {
+    padding: 40px 0 0 66px;
+}
+
+.activate-acc .sub-header-container {
+    padding-right: 60px;
+    text-align: left;
+    padding-bottom: 6px;
+}
+
+.activate-acc .sub-header {
+    font-size: 1em;
+    color: #434343;
+    font-weight: 600;
+}
+
+.activate-acc .warn-text {
+    float: right;
+    color: #e05d5d;
+    font-weight: 300;
+    font-size: 0.786em;
+    padding-top: 3px;
+}
+
+.activate-acc .separator {
+    margin-bottom: 11px;
+    margin-top: 22px;
+    margin-right: 66px;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.activate-acc .form-group {
+    margin: 14px 0 0 0 ;
+    height: 35px;
+    line-height: 35px;
+    text-align: left;
+}
+
+.activate-acc .form-group .control-label {
+    margin-left: 50px;
+    width: 115px;
+    text-align: left;
+    padding: 0;
+    line-height: 100%;
+    vertical-align: middle;
+    font-size: 1em;
+    color: #354960;
+    font-weight: 500;
+}
+
+.activate-acc .form-note {
+    text-align: left;
+    padding-left: 50px;
+    padding-top: 5px;
+    font-size: 0.786em;
+    font-weight: 300;
+    color: #6c6c6c;
+}
+
+.activate-acc .form-note .note-label {
+    font-weight: 500;
+}
+
+.activate-acc .form-group .k-invalid-msg {
+    background-color: transparent;
+    border: none;
+    margin: 0 5px;
+    color: #e05d5d;
+    font-size: 0.786em;
+    font-weight: 300;
+    vertical-align: middle;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+.activate-acc .form-group .k-invalid-msg .k-icon {
+    display: none;
+}
+
+.activate-acc .buttons-wrap {
+    padding-right: 66px;
+}
+
+
+
+div.activate-acc.post-activate.k-window-content {
+    padding: 0;
+}
+
+.activate-acc.post-activate {
+    text-align: center;
+}
+
+.activate-acc.post-activate img {
+    margin-top: 16px;
+    height: 61px;
+    width: 61px;
+}
+
+.activate-acc.post-activate .congrat-msg {
+    margin-top: 16px;
+    font-size: 1.071em;
+    font-weight: 600;
+    color: #fdb913;
+}
+
+.activate-acc.post-activate .separator {
+    margin-bottom: 22px;
+    margin-left: 66px;
+}
+
+.activate-acc.post-activate .info-msg {
+    font-size: 1.071em;
+    font-weight: 300;
+    color: #354960;
+}
+
+.activate-acc.post-activate .question {
+    margin-top: 14px;
+    font-size: 1.214em;
+    font-weight: 600;
+    color: #354960;
+}
+
+.activate-acc.post-activate .buttons-wrap {
+    margin-top: 20px;
+    padding: 0;
+}
+
+.activate-acc.post-activate .buttons-wrap .k-button {
+    width: 80px;
+}
+
+.activate-acc.post-activate .buttons-wrap .k-button:first-child {
+    margin-right: 56px;
+}
+
+.activate-acc.post-activate .sub-text {
+    margin-top: 16px;
+    padding-bottom: 11px;
+    font-size: 0.786em;
+    font-weight: 300;
+    color: #6c6c6c;
+}
+
+.activate-acc.post-activate .normal-user .buttons-wrap,
+.activate-acc.post-activate .normal-user .congrat-msg {
+    margin-top: 30px;
+}
+
+.activate-acc.post-activate .normal-user img {
+    margin-top: 40px;
+}
+
+.activate-acc.post-activate .normal-user .buttons-wrap .k-button {
+    width: 140px;
+    margin: 0;
+}
+
+.activate-acc .form-group .department {
+    width: 218px;
+}
+
+.server-message {
+    font-size: 14px;
+    color: #e05d5d;
+    padding-bottom: 10px;
+}

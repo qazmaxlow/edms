@@ -14,6 +14,8 @@
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
 <script src="{% static 'js/mustache.js-master/mustache.js' %}"></script>
 <script src="{% static 'js/jquery.bpopup.min.js' %}"></script>
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/custom_control.css' %}">
 {% endblock %}
 
 {% block page_title %}{% trans "THE SETTINGS PAGE" %}{% endblock %}
@@ -47,6 +49,7 @@ USER_TYPE_ADMIN = 'admin'
 
 settings = {};
 
+
 function setupAccountRowCancelBtn(targetEle) {
     targetEle.click(function() {
         var accountRow = $(this).parent().parent();
@@ -64,6 +67,7 @@ function setupAccountRowCancelBtn(targetEle) {
     });
 }
 
+
 function popupWarning(text) {
     $('.warning-dialog .warning-text').text(text);
     var warningDialog = $('.warning-dialog').bPopup();
@@ -71,6 +75,7 @@ function popupWarning(text) {
         warningDialog.close();
     });
 }
+
 
 function setupChangePwdBtn(targetEle) {
     targetEle.click(function() {
@@ -98,6 +103,7 @@ function setupChangePwdBtn(targetEle) {
         });
     });
 }
+
 
 function setUserInfo(info) {
     if (info.username === '' || info.email === '' || info.label === '') {
@@ -136,6 +142,7 @@ function setUserInfo(info) {
     });
 }
 
+
 function deleteUser(userId) {
     $.ajax({
         type: "POST",
@@ -155,6 +162,7 @@ function deleteUser(userId) {
         console.log(jqXHR.responseText);
     });
 }
+
 
 function setupApplyBtn(targetEle) {
     targetEle.click(function() {
@@ -190,6 +198,7 @@ function setupApplyBtn(targetEle) {
     });
 }
 
+
 function setupDeleteBtn(targetEle) {
     targetEle.click(function() {
         var accountRow = $(this).parent().parent();
@@ -204,15 +213,18 @@ function setupDeleteBtn(targetEle) {
     });
 }
 
+
 function changeToCancelStatus(container) {
     container.find('.ar-delete-btn').css('display', 'none');
     container.find('.ar-cancel-btn').css('display', 'inline-block');
 }
 
+
 function changeToDeleteStatus(container) {
     container.find('.ar-cancel-btn').css('display', 'none');
     container.find('.ar-delete-btn').css('display', 'inline-block');
 }
+
 
 function insertAccountRow(user, accountTemplate, targetEle, userType) {
     var eleHtml = $(Mustache.render(accountTemplate, {}));
@@ -243,6 +255,7 @@ function insertAccountRow(user, accountTemplate, targetEle, userType) {
     eleHtml.data('user', user);
     targetEle.append(eleHtml);
 }
+
 
 $(function() {
     setupAjaxForCsrf($.cookie('csrftoken'));
@@ -304,7 +317,10 @@ $(function() {
 {% block page_content %}
 
 <div class="account-section settings-section">
-    <div class="section-header">{% trans "Manage Accounts" %}</div>
+    <div class="section-header">
+        <div class="header-tab">{% trans "My Profile" %}</div><!--
+        --><div class="header-tab selected-tab">{% trans "Manage Accounts" %}</div>
+    </div>
     <div class="section-desc">{% trans "Use the form below to manage or create new user accounts" %}</div>
     <div class="admin-account-title">{% trans "Admin Account" %}</div>
     <div class="account-table admin-account-table">
@@ -325,7 +341,7 @@ $(function() {
             <div class="add-account-note">{% trans "All fields are required" %}</div>
         </div>
     </div>
-    
+
     <div class="account-table general-account-table">
         <div class="account-th">
             <div class="account-th-label">{% trans "Label" %}

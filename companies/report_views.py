@@ -27,6 +27,8 @@ from utils.auth import permission_required
 from utils import calculation
 from utils.utils import Utils
 
+from entrak.auth.decorators import require_passes_test
+
 
 # oops! change to write better API later
 from entrak.report_views import __generate_report_data
@@ -131,7 +133,7 @@ def get_overnight_avg_cost(system, source_ids, start_dt, end_dt):
     # money_unit_code = unit_infos['money']
     # money_unit_rate = UnitRate.objects.filter(category_code='money', code=unit_infos['money']).first()
     money_unit_rates = UnitRate.objects.filter(category_code='money', code=unit_infos['money']).order_by('effective_date')
-    system_tz = pytz.timezone(system.timezone)
+    system_tz = system.time_zone
 
     for ix, mr in enumerate(money_unit_rates):
         c_rate_date = mr.effective_date.astimezone(system_tz)
@@ -163,15 +165,11 @@ def get_overnight_avg_cost(system, source_ids, start_dt, end_dt):
     for date_range in date_ranges:
         sd, ed, r = date_range
         mqs = []
-        num_day = (ed - sd).days
+        num_day = (ed.date() - sd.date()).days + 1
         rdays = [sd+datetime.timedelta(days=n) for n in range(num_day)]
         for rday in rdays:
-            on_sd = datetime.datetime.combine(rday, system.night_time_start)
-            on_sd = on_sd.replace(tzinfo=system_tz)
-
-            on_ed = datetime.datetime.combine(
-                rday + datetime.timedelta(days=1), system.night_time_end)
-            on_ed = on_ed.replace(tzinfo=system_tz)
+            on_sd = rday.astimezone(system_tz).replace(hour=system.night_time_start.hour)
+            on_ed = rday.astimezone(system_tz).replace(hour=system.night_time_end.hour) + relativedelta(days=1)
 
             q = MQ(datetime__gte=on_sd, datetime__lt=on_ed)
             mqs.append(q)
@@ -185,10 +183,10 @@ def get_overnight_avg_cost(system, source_ids, start_dt, end_dt):
         total_on_sum += dr_sum
 
     # dirty way to count number of days
-    total_day = (end_dt - start_dt).days
-    today = datetime.datetime.now(pytz.utc)
+    total_day = (end_dt.date() - start_dt.date()).days + 1
+    today = datetime.datetime.now(pytz.utc).astimezone(system_tz)
     if end_dt > today:
-        total_day = (today - start_dt).days
+        total_day = (today.date() - start_dt.date()).days + 1
 
     return total_on_sum / total_day
 
@@ -514,7 +512,8 @@ class CompareTplHepler:
 
 
 def _popup_report_view(request, system_code, year=None, month=None, report_type=None, to_pdf=False):
-    systems_info = System.get_systems_info(system_code, request.user.system.code)
+    # systems_info = System.get_systems_info(system_code, request.user.system.code)
+    systems_info = System.get_systems_info(system_code, system_code) # in fact just using systems no user systems
     systems = systems_info['systems']
     current_system = System.objects.get(code=system_code)
     sources = SourceManager.get_sources(current_system)
@@ -1098,6 +1097,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         if 'last_year_this_month' in g and g['last_year_this_month']['money']:
             change_in_money = g['currentTotalMoney']- g['last_year_this_month']['money']
 
+
         data_info = {
             'total_energy': g['currentTotalEnergy'],
             'co2_val': g['currentTotalCo2'],
@@ -1312,11 +1312,15 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     return render(request, 'companies/reports/popup_report.html', m)
 
 
-@permission_required()
+from tokens.models import UrlToken
+@require_passes_test(
+    lambda r: UrlToken.objects.check_token_by_request(r) or r.user.is_authenticated())
 def popup_report_view(request, system_code, year=None, month=None, report_type=None, to_pdf=False):
     return _popup_report_view(request, system_code)
 
-@permission_required()
+# @permission_required()
+@require_passes_test(
+    lambda r: UrlToken.objects.check_token_by_request(r) or r.user.is_authenticated())
 def download_popup_report_view(request, system_code):
     return _popup_report_view(request, system_code, to_pdf=True)
 

@@ -1,0 +1,56 @@
+{% verbatim %}
+<div class="widget-container" ng-controller="WidgetBiggestConsumers">
+<div class="widget-header row">
+    <div class="widget-title col-sm-7">{{title}}</div>
+    <div class="widget-toggle col-sm-5">
+        <div class="pull-right">
+            <button id="week_button_{{widget_id}}" ng-class="{'toggle-primary' : isWeek}" ng-click="toggle(true)" class="toggle-button button-left">{{btnLeft}}</button><!--
+            --><button id="month_button_{{widget_id}}" ng-class="{'toggle-primary' : !isWeek}" ng-click="toggle(false)" class="toggle-button button-right">{{btnRight}}</button>
+        </div>
+    </div>
+</div>
+<div class="widget-content row">
+    <div class="widget-message">
+        <div class="bc-right-box pull-right first-row">
+            <h3>% {{changeText}}</h3>
+        </div>
+        <div class="bc-left-box auto-width first-row">
+            <h3 class="description-1">{{energyCost}} (HKD)</h3>
+        </div>
+    </div>
+    <div class="bc-graph">
+        <table class="horizontal-bars">
+            <tr ng-repeat="c in consumers.data()"><td>
+                <div class="bc-right-box pull-right">
+                    <div class="name-row"></div>
+                    <div class="bar-row" ng-if="c.percentage_change != null">
+                        <span class="bc-change-percent" ng-class="{'red-text' : c.percentage_change > 0, 'green-text' : c.percentage_change <= 0}" ng-bind="c.percentage_change | abs | entrakNumber"></span>
+                        <span class="bc-percent-unit" ng-class="{'red-text' : c.percentage_change > 0, 'green-text' : c.percentage_change <= 0}">%</span>
+                    </div>
+                    <div class="bar-row" ng-if="c.percentage_change == null">
+                        <span class="bc-change-percent bar-value-na">0</span>
+                        <span class="bc-percent-unit bar-value-na">%</span>
+                    </div>
+                </div>
+                <div class="bc-left-box auto-width">
+                    <div class="name-row">
+                        <div class="name" ng-bind="c.d_name"></div>
+                    </div>
+                    <div class="bar-row">
+                        <img ng-src="/static/images/dashboard/consumer-{{$index+1}}.png"></img>
+                        <div class="bar-container">
+                            <div class="bar" ng-if="c.value != null" style="width: {{100 * c.value / consumers.data()[0].value}}%">
+                                <span class="bar-value" ng-bind="c.value | entrakNumber"></span>
+                            </div>
+                            <div class="bar" ng-if="c.value == null" style="width: 0px">
+                                <span class="bar-value bar-value-na">N/A</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td></tr>
+        </table>
+    </div>
+</div>
+</div>
+{% endverbatim %}

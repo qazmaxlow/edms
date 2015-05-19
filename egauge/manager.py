@@ -7,11 +7,12 @@ import logging
 from bson.code import Code
 from bson.objectid import ObjectId
 from mongoengine import connection, Q, NotUniqueError
-from .models import Source, SourceMember, SourceReadingMin, SourceReadingHour,\
+from egauge.models import Source, SourceMember, SourceReadingMin, SourceReadingHour,\
     SourceReadingDay, SourceReadingWeek, SourceReadingMonth, SourceReadingYear, SourceReadingMinInvalid
 from lxml import etree
 from collections import defaultdict
 from utils.utils import Utils
+
 
 class SourceManager:
 
@@ -442,8 +443,9 @@ class SourceManager:
                 source_tz = source_with_members['tz']
                 SourceManager.update_sum(start_time, source_tz, need_update_source_ids)
 
+
     @staticmethod
-    def force_retrieve_reading(start_dt, end_dt, system_codes, celery_task=None):
+    def force_retrieve_reading(start_dt, end_dt, system_codes, is_delayed=False, celery_task_1=None, celery_task_2=None):
         '''
         The start_dt and end_dt should be timezone aware
         '''
@@ -455,16 +457,18 @@ class SourceManager:
         all_sources_with_members = SourceManager.get_sources_with_members(system_codes)
 
         for hour_idx in xrange(total_hour):
-            if celery_task is None:
+            if is_delayed:
+                celery_task_1.delay(all_grouped_sources, start_dt, hour_idx)
+                celery_task_2.delay(all_sources_with_members, start_dt, hour_idx)
+            else:
                 SourceManager.force_retrieve_hour_reading(all_grouped_sources, start_dt, hour_idx)
                 SourceManager.force_retrieve_source_with_members_hour_reading(all_sources_with_members, start_dt, hour_idx)
-            else:
-                celery_task.delay(all_grouped_sources, start_dt, hour_idx)
-                celery_task.delay(all_sources_with_members, start_dt, hour_idx)
+
 
     @staticmethod
     def force_retrieve_all_reading(start_dt, end_dt):
         SourceManager.force_retrieve_reading(start_dt, end_dt, None)
+
 
     @staticmethod
     def __get_validated_reading(reading, retrieve_time, source, offset=0):

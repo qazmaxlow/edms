@@ -1,0 +1,250 @@
+{% extends "page_base.html" %}
+
+{% load i18n %}
+{% load entrak_extras %}
+{% load static %}
+{% load humanize %}
+
+{% block ga_page_title %}report{% endblock %}
+
+{% block extra_head %}
+{{block.super}}
+{% get_current_language as LANGUAGE_CODE %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
+
+<script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
+<script src="{% static 'js/csrf_ajax.js' %}"></script>
+<script src="{% static 'js/moment-with-locales.js' %}"></script>
+<script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
+<script src="{% static 'js/entrak-system.js' %}"></script>
+<script src="{% static 'js/entrak-utils.js' %}"></script>
+<script src="{% static 'js/report-generator.js' %}"></script>
+
+<link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
+<link href="{% static 'css/companies/export.css' %}" rel="stylesheet">
+
+<script src="{% static 'js/moment-with-locales.js' %}"></script>
+<script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
+
+<script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
+<script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
+<script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
+
+{% endblock %}
+
+{% block selected-menu-link-id %}menu-link-export{% endblock %}
+{% block system_menu_target_view %}report{% endblock %}
+{% block breadcrumb_target_view %}report{% endblock %}
+
+{% block page_title %}{% trans "Data Download Center" %}{% endblock %}
+{% block page_subtitle %}{% trans "Get all your historical energy data at the" %}{% endblock %}
+
+{% block extra_script %}
+{{block.super}}
+{% endblock %}
+
+{% block page_content %}
+
+<div ng-app="Entrak">
+    <div ng-controller="ExportController">
+        <div class="row export-base" ng-class="{chinese : !eng}">
+            <div class="col-md-4 description">
+                <p class="select-text">
+                    <img src="/static/images/export/left-quote.png"></img>
+                    <span ng-bind="description"></span>
+                    <img src="/static/images/export/right-quote.png"></img>
+                </p>
+                <div class="yellow-bottom"></div>
+                <img class="main-img" src="/static/images/export/entrak-illu.png"></img>
+            </div>
+            <div class="col-md-8 steps">
+                {% verbatim %}
+                <div class="row">
+                    <div class="col-md-6 left">
+                        <div class="step-label">{{step1}}</div>
+                        <div class="header">{{step1Title}}</div>
+                        <div class="content bg-calendar">
+                            <div class="table-row"></div>
+                            <div class="table-row">
+                                <h3 class="date-text">{{startDate}}</h3>
+                                <input id="export-start-date" kendo-et-date-picker="dp_date_start" k-ng-model="date_start" k-click-popup="true" k-format="'D'" >
+                                <div class="second-row">
+                                    <span class="date-text inline">{{endDate}}</span>
+                                    <span class="inline date-text small">{{inclusive}}</span>
+                                </div>
+                                <input id="export-end-date" kendo-et-date-picker="dp_date_end" k-ng-model="date_end" k-click-popup="true" k-format="'D'">
+                            </div>
+                            <div class="table-row"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="step-label">{{step2}}</div>
+                        <div class="header">{{step2Title}}</div>
+                        <div class="content bg-time">
+                            <div class="table-row"></div>
+                            <div class="table-row">
+                                <button ng-disabled="disableLv =='Minute' || disableLv == 'Hour'" ng-click="interval='Minute'" class="rect-radio" ng-class="{ 'active': interval=='Minute'}">{{minute}}</button><br>
+                                <button ng-disabled="disableLv == 'Hour'" ng-click="interval='Hour'" class="rect-radio" ng-class="{ 'active': interval=='Hour'}">{{hour}}</button><br>
+                                <button ng-click="interval='Day'" class="rect-radio" ng-class="{ 'active': interval=='Day'}">{{day}}</button>
+                            </div>
+                            <div class="table-row"></div>
+                        </div>
+                    </div>
+                </div>
+                {% endverbatim %}
+                <div class="row">
+                    <div class="col-md-6 left">
+                        <div class="step-label" ng-bind="step3"></div>
+                        <div class="header" ng-bind="step3Title"></div>
+                        <div class="content bg-unit">
+                            <div class="table-row"></div>
+                            <div class="table-row">
+                                <button ng-click="unit='kWh'" class="rect-radio" ng-class="{ 'active': unit=='kWh'}">kWh</button><br>
+                                <button ng-click="unit='money'" class="rect-radio" ng-class="{ 'active': unit=='money'}" ng-bind="cost"></button><br>
+                                <button ng-click="unit='co2'" class="rect-radio" ng-class="{ 'active': unit=='co2'}">{% trans "CO<sub>2</sub> (kg)" %}</button>
+                            </div>
+                            <div class="table-row"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="step-label" ng-bind="step4"></div>
+                        <div class="header" ng-bind="step4Title"></div>
+                        <div class="content">
+                            <div class="table-row"></div>
+                            <div class="table-row">
+                                <div class="col-md-3 field-name">
+                                    <p ng-bind="from"></p>
+                                    <p ng-bind="to"></p>
+                                    <p ng-bind="intervalStep4"></p>
+                                    <p ng-bind="units"></p>
+                                </div>
+                                <div class="col-md-6 field-info">
+                                    <p ng-bind="date_start | dateFmt:'d'"></p>
+                                    <p ng-bind="date_end | dateFmt:'d'"></p>
+                                    <p ng-bind="displayTxt(interval)"></p>
+                                    <p ng-hide="unit=='co2'" ng-bind="displayTxt(unit)"></p>
+                                    <p ng-show="unit=='co2'">{% trans "CO<sub>2</sub> (kg)" %}</p>
+                                </div>
+                                {% verbatim %}
+                                <div class="col-md-3 field-info">
+                                    <p>12:00 {{am}}</p>
+                                    <p>11:59 {{pm}}</p>
+                                </div>
+                                {% endverbatim %}
+                            </div>
+                            <div class="table-row">
+                                <button ng-bind="download" ng-disabled="!is_downloadable()" class="normal" ng-click="download_csv()"</button>
+                            </div>
+                            <div class="table-row"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var ngapp = angular.module("Entrak", [ "kendo.directives" ]);
+
+    ngapp.filter('dateFmt', function () {
+        return function(val, fmtStr) {
+            if (!val){
+                return "";
+            } else if (!fmtStr){
+                return kendo.toString(val, "D");
+            }
+            return kendo.toString(val, fmtStr);
+        }
+    });
+
+    ngapp.controller("ExportController", function($scope){
+        langCode = '{{LANGUAGE_CODE}}';
+        kendo.culture(langCode.substring(0,3)+langCode.substring(3,5).toUpperCase());
+        $scope.eng = langCode.indexOf("en") == 0;
+
+        $scope.interval = "Minute";
+        $scope.unit = "kWh";
+
+        $scope.description = '{% trans "Follow the steps on the right to download your energy data." %}';
+        $scope.step1 = '{% trans "Step 1" %}';
+        $scope.step2 = '{% trans "Step 2" %}';
+        $scope.step3 = '{% trans "Step 3" %}';
+        $scope.step4 = '{% trans "Step 4" %}';
+        $scope.step1Title = '{% trans "Select Time" %}';
+        $scope.step2Title = '{% trans "Select Data Interval" %}';
+        $scope.step3Title = '{% trans "Select Unit" %}';
+        $scope.step4Title = '{% trans "Confirm and Go!" %}';
+
+        $scope.startDate = '{% trans "Start Date" %}';
+        $scope.endDate = '{% trans "End Date" %}';
+        $scope.inclusive = '{% trans "(inclusive)" %}';
+        $scope.minute = '{% trans "Minute" %}';
+        $scope.hour = '{% trans "Hour" %}';
+        $scope.day = '{% trans "Day" context "export" %}';
+        $scope.cost = '{% trans "Cost ($)" %}';
+        $scope.from = '{% trans "From:" %}';
+        $scope.to = '{% trans "To:" context "export" %}';
+        $scope.intervalStep4 = '{% trans "Interval:" %}';
+        $scope.units = '{% trans "Units:" %}';
+        $scope.download = '{% trans "Download" %}';
+        $scope.am = '{% trans "am" %}';
+        $scope.pm = '{% trans "pm" %}';
+
+        $scope.date_start = new Date();
+        $scope.date_start.setHours(0,0,0,0)
+        $scope.date_end = new Date($scope.date_start);
+        $scope.date_end.setDate($scope.date_end.getDate()+1);
+
+        $scope.disableLv = "";
+        $scope.$watchGroup(["date_start", "date_end"], function(nVal, oVal, scope){console.log($("#export-end-date"));
+            // $("#export-end-date").data("kendoDatePicker").min(nVal[0]);
+            // $("#export-start-date").data("kendoEtDatePicker").max(nVal[1]);
+            // $("#export-start-date").datepicker("option", "maxDate", nVal[1]);
+            // $("#export-end-date").datepicker("option", "minDate", nVal[0]);
+
+            var diff = moment(nVal[1]).diff(moment(nVal[0]), "days") + 1;
+            if (diff > 62){
+                $scope.disableLv = "Hour";
+                if ($scope.interval != "Day"){
+                    $scope.interval = "Day";
+                }
+            } else if (diff > 7){
+                $scope.disableLv = "Minute";
+                if ($scope.interval == "Minute"){
+                    $scope.interval = "Hour";
+                }
+            }
+        });
+
+        $scope.displayTxt = function(txt){
+            if (txt == "Minute"){
+                return $scope.minute;
+            } else if (txt == "Hour"){
+                return $scope.hour;
+            } else if (txt == "Day"){
+                return $scope.day;
+            } else if (txt == "kWh"){
+                return "kWh";
+            } else if (txt == "money"){
+                return $scope.cost;
+            }
+            return txt;
+        }
+
+        $scope.is_downloadable = function() {
+            return  $scope.interval && $scope.unit && $scope.date_start && $scope.date_end;
+        }
+
+        $scope.download_csv = function() {
+            var url = "{% url 'companies.export.download' current_system.code %}";
+            url += '?start=' + $scope.date_start.toISOString() + '&end=' + $scope.date_end.toISOString() + '&unit=' + $scope.unit.toLowerCase() + '&interval=' + $scope.interval.toLowerCase();
+
+            window.location.assign(url);
+        }
+
+    });
+</script>
+{% endblock %}

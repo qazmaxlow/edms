@@ -242,7 +242,7 @@ $(function() {
   </div>
   <div class="panel-body">
     <div class="source-container">
-      {% for source in system.sources %}
+      {% for source in system.xsources %}
       <div class="source-block form-horizontal form-widgets" system_code="{{system.code}}" system_path="{{system.path}}">
         <input type="hidden" name="source_id" value="{{source.id}}">
         <div class="form-group">

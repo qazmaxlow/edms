@@ -1,0 +1,165 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Testing</title>
+</head>
+<body style="font-family: &quot;century gothic&quot: ;,helvetica, sans serif: ;color: #354960;">
+  <style>
+    body {
+      font-family:"Century Gothic",Helvetica, Sans Serif;
+      color:#354960;
+      font-size: 16px;
+    }
+    .background_green{
+      background-color:#8dc63F; 
+    }
+    .background_orange{
+      background-color:#fdb913;
+    }
+    .center{
+      text-align: center;
+    }
+    .left{
+      position: relative;
+      left:24px;
+    }
+    .white{
+      color:white;
+    }
+    .black{
+      color:#354960;
+    }
+    .logo{
+      position: absolute;
+    }
+    .dummy{
+      height:60px;
+    }
+    .header-logo{
+      position: relative;
+      /* right: 8px; */
+      right: 0;
+      float: right;
+      bottom: 205px;
+    }
+    .header-video{
+      position: relative;
+      float: right;
+      z-index: 100;
+    }
+    .thank{
+      font-size: 1.313em;
+      font-weight: bold;
+      padding-top: 40px;
+      z-index: 1;
+    }
+    .description{
+      padding-top: 36px;
+      padding-bottom: 66px;
+      z-index: 1;
+    }
+    .enquiry{
+      padding-top: 32px;
+    }
+    .enquiry_thank{
+      font-size: 0.875em;
+    }
+    .contact, .team{
+      font-weight: bold;
+    }
+    .divide_line{
+      width: 90%;
+      margin: 0 auto;
+      height:1px;
+      background-color: #e6e6e6;
+    }
+    .thank_again{
+      padding-top: 16px;
+    }
+    .team{
+      padding-top: 16px;
+      padding-bottom: 32px;
+    }
+    .manage {
+      background-color:#fdb913;
+      border-color:#93CFD9;
+      margin-top:25px;
+      font-weight:bold;
+      border-radius:8px;
+      border:0;
+      cursor:pointer;
+      height:34px;
+      color:white;
+    }
+    .slogan {
+      padding-top: 26px;
+      font-weight:bold;
+      font-size:0.875em;
+    }
+    .link {
+      padding-top: 20px;
+      font-size:0.938em;
+      padding-bottom: 26px;
+    }
+    a {
+      text-decoration:none;
+    }
+    .social{
+      padding-top: 21px;
+      font-size: 0.875em;
+      font-weight: bold;
+      padding-bottom: 11px;
+    }
+    .copyright{
+      padding-top: 26px;
+      font-size: 0.688em;
+      padding-bottom: 21px;
+    }
+  </style>
+    <a href="http://www.en-trak.com/" style="text-decoration: none;"><img class="left logo" src="https://test-dms.en-trak.com{% static 'images/product-logo.png' %}" style="position: absolute;left: 24px;"></a>
+    <div class="dummy" style="height: 60px;"></div>
+    <div class="background_green white" style="background-color: #8dc63F;color: white;">
+        <div class="thank left" style="position: relative;left: 24px;font-size: 1.313em;font-weight: bold;padding-top: 40px;">
+          Thank you for creating an account with En-trak.<br>
+          Now let's manage your energy use!
+        </div>
+        <a class="header-video" href="#" style="text-decoration: none;"><img src="https://test-dms.en-trak.com{% static 'images/header-video.png' %}"></a>
+        <div class="description left" style="position: relative;left: 24px;padding-top: 36px;padding-bottom: 66px;">
+          En-trak shows you when, where,<br>
+          and how you use your energy.<br>
+          This video will show you how it's done!
+        </div>
+
+        <img class="header-logo" src="https://test-dms.en-trak.com{% static 'images/header-logo.png' %}">
+    </div>
+    <div class="background_white enquiry_thank" style="font-size: 0.875em;">
+        <div class="enquiry left" style="position: relative;left: 24px;padding-top: 32px;">
+          If at any time you have questions, comments, ideas or suggestions,<br>
+          please contact our dedicated support team:<br>
+          <div class="contact" style="font-weight: bold;">
+            <p>Phone: (+852) 2311 2488</p>
+            <p>Email: <a class="black" href="mailto:support@en-trak.com" target="_top" style="text-decoration: none;color: #354960;">support@en-trak.com</a></p>
+          </div>
+        </div>
+        <div class="divide_line" style="width: 90%;margin: 0 auto;height: 1px;background-color: #e6e6e6;"></div>
+        <div class="thank_again left" style="position: relative;left: 24px;padding-top: 16px;">
+          Thanks again for choosing En-trak to manage your energy and make<br>
+          your organization greener and more efficient!
+        </div>
+        <a href="{{url}}" style="text-decoration: none;"><button class="manage left" style="position: relative;left: 24px;background-color: #fdb913;border-color: #93CFD9;margin-top: 25px;font-weight: bold;border-radius: 8px;border: 0;cursor: pointer;height: 34px;color: white;">Manage My Energy</button></a>
+        <div class="team left" style="position: relative;left: 24px;font-weight: bold;padding-top: 16px;padding-bottom: 32px;">Team En-trak</div>
+    </div>
+    <div class="background_orange center white" style="background-color: #fdb913;text-align: center;color: white;">
+      <div class="slogan" style="padding-top: 26px;font-weight: bold;font-size: 0.875em;">Turning Data into Actionable Intelligence</div>
+      <div class="link" style="padding-top: 20px;font-size: 0.938em;padding-bottom: 26px;"><a class="white" href="http://www.en-trak.com/" style="text-decoration: none;color: white;">www.en-trak.com</a></div>
+    </div>
+    <div class="background_green center white" style="background-color: #8dc63F;text-align: center;color: white;">
+      <div class="social" style="padding-top: 21px;font-size: 0.875em;font-weight: bold;padding-bottom: 11px;">Follow Us</div>
+      <a href="https://www.facebook.com/entrak.hk" style="text-decoration: none;"><img alt="Facebook" src="https://test-dms.en-trak.com{% static 'images/fb-icon.png' %}"></a>
+      <a href="https://www.linkedin.com/company/en-trak-hong-kong-limited" style="text-decoration: none;"><img alt="Linkedin" src="https://test-dms.en-trak.com{% static 'images/linkedin-icon.png' %}"></a>
+      <div class="copyright" style="padding-top: 26px;font-size: 0.688em;padding-bottom: 21px;">&copy; 2015 All Rights Reserved</div>
+    </div>
+</body>
+</html>

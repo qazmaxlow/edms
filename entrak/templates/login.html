@@ -69,6 +69,12 @@ $(function() {
             <img src="{% static 'images/login/password-icon.png' %}">
             <input type="password" name="password" placeholder='{% trans "Password" %}'>
         </div>
+        <div class="remember-me">
+            <label for="remember_me" class="remember-me">
+                <input type="checkbox" value="remember_me" name="remember_me" class="remember-me">
+                Remember Me
+            </label>
+        </div>
         <input type="submit" value='{% trans "Sign In" %}'>
     </form>
     {% if warning_msg %}
@@ -78,9 +84,9 @@ $(function() {
 
 <footer class="site-footer">
     <p style="clear: both;"></p>
-    <p id="copyright">Copyright © En-trak Hong Kong Ltd 2013. All rights reserved.</p>
+    <p id="copyright">Copyright © En-trak Hong Kong Ltd 2015. All rights reserved.</p>
     <a href="#"><img id="entrak-logo" src="{% static 'images/powered-by-logo.png' %}"></a>
-    <p class="footer-main"></p>             
+    <p class="footer-main"></p>
     <p style="clear: both;"></p>
 </footer>
 

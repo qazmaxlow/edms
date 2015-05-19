@@ -20,160 +20,879 @@
 <script src="{% static 'js/entrak-system.js' %}"></script>
 <script src="{% static 'js/entrak-utils.js' %}"></script>
 <script src="{% static 'js/report-generator.js' %}"></script>
-
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
 <link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/kendo.entrak.theme.css' %}" rel="stylesheet">
 
+<link href="{% static 'assets/kendoui/styles/kendo.dataviz.min.css' %}" rel="stylesheet">
+<link href="{% static 'assets/kendoui/styles/kendo.dataviz.default.min.css' %}" rel="stylesheet"
 <!-- Because now using jquery v1.11 -->
-<script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
-<script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
+<!-- <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script> -->
+<!-- <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script> -->
 <script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
+<script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
 
-<!-- hack css for pdf -->
+<script type="text/javascript" charset="utf-8" src="/static/edges/dashboard/widgets/money/edge_includes/edge.5.0.1.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/dashboard/widgets.css' %}">
 <style>
-  .container {
-    width: 1024px !important;
-    padding: 20px 20px 30px 20px;
-  }
+    .edgeLoad-EDGE-18660633 { visibility:hidden; }
+    .edgeLoad-EDGE-9220080 { visibility:hidden; }
 </style>
+
 {% endblock %}
 
-{% block selected-menu-link-id %}menu-link-report{% endblock %}
+{% block selected-menu-link-id %}menu-link-dashboard{% endblock %}
 {% block system_menu_target_view %}report{% endblock %}
 {% block breadcrumb_target_view %}report{% endblock %}
 
-{% block page_title %}{% trans "THE REPORTS PAGE" %}{% endblock %}
-{% block page_subtitle %}{% trans "Get all your information here at the" %}{% endblock %}
+{% block page_title %}{% trans "ENERGY DASHBOARD" %}{% endblock %}
+{% block page_subtitle %}{% trans "Grab a snapshot of your performance at the" %}{% endblock %}
 
 {% block page_content %}
-<style>
-    .widget-container {
-        padding: 10px;
-    }
 
-    .widget-container .widget-panel {
-        border-radius: 8px 8px 0 0;
-        background-color: #9BCEDA;
-        -webkit-box-shadow: -6px 6px 10px 0px #E8E8E8;
-    }
-
-    .widget-title {
-        color: #FFF;
-        font-family: 'ITCAvantGardeStd-Bk', sans-serif;
-        font-size: 1.0em;
-        line-height: 30px;
-        font-weight: bold;
-        height: 40px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-    }
-
-    .widget-toggle {
-        font-family: 'ITCAvantGardeStd-Bk', sans-serif;
-        font-size: 1.0em;
-        font-weight: bold;
-        padding-top: 5px;
-        padding-bottom: 5px;
-    }
-
-    .widget-content {
-        height: 300px;
-        background-color: #FCFCFC;
-        -webkit-box-shadow: -6px 6px 10px 0px #e8e8e8;
-    }
-
-    .widget-content .widget-message {
-        height: 70px;
-    }
-
-    .widget-message .left-box {
-        height: 70px;
-        background-color: #FCFCFC;
-        padding: 10px 15px 10px 15px;
-    }
-
-    .widget-message .right-box {
-        height: 70px;
-        padding: 10px 15px 10px 15px;
-        background-color: #E5E8E9;
-    }
-
-    .widget-graph {
-        margin-top: -5px;
-    }
-
-    .toggle-button {
-        color: #9D9D9D;
-        border: none;
-        /*border-color: #dadada;*/
-        background-color: #fff;
-        min-width: 50px;
-        line-height: 20px;
-        font-size: 0.929em;
-        font-weight: normal;
-        border-radius: 6px;
-        -webkit-box-shadow: none;
-        -moz-box-shadow: none;
-        -o-box-shadow: none;
-        box-shadow: none;
-        margin-top: 4px;
-        margin-bottom: 4px;
-    }
-
-    .toggle-primary {
-        color: #eee;
-        /*border-color: #67cd18;*/
-        font-weight: bold;
-        background-image: none;
-        background-color: #74C62B;
-
-    }
-
-    .button-left {
-        border-top-right-radius: 0px;
-        border-bottom-right-radius: 0px;
-    }
-
-    .button-right {
-        border-top-left-radius: 0px;
-        border-bottom-left-radius: 0px;
-        margin-left: -4px;
-    }
-
-    .toggle-button:hover {
-      color: #333;
-      /*border-color: #adadad;*/
-      background-color: #ebebeb;
-    }
-
-    .toggle-primary:hover {
-      color: #fff;
-      /*border-color: #78ed29;*/
-      background-color: #48ad00;
-    }
-
-</style>
+{% ifequal LANGUAGE_CODE 'zh-tw' %}
+<div class="container chinese" ng-app="Entrak">
+{% else %}
 <div class="container" ng-app="Entrak">
-    <div class="row">
+{% endifequal %}
+    <div ng-cloak class="row">
         <div class="col-md-8">
-            {% include "companies/dashboard/_last_week_stats.html" with widget_id=4 %}
+            {% include "companies/dashboard/widgets/_real_time.html" with widget_id=4 %}
         </div>
         <div class="col-md-4">
-            {% include "companies/dashboard/_last_week_stats.html" with widget_id=3 %}
+            {% include "companies/dashboard/widgets/_tips.html" with widget_id=3 %}
         </div>
     </div>
-    <div class="row">
+    <div ng-cloak class="row">
         <div class="col-md-4">
-          {% include "companies/dashboard/_last_week_stats.html" with widget_id=1 %}
+          {% include "companies/dashboard/widgets/_biggest_consumers.html" with widget_id=1 %}
         </div>
         <div class="col-md-4">
-          {% include "companies/dashboard/_last_week_stats.html" with widget_id=2 %}
+          {% include "companies/dashboard/widgets/_so_far.html" with widget_id=2 %}
         </div>
         <div class="col-md-4">
-          {% include "companies/dashboard/_last_week_stats.html" with widget_id=5 %}
+          {% include "companies/dashboard/widgets/_last_week_stats.html" with widget_id=5 %}
         </div>
     </div>
 </div>
+
+<script>
+    function to_ampm(h) {
+        var ampm = h;
+        if (ampm > 12) {
+            ampm -= 12;
+        }
+        else if (ampm == 0) {
+            ampm = 12
+        }
+
+        return ampm
+    }
+
+    var ngapp = angular.module("Entrak", [ "kendo.directives" ]);
+
+    ngapp.filter('abs', function () {
+        return function(val) {
+            return Math.abs(val);
+        }
+    });
+
+    ngapp.filter('entrakNumber', function () {
+        return function(val) {
+            if (isNaN(val)){
+                return "";
+            } else if (val < 1) {
+                return kendo.toString(val, "#.##");
+            } else if (val < 10 ) {
+                return kendo.toString(val, "#.#");
+            } else {
+                return kendo.toString(val, "##,#");
+            }
+        }
+    });
+
+    ngapp.controller("WidgetRealtime", function($scope) {
+        $scope.title = '{% trans "Real-Time" %}';
+        $scope.btnLeft = '{% trans "Graph" %}';
+        $scope.btnRight = '{% trans "Rates" %}';
+        $scope.usedSoFar = '{% trans "So far today you have used: " %}';
+        $scope.axisToday = '{% trans "Today" %}';
+        $scope.axisLast = '{% trans "Last week" %}';
+        $scope.perDay = '{% trans "per day" %}';
+
+        var today_measures = [];
+        var last_week_measures = [];
+        for (var i = 0; i < 24; i++) last_week_measures[i] = null;
+
+        AdobeEdge.loadComposition('co2', 'EDGE-18660633', {
+            scaleToFit: "none",
+            centerStage: "none",
+            minW: "0",
+            maxW: "undefined",
+            width: "326px",
+            height: "250px",
+            htmlRoot: "/static/edges/dashboard/widgets/co2/"
+        }, {"dom":{}}, {"style":{"${symbolSelector}":{"isStage":"true","rect":["undefined","undefined","550px","400px"],"fill":["rgba(255,255,255,1)"]}},"dom":{}});
+
+        AdobeEdge.bootstrapCallback(function (compId) {
+            if (compId != "EDGE-9220080"){
+                AdobeEdge.loadComposition('money', 'EDGE-9220080', {
+                    scaleToFit: "none",
+                    centerStage: "none",
+                    minW: "0",
+                    maxW: "undefined",
+                    width: "328px",
+                    height: "250px",
+                    htmlRoot: "/static/edges/dashboard/widgets/money/"
+                }, {"dom":{}}, {"dom":{}});
+            }
+        });
+
+
+        // Reference from https://www.youtube.com/watch?feature=player_embedded&v=hrLt0Y9QAY8
+        $("#stageMoney,#stageCO2").css({ // Set the transform origin so we always scale to the top left corner of the stage
+            "transform-origin":"0 0",
+            "-ms-transform-origin":"0 0",
+            "-webkit-transform-origin":"0 0",
+            "-moz-transform-origin":"0 0",
+            "-o-transform-origin":"0 0"
+        });
+
+        var scaleStage = function (id, pid) {
+            var stage = $("#"+id); // Set a reusable variable to reference the stage
+            var parent = pid ? $("#"+pid) : $("#"+id).parent(); // Set a reusable variable to reference the parent container of the stage
+
+            var parentWidth = parent.width(); // Get the parent of the stage width
+            var parentHeight = parent.height(); // Get the browser window height
+
+            var stageWidth = stage.width(); // Get the stage width
+            var stageHeight = stage.height(); // Get the stage height
+
+            var desiredWidth = Math.round(parentWidth * 1); // Set the new width of the stage as it scales
+            var desiredHeight = Math.round(parentHeight * 1); // Set the new height of the stage as it scales
+
+            var rescaleWidth = (desiredWidth / stageWidth); // Set a variable to calculate the new width of the stage as it scales
+            var rescaleHeight = stageHeight > 0 ? (desiredHeight / stageHeight) : rescaleWidth; // Set a variable to calculate the new height of the stage as it scales
+
+            // Rescale the stage!
+            stage.css('transform', 'scale(' + rescaleWidth + ', ' + rescaleHeight + ')');
+            stage.css('-o-transform', 'scale(' + rescaleWidth + ', ' + rescaleHeight + ')');
+            stage.css('-ms-transform', 'scale(' + rescaleWidth + ', ' + rescaleHeight + ')');
+            stage.css('-webkit-transform', 'scale(' + rescaleWidth + ', ' + rescaleHeight + ')');
+            stage.css('-moz-transform', 'scale(' + rescaleWidth + ', ' + rescaleHeight + ')');
+            stage.css('-o-transform', 'scale(' + rescaleWidth + ', ' + rescaleHeight + ')');
+        }
+
+        $(window).on('resize', function(){
+            scaleStage("stageCO2", "animationContainerCO2");
+            scaleStage("stageMoney", "animationContainerMoney");
+        });
+
+        $scope.refreshHeader = function(){
+            var d = new Date();
+            var langCode = '{{LANGUAGE_CODE}}';
+            kendo.culture(langCode.substring(0,3)+langCode.substring(3,5).toUpperCase());
+            $scope.curDate = kendo.toString(d, "D");
+            $scope.curTime = kendo.toString(d, "h:mm tt").toLowerCase();
+        }
+
+        var refreshChartAxis = function(){
+            var max_today = Math.max.apply(null, today_measures);
+            var max_last = Math.max.apply(null, last_week_measures);
+            var maxValue = Math.max(max_today, max_last);
+
+            // find the nearest 10, 100, 1000... based interget
+            var pow = (maxValue+".").indexOf(".") - 1;
+            var step = Math.ceil(maxValue/Math.pow(10, pow)) * Math.pow(10, pow) / 4;
+            var maxStep = step * 4.2;   // X4.2 but not 4 so that the top data point can always be shown fully
+            $scope.realTimeChart.setOptions({valueAxis: {max: maxStep, majorUnit: step}});
+        }
+
+        var today_measure_ds = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "{% url 'companies.measures.daily' current_system.code %}",
+                    type: 'GET',
+                    dataType: "json"
+                },
+                parameterMap: function(data, type) {
+                    if (type == "read") {
+                        var d = data.date;
+                        if (d === undefined) { d = new Date(); }
+
+                        return {
+                            date: kendo.toString(d, 'yyyy-MM-dd')
+                        }
+                    }
+                }
+            },
+            schema: {
+                model: {
+                    fields: {
+                        datetime: { type: "date"}
+                    }
+                }
+            }
+        });
+
+        var total_ds = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "{% url 'companies.measures.total' current_system.code %}",
+                    type: 'GET',
+                    dataType: "json"
+                }
+            },
+            schema: {
+                    // Fix for single result
+                    data: function(response) {
+                        return [response];
+                    }
+                }
+        });
+
+        var hours = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+        var per_hour_measures = {};
+        $.each(hours, function(i, h) { per_hour_measures[h] = null; });
+        //$.each(hours, function(i, h) { last_week_measures[h] = h*5+54;per_hour_measures[h] = h*5+123; });
+
+        $scope.realTimeSelect = 'graph';
+        $scope.realTimeOptions = {
+            transitions: false,
+            chartArea: {
+                height: 200,
+                margin: 0,
+                background: "#FCFCFC"
+            },
+            series: [{
+                type: "column",
+                name: "Today",
+                color: "#81d51d",
+                gap: 1.2,
+                overlay: {
+                    gradient: "none"
+                },
+                border: {
+                    width: 0
+                },
+                data: today_measures
+            }, {
+                type: "line",
+                name: "Last Week",
+                color: "#354960",
+                line: {
+                    width: 2
+                },
+                data: last_week_measures
+            }],
+            legend: {
+                visible: false
+            },
+            categoryAxis: {
+                categories: hours,
+                labels: {
+                    step: 2,
+                    font: "0.857em ITCAvantGardeStd-Bk",
+                    padding: { 
+                     top: 5
+                    },
+                    color: "#4B4B4B",
+                    template: "#= to_ampm(value) #"
+                },
+                line: {
+                    visible: true,
+                    width: 2,
+                    color: "#ECECEC"
+                },
+                majorGridLines: {
+                    visible: false
+                },
+                majorTicks: {
+                    size: 0
+                }
+            },
+            valueAxis: {
+                line: {
+                    visible: false
+                },
+                labels: {
+                        format: "{0}",
+                        font: "0.857em ITCAvantGardeStd-Bk",
+                        color: "#4B4B4B"
+                    },
+                min: 0
+            },
+            tooltip: {
+                visible: true,
+                template: "# if (value < 1) { # #=kendo.toString(value, 'n2')# # } else if (value < 10) { # #=kendo.toString(value, 'n1') # # } else { # #=kendo.toString(value, 'n0') # # } #",
+                background: "#EFEFEF",
+                border: {
+                    color: "#333",
+                    width: 2
+                },
+            }
+
+        }
+
+        // get last week data
+        var last_week_date = new Date();
+        last_week_date.setDate(last_week_date.getDate()-7);
+
+        today_measure_ds.read({date: kendo.toString(last_week_date, 'yyyy-MM-dd')}).then(function() {
+            var data = today_measure_ds.data();
+            $.each(data, function(index, m) {
+                var hour = m.datetime.getHours();
+                last_week_measures[hour] = m.value;
+            });
+        });
+
+        $scope.updateTodayMeasure = function () {
+            today_measure_ds.read().then(function() {
+                var data = today_measure_ds.data();
+                $.each(data, function(index, m) {
+                    var hour = m.datetime.getHours();
+                    if (per_hour_measures[hour] === null) {
+                        per_hour_measures[hour] = m.value;
+                    }
+                });
+
+                today_measures.length = 0;
+                $.each(per_hour_measures, function(h, v) { today_measures.push(v); });
+                refreshChartAxis();
+                $scope.realTimeChart.refresh();
+            });
+
+            total_ds.read().then(function() {
+                var data = total_ds.data();
+                $scope.$apply(function(){
+                    $scope.total_cost = data[0].cost;
+                });
+            });
+        }
+
+        $scope.updateRates = function () {
+            var date_end = new Date();
+            var date_start = new Date();
+            date_start.setDate(date_start.getDate() -1);
+
+            total_ds.read({
+                date_start: date_start.getTime(),
+                date_end: date_end.getTime()
+            }).then(function() {
+                var data = total_ds.data();
+                $scope.$apply(function(){
+                    $scope.total_per_day = data[0];
+                });
+            });
+
+        }
+
+        $scope.toggle = function(isGraph){
+            $scope.isGraph = isGraph;
+            if (isGraph){
+                $scope.updateTodayMeasure();
+            } else {
+                $scope.updateRates();
+                setTimeout(function(){  //without timeout, the parent dimension is incorrect
+                    scaleStage("stageCO2", "animationContainerCO2");
+                    scaleStage("stageMoney", "animationContainerMoney");
+                }, 150);
+            }
+            $scope.refreshHeader();
+        }
+        $scope.toggle(true);
+
+        // update the chart every 10 sec
+        $scope.refreshHeader();
+        setInterval(function(){
+            $scope.updateTodayMeasure();
+            $scope.refreshHeader();
+        }, 10000);
+    });
+
+    ngapp.controller("WidgetBiggestConsumers", function($scope){
+        $scope.title = '{% trans "Biggest Consumers" %}';
+        $scope.btnLeft = '{% trans "Week" context "dashboard" %}';
+        $scope.btnRight = '{% trans "Month" context "dashboard" %}';
+        $scope.changeText = $scope.isWeek ? '{% trans "Change from last week" %}' : '{% trans "Change from last month" %}';
+        $scope.energyCost = '{% trans "Energy cost so far" %}';
+        
+        var refreshIntervalId;
+        var refreshPeriod = 30000;
+
+        $scope.consumers = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "{% url 'companies.measures.top-three' current_system.code %}",
+                    type: 'GET',
+                    dataType: "json"
+                },
+                parameterMap: function(data, type) {
+                    if (type == "read") {
+                        var d = data["datetime"];
+                        var t = data["type"];
+                        if (d === undefined) { d = new Date(); }
+                        if (t === undefined) { t = "weekly"; }
+
+                        return {
+                            datetime: d.toISOString(),
+                            type: t
+                        }
+                    }
+                },
+            },
+            sort: { field: "rank", dir: "dsc" }
+        });
+
+        $scope.consumers.read().done(function() {$scope.$digest()});
+
+        $scope.isWeek = true;
+        $scope.toggle = function(clickWeek){
+
+            $scope.isWeek = clickWeek;
+            clearInterval(refreshIntervalId);
+
+            var retrieve_type = ($scope.isWeek ? "weekly" : "monthly");
+
+            $scope.consumers.read({type:retrieve_type}).done(function() {$scope.$digest() });
+            refreshIntervalId = setInterval(function() { $scope.consumers.read({type:retrieve_type}) }, refreshPeriod);
+        };
+
+
+        refreshIntervalId = setInterval(function() { $scope.consumers.read(); }, refreshPeriod);
+
+    });
+
+    ngapp.controller("WidgetTips", function($scope){
+        $scope.title = '{% trans "Energy Saving Tips" %}';
+        var tipsList = [{
+            shortDesc: '{% trans "Put a ribbon on it" %}',
+            longDesc: '{% trans "Tie a ribbon to the vent of each aircon unit so you can easily tell if aircon has actually been turned off." %}',
+            imgPath: "/static/images/dashboard/tips-ribbon.png"
+        },
+        {
+            shortDesc: '{% trans "Label your plugs" %}',
+            longDesc: '{% trans "Label your plugs so you can unplug appliances without accidentally turning off important things!" %}',
+            imgPath: "/static/images/dashboard/tips-button.png"
+        },
+        {
+            shortDesc: '{% trans "Remove a tube" %}',
+            longDesc: '{% trans "If you have more light than you need in an area, you can remove one light tube to save energy!" %}',
+            imgPath: "/static/images/dashboard/tips-lightbulbs.png"
+        },
+        {
+            shortDesc: '{% trans "Turn off the socket" %}',
+            longDesc: "{% blocktrans with percent='%' %}Even if an appliance is off, it can still consume 10{{percent}} of normal energy. Remember to turn off the socket switch too!{% endblocktrans %}",
+            imgPath: "/static/images/dashboard/tips-switch-off.png"
+        },
+        {
+            shortDesc: '{% trans "Adjust aircon temperature" %}',
+            longDesc: '{% trans "30 minutes after turning on aircon, adjust the temperature to minimize energy wastage." %}',
+            imgPath: "/static/images/dashboard/tips-temperature.png"
+        }];
+
+        var update = function(){
+            $scope.shortDesc = tipsList[$scope.curTips].shortDesc;
+            $scope.longDesc = tipsList[$scope.curTips].longDesc;
+            $scope.imgPath = tipsList[$scope.curTips].imgPath;
+        };
+
+        $scope.curTips = 0;
+        update();
+
+        $scope.showNext = function(goNext){
+            $scope.curTips += goNext;
+            if ($scope.curTips >= tipsList.length){
+                $scope.curTips = 0;
+            } else if ($scope.curTips < 0) {
+                $scope.curTips = tipsList.length - 1;
+            }
+
+            update();
+        }
+    });
+
+
+    ngapp.controller("WidgetSoFar", function($scope){
+        $scope.title = '{% trans "Comparison" %}';
+        $scope.btnLeft = '{% trans "Week" context "dashboard" %}';
+        $scope.btnRight = '{% trans "Month" context "dashboard" %}';
+
+        var refreshIntervalId;
+        var refreshPeriod = 30000;
+
+        var costs = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "{% url 'companies.measures.up-till-now' current_system.code %}",
+                    type: 'GET',
+                    dataType: "json"
+                },
+                parameterMap: function(data, type) {
+                    if (type == "read") {
+                        var d = data["datetime"];
+                        var t = data["type"];
+                        if (d === undefined) { d = new Date(); }
+                        if (t === undefined) { t = "weekly"; }
+
+                        return {
+                            datetime: d.toISOString(),
+                            type: t
+                        }
+                    }
+                }
+            }
+        });
+
+        var thisCost = [];
+        var lastCost = [];
+        var updateChart = function(){
+            var data = costs.data();
+            thisCost.length = 0;
+            lastCost.length = 0;
+            for (var i=0; i<data.length; i++){
+                if (data[i].is_today){
+                    thisCost.push(data[i].value);
+                } else {
+                    lastCost.push(data[i].value);
+                }
+            }
+            var yMax = Math.max(thisCost[0], lastCost[0]) / 0.85;  //give move space to the text
+            $scope.soFarChartThis.setOptions({valueAxis: {max: yMax}}); //use same scale for both chart
+            $scope.soFarChartLast.setOptions({valueAxis: {max: yMax}});
+            $scope.soFarChartThis.refresh();
+            $scope.soFarChartLast.refresh();
+        }
+
+        var ca = {
+            height: 230,
+            margin: 0,
+            background: '#FCFCFC'
+        };
+        var le = {
+            visible: false,
+            position: 'bottom'
+        };
+        var sd = {
+            type: 'column'
+        };
+        var va = {
+            visible: false,
+            line: {
+                visible: false
+            },
+            majorGridLines: {
+                visible: false
+            },
+            min: 0
+        };
+        var catAxis = {
+            visible: true,
+            line: {
+                visible: true,
+                width: 2,
+                color: "#D3D3D3"
+            },
+            majorGridLines: {
+                visible: false
+            },
+            majorTicks: {
+                size: 0
+            }
+        };
+
+        $scope.soFarOptionsThis = {
+            series: [{
+                markers: { visible: true },
+                data: thisCost,
+                color: '#354960',
+                opacity: 0.6,
+                gap: 0.1,
+                overlay: {
+                    gradient: "none"
+                },
+                border: {
+                    width: 0
+                },
+                highlight: {
+                    visible: false
+                },
+                labels: {
+                    visible: true,
+                    font: "bold 1.357em ITCAvantGardeStd-Bk",
+                    color: "#354960",
+                    format: "$ ##,#"
+                }
+            }],
+            chartArea: ca,
+            legend: le,
+            seriesDefaults: sd,
+            valueAxis: va,
+            categoryAxis: catAxis
+        }
+        $scope.soFarOptionsLast = {
+            series: [{
+                markers: { visible: true },
+                data: lastCost,
+                color: '#7a7a7a',
+                opacity: 0.6,
+                gap: 0.1,
+                overlay: {
+                    gradient: "none"
+                },
+                border: {
+                    width: 0
+                },
+                highlight: {
+                    visible: false
+                },
+                labels: {
+                    visible: true,
+                    font: "bold 1.357em ITCAvantGardeStd-Bk",
+                    color: "#878787",
+                    format: "$ ##,#"
+                }
+            }],
+            chartArea: ca,
+            legend: le,
+            seriesDefaults: sd,
+            valueAxis: va,
+            categoryAxis: catAxis
+        }
+
+
+        $scope.isWeek = true;
+        var setTitle = function(){
+            $scope.leftBoxTitle = $scope.isWeek ? '{% trans "So far this week" %}' : '{% trans "So far this month" %}';
+            $scope.rightBoxTitle = $scope.isWeek ? '{% trans "By this time last week" %}' : '{% trans "By this time last month" %}';
+        }
+
+        setTitle();
+
+        $scope.toggle = function(isWeek) {
+            $scope.isWeek = isWeek;
+            setTitle();
+            clearInterval(refreshIntervalId);
+
+            var retrieve_date = new Date();
+            var retrieve_type = ($scope.isWeek ? "weekly" : "monthly");
+
+            costs.read({datetime:retrieve_date, type:retrieve_type}).then(updateChart);
+            refreshIntervalId = setInterval(function() {
+                costs.read({datetime:retrieve_date, type:retrieve_type}).then(updateChart);
+            }, refreshPeriod);
+        }
+
+        setTimeout(function(){
+            if (angular.isDefined($scope.soFarChartThis) && angular.isDefined($scope.soFarChartLast)){
+                costs.read().then(updateChart);
+            } else {
+                $scope.$watchGroup(["soFarChartThis", "soFarChartLast"], function(nVal, oVal, scope){
+                    if (angular.isDefined(nVal[0]) && angular.isDefined(nVal[1])){
+                        costs.read().then(updateChart);
+                    }
+                });
+            }
+        }, 300);
+        refreshIntervalId = setInterval(function() {
+            costs.read().then(updateChart);
+        }, refreshPeriod);
+    });
+
+    ngapp.controller("WidgetLastWeekStats", function($scope){
+        $scope.title = '{% trans "Last Week Stats" %}';
+        $scope.btnLeft = '{% trans "Day" %}';
+        $scope.btnRight = '{% trans "Night" %}';
+        $scope.rightBoxText = '{% trans "than two weeks ago" %}';
+
+        var ds = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "{% url 'companies.measures.last-week-stats' current_system.code %}",
+                    type: 'GET',
+                    dataType: "json"
+                },
+                parameterMap: function(data, type) {
+                    if (type == "read") {
+                        var d = data["datetime"];
+                        if (d === undefined) { d = new Date(); }
+
+                        return {
+                            datetime: d.toISOString(),
+                        }
+                    }
+                }
+            },
+        });
+
+        var dayMaxStep, nightMaxStep = 100;
+        var dayStep, nightStep = 100/4;
+        var dayUsage, nightUsage = {}
+
+        var dayAverage, nightAverage = 0
+        var dayPercentageChange, nightPercentageChange = 0
+
+        $scope.average = 0;
+        $scope.percentage_change = 0;
+        $scope.isWeekday = true;
+
+        function updateChart() {
+
+            if ($scope.isWeekday) {
+                $scope.lastWeekStatChart.setOptions({valueAxis: {max: dayMaxStep, majorUnit: dayStep}});
+                $scope.lastWeekStatChart.dataSource.data(dayUsage.data);
+                $scope.average = dayAverage;
+                $scope.percentage_change = dayPercentageChange;
+            } else {
+                $scope.lastWeekStatChart.setOptions({valueAxis: {max: nightMaxStep, majorUnit: nightStep}});
+                $scope.lastWeekStatChart.dataSource.data(nightUsage.data);
+                $scope.average = nightAverage;
+                $scope.percentage_change = nightPercentageChange;
+            }
+            $scope.moreLessText = ($scope.percentage_change > 0) ? '{% trans "more" %}' : '{% trans "less" %}';
+
+            $scope.lastWeekStatChart.refresh();
+            if(!$scope.$$phase) {
+                $scope.$digest();
+            }
+        }
+
+        $scope.lastWeekStatOptions = {
+            dataSource: {
+                data: []
+            },
+            chartArea: {
+                height: 190,
+                margin: 0,
+                background: "#FCFCFC"
+            },
+            // seriesDefaults: {
+            //     type: "area",
+            //     opacity: 0.6
+            // },
+            series: [{
+                type: "area",
+                opacity: 0.6,
+                markers: {visible: true},
+                field: "value",
+                color: "#354960",
+                line: {
+                    width: 2
+                }
+            },{
+                type: "column", //add this to give some space before the first data point and after the last data point
+                field: "dummy"
+            }],
+            valueAxis: {
+                labels: {
+                    format: "{0}",
+                    font: "0.857em ITCAvantGardeStd-Bk",
+                    color: "#4B4B4B"
+                },
+                line: {
+                    visible: false
+                },
+                majorGridLines: {
+                    color: "#ECECEC",
+                    visible: true
+                },
+                majorUnit: dayStep,
+                max: dayMaxStep,
+                min: 0
+            },
+            categoryAxis: {
+                field: "weekday",
+                type: "date",
+                majorGridLines: {
+                    //color: "#ECECEC",
+                    visible: false
+                },
+                labels: {
+                    font: "0.857em ITCAvantGardeStd-Bk",
+                    color: "#4B4B4B",
+
+        dateFormats: {
+            days: "ddd"
+        }
+    
+                },
+                line: {
+                    color: "#ECECEC",
+                    width: 2,
+                    visible: true
+                },
+                majorTicks: {
+                    size: 0
+
+                }
+            },
+            tooltip: {
+                visible: true,
+                //format: "{0}%",
+                template: "# if (value < 1) { # #=kendo.toString(value, 'n2')# # } else if (value < 10) { # #=kendo.toString(value, 'n1') # # } else { # #=kendo.toString(value, 'n0') # # } #",
+                background: "#EFEFEF",
+                border: {
+                    color: "#333",
+                    width: 2
+                },
+            }
+        };
+
+        function initChartData(){
+            ds.read().done(function() {
+
+                dayUsage = ds.data()[0];
+                nightUsage = ds.data()[1];
+
+                var dayMax = dayUsage.maximum;
+                var dayPow = (dayMax+".").indexOf(".") - 1;
+
+                dayStep = Math.ceil(dayMax/Math.pow(10, dayPow)) * Math.pow(10, dayPow) / 4;
+                dayMaxStep = dayStep * 4.2;// X4.2 but not 4 so that the top data point can always be shown fully
+                dayAverage = dayUsage.average;
+                dayPercentageChange = dayUsage.percentage_change;
+
+                var nightMax = nightUsage.maximum;
+                var nightPow = (nightMax+".").indexOf(".") - 1;
+
+                nightStep = Math.ceil(nightMax/Math.pow(10, nightPow)) * Math.pow(10, nightPow) / 4;
+                nightMaxStep = nightStep * 4.2;// X4.2 but not 4 so that the top data point can always be shown fully
+                nightAverage = nightUsage.average;
+                nightPercentageChange = nightUsage.percentage_change;
+
+                $scope.lastWeekStatChart.dataSource.data(dayUsage.data);
+                updateChart();
+            });
+        }
+
+        setTimeout(function(){
+            if (angular.isDefined($scope.lastWeekStatChart)){
+                initChartData();
+            } else {
+                $scope.$watch("lastWeekStatChart", function(nVal, oVal){
+                    if (angular.isDefined(nVal)){
+                        initChartData();
+                    }
+                });
+            }
+        }, 300);
+
+        $scope.toggle = function() {
+            $scope.isWeekday = !$scope.isWeekday;
+            updateChart();
+        }
+
+        $scope.moreLessText = function(percentage_change){
+            return (percentage_change > 0) ? '{% trans "more" %}' : '{% trans "less" %}';
+        };
+
+        $scope.currentAverage = function(){
+            return  ($scope.isWeekday) ? '{% trans "average weekday" %}' : '{% trans "average overnight" %}';
+        };
+    });
+</script>
+
 {% endblock %}

@@ -1,0 +1,76 @@
+{% load static %}<!DOCTYPE html>
+<html>
+<head>
+    <title>Auto-report</title>
+</head>
+<body style="font-family: &quot;century gothic&quot: ;,helvetica, sans serif: ;text-align: center;font-size: 16px;">
+  <style>
+    body {
+      font-family:"Century Gothic",Helvetica, Sans Serif;
+        text-align:center;
+        font-size: 16px;
+    }
+    .background {
+        padding-top:25px;
+        background-color:#EFEFEF;
+        padding-bottom: 15px;
+    }
+    .invite {
+      font-weight:bold;
+      color:#354960;
+    }
+    .description_big {
+      font-size:1em;
+      color:#354960;
+    }
+    .description {
+      font-size:0.938em;
+      color:#354960;
+    }
+    .create {
+      background-color:#93CFD9;
+      border-color:#93CFD9;
+      margin-top:25px;
+      margin-bottom:40px;
+      font-size:0.938em;
+      font-weight:bold;
+      border-radius:8px;
+      border:0;
+      cursor:pointer;
+      height:34px;
+      color:white;
+    }
+    .slogan {
+      font-weight:bold;
+      color:#8dc63F;
+      font-size:0.813em;
+    }
+    .link {
+      color:#8dc63F;
+      font-size:0.813em;
+    }
+    a {
+      text-decoration:none;
+    }
+  </style>
+    <a href="https://www.en-trak.com/" style="text-decoration: none;"><img src="https://{{ site.domain }}{% static 'images/product-logo.png' %}"></a>
+    <div class="background" style="padding-top: 25px;background-color: #EFEFEF;padding-bottom: 15px;">
+        <img alt="actionIcon" src="https://{{ site.domain }}{% static 'images/companies/report_schedule/mail/top_icon.png' %}">
+        <br>
+        <div class="description_big" style="font-size: 1em;color: #354960;">Your energy report for</div>
+        <div class="invite" style="font-weight: bold;color: #354960;">En-trak Headquarter - {{ report_date_text }}</div>
+        <div class="description_big" style="font-size: 1em;color: #354960;">is ready for your review</div>
+        <a href="{{ report_url|safe }}" style="text-decoration: none;"><button class="create" style="background-color: #93CFD9;border-color: #93CFD9;margin-top: 25px;font-size: 0.938em;font-weight: bold;border-radius: 8px;border: 0;cursor: pointer;height: 34px;color: white;margin-bottom: 40px;">View Report</button></a>
+        <div class="description" style="font-size: 0.938em;color: #354960;">
+          This link will expire 72 hours after sending<br>
+          If you wish to view this report after that period,<br>
+          simply log into your En-trak system and go to the Report Page
+        </div>
+    </div>
+    <p class="slogan" style="font-weight: bold;color: #8dc63F;font-size: 0.813em;">Turning Data into Actionable Intelligence</p>
+    <a href="http://www.en-trak.com/" style="text-decoration: none;"><p class="link" style="color: #8dc63F;font-size: 0.813em;">www.en-trak.com</p></a>
+    <a href="https://www.facebook.com/entrak.hk" style="text-decoration: none;"><img alt="Facebook" src="https://test-dms.en-trak.com{% static 'images/fb-icon.png' %}"></a>
+    <a href="https://www.linkedin.com/company/en-trak-hong-kong-limited" style="text-decoration: none;"><img alt="Linkedin" src="https://test-dms.en-trak.com{% static 'images/linkedin-icon.png' %}"></a>
+
+</body>
+</html>

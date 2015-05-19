@@ -33,7 +33,7 @@
 {% block breadcrumb_target_view %}alert_settings{% endblock %}
 
 {% block page_title %}{% trans "THE ALERT PAGE" %}{% endblock %}
-{% block page_subtitle %}{% trans "Find out what you can set here at" %}{% endblock %}
+{% block page_subtitle %}{% trans "We'll keep you in touch with" %}{% endblock %}
 
 {% block extra_script %}
 {{block.super}}
@@ -290,7 +290,7 @@ function updateReceiverSelect(emailInputEle) {
     if (settings.skipSignalEvent) {
         return;
     }
-    
+
     var emails = emailInputEle.tagit("assignedTags");
     var receiverSelect = emailInputEle.parent().parent().parent().find('.on-edit .receiver-select');
     if (receiverSelect.length > 0) {
@@ -734,7 +734,7 @@ $(function() {
     setupAjaxForCsrf($.cookie('csrftoken'));
     settings.langCode = '{{LANGUAGE_CODE}}';
     moment.locale(settings.langCode);
-    
+
     var peakConversationTemplate = $('#peak-conversation-template').html();
     Mustache.parse(peakConversationTemplate);
     var peakConversationHtml = Mustache.render(peakConversationTemplate, {});
@@ -756,7 +756,7 @@ $(function() {
         $(this).click({connectedPanel: subMenuPanel[eleIdx]}, function (event) {
             $(".panel-header-left-menu h3").removeClass('selected-tab');
             $(this).addClass('selected-tab');
-            
+
             var connectedPanel = $(event.data.connectedPanel);
             if (!(connectedPanel.hasClass('selected-submenu'))) {
                 subMenuPanel.filter(".selected-submenu").removeClass('selected-submenu').hide();

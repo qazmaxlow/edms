@@ -1,0 +1,344 @@
+.manage-acc.chinese,
+.k-window-title.chinese {
+	font-family: "Helvetica Neue Light",
+ 	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+ 	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
+ 	-webkit-font-smoothing: antialiased;
+	font-size: 14px;
+}
+
+.manage-acc, .k-window-title {
+	font-family: 'ITCAvantGardeStd', "Helvetica Neue Light",
+	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
+	-webkit-font-smoothing: antialiased;
+	font-size: 14px;
+}
+
+.manage-acc {
+	box-shadow: -2px 4px 5px 0 #e8e8e8;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 25px;
+	margin-bottom: 50px;
+	width: 1002px;
+	padding: 0;
+	border-radius: 8px;
+	background-color: #FCFCFC;
+}
+
+.manage-acc div.k-header {
+	border-radius: 8px 8px 0 0;
+    background-color: #9BCEDA;
+    color: #FFFFFF;
+    font-size: 1em;
+    height: 40px;
+    line-height: 40px;
+    border: none;
+}
+.manage-acc div.k-header a,
+.manage-acc div.k-header a:hover {
+	display: block;
+	border-radius: 8px 8px 0 0;
+    background-color: transparent;
+    color: #FFFFFF;
+    font-size: 1em;
+    height: 40px;
+    line-height: 40px;
+    text-decoration: none;
+}
+
+.manage-acc .k-header .header-tab {
+    border-right: 1px solid #FFFFFF;
+    padding: 0 10px;
+    display: inline-block;
+}
+
+.manage-acc .k-header .header-tab:first-child {
+	border-radius: 8px 0 0 0;
+}
+
+.manage-acc .k-header .header-tab:hover,
+.manage-acc .k-header .header-tab.selected-tab{
+	background: linear-gradient(to bottom, #aee428, #67cd18);
+}
+
+.manage-acc .k-button.userAcc {
+	margin-top: 26px;
+	margin-bottom: 17px;
+	margin-left: 26px;
+}
+
+.manage-acc .k-button.sharedAcc {
+	margin-top: 54px;
+	margin-bottom: 17px;
+	margin-left: 26px;
+}
+
+.manage-acc .k-grid-header {
+    padding: 0 !important;
+
+}
+.manage-acc .k-grid-content {
+	overflow-y: visible;
+}
+
+.manage-acc .k-grid {
+	margin: 0 10px 0 10px;
+	padding: 0 0 10px 0;
+
+	border: none;
+	background-color: transparent;
+}
+
+.manage-acc .k-grid-header,
+.manage-acc .k-grid-header .k-grid-header-wrap {
+	border: none;
+}
+
+.manage-acc .k-grid-header .k-grid-header-wrap th {
+	height: 40px;
+	line-height: 40px;
+	padding: 0;
+	text-align: center;
+	background-color: #354960;
+	vertical-align: middle;
+	border: 1px solid #354960;
+}
+
+.manage-acc .k-grid-header .k-grid-header-wrap th:first-child {
+	padding-left: 23px;
+	text-align: left;
+}
+
+.manage-acc .k-grid-header .k-grid-header-wrap th .k-link, 
+.manage-acc .k-grid-header .k-grid-header-wrap th.k-header {
+	font-size: 0.929em;
+	font-weight: 600;
+	color: #ffffff;
+}
+
+.manage-acc .k-grid-content tr {
+	height: 40px;
+}
+
+.manage-acc .k-grid-content tr td {
+	border-color: #dbdbdb;
+	font-size: 0.929em;
+	font-weight: 300;
+	color: #4a4a4a;
+	text-align: center;
+}
+
+.manage-acc .k-grid-content tr td .k-button {
+	height: 23px;
+}
+
+.manage-acc .k-grid-content tr td:first-child {
+	font-size: 0.929em;
+	font-weight: 600;
+	color: #354960;
+	padding-left: 0;
+	text-align: left;
+}
+
+.manage-acc .k-grid-content tr td.empty-img {
+	padding-left: 23px;
+}
+
+.manage-acc .k-grid-content tr:nth-child(even) {
+	background-color: #e2e2e2;
+}
+
+.manage-acc .k-grid-content tr:nth-child(odd) {
+	background-color: #ececec;
+}
+
+.manage-acc .k-grid-content img.delete-icon {
+	width: 14px;
+	height: 16px;
+}
+
+.manage-acc .k-grid-content img.delete-icon:hover {
+	cursor: pointer;
+}
+
+.manage-acc .k-grid-content img.attention-icon {
+	width: 13px;
+	height: 13px;
+	margin: 0 5px;
+}
+
+.manage-acc img.info-icon {
+	margin-left: 10px;
+	width: 19px;
+	height: 27px;
+	padding-top:8px;
+}
+
+.manage-acc .k-grid.sharedAcc tr td:first-child {
+	padding-left: 23px;
+}
+
+/* popup -----*/
+.popup-window.k-content .popup-text {
+	margin-top: 30px;
+	margin-bottom: 12px;
+	text-align: center;
+	font-size: 1em;
+	font-weight: 600;
+	color: #434343;
+}
+
+.popup-window.k-content #userEmail {
+	text-align: center;
+	margin-bottom: 15px;
+}
+
+.popup-window.k-content .buttons-wrap {
+	text-align: center;
+	padding-top: 15px;
+}
+
+.popup-window.k-content .buttons-wrap .k-button {
+	min-width: 70px;
+}
+
+.popup-window .k-widget.k-dropdown.k-header .k-dropdown-wrap {
+	background-color: #e8e8e8;
+}
+
+.popup-window #userEmail .k-dropdown.k-header {
+	width: 264px;
+}
+
+.popup-window .k-content .submitted-text {
+	text-align: center;
+	font-size: 0.929em;
+	font-weight: 500;
+	color: #FDB913;
+	padding-left: 5%;
+	padding-right: 5%;
+}
+
+.k-content .submitted-text.error-text {
+	color: #e05d5d;
+}
+
+
+.popup-window.k-content .title-text {
+	text-align: center;
+	font-size: 1em;
+	color: #354960;
+	font-weight: 600;
+	margin-top: 20px;
+}
+
+.popup-window.k-content .content-text {
+	text-align: center;
+	font-size: 1.071em;
+	color: #354960;
+	font-weight: 300;
+	margin-top: 16px;
+}
+
+.popup-window.k-content .action-msg {
+	margin-top: 15px;
+	text-align: center;
+	font-size: 1.071em;
+	font-weight: 500;
+	color: #FDB913;
+}
+
+.popup-window.k-content .action-msg.error-text {
+	color: #e05d5d;
+}
+
+.popup-window .form-group {
+	margin-left: 0;
+	margin-right: 0;
+	margin-bottom: 15px;
+}
+
+.popup-window .form-group:first-child {
+	margin-top: 20px;
+}
+
+.popup-window .form-group .control-label {
+	padding-left: 50px;
+	padding-bottom: 5px;
+	width: 200px;
+	text-align: left;
+	font-size: 1em;
+	font-weight: 600;
+	color: #354960;
+}
+
+.popup-window .form-group .k-textbox {
+	margin-left: 50px;
+	width: 280px;
+}
+
+.popup-window .k-invalid-msg {
+    background-color: transparent;
+    border: none;
+    margin: 0;
+    color: #e05d5d;
+    font-size: 0.786em;
+    font-weight: 300;
+    vertical-align: middle;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+.popup-window .k-invalid-msg .k-icon {
+    display: none;
+}
+
+.popup-window .down-err-txt .form-group .k-invalid-msg {
+	margin-left: 50px;
+}
+
+.popup-window .down-err-txt .form-group {
+	height: 70px;
+}
+
+#resetPasswordWindow .buttons-wrap,
+#createSharedAccountWindow .buttons-wrap {
+	padding-right: 50px;
+	height: 55px;
+}
+
+#resetPasswordWindow .buttons-wrap .k-button,
+#createSharedAccountWindow .buttons-wrap .k-button {
+	float: right;
+}
+
+.popup-window.k-content .k-textbox {
+	background-color: #e8e8e8;
+}
+/* ----- popup */
+
+/* tooltip ------ */
+.k-widget.k-tooltip {
+	background-color: #FFFFFF;
+}
+.k-widget.k-tooltip .k-callout-w {
+	border-right-color: #FFFFFF;
+	left: -11px;
+}
+
+.k-widget.k-tooltip .k-tooltip-content {
+	font-size: 0.857em;
+	font-weight: 500;
+	line-height: 1.6;
+	color: #4a4a4a;
+	text-align: left;
+	padding-top: 2px;
+	padding-left: 3px;
+}
+
+.k-animation-container .k-widget.k-tooltip.k-popup {
+	margin: 0;
+}
+/* ------ tooltip */

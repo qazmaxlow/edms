@@ -12,6 +12,12 @@
 .k-widget {
   background-color: #ffffff;
 }
+
+.k-overlay {
+  background-color: #354960;
+  opacity: 0.9 !important;
+}
+
 .k-block,
 .k-widget,
 .k-input,
@@ -867,6 +873,7 @@ div.k-filebrowser-dropzone em {
 }
 /* Window */
 .k-window {
+  border-radius: 8px;
   border-color: rgba(0, 0, 0, 0.298039);
   -webkit-box-shadow: 1px 1px 7px 1px rgba(128, 128, 128, 0.298039);
   box-shadow: 1px 1px 7px 1px rgba(128, 128, 128, 0.298039);
@@ -994,7 +1001,6 @@ div.k-filebrowser-dropzone em {
 .k-textbox,
 .k-drag-clue,
 .k-touch-scrollbar,
-.k-window,
 .k-window-titleless .k-window-content,
 .k-window-action,
 .k-inline-block,
@@ -1752,4 +1758,10 @@ html .km-pane-wrapper .km-widget,
   font-weight: bolder;
   border-right: 1px solid #C7C7C7;
   color: #354960;
+}
+
+.k-widget.k-datepicker.k-header .k-select .k-icon.k-i-calendar {
+  background-image: url("../images/datepicker-icon.png");
+  background-size: cover;
+  background-position: center;
 }

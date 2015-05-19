@@ -254,7 +254,8 @@
         views: [{
             name: MONTH,
             title: function(date, min, max, culture) {
-                return getCalendarInfo(culture).months.names[date.getMonth()] + " " + date.getFullYear();
+                return kendo.toString(date, "y", culture);
+                //return getCalendarInfo(culture).months.names[date.getMonth()] + " " + date.getFullYear();
             },
             content: function(options) {
                 var that = this,

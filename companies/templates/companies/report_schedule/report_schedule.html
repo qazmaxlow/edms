@@ -1,0 +1,371 @@
+{% extends "page_base.html" %}
+
+{% load i18n %}
+{% load entrak_extras %}
+{% load static %}
+{% load humanize %}
+
+{% block ga_page_title %}report{% endblock %}
+
+{% block extra_head %}
+{{block.super}}
+{% get_current_language as LANGUAGE_CODE %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
+
+<script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
+<script src="{% static 'assets/django/js/ajax.js' %}"></script>
+<script src="{% static 'js/moment-with-locales.js' %}"></script>
+<script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
+<script src="{% static 'js/entrak-system.js' %}"></script>
+<script src="{% static 'js/entrak-utils.js' %}"></script>
+<script src="{% static 'js/report-generator.js' %}"></script>
+
+<link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
+<link href="{% static 'css/companies/report_schedule.css' %}" rel="stylesheet">
+
+<script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
+<script src="{% static 'assets/etkendoui/js/et.dropdown.js' %}"></script>
+<script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
+<script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
+
+{% endblock %}
+
+{% block selected-menu-link-id %}menu-link-report{% endblock %}
+{% block system_menu_target_view %}report{% endblock %}
+{% block breadcrumb_target_view %}report{% endblock %}
+
+{% block page_title %}{% trans "THE DOWNLOAD PAGE" %}{% endblock %}
+{% block page_subtitle %}{% trans "Get all your information here at the" %}{% endblock %}
+
+{% block extra_script %}
+{{block.super}}
+{% endblock %}
+
+{% block page_content %}
+
+
+<div ng-app="Entrak">
+    <div ng-cloak ng-controller="ReportScheduleController" class="auto-report-base" ><!-- style="height: 420px" -->
+        <div id="report-schedule-container">
+            <div class="row drop-down-panel-header">
+                <div class="panel-header-left-menu">
+                    <h3><a href="{% url 'companies.report' system_code=systems.0.code %}" ng-bind="viewReportTitle"></a></h3><h3 class="automatedreport"><a href="#" ng-bind="automatedReportTitle"></a></h3>
+                </div>
+            </div>
+{% verbatim %}
+            <div class="row steps">
+                <div class="col-md-3 description">
+                    <p class="desc-text">{{description}}</p>
+                    <img src="/static/images/report-schedule/report-icon.png"></img>
+                </div>
+                <div class="col-md-3">
+                    <div class="step-label">{{step1}}</div>
+                    <div class="header">{{step1Title}}</div>
+                    <div class="content bg-step1">
+                        <div class="label-top"></div>
+                        <select kendo-drop-down-list="systemDropdown"
+                                k-data-text-field="'fullname'"
+                                k-data-value-field="'id'"
+                                k-data-source="systemsDataSource"></select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="step-label">{{step2}}</div>
+                    <div class="header">{{step2Title}}</div>
+                    <div class="content bg-step2">
+                        <div class="label-top"></div>
+                        <select kendo-drop-down-list="frequencyDropdown"
+                                k-data-text-field="'name'"
+                                k-data-value-field="'id'"
+                                k-on-change="validate(data)"
+                                k-data-source="frequencyDataSource"></select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="step-label">{{step3}}</div>
+                    <div class="header">{{step3Title}}</div>
+                    <div class="content bg-step3">
+                        <h4 class="label-top">{{sendTo}}</h4>
+                        <div id="rs-emailList" ng-show="user_group == 'manager'"></div>
+                        <input ng-model="taskEmail" ng-show="user_group == 'viewer'">
+                        <div class="btn-container">
+                            <button class="k-button normal-btn" ng-click="confirmAdd()" ng-disabled="isDisabled" ng-model="isDisabled">{{btnConfirm}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row records">
+                <div class="col-md-12">
+                    <div class="header">{{recordTitle}}</div>
+                    <div kendo-grid k-options="taskGridOptions(dataItem)"></div>
+                </div>
+            </div>
+            <div kendo-window="deleteGridRowWin" k-title="'Delete'"
+                 k-visible="false" k-modal="true">
+              <div>Are you sure want to delete?</div>
+              <div>
+                <button class="k-button normal-btn cancel" ng-click="deleteGridRowWin.close()">Cancel</button>
+                <button class="k-button normal-btn" ng-click="confirmDelete()">Confirm</button>
+              </div>
+            </div>
+{% endverbatim %}
+        </div>
+    </div>
+</div>
+
+
+<script>
+    angular.module("Entrak", [ "kendo.directives" ])
+        .controller("ReportScheduleController", function($scope) {
+
+            $scope.viewReportTitle = '{% trans "View Reports" %}';
+            $scope.automatedReportTitle = '{% trans "Automated Reports" %}';
+            var etDropDown = new EtDropDown($("#rs-emailList"), []);
+            $scope.isDisabled = true;
+            etDropDown.setOptions({readOnly: false, itemDisplayName: "e-mails", ignoreCase: true, onchange: function(){
+                console.log("onchange");
+
+                $scope.$apply(function(){
+                     if ($scope.systemDropdown.value() > 0 && $scope.frequencyDropdown.value() > 0 && etDropDown.value().length > 0){
+                        console.log(etDropDown.value().length);
+                        $scope.isDisabled = false;
+                    }else{
+                         $scope.isDisabled = true;
+                    }
+                });
+
+            }});
+
+            $scope.description = '{% trans "Set the system to email you an energy report each month or week, so you can stay informaed and up to date on your energy use." %}';
+            $scope.btnConfirm = '{% trans "Confirm" %}';
+            $scope.sendTo = '{% trans "Send to:" %}';
+            $scope.step1 = '{% trans "Step 1" %}';
+            $scope.step2 = '{% trans "Step 2" %}';
+            $scope.step3 = '{% trans "Step 3" %}';
+            $scope.step1Title = '{% trans "Select Scope" %}';
+            $scope.step2Title = '{% trans "Select Frequency" %}';
+            $scope.step3Title = '{% trans "Confirm and Go" %}';
+            $scope.recordTitle = '{% trans "Manage Automated Reports" %}';
+            var userDataSource = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        async: false,
+                        url: "{% url 'companies.users.authenticated-user' current_system.code %}",
+                        type: 'GET',
+                        dataType: "json"
+                    }
+                },
+                schema: {
+                    // Fix for single result
+                    data: function(response) {
+                        return [response];
+                    }
+                }
+            });
+            userDataSource.read();
+            var authenticated_user = userDataSource.data()[0];
+            if (authenticated_user){
+                $scope.taskEmail = authenticated_user.email; // set default task value
+            } else {
+                $scope.taskEmail = "";
+            }
+            if (authenticated_user.role_level==100) {
+                $scope.user_group = 'manager';
+            }
+            else {
+                $scope.user_group = 'viewer';
+            }
+            $scope.systemsDataSource = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        async: false,
+                        url: "{% url 'companies.systems.company-systems' current_system.code %}",
+                        type: 'GET',
+                        dataType: "json"
+                    }
+                }
+            });
+            $scope.frequencyDataSource = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        async: false,
+                        url: "{% url 'companies.report-schedule.frequencies' current_system.code %}",
+                        type: 'GET',
+                        dataType: "json"
+                    }
+                }
+            });
+            $scope.systemsDataSource.read();
+            var company_systems = $scope.systemsDataSource.data();
+            $scope.frequencyDataSource.read();
+            var frequencies = $scope.frequencyDataSource.data();
+            var scheduleTaskDataSource = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        url: "{% url 'companies.report-schedule.tasks' current_system.code %}"
+                    },
+                    create: {
+                        url: "{% url 'companies.report-schedule.create' current_system.code %}",
+                        type: "POST",
+                        contentType: "application/json"
+                    },
+                    update: {
+                        url: function (item) {
+                            var url = "{% url 'companies.report-schedule.update' current_system.code 999 %}";
+                            return url.replace(999, item.id);
+                        },
+                        type: "PUT",
+                        contentType: "application/json"
+                    },
+                    destroy: {
+                        url: function (item) {
+                            var url = "{% url 'companies.report-schedule.destroy' current_system.code 999 %}";
+                            url = url.replace(999, item.id);
+                            return url;
+                        },
+                        type: "DELETE"
+                    },
+                    parameterMap: function(data, type) {
+                        if (type == "create") {
+                            return kendo.stringify(data);
+                        }
+                        if (type == "update") {
+                            return kendo.stringify(data);
+                        }
+                    }
+                },
+                schema: {
+                    model: { id: "id" } // identifier for map to kendo model, must be defined for create, update or delete
+                }
+            });
+            $scope.confirmAdd = function() {
+                var emails = [];
+                if ($scope.user_group == 'manager') {
+                    emails = $.map(etDropDown.value(), function(email, i) {
+                        return {"email": email};
+                    });
+                }
+                else {
+                    emails.push({"email": $scope.taskEmail});
+                }
+                scheduleTaskDataSource.add(
+                    {
+                        frequency_id: $scope.frequencyDropdown.value(),
+                        system_id: $scope.systemDropdown.value(),
+                        receivers: emails
+                    });
+                scheduleTaskDataSource.sync();
+            };
+
+
+            var receivers_editor = receiversEditor;
+            // var receivers_editor = null;
+            $scope.taskGridOptions = function(dataItem) {
+                return {
+                    dataSource: scheduleTaskDataSource,
+                    columns: [
+                        { field: "system_id", title:"Scope", width: "26%", editor: systemDropDownEditor,
+                              template: function(dataItem) {
+                              return $.grep(company_systems, function(e) {
+                                  return e.id == dataItem.system_id
+                              })[0].fullname;
+                          }
+                        },
+                        { field: "frequency_id", title:"Frequency", width: "12%", editor: frequencyDropDownEditor,
+                          template: function(dataItem) {
+                              return $.grep(frequencies, function(e) {
+                                  return e.id == dataItem.frequency_id
+                              })[0].name;
+                          }
+                        },
+                        
+                        { field: "receivers", title: "Email", width: "20%", editor: receivers_editor,
+                          template: function(dataItem) {
+                              var arr = $.map(dataItem.receivers, function(r) { return r.email; });
+                              return arr.join(',');
+                          }
+                        },
+                        { 
+                            command: [{
+                                name: "edit",
+                                text: {
+                                    edit: "Edit",
+                                    update: "Confirm",
+                                    cancel: "Cancel"
+                                }
+                            }, {
+                                name: "mydestroy",
+                                text: "Delete",
+                                click: function(e) {
+                                    var tr = $(e.target).closest("tr"); // get the current table row (tr)
+                                    var data = this.dataItem(tr);
+
+                                    var that = this;
+                                    $scope.confirmDelete = function() {
+                                        that._removeRow(tr);
+                                        $scope.deleteGridRowWin.close()
+                                    };
+
+                                    $scope.deleteGridRowWin.center().open();
+                                }
+                            }], 
+                            title: "Actions", 
+                            width: "160px" 
+                        }
+                    ],
+                    editable: "inline"
+                };
+            };
+            function systemDropDownEditor(container, options) {
+                $('<input required data-text-field="fullname" data-value-field="id" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        autoBind: false,
+                        dataSource: $scope.systemsDataSource
+                    });
+            }
+            function frequencyDropDownEditor(container, options) {
+                $('<input required data-text-field="name" data-value-field="id" data-bind="value:' + options.field + '"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        autoBind: false,
+                        dataSource: $scope.frequencyDataSource
+                    });
+            }
+            function receiversEditor(container, options) {
+                var emails = $.map(options.model.receivers, function(r, i) { return r.email;});
+                $('<div id="edit_email_popup"></div>')
+                    .appendTo(container);
+                var e = new EtDropDown($('#edit_email_popup'), emails);
+                e.setOptions({
+                    readOnly: false,
+                    itemDisplayName: "e-mails",
+                    ignoreCase: true,
+                    onchange: function() {
+                        options.model.receivers = $.map(e.value(), function(email, i) {
+                            return {"email": email};
+                        });
+                        options.model.dirty = true;
+                    }
+                });
+            }
+
+    });
+</script>
+
+<script>
+    $(function() {
+           $(".panel-header-left-menu h3").each(function(btnIdx) {
+                $(this).click({btnIdx: btnIdx}, function(event) {
+                    var btnIdx = event.data.btnIdx;
+
+                    $(".panel-header-left-menu h3").removeClass('selected-tab');
+                    $(this).addClass('selected-tab');
+                });
+            });
+            $(".panel-header-left-menu h3:eq(1)").click();
+    });
+</script>
+{% endblock %}

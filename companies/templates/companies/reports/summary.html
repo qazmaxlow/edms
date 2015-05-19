@@ -23,35 +23,11 @@
 <script src="{% static 'js/report-generator.js' %}"></script>
 
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-<link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
-<link href="{% static 'css/kendo.entrak.theme.css' %}" rel="stylesheet">
-<!-- Because now using jquery v1.11 -->
-<script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
-<script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
+<link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
 
 <script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
-
-<!-- hack for combining bootstrap -->
-<style>
-  #menu-links li:hover, #menu-links li.menu-links-selected {
-     height: auto;
-  }
-
-  .panel-header-left-menu h3 {
-    margin: 0;
-    height: 33px;
-  }
-
-  #sub-heading-facilities h3 {
-    font-size: 15px;
-  }
-
-  #sub-heading h2 { font-size: 16px; }
-  #heading h1 { font-size: 30px; }
-
-</style>
 
 <style>
   .report-summary img.icon {
@@ -224,7 +200,7 @@ $(function() {
             }
             $("#panel-content").css("height", panelContentHeight);
 
-            var targetPanel = $($('#panel-content>div')[btnIdx]);
+            var targetPanel = $($('#panel-content>div')[btnIdx]);   //switch between View-Reports and Download-data
             if (targetPanel.css("display") == 'none') {
                 $('#panel-content>div').fadeOut();
                 targetPanel.fadeIn();
@@ -281,8 +257,9 @@ $(function() {
     <div class="row drop-down-panel-header">
         <div class="panel-header-left-menu">
             <h3 panel="monthly-report">
-                {% trans "View Report" %}</h3><h3 panel="download-data">
-                {% trans "Download Data" %}</h3>
+                <a>{% trans "View Report" %}</a></h3><!-- <h3 panel="download-data">
+                {% trans "Download Data" %}</h3> --><h3>
+                <!-- <a href="{% url 'companies.report-schedule' system_code=systems.0.code %}">{% trans "Automated Reports" %}</a></h3> -->
         </div>
     </div>
     <div id="panel-content">
@@ -403,7 +380,7 @@ $(function() {
         </div>
 
 
-        <div id="download-raw-data">
+        <!-- <div id="download-raw-data">
             <div class="row dl-data-title">{% trans "Here you can download your energy use data to files in .csv format." %}</div>
             <div class="row dl-data-title">{% trans "Simply select the start date, end date and the units that you would like to obtain from the system." %}</div>
             <div class="row customize-section-title"><span>1</span>{% trans "Choose your date" %}</div>
@@ -441,7 +418,7 @@ $(function() {
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
 
 <span kendo-notification="notf" k-allow-hide-after="0" k-append-to="'#view_report_btn'"></span>

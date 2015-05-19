@@ -48,12 +48,14 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.sites',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'rest_framework',
     'rest_framework.authtoken',
     'south',
     'egauge',
+    'tokens',
     'system',
     'user',
     'baseline',
@@ -68,6 +70,7 @@ INSTALLED_APPS = (
     'notifications',
     'trails',
     'apis',
+    'schedulers',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -79,6 +82,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'entrak.middleware.timezone_middleware.TimezoneMiddleware',
+    'entrak.middleware.locale.LocaleMiddleware',    
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
@@ -153,7 +157,7 @@ LOGGING = {
     },
 }
 
-EMAIL_HOST = 'en-trak.com'
+EMAIL_HOST = 'mail.station191.com'
 EMAIL_HOST_USER = 'alert@en-trak.com'
 EMAIL_HOST_PASSWORD = 'entrak8888'
 EMAIL_USE_TLS = True
@@ -172,3 +176,14 @@ AUTH_USER_MODEL = 'user.EntrakUser'
 GRAPPELLI_ADMIN_TITLE = 'En-trak CMS'
 
 ANALYTICS_TRACKING = False
+
+# Expire after 60 minutes
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_AGE = 60 * 60
+
+
+# Celery
+ENTRAK_BROKER_URL = 'amqp://guest:entrak8888@localhost' # should be removed
+
+# Site
+SITE_ID = 1

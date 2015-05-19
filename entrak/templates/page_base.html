@@ -159,10 +159,13 @@ $(function() {
                     <a href="{% url 'progress' system_code=systems.0.code %}"><img width="26" height="23" src="{% static 'images/progress-icon.png' %}"><span>{% trans "Progress" %}</span></a>
                 </li>
                 <li id="menu-link-report">
-                    <a href="{% url 'report' system_code=systems.0.code %}"><img width="26" height="24" src="{% static 'images/reports-icon.png' %}"><span>{% trans "Reports" %}</span></a>
+                    <a href="{% url 'companies.report' system_code=systems.0.code %}"><img width="26" height="24" src="{% static 'images/reports-icon.png' %}"><span>{% trans "Reports" %}</span></a>
                 </li>
                 <li id="menu-link-display">
                     <a href="{% url 'display' system_code=systems.0.code %}" target="_blank"><img width="26" height="22" src="{% static 'images/display-icon.png' %}"><span>{% trans "Display" %}</span></a>
+                </li>
+                <li id="menu-link-export">
+                    <a href="{% url 'companies.export' system_code=systems.0.code %}"><img width="24" height="24" src="{% static 'images/dataDownload-icon.png' %}" style="margin-right:2px"><span>{% trans "Download" %}</span></a>
                 </li>
                 {% comment %}
                 <li id="menu-link-pro-v">
@@ -170,7 +173,7 @@ $(function() {
                 </li>
                 {% endcomment %}
                 <li id="menu-link-alert">
-                    <a href="{% url 'alert_settings' system_code=systems.0.code %}"><img width="23" height="22" src="{% static 'images/alert-icon.png' %}"><span>{% trans "Alert" %}</span></a>
+                    <a href="{% url 'alert_settings' system_code=systems.0.code %}"><img width="23" height="22" src="{% static 'images/alert-icon.png' %}" style="margin-right:3px"><span>{% trans "Alert" %}</span></a>
                 </li>
                 {% if systems.0.printers.count > 0 %}
                 <li id="menu-link-printer-graph">
@@ -178,7 +181,7 @@ $(function() {
                 </li>
                 {% endif %}
                 <li id="menu-link-logout">
-                    <a href="{% url 'logout' system_code=systems.0.code %}"><img width="23" height="24" src="{% static 'images/logout-icon.png' %}"><span>{% trans "Logout" %}</span></a>
+                    <a href="{% url 'logout' system_code=systems.0.code %}"><img width="23" height="24" src="{% static 'images/logout-icon.png' %}" style="margin-right:3px"><span>{% trans "Logout" %}</span></a>
                 </li>
             </ul>
         </nav>
@@ -259,7 +262,7 @@ $(function() {
     <p id="copyright">Copyright © En-trak Hong Kong Ltd 2015. All rights reserved.</p>
     <a><img id="entrak-logo" src="{% static 'images/powered-by-logo.png' %}"></a>
     <p class="footer-main"><a class="footer-link" href="{% url 'faq' system_code=systems.0.code %}">FAQ </a>
-    <a class="footer-link" href="{% url 'general_settings' system_code=systems.0.code %}"> |  Settings</a>
+    <a class="footer-link" href="{% url 'profile' system_code=systems.0.code %}"> |  Settings</a>
     <a class="footer-link" href="{% url 'disclaimer' system_code=systems.0.code %}"> |  Legal </a></p>
     <p style="clear: both;"></p>
 </footer>
