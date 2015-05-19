@@ -15,6 +15,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.utils.translation import ugettext as _
 from django.utils import translation
 from entrak.settings_common import LANG_CODE_EN, LANG_CODE_TC
+from django.contrib.sites.models import Site
 
 
 USER_ROLE_ADMIN_LEVEL   = 100
@@ -56,8 +57,9 @@ class EntrakUser(AbstractUser):
         encrypter = EntrakEncrypter(self.get_or_create_salt)
         uid = encrypter.encode(str(self.id))
         ucode = encrypter.encode(str(utc_timestamp))
+        site = Site.objects.get_current()
 
-        return "https://data.en-trak.com/users/%d/activate?uid=%s&ucode=%s"%(self.id, uid, ucode)
+        return "https://%s/users/%d/activate?uid=%s&ucode=%s"%(site.domain, self.id, uid, ucode)
 
     @property
     def get_or_create_salt(self):
@@ -107,7 +109,10 @@ class EntrakUser(AbstractUser):
             heading = _("{0} invitation email user heading").format(on_behalf_of.fullname)
             description = _("invitation email user description")
 
+        site = Site.objects.get_current()
+
         d = Context({
+                'domain': site.domain,
                 'url': self.activation_url,
                 'heading': heading,
                 'description': description,
