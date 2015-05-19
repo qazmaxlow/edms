@@ -584,3 +584,43 @@
     border-radius: 0 0 8px 0;
 }
 /*-------real time widget*/
+
+
+/* progess widget -----*/
+.progress-widget .bg-image {
+    background-image: url(../../images/dashboard/decrease-illu.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+}
+
+.progress-widget .bg-image.increase {
+    background-image: url(../../images/dashboard/increase-illu.png);
+}
+
+.progress-widget .percent {
+    text-align: center;
+}
+
+.progress-widget .percentNum {
+    font-size: 2.857em;
+    color: #354960;
+}
+
+.progress-widget .percentSign {
+    font-size: 1.786em;
+    color: #354960;
+}
+
+.progress-widget .description-6 {
+    text-align: center;
+}
+
+.progress-widget .top-space26 {
+    margin-top: 26px;
+}
+
+.progress-widget .top-space10 {
+    margin-top: 10px;
+}
+/* -----progess widget */

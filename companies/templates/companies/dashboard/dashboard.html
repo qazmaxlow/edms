@@ -77,6 +77,17 @@
           {% include "companies/dashboard/widgets/_last_week_stats.html" with widget_id=5 %}
         </div>
     </div>
+    <div ng-cloak class="row">
+        <div class="col-md-4">
+          {% include "companies/dashboard/widgets/_progress.html" with widget_id=6 %}
+        </div>
+        <div class="col-md-4">
+          {% include "companies/dashboard/widgets/_so_far.html" with widget_id=7 %}
+        </div>
+        <div class="col-md-4">
+          {% include "companies/dashboard/widgets/_last_week_stats.html" with widget_id=8 %}
+        </div>
+    </div>
 </div>
 
 <script>
@@ -892,6 +903,25 @@
         $scope.currentAverage = function(){
             return  ($scope.isWeekday) ? '{% trans "average weekday" %}' : '{% trans "average overnight" %}';
         };
+    });
+
+    ngapp.controller("WidgetProgress", function($scope){
+        $scope.isPast12Month = true;
+        $scope.percent = -14;
+        $scope.lastYear = 2014;
+        
+        $scope.isIncrease = $scope.percent > 0;
+        $scope.percent = Math.abs($scope.percent);
+
+        $scope.title = '{% trans "Progress" %}';
+        $scope.p12DescLine1Text = '{% trans "Over the past 12 months" %}';
+        $scope.thisYrDescLine1Text = '{% trans "So far this year" %}';
+        $scope.increaseLine2Text = '{% trans "you have increased your energy use" %}';
+        $scope.decreaseLine2Text = '{% trans "you have decreased your energy use" %}';
+        $scope.fromBaselineText = '{% trans "from your baseline of" %}';
+        $scope.comparedToText = '{% trans "compared to " %}' + $scope.lastYear;
+        $scope.yearRangeText = $scope.lastYear + ' - ' + ($scope.lastYear + 1);
+
     });
 </script>
 
