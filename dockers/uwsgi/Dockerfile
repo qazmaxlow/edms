@@ -2,6 +2,10 @@
 # sudo docker run --name uwsgi --link mongo:mongo --link postgres:postgres -t -i -v ~/src/entrak:/srv entrak_dms/uwsgi
 FROM entrakdms_celerybase
 
+# Let ubuntu to get the main repo packages
+RUN echo "deb http://archive.ubuntu.com/ubuntu utopic main universe" > /etc/apt/sources.list
+RUN apt-get update
+
 RUN apt-get install -y uwsgi uwsgi-plugin-python xfonts-75dpi
 
 # ubuntu's one did not work for server version
