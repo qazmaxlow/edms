@@ -75,6 +75,7 @@
 .widget-content .full-width-img {
     width: 100%;
     height: auto;
+    max-height: 170px
 }
 
 .left-padding-15 {
@@ -602,25 +603,24 @@
     text-align: center;
 }
 
-.progress-widget .percentNum {
+.progress-widget .percent .percentNum {
     font-size: 2.857em;
     color: #354960;
+    display: inline-block;
 }
 
-.progress-widget .percentSign {
+.progress-widget .percent .percentSign {
     font-size: 1.786em;
     color: #354960;
+    display: inline-block;
 }
 
 .progress-widget .description-6 {
     text-align: center;
 }
 
-.progress-widget .top-space26 {
-    margin-top: 26px;
+.progress-widget .top-space {
+    padding-top: 8px;
 }
 
-.progress-widget .top-space10 {
-    margin-top: 10px;
-}
 /* -----progess widget */

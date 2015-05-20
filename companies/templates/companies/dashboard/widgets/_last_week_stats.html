@@ -6,8 +6,8 @@
 <div class="widget-container" ng-controller="WidgetLastWeekStats">
     {% verbatim %}
     <div class="widget-header row">
-        <div class="widget-title col-sm-7">{{title}}</div>
-        <div class="widget-toggle col-sm-5">
+        <div class="widget-title col-xs-7">{{title}}</div>
+        <div class="widget-toggle col-xs-5">
             <div class="pull-right">
                 <button ng-class="{'toggle-primary' : isWeekday}" ng-click="toggle()" class="toggle-button button-left">{{btnLeft}}</button><!--
                 --><button ng-class="{'toggle-primary' : !isWeekday}" ng-click="toggle()" class="toggle-button button-right">{{btnRight}}</button>
@@ -18,13 +18,13 @@
     <div class="widget-content row">
         <div class="widget-message">
             {% verbatim %}
-            <div class='col-sm-6 left-box'>
+            <div class='col-xs-6 left-box'>
                 <h3 class="pull-left description-4">${{average | entrakNumber}}</h3>
                 <div class="clearfix"></div>
                 <span class="description-1 ">{{currentAverage()}}</span>
             </div>
             {% endverbatim %}
-            <div class='col-sm-6 right-box'>
+            <div class='col-xs-6 right-box'>
                 {% ifequal LANGUAGE_CODE 'zh-tw' %}
                     {% verbatim %}
                     <span class="description-2">{{rightBoxText}}</span><div class="clearfix"></div>
