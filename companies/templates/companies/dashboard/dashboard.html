@@ -891,9 +891,11 @@
             }
         }, 300);
 
-        $scope.toggle = function() {
-            $scope.isWeekday = !$scope.isWeekday;
-            updateChart();
+        $scope.toggle = function(isWkDay) {
+            if (isWkDay != $scope.isWeekday){
+                $scope.isWeekday = isWkDay;    
+                updateChart();
+            }
         }
 
         $scope.moreLessText = function(percentage_change){

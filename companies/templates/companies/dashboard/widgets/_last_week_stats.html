@@ -9,8 +9,8 @@
         <div class="widget-title col-xs-7">{{title}}</div>
         <div class="widget-toggle col-xs-5">
             <div class="pull-right">
-                <button ng-class="{'toggle-primary' : isWeekday}" ng-click="toggle()" class="toggle-button button-left">{{btnLeft}}</button><!--
-                --><button ng-class="{'toggle-primary' : !isWeekday}" ng-click="toggle()" class="toggle-button button-right">{{btnRight}}</button>
+                <button ng-class="{'toggle-primary' : isWeekday}" ng-click="toggle(true)" class="toggle-button button-left">{{btnLeft}}</button><!--
+                --><button ng-class="{'toggle-primary' : !isWeekday}" ng-click="toggle(false)" class="toggle-button button-right">{{btnRight}}</button>
             </div>
         </div>
     </div>
