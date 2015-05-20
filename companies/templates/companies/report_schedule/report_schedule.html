@@ -116,7 +116,7 @@
             $scope.automatedReportTitle = '{% trans "Automated Reports" %}';
             var etDropDown = new EtDropDown($("#rs-emailList"), []);
             $scope.isDisabled = true;
-            etDropDown.setOptions({readOnly: false, itemDisplayName: "e-mails", ignoreCase: true, onchange: function(){
+            etDropDown.setOptions({readOnly: false, itemDisplayName: "e-mails", ignoreCase: false, onchange: function(){
                 console.log("onchange");
 
                 $scope.$apply(function(){
