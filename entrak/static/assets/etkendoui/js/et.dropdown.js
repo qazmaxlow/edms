@@ -4,8 +4,7 @@ var EtDropDown = function(elm, data){
     keys = kendo.keys,
     support = kendo.support,
     ARIA_HIDDEN = "aria-hidden",
-    EMPTYITEMLIST = '<div class="k-itemList"></div><div class="k-editPanel"><input></input><button class="add-btn">Add</button></div>',
-    // EMPTYITEMLIST = '<div class="k-itemList"></div><div class="k-editPanel"><input></input><button class="add-btn">Add</button><label class="valid-msg">Invalid</label></div>',
+    EMPTYITEMLIST = '<div class="k-itemList"></div><div class="k-editPanel"><input></input><button class="add-btn">Add</button><label class="error-label valid-msg"></label></div>',
     SPAN = "<SPAN/>",
     ns = ".kendoEtDropDown",
     MOUSEDOWN = "mousedown" + ns,
@@ -13,9 +12,9 @@ var EtDropDown = function(elm, data){
     CLICK = "click" + ns;
     
     that.wrapper = '<SPAN unselectable="on" class="k-widget k-dropdown k-header"><SPAN unselectable="on" class="k-dropdown-wrap k-state-default">'
-                + '<SPAN unselectable="on" class="k-input"></SPAN>' 
-                + '<SPAN unselectable="on" class="k-select"><SPAN unselectable="on" class="k-icon k-i-arrow-s"></SPAN></SPAN>'
-                + '</SPAN></SPAN>';
+    + '<SPAN unselectable="on" class="k-input"></SPAN>' 
+    + '<SPAN unselectable="on" class="k-select"><SPAN unselectable="on" class="k-icon k-i-arrow-s"></SPAN></SPAN>'
+    + '</SPAN></SPAN>';
 
     that.wrapper = $(that.wrapper);
     that.wrapper.appendTo(elm);
@@ -24,7 +23,13 @@ var EtDropDown = function(elm, data){
         readOnly: false,
         itemDisplayName: "Emails",
         emptyItemText: "Add Email",
-        ignoreCase: true
+        ignoreCase: true,
+        allowDuplicate: false,
+        isEmail: true,
+        validationLabel: {
+            duplicateEmail: "Duplicate Email",
+            invalidEmail: "Invalid Email."
+        }
     };
 
     if (data == null){
@@ -47,26 +52,54 @@ var EtDropDown = function(elm, data){
     var div = $("<DIV/>").attr("id", kendo.guid()).appendTo(that.popup.element);//.on(MOUSEDOWN, preventDefault);
     div.html(EMPTYITEMLIST);
 
-    // function validateEmail(sEmail) {
-    //     var filter = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
-    //     if (filter.test(sEmail)) {
-    //         return true;
-    //     }
-    //     else {
-    //         return false;
-    //     }
-    // }
+    function validateEmail(sEmail) {
+        var filter = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+        if (filter.test(sEmail)) {
+            return true;
+        }
+        else {
+            that.container.find(".error-label").html(that.options.validationLabel.invalidEmail);
+            return false;
+        }
+    }
+
+
+    function checkDuplicate(item){
+        if (!that.options.allowDuplicate){
+            if (that.options.ignoreCase){   //a@a.com == A@A.com
+                for (var i=0; i<that.items.length; i++){
+                    if (that.items[i].toLowerCase() == item.toLowerCase()){
+                        that.container.find(".error-label").html(that.options.validationLabel.duplicateEmail);
+                        return false;
+                    }
+                } 
+            } else if(that.items.indexOf(item) != -1) { //a@a.com != A@A.com
+                that.container.find(".error-label").html(that.options.validationLabel.duplicateEmail);
+                return false;
+            }
+        }
+       
+        return true;
+    }
 
     function addAction(){
-        // if (validateEmail(that.container.find("INPUT").val())){
-            if (that.addItem(that.container.find("INPUT").val())){
-                $(".invalid-msg").removeClass("invalid-msg").addClass("valid-msg");
-                that.container.find("INPUT").val("");
-                that.updatePopup();
-            }        
-        // } else {
-        //     $(".valid-msg").addClass("invalid-msg").removeClass("valid-msg");
-        // }
+        // isEmail is true do and allowDuplicate is true
+        var item = that.container.find("INPUT").val(); 
+
+        if (item){
+            item = item.trim();
+        }
+
+        if (checkDuplicate(item) && that.options.isEmail && validateEmail(item)){
+            that.addItem(item);
+            that.container.find(".error-label").removeClass("invalid-msg").addClass("valid-msg");
+            console.log(that.container.find(".error-label"));
+            that.container.find("INPUT").val("");
+            that.updatePopup();
+                    
+        } else {
+            that.container.find(".error-label").addClass("invalid-msg").removeClass("valid-msg");
+        }
     }
 
     that.container.on(KEYDOWN, function(e){
@@ -100,9 +133,10 @@ var EtDropDown = function(elm, data){
 
 };
 
+
 EtDropDown.prototype = {
     ITEM: '<DIV class="k-itemRow"><DIV class="k-highlight"><SPAN class="k-item"></SPAN>'
-         + '<SPAN class="k-select"><SPAN class="k-icon k-delete"></SPAN></SPAN></DIV></DIV>',
+    + '<SPAN class="k-select"><SPAN class="k-icon k-delete"></SPAN></SPAN></DIV></DIV>',
 
     value: function(data){
         if (data == null){
@@ -122,7 +156,12 @@ EtDropDown.prototype = {
     },
 
     addItem: function(item){
-        if (item && item.trim()){
+        this.items.push(item);
+        this.updateTextbox();
+        if (this.options.onchange && typeof this.options.onchange == "function"){
+            this.options.onchange();
+        }
+      /*  if (item && item.trim()){
             item = item.trim();
             if (this.options.ignoreCase){
                 for (var i=0; i<this.items.length; i++){
@@ -136,16 +175,15 @@ EtDropDown.prototype = {
                     this.options.onchange();
                 }
                 return true;
-            } else if (this.items.indexOf(item) == -1){
-                this.items.push(item);
-                this.updateTextbox();
-                if (this.options.onchange && typeof this.options.onchange == "function"){
-                    this.options.onchange();
-                }
+            } else
+            if (this.items.indexOf(item) == -1){
+                
                 return true;
             }
         }
         return false;
+
+        */ 
     },
 
     removeItem: function(item){
