@@ -8,16 +8,16 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Deleting field 'UrlToken.extra_data'
+        db.delete_column(u'tokens_urltoken', 'extra_data')
 
-        # Changing field 'EntrakUser.language'
-        db.alter_column(u'user_entrakuser', 'language', self.gf('django.db.models.fields.CharField')(max_length=10))
-        orm.EntrakUser.objects.update(language='en')
 
     def backwards(self, orm):
+        # Adding field 'UrlToken.extra_data'
+        db.add_column(u'tokens_urltoken', 'extra_data',
+                      self.gf('django.db.models.fields.TextField')(null=True),
+                      keep_default=False)
 
-        # Changing field 'EntrakUser.language'
-        orm.EntrakUser.objects.update(language='1')
-        db.alter_column(u'user_entrakuser', 'language', self.gf('django.db.models.fields.PositiveSmallIntegerField')())
 
     models = {
         u'auth.group': {
@@ -45,6 +45,7 @@ class Migration(SchemaMigration):
             'area_sqfoot': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'city': ('django.db.models.fields.CharField', [], {'default': "'hk'", 'max_length': '200'}),
             'code': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
+            'company_type': ('django.db.models.fields.PositiveIntegerField', [], {'default': '1'}),
             'first_record': ('django.db.models.fields.DateTimeField', [], {}),
             'full_name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'blank': 'True'}),
             'full_name_tc': ('django.db.models.fields.CharField', [], {'max_length': '200', 'blank': 'True'}),
@@ -65,6 +66,16 @@ class Migration(SchemaMigration):
             'timezone': ('django.db.models.fields.CharField', [], {'default': "u'Asia/Hong_Kong'", 'max_length': '50'}),
             'unit_info': ('django.db.models.fields.TextField', [], {'default': "'{}'"})
         },
+        u'tokens.urltoken': {
+            'Meta': {'object_name': 'UrlToken'},
+            'created_by': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['user.EntrakUser']"}),
+            'created_time': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'expiration_days': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'token_key': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '40'}),
+            'url': ('django.db.models.fields.URLField', [], {'max_length': '200'}),
+            'url_params': ('django.db.models.fields.TextField', [], {'null': 'True'})
+        },
         u'user.entrakuser': {
             'Meta': {'object_name': 'EntrakUser'},
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
@@ -79,7 +90,7 @@ class Migration(SchemaMigration):
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'label': ('django.db.models.fields.CharField', [], {'max_length': '300', 'blank': 'True'}),
-            'language': ('django.db.models.fields.CharField', [], {'default': "'en'", 'max_length': '10'}),
+            'language': ('django.db.models.fields.CharField', [], {'default': "'en_US'", 'max_length': '10'}),
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
@@ -91,4 +102,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['user']
+    complete_apps = ['tokens']

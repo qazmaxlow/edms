@@ -75,6 +75,7 @@
 .widget-content .full-width-img {
     width: 100%;
     height: auto;
+    max-height: 170px
 }
 
 .left-padding-15 {
@@ -584,3 +585,42 @@
     border-radius: 0 0 8px 0;
 }
 /*-------real time widget*/
+
+
+/* progess widget -----*/
+.progress-widget .bg-image {
+    background-image: url(../../images/dashboard/decrease-illu.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+}
+
+.progress-widget .bg-image.increase {
+    background-image: url(../../images/dashboard/increase-illu.png);
+}
+
+.progress-widget .percent {
+    text-align: center;
+}
+
+.progress-widget .percent .percentNum {
+    font-size: 2.857em;
+    color: #354960;
+    display: inline-block;
+}
+
+.progress-widget .percent .percentSign {
+    font-size: 1.786em;
+    color: #354960;
+    display: inline-block;
+}
+
+.progress-widget .description-6 {
+    text-align: center;
+}
+
+.progress-widget .top-space {
+    padding-top: 8px;
+}
+
+/* -----progess widget */

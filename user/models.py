@@ -13,6 +13,9 @@ from django.template.loader import get_template
 from django.template import Context
 from django.core.mail import EmailMultiAlternatives
 from django.utils.translation import ugettext as _
+from django.utils import translation
+from entrak.settings_common import LANG_CODE_EN, LANG_CODE_TC
+from django.contrib.sites.models import Site
 
 
 USER_ROLE_ADMIN_LEVEL   = 100
@@ -22,12 +25,9 @@ USER_ROLE_CHOICES = (
     (USER_ROLE_VIEWER_LEVEL, 'viewer'),
 )
 
-ENGLISH     = "en_US"
-CHINESE     = "zh_TW"
-
 USER_LANGUAGES      = (
-    (ENGLISH, u'English'),
-    (CHINESE, u'繁體中文'),
+    (LANG_CODE_EN, u'English'),
+    (LANG_CODE_TC, u'繁體中文'),
 )
 
 
@@ -37,7 +37,7 @@ class EntrakUser(AbstractUser):
     role_level = models.PositiveSmallIntegerField(max_length=20, choices=USER_ROLE_CHOICES, default=USER_ROLE_VIEWER_LEVEL)
     label = models.CharField(max_length=300, blank=True)
     department = models.CharField(max_length=100, blank=True)
-    language = models.CharField(max_length=10, choices=USER_LANGUAGES, default=ENGLISH)
+    language = models.CharField(max_length=10, choices=USER_LANGUAGES, default=LANG_CODE_EN)
     is_email_verified = models.BooleanField(default=False)
     is_personal_account = models.BooleanField(default=False)
     salt = models.CharField(max_length=32, blank=True)
@@ -57,8 +57,9 @@ class EntrakUser(AbstractUser):
         encrypter = EntrakEncrypter(self.get_or_create_salt)
         uid = encrypter.encode(str(self.id))
         ucode = encrypter.encode(str(utc_timestamp))
+        site = Site.objects.get_current()
 
-        return "https://data.en-trak.com/users/%d/activate?uid=%s&ucode=%s"%(self.id, uid, ucode)
+        return "https://%s/users/%d/activate?uid=%s&ucode=%s"%(site.domain, self.id, uid, ucode)
 
     @property
     def get_or_create_salt(self):
@@ -66,6 +67,12 @@ class EntrakUser(AbstractUser):
             self.salt = uuid.uuid4().hex
             self.save()
         return self.salt
+
+
+    @property
+    def is_manager(self):
+        # TODO: switch to Django group permission checking
+        return self.role_level >= USER_ROLE_ADMIN_LEVEL
 
 
     def validate_activation_url(self, uid, ucode):
@@ -91,20 +98,28 @@ class EntrakUser(AbstractUser):
         plaintext = get_template('activation_email.txt')
         htmly     = get_template('activation_email.html')
 
-        if self.is_manager():
-            heading = "You have been invited to create an admin account\nfor your organization’s En-trak Energy Monitoring System."
-            description = "With En-trak you can see when, where and how you are spending\nyour energy dollars, enabling effective energy management."
+        translation.activate(LANG_CODE_EN)
+
+        if self.is_manager:
+            title = _("invitation email manager title")
+            heading = _("invitation email manager heading")
+            description = _("invitation email manager description")
         elif on_behalf_of:
-            heading = on_behalf_of.fullname
-            description = "has invited you to create an account for\nyour organization’s En-trak Energy Monitoring System."
+            title = _("invitation email user title")
+            heading = _("{0} invitation email user heading").format(on_behalf_of.fullname)
+            description = _("invitation email user description")
+
+        site = Site.objects.get_current()
 
         d = Context({
+                'domain': site.domain,
                 'url': self.activation_url,
                 'heading': heading,
                 'description': description,
+                'create_account_button': _('invitation email button')
             })
 
-        subject, from_email, to_email = 'Thanks for signing up!', "info@en-trak.com", [self.email]
+        subject, from_email, to_email = title, "info@en-trak.com", [self.email]
 
         text_content = plaintext.render(d)
         html_content = htmly.render(d)
@@ -113,7 +128,3 @@ class EntrakUser(AbstractUser):
         msg.attach_alternative(html_content, "text/html")
         msg.send()
 
-
-    def is_manager(self):
-        # TODO: switch to Django group permission checking
-        return self.role_level >= USER_ROLE_ADMIN_LEVEL

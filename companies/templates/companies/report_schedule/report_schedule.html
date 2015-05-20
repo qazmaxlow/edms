@@ -102,7 +102,15 @@
                     <div kendo-grid k-options="taskGridOptions(dataItem)"></div>
                 </div>
             </div>
-{% endverbatim %}            
+            <div kendo-window="deleteGridRowWin" k-title="'Delete'"
+                 k-visible="false" k-modal="true">
+              <div>Are you sure want to delete?</div>
+              <div>
+                <button class="k-button normal-btn cancel" ng-click="deleteGridRowWin.close()">Cancel</button>
+                <button class="k-button normal-btn" ng-click="confirmDelete()">Confirm</button>
+              </div>
+            </div>
+{% endverbatim %}
         </div>
     </div>
 </div>
@@ -116,12 +124,11 @@
             $scope.automatedReportTitle = '{% trans "Automated Reports" %}';
             var etDropDown = new EtDropDown($("#rs-emailList"), []);
             $scope.isDisabled = true;
-            etDropDown.setOptions({readOnly: false, itemDisplayName: "e-mails", ignoreCase: false, onchange: function(){
+            etDropDown.setOptions({readOnly: false, itemDisplayName: "e-mails", onchange: function(){
                 console.log("onchange");
 
                 $scope.$apply(function(){
                      if ($scope.systemDropdown.value() > 0 && $scope.frequencyDropdown.value() > 0 && etDropDown.value().length > 0){
-                        console.log(etDropDown.value().length);
                         $scope.isDisabled = false;
                     }else{
                          $scope.isDisabled = true;
@@ -288,8 +295,20 @@
                                     cancel: "Cancel"
                                 }
                             }, {
-                                name: "destroy",
-                                text: "Delete"
+                                name: "mydestroy",
+                                text: "Delete",
+                                click: function(e) {
+                                    var tr = $(e.target).closest("tr"); // get the current table row (tr)
+                                    var data = this.dataItem(tr);
+
+                                    var that = this;
+                                    $scope.confirmDelete = function() {
+                                        that._removeRow(tr);
+                                        $scope.deleteGridRowWin.close()
+                                    };
+
+                                    $scope.deleteGridRowWin.center().open();
+                                }
                             }], 
                             title: "Actions", 
                             width: "160px" 

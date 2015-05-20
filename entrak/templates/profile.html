@@ -32,8 +32,8 @@
 
 {% endblock %}
 
-{% block page_title %}{% trans "THE SETTINGS PAGE" %}{% endblock %}
-{% block page_subtitle %}{% trans "Find out what you can set here at" %}{% endblock %}
+{% block page_title %}{% trans "SETTINGS" %}{% endblock %}
+{% block page_subtitle %}{% trans "Manage your system access with" %}{% endblock %}
 
 {% block extra_script %}
 {{block.super}}
@@ -45,100 +45,99 @@
 <div ng-app="entrak">
     <div class="profile profile-container" ng-controller="MyCtrl">
         <div class="k-header">
-            <div class="header-tab selected-tab">My Profile</div><!--
-            --><div class="header-tab"><a href="{% url 'manage_accounts' system_code=systems.0.code %}">Manage Accounts</a></div>
+            <div class="header-tab selected-tab">{% trans "My Profile" %}</div><!--
+            -->{% if user.is_manager == True %}<div class="header-tab"><a href="{% url 'manage_accounts' system_code=systems.0.code %}">{% trans "Manage Accounts" %}</a></div>{% endif %}
         </div>
-        {% verbatim %}
+
         <div class="form-horizontal form-widgets">
             <form name="kForm" kendo-validator="validator" ng-submit="validate($event, false)" class="k-content" ng-model="isValid">
             <div class="form-group">
                 <div class="col-sm-6">
-                    <label class="control-label" for="firstname">First Name:</label>
-                    <input type="text" id="firstname" name="First Name" ng-model="user.first_name" class="k-textbox normal-tb" placeholder="First Name" required validationMessage="required field"/>
+                    <label class="control-label" for="firstname">{% trans "First Name" %}:</label>
+                    <input type="text" id="firstname" name="First Name" ng-model="user.first_name" class="k-textbox normal-tb" required validationMessage="{% trans '*Required field' %}"/>
                 </div>
                 <div class="col-sm-6">
-                    <label class="control-label right" for="department">Department:</label>
-                    <select kendo-dropdownlist k-option-label="'--Department--'" name="department" ng-model="user.department" id="department" required data-required-msg="required field">
-                        <option>Administration</option>
-                        <option>Business Development</option>
-                        <option>CEO Office / Management</option>
-                        <option>Corporate Communcations</option>
-                        <option>CSR</option>
-                        <option>Customer Services</option>
-                        <option>Facilities Management</option>
-                        <option>Finance / Accounting</option>
-                        <option>Human Resources</option>
-                        <option>Information Technology</option>
-                        <option>Legal / Compliance</option>
-                        <option>Marketing</option>
-                        <option>Others</option>
-                        <option>Products</option>
-                        <option>Purchasing</option>
-                        <option>Sales</option>
+                    <label class="control-label right" for="department">{% trans "Department" %}:</label>
+                    <select kendo-dropdownlist k-option-label="defaultDepartment" name="department" ng-model="user.department" id="department" required data-required-msg="{% trans '*Required field' %}">
+                        <option value="Administration">{% trans "Administration" %}</option>
+                        <option value="Business Development">{% trans "Business Development" %}</option>
+                        <option value="CEO Office / Management">{% trans "CEO Office / Management" %}</option>
+                        <option value="Corporate Communications">{% trans "Corporate Communications" %}</option>
+                        <option value="CSR">{% trans "CSR" %}</option>
+                        <option value="Customer Services">{% trans "Customer Services" %}</option>
+                        <option value="Facilities Management">{% trans "Facilities Management" %}</option>
+                        <option value="Finance / Accounting">{% trans "Finance / Accounting" %}</option>
+                        <option value="Human Resources">{% trans "Human Resources" %}</option>
+                        <option value="Information Technology">{% trans "Information Technology" %}</option>
+                        <option value="Legal / Compliance">{% trans "Legal / Compliance" %}</option>
+                        <option value="Marketing">{% trans "Marketing" %}</option>
+                        <option value="Others">{% trans "Others" %}</option>
+                        <option value="Products">{% trans "Products" %}</option>
+                        <option value="Purchasing">{% trans "Purchasing" %}</option>
+                        <option value="Sales">{% trans "Sales" %}</option>
                     </select>
                     <span class="k-invalid-msg" data-for="department"></span>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-6">
-                    <label class="control-label" for="lastname">Last Name:</label>
-                    <input type="text" id="lastname" name="Last Name" ng-model="user.last_name" class="k-textbox normal-tb" placeholder="Last Name" required validationMessage="required field"/>
+                    <label class="control-label" for="lastname">{% trans "Last Name" %}:</label>
+                    <input type="text" id="lastname" name="Last Name" ng-model="user.last_name" class="k-textbox normal-tb" required validationMessage="{% trans '*Required field' %}"/>
                 </div>
                 <div class="col-sm-6">
-                    <label class="control-label right" for="language">Language:</label>
-                    <select kendo-dropdownlist k-option-label="'--Language--'" name="language" id="language" ng-model="user.language" required data-required-msg="required field">
-                        <option value="en_US">English</option>
-                        <option value="zh_TW">繁體中文</option>
+                    <label class="control-label right" for="language">{% trans "Language" %}:</label>
+                    <select kendo-dropdownlist k-option-label="defaultLanguage" name="language" id="language" ng-model="user.language" required data-required-msg="{% trans '*Required field' %}">
+                        <option value="en">English</option>
+                        <option value="zh-tw">繁體中文</option>
                     </select>
                     <span class="k-invalid-msg" data-for="language"></span>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-12">
-                    <label class="control-label" for="email">Email:</label>
+                    <label class="control-label" for="email">{% trans "Email" %}:</label>
                     <span class="email-display" ng-bind="email"></span>
                 </div>
             </div>
             <div class="buttons-wrap right">
-                <button class="k-button normal-btn cancel" ng-click="resetInput()" ng-disabled="!userChanged || isUpdating">Cancel</button>
-                <button class="k-button normal-btn" type="submit" ng-disabled="!isValid || !userChanged || isUpdating">Save Changes</button>
+                <button class="k-button normal-btn cancel" ng-click="resetInput()" ng-disabled="!userChanged || isUpdating">{% trans "Cancel" %}</button>
+                <button class="k-button normal-btn" type="submit" ng-disabled="!userChanged || isUpdating">{% trans "Save Changes" %}</button>
             </div>
             </form>
             <div class="separator"></div>
             <div class="buttons-wrap">
-                <button class="k-button normal-btn" ng-disabled="isUpdating" ng-click="resetPassword()">Change Password</button>
+                <button class="k-button normal-btn" ng-disabled="isUpdating" ng-click="resetPassword()">{% trans "Change Password" %}</button>
             </div>
         </div>
-        {% endverbatim %}
-    {% verbatim %}
-    <div class="ng-cloak profile profile-popup" kendo-window="wndw" id="resetPassword" k-title="'Change Password'" k-width="368" k-height="360" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
+
+    <div class="ng-cloak profile profile-popup" kendo-window="wndw" id="resetPassword" k-title="'{% trans "Change Password" %}'" k-width="368" k-height="370" k-visible="false" k-modal="true" k-draggable="false" k-resizable="false">
             <div class="form-horizontal form-widgets">
                 <form name="kForm" kendo-validator="pwdValidator" k-options="validOptions" ng-submit="validate($event, true)" class="k-content down-err-txt" ng-model="isPwdValid">
                 <div class="form-group">
-                    <label class="control-label" for="current_password">Current Password</label>
+                    <label class="control-label" for="current_password">{% trans "Current Password" %}</label>
                     <div class="col-sm-12">
-                        <input type="password" id="current_password" name="Current Password" ng-model="user.current_password" class="k-textbox normal-tb popup-input" placeholder="Set Your Password" required data-required-msg="required field" />
+                        <input type="password" id="current_password" name="Current Password" ng-model="user.current_password" class="k-textbox normal-tb popup-input" required data-required-msg="{% trans '*Required field' %}" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="password">New Password</label>
+                    <label class="control-label" for="password">{% trans "New Password" %}</label>
                     <div class="col-sm-12">
-                        <input type="password" id="new_password" name="New Password" ng-model="user.password" class="k-textbox normal-tb popup-input" placeholder="Set Your Password" required data-required-msg="required field" />
+                        <input type="password" id="new_password" name="New Password" ng-model="user.password" class="k-textbox normal-tb popup-input" required data-required-msg="{% trans '*Required field' %}" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="confirm_password">Confirm Password</label>
+                    <label class="control-label" for="confirm_password">{% trans "Confirm Password" %}</label>
                     <div class="col-sm-12">
-                        <input type="password" id="confirm_password" name="Confirm Password" class="k-textbox normal-tb popup-input" placeholder="Retype Your Password" required data-required-msg="required field" ng-model="user.confirm_password"/>
+                        <input type="password" id="confirm_password" name="Confirm Password" class="k-textbox normal-tb popup-input" required data-required-msg="{% trans '*Required field' %}" ng-model="user.confirm_password"/>
                     </div>
                 </div>
                 <div class="buttons-wrap">
-                    <button class="k-button normal-btn" type="submit" ng-disabled="!isPwdValid || isUpdating">Save</button>
+                    <button class="k-button normal-btn" type="submit" ng-disabled="!isPwdValid || isUpdating">{% trans "Save" %}</button>
                 </div>
+                <div ng-cloak ng-class="{'error-text' : !isUpdated}" class="action-msg" ng-bind="changePwdMessage"></div>
                 </form>
             </div>
     </div>
-    {% endverbatim %}
     </div>
 
 
@@ -158,6 +157,9 @@
                 $scope.user.department = "{{user.department}}";
                 $scope.user.language = "{{user.language}}";
 
+                $scope.defaultDepartment = "--" + {% trans "'Department'" %} + "--";
+                $scope.defaultLanguage = "--" + {% trans "'Language'" %} + "--";
+
                 $scope.copyOriginUser = function(){
                     $scope.origUser = {};
                     $scope.origUser.first_name = $scope.user.first_name;
@@ -165,10 +167,11 @@
                     $scope.origUser.department = $scope.user.department;
                     $scope.origUser.language = $scope.user.language;
                 }
-                
+
                 $scope.copyOriginUser();
                 $scope.userChanged = false;
-                $scope.email = "{{user.email}}"
+                $scope.isUpdated = false;
+                $scope.email = "{{user.email}}";
 
                 $scope.resetInput = function() {
                     $scope.user.first_name = $scope.origUser.first_name;
@@ -185,10 +188,13 @@
                         contentType: 'application/json; charset=utf-8',
                         data: $scope.user,
                     }).success(function(data, textStatus) {
+                        $scope.isUpdated = true;
                         $scope.isUpdating = false;
                         $scope.copyOriginUser();
                         if (!isChangePwd){
                             $scope.userChanged = false;
+                        } else {
+                            $scope.changePwdMessage = "{% trans 'Password changed.' %}";
                         }
 
                         if (data.redirect) {
@@ -199,7 +205,9 @@
                             console.log(data);
                         }
                     }).error(function(data){
+                        $scope.isUpdated = false;
                         $scope.isUpdating = false;
+                        $scope.changePwdMessage = data;
                         console.log(data);
                     });
                 }
@@ -215,7 +223,7 @@
                         }
                     },
                     messages: {
-                        matchpwd: "Password do not match"
+                        matchpwd: "{% trans '*Passwords do not match' %}"
                     }
                 }
 
@@ -246,6 +254,8 @@
                     $scope.user.confirm_password = null;
                     $scope.user.password = null;
                     $scope.user.current_password = null;
+                    $scope.isUpdated = false;
+                    $scope.changePwdMessage = "";
                     $("#resetPassword").data("kendoWindow").center().open();
                 }
 
@@ -259,10 +269,6 @@
                         $scope.userChanged = true;
                     }
                 });
-
-                //TODO handle dropdown prefill null value case
-                //setTimeout(function(){$("#department").data("kendoDropDownList").value(null);},300);
             });
-
     </script>
 {% endblock %}

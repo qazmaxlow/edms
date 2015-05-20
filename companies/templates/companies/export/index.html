@@ -62,7 +62,7 @@
             <div class="col-md-8 steps">
                 {% verbatim %}
                 <div class="row">
-                    <div class="col-md-6 left">
+                    <div class="col-xs-6 left">
                         <div class="step-label">{{step1}}</div>
                         <div class="header">{{step1Title}}</div>
                         <div class="content bg-calendar">
@@ -79,7 +79,7 @@
                             <div class="table-row"></div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-xs-6">
                         <div class="step-label">{{step2}}</div>
                         <div class="header">{{step2Title}}</div>
                         <div class="content bg-time">
@@ -95,7 +95,7 @@
                 </div>
                 {% endverbatim %}
                 <div class="row">
-                    <div class="col-md-6 left">
+                    <div class="col-xs-6 left">
                         <div class="step-label" ng-bind="step3"></div>
                         <div class="header" ng-bind="step3Title"></div>
                         <div class="content bg-unit">
@@ -108,19 +108,19 @@
                             <div class="table-row"></div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-xs-6">
                         <div class="step-label" ng-bind="step4"></div>
                         <div class="header" ng-bind="step4Title"></div>
                         <div class="content">
                             <div class="table-row"></div>
                             <div class="table-row">
-                                <div class="col-md-3 field-name">
+                                <div class="col-xs-3 field-name">
                                     <p ng-bind="from"></p>
                                     <p ng-bind="to"></p>
                                     <p ng-bind="intervalStep4"></p>
                                     <p ng-bind="units"></p>
                                 </div>
-                                <div class="col-md-6 field-info">
+                                <div class="col-xs-6 field-info">
                                     <p ng-bind="date_start | dateFmt:'d'"></p>
                                     <p ng-bind="date_end | dateFmt:'d'"></p>
                                     <p ng-bind="displayTxt(interval)"></p>
@@ -128,7 +128,7 @@
                                     <p ng-show="unit=='co2'">{% trans "CO<sub>2</sub> (kg)" %}</p>
                                 </div>
                                 {% verbatim %}
-                                <div class="col-md-3 field-info">
+                                <div class="col-xs-3 field-info">
                                     <p>12:00 {{am}}</p>
                                     <p>11:59 {{pm}}</p>
                                 </div>

@@ -42,6 +42,11 @@ class PseudoBuffer(object):
 
 
 class DownloadView(View):
+
+    @method_decorator(permission_required())
+    def dispatch(self, request, *args, **kwargs):
+        return super(DownloadView, self).dispatch(request, *args, **kwargs)
+
     def get(self, request, *args, **kwargs):
         unit_category_code = request.GET.get('unit')
         interval = request.GET.get('interval')

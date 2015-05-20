@@ -94,7 +94,7 @@ def get_weekdays_cost_by_source_readings(system, source_id, start_dt, end_dt):
     readings = SourceReadingDay.objects(
         source_id=source_id,
         datetime__gte=start_dt,
-        datetime__lte=end_dt)
+        datetime__lt=end_dt)
 
     system_tz = pytz.timezone(system.timezone)
     for sr in readings:
@@ -627,6 +627,24 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     m['report_date_text'] = report_date_text
     m['report_day_diff'] = (report_end_date - report_date).days
 
+    compare_type = report_type
+    if compare_type == 'month':
+        last_start_dt = report_date - relativedelta(months=1)
+        last_end_dt = report_end_date - relativedelta(months=1)
+    elif compare_type == 'week':
+        last_start_dt = report_date - datetime.timedelta(days=7)
+        last_end_dt = report_end_date - datetime.timedelta(days=7)
+    elif compare_type == 'quarter':
+        last_start_dt = report_date - relativedelta(months=3)
+        last_end_dt = report_end_date - relativedelta(months=3)
+    elif compare_type == 'year':
+        last_start_dt = report_date - relativedelta(years=1)
+        last_end_dt = report_end_date - relativedelta(years=1)
+    elif compare_type == 'custom':
+        date_delta = report_date - start_dt
+        last_end_dt = report_end_date - datetime.timedelta(days=1)
+        last_start_dt = last_end_dt - date_delta
+
     sources = SourceManager.get_sources(current_system)
     source_ids = [str(source.id) for source in sources]
 
@@ -670,7 +688,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     # oops, wrong?
     money_unit_rate = UnitRate.objects.filter(category_code='money', code=unit_infos['money']).first()
 
-    m['weekday_bill'] = get_weekdays_cost(current_system, report_date, report_end_date)
+    m['weekday_bill'] = get_weekdays_cost(current_system, report_date, report_end_date + datetime.timedelta(days=1))
 
     m['total_co2'] = sum([g['currentTotalCo2'] for g in group_data])/1000.0
     m['total_money'] = sum([g['currentTotalMoney'] for g in group_data])
@@ -1225,7 +1243,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     overnight_usage = {}
     overnight_bill = sum([ g['currentOvernightInfo']['average'] for g in group_data])
     # overnight_usage['bill'] = overnight_bill * money_unit_rate.rate
-    overnight_usage['bill'] = get_overnight_avg_cost(current_system, source_ids, report_date, report_end_date)
+    overnight_usage['bill'] = get_overnight_avg_cost(current_system, source_ids, report_date, report_end_date + datetime.timedelta(days=1))
+    last_overnight_usage = get_overnight_avg_cost(current_system, source_ids, last_start_dt, last_end_dt + datetime.timedelta(days=1))
 
     overnight_beginning_usage = sum([ g['beginningOvernightInfo']['average'] for g in group_data])
     overnight_average_usage = sum([ g['currentOvernightInfo']['average'] for g in group_data])
@@ -1235,8 +1254,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
     # average_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
     overnight_compare_last = None
-    if overnight_last_usage > 0:
-        overnight_compare_last = float(overnight_current_usage - overnight_last_usage)/overnight_last_usage*100
+    if last_overnight_usage > 0:
+        overnight_compare_last = float(overnight_usage['bill'] - last_overnight_usage)/last_overnight_usage*100
 
     overnight_usage['compare_last_helper'] = CompareTplHepler(overnight_compare_last)
 
@@ -1299,7 +1318,9 @@ from tokens.models import UrlToken
 def popup_report_view(request, system_code, year=None, month=None, report_type=None, to_pdf=False):
     return _popup_report_view(request, system_code)
 
-@permission_required()
+# @permission_required()
+@require_passes_test(
+    lambda r: UrlToken.objects.check_token_by_request(r) or r.user.is_authenticated())
 def download_popup_report_view(request, system_code):
     return _popup_report_view(request, system_code, to_pdf=True)
 

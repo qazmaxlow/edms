@@ -157,6 +157,16 @@ class System(models.Model):
         return systems
 
 
+    @property
+    def is_corporate(self):
+        return self.company_type == CORPORATE
+
+
+    @property
+    def is_education(self):
+        return self.company_type == EDUCATION
+
+
     def get_all_holidays(self, timestamp_info=None):
         if timestamp_info:
             system_timezone = pytz.timezone(self.timezone)

@@ -94,7 +94,7 @@
 
 .profile .control-label {
 	padding-left: 74px;
-	width: 180px;
+	width: 160px;
 	text-align: left;
 	font-size: 1em;
 	font-weight: 600;
@@ -149,10 +149,6 @@
 }
 
 /* change password -----*/
-.profile.k-window-content {
-	padding: 0;
-}
-
 .profile .form-group {
 	margin-left: 0;
 	margin-right: 0;
@@ -174,7 +170,19 @@
 
 .profile.profile-popup .buttons-wrap {
 	box-sizing: border-box;
-	padding: 10px 74px 18px 0;
+	padding: 10px 74px 0 0;
 	width: 100%;
 	text-align: right;
+}
+
+.profile-popup .k-content .action-msg {
+	margin-top: 12px;
+	text-align: center;
+	font-size: 1.071em;
+	font-weight: 500;
+	color: #FDB913;
+}
+
+.profile-popup .k-content .action-msg.error-text {
+	color: #e05d5d;
 }

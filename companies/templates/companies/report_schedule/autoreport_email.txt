@@ -1,9 +1,10 @@
 Dear Sir/Madam,
 
-{{heading}}
-{{description}}
-To create an En-trak Account, visit the following url:
-{{url}}
+Your energy report for En-trak Headquarter - {{ report_date_text }} is ready for your review.
+
+{{ report_url|safe }}
+
+This link will expire 72 hours after sending. If you wish to view this report after that period, simply log into your En-trak system and go to the Report Page.
 
 Best Regards,
 En-Trak

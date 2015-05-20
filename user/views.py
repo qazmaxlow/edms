@@ -12,12 +12,14 @@ from django.utils import timezone
 from operator import itemgetter
 from django.utils.translation import ugettext as _
 from django.contrib.auth import authenticate
+from django.contrib.auth import login
 from django.core.urlresolvers import reverse
 from django.utils import simplejson
 from django.http import HttpResponse
 from django.http import HttpResponseForbidden
 from django.http import HttpResponseBadRequest
 from django.db.utils import IntegrityError
+from django.utils import translation
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
@@ -30,12 +32,18 @@ from user.models import EntrakUser
 from utils.utils import Utils
 from rest_framework import generics
 from companies.views.user_views import UserSerializer
+from companies.views.user_views import resetPasswordSerializer
 from rest_framework import serializers
+from django.utils import translation
+from entrak.settings_common import LANG_CODE_EN, LANG_CODE_TC
 
 PASSWORD_REGEX = re.compile(r'^.*(?=.{8,})(?=.*[A-Za-z]+)(?=.*\d).*$')
 
 
 def activate_account(request, user_id):
+
+    # always activate the account in English
+    translation.activate(LANG_CODE_EN)
 
     user = None
     data = {}
@@ -58,6 +66,10 @@ def activate_account(request, user_id):
             system = System.objects.get(id=user.system_id)
 
             if request.is_ajax() and request.method == 'POST':
+
+                if PASSWORD_REGEX.search(data.get('password', None)) is None:
+                    return HttpResponse(json.dumps({"error": "Password must be at least 8 characters long and contains at least one character and one number"}), content_type="application/json", status=400)
+
                 user.first_name = data.get('first_name', None)
                 user.last_name = data.get('last_name', None)
                 user.username = user.email
@@ -68,12 +80,15 @@ def activate_account(request, user_id):
                 user.is_email_verified =  True
                 user.save()
 
-                authenticate(username=user.username, password=user.password)
+                user = authenticate(username=user.username, password=data.get('password', None))
+                if user is not None:
+                    login(request, user)
+                    translation.activate(user.language)
 
-                dashboard_url = reverse('companies.dashboard', kwargs={'system_code': system.code})
+                dashboard_url = reverse('graph', kwargs={'system_code': system.code})
                 settings_url = reverse('manage_accounts', kwargs={'system_code': system.code})
 
-                if user.is_manager():
+                if user.is_manager:
                     return Utils.json_response({"is_manager": True, "dashboard_url": dashboard_url, "settings_url": settings_url})
                 else:
                     return Utils.json_response({"is_manager": False, "dashboard_url": dashboard_url})
@@ -112,9 +127,9 @@ def update_account(request, user_id):
         language = data.get('language', None)
         is_change_pwd = data.get('isChangePwd', False)
 
-        current_password = data.get('current_passowrd', None)
-        password = data.get('passowrd', None)
-        confirm_password = data.get('confirm_passowrd', None)
+        current_password = data.get('current_password', None)
+        password = data.get('password', None)
+        confirm_password = data.get('confirm_password', None)
 
         if first_name and last_name and department and language and not is_change_pwd:
 
@@ -126,10 +141,10 @@ def update_account(request, user_id):
 
             return HttpResponse("User profile updated successfully")
 
-        elif current_passowrd and password and confirm_passowrd and is_change_pwd:
+        elif current_password and password and confirm_password and is_change_pwd:
 
             if password == confirm_password:
-                o_user = authenticate(username=user.username, password=current_passowrd)
+                o_user = authenticate(username=user.username, password=current_password)
 
                 if o_user:
                     user.set_password(password)
@@ -138,7 +153,10 @@ def update_account(request, user_id):
                 else:
                     return HttpResponseBadRequest("Current password is incorrect")
             else:
-                return HttpResponseBadRequest("Password and confirm password must be the same")
+                return HttpResponseBadRequest("Passwords do not match")
+
+        else:
+            return HttpResponseBadRequest("Invalid request")
 
     else:
         return HttpResponseBadRequest("Invalid request")
@@ -146,7 +164,7 @@ def update_account(request, user_id):
 
 def send_invitation_email(request, user_id):
 
-    if request.user.is_manager():
+    if request.user.is_manager:
 
         users = EntrakUser.objects.filter(id=user_id, is_email_verified=False, is_personal_account=True)
 
@@ -222,7 +240,6 @@ class CreateSharedUserView(generics.CreateAPIView):
         return Response(user.data)
 
 
-# @permission_classes((IsAuthenticated,))
 class DeleteUserView(generics.DestroyAPIView):
 
     serializer_class = UserSerializer
@@ -239,7 +256,7 @@ class DeleteUserView(generics.DestroyAPIView):
 
         system_info = System.get_systems_info(user_to_be_deleted.system.code, request_user.system.code)
 
-        if not system_info or not request_user.is_manager():
+        if not system_info or not request_user.is_manager:
             raise PermissionDenied()
 
         user_to_be_deleted.is_active = False
@@ -250,6 +267,41 @@ class DeleteUserView(generics.DestroyAPIView):
 
 
 class UpdateUserView(generics.UpdateAPIView):
-    serializer_class = UserSerializer
+    serializer_class = resetPasswordSerializer
     permission_classes = (IsAuthenticated,)
-    queryset = EntrakUser.objects.all()
+    lookup_field = 'user_id'
+    lookup_url_kwarg = 'user_id'
+
+    def put(self, request, *args, **kwargs):
+
+        request_user = self.request.user
+        user = EntrakUser.objects.get(id=self.kwargs['user_id'])
+        system_info = System.get_systems_info(user.system.code, request_user.system.code)
+
+        request_data = {
+            'username': user.username,
+            'new_password': request.data.get('new_password', None),
+            'confirm_password': request.data.get('confirm_password', None)
+        }
+
+        if user.id == request_user.id:
+            request_data['current_password'] = request.data.get('current_password', None)
+        elif not system_info or not request_user.is_manager:
+            raise PermissionDenied()
+
+        serializer = resetPasswordSerializer(user, data=request_data)
+
+        serializer.is_valid(raise_exception=True)
+        user.set_password(request.data.get('new_password', None))
+        user.save()
+        return Response(serializer.data)
+
+
+class GetUserView(generics.RetrieveAPIView):
+    serializer_class = resetPasswordSerializer
+    permission_classes = (IsAuthenticated,)
+    lookup_field = 'user_id'
+    lookup_url_kwarg = 'user_id'
+
+    def get_object(self):
+        return self.request.user
