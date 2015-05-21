@@ -19,6 +19,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseForbidden
 from django.http import HttpResponseBadRequest
 from django.db.utils import IntegrityError
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils import translation
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -62,7 +63,7 @@ def activate_account(request, user_id):
 
     if user and user_id and user_code:
 
-        if user.validate_activation_url(user_id.encode('ascii','ignore'), user_code.encode('ascii','ignore')):
+        if user.validate_uid_and_ucode(user_id.encode('ascii','ignore'), user_code.encode('ascii','ignore')):
             system = System.objects.get(id=user.system_id)
 
             if request.is_ajax() and request.method == 'POST':
@@ -181,6 +182,39 @@ def send_invitation_email(request, user_id):
     return HttpResponseForbidden('<h3>Not authorized</h3>')
 
 
+def reset_password(request, user_id):
+
+    user = None
+    data = {}
+
+    users = EntrakUser.objects.filter(id=user_id, is_personal_account=True)
+    if users.exists():
+        user = users[0]
+        translation.activate(user.language)
+
+    user_id = request.GET.get('uid', None)
+    user_code = request.GET.get('ucode', None)
+
+    if user and user_id and user_code:
+
+        if user.validate_uid_and_ucode(user_id.encode('ascii','ignore'), user_code.encode('ascii','ignore')):
+            system = System.objects.get(id=user.system_id)
+
+            m = {"uid": user_id, "ucode": user_code}
+            m.update(csrf(request))
+            m["system"] = system
+            m["user"] = user
+
+            return render(request, 'reset_password.html', m)
+
+        else:
+            request.session['login_warning_msg'] = _("Invalid user or token")
+            return redirect('/login')
+
+    else:
+        request.session['login_warning_msg'] = _("Invalid request")
+        return redirect('/login')
+
 class CreateIndividualUserView(generics.CreateAPIView):
 
     serializer_class = UserSerializer
@@ -288,6 +322,52 @@ class UpdateUserView(generics.UpdateAPIView):
             request_data['current_password'] = request.data.get('current_password', None)
         elif not system_info or not request_user.is_manager:
             raise PermissionDenied()
+
+        serializer = resetPasswordSerializer(user, data=request_data)
+
+        serializer.is_valid(raise_exception=True)
+        user.set_password(request.data.get('new_password', None))
+        user.save()
+        return Response(serializer.data)
+
+
+class SendPasswordResetEmailView(generics.CreateAPIView):
+
+    serializer_class = UserSerializer
+
+    def post(self, request, format=None):
+
+        data = request.data
+        required_keys = set(['email', 'system_id'])
+
+        if not required_keys.issubset(set(data.keys())):
+            raise ParseError('Invalid request')
+
+        try:
+            u = EntrakUser.objects.get(email=data['email'], system_id=data['system_id'])
+            u.send_password_reset_email()
+        except ObjectDoesNotExist as e:
+            raise serializers.ValidationError(_("This email is not linked to any existing account."))
+
+        user = UserSerializer(u)
+        return Response(user.data)
+
+
+class ResetPasswordView(generics.UpdateAPIView):
+
+    serializer_class = resetPasswordSerializer
+    lookup_field = 'user_id'
+    lookup_url_kwarg = 'user_id'
+
+    def put(self, request, *args, **kwargs):
+
+        user = EntrakUser.objects.get(id=self.kwargs['user_id'])
+
+        request_data = {
+            'username': user.username,
+            'new_password': request.data.get('new_password', None),
+            'confirm_password': request.data.get('confirm_password', None)
+        }
 
         serializer = resetPasswordSerializer(user, data=request_data)
 

@@ -80,6 +80,7 @@ urlpatterns = patterns('',
     url(r'^users/(?P<user_id>\d+)/', include('user.urls')),
     url(r'^users/create_individual_users', user.views.CreateIndividualUserView.as_view(), name='users.create_individual_users'),
     url(r'^users/create_shared_user', user.views.CreateSharedUserView.as_view(), name='users.create_shared_user'),
+    url(r'^users/send_password_reset_email', user.views.SendPasswordResetEmailView.as_view(), name='users.send_password_reset_email'),
 )
 
 if settings.DEBUG:
