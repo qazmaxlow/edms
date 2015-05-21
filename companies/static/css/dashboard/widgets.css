@@ -94,6 +94,7 @@
 .widget-title {
 	letter-spacing: 0.01em;
     padding-left: 15px;
+    padding-right: 0px;
     height: 40px;
     line-height: 39px;
     color: #FFF;
@@ -124,7 +125,7 @@
 }
 
 .long-text-toggle .button-left {
-    min-width: 110px;
+    min-width: 100px;
     height: 20px;
     font-size: 0.857em;
     font-weight: 300;
@@ -667,5 +668,66 @@
 .progress-widget .top-space {
     padding-top: 8px;
 }
-
 /* -----progess widget */
+
+/* cumulative saving widget----- */
+.cumulative-widget .description-1 {
+    height: 60px;
+    line-height: 60px;
+    padding-left: 15px;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.cumulative-widget .top-box, .cumulative-widget .bottom-box {
+    height: calc(50% - 44px);
+    padding-left: 15px;
+    padding-top: 10px;
+    border-bottom: 1px solid #f2f2f2;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: right bottom;
+}
+
+.cumulative-widget .top-box {
+    background-image: url(../../images/dashboard/save.png);
+}
+
+.cumulative-widget .bottom-box {
+    background-image: url(../../images/dashboard/carbon.png);
+}
+
+.cumulative-widget .light-text {
+    font-size: 1em;
+    color: #354960;
+    font-weight: 300;
+}
+
+.cumulative-widget .normal-text {
+    font-size: 1em;
+    color: #354960;
+    font-weight: 500;
+}
+
+.cumulative-widget .amount-text {
+    font-size: 2.214em;
+    color: #354960;
+    font-weight: 500;
+    display: inline;
+}
+
+.cumulative-widget .unit-text {
+    font-size: 1.429em;
+    color: #354960;
+    font-weight: 300;
+    display: inline;
+}
+
+.cumulative-widget .footer-text {
+    padding-left: 15px;
+    height: 28px;
+    line-height: 28px;
+    font-size: 0.857em;
+    font-weight: 300;
+    color: #4b4b4b;
+}
+/* -----cumulative saving widget */
