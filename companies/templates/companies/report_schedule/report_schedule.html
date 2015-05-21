@@ -20,11 +20,10 @@
 <script src="{% static 'js/entrak-system.js' %}"></script>
 <script src="{% static 'js/entrak-utils.js' %}"></script>
 <script src="{% static 'js/report-generator.js' %}"></script>
-
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
 <link href="{% static 'css/companies/report_schedule.css' %}" rel="stylesheet">
-
+<link href="{% static 'css/custom_control.css' %}" rel="stylesheet">
 <script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/et.dropdown.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
@@ -103,9 +102,9 @@
                 </div>
             </div>
             <div kendo-window="deleteGridRowWin" k-title="'Delete'"
-                 k-visible="false" k-modal="true">
-              <div>Are you sure want to delete?</div>
-              <div>
+                 k-visible="false" k-modal="true" k-draggable="false">
+              <div class="titleText">Are you sure want to delete?</div>
+              <div class="buttons-wrap">
                 <button class="k-button normal-btn cancel" ng-click="deleteGridRowWin.close()">Cancel</button>
                 <button class="k-button normal-btn" ng-click="confirmDelete()">Confirm</button>
               </div>
