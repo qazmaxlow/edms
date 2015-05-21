@@ -124,12 +124,11 @@
             $scope.automatedReportTitle = '{% trans "Automated Reports" %}';
             var etDropDown = new EtDropDown($("#rs-emailList"), []);
             $scope.isDisabled = true;
-            etDropDown.setOptions({readOnly: false, itemDisplayName: "e-mails", ignoreCase: true, onchange: function(){
+            etDropDown.setOptions({readOnly: false, itemDisplayName: "e-mails", onchange: function(){
                 console.log("onchange");
 
                 $scope.$apply(function(){
                      if ($scope.systemDropdown.value() > 0 && $scope.frequencyDropdown.value() > 0 && etDropDown.value().length > 0){
-                        console.log(etDropDown.value().length);
                         $scope.isDisabled = false;
                     }else{
                          $scope.isDisabled = true;

@@ -916,6 +916,8 @@
         $scope.percent = Math.abs($scope.percent);
 
         $scope.title = '{% trans "Progress" %}';
+        $scope.p12BtnText = '{% trans "Past 12 months" %}';
+        $scope.thisYrBtnText = '{% trans "So far this year" %}';
         $scope.p12DescLine1Text = '{% trans "Over the past 12 months" %}';
         $scope.thisYrDescLine1Text = '{% trans "So far this year" %}';
         $scope.increaseLine2Text = '{% trans "you have increased your energy use" %}';
@@ -923,6 +925,10 @@
         $scope.fromBaselineText = '{% trans "from your baseline of" %}';
         $scope.comparedToText = '{% trans "compared to " %}' + $scope.lastYear;
         $scope.yearRangeText = $scope.lastYear + ' - ' + ($scope.lastYear + 1);
+
+        $scope.toggle = function(){
+            $scope.isPast12Month = !$scope.isPast12Month;
+        }
 
     });
 </script>
