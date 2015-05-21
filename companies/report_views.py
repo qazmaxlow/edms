@@ -805,10 +805,11 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
 
         # for overnight
-        overnight = {'bill': get_overnight_avg_cost(current_system, g['sourceIds'], report_date, report_end_date)}
+        last_overnight_usage = get_overnight_avg_cost(current_system, g['sourceIds'], report_date - relativedelta(months=1), report_end_date - relativedelta(months=1))
 
-        last_overnight_usage = g['lastOvernightInfo']['average']
-        current_overnight_usage = g['currentOvernightInfo']['average']
+        current_overnight_usage = get_overnight_avg_cost(current_system, g['sourceIds'], report_date, report_end_date)
+
+        overnight = {'bill': current_overnight_usage}
 
         overnight_compare_last = None
         if last_overnight_usage > 0:
