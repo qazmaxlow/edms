@@ -113,8 +113,6 @@ def retrieve_hkis_measures(system_code, file_paths):
         csv_reader = csv.reader(rl[-4:])
         previous_row = csv_reader.next()
 
-        last_time_newrecord = None
-
         for row in csv_reader:
             try:
                 timestamp1 = row[2]
@@ -133,13 +131,10 @@ def retrieve_hkis_measures(system_code, file_paths):
                         value = consumption1
                     )
                     SourceReadingMin.objects.insert(source_reading_min)
-                    if last_time_newrecord is None:
-                        last_time_newrecord = timestamp1
             except Exception:
                 pass
 
-            if last_time_newrecord:
-                SourceManager.update_sum(last_time_newrecord, 'Asia/Hong_Kong', [source.id])
+            SourceManager.update_sum(timestamp1, 'Asia/Hong_Kong', [source.id])
 
 
 def import_v2_hkis_hs():
