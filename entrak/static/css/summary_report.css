@@ -2288,3 +2288,21 @@ iframe {
 .panel-header-left-menu h3 a:hover, .panel-header-left-menu h3 a:focus{
     text-decoration: none;
 }
+.grey_layer{
+    width:100%;
+    height:9999px;
+    position:absolute;
+    left:0;
+    top:0;
+    background-color:#354960;
+  opacity:0.9;
+    display:none;
+    z-index: 101;
+}
+#win_report_ajax{
+position:absolute;
+      left: 0;
+      top: 0;
+      z-index: 102;
+display:none;
+}

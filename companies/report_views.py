@@ -509,10 +509,8 @@ class CompareTplHepler:
             'icon_path': static(self.change_icon_path)
         }
 
-
-def _popup_report_view(request, system_code, year=None, month=None, report_type=None, to_pdf=False):
-    # systems_info = System.get_systems_info(system_code, request.user.system.code)
-    systems_info = System.get_systems_info(system_code, system_code) # in fact just using systems no user systems
+def _popup_report_view(request, system_code, year=None, month=None, report_type=None, to_pdf=False, share=False):
+    systems_info = System.get_systems_info(system_code, request.user.system.code)
     systems = systems_info['systems']
     current_system = System.objects.get(code=system_code)
     sources = SourceManager.get_sources(current_system)
@@ -1307,9 +1305,14 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
             },
         )
 
+    if share:
+        return render(request, 'companies/reports/share_report.html', m)
 
     return render(request, 'companies/reports/popup_report.html', m)
 
+@permission_required()
+def share_popup_report_view(request, system_code, year=None, month=None, report_type=None, to_pdf=False):
+    return _popup_report_view(request, system_code, share=True)
 
 from tokens.models import UrlToken
 @require_passes_test(
@@ -1322,7 +1325,6 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
     lambda r: UrlToken.objects.check_token_by_request(r) or r.user.is_authenticated())
 def download_popup_report_view(request, system_code):
     return _popup_report_view(request, system_code, to_pdf=True)
-
 
 # @permission_required()
 def download_report_view(request, system_code, start_timestamp, end_timestamp, report_type, report_layout=None):

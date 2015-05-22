@@ -9,12 +9,12 @@
 
 .x-padding-5 {
     padding-left: 5px !important;
-    padding-right: 5px !important;   
+    padding-right: 5px !important;
 }
 
 .x-padding-25 {
     padding-left: 25px !important;
-    padding-right: 25px !important;   
+    padding-right: 25px !important;
 }
 
 .x-padding-5-0 {
@@ -118,6 +118,7 @@ body {
     padding: 0;
     padding-bottom: 15px;
     border-radius: 5px;
+    position: relative;
 }
 
 .sidebar-left .section {
@@ -165,7 +166,7 @@ body {
     border-radius: 10px 10px 0 0;
 }
 
-.system-name {
+.system-name-popup {
     padding-top: 20px;
     padding-bottom: 3px;
     text-align:center;
@@ -183,7 +184,7 @@ body {
     margin-right: auto;
 }
 
-.report-name{
+.report-name-popup{
     font-weight: lighter;
     font-size: 14pt;
     color: #354960;
@@ -491,7 +492,7 @@ body {-webkit-print-color-adjust: exact;}
     color: #e4b563;
 }
 
-.report-component-header {
+.report-component-header-popup {
     margin-top: 30px;
     background-color: #FDE6AD;
     font-size: 1.8rem;
@@ -637,7 +638,7 @@ body {-webkit-print-color-adjust: exact;}
     margin-top: 20px;
     font-size: 1.145em;
     font-weight: 600;
-    color: #354960;   
+    color: #354960;
 }
 
 .detail-container table {
@@ -1176,4 +1177,12 @@ body {-webkit-print-color-adjust: exact;}
     margin-top: 20px;
 }
 
+#popup_close{
+  position: relative;
+  top: 0;
+  left: calc(100% - 9px);
+  margin-top: 24px;
+  white-space: nowrap;
+  cursor:pointer;
+}
 /* CSS by Richard*/
