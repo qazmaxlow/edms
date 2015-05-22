@@ -35,8 +35,8 @@
 {% block system_menu_target_view %}report{% endblock %}
 {% block breadcrumb_target_view %}report{% endblock %}
 
-{% block page_title %}{% trans "THE DOWNLOAD PAGE" %}{% endblock %}
-{% block page_subtitle %}{% trans "Get all your information here at the" %}{% endblock %}
+{% block page_title %}{% trans "REPORTS" %}{% endblock %}
+{% block page_subtitle %}{% trans "Keep up to date with concise" %}{% endblock %}
 
 {% block extra_script %}
 {{block.super}}
@@ -124,11 +124,12 @@
             var etDropDown = new EtDropDown($("#rs-emailList"), []);
             $scope.isDisabled = true;
             etDropDown.setOptions({readOnly: false, 
-                itemDisplayName: '{% trans "Emails" %}',
-                emptyItemText: '{% trans "Add Email" %}',
+                buttonText: '{% trans "Add" context "dropdown" %}',
+                itemDisplayName: '{% trans "Emails" context "dropdown" %}',
+                emptyItemText: '{% trans "Add Email" context "dropdown" %}',
                 validationLabel: {
-                    duplicateEmail: '{% trans "Duplicated Email" %}',
-                    invalidEmail: '{% trans "Invalid Email" %}'
+                    duplicateEmail: '{% trans "Duplicated Email" context "dropdown" %}',
+                    invalidEmail: '{% trans "Invalid Email" context "dropdown" %}'
                 },
                 onchange: function(){
                     $scope.$apply(function(){
@@ -152,7 +153,7 @@
             $scope.step3Title = '{% trans "Confirm and Go" %}';
             $scope.recordTitle = '{% trans "Manage Automated Reports" %}';
             $scope.delWinTitle = '{% trans "Delete" %}';
-            $scope.delQuestion = '{% trans "Are you sure want to delete?" %}';
+            $scope.delQuestion = '{% trans "Are you sure you want to delete the item?" %}';
             $scope.btnCancel = '{% trans "Cancel" %}';
 
             var userDataSource = new kendo.data.DataSource({
@@ -348,11 +349,12 @@
                 var e = new EtDropDown($('#edit_email_popup'), emails);
                 e.setOptions({
                     readOnly: false,
-                    itemDisplayName: '{% trans "Emails" %}',
-                    emptyItemText: '{% trans "Add Email" %}',
+                    buttonText: '{% trans "Add" context "dropdown" %}',
+                    itemDisplayName: '{% trans "Emails" context "dropdown" %}',
+                    emptyItemText: '{% trans "Add Email" context "dropdown" %}',
                     validationLabel: {
-                        duplicateEmail: '{% trans "Duplicated Email" %}',
-                        invalidEmail: '{% trans "Invalid Email" %}'
+                        duplicateEmail: '{% trans "Duplicated Email" context "dropdown" %}',
+                        invalidEmail: '{% trans "Invalid Email" context "dropdown" %}'
                     },
                     ignoreCase: true,
                     onchange: function() {

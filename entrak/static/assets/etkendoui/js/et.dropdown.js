@@ -29,7 +29,7 @@ var EtDropDown = function(elm, data){
         isEmail: true,
         validationLabel: {
             duplicateEmail: "Duplicate Email",
-            invalidEmail: "Invalid Email."
+            invalidEmail: "Invalid Email"
         }
 
     };
