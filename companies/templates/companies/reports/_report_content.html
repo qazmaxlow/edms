@@ -66,9 +66,9 @@
                       {% else %}
                       <span class="basic-info-col-subtext">{% trans "more" %}</span>
                       {% endif %}
-                      <span id="save-energy-usage">{{ saving_energy|stringformat:".0f"|intcomma }}%</span>
+                      <span id="save-energy-usage">{% if saving_energy == None  %}N/A{% else %}{{ saving_energy|stringformat:".0f"|intcomma }}%{% endif %}</span>
                     {% else %}
-                      <span id="save-energy-usage">{{ saving_energy|stringformat:".0f"|intcomma }}%</span>
+                      <span id="save-energy-usage">{% if saving_energy == None  %}N/A{% else %}{{ saving_energy|stringformat:".0f"|intcomma }}%{% endif %}</span>
                       <br>
                       {% if is_saving %}
                       <span class="basic-info-col-subtext">{% trans "less" %}</span>

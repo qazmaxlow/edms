@@ -347,7 +347,7 @@ def summary_ajax(request, system_code):
     m['formated_overnight_avg_cost'] = '${0:,.0f}'.format(overnight_avg_cost) if overnight_avg_cost else None
 
     compare_to_last_overnight_avg_cost = None
-    last_overnight_avg_cost = get_overnight_avg_cost(current_system, source_ids, last_start_dt, last_end_dt)
+    last_overnight_avg_cost = get_overnight_avg_cost(current_system, source_ids, last_start_dt, last_end_dt + relativedelta(days=1))
 
     if last_overnight_avg_cost > 0 and overnight_avg_cost is not None:
         compare_to_last_overnight_avg_cost = float(overnight_avg_cost-last_overnight_avg_cost)/last_overnight_avg_cost*100
@@ -1052,7 +1052,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     # oops!!! have to rewrite
     p_or_n = -1 if report_data['savingInfo']['energy'] >=0 else 0
 
-    m['saving_energy'] = abs(report_data['savingInfo']['energy'])
+    m['saving_energy'] = abs(report_data['savingInfo']['energy']) if report_data['savingInfo']['energy'] is not None else None
     m['css_class_energy_saving'] = 'positive-saving' if report_data['savingInfo']['energy'] >=0 else 'negative-saving'
     m['is_saving'] = (report_data['savingInfo']['energy'] >=0)
     # in tons
