@@ -247,9 +247,8 @@ def summary_ajax(request, system_code):
         last_start_dt = start_dt - relativedelta(years=1)
         last_end_dt = end_dt - relativedelta(years=1)
     elif compare_type == 'custom':
-        date_delta = end_dt - start_dt
-        last_end_dt = start_dt - datetime.timedelta(days=1)
-        last_start_dt = last_end_dt - date_delta
+        last_start_dt = start_dt - relativedelta(months=1)
+        last_end_dt = end_dt - relativedelta(months=1)
 
     last_total_cost = get_total_cost(source_ids, last_start_dt, last_end_dt, compare_type)
 
@@ -641,9 +640,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         last_start_dt = report_date - relativedelta(years=1)
         last_end_dt = report_end_date - relativedelta(years=1)
     elif compare_type == 'custom':
-        date_delta = report_date - start_dt
-        last_end_dt = report_end_date - datetime.timedelta(days=1)
-        last_start_dt = last_end_dt - date_delta
+        last_start_dt = report_date - relativedelta(months=1)
+        last_end_dt = report_end_date - relativedelta(months=1)
 
     sources = SourceManager.get_sources(current_system)
     source_ids = [str(source.id) for source in sources]
