@@ -123,18 +123,23 @@
             $scope.automatedReportTitle = '{% trans "Automated Reports" %}';
             var etDropDown = new EtDropDown($("#rs-emailList"), []);
             $scope.isDisabled = true;
-            etDropDown.setOptions({readOnly: false, itemDisplayName: "e-mails", onchange: function(){
-                console.log("onchange");
-
-                $scope.$apply(function(){
-                     if ($scope.systemDropdown.value() > 0 && $scope.frequencyDropdown.value() > 0 && etDropDown.value().length > 0){
-                        $scope.isDisabled = false;
-                    }else{
-                         $scope.isDisabled = true;
-                    }
-                });
-
-            }});
+            etDropDown.setOptions({readOnly: false, 
+                itemDisplayName: '{% trans "Emails" %}',
+                emptyItemText: '{% trans "Add Email" %}',
+                validationLabel: {
+                    duplicateEmail: '{% trans "Duplicated Email" %}',
+                    invalidEmail: '{% trans "Invalid Email" %}'
+                },
+                onchange: function(){
+                    $scope.$apply(function(){
+                         if ($scope.systemDropdown.value() > 0 && $scope.frequencyDropdown.value() > 0 && etDropDown.value().length > 0){
+                            $scope.isDisabled = false;
+                        }else{
+                             $scope.isDisabled = true;
+                        }
+                    });
+                }
+            });
 
             $scope.description = '{% trans "Set the system to email you an energy report each month or week, so you can stay informaed and up to date on your energy use." %}';
             $scope.btnConfirm = '{% trans "Confirm" %}';
@@ -268,14 +273,14 @@
                 return {
                     dataSource: scheduleTaskDataSource,
                     columns: [
-                        { field: "system_id", title:"Scope", width: "26%", editor: systemDropDownEditor,
+                        { field: "system_id", title: '{% trans "Scope" %}', width: "26%", editor: systemDropDownEditor,
                               template: function(dataItem) {
                               return $.grep(company_systems, function(e) {
                                   return e.id == dataItem.system_id
                               })[0].fullname;
                           }
                         },
-                        { field: "frequency_id", title:"Frequency", width: "12%", editor: frequencyDropDownEditor,
+                        { field: "frequency_id", title: '{% trans "Frequency" %}', width: "12%", editor: frequencyDropDownEditor,
                           template: function(dataItem) {
                               return $.grep(frequencies, function(e) {
                                   return e.id == dataItem.frequency_id
@@ -283,7 +288,7 @@
                           }
                         },
                         
-                        { field: "receivers", title: "Email", width: "20%", editor: receivers_editor,
+                        { field: "receivers", title: '{% trans "Email" %}', width: "20%", editor: receivers_editor,
                           template: function(dataItem) {
                               var arr = $.map(dataItem.receivers, function(r) { return r.email; });
                               return arr.join(',');
@@ -293,13 +298,13 @@
                             command: [{
                                 name: "edit",
                                 text: {
-                                    edit: "Edit",
-                                    update: "Confirm",
-                                    cancel: "Cancel"
+                                    edit: '{% trans "Edit" %}',
+                                    update: '{% trans "Confirm" %}',
+                                    cancel: '{% trans "Cancel" %}'
                                 }
                             }, {
                                 name: "mydestroy",
-                                text: "Delete",
+                                text: '{% trans "Delete" %}',
                                 click: function(e) {
                                     var tr = $(e.target).closest("tr"); // get the current table row (tr)
                                     var data = this.dataItem(tr);
@@ -313,7 +318,7 @@
                                     $scope.deleteGridRowWin.center().open();
                                 }
                             }], 
-                            title: "Actions", 
+                            title: '{% trans "Actions" %}', 
                             width: "160px" 
                         }
                     ],
@@ -343,7 +348,12 @@
                 var e = new EtDropDown($('#edit_email_popup'), emails);
                 e.setOptions({
                     readOnly: false,
-                    itemDisplayName: "e-mails",
+                    itemDisplayName: '{% trans "Emails" %}',
+                    emptyItemText: '{% trans "Add Email" %}',
+                    validationLabel: {
+                        duplicateEmail: '{% trans "Duplicated Email" %}',
+                        invalidEmail: '{% trans "Invalid Email" %}'
+                    },
                     ignoreCase: true,
                     onchange: function() {
                         options.model.receivers = $.map(e.value(), function(email, i) {
