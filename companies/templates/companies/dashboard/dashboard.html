@@ -85,7 +85,7 @@
           {% include "companies/dashboard/widgets/_cumulative_savings.html" with widget_id=7 %}
         </div>
         <div class="col-md-4 col-xs-6">
-          {% include "companies/dashboard/widgets/_last_week_stats.html" with widget_id=8 %}
+          {% include "companies/dashboard/widgets/_goal_tracking.html" with widget_id=8 %}
         </div>
     </div>
 </div>
@@ -950,6 +950,31 @@
         $scope.savedText2 = '{% trans "on energy costs" %}';
         $scope.reducedText1 = '{% trans "Reduced" %}';
         $scope.tons = '{% trans "Tons" %}';
+
+        $scope.toggle = function(){
+            $scope.isPast12Month = !$scope.isPast12Month;
+        }
+
+    });
+
+    ngapp.controller("WidgetGoalTracking", function($scope){
+        $scope.isPast12Month = true;
+        $scope.percent = -14;
+        $scope.lastYear = 2014;
+        
+        $scope.isIncrease = $scope.percent > 0;
+        $scope.percent = Math.abs($scope.percent);
+
+        $scope.title = '{% trans "Progress" %}';
+        $scope.p12BtnText = '{% trans "Past 12 months" %}';
+        $scope.thisYrBtnText = '{% trans "So far this year" %}';
+        $scope.p12DescLine1Text = '{% trans "Over the past 12 months" %}';
+        $scope.thisYrDescLine1Text = '{% trans "So far this year" %}';
+        $scope.increaseLine2Text = '{% trans "you have increased your energy use" %}';
+        $scope.decreaseLine2Text = '{% trans "you have decreased your energy use" %}';
+        $scope.fromBaselineText = '{% trans "from your baseline of" %}';
+        $scope.comparedToText = '{% trans "compared to " %}' + $scope.lastYear;
+        $scope.yearRangeText = $scope.lastYear + ' - ' + ($scope.lastYear + 1);
 
         $scope.toggle = function(){
             $scope.isPast12Month = !$scope.isPast12Month;
