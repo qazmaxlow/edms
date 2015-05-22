@@ -62,29 +62,29 @@
         <div class="col-md-8">
             {% include "companies/dashboard/widgets/_real_time.html" with widget_id=4 %}
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-xs-6">
             {% include "companies/dashboard/widgets/_tips.html" with widget_id=3 %}
         </div>
-    </div>
-    <div ng-cloak class="row">
-        <div class="col-md-4">
+<!--     </div>
+    <div ng-cloak class="row"> -->
+        <div class="col-md-4 col-xs-6">
           {% include "companies/dashboard/widgets/_biggest_consumers.html" with widget_id=1 %}
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-xs-6">
           {% include "companies/dashboard/widgets/_so_far.html" with widget_id=2 %}
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-xs-6">
           {% include "companies/dashboard/widgets/_last_week_stats.html" with widget_id=5 %}
         </div>
-    </div>
-    <div ng-cloak class="row">
-        <div class="col-md-4">
+    <!-- </div>
+    <div ng-cloak class="row"> -->
+        <div class="col-md-4 col-xs-6">
           {% include "companies/dashboard/widgets/_progress.html" with widget_id=6 %}
         </div>
-        <div class="col-md-4">
-          {% include "companies/dashboard/widgets/_so_far.html" with widget_id=7 %}
+        <div class="col-md-4 col-xs-6">
+          {% include "companies/dashboard/widgets/_cumulative_savings.html" with widget_id=7 %}
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-xs-6">
           {% include "companies/dashboard/widgets/_last_week_stats.html" with widget_id=8 %}
         </div>
     </div>
@@ -891,9 +891,11 @@
             }
         }, 300);
 
-        $scope.toggle = function() {
-            $scope.isWeekday = !$scope.isWeekday;
-            updateChart();
+        $scope.toggle = function(isWkDay) {
+            if (isWkDay != $scope.isWeekday){
+                $scope.isWeekday = isWkDay;    
+                updateChart();
+            }
         }
 
         $scope.moreLessText = function(percentage_change){
@@ -914,6 +916,8 @@
         $scope.percent = Math.abs($scope.percent);
 
         $scope.title = '{% trans "Progress" %}';
+        $scope.p12BtnText = '{% trans "Past 12 months" %}';
+        $scope.thisYrBtnText = '{% trans "So far this year" %}';
         $scope.p12DescLine1Text = '{% trans "Over the past 12 months" %}';
         $scope.thisYrDescLine1Text = '{% trans "So far this year" %}';
         $scope.increaseLine2Text = '{% trans "you have increased your energy use" %}';
@@ -921,6 +925,35 @@
         $scope.fromBaselineText = '{% trans "from your baseline of" %}';
         $scope.comparedToText = '{% trans "compared to " %}' + $scope.lastYear;
         $scope.yearRangeText = $scope.lastYear + ' - ' + ($scope.lastYear + 1);
+
+        $scope.toggle = function(){
+            $scope.isPast12Month = !$scope.isPast12Month;
+        }
+
+    });
+
+    ngapp.controller("WidgetCumulative", function($scope){
+        $scope.isPast12Month = true;
+        $scope.sinceDate = new Date();
+        $scope.baselineYear = "2014 - 15";
+        $scope.currencyUnit = "HKD";
+        $scope.savedAmt = 2345;
+        $scope.co2Amt = 3;
+
+        $scope.title = '{% trans "Cumulative Savings" %}';
+        $scope.p12BtnText = '{% trans "Past 12 months" %}';
+        $scope.thisYrBtnText = '{% trans "So far this year" %}';
+        $scope.p12HeaderText = '{% trans "Since " %}' + kendo.toString($scope.sinceDate, "D") + '{% trans " you have" %}';
+        $scope.thisYrHeaderText = '{% trans "So far this year you have" %}';
+        $scope.footerText = '{% trans "Compared with your baseline year of " %}' + $scope.baselineYear;
+        $scope.savedText1 = '{% trans "Saved" %}';
+        $scope.savedText2 = '{% trans "on energy costs" %}';
+        $scope.reducedText1 = '{% trans "Reduced" %}';
+        $scope.tons = '{% trans "Tons" %}';
+
+        $scope.toggle = function(){
+            $scope.isPast12Month = !$scope.isPast12Month;
+        }
 
     });
 </script>

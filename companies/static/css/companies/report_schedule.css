@@ -227,13 +227,12 @@
 	box-shadow: 0px 2px 0px #6b9aa5;
 	font-size: 0.857em;
 	padding: 0px;
-	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 	text-decoration: none;
 	background-image: none;
 	background-color: #9bceda;
 	border-color: #9bceda;
 }
-.auto-report-base a.k-button.k-button-icontext.k-grid-edit:hover, a.k-button.k-button-icontext.k-grid-delete:hover,  a.k-button.k-button-icontext.k-grid-update:hover,  a.k-button.k-button-icontext.k-grid-cancel:hover{
+.auto-report-base a.k-button.k-button-icontext.k-grid-edit:hover, a.k-button.k-button-icontext.k-grid-delete:hover,  a.k-button.k-button-icontext.k-grid-update:hover,  a.k-button.k-button-icontext.k-grid-cancel:hover, a.k-button.k-button-icontext.k-grid-mydestroy:hover{
 	background-color: #74c62b;
 	border-color: #74c62b;
 }
@@ -373,6 +372,8 @@
 	box-sizing: border-box;
 	height: 100%;
 }
+
+
 /* -----dropdown*/
 
 /* etdropdown-----*/
@@ -488,3 +489,21 @@
 }
 
 /***** end of invalid message *****/
+/***** delete popup *****/
+.k-widget.k-window{
+	left: 866.5px;
+}
+
+.k-widget.k-window .titleText{
+	text-align: center;
+	font-size: 1em;
+	color: #354960;
+	font-weight: 600;
+	margin-bottom: 20px;
+}
+
+.k-widget.k-window .buttons-wrap{
+	text-align: center;
+  	padding-top: 15px;
+}
+/***** end of delete popup *****/

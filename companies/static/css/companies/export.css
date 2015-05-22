@@ -4,7 +4,6 @@
  	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
 	-webkit-font-smoothing: antialiased;
 	font-size: 14px;
-	height: 443px;
 	margin: 30px 40px;
 }
 
@@ -19,13 +18,19 @@
 	margin-left: 0;
 }
 
-.export-base .col-md-6, .export-base .col-md-5, .export-base .col-md-4, .export-base .col-md-3, .export-base .col-md-8 {
+.export-base .col-md-6,
+.export-base .col-xs-6,
+.export-base .col-md-5,
+.export-base .col-md-4,
+.export-base .col-md-3,
+.export-base .col-xs-3,
+.export-base .col-md-8 {
 	padding: 0;
 }
 
 
 .export-base .description {
-	height: 100%;
+	height: 444px;
 	text-align: center;
 	border-radius: 8px 0 0 8px;
 	border-right: 1px solid #e8dfcc;
@@ -47,16 +52,18 @@
 .export-base .description .main-img {
 	position: absolute;
 	bottom: 0;
-	width: 70%;
-  	left: 15%;
+  	left: calc(50% - 100px);
 }
 
 .export-base .steps {
-	height: 100%;
 	border-radius: 0 0 8px 0;
 	background-color: #fafafa;
 	-webkit-box-shadow: -2px 2px 3px rgba(0,0,0,0.1);
 	box-shadow: -2px 2px 3px rgba(0,0,0,0.1);
+}
+
+.export-base .steps>.row>.col-xs-6 {
+ height: 222px;
 }
 
 .export-base .select-text {
@@ -223,7 +230,7 @@
 	line-height: 175%;
 }
 
-.export-base .field-info.col-md-6 {
+.export-base .field-info.col-xs-6 {
 	padding-left: 15px;
 }
 

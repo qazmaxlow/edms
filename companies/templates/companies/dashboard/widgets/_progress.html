@@ -6,19 +6,20 @@
 {% verbatim %}
 <div class="widget-container progress-widget" ng-controller="WidgetProgress">
     <div class="widget-header row">
-        <div class="widget-title col-sm-7">{{title}}</div>
-        <div class="widget-toggle col-sm-5">
+        <div class="widget-title col-xs-6">{{title}}</div>
+        <div class="widget-toggle col-xs-6">
             <div class="pull-right">
-                <button ng-class="{'toggle-primary' : isWeek}" ng-click="toggle(true)" class="toggle-button button-left">{{btnLeft}}</button><!--
-                --><button ng-class="{'toggle-primary' : !isWeek}" ng-click="toggle(false)" class="toggle-button button-right">{{btnRight}}</button>
+                <div class="long-text-toggle" ng-click="toggle()">
+                    <span class="button-left">{{ isPast12Month ? p12BtnText : thisYrBtnText }}</span><span class="button-right"></span>
+                </div>
             </div>
         </div>
     </div>
     
     <div class="widget-content row bg-image" ng-class="{'increase' : isIncrease}">
-        <div class="description-6 top-space26">{{isPast12Month ? p12DescLine1Text : thisYrDescLine1Text}}</div>
+        <div class="description-6 top-space">{{isPast12Month ? p12DescLine1Text : thisYrDescLine1Text}}</div>
         <div class="description-6">{{isIncrease ? increaseLine2Text : decreaseLine2Text}}</div>
-        <div class="percent top-space26">
+        <div class="percent top-space">
             <span class="percentNum">{{percent}}</span><span class="percentSign">%</span>
         </div>
         <div class="description-6">{{isPast12Month ? fromBaselineText : comparedToText}}</div>

@@ -80,6 +80,9 @@
             </label>
         </div>
         <input type="submit" value='{% trans "Sign In" %}'>
+        <div class="forget-pwd-container">
+            <a class="forget-pwd-link" href="#" onclick="openForgetPwd()">{% trans "Forgot your password?" %}</a>
+        </div>
     </form>
     {% if warning_msg %}
     <div class="warning-msg">{{warning_msg}}</div>
