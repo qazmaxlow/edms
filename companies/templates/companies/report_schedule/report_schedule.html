@@ -101,12 +101,12 @@
                     <div kendo-grid k-options="taskGridOptions(dataItem)"></div>
                 </div>
             </div>
-            <div kendo-window="deleteGridRowWin" k-title="'Delete'"
+            <div kendo-window="deleteGridRowWin" k-title="delWinTitle"
                  k-visible="false" k-modal="true" k-draggable="false">
-              <div class="titleText">Are you sure want to delete?</div>
+              <div class="titleText">{{delQuestion}}</div>
               <div class="buttons-wrap">
-                <button class="k-button normal-btn cancel" ng-click="deleteGridRowWin.close()">Cancel</button>
-                <button class="k-button normal-btn" ng-click="confirmDelete()">Confirm</button>
+                <button class="k-button normal-btn cancel" ng-click="deleteGridRowWin.close()">{{btnCancel}}</button>
+                <button class="k-button normal-btn" ng-click="confirmDelete()">{{btnConfirm}}</button>
               </div>
             </div>
 {% endverbatim %}
@@ -146,6 +146,10 @@
             $scope.step2Title = '{% trans "Select Frequency" %}';
             $scope.step3Title = '{% trans "Confirm and Go" %}';
             $scope.recordTitle = '{% trans "Manage Automated Reports" %}';
+            $scope.delWinTitle = '{% trans "Delete" %}';
+            $scope.delQuestion = '{% trans "Are you sure want to delete?" %}';
+            $scope.btnCancel = '{% trans "Cancel" %}';
+
             var userDataSource = new kendo.data.DataSource({
                 transport: {
                     read: {
