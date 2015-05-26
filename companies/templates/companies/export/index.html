@@ -199,7 +199,7 @@
         $scope.date_end.setDate($scope.date_end.getDate()+1);
 
         $scope.disableLv = "";
-        $scope.$watchGroup(["date_start", "date_end"], function(nVal, oVal, scope){console.log($("#export-end-date"));
+        $scope.$watchGroup(["date_start", "date_end"], function(nVal, oVal, scope){
             // $("#export-end-date").data("kendoDatePicker").min(nVal[0]);
             // $("#export-start-date").data("kendoEtDatePicker").max(nVal[1]);
             // $("#export-start-date").datepicker("option", "maxDate", nVal[1]);
