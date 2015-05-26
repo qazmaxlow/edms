@@ -909,7 +909,7 @@
 
     ngapp.controller("WidgetProgress", function($scope){
         $scope.isPast12Month = true;
-        $scope.percent = -14;
+        $scope.percent = 14;
         $scope.lastYear = 2014;
         
         $scope.isIncrease = $scope.percent > 0;
@@ -965,10 +965,14 @@
         $scope.isIncrease = $scope.percent > 0;
         $scope.percent = Math.abs($scope.percent);
 
-        $scope.title = '{% trans "Progress" %}';
+        $scope.title = '{% trans "Goal Tracking" %}';
         $scope.p12BtnText = '{% trans "Past 12 months" %}';
-        $scope.thisYrBtnText = '{% trans "So far this year" %}';
-        $scope.p12DescLine1Text = '{% trans "Over the past 12 months" %}';
+        $scope.btnText = '{% trans "Goal-1" %}';
+        $scope.descPart1Text = '{% trans "Reduce energy use in " %}';
+        $scope.descPart2Text = '{% trans "by " %}';
+        $scope.descPart3Text = '{% trans "% compared to" %}';
+
+
         $scope.thisYrDescLine1Text = '{% trans "So far this year" %}';
         $scope.increaseLine2Text = '{% trans "you have increased your energy use" %}';
         $scope.decreaseLine2Text = '{% trans "you have decreased your energy use" %}';
