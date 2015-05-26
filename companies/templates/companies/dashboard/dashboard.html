@@ -953,7 +953,7 @@
     });
 
     ngapp.controller("WidgetCumulative", function($scope){
-        $scope.isPast12Month = true;
+        $scope.isPast12Month = "1";
         $scope.sinceDate = new Date();
         $scope.baselineYear = "2014 - 15";
         $scope.currencyUnit = "HKD";
@@ -972,9 +972,9 @@
         $scope.reducedText1 = $scope.isSaved ? '{% trans "Reduced" %}' : '{% trans "Reduced" %}';
         $scope.tons = '{% trans "Tons" %}';
 
-        $scope.toggle = function(){
-            $scope.isPast12Month = !$scope.isPast12Month;
-        }
+        // $scope.toggle = function(){
+        //     $scope.isPast12Month = !$scope.isPast12Month;
+        // }
 
     });
 
