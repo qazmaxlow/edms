@@ -926,6 +926,26 @@
         $scope.comparedToText = '{% trans "compared to " %}' + $scope.lastYear;
         $scope.yearRangeText = $scope.lastYear + ' - ' + ($scope.lastYear + 1);
 
+        var progress_ds = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    async: false,
+                    url: "{% url 'companies.progesses.so-far-this-year' current_system.code %}",
+                    type: 'GET',
+                    dataType: "json"
+                }
+            },
+            schema: {
+                // Fix for single result
+                data: function(response) {
+                    return [response];
+                }
+            }
+        });
+
+        progress_ds.read();
+        $scope.soFarThisYear = progress_ds.data()[0];
+
         $scope.toggle = function(){
             $scope.isPast12Month = !$scope.isPast12Month;
         }
