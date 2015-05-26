@@ -908,7 +908,7 @@
     });
 
     ngapp.controller("WidgetProgress", function($scope){
-        $scope.isPast12Month = true;
+        $scope.isPast12Month = "1";
         $scope.percent = 14;
         $scope.lastYear = 2014;
         
@@ -946,9 +946,9 @@
         progress_ds.read();
         $scope.soFarThisYear = progress_ds.data()[0];
 
-        $scope.toggle = function(){
-            $scope.isPast12Month = !$scope.isPast12Month;
-        }
+        // $scope.toggle = function(){
+        //     $scope.isPast12Month = !$scope.isPast12Month;
+        // }
 
     });
 
