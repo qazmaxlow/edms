@@ -13,9 +13,9 @@ from egauge.models import SourceReadingMonth
 from system.models import System
 
 
-class CompareDetail:
-    def __init__(self, compared_value):
-        self.compared_value = compared_value
+class CompareFromLastToCurrentHelper:
+    def __init__(self, current_value, last_value):
+        self.compared_value = float(current_value - last_value)/last_value
 
     @property
     def compared_percent(self):
@@ -112,12 +112,12 @@ class progressSoFarThisYear(APIView):
 
         last_year_kwh = measure_sum['result'][0]['kwh']
 
-        compare_last_year = (this_year_kwh - last_year_kwh) / last_year_kwh
+        # compare_last_year = (this_year_kwh - last_year_kwh) / last_year_kwh
 
         info = {
             'thisYearKwh': this_year_kwh,
             'lastYearKwh': last_year_kwh,
-            'compareToLastYearDetail': CompareDetail(compare_last_year).to_dict()
+            'compareToLastYearDetail': CompareFromLastToCurrentHelper(this_year_kwh, last_year_kwh).to_dict()
         }
         response = Response(info, status=status.HTTP_200_OK)
         return response
