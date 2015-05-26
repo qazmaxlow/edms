@@ -247,9 +247,8 @@ def summary_ajax(request, system_code):
         last_start_dt = start_dt - relativedelta(years=1)
         last_end_dt = end_dt - relativedelta(years=1)
     elif compare_type == 'custom':
-        date_delta = end_dt - start_dt
-        last_end_dt = start_dt - datetime.timedelta(days=1)
-        last_start_dt = last_end_dt - date_delta
+        last_start_dt = start_dt - relativedelta(months=1)
+        last_end_dt = end_dt - relativedelta(months=1)
 
     last_total_cost = get_total_cost(source_ids, last_start_dt, last_end_dt, compare_type)
 
@@ -348,7 +347,7 @@ def summary_ajax(request, system_code):
     m['formated_overnight_avg_cost'] = '${0:,.0f}'.format(overnight_avg_cost) if overnight_avg_cost else None
 
     compare_to_last_overnight_avg_cost = None
-    last_overnight_avg_cost = get_overnight_avg_cost(current_system, source_ids, last_start_dt, last_end_dt)
+    last_overnight_avg_cost = get_overnight_avg_cost(current_system, source_ids, last_start_dt, last_end_dt + relativedelta(days=1))
 
     if last_overnight_avg_cost > 0 and overnight_avg_cost is not None:
         compare_to_last_overnight_avg_cost = float(overnight_avg_cost-last_overnight_avg_cost)/last_overnight_avg_cost*100
@@ -641,9 +640,8 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         last_start_dt = report_date - relativedelta(years=1)
         last_end_dt = report_end_date - relativedelta(years=1)
     elif compare_type == 'custom':
-        date_delta = report_date - start_dt
-        last_end_dt = report_end_date - datetime.timedelta(days=1)
-        last_start_dt = last_end_dt - date_delta
+        last_start_dt = report_date - relativedelta(months=1)
+        last_end_dt = report_end_date - relativedelta(months=1)
 
     sources = SourceManager.get_sources(current_system)
     source_ids = [str(source.id) for source in sources]
@@ -805,10 +803,11 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
 
         # for overnight
-        overnight = {'bill': get_overnight_avg_cost(current_system, g['sourceIds'], report_date, report_end_date)}
+        last_overnight_usage = get_overnight_avg_cost(current_system, g['sourceIds'], report_date - relativedelta(months=1), report_end_date - relativedelta(months=1))
 
-        last_overnight_usage = g['lastOvernightInfo']['average']
-        current_overnight_usage = g['currentOvernightInfo']['average']
+        current_overnight_usage = get_overnight_avg_cost(current_system, g['sourceIds'], report_date, report_end_date)
+
+        overnight = {'bill': current_overnight_usage}
 
         overnight_compare_last = None
         if last_overnight_usage > 0:
@@ -1053,7 +1052,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     # oops!!! have to rewrite
     p_or_n = -1 if report_data['savingInfo']['energy'] >=0 else 0
 
-    m['saving_energy'] = abs(report_data['savingInfo']['energy'])
+    m['saving_energy'] = abs(report_data['savingInfo']['energy']) if report_data['savingInfo']['energy'] is not None else None
     m['css_class_energy_saving'] = 'positive-saving' if report_data['savingInfo']['energy'] >=0 else 'negative-saving'
     m['is_saving'] = (report_data['savingInfo']['energy'] >=0)
     # in tons
