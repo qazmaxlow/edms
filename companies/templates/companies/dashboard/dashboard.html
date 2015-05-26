@@ -959,6 +959,7 @@
         $scope.currencyUnit = "HKD";
         $scope.savedAmt = 2345;
         $scope.co2Amt = 3;
+        $scope.isSaved = false;
 
         $scope.title = '{% trans "Cumulative Savings" %}';
         $scope.p12BtnText = '{% trans "Past 12 months" %}';
@@ -966,9 +967,9 @@
         $scope.p12HeaderText = '{% trans "Since " %}' + kendo.toString($scope.sinceDate, "D") + '{% trans " you have" %}';
         $scope.thisYrHeaderText = '{% trans "So far this year you have" %}';
         $scope.footerText = '{% trans "Compared with your baseline year of " %}' + $scope.baselineYear;
-        $scope.savedText1 = '{% trans "Saved" %}';
+        $scope.savedText1 = $scope.isSaved ? '{% trans "Saved" %}' : '{% trans "Reduced" %}';
         $scope.savedText2 = '{% trans "on energy costs" %}';
-        $scope.reducedText1 = '{% trans "Reduced" %}';
+        $scope.reducedText1 = $scope.isSaved ? '{% trans "Reduced" %}' : '{% trans "Reduced" %}';
         $scope.tons = '{% trans "Tons" %}';
 
         $scope.toggle = function(){
