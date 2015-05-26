@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-22 03:44+0000\n"
+"POT-Creation-Date: 2015-05-26 05:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -367,12 +367,14 @@ msgid "average overnight"
 msgstr "晚間平均用電"
 
 #: companies/templates/companies/dashboard/dashboard.html:918
+#: companies/templates/companies/dashboard/dashboard.html:968
 #: entrak/templates/page_base.html:159
 msgid "Progress"
 msgstr "進度"
 
 #: companies/templates/companies/dashboard/dashboard.html:919
 #: companies/templates/companies/dashboard/dashboard.html:944
+#: companies/templates/companies/dashboard/dashboard.html:969
 #, fuzzy
 msgid "Past 12 months"
 msgstr "上月"
@@ -380,28 +382,35 @@ msgstr "上月"
 #: companies/templates/companies/dashboard/dashboard.html:920
 #: companies/templates/companies/dashboard/dashboard.html:922
 #: companies/templates/companies/dashboard/dashboard.html:945
+#: companies/templates/companies/dashboard/dashboard.html:970
+#: companies/templates/companies/dashboard/dashboard.html:972
 #, fuzzy
 msgid "So far this year"
 msgstr "本週直到目前"
 
 #: companies/templates/companies/dashboard/dashboard.html:921
+#: companies/templates/companies/dashboard/dashboard.html:971
 #: entrak/templates/display.html:100 entrak/templates/display.html.py:102
 msgid "Over the past 12 months"
 msgstr "過去12個月"
 
 #: companies/templates/companies/dashboard/dashboard.html:923
+#: companies/templates/companies/dashboard/dashboard.html:973
 msgid "you have increased your energy use"
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:924
+#: companies/templates/companies/dashboard/dashboard.html:974
 msgid "you have decreased your energy use"
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:925
+#: companies/templates/companies/dashboard/dashboard.html:975
 msgid "from your baseline of"
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:926
+#: companies/templates/companies/dashboard/dashboard.html:976
 #, fuzzy
 msgid "compared to "
 msgstr " "
@@ -590,7 +599,7 @@ msgid "View Reports"
 msgstr "閱覽報告"
 
 #: companies/templates/companies/report_schedule/report_schedule.html:123
-#: companies/templates/companies/reports/summary.html:262
+#: companies/templates/companies/reports/summary.html:261
 msgid "Automated Reports"
 msgstr "自動發送報告"
 
@@ -1373,7 +1382,7 @@ msgstr "Ahh:mm"
 msgid "MMM D"
 msgstr "MMMD日"
 
-#: companies/templates/companies/reports/summary.html:261
+#: companies/templates/companies/reports/summary.html:262
 #: entrak/templates/report.html:702
 msgid "Download Data"
 msgstr "數據下載"
@@ -2200,7 +2209,7 @@ msgid "Admin Account"
 msgstr "管理員賬戶"
 
 #: entrak/templates/general_settings.html:329
-#: entrak/templates/general_settings.html:348 entrak/templates/login.html:123
+#: entrak/templates/general_settings.html:348
 #: entrak/templates/manage_accounts.html:124
 msgid "Username"
 msgstr "用戶名稱"
@@ -2435,6 +2444,10 @@ msgstr "轉化數據為實際行動"
 #: entrak/templates/login.html:118 user/templates/activate_account.html:66
 msgid "To use the En-trak monitor platform, please sign in"
 msgstr "要使用 En-trak 能源管理系統，請先登入"
+
+#: entrak/templates/login.html:123
+msgid "Username / Email"
+msgstr "用戶名稱 / 電郵"
 
 #: entrak/templates/login.html:132
 msgid "Remember Me"
