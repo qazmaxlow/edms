@@ -909,7 +909,7 @@
 
     ngapp.controller("WidgetProgress", function($scope){
         $scope.isPast12Month = true;
-        $scope.percent = -14;
+        $scope.percent = 14;
         $scope.lastYear = 2014;
         
         $scope.isIncrease = $scope.percent > 0;
@@ -959,6 +959,7 @@
         $scope.currencyUnit = "HKD";
         $scope.savedAmt = 2345;
         $scope.co2Amt = 3;
+        $scope.isSaved = false;
 
         $scope.title = '{% trans "Cumulative Savings" %}';
         $scope.p12BtnText = '{% trans "Past 12 months" %}';
@@ -966,9 +967,9 @@
         $scope.p12HeaderText = '{% trans "Since " %}' + kendo.toString($scope.sinceDate, "D") + '{% trans " you have" %}';
         $scope.thisYrHeaderText = '{% trans "So far this year you have" %}';
         $scope.footerText = '{% trans "Compared with your baseline year of " %}' + $scope.baselineYear;
-        $scope.savedText1 = '{% trans "Saved" %}';
+        $scope.savedText1 = $scope.isSaved ? '{% trans "Saved" %}' : '{% trans "Reduced" %}';
         $scope.savedText2 = '{% trans "on energy costs" %}';
-        $scope.reducedText1 = '{% trans "Reduced" %}';
+        $scope.reducedText1 = $scope.isSaved ? '{% trans "Reduced" %}' : '{% trans "Reduced" %}';
         $scope.tons = '{% trans "Tons" %}';
 
         $scope.toggle = function(){
@@ -985,10 +986,14 @@
         $scope.isIncrease = $scope.percent > 0;
         $scope.percent = Math.abs($scope.percent);
 
-        $scope.title = '{% trans "Progress" %}';
+        $scope.title = '{% trans "Goal Tracking" %}';
         $scope.p12BtnText = '{% trans "Past 12 months" %}';
-        $scope.thisYrBtnText = '{% trans "So far this year" %}';
-        $scope.p12DescLine1Text = '{% trans "Over the past 12 months" %}';
+        $scope.btnText = '{% trans "Goal-1" %}';
+        $scope.descPart1Text = '{% trans "Reduce energy use in " %}';
+        $scope.descPart2Text = '{% trans "by " %}';
+        $scope.descPart3Text = '{% trans "% compared to" %}';
+
+
         $scope.thisYrDescLine1Text = '{% trans "So far this year" %}';
         $scope.increaseLine2Text = '{% trans "you have increased your energy use" %}';
         $scope.decreaseLine2Text = '{% trans "you have decreased your energy use" %}';
