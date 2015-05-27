@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-27 04:06+0000\n"
+"POT-Creation-Date: 2015-05-27 05:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2348,7 +2348,7 @@ msgstr ""
 msgid "The reset password link has been sent to your email."
 msgstr ""
 
-#: entrak/templates/login.html:58 user/views.py:350
+#: entrak/templates/login.html:58 user/views.py:351
 msgid "This email is not linked to any existing account."
 msgstr ""
 
@@ -2446,8 +2446,7 @@ msgstr ""
 #: user/templates/activate_account.html:133
 #: user/templates/activate_account.html:153
 #: user/templates/activate_account.html:157
-#: user/templates/reset_password.html:99
-#: user/templates/reset_password.html:103
+#: user/templates/reset_password.html:95 user/templates/reset_password.html:99
 msgid "*Required field"
 msgstr ""
 
@@ -2457,7 +2456,6 @@ msgstr ""
 
 #: entrak/templates/manage_accounts.html:120
 #: user/templates/activate_account.html:164
-#: user/templates/reset_password.html:110
 msgid "Create Account"
 msgstr ""
 
@@ -2477,7 +2475,7 @@ msgstr ""
 
 #: entrak/templates/manage_accounts.html:211 entrak/templates/profile.html:226
 #: user/templates/activate_account.html:283
-#: user/templates/reset_password.html:171
+#: user/templates/reset_password.html:169
 msgid "*Passwords do not match"
 msgstr ""
 
@@ -2539,6 +2537,7 @@ msgstr ""
 
 #: entrak/templates/manage_accounts.html:685
 #: entrak/templates/manage_accounts.html:688 entrak/templates/profile.html:197
+#: user/templates/reset_password.html:145
 msgid "Password changed."
 msgstr ""
 
@@ -3060,7 +3059,7 @@ msgstr ""
 msgid "invitation email button"
 msgstr "Create En-trak Account"
 
-#: user/models.py:155 user/templates/reset_password.html:133
+#: user/models.py:155 user/templates/reset_password.html:129
 msgid "reset password title"
 msgstr "Forgot/Reset Password"
 
@@ -3074,15 +3073,15 @@ msgid "reset password description"
 msgstr ""
 "To reset your password, click on the link below and input your new password."
 
-#: user/models.py:166
+#: user/models.py:166 user/templates/reset_password.html:106
 msgid "reset password button"
 msgstr "Reset Password"
 
-#: user/views.py:106 user/views.py:211
+#: user/views.py:106 user/views.py:212
 msgid "Invalid user or token"
 msgstr ""
 
-#: user/views.py:110 user/views.py:215
+#: user/views.py:110 user/views.py:216
 msgid "Invalid request"
 msgstr ""
 
@@ -3099,19 +3098,18 @@ msgid "You will be using this email to login the En-trak Platform."
 msgstr ""
 
 #: user/templates/activate_account.html:149
-#: user/templates/reset_password.html:95
 msgctxt "activate_title"
 msgid "Password"
 msgstr ""
 
 #: user/templates/activate_account.html:152
-#: user/templates/reset_password.html:98
+#: user/templates/reset_password.html:94
 msgctxt "activate_input"
 msgid "Password"
 msgstr ""
 
 #: user/templates/activate_account.html:156
-#: user/templates/reset_password.html:102
+#: user/templates/reset_password.html:98
 msgctxt "activate"
 msgid "Confirm Password"
 msgstr ""
@@ -3161,6 +3159,3 @@ msgstr ""
 #: utils/auth.py:40 utils/auth.py:61
 msgid "Please enter username and password."
 msgstr ""
-
-#~ msgid "'reset password title'"
-#~ msgstr "Forgot/Reset Password"

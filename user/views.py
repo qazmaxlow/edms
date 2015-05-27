@@ -204,6 +204,7 @@ def reset_password(request, user_id):
             m.update(csrf(request))
             m["system"] = system
             m["user"] = user
+            m["dashboard_url"] = reverse('graph', kwargs={'system_code': system.code})
 
             return render(request, 'reset_password.html', m)
 
@@ -370,18 +371,14 @@ class ResetPasswordView(generics.UpdateAPIView):
         }
 
         serializer = resetPasswordSerializer(user, data=request_data)
-
         serializer.is_valid(raise_exception=True)
+
         user.set_password(request.data.get('new_password', None))
         user.save()
+
+        user = authenticate(username=user.username, password=request.data.get('new_password', None))
+
+        if user is not None:
+            login(request, user)
+
         return Response(serializer.data)
-
-
-class GetUserView(generics.RetrieveAPIView):
-    serializer_class = resetPasswordSerializer
-    permission_classes = (IsAuthenticated,)
-    lookup_field = 'user_id'
-    lookup_url_kwarg = 'user_id'
-
-    def get_object(self):
-        return self.request.user

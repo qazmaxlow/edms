@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-27 04:06+0000\n"
+"POT-Creation-Date: 2015-05-27 05:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2433,7 +2433,7 @@ msgstr "至："
 msgid "The reset password link has been sent to your email."
 msgstr "已發出重設密碼電郵"
 
-#: entrak/templates/login.html:58 user/views.py:350
+#: entrak/templates/login.html:58 user/views.py:351
 msgid "This email is not linked to any existing account."
 msgstr "此電郵沒有連結到任何賬號"
 
@@ -2531,8 +2531,7 @@ msgstr "刪除賬戶"
 #: user/templates/activate_account.html:133
 #: user/templates/activate_account.html:153
 #: user/templates/activate_account.html:157
-#: user/templates/reset_password.html:99
-#: user/templates/reset_password.html:103
+#: user/templates/reset_password.html:95 user/templates/reset_password.html:99
 msgid "*Required field"
 msgstr "*必須填寫"
 
@@ -2542,7 +2541,6 @@ msgstr "建立共享賬戶"
 
 #: entrak/templates/manage_accounts.html:120
 #: user/templates/activate_account.html:164
-#: user/templates/reset_password.html:110
 msgid "Create Account"
 msgstr "建立賬戶"
 
@@ -2564,7 +2562,7 @@ msgstr ""
 
 #: entrak/templates/manage_accounts.html:211 entrak/templates/profile.html:226
 #: user/templates/activate_account.html:283
-#: user/templates/reset_password.html:171
+#: user/templates/reset_password.html:169
 msgid "*Passwords do not match"
 msgstr "*登錄密碼不相同"
 
@@ -2626,6 +2624,7 @@ msgstr "賬戶已刪除"
 
 #: entrak/templates/manage_accounts.html:685
 #: entrak/templates/manage_accounts.html:688 entrak/templates/profile.html:197
+#: user/templates/reset_password.html:145
 msgid "Password changed."
 msgstr "密碼已變更"
 
@@ -3147,7 +3146,7 @@ msgstr "邀請您在 貴公司的 En-trak 能源監察系統建立一個帳戶"
 msgid "invitation email button"
 msgstr "建立En-trak帳戶"
 
-#: user/models.py:155 user/templates/reset_password.html:133
+#: user/models.py:155 user/templates/reset_password.html:129
 msgid "reset password title"
 msgstr "忘記/重置密碼"
 
@@ -3159,15 +3158,15 @@ msgstr "En-trak系統收到一個重置您的賬戶密碼的請求。"
 msgid "reset password description"
 msgstr "要重置密碼，請點擊下面的鏈接，並輸入您的新密碼。"
 
-#: user/models.py:166
+#: user/models.py:166 user/templates/reset_password.html:106
 msgid "reset password button"
 msgstr "重置密碼"
 
-#: user/views.py:106 user/views.py:211
+#: user/views.py:106 user/views.py:212
 msgid "Invalid user or token"
 msgstr ""
 
-#: user/views.py:110 user/views.py:215
+#: user/views.py:110 user/views.py:216
 msgid "Invalid request"
 msgstr ""
 
@@ -3184,19 +3183,18 @@ msgid "You will be using this email to login the En-trak Platform."
 msgstr "此電郵日後會成為您登錄 En-trak系統的賬户"
 
 #: user/templates/activate_account.html:149
-#: user/templates/reset_password.html:95
 msgctxt "activate_title"
 msgid "Password"
 msgstr "設定登錄密碼"
 
 #: user/templates/activate_account.html:152
-#: user/templates/reset_password.html:98
+#: user/templates/reset_password.html:94
 msgctxt "activate_input"
 msgid "Password"
 msgstr "輸入密碼"
 
 #: user/templates/activate_account.html:156
-#: user/templates/reset_password.html:102
+#: user/templates/reset_password.html:98
 msgctxt "activate"
 msgid "Confirm Password"
 msgstr "確認密碼"
@@ -3246,115 +3244,3 @@ msgstr "用戶沒有訪問這部份的權限。"
 #: utils/auth.py:40 utils/auth.py:61
 msgid "Please enter username and password."
 msgstr "請輸入用戶名稱和密碼"
-
-#~ msgid "'reset password title'"
-#~ msgstr "忘記/重置密碼"
-
-#~ msgid "THE DOWNLOAD PAGE"
-#~ msgstr "耗電情況提示"
-
-#~ msgid "View Report"
-#~ msgstr "報告"
-
-#~ msgid "DOWNLOAD"
-#~ msgstr "耗電情況提示"
-
-#~ msgid "Dashboard"
-#~ msgstr "首頁"
-
-#~ msgctxt "activate"
-#~ msgid "Username"
-#~ msgstr "名字"
-
-#~ msgid "Set Your Password"
-#~ msgstr "建立密碼"
-
-#~ msgid "Retype Your Password"
-#~ msgstr "建立密碼"
-
-#~ msgctxt "dashboard"
-#~ msgid ""
-#~ "Even if an appliance is off, it can still consume 10%% of normal energy. "
-#~ "Remember to turn off the socket switch too!"
-#~ msgstr ""
-#~ "縱使電器已經關掉，如果插頭沒有拔除，仍然會消耗若10％的正常用電。以後要緊記"
-#~ "關掉掉或拔出插頭啊。"
-
-#~ msgid "Week total"
-#~ msgstr "全週"
-
-#~ msgid "Month total"
-#~ msgstr "全月"
-
-#~ msgid "Quarter total"
-#~ msgstr "全季"
-
-#~ msgid "Year total"
-#~ msgstr "全年"
-
-#~ msgid "Reduced CO<sub>2</sub> emissions equal to the weight of"
-#~ msgstr "減少排放二氧化碳的重量，等於"
-
-#~ msgid "Extra CO<sub>2</sub> emissions equal to the weight of"
-#~ msgstr "增加排放二氧化碳的重量，等於"
-
-#~ msgid "custom"
-#~ msgstr "期"
-
-#~ msgid "Compared to Last {{ report_type_name }}"
-#~ msgstr "比上%(report_type_name)s"
-
-#~ msgid ""
-#~ "HOW MUCH ENERGY DID WE USE ON <span>WEEKENDS</span> AND <span>HOLIDAYS?</"
-#~ "span>"
-#~ msgstr "在<span>週末及假期</span>，我們平均消耗多少能源？"
-
-#~ msgid "{0:.0f}% more"
-#~ msgstr "{1} {0:.0f}%"
-
-#~ msgid "{0:.0f}% less"
-#~ msgstr "{1} {0:.0f}%"
-
-#~ msgid "CO<sub>2"
-#~ msgstr "二氧化碳"
-
-#~ msgid "Compared to same period year"
-#~ msgstr "比去年同期"
-
-#~ msgid "highest weekday energy"
-#~ msgstr "平日最高用電量"
-
-#~ msgid "Weekdays Energy Use"
-#~ msgstr "平日能源使用"
-
-#~ msgid " "
-#~ msgstr "減少"
-
-#~ msgid "  "
-#~ msgstr "增加"
-
-#~ msgid "moretc"
-#~ msgstr "多了"
-
-#~ msgid "lesstc"
-#~ msgstr "少了"
-
-#~ msgid "more_"
-#~ msgstr " "
-
-#~ msgid "less_"
-#~ msgstr " "
-
-#~ msgid "pandas"
-#~ msgstr "隻大熊貓"
-
-#~ msgid "Re-assess Air Conditioning’s Temperature"
-#~ msgstr "重新評估冷氣的溫度"
-
-#~ msgid ""
-#~ "Label the plugs of electrical devices - sometime it\\'s hard to tell what "
-#~ "is what, so this helps you to safely unplug or turn off appliances "
-#~ "without worrying about turning off important things!"
-#~ msgstr ""
-#~ "標籤電器開關掣 – 有時候你不清楚電源插著的是什麼，所以這可以協助你完全地關"
-#~ "上插座及拖板上的電掣，而不擔心關掉重要的電器！"
