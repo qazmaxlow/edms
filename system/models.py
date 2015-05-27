@@ -228,6 +228,14 @@ class System(models.Model):
         return unit_rate
 
 
+    def get_money_unitrates(self, start_from):
+        target_unit='money'
+        unit_infos = json.loads(self.unit_info)
+        unit_code = unit_infos[target_unit]
+        unit_rates = UnitRate.objects.filter(category_code=target_unit, code=unit_code, effective_date__gte=start_from).order_by('-effective_date')
+        return unit_rates
+
+
     def get_total_co2(self, start_dt, end_dt, date_type='day'):
         """
         Calculate the co2 usage between the dates of the system.
