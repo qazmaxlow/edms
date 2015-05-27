@@ -71,6 +71,6 @@ class savingSoFarThisYear(APIView):
             cost_change = (current_kwh - last_kwh) * unitrate.rate
             total_cost_changed += cost_change
 
-        info = {'total_cost_changed': total_cost_changed}
+        info = {'totalCostChanged': total_cost_changed}
         response = Response(info, status=status.HTTP_200_OK)
         return response
