@@ -994,7 +994,10 @@
         });
 
         saving_ds.read();
-        $scope.soFarThisYear = saving_ds.data()[0];
+        var saving = saving_ds.data()[0];
+
+        $scope.costChanged = saving.totalCostChanged;
+        $scope.costChangedDescText = saving.totalCostChanged > 0 ? 'Losted' : 'Saved';
     });
 
     ngapp.controller("WidgetGoalTracking", function($scope){
