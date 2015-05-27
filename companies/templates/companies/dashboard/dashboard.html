@@ -978,9 +978,9 @@
         $scope.p12HeaderText = '{% trans "Since " %}' + kendo.toString($scope.sinceDate, "D") + '{% trans " you have" %}';
         $scope.thisYrHeaderText = '{% trans "So far this year you have" %}';
         $scope.footerText = '{% trans "Compared with your baseline year of " %}' + $scope.baselineYear;
-        $scope.savedText1 = $scope.isSaved ? '{% trans "Saved" %}' : '{% trans "Reduced" %}';
+        $scope.savedText1 = $scope.isSaved ? '{% trans "Saved" %}' : '{% trans "Increased" %}';
         $scope.savedText2 = '{% trans "on energy costs" %}';
-        $scope.reducedText1 = $scope.isSaved ? '{% trans "Reduced" %}' : '{% trans "Reduced" %}';
+        $scope.reducedText1 = $scope.isSaved ? '{% trans "Reduced" %}' : '{% trans "Increased" %}';
         $scope.tons = '{% trans "Tons" %}';
 
         // $scope.toggle = function(){
@@ -990,16 +990,20 @@
     });
 
     ngapp.controller("WidgetGoalTracking", function($scope){
-        // $scope.goalDropdown.value();
         $scope.selectedGoal = "0";
-        $scope.compareDate = new Date();
-        $scope.fromDate = new Date();
-        $scope.toDate = new Date();
-        $scope.goalPercent = 10;
-        $scope.soFarPercent = 14;
-        $scope.todoPercent = 6;
-        $scope.isIncrease = true;
-        $scope.reducedText = $scope.isIncrease ? '{% trans "increased" %}' : '{% trans "reduced" %}';
+        $scope.changeGoal = function(){
+            console.log($scope.selectedGoal);
+            
+            $scope.compareDate = new Date();
+            $scope.fromDate = new Date();
+            $scope.toDate = new Date();
+            $scope.goalPercent = 10;
+            $scope.soFarPercent = 14;
+            $scope.todoPercent = 6;
+            $scope.isIncrease = true;
+            $scope.reducedText = $scope.isIncrease ? '{% trans "increased" %}' : '{% trans "reduced" %}';
+        }
+        $scope.changeGoal();
 
         $scope.title = '{% trans "Goal Tracking" %}';
         $scope.p12BtnText = '{% trans "Past 12 months" %}';

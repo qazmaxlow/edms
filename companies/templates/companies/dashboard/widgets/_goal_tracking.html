@@ -9,9 +9,9 @@
         <div class="widget-title col-xs-6">{{title}}</div>
         <div class="widget-toggle col-xs-6">
             <div class="pull-right">
-                <select kendo-drop-down-list="goalDropdown" ng-model="selectedGoal">
-                    <option value="1">Goal 1</option>
-                    <option value="0">Goal 2</option>
+                <select kendo-drop-down-list="goalDropdown" ng-model="selectedGoal" k-on-change="changeGoal()">
+                    <option value="0">Goal 1</option>
+                    <option value="1">Goal 2</option>
                 </select>
                 <!-- <div class="long-text-toggle" ng-click="toggle()">
                     <span class="button-left">{{ btnText }}</span><span class="button-right"></span>
