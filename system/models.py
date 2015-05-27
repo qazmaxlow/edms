@@ -262,6 +262,26 @@ class System(models.Model):
         if readings:
             return sum([self.get_unit_rate(r.datetime, 'co2').rate*r.value for r in readings])
 
+    def get_total_kwh(self, start_date, end_date):
+        mdb_conn = connection.get_db()
+        source_ids = [s.id for s in self.sources]
+
+        reading = mdb_conn.source_reading_day.aggregate([
+            {'$match': {
+                'source_id': {'$in': source_ids},
+                'datetime': {
+                    '$gte': start_date,
+                    '$lt': end_date
+                }
+            }},
+            {'$group': {
+                '_id': None,
+                'kwh': {'$sum': '$value'}
+            }}
+        ])
+
+        total_kwh = reading['result'][0]['kwh']
+        return total_kwh
 
     def get_total_cost(self, start_dt, end_dt, date_type='day'):
         """
