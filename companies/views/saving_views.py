@@ -15,13 +15,12 @@ class savingSoFarThisYear(APIView):
 
         # get this year unit rates
         today = datetime.datetime.now(pytz.utc)
-        hktz = pytz.timezone("Asia/Hong_Kong")
 
         this_year_first_date = datetime.datetime(
             today.year,
             1, 1
         )
-        this_year_first_date = hktz.localize(this_year_first_date)
+        this_year_first_date = sys.time_zone.localize(this_year_first_date)
 
         unitrates = sys.get_money_unitrates(start_from=this_year_first_date)
 
