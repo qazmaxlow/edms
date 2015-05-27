@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-26 05:43+0000\n"
+"POT-Creation-Date: 2015-05-26 09:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,14 +17,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: companies/report_views.py:474
+#: companies/report_views.py:474 companies/views/progress_views.py:30
 #, python-brace-format
 msgid "{0:.0f}% {1}"
 msgstr "{1} {0:.0f}%"
 
 #: companies/report_views.py:478
-#: companies/templates/companies/dashboard/dashboard.html:755
-#: companies/templates/companies/dashboard/dashboard.html:889
+#: companies/templates/companies/dashboard/dashboard.html:766
+#: companies/templates/companies/dashboard/dashboard.html:902
 #: companies/templates/companies/reports/_report_content.html:70
 #: companies/templates/companies/reports/_report_content.html:79
 #: companies/templates/companies/reports/_report_content.html:97
@@ -32,13 +32,13 @@ msgstr "{1} {0:.0f}%"
 #: companies/templates/companies/reports/_report_content.html:123
 #: companies/templates/companies/reports/_report_content.html:132
 #: companies/templates/companies/reports/summary.html:58
-#: entrak/templates/report.html:47
+#: companies/views/progress_views.py:34 entrak/templates/report.html:47
 msgid "more"
 msgstr "增加了"
 
 #: companies/report_views.py:478
-#: companies/templates/companies/dashboard/dashboard.html:755
-#: companies/templates/companies/dashboard/dashboard.html:889
+#: companies/templates/companies/dashboard/dashboard.html:766
+#: companies/templates/companies/dashboard/dashboard.html:902
 #: companies/templates/companies/reports/_report_content.html:68
 #: companies/templates/companies/reports/_report_content.html:77
 #: companies/templates/companies/reports/_report_content.html:95
@@ -46,11 +46,11 @@ msgstr "增加了"
 #: companies/templates/companies/reports/_report_content.html:121
 #: companies/templates/companies/reports/_report_content.html:130
 #: companies/templates/companies/reports/summary.html:59
-#: entrak/templates/report.html:48
+#: companies/views/progress_views.py:34 entrak/templates/report.html:48
 msgid "less"
 msgstr "減少了"
 
-#: companies/report_views.py:498
+#: companies/report_views.py:498 companies/views/progress_views.py:43
 #, python-brace-format
 msgid "{self.compared_percent_abs:.0f}% {self.change_desc}"
 msgstr "{self.change_desc} {self.compared_percent_abs:.0f}%"
@@ -141,7 +141,7 @@ msgid "This week"
 msgstr "本週"
 
 #: companies/report_views.py:838
-#: companies/templates/companies/dashboard/dashboard.html:123
+#: companies/templates/companies/dashboard/dashboard.html:134
 msgid "Last week"
 msgstr "上週"
 
@@ -204,80 +204,80 @@ msgstr "能源使用摘要中心"
 msgid "Grab a snapshot of your performance at the"
 msgstr "想一目了然地知道你的用電概況，請看看"
 
-#: companies/templates/companies/dashboard/dashboard.html:118
+#: companies/templates/companies/dashboard/dashboard.html:129
 msgid "Real-Time"
 msgstr "實時"
 
-#: companies/templates/companies/dashboard/dashboard.html:119
+#: companies/templates/companies/dashboard/dashboard.html:130
 #: entrak/templates/page_base.html:153
 msgid "Graph"
 msgstr "圖表"
 
-#: companies/templates/companies/dashboard/dashboard.html:120
+#: companies/templates/companies/dashboard/dashboard.html:131
 msgid "Rates"
 msgstr "率"
 
-#: companies/templates/companies/dashboard/dashboard.html:121
+#: companies/templates/companies/dashboard/dashboard.html:132
 msgid "So far today you have used: "
 msgstr "今天直到目前，你消耗電力共 "
 
-#: companies/templates/companies/dashboard/dashboard.html:122
+#: companies/templates/companies/dashboard/dashboard.html:133
 #: entrak/templates/display.html:274
 msgid "Today"
 msgstr "今天"
 
-#: companies/templates/companies/dashboard/dashboard.html:124
+#: companies/templates/companies/dashboard/dashboard.html:135
 msgid "per day"
 msgstr "每天"
 
-#: companies/templates/companies/dashboard/dashboard.html:417
+#: companies/templates/companies/dashboard/dashboard.html:428
 msgid "Biggest Consumers"
 msgstr "電力消耗排名 (首3位)"
 
-#: companies/templates/companies/dashboard/dashboard.html:418
-#: companies/templates/companies/dashboard/dashboard.html:521
+#: companies/templates/companies/dashboard/dashboard.html:429
+#: companies/templates/companies/dashboard/dashboard.html:532
 msgctxt "dashboard"
 msgid "Week"
 msgstr "週"
 
-#: companies/templates/companies/dashboard/dashboard.html:419
-#: companies/templates/companies/dashboard/dashboard.html:522
+#: companies/templates/companies/dashboard/dashboard.html:430
+#: companies/templates/companies/dashboard/dashboard.html:533
 msgctxt "dashboard"
 msgid "Month"
 msgstr "月"
 
-#: companies/templates/companies/dashboard/dashboard.html:420
+#: companies/templates/companies/dashboard/dashboard.html:431
 msgid "Change from last week"
 msgstr "與上週比較"
 
-#: companies/templates/companies/dashboard/dashboard.html:420
+#: companies/templates/companies/dashboard/dashboard.html:431
 msgid "Change from last month"
 msgstr "與上月比較"
 
-#: companies/templates/companies/dashboard/dashboard.html:421
+#: companies/templates/companies/dashboard/dashboard.html:432
 msgid "Energy cost so far"
 msgstr "直到目前的用電"
 
-#: companies/templates/companies/dashboard/dashboard.html:470
+#: companies/templates/companies/dashboard/dashboard.html:481
 msgid "Energy Saving Tips"
 msgstr "節省能源小貼士"
 
-#: companies/templates/companies/dashboard/dashboard.html:472
+#: companies/templates/companies/dashboard/dashboard.html:483
 msgid "Put a ribbon on it"
 msgstr "綁上小絲帶"
 
-#: companies/templates/companies/dashboard/dashboard.html:473
+#: companies/templates/companies/dashboard/dashboard.html:484
 msgid ""
 "Tie a ribbon to the vent of each aircon unit so you can easily tell if "
 "aircon has actually been turned off."
 msgstr ""
 "在空調的通風口綁上一條小絲帶，這樣你可以從絲帶的動態看到空調是否已經關上。"
 
-#: companies/templates/companies/dashboard/dashboard.html:477
+#: companies/templates/companies/dashboard/dashboard.html:488
 msgid "Label your plugs"
 msgstr "為電制、插頭貼上標記"
 
-#: companies/templates/companies/dashboard/dashboard.html:478
+#: companies/templates/companies/dashboard/dashboard.html:489
 #: entrak/templates/display.html:174
 msgid ""
 "Label your plugs so you can unplug appliances without accidentally turning "
@@ -285,11 +285,11 @@ msgid ""
 msgstr ""
 "在插頭上貼上註明用途的標記，讓你關閉電器或插座時不再擔憂錯誤關上重要的設施。"
 
-#: companies/templates/companies/dashboard/dashboard.html:482
+#: companies/templates/companies/dashboard/dashboard.html:493
 msgid "Remove a tube"
 msgstr "取下過盛的燈管"
 
-#: companies/templates/companies/dashboard/dashboard.html:483
+#: companies/templates/companies/dashboard/dashboard.html:494
 #: entrak/templates/display.html:171
 msgid ""
 "If you have more light than you need in an area, you can remove one light "
@@ -297,11 +297,11 @@ msgid ""
 msgstr ""
 "如果你工作範圍安裝遠超於你所需要的燈管，你可以取下過盛的燈管以減低用電。"
 
-#: companies/templates/companies/dashboard/dashboard.html:487
+#: companies/templates/companies/dashboard/dashboard.html:498
 msgid "Turn off the socket"
 msgstr "關上插座總開關"
 
-#: companies/templates/companies/dashboard/dashboard.html:488
+#: companies/templates/companies/dashboard/dashboard.html:499
 #, python-format
 msgid ""
 "Even if an appliance is off, it can still consume 10%(percent)s of normal "
@@ -310,11 +310,11 @@ msgstr ""
 "縱使電器已經關掉，如果插頭沒有拔除，仍然會消耗若10%(percent)s的正常用電。 以"
 "後要緊記關掉掉或拔出插頭啊。"
 
-#: companies/templates/companies/dashboard/dashboard.html:492
+#: companies/templates/companies/dashboard/dashboard.html:503
 msgid "Adjust aircon temperature"
 msgstr "調整空調溫度"
 
-#: companies/templates/companies/dashboard/dashboard.html:493
+#: companies/templates/companies/dashboard/dashboard.html:504
 #: entrak/templates/display.html:172
 msgid ""
 "30 minutes after turning on aircon, adjust the temperature to minimize "
@@ -322,49 +322,165 @@ msgid ""
 msgstr ""
 "在冷氣開啟30分鐘後，請把溫度調整至適中的溫度，以免溫度過低，浪費電力能源。"
 
-#: companies/templates/companies/dashboard/dashboard.html:520
+#: companies/templates/companies/dashboard/dashboard.html:531
 msgid "Comparison"
 msgstr "和以往相比"
 
-#: companies/templates/companies/dashboard/dashboard.html:669
+#: companies/templates/companies/dashboard/dashboard.html:680
 msgid "So far this week"
 msgstr "本週直到目前"
 
-#: companies/templates/companies/dashboard/dashboard.html:669
+#: companies/templates/companies/dashboard/dashboard.html:680
 msgid "So far this month"
 msgstr "本月直到目前"
 
-#: companies/templates/companies/dashboard/dashboard.html:670
+#: companies/templates/companies/dashboard/dashboard.html:681
 msgid "By this time last week"
 msgstr "上週同一時段"
 
-#: companies/templates/companies/dashboard/dashboard.html:670
+#: companies/templates/companies/dashboard/dashboard.html:681
 msgid "By this time last month"
 msgstr "上月同一時段"
 
-#: companies/templates/companies/dashboard/dashboard.html:706
+#: companies/templates/companies/dashboard/dashboard.html:717
 msgid "Last Week Stats"
 msgstr "上週摘要"
 
-#: companies/templates/companies/dashboard/dashboard.html:707
+#: companies/templates/companies/dashboard/dashboard.html:718
 msgid "Day"
 msgstr "平日"
 
-#: companies/templates/companies/dashboard/dashboard.html:708
+#: companies/templates/companies/dashboard/dashboard.html:719
 msgid "Night"
 msgstr "晚間"
 
-#: companies/templates/companies/dashboard/dashboard.html:709
+#: companies/templates/companies/dashboard/dashboard.html:720
 msgid "than two weeks ago"
 msgstr "比兩週前"
 
-#: companies/templates/companies/dashboard/dashboard.html:893
+#: companies/templates/companies/dashboard/dashboard.html:906
 msgid "average weekday"
 msgstr "平日平均用電"
 
-#: companies/templates/companies/dashboard/dashboard.html:893
+#: companies/templates/companies/dashboard/dashboard.html:906
 msgid "average overnight"
 msgstr "晚間平均用電"
+
+#: companies/templates/companies/dashboard/dashboard.html:918
+#: entrak/templates/page_base.html:159
+msgid "Progress"
+msgstr "進度"
+
+#: companies/templates/companies/dashboard/dashboard.html:919
+#: companies/templates/companies/dashboard/dashboard.html:965
+#: companies/templates/companies/dashboard/dashboard.html:990
+#, fuzzy
+msgid "Past 12 months"
+msgstr "上月"
+
+#: companies/templates/companies/dashboard/dashboard.html:920
+#: companies/templates/companies/dashboard/dashboard.html:922
+#: companies/templates/companies/dashboard/dashboard.html:966
+#: companies/templates/companies/dashboard/dashboard.html:997
+#, fuzzy
+msgid "So far this year"
+msgstr "本週直到目前"
+
+#: companies/templates/companies/dashboard/dashboard.html:921
+#: entrak/templates/display.html:100 entrak/templates/display.html.py:102
+msgid "Over the past 12 months"
+msgstr "過去12個月"
+
+#: companies/templates/companies/dashboard/dashboard.html:923
+#: companies/templates/companies/dashboard/dashboard.html:998
+msgid "you have increased your energy use"
+msgstr ""
+
+#: companies/templates/companies/dashboard/dashboard.html:924
+#: companies/templates/companies/dashboard/dashboard.html:999
+msgid "you have decreased your energy use"
+msgstr ""
+
+#: companies/templates/companies/dashboard/dashboard.html:925
+#: companies/templates/companies/dashboard/dashboard.html:1000
+msgid "from your baseline of"
+msgstr ""
+
+#: companies/templates/companies/dashboard/dashboard.html:926
+#: companies/templates/companies/dashboard/dashboard.html:1001
+#, fuzzy
+msgid "compared to "
+msgstr " "
+
+#: companies/templates/companies/dashboard/dashboard.html:964
+#: entrak/templates/progress.html:90
+msgid "Cumulative Savings"
+msgstr "累積能源節省 (相等於)"
+
+#: companies/templates/companies/dashboard/dashboard.html:967
+msgid "Since "
+msgstr ""
+
+#: companies/templates/companies/dashboard/dashboard.html:967
+msgid " you have"
+msgstr ""
+
+#: companies/templates/companies/dashboard/dashboard.html:968
+#, fuzzy
+msgid "So far this year you have"
+msgstr "今天到目前目止，你消耗了電力共"
+
+#: companies/templates/companies/dashboard/dashboard.html:969
+#, fuzzy
+msgid "Compared with your baseline year of "
+msgstr "比上年"
+
+#: companies/templates/companies/dashboard/dashboard.html:970
+#, fuzzy
+msgid "Saved"
+msgstr "儲存"
+
+#: companies/templates/companies/dashboard/dashboard.html:970
+#: companies/templates/companies/dashboard/dashboard.html:972
+#, fuzzy
+msgid "Reduced"
+msgstr "減少"
+
+#: companies/templates/companies/dashboard/dashboard.html:971
+#, fuzzy
+msgid "on energy costs"
+msgstr "電費"
+
+#: companies/templates/companies/dashboard/dashboard.html:973
+msgid "Tons"
+msgstr ""
+
+#: companies/templates/companies/dashboard/dashboard.html:989
+msgid "Goal Tracking"
+msgstr ""
+
+#: companies/templates/companies/dashboard/dashboard.html:991
+msgid "Goal-1"
+msgstr ""
+
+#: companies/templates/companies/dashboard/dashboard.html:992
+#, fuzzy
+msgid "Reduce energy use in "
+msgstr "想發掘更多實時用電資料，請看看"
+
+#: companies/templates/companies/dashboard/dashboard.html:993
+msgid "by "
+msgstr ""
+
+#: companies/templates/companies/dashboard/dashboard.html:994
+#, fuzzy, python-format
+msgid "%% compared to"
+msgstr " "
+
+#: companies/templates/companies/dashboard/widgets/_cumulative_savings.html:31
+#, fuzzy
+msgid "of CO<sub>2</sub> emissions"
+msgstr "二氧化碳排放 (kg)"
 
 #: companies/templates/companies/dashboard/widgets/_real_time.html:62
 #: companies/templates/companies/reports/_report_content.html:39
@@ -391,17 +507,17 @@ msgid "Follow the steps on the right to download your energy data."
 msgstr "請按照右方的步驟下載你的能源數據。"
 
 #: companies/templates/companies/export/index.html:172
-#: companies/templates/companies/report_schedule/report_schedule.html:144
+#: companies/templates/companies/report_schedule/report_schedule.html:148
 msgid "Step 1"
 msgstr "1."
 
 #: companies/templates/companies/export/index.html:173
-#: companies/templates/companies/report_schedule/report_schedule.html:145
+#: companies/templates/companies/report_schedule/report_schedule.html:149
 msgid "Step 2"
 msgstr "2."
 
 #: companies/templates/companies/export/index.html:174
-#: companies/templates/companies/report_schedule/report_schedule.html:146
+#: companies/templates/companies/report_schedule/report_schedule.html:150
 msgid "Step 3"
 msgstr "3."
 
@@ -489,36 +605,67 @@ msgstr "上午"
 msgid "pm"
 msgstr "下午"
 
-#: companies/templates/companies/report_schedule/report_schedule.html:39
-#, fuzzy
-msgid "THE DOWNLOAD PAGE"
-msgstr "耗電情況提示"
+#: companies/templates/companies/report_schedule/report_schedule.html:38
+msgid "REPORTS"
+msgstr "能源使用報告"
 
-#: companies/templates/companies/report_schedule/report_schedule.html:40
-#: companies/templates/companies/reports/popup_report_pdf.html:45
-#: companies/templates/companies/reports/summary.html:90
-#: entrak/templates/report.html:81 entrak/templates/testing_code.html:66
-msgid "Get all your information here at the"
+#: companies/templates/companies/report_schedule/report_schedule.html:39
+msgid "Keep up to date with concise"
 msgstr "想知道你在電力消耗方面的詳細分析，請看看"
 
-#: companies/templates/companies/report_schedule/report_schedule.html:123
-#, fuzzy
+#: companies/templates/companies/report_schedule/report_schedule.html:122
+#: companies/templates/companies/reports/summary.html:260
 msgid "View Reports"
-msgstr "報告"
+msgstr "閱覽報告"
 
-#: companies/templates/companies/report_schedule/report_schedule.html:124
-#: companies/templates/companies/reports/summary.html:262
-#, fuzzy
+#: companies/templates/companies/report_schedule/report_schedule.html:123
+#: companies/templates/companies/reports/summary.html:261
 msgid "Automated Reports"
-msgstr "下載報告"
+msgstr "自動發送報告"
 
-#: companies/templates/companies/report_schedule/report_schedule.html:141
+#: companies/templates/companies/report_schedule/report_schedule.html:127
+#: companies/templates/companies/report_schedule/report_schedule.html:352
+#: entrak/templates/manage_accounts.html:182
+msgctxt "dropdown"
+msgid "Add"
+msgstr "新增"
+
+#: companies/templates/companies/report_schedule/report_schedule.html:128
+#: companies/templates/companies/report_schedule/report_schedule.html:353
+#: entrak/templates/manage_accounts.html:180
+msgctxt "dropdown"
+msgid "Emails"
+msgstr "個電郵"
+
+#: companies/templates/companies/report_schedule/report_schedule.html:129
+#: companies/templates/companies/report_schedule/report_schedule.html:354
+#: entrak/templates/manage_accounts.html:181
+msgctxt "dropdown"
+msgid "Add Email"
+msgstr "新增電郵"
+
+#: companies/templates/companies/report_schedule/report_schedule.html:131
+#: companies/templates/companies/report_schedule/report_schedule.html:356
+msgctxt "dropdown"
+msgid "Duplicated Email"
+msgstr "不能輸入相同電郵"
+
+#: companies/templates/companies/report_schedule/report_schedule.html:132
+#: companies/templates/companies/report_schedule/report_schedule.html:357
+msgctxt "dropdown"
+msgid "Invalid Email"
+msgstr "電郵不正確"
+
+#: companies/templates/companies/report_schedule/report_schedule.html:145
 msgid ""
 "Set the system to email you an energy report each month or week, so you can "
 "stay informaed and up to date on your energy use."
 msgstr ""
+"您可以通過系統設置，設定每月或每週以電子郵件收取能源使用報告，令您隨時了解最"
+"新用電情況。"
 
-#: companies/templates/companies/report_schedule/report_schedule.html:142
+#: companies/templates/companies/report_schedule/report_schedule.html:146
+#: companies/templates/companies/report_schedule/report_schedule.html:303
 #: entrak/templates/alert_settings.html:52
 #: entrak/templates/alert_settings.html:67
 #: entrak/templates/alert_settings.html:1086
@@ -527,29 +674,75 @@ msgstr ""
 msgid "Confirm"
 msgstr "確認"
 
-#: companies/templates/companies/report_schedule/report_schedule.html:143
-#, fuzzy
-msgid "Send to:"
-msgstr "寄給"
-
 #: companies/templates/companies/report_schedule/report_schedule.html:147
+msgid "Send to:"
+msgstr "發送至:"
+
+#: companies/templates/companies/report_schedule/report_schedule.html:151
 msgid "Select Scope"
-msgstr ""
+msgstr "選擇所需報告"
 
-#: companies/templates/companies/report_schedule/report_schedule.html:148
-#, fuzzy
+#: companies/templates/companies/report_schedule/report_schedule.html:152
 msgid "Select Frequency"
-msgstr "選擇你要的單位"
+msgstr "選擇報告類型"
 
-#: companies/templates/companies/report_schedule/report_schedule.html:149
-#, fuzzy
+#: companies/templates/companies/report_schedule/report_schedule.html:153
 msgid "Confirm and Go"
-msgstr "再輸入新密碼以作確認"
+msgstr "確認資料"
 
-#: companies/templates/companies/report_schedule/report_schedule.html:150
-#, fuzzy
+#: companies/templates/companies/report_schedule/report_schedule.html:154
 msgid "Manage Automated Reports"
-msgstr "下載報告"
+msgstr "管理自動發送報告"
+
+#: companies/templates/companies/report_schedule/report_schedule.html:155
+#: companies/templates/companies/report_schedule/report_schedule.html:308
+#: entrak/templates/general_settings.html:35
+#: entrak/templates/manage_accounts.html:362
+#: entrak/templates/manage_accounts.html:373
+msgid "Delete"
+msgstr "刪除"
+
+#: companies/templates/companies/report_schedule/report_schedule.html:156
+msgid "Are you sure you want to delete the item?"
+msgstr "您確認要刪除項目?"
+
+#: companies/templates/companies/report_schedule/report_schedule.html:157
+#: companies/templates/companies/report_schedule/report_schedule.html:304
+#: entrak/templates/alert_settings.html:51
+#: entrak/templates/alert_settings.html:66
+#: entrak/templates/alert_settings.html:1085
+#: entrak/templates/general_settings.html:34
+#: entrak/templates/general_settings.html:369
+#: entrak/templates/general_settings.html:382
+#: entrak/templates/general_settings.html:393
+#: entrak/templates/manage_accounts.html:87
+#: entrak/templates/manage_accounts.html:137 entrak/templates/profile.html:103
+msgid "Cancel"
+msgstr "取消"
+
+#: companies/templates/companies/report_schedule/report_schedule.html:277
+msgid "Scope"
+msgstr "所需報告"
+
+#: companies/templates/companies/report_schedule/report_schedule.html:284
+msgid "Frequency"
+msgstr "報告類型"
+
+#: companies/templates/companies/report_schedule/report_schedule.html:292
+#: entrak/templates/manage_accounts.html:359 entrak/templates/profile.html:98
+#: user/templates/activate_account.html:140
+msgid "Email"
+msgstr "電郵"
+
+#: companies/templates/companies/report_schedule/report_schedule.html:302
+msgid "Edit"
+msgstr "編輯"
+
+#: companies/templates/companies/report_schedule/report_schedule.html:322
+#: entrak/templates/general_settings.html:332
+#: entrak/templates/general_settings.html:351
+msgid "Actions"
+msgstr "行動"
 
 #: companies/templates/companies/reports/_report_content.html:19
 #, python-format
@@ -909,6 +1102,12 @@ msgstr "晚間能源使用"
 msgid "THE REPORTS PAGE"
 msgstr "能源使用報告"
 
+#: companies/templates/companies/reports/popup_report_pdf.html:45
+#: companies/templates/companies/reports/summary.html:90
+#: entrak/templates/report.html:81 entrak/templates/testing_code.html:66
+msgid "Get all your information here at the"
+msgstr "想知道你在電力消耗方面的詳細分析，請看看"
+
 #: companies/templates/companies/reports/popup_report_pdf.html:66
 #: entrak/templates/report.html:880
 msgid "Save Summary Report"
@@ -1203,11 +1402,7 @@ msgstr "Ahh:mm"
 msgid "MMM D"
 msgstr "MMMD日"
 
-#: companies/templates/companies/reports/summary.html:260
-msgid "View Report"
-msgstr "報告"
-
-#: companies/templates/companies/reports/summary.html:261
+#: companies/templates/companies/reports/summary.html:262
 #: entrak/templates/report.html:702
 msgid "Download Data"
 msgstr "數據下載"
@@ -1346,6 +1541,14 @@ msgstr "年報"
 msgid "Match my bills"
 msgstr "與電費月結單同步"
 
+#: constants/schedulers.py:7
+msgid "Weekly"
+msgstr "週報"
+
+#: constants/schedulers.py:8
+msgid "Monthly"
+msgstr "月報"
+
 #: entrak/auth_views.py:29 entrak/auth_views.py:58
 msgid "Username or password incorrect"
 msgstr "用戶名稱或密碼不正確"
@@ -1422,18 +1625,6 @@ msgid ""
 msgstr ""
 "你可以填寫最多五個電郵，以分號分開電郵地址<br>如：user@email.com; "
 "user2@email.com"
-
-#: entrak/templates/alert_settings.html:51
-#: entrak/templates/alert_settings.html:66
-#: entrak/templates/alert_settings.html:1085
-#: entrak/templates/general_settings.html:34
-#: entrak/templates/general_settings.html:369
-#: entrak/templates/general_settings.html:382
-#: entrak/templates/general_settings.html:393
-#: entrak/templates/manage_accounts.html:87
-#: entrak/templates/manage_accounts.html:137 entrak/templates/profile.html:103
-msgid "Cancel"
-msgstr "取消"
 
 #: entrak/templates/alert_settings.html:59
 #, python-format
@@ -1679,10 +1870,6 @@ msgstr "電力能源"
 #: entrak/templates/display.html:91
 msgid "Extra spending up to"
 msgstr "多用了"
-
-#: entrak/templates/display.html:100 entrak/templates/display.html.py:102
-msgid "Over the past 12 months"
-msgstr "過去12個月"
 
 #: entrak/templates/display.html:171
 msgid "REMOVE A TUBE"
@@ -1997,12 +2184,6 @@ msgstr "更換密碼"
 msgid "Set Password"
 msgstr "建立密碼"
 
-#: entrak/templates/general_settings.html:35
-#: entrak/templates/manage_accounts.html:362
-#: entrak/templates/manage_accounts.html:373
-msgid "Delete"
-msgstr "刪除"
-
 #: entrak/templates/general_settings.html:36
 #: entrak/templates/general_settings.html:368
 #: entrak/templates/general_settings.html:381
@@ -2021,7 +2202,7 @@ msgstr "確認的密碼並不相符"
 
 #: entrak/templates/general_settings.html:110
 #: entrak/templates/general_settings.html:341
-#: user/templates/activate_account.html:96
+#: user/templates/activate_account.html:99
 msgid "All fields are required"
 msgstr "必須填寫所有項目"
 
@@ -2054,16 +2235,11 @@ msgid "Username"
 msgstr "用戶名稱"
 
 #: entrak/templates/general_settings.html:331
-#: entrak/templates/general_settings.html:350 entrak/templates/login.html:70
+#: entrak/templates/general_settings.html:350 entrak/templates/login.html:127
 #: entrak/templates/manage_accounts.html:128
 #: entrak/templates/manage_accounts.html:372
 msgid "Password"
 msgstr "密碼"
-
-#: entrak/templates/general_settings.html:332
-#: entrak/templates/general_settings.html:351
-msgid "Actions"
-msgstr "行動"
 
 #: entrak/templates/general_settings.html:338
 msgid "User Account"
@@ -2265,25 +2441,56 @@ msgstr "由："
 msgid "to:"
 msgstr "至："
 
-#: entrak/templates/login.html:58 user/templates/activate_account.html:64
+#: entrak/templates/login.html:47
+msgid "The reset password link has been sent to your email."
+msgstr "已發出重設密碼電郵"
+
+#: entrak/templates/login.html:53
+msgid "This email is not linked to any existing account."
+msgstr "此電郵沒有連結到任何賬號"
+
+#: entrak/templates/login.html:68
+msgid "Forget Password"
+msgstr "忘記密碼"
+
+#: entrak/templates/login.html:115 user/templates/activate_account.html:64
 msgid "Welcome to En-trak<sup>TM</sup>"
 msgstr "En-trak<sup>TM</sup> 歡迎您"
 
-#: entrak/templates/login.html:59 user/templates/activate_account.html:65
+#: entrak/templates/login.html:116 user/templates/activate_account.html:65
 msgid "Turning Data into Actionable Intelligence"
 msgstr "轉化數據為實際行動"
 
-#: entrak/templates/login.html:61 user/templates/activate_account.html:67
+#: entrak/templates/login.html:118 user/templates/activate_account.html:67
 msgid "To use the En-trak monitor platform, please sign in"
 msgstr "要使用 En-trak 能源管理系統，請先登入"
 
-#: entrak/templates/login.html:66
+#: entrak/templates/login.html:123
 msgid "Username / Email"
 msgstr "用戶名稱 / 電郵"
 
-#: entrak/templates/login.html:78 user/templates/activate_account.html:83
+#: entrak/templates/login.html:132
+msgid "Remember Me"
+msgstr "記住我"
+
+#: entrak/templates/login.html:135 user/templates/activate_account.html:83
 msgid "Sign In"
 msgstr "登入"
+
+#: entrak/templates/login.html:137 user/templates/activate_account.html:85
+msgid "Forgot your password?"
+msgstr "忘記密碼？"
+
+#: entrak/templates/login.html:155
+msgid "Please enter your email"
+msgstr "請輸入你的電郵"
+
+#: entrak/templates/login.html:158 entrak/templates/manage_accounts.html:377
+#: entrak/templates/manage_accounts.html:391
+#: entrak/templates/manage_accounts.html:444
+#: entrak/templates/manage_accounts.html:557
+msgid "Send"
+msgstr "寄出"
 
 #: entrak/templates/manage_accounts.html:35 entrak/templates/profile.html:35
 msgid "SETTINGS"
@@ -2326,12 +2533,12 @@ msgstr "刪除賬戶"
 #: entrak/templates/profile.html.py:61 entrak/templates/profile.html:85
 #: entrak/templates/profile.html.py:89 entrak/templates/profile.html:119
 #: entrak/templates/profile.html.py:125 entrak/templates/profile.html:131
-#: user/templates/activate_account.html:100
-#: user/templates/activate_account.html:104
-#: user/templates/activate_account.html:108
-#: user/templates/activate_account.html:130
-#: user/templates/activate_account.html:150
-#: user/templates/activate_account.html:154
+#: user/templates/activate_account.html:103
+#: user/templates/activate_account.html:107
+#: user/templates/activate_account.html:111
+#: user/templates/activate_account.html:133
+#: user/templates/activate_account.html:153
+#: user/templates/activate_account.html:157
 msgid "*Required field"
 msgstr "*必須填寫"
 
@@ -2340,7 +2547,7 @@ msgid "Create Shared Account"
 msgstr "建立共享賬戶"
 
 #: entrak/templates/manage_accounts.html:120
-#: user/templates/activate_account.html:161
+#: user/templates/activate_account.html:164
 msgid "Create Account"
 msgstr "建立賬戶"
 
@@ -2352,21 +2559,6 @@ msgstr "賬戶未啟用"
 msgid "Resend Invitation"
 msgstr "重發邀請電郵"
 
-#: entrak/templates/manage_accounts.html:180
-msgctxt "dropdown"
-msgid "Emails"
-msgstr "個電郵"
-
-#: entrak/templates/manage_accounts.html:181
-msgctxt "dropdown"
-msgid "Add Email"
-msgstr "新增電郵"
-
-#: entrak/templates/manage_accounts.html:182
-msgctxt "dropdown"
-msgid "Add"
-msgstr "新增"
-
 #: entrak/templates/manage_accounts.html:195
 msgid ""
 "User Accounts enjoy a higher level of security, more control, and better "
@@ -2376,7 +2568,7 @@ msgstr ""
 "賬戶！"
 
 #: entrak/templates/manage_accounts.html:211 entrak/templates/profile.html:226
-#: user/templates/activate_account.html:280
+#: user/templates/activate_account.html:283
 msgid "*Passwords do not match"
 msgstr "*登錄密碼不相同"
 
@@ -2384,18 +2576,13 @@ msgstr "*登錄密碼不相同"
 msgid "Full Name"
 msgstr "名字"
 
-#: entrak/templates/manage_accounts.html:359 entrak/templates/profile.html:98
-#: user/templates/activate_account.html:137
-msgid "Email"
-msgstr "電郵"
-
 #: entrak/templates/manage_accounts.html:360
 msgctxt "grid"
 msgid "Language"
 msgstr "語言"
 
 #: entrak/templates/manage_accounts.html:361 entrak/templates/profile.html:60
-#: user/templates/activate_account.html:107
+#: user/templates/activate_account.html:110
 msgid "Department"
 msgstr "部門"
 
@@ -2406,13 +2593,6 @@ msgstr "用戶名稱"
 #: entrak/templates/manage_accounts.html:372
 msgid "Change password"
 msgstr "更換密碼"
-
-#: entrak/templates/manage_accounts.html:377
-#: entrak/templates/manage_accounts.html:391
-#: entrak/templates/manage_accounts.html:444
-#: entrak/templates/manage_accounts.html:557
-msgid "Send"
-msgstr "寄出"
 
 #: entrak/templates/manage_accounts.html:404
 #: entrak/templates/manage_accounts.html:453
@@ -2457,10 +2637,6 @@ msgstr "密碼已變更"
 msgid "Ranking"
 msgstr "用電量排行榜"
 
-#: entrak/templates/page_base.html:159
-msgid "Progress"
-msgstr "進度"
-
 #: entrak/templates/page_base.html:162
 msgid "Reports"
 msgstr "能源使用報告"
@@ -2485,79 +2661,79 @@ msgstr "登出"
 msgid "You are viewing:"
 msgstr "你正在檢視:"
 
-#: entrak/templates/profile.html:56 user/templates/activate_account.html:99
+#: entrak/templates/profile.html:56 user/templates/activate_account.html:102
 msgid "First Name"
 msgstr "名字"
 
-#: entrak/templates/profile.html:62 user/templates/activate_account.html:109
+#: entrak/templates/profile.html:62 user/templates/activate_account.html:112
 msgid "Administration"
 msgstr "行政"
 
-#: entrak/templates/profile.html:63 user/templates/activate_account.html:110
+#: entrak/templates/profile.html:63 user/templates/activate_account.html:113
 msgid "Business Development"
 msgstr "業務發展"
 
-#: entrak/templates/profile.html:64 user/templates/activate_account.html:111
+#: entrak/templates/profile.html:64 user/templates/activate_account.html:114
 msgid "CEO Office / Management"
 msgstr "行政總裁辦公室 / 管理層"
 
-#: entrak/templates/profile.html:65 user/templates/activate_account.html:112
+#: entrak/templates/profile.html:65 user/templates/activate_account.html:115
 msgid "Corporate Communications"
 msgstr "企業傳訊"
 
-#: entrak/templates/profile.html:66 user/templates/activate_account.html:113
+#: entrak/templates/profile.html:66 user/templates/activate_account.html:116
 msgid "CSR"
 msgstr "企業社會責任"
 
-#: entrak/templates/profile.html:67 user/templates/activate_account.html:114
+#: entrak/templates/profile.html:67 user/templates/activate_account.html:117
 msgid "Customer Services"
 msgstr "客戶服務"
 
-#: entrak/templates/profile.html:68 user/templates/activate_account.html:115
+#: entrak/templates/profile.html:68 user/templates/activate_account.html:118
 msgid "Facilities Management"
 msgstr "設施管理"
 
-#: entrak/templates/profile.html:69 user/templates/activate_account.html:116
+#: entrak/templates/profile.html:69 user/templates/activate_account.html:119
 msgid "Finance / Accounting"
 msgstr "財務 / 會計"
 
-#: entrak/templates/profile.html:70 user/templates/activate_account.html:117
+#: entrak/templates/profile.html:70 user/templates/activate_account.html:120
 msgid "Human Resources"
 msgstr "人力資源"
 
-#: entrak/templates/profile.html:71 user/templates/activate_account.html:118
+#: entrak/templates/profile.html:71 user/templates/activate_account.html:121
 msgid "Information Technology"
 msgstr "資訊科技"
 
-#: entrak/templates/profile.html:72 user/templates/activate_account.html:119
+#: entrak/templates/profile.html:72 user/templates/activate_account.html:122
 msgid "Legal / Compliance"
 msgstr "法務 / 合規"
 
-#: entrak/templates/profile.html:73 user/templates/activate_account.html:120
+#: entrak/templates/profile.html:73 user/templates/activate_account.html:123
 msgid "Marketing"
 msgstr "市場營銷"
 
-#: entrak/templates/profile.html:74 user/templates/activate_account.html:121
+#: entrak/templates/profile.html:74 user/templates/activate_account.html:124
 msgid "Others"
 msgstr "其他"
 
-#: entrak/templates/profile.html:75 user/templates/activate_account.html:122
+#: entrak/templates/profile.html:75 user/templates/activate_account.html:125
 msgid "Products"
 msgstr "產品"
 
-#: entrak/templates/profile.html:76 user/templates/activate_account.html:123
+#: entrak/templates/profile.html:76 user/templates/activate_account.html:126
 msgid "Purchasing"
 msgstr "採購"
 
-#: entrak/templates/profile.html:77 user/templates/activate_account.html:124
+#: entrak/templates/profile.html:77 user/templates/activate_account.html:127
 msgid "Sales"
 msgstr "銷售"
 
-#: entrak/templates/profile.html:84 user/templates/activate_account.html:103
+#: entrak/templates/profile.html:84 user/templates/activate_account.html:106
 msgid "Last Name"
 msgstr "姓氏"
 
-#: entrak/templates/profile.html:88 user/templates/activate_account.html:129
+#: entrak/templates/profile.html:88 user/templates/activate_account.html:132
 msgid "Language"
 msgstr "語言選擇"
 
@@ -2569,11 +2745,11 @@ msgstr "儲存"
 msgid "Current Password"
 msgstr "當前密碼"
 
-#: entrak/templates/profile.html:160 user/templates/activate_account.html:230
+#: entrak/templates/profile.html:160 user/templates/activate_account.html:233
 msgid "'Department'"
 msgstr "'部門'"
 
-#: entrak/templates/profile.html:161 user/templates/activate_account.html:231
+#: entrak/templates/profile.html:161 user/templates/activate_account.html:234
 msgid "'Language'"
 msgstr "'語言'"
 
@@ -2594,10 +2770,6 @@ msgstr "下個目標"
 msgid ""
 "%(target_level)s<span class=\"saving-percent-symbol\">%%</span> Reduction"
 msgstr "節省 %(target_level)s<span class=\"saving-percent-symbol\">%%</span>"
-
-#: entrak/templates/progress.html:90
-msgid "Cumulative Savings"
-msgstr "累積能源節省 (相等於)"
 
 #: entrak/templates/progress.html:90
 msgid "Extra Spending"
@@ -2993,68 +3165,68 @@ msgstr ""
 msgid "Invalid request"
 msgstr ""
 
-#: user/templates/activate_account.html:95
+#: user/templates/activate_account.html:98
 msgid "Basic Information"
 msgstr "基本資料"
 
-#: user/templates/activate_account.html:141
+#: user/templates/activate_account.html:144
 msgid "Please note"
 msgstr "請注意"
 
-#: user/templates/activate_account.html:142
+#: user/templates/activate_account.html:145
 msgid "You will be using this email to login the En-trak Platform."
 msgstr "此電郵日後會成為您登錄 En-trak系統的賬户"
 
-#: user/templates/activate_account.html:146
+#: user/templates/activate_account.html:149
 msgctxt "activate_title"
 msgid "Password"
 msgstr "設定登錄密碼"
 
-#: user/templates/activate_account.html:149
+#: user/templates/activate_account.html:152
 msgctxt "activate_input"
 msgid "Password"
 msgstr "輸入密碼"
 
-#: user/templates/activate_account.html:153
+#: user/templates/activate_account.html:156
 msgctxt "activate"
 msgid "Confirm Password"
 msgstr "確認密碼"
 
-#: user/templates/activate_account.html:171
-#: user/templates/activate_account.html:179
+#: user/templates/activate_account.html:174
+#: user/templates/activate_account.html:182
 msgid "Congrats, your account is ready to use!"
 msgstr "恭喜您，你的賬戶已成功開通！"
 
-#: user/templates/activate_account.html:173
+#: user/templates/activate_account.html:176
 msgid "Get Started"
 msgstr "開始使用En-trak 系統"
 
-#: user/templates/activate_account.html:181
+#: user/templates/activate_account.html:184
 msgid "As the Admin you are able to create additional User Accounts."
 msgstr "作為系統管理員，你可以建立更多的用戶賬戶！"
 
-#: user/templates/activate_account.html:182
+#: user/templates/activate_account.html:185
 msgid "Do you want to create User Accounts now?"
 msgstr "您現在要建立用戶賬戶嗎？"
 
-#: user/templates/activate_account.html:184
+#: user/templates/activate_account.html:187
 msgid "Yes"
 msgstr "是"
 
-#: user/templates/activate_account.html:185
+#: user/templates/activate_account.html:188
 msgid "No"
 msgstr "否"
 
-#: user/templates/activate_account.html:187
+#: user/templates/activate_account.html:190
 msgid "You can also later create or manage accounts in the settings page."
 msgstr "您可以稍後在設置頁面建立或管理賬戶"
 
-#: user/templates/activate_account.html:227
-#: user/templates/activate_account.html:228
+#: user/templates/activate_account.html:230
+#: user/templates/activate_account.html:231
 msgid "'Create En-trak Account'"
 msgstr "'建立En-trak 賬戶'"
 
-#: user/templates/activate_account.html:229
+#: user/templates/activate_account.html:232
 msgid "'Create En-trak Accounts'"
 msgstr "'建立En-trak 賬戶'"
 
@@ -3065,6 +3237,17 @@ msgstr "用戶沒有訪問這部份的權限。"
 #: utils/auth.py:40 utils/auth.py:61
 msgid "Please enter username and password."
 msgstr "請輸入用戶名稱和密碼"
+
+#, fuzzy
+#~ msgid "THE DOWNLOAD PAGE"
+#~ msgstr "耗電情況提示"
+
+#~ msgid "View Report"
+#~ msgstr "報告"
+
+#, fuzzy
+#~ msgid "DOWNLOAD"
+#~ msgstr "耗電情況提示"
 
 #~ msgid "Dashboard"
 #~ msgstr "首頁"
@@ -3080,14 +3263,6 @@ msgstr "請輸入用戶名稱和密碼"
 #, fuzzy
 #~ msgid "Retype Your Password"
 #~ msgstr "建立密碼"
-
-#, fuzzy
-#~ msgid "Weekly"
-#~ msgstr "週報"
-
-#, fuzzy
-#~ msgid "Monthly"
-#~ msgstr "月報"
 
 #~ msgctxt "dashboard"
 #~ msgid ""

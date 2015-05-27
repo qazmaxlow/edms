@@ -9,21 +9,25 @@
         <div class="widget-title col-xs-6">{{title}}</div>
         <div class="widget-toggle col-xs-6">
             <div class="pull-right">
-                <div class="long-text-toggle" ng-click="toggle()">
+                <!-- <div class="long-text-toggle" ng-click="toggle()">
                     <span class="button-left">{{ isPast12Month ? p12BtnText : thisYrBtnText }}</span><span class="button-right"></span>
-                </div>
+                </div> -->
+                <select kendo-dropdownlist ng-model="isPast12Month">
+                    <option value="1">{{p12BtnText}}</option>
+                    <option value="0">{{thisYrBtnText}}</option>
+                </select>
             </div>
         </div>
     </div>
     
     <div class="widget-content row bg-image" ng-class="{'increase' : isIncrease}">
-        <div class="description-6 top-space">{{isPast12Month ? p12DescLine1Text : thisYrDescLine1Text}}</div>
+        <div class="description-6 top-space">{{isPast12Month == "1" ? p12DescLine1Text : thisYrDescLine1Text}}</div>
         <div class="description-6">{{isIncrease ? increaseLine2Text : decreaseLine2Text}}</div>
         <div class="percent">
             <span class="percentNum">{{ soFarThisYear.compareToLastYearDetail.percentAbs | number:0 }}</span><span class="percentSign">%</span>
         </div>
-        <div class="description-6">{{isPast12Month ? fromBaselineText : comparedToText}}</div>
-        <div class="description-6">{{isPast12Month ? yearRangeText : ""}}</div>
+        <div class="description-6">{{isPast12Month == "1" ? fromBaselineText : comparedToText}}</div>
+        <div class="description-6">{{isPast12Month == "1" ? yearRangeText : ""}}</div>
     </div>
 </div>
 {% endverbatim %}

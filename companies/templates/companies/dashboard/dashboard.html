@@ -908,7 +908,7 @@
     });
 
     ngapp.controller("WidgetProgress", function($scope){
-        $scope.isPast12Month = true;
+        $scope.isPast12Month = "1";
         $scope.percent = 14;
         $scope.lastYear = 2014;
         
@@ -946,14 +946,14 @@
         progress_ds.read();
         $scope.soFarThisYear = progress_ds.data()[0];
 
-        $scope.toggle = function(){
-            $scope.isPast12Month = !$scope.isPast12Month;
-        }
+        // $scope.toggle = function(){
+        //     $scope.isPast12Month = !$scope.isPast12Month;
+        // }
 
     });
 
     ngapp.controller("WidgetCumulative", function($scope){
-        $scope.isPast12Month = true;
+        $scope.isPast12Month = "1";
         $scope.sinceDate = new Date();
         $scope.baselineYear = "2014 - 15";
         $scope.currencyUnit = "HKD";
@@ -972,19 +972,15 @@
         $scope.reducedText1 = $scope.isSaved ? '{% trans "Reduced" %}' : '{% trans "Reduced" %}';
         $scope.tons = '{% trans "Tons" %}';
 
-        $scope.toggle = function(){
-            $scope.isPast12Month = !$scope.isPast12Month;
-        }
+        // $scope.toggle = function(){
+        //     $scope.isPast12Month = !$scope.isPast12Month;
+        // }
 
     });
 
     ngapp.controller("WidgetGoalTracking", function($scope){
-        $scope.isPast12Month = true;
-        $scope.percent = -14;
-        $scope.lastYear = 2014;
-        
-        $scope.isIncrease = $scope.percent > 0;
-        $scope.percent = Math.abs($scope.percent);
+        // $scope.goalDropdown.value();
+        $scope.selectedGoal = "0";
 
         $scope.title = '{% trans "Goal Tracking" %}';
         $scope.p12BtnText = '{% trans "Past 12 months" %}';
@@ -1000,10 +996,6 @@
         $scope.fromBaselineText = '{% trans "from your baseline of" %}';
         $scope.comparedToText = '{% trans "compared to " %}' + $scope.lastYear;
         $scope.yearRangeText = $scope.lastYear + ' - ' + ($scope.lastYear + 1);
-
-        $scope.toggle = function(){
-            $scope.isPast12Month = !$scope.isPast12Month;
-        }
 
     });
 </script>
