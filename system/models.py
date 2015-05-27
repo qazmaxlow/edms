@@ -232,7 +232,7 @@ class System(models.Model):
         target_unit='money'
         unit_infos = json.loads(self.unit_info)
         unit_code = unit_infos[target_unit]
-        unit_rates = UnitRate.objects.filter(category_code=target_unit, code=unit_code, effective_date__gte=start_from).order_by('-effective_date')
+        unit_rates = UnitRate.objects.filter(category_code=target_unit, code=unit_code, effective_date__gte=start_from).order_by('effective_date')
         return unit_rates
 
 
