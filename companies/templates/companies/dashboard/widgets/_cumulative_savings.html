@@ -26,7 +26,7 @@
         <div class="description-1" ng-bind="isPast12Month == '1' ? p12HeaderText : thisYrHeaderText"></div>
         <div class="top-box" ng-class="{saved : isSaved}">
             <div class="light-text" ng-bind="savedText1"></div>
-            <div class="amount-text" ng-bind="savedAmt | entrakNumber"></div> <div class="unit-text" ng-bind="currencyUnit"></div>
+            <div class="amount-text" ng-bind="soFarThisYear.totalCostChanged | entrakNumber"></div> <div class="unit-text" ng-bind="currencyUnit"></div>
             <div class="normal-text" ng-bind="savedText2"></div>
         </div>
         <div class="bottom-box" ng-class="{saved : isSaved}">

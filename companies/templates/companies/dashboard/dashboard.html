@@ -976,6 +976,25 @@
         //     $scope.isPast12Month = !$scope.isPast12Month;
         // }
 
+        var saving_ds = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    async: false,
+                    url: "{% url 'companies.savings.so-far-this-year' current_system.code %}",
+                    type: 'GET',
+                    dataType: "json"
+                }
+            },
+            schema: {
+                // Fix for single result
+                data: function(response) {
+                    return [response];
+                }
+            }
+        });
+
+        saving_ds.read();
+        $scope.soFarThisYear = saving_ds.data()[0];
     });
 
     ngapp.controller("WidgetGoalTracking", function($scope){
