@@ -1,0 +1,33 @@
+{% load i18n %}
+{% load entrak_extras %}
+{% load static %}
+{% load humanize %}
+
+{% verbatim %}
+<div class="widget-container goal-widget" ng-controller="WidgetGoalTracking">
+    <div class="widget-header row">
+        <div class="widget-title col-xs-6">{{title}}</div>
+        <div class="widget-toggle col-xs-6">
+            <div class="pull-right">
+                <select kendo-drop-down-list="goalDropdown" ng-model="selectedGoal">
+                    <option value="1">Goal 1</option>
+                    <option value="0">Goal 2</option>
+                </select>
+                <!-- <div class="long-text-toggle" ng-click="toggle()">
+                    <span class="button-left">{{ btnText }}</span><span class="button-right"></span>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    
+    <div class="widget-content row bg-image" ng-class="{'increase' : isIncrease}">
+        <div class="description-6 top-space">{{isPast12Month ? p12DescLine1Text : thisYrDescLine1Text}}</div>
+        <div class="description-6">{{isIncrease ? increaseLine2Text : decreaseLine2Text}}</div>
+        <div class="percent top-space">
+            <span class="percentNum">{{percent}}</span><span class="percentSign">%</span>
+        </div>
+        <div class="description-6">{{isPast12Month ? fromBaselineText : comparedToText}}</div>
+        <div class="description-6">{{isPast12Month ? yearRangeText : ""}}</div>
+    </div>
+</div>
+{% endverbatim %}

@@ -60,6 +60,9 @@
             <div>
                 <img src="{% static 'images/report/lightning-energy.png' %}">
                 <div class="basic-info-text-container">
+                  {% if saving_energy == None %}
+                    <span id="save-energy-usage">N/A</span>
+                  {% else %}
                     {% ifequal LANGUAGE_CODE 'zh-tw' %}
                       {% if is_saving  %}
                       <span class="basic-info-col-subtext">{% trans "less" %}</span>
@@ -76,12 +79,17 @@
                       <span class="basic-info-col-subtext">{% trans "more" %}</span>
                       {% endif %}
                     {% endifequal %}
+                   {% endif %}
                 </div>
             </div>
             <hr class="current-usage-separator-dark-grey">
             <div>
                 <img src="{% static 'images/report/factory-co2.png' %}">
                 <div class="basic-info-text-container">
+                  {% if saving_energy == None %}
+                    <span id="save-co2-usage">N/A</span>
+                  {% else %}
+
                     {% ifequal LANGUAGE_CODE 'zh-tw' %}
                       {% if is_saving %}
                       <span class="basic-info-col-subtext">{% trans "less" %}</span>
@@ -98,12 +106,16 @@
                       <span class="basic-info-col-subtext">{% trans "more" %}</span>
                       {% endif %}
                     {% endifequal %}
+                  {% endif %}
                 </div>
             </div>
             <hr class="current-usage-separator-dark-grey">
             <div class="bottom-margin-20">
                 <img src="{% static 'images/report/piggy.png' %}">
                 <div class="basic-info-text-container">
+                  {% if saving_energy == None %}
+                    <span id="save-money-usage">N/A</span>
+                  {% else %}
                     {% ifequal LANGUAGE_CODE 'zh-tw' %}
                       {% if is_saving %}
                       <span class="basic-info-col-subtext">{% trans "less" %}</span>
@@ -120,6 +132,7 @@
                       <span class="basic-info-col-subtext">{% trans "more" %}</span>
                       {% endif %}
                     {% endifequal %}
+                  {% endif %}
                 </div>
             </div>
         </div>

@@ -1,0 +1,39 @@
+{% load i18n %}
+{% load entrak_extras %}
+{% load static %}
+{% load humanize %}
+
+
+<div class="widget-container cumulative-widget" ng-controller="WidgetCumulative">
+    {% verbatim %}
+    <div class="widget-header row">
+        <div class="widget-title col-xs-6">{{title}}</div>
+        <div class="widget-toggle col-xs-6">
+            <div class="pull-right">
+                <select kendo-dropdownlist ng-model="isPast12Month">
+                    <option value="0">{{p12BtnText}}</option>
+                    <option value="1">{{thisYrBtnText}}</option>
+                </select>
+                <!-- <div class="long-text-toggle" ng-click="toggle()">
+                    <span class="button-left">{{ isPast12Month ? p12BtnText : thisYrBtnText }}</span><span class="button-right"></span>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    {% endverbatim %}
+    
+    <div class="widget-content row">
+        <div class="description-1" ng-bind="isPast12Month == '1' ? p12HeaderText : thisYrHeaderText"></div>
+        <div class="top-box" ng-class="{saved : isSaved}">
+            <div class="light-text" ng-bind="savedText1"></div>
+            <div class="amount-text" ng-bind="savedAmt | entrakNumber"></div> <div class="unit-text" ng-bind="currencyUnit"></div>
+            <div class="normal-text" ng-bind="savedText2"></div>
+        </div>
+        <div class="bottom-box" ng-class="{saved : isSaved}">
+            <div class="light-text" ng-bind="reducedText1"></div>
+            <div class="amount-text" ng-bind="co2Amt | entrakNumber"></div> <div class="unit-text" ng-bind="tons"></div>
+            <div class="normal-text">{% trans "of CO<sub>2</sub> emissions" %}</div>
+        </div>
+        <div class="footer-text" ng-bind="footerText"></div>
+    </div>
+</div>

@@ -20,11 +20,10 @@
 <script src="{% static 'js/entrak-system.js' %}"></script>
 <script src="{% static 'js/entrak-utils.js' %}"></script>
 <script src="{% static 'js/report-generator.js' %}"></script>
-
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
 <link href="{% static 'css/companies/report_schedule.css' %}" rel="stylesheet">
-
+<link href="{% static 'css/custom_control.css' %}" rel="stylesheet">
 <script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/et.dropdown.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
@@ -36,8 +35,8 @@
 {% block system_menu_target_view %}report{% endblock %}
 {% block breadcrumb_target_view %}report{% endblock %}
 
-{% block page_title %}{% trans "THE DOWNLOAD PAGE" %}{% endblock %}
-{% block page_subtitle %}{% trans "Get all your information here at the" %}{% endblock %}
+{% block page_title %}{% trans "REPORTS" %}{% endblock %}
+{% block page_subtitle %}{% trans "Keep up to date with concise" %}{% endblock %}
 
 {% block extra_script %}
 {{block.super}}
@@ -56,11 +55,11 @@
             </div>
 {% verbatim %}
             <div class="row steps">
-                <div class="col-md-3 description">
+                <div class="col-xs-3 description">
                     <p class="desc-text">{{description}}</p>
                     <img src="/static/images/report-schedule/report-icon.png"></img>
                 </div>
-                <div class="col-md-3">
+                <div class="col-xs-3">
                     <div class="step-label">{{step1}}</div>
                     <div class="header">{{step1Title}}</div>
                     <div class="content bg-step1">
@@ -71,7 +70,7 @@
                                 k-data-source="systemsDataSource"></select>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-xs-3">
                     <div class="step-label">{{step2}}</div>
                     <div class="header">{{step2Title}}</div>
                     <div class="content bg-step2">
@@ -83,7 +82,7 @@
                                 k-data-source="frequencyDataSource"></select>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-xs-3">
                     <div class="step-label">{{step3}}</div>
                     <div class="header">{{step3Title}}</div>
                     <div class="content bg-step3">
@@ -102,12 +101,12 @@
                     <div kendo-grid k-options="taskGridOptions(dataItem)"></div>
                 </div>
             </div>
-            <div kendo-window="deleteGridRowWin" k-title="'Delete'"
-                 k-visible="false" k-modal="true">
-              <div>Are you sure want to delete?</div>
-              <div>
-                <button class="k-button normal-btn cancel" ng-click="deleteGridRowWin.close()">Cancel</button>
-                <button class="k-button normal-btn" ng-click="confirmDelete()">Confirm</button>
+            <div kendo-window="deleteGridRowWin" k-title="delWinTitle"
+                 k-visible="false" k-modal="true" k-draggable="false">
+              <div class="titleText">{{delQuestion}}</div>
+              <div class="buttons-wrap">
+                <button class="k-button normal-btn cancel" ng-click="deleteGridRowWin.close()">{{btnCancel}}</button>
+                <button class="k-button normal-btn" ng-click="confirmDelete()">{{btnConfirm}}</button>
               </div>
             </div>
 {% endverbatim %}
@@ -124,18 +123,24 @@
             $scope.automatedReportTitle = '{% trans "Automated Reports" %}';
             var etDropDown = new EtDropDown($("#rs-emailList"), []);
             $scope.isDisabled = true;
-            etDropDown.setOptions({readOnly: false, itemDisplayName: "e-mails", onchange: function(){
-                console.log("onchange");
-
-                $scope.$apply(function(){
-                     if ($scope.systemDropdown.value() > 0 && $scope.frequencyDropdown.value() > 0 && etDropDown.value().length > 0){
-                        $scope.isDisabled = false;
-                    }else{
-                         $scope.isDisabled = true;
-                    }
-                });
-
-            }});
+            etDropDown.setOptions({readOnly: false, 
+                buttonText: '{% trans "Add" context "dropdown" %}',
+                itemDisplayName: '{% trans "Emails" context "dropdown" %}',
+                emptyItemText: '{% trans "Add Email" context "dropdown" %}',
+                validationLabel: {
+                    duplicateEmail: '{% trans "Duplicated Email" context "dropdown" %}',
+                    invalidEmail: '{% trans "Invalid Email" context "dropdown" %}'
+                },
+                onchange: function(){
+                    $scope.$apply(function(){
+                         if ($scope.systemDropdown.value() > 0 && $scope.frequencyDropdown.value() > 0 && etDropDown.value().length > 0){
+                            $scope.isDisabled = false;
+                        }else{
+                             $scope.isDisabled = true;
+                        }
+                    });
+                }
+            });
 
             $scope.description = '{% trans "Set the system to email you an energy report each month or week, so you can stay informaed and up to date on your energy use." %}';
             $scope.btnConfirm = '{% trans "Confirm" %}';
@@ -147,6 +152,10 @@
             $scope.step2Title = '{% trans "Select Frequency" %}';
             $scope.step3Title = '{% trans "Confirm and Go" %}';
             $scope.recordTitle = '{% trans "Manage Automated Reports" %}';
+            $scope.delWinTitle = '{% trans "Delete" %}';
+            $scope.delQuestion = '{% trans "Are you sure you want to delete the item?" %}';
+            $scope.btnCancel = '{% trans "Cancel" %}';
+
             var userDataSource = new kendo.data.DataSource({
                 transport: {
                     read: {
@@ -265,14 +274,14 @@
                 return {
                     dataSource: scheduleTaskDataSource,
                     columns: [
-                        { field: "system_id", title:"Scope", width: "26%", editor: systemDropDownEditor,
+                        { field: "system_id", title: '{% trans "Scope" %}', width: "26%", editor: systemDropDownEditor,
                               template: function(dataItem) {
                               return $.grep(company_systems, function(e) {
                                   return e.id == dataItem.system_id
                               })[0].fullname;
                           }
                         },
-                        { field: "frequency_id", title:"Frequency", width: "12%", editor: frequencyDropDownEditor,
+                        { field: "frequency_id", title: '{% trans "Frequency" %}', width: "12%", editor: frequencyDropDownEditor,
                           template: function(dataItem) {
                               return $.grep(frequencies, function(e) {
                                   return e.id == dataItem.frequency_id
@@ -280,7 +289,7 @@
                           }
                         },
                         
-                        { field: "receivers", title: "Email", width: "20%", editor: receivers_editor,
+                        { field: "receivers", title: '{% trans "Email" %}', width: "20%", editor: receivers_editor,
                           template: function(dataItem) {
                               var arr = $.map(dataItem.receivers, function(r) { return r.email; });
                               return arr.join(',');
@@ -290,13 +299,13 @@
                             command: [{
                                 name: "edit",
                                 text: {
-                                    edit: "Edit",
-                                    update: "Confirm",
-                                    cancel: "Cancel"
+                                    edit: '{% trans "Edit" %}',
+                                    update: '{% trans "Confirm" %}',
+                                    cancel: '{% trans "Cancel" %}'
                                 }
                             }, {
                                 name: "mydestroy",
-                                text: "Delete",
+                                text: '{% trans "Delete" %}',
                                 click: function(e) {
                                     var tr = $(e.target).closest("tr"); // get the current table row (tr)
                                     var data = this.dataItem(tr);
@@ -310,7 +319,7 @@
                                     $scope.deleteGridRowWin.center().open();
                                 }
                             }], 
-                            title: "Actions", 
+                            title: '{% trans "Actions" %}', 
                             width: "160px" 
                         }
                     ],
@@ -340,7 +349,13 @@
                 var e = new EtDropDown($('#edit_email_popup'), emails);
                 e.setOptions({
                     readOnly: false,
-                    itemDisplayName: "e-mails",
+                    buttonText: '{% trans "Add" context "dropdown" %}',
+                    itemDisplayName: '{% trans "Emails" context "dropdown" %}',
+                    emptyItemText: '{% trans "Add Email" context "dropdown" %}',
+                    validationLabel: {
+                        duplicateEmail: '{% trans "Duplicated Email" context "dropdown" %}',
+                        invalidEmail: '{% trans "Invalid Email" context "dropdown" %}'
+                    },
                     ignoreCase: true,
                     onchange: function() {
                         options.model.receivers = $.map(e.value(), function(email, i) {

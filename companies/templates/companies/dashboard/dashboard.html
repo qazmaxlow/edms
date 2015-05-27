@@ -82,10 +82,10 @@
           {% include "companies/dashboard/widgets/_progress.html" with widget_id=6 %}
         </div>
         <div class="col-md-4 col-xs-6">
-          {% include "companies/dashboard/widgets/_so_far.html" with widget_id=7 %}
+          {% include "companies/dashboard/widgets/_cumulative_savings.html" with widget_id=7 %}
         </div>
         <div class="col-md-4 col-xs-6">
-          {% include "companies/dashboard/widgets/_last_week_stats.html" with widget_id=8 %}
+          {% include "companies/dashboard/widgets/_goal_tracking.html" with widget_id=8 %}
         </div>
     </div>
 </div>
@@ -908,8 +908,8 @@
     });
 
     ngapp.controller("WidgetProgress", function($scope){
-        $scope.isPast12Month = true;
-        $scope.percent = -14;
+        $scope.isPast12Month = "1";
+        $scope.percent = 14;
         $scope.lastYear = 2014;
         
         $scope.isIncrease = $scope.percent > 0;
@@ -926,9 +926,76 @@
         $scope.comparedToText = '{% trans "compared to " %}' + $scope.lastYear;
         $scope.yearRangeText = $scope.lastYear + ' - ' + ($scope.lastYear + 1);
 
-        $scope.toggle = function(){
-            $scope.isPast12Month = !$scope.isPast12Month;
-        }
+        var progress_ds = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    async: false,
+                    url: "{% url 'companies.progesses.so-far-this-year' current_system.code %}",
+                    type: 'GET',
+                    dataType: "json"
+                }
+            },
+            schema: {
+                // Fix for single result
+                data: function(response) {
+                    return [response];
+                }
+            }
+        });
+
+        progress_ds.read();
+        $scope.soFarThisYear = progress_ds.data()[0];
+
+        // $scope.toggle = function(){
+        //     $scope.isPast12Month = !$scope.isPast12Month;
+        // }
+
+    });
+
+    ngapp.controller("WidgetCumulative", function($scope){
+        $scope.isPast12Month = "1";
+        $scope.sinceDate = new Date();
+        $scope.baselineYear = "2014 - 15";
+        $scope.currencyUnit = "HKD";
+        $scope.savedAmt = 2345;
+        $scope.co2Amt = 3;
+        $scope.isSaved = false;
+
+        $scope.title = '{% trans "Cumulative Savings" %}';
+        $scope.p12BtnText = '{% trans "Past 12 months" %}';
+        $scope.thisYrBtnText = '{% trans "So far this year" %}';
+        $scope.p12HeaderText = '{% trans "Since " %}' + kendo.toString($scope.sinceDate, "D") + '{% trans " you have" %}';
+        $scope.thisYrHeaderText = '{% trans "So far this year you have" %}';
+        $scope.footerText = '{% trans "Compared with your baseline year of " %}' + $scope.baselineYear;
+        $scope.savedText1 = $scope.isSaved ? '{% trans "Saved" %}' : '{% trans "Reduced" %}';
+        $scope.savedText2 = '{% trans "on energy costs" %}';
+        $scope.reducedText1 = $scope.isSaved ? '{% trans "Reduced" %}' : '{% trans "Reduced" %}';
+        $scope.tons = '{% trans "Tons" %}';
+
+        // $scope.toggle = function(){
+        //     $scope.isPast12Month = !$scope.isPast12Month;
+        // }
+
+    });
+
+    ngapp.controller("WidgetGoalTracking", function($scope){
+        // $scope.goalDropdown.value();
+        $scope.selectedGoal = "0";
+
+        $scope.title = '{% trans "Goal Tracking" %}';
+        $scope.p12BtnText = '{% trans "Past 12 months" %}';
+        $scope.btnText = '{% trans "Goal-1" %}';
+        $scope.descPart1Text = '{% trans "Reduce energy use in " %}';
+        $scope.descPart2Text = '{% trans "by " %}';
+        $scope.descPart3Text = '{% trans "% compared to" %}';
+
+
+        $scope.thisYrDescLine1Text = '{% trans "So far this year" %}';
+        $scope.increaseLine2Text = '{% trans "you have increased your energy use" %}';
+        $scope.decreaseLine2Text = '{% trans "you have decreased your energy use" %}';
+        $scope.fromBaselineText = '{% trans "from your baseline of" %}';
+        $scope.comparedToText = '{% trans "compared to " %}' + $scope.lastYear;
+        $scope.yearRangeText = $scope.lastYear + ' - ' + ($scope.lastYear + 1);
 
     });
 </script>

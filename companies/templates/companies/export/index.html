@@ -50,7 +50,7 @@
 <div ng-app="Entrak">
     <div ng-controller="ExportController">
         <div class="row export-base" ng-class="{chinese : !eng}">
-            <div class="col-md-4 description">
+            <div class="col-xs-4 description">
                 <p class="select-text">
                     <img src="/static/images/export/left-quote.png"></img>
                     <span ng-bind="description"></span>
@@ -59,7 +59,7 @@
                 <div class="yellow-bottom"></div>
                 <img class="main-img" src="/static/images/export/entrak-illu.png"></img>
             </div>
-            <div class="col-md-8 steps">
+            <div class="col-xs-8 steps">
                 {% verbatim %}
                 <div class="row">
                     <div class="col-xs-6 left">
@@ -199,7 +199,7 @@
         $scope.date_end.setDate($scope.date_end.getDate()+1);
 
         $scope.disableLv = "";
-        $scope.$watchGroup(["date_start", "date_end"], function(nVal, oVal, scope){console.log($("#export-end-date"));
+        $scope.$watchGroup(["date_start", "date_end"], function(nVal, oVal, scope){
             // $("#export-end-date").data("kendoDatePicker").min(nVal[0]);
             // $("#export-start-date").data("kendoEtDatePicker").max(nVal[1]);
             // $("#export-start-date").datepicker("option", "maxDate", nVal[1]);
