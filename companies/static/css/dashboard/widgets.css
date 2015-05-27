@@ -735,7 +735,6 @@
     padding-left: 15px;
     padding-top: 10px;
     border-bottom: 1px solid #f2f2f2;
-    background-size: contain;
     background-repeat: no-repeat;
     background-position: right bottom;
 }
@@ -793,8 +792,107 @@
 /* -----cumulative saving widget */
 
 /* goal tracking widget----- */
-.goal-widget {
-    
+.goal-widget .widget-content .top-row {
+    padding-top: 12px;
+    padding-left: 15px;
+    padding-right: 150px;
+    height: 108px;
+    background-color: #eeeeee;
+    background-repeat: no-repeat;
+    background-position: right bottom;
+    background-image: url(../../images/dashboard/goal.png);
+
+    color: #354960;
+    font-size: 1em;
+    font-weight: 300;
+}
+
+.bold {
+    font-weight: 600;
+}
+
+.normal {
+    font-weight: 500;
+}
+
+.goal-widget .widget-content .second-row {
+    height: 96px;
+    background-repeat: no-repeat;
+    background-position: 15px top;
+    background-image: url(../../images/dashboard/button-down.png);
+    border-bottom: 1px solid #f2f2f2;
+
+    color: #354960;
+    font-size: 0.929em;
+    font-weight: 300;
+}
+
+.goal-widget .widget-content .second-row .arrow-icon {
+    display: inline-block;
+    height: 100%;
+    width: 52px;
+    vertical-align: middle;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url(../../images/dashboard/down.png);
+}
+
+.goal-widget .widget-content .second-row .arrow-icon.up {
+    background-image: url(../../images/dashboard/up.png);
+}
+
+.goal-widget .widget-content .second-row .right-text,
+.goal-widget .widget-content .third-row .right-text {
+    display: inline-block;
+    padding-top: 13px;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.goal-widget .second-row .right-text .percent {
+    padding-top: 4px;
+    color: #354960;
+}
+
+.goal-widget .third-row .right-text .percent {
+    padding: 4px 0;
+}
+
+.goal-widget .second-row .right-text .percent.green-text {
+    color: #74C26B;
+}
+
+.goal-widget .second-row .right-text .percent.red-text {
+    color: #D65C2C;
+}
+
+.goal-widget .right-text .percentNum {
+    line-height: 100%;
+    font-size: 2.214em;
+    font-weight: 600;
+}
+
+.goal-widget .right-text .percentSign {
+    line-height: 100%;
+    font-size: 1.429em;
+    font-weight: 600;
+}
+
+.goal-widget .widget-content .third-row {
+    height: 96px;
+    color: #354960;
+    font-size: 0.929em;
+    font-weight: 300;
+}
+
+.goal-widget .widget-content .third-row .goal-icon {
+    display: inline-block;
+    height: 100%;
+    width: 52px;
+    vertical-align: middle;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url(../../images/dashboard/goal-small.png);
 }
 
 /* -----goal tracking widget */

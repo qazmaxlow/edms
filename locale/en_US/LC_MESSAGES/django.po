@@ -2,13 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
-#, fuzzy
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-26 09:35+0000\n"
+"POT-Creation-Date: 2015-05-27 05:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,7 +73,6 @@ msgid "{0} - Monthly Energy Report"
 msgstr ""
 
 #: companies/report_views.py:600
-#, fuzzy
 msgid "week"
 msgstr "Weekdays"
 
@@ -138,13 +136,11 @@ msgid "tcmonth"
 msgstr ""
 
 #: companies/report_views.py:837
-#, fuzzy
 msgid "This week"
 msgstr "Weekdays"
 
 #: companies/report_views.py:838
 #: companies/templates/companies/dashboard/dashboard.html:134
-#, fuzzy
 msgid "Last week"
 msgstr "Weekdays"
 
@@ -324,7 +320,6 @@ msgid "Comparison"
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:680
-#, fuzzy
 msgid "So far this week"
 msgstr "Weekdays"
 
@@ -341,7 +336,6 @@ msgid "By this time last month"
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:717
-#, fuzzy
 msgid "Last Week Stats"
 msgstr "Weekdays"
 
@@ -358,7 +352,6 @@ msgid "than two weeks ago"
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:906
-#, fuzzy
 msgid "average weekday"
 msgstr "Weekdays"
 
@@ -373,15 +366,14 @@ msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:919
 #: companies/templates/companies/dashboard/dashboard.html:965
-#: companies/templates/companies/dashboard/dashboard.html:990
+#: companies/templates/companies/dashboard/dashboard.html:986
 msgid "Past 12 months"
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:920
 #: companies/templates/companies/dashboard/dashboard.html:922
 #: companies/templates/companies/dashboard/dashboard.html:966
-#: companies/templates/companies/dashboard/dashboard.html:997
-#, fuzzy
+#: companies/templates/companies/dashboard/dashboard.html:993
 msgid "So far this year"
 msgstr "Weekdays"
 
@@ -391,22 +383,22 @@ msgid "Over the past 12 months"
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:923
-#: companies/templates/companies/dashboard/dashboard.html:998
+#: companies/templates/companies/dashboard/dashboard.html:994
 msgid "you have increased your energy use"
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:924
-#: companies/templates/companies/dashboard/dashboard.html:999
+#: companies/templates/companies/dashboard/dashboard.html:995
 msgid "you have decreased your energy use"
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:925
-#: companies/templates/companies/dashboard/dashboard.html:1000
+#: companies/templates/companies/dashboard/dashboard.html:996
 msgid "from your baseline of"
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:926
-#: companies/templates/companies/dashboard/dashboard.html:1001
+#: companies/templates/companies/dashboard/dashboard.html:997
 msgid "compared to "
 msgstr ""
 
@@ -424,7 +416,6 @@ msgid " you have"
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:968
-#, fuzzy
 msgid "So far this year you have"
 msgstr "Weekdays"
 
@@ -449,28 +440,28 @@ msgstr ""
 msgid "Tons"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:989
+#: companies/templates/companies/dashboard/dashboard.html:985
 msgid "Goal Tracking"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:991
+#: companies/templates/companies/dashboard/dashboard.html:987
 msgid "Goal-1"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:992
+#: companies/templates/companies/dashboard/dashboard.html:988
 msgid "Reduce energy use in "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:993
+#: companies/templates/companies/dashboard/dashboard.html:989
 msgid "by "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:994
+#: companies/templates/companies/dashboard/dashboard.html:990
 #, python-format
 msgid "%% compared to"
 msgstr ""
 
-#: companies/templates/companies/dashboard/widgets/_cumulative_savings.html:31
+#: companies/templates/companies/dashboard/widgets/_cumulative_savings.html:35
 msgid "of CO<sub>2</sub> emissions"
 msgstr ""
 
@@ -598,7 +589,6 @@ msgid "pm"
 msgstr ""
 
 #: companies/templates/companies/report_schedule/report_schedule.html:38
-#, fuzzy
 msgid "REPORTS"
 msgstr "REPORTS"
 
@@ -965,7 +955,6 @@ msgid "Average"
 msgstr ""
 
 #: companies/templates/companies/reports/_report_content.html:385
-#, fuzzy
 msgid "weekday"
 msgstr "Weekdays"
 
@@ -1015,7 +1004,6 @@ msgid "than average weekend"
 msgstr ""
 
 #: companies/templates/companies/reports/_report_content.html:592
-#, fuzzy
 msgid "weekend"
 msgstr "Weekdays"
 
@@ -2150,7 +2138,7 @@ msgid "Username"
 msgstr ""
 
 #: entrak/templates/general_settings.html:331
-#: entrak/templates/general_settings.html:350 entrak/templates/login.html:127
+#: entrak/templates/general_settings.html:350 entrak/templates/login.html:133
 #: entrak/templates/manage_accounts.html:128
 #: entrak/templates/manage_accounts.html:372
 msgid "Password"
@@ -2356,51 +2344,55 @@ msgstr ""
 msgid "to:"
 msgstr ""
 
-#: entrak/templates/login.html:47
+#: entrak/templates/login.html:54
 msgid "The reset password link has been sent to your email."
 msgstr ""
 
-#: entrak/templates/login.html:53
+#: entrak/templates/login.html:58 user/views.py:351
 msgid "This email is not linked to any existing account."
 msgstr ""
 
-#: entrak/templates/login.html:68
+#: entrak/templates/login.html:74
 msgid "Forget Password"
 msgstr ""
 
-#: entrak/templates/login.html:115 user/templates/activate_account.html:64
+#: entrak/templates/login.html:121 user/templates/activate_account.html:64
+#: user/templates/reset_password.html:63
 msgid "Welcome to En-trak<sup>TM</sup>"
 msgstr ""
 
-#: entrak/templates/login.html:116 user/templates/activate_account.html:65
+#: entrak/templates/login.html:122 user/templates/activate_account.html:65
+#: user/templates/reset_password.html:64
 msgid "Turning Data into Actionable Intelligence"
 msgstr ""
 
-#: entrak/templates/login.html:118 user/templates/activate_account.html:67
+#: entrak/templates/login.html:124 user/templates/activate_account.html:67
+#: user/templates/reset_password.html:66
 msgid "To use the En-trak monitor platform, please sign in"
 msgstr ""
 
-#: entrak/templates/login.html:123
+#: entrak/templates/login.html:129
 msgid "Username / Email"
 msgstr ""
 
-#: entrak/templates/login.html:132
+#: entrak/templates/login.html:138
 msgid "Remember Me"
 msgstr ""
 
-#: entrak/templates/login.html:135 user/templates/activate_account.html:83
+#: entrak/templates/login.html:141 user/templates/activate_account.html:83
+#: user/templates/reset_password.html:82
 msgid "Sign In"
 msgstr ""
 
-#: entrak/templates/login.html:137 user/templates/activate_account.html:85
+#: entrak/templates/login.html:143 user/templates/activate_account.html:85
 msgid "Forgot your password?"
 msgstr ""
 
-#: entrak/templates/login.html:155
+#: entrak/templates/login.html:161
 msgid "Please enter your email"
 msgstr ""
 
-#: entrak/templates/login.html:158 entrak/templates/manage_accounts.html:377
+#: entrak/templates/login.html:164 entrak/templates/manage_accounts.html:377
 #: entrak/templates/manage_accounts.html:391
 #: entrak/templates/manage_accounts.html:444
 #: entrak/templates/manage_accounts.html:557
@@ -2454,6 +2446,7 @@ msgstr ""
 #: user/templates/activate_account.html:133
 #: user/templates/activate_account.html:153
 #: user/templates/activate_account.html:157
+#: user/templates/reset_password.html:95 user/templates/reset_password.html:99
 msgid "*Required field"
 msgstr ""
 
@@ -2482,6 +2475,7 @@ msgstr ""
 
 #: entrak/templates/manage_accounts.html:211 entrak/templates/profile.html:226
 #: user/templates/activate_account.html:283
+#: user/templates/reset_password.html:169
 msgid "*Passwords do not match"
 msgstr ""
 
@@ -2500,7 +2494,6 @@ msgid "Department"
 msgstr ""
 
 #: entrak/templates/manage_accounts.html:371
-#, fuzzy
 msgid "User Name"
 msgstr "Weekdays"
 
@@ -2544,6 +2537,7 @@ msgstr ""
 
 #: entrak/templates/manage_accounts.html:685
 #: entrak/templates/manage_accounts.html:688 entrak/templates/profile.html:197
+#: user/templates/reset_password.html:145
 msgid "Password changed."
 msgstr ""
 
@@ -2644,7 +2638,6 @@ msgid "Sales"
 msgstr ""
 
 #: entrak/templates/profile.html:84 user/templates/activate_account.html:106
-#, fuzzy
 msgid "Last Name"
 msgstr "Weekdays"
 
@@ -3031,46 +3024,64 @@ msgstr ""
 msgid "This is an overall"
 msgstr ""
 
-#: user/models.py:104
+#: user/models.py:117
 msgid "invitation email manager title"
 msgstr "Invitation to Create Admin Account"
 
-#: user/models.py:105
+#: user/models.py:118
 msgid "invitation email manager heading"
 msgstr ""
 "You have been invited to create an admin account for your organization’s En-"
 "trak Energy Monitoring System."
 
-#: user/models.py:106
+#: user/models.py:119
 msgid "invitation email manager description"
 msgstr ""
 "With En-trak you can see when, where and how you are spending your energy "
 "dollars, enabling effective energy management."
 
-#: user/models.py:108
+#: user/models.py:121
 msgid "invitation email user title"
 msgstr "Invitation to Create User Account"
 
-#: user/models.py:109
+#: user/models.py:122
 #, python-brace-format
 msgid "{0} invitation email user heading"
 msgstr "{0}"
 
-#: user/models.py:110
+#: user/models.py:123
 msgid "invitation email user description"
 msgstr ""
 "has invited you to create an account for your organization’s En-trak Energy "
 "Monitoring System."
 
-#: user/models.py:119
+#: user/models.py:132
 msgid "invitation email button"
 msgstr "Create En-trak Account"
 
-#: user/views.py:105
+#: user/models.py:155 user/templates/reset_password.html:129
+msgid "reset password title"
+msgstr "Forgot/Reset Password"
+
+#: user/models.py:156
+msgid "reset password heading"
+msgstr ""
+"En-trak received a request to reset the password for your En-trak account."
+
+#: user/models.py:157
+msgid "reset password description"
+msgstr ""
+"To reset your password, click on the link below and input your new password."
+
+#: user/models.py:166 user/templates/reset_password.html:106
+msgid "reset password button"
+msgstr "Reset Password"
+
+#: user/views.py:106 user/views.py:212
 msgid "Invalid user or token"
 msgstr ""
 
-#: user/views.py:109
+#: user/views.py:110 user/views.py:216
 msgid "Invalid request"
 msgstr ""
 
@@ -3092,11 +3103,13 @@ msgid "Password"
 msgstr ""
 
 #: user/templates/activate_account.html:152
+#: user/templates/reset_password.html:94
 msgctxt "activate_input"
 msgid "Password"
 msgstr ""
 
 #: user/templates/activate_account.html:156
+#: user/templates/reset_password.html:98
 msgctxt "activate"
 msgid "Confirm Password"
 msgstr ""
