@@ -19,13 +19,13 @@ def get_saving(system, start_date, end_date, unitrates):
 
     _ranges = []
     # _st = this_year_first_date
-    _unitrate = unitrates[0]
+    _unitrate = unitrates.first()
 
-    if _unitrate.effective_date > start_date:
+    if _unitrate is None or _unitrate.effective_date > start_date:
         # get the unit rate for this year
         unitrate = system.get_unit_rate(start_date)
-        _ranges.append({'from': start_date,
-              'to': unitrate.effective_date,
+        _ranges.append({'from': unitrate.effective_date,
+              'to': start_date,
               'unitrate': unitrate}
         )
         _unitrate = unitrate
@@ -87,6 +87,15 @@ class savingSoFarThisYear(APIView):
             timezone.now() + datetime.timedelta(days=1),
             unitrates
         )
+
+        co2_rates = sys.get_unitrates(start_from=this_year_first_date, target_unit='co2')
+        co2_changed = get_saving(
+            sys,
+            this_year_first_date,
+            timezone.now() + datetime.timedelta(days=1),
+            co2_rates
+        )
+
 
         info = {'totalCostChanged': cost_changed}
         response = Response(info, status=status.HTTP_200_OK)
