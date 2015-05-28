@@ -24,7 +24,7 @@ def get_saving(system, start_date, end_date, unitrates):
     if _unitrate.effective_date > start_date:
         # get the unit rate for this year
         unitrate = system.get_unit_rate(start_date)
-        date_ranges.append({'from': start_date,
+        _ranges.append({'from': start_date,
               'to': unitrate.effective_date,
               'unitrate': unitrate}
         )
