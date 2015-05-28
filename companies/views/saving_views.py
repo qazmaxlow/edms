@@ -25,7 +25,7 @@ class savingSoFarThisYear(APIView):
         )
         this_year_first_date = sys.time_zone.localize(this_year_first_date)
 
-        unitrates = sys.get_money_unitrates(start_from=this_year_first_date)
+        unitrates = sys.get_unitrates(start_from=this_year_first_date)
 
         # if no unit rate for this year, use the latest one
 
