@@ -94,7 +94,10 @@ class progressSoFarThisYear(APIView):
             }}
         ])
 
-        this_year_kwh = measure_sum['result'][0]['kwh']
+        if measure_sum['result']:
+            this_year_kwh = measure_sum['result'][0]['kwh']
+        else:
+            this_year_kwh = 0
 
         measure_sum = mdb_conn.source_reading_month.aggregate([
             {'$match': {
@@ -110,7 +113,10 @@ class progressSoFarThisYear(APIView):
             }}
         ])
 
-        last_year_kwh = measure_sum['result'][0]['kwh']
+        if measure_sum['result']:
+            last_year_kwh = measure_sum['result'][0]['kwh']
+        else:
+            last_year_kwh = 0
 
         # compare_last_year = (this_year_kwh - last_year_kwh) / last_year_kwh
 
