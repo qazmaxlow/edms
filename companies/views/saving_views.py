@@ -33,7 +33,6 @@ def get_saving(system, start_date, end_date, unit_code):
                   'to': _unitrate.effective_date,
                   'unitrate': unitrate}
             )
-            # _unitrate = unitrate
 
         for unitrate in unitrates[1:]:
             r = {'from': _unitrate.effective_date,
@@ -83,14 +82,14 @@ class savingSoFarThisYear(APIView):
         cost_changed = get_saving(
             sys,
             this_year_first_date,
-            timezone.now() + datetime.timedelta(days=1),
+            timezone.now(),
             'money'
         )
 
         co2_changed = get_saving(
             sys,
             this_year_first_date,
-            timezone.now() + datetime.timedelta(days=1),
+            timezone.now(),
             'co2'
         )
 
