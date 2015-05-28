@@ -11,39 +11,43 @@ from rest_framework.views import APIView
 from system.models import System
 
 
-def get_saving(system, start_date, end_date, unitrates):
-    # if no unit rate for this year, use the latest one
-
-    # start_dt = this_year_first_date
-    # end_dt = timezone.now() + datetime.timedelta(days=1)
+def get_saving(system, start_date, end_date, unit_code):
+    unitrates = system.get_unitrates(start_from=start_date, target_unit=unit_code)
 
     _ranges = []
-    # _st = this_year_first_date
     _unitrate = unitrates.first()
 
-    if _unitrate is None or _unitrate.effective_date > start_date:
-        # get the unit rate for this year
-        unitrate = system.get_unit_rate(start_date)
-        _ranges.append({'from': unitrate.effective_date,
-              'to': start_date,
-              'unitrate': unitrate}
-        )
-        _unitrate = unitrate
-
-    for unitrate in unitrates[1:]:
-        # _to = unitrate.effective_date
-        r = {'from': _unitrate.effective_date,
-              'to': unitrate.effective_date,
-              'unitrate': _unitrate}
-        _unitrate = unitrate
-        _ranges.append(r)
-
-    if _unitrate.effective_date < end_date:
-        _ranges.append({
-            'from': _unitrate.effective_date,
-            'to': end_date,
-            'unitrate': _unitrate
+    # get the closest unit rate if no unit rate in the unit rate to for the all date range
+    if _unitrate is None:
+        unitrate = system.get_unit_rate(start_date, target_unit=unit_code)
+        _ranges.append({'from': start_date,
+              'to': end_date,
+              'unitrate': unitrate
         })
+
+    else:
+        if _unitrate.effective_date > start_date:
+            # get the unit rate for start_date
+            unitrate = system.get_unit_rate(start_date, target_unit=unit_code)
+            _ranges.append({'from': start_date,
+                  'to': _unitrate.effective_date,
+                  'unitrate': unitrate}
+            )
+            # _unitrate = unitrate
+
+        for unitrate in unitrates[1:]:
+            r = {'from': _unitrate.effective_date,
+                  'to': unitrate.effective_date,
+                  'unitrate': _unitrate}
+            _unitrate = unitrate
+            _ranges.append(r)
+
+        if _unitrate.effective_date < end_date:
+            _ranges.append({
+                'from': _unitrate.effective_date,
+                'to': end_date,
+                'unitrate': _unitrate
+            })
 
     total_cost_changed = 0
     for r in _ranges:
@@ -74,29 +78,23 @@ class savingSoFarThisYear(APIView):
         )
         this_year_first_date = sys.time_zone.localize(this_year_first_date)
 
-        unitrates = sys.get_unitrates(start_from=this_year_first_date)
-
-
-        # if no unit rate for this year, use the latest one
-
         start_dt = this_year_first_date
         end_dt = timezone.now() + datetime.timedelta(days=1)
         cost_changed = get_saving(
             sys,
             this_year_first_date,
             timezone.now() + datetime.timedelta(days=1),
-            unitrates
+            'money'
         )
 
-        co2_rates = sys.get_unitrates(start_from=this_year_first_date, target_unit='co2')
         co2_changed = get_saving(
             sys,
             this_year_first_date,
             timezone.now() + datetime.timedelta(days=1),
-            co2_rates
+            'co2'
         )
 
 
-        info = {'totalCostChanged': cost_changed}
+        info = {'totalCostChanged': cost_changed, 'co2Changed': co2_changed}
         response = Response(info, status=status.HTTP_200_OK)
         return response
