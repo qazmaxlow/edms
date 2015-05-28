@@ -162,10 +162,11 @@ def get_overnight_avg_cost(system, source_ids, start_dt, end_dt):
         date_ranges.append(date_range)
 
     total_on_sum = 0
+
     for date_range in date_ranges:
         sd, ed, r = date_range
         mqs = []
-        num_day = (ed.date() - sd.date()).days + 1
+        num_day = (ed.date() - sd.date()).days
         rdays = [sd+datetime.timedelta(days=n) for n in range(num_day)]
         for rday in rdays:
             on_sd = rday.astimezone(system_tz).replace(hour=system.night_time_start.hour)
@@ -207,7 +208,6 @@ def summary_ajax(request, system_code):
     else:
         start_dt = Utils.add_month(first_record, 1).replace(day=1)
 
-
     sd = request.GET.get('start_date')
     if sd:
         start_dt = dateparse.parse_date(request.GET.get('start_date'))
@@ -229,10 +229,8 @@ def summary_ajax(request, system_code):
     end_dt = end_dt + relativedelta(days=1)
     day_source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingDay, start_dt, end_dt)
 
-
     compare_type = request.GET.get('compare_type')
     total_cost = get_total_cost(source_ids, start_dt, end_dt, compare_type)
-    print(total_cost)
 
     if compare_type == 'month':
         last_start_dt = start_dt - relativedelta(months=1)
@@ -274,6 +272,7 @@ def summary_ajax(request, system_code):
 
         if total_day > 0:
             return total_val / float(total_day)
+
 
     def _get_weekdays_cost(source_ids, start_dt, end_dt):
         day_source_readings = SourceManager.get_readings_with_target_class(source_ids, SourceReadingDay, start_dt, end_dt)
@@ -347,7 +346,7 @@ def summary_ajax(request, system_code):
     m['formated_overnight_avg_cost'] = '${0:,.0f}'.format(overnight_avg_cost) if overnight_avg_cost else None
 
     compare_to_last_overnight_avg_cost = None
-    last_overnight_avg_cost = get_overnight_avg_cost(current_system, source_ids, last_start_dt, last_end_dt + relativedelta(days=1))
+    last_overnight_avg_cost = get_overnight_avg_cost(current_system, source_ids, last_start_dt, last_end_dt)
 
     if last_overnight_avg_cost > 0 and overnight_avg_cost is not None:
         compare_to_last_overnight_avg_cost = float(overnight_avg_cost-last_overnight_avg_cost)/last_overnight_avg_cost*100
@@ -1268,7 +1267,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     m['overnight'] = overnight_usage
 
     if current_system.night_time_start.minute > 29:
-        tmpDateStart = datetime.datetime.combine(datetime.date.today(), current_system.night_time_start) + datetime.timedelta(hours=1)    
+        tmpDateStart = datetime.datetime.combine(datetime.date.today(), current_system.night_time_start) + datetime.timedelta(hours=1)
         tmpDateStart = tmpDateStart.time()
     else:
         tmpDateStart = current_system.night_time_start
