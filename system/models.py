@@ -279,8 +279,11 @@ class System(models.Model):
             }}
         ])
 
-        total_kwh = reading['result'][0]['kwh']
-        return total_kwh
+        if reading['result']:
+            return reading['result'][0]['kwh']
+        else:
+            return 0
+
 
     def get_total_cost(self, start_dt, end_dt, date_type='day'):
         """
