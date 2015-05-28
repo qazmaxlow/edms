@@ -436,6 +436,7 @@
     });
 
     ngapp.controller("WidgetBiggestConsumers", function($scope){
+        $scope.isWeek = true;
         $scope.title = '{% trans "Biggest Consumers" %}';
         $scope.btnLeft = '{% trans "Week" context "dashboard" %}';
         $scope.btnRight = '{% trans "Month" context "dashboard" %}';
@@ -471,11 +472,12 @@
 
         $scope.consumers.read().done(function() {$scope.$digest()});
 
-        $scope.isWeek = true;
         $scope.toggle = function(clickWeek){
 
             $scope.isWeek = clickWeek;
             clearInterval(refreshIntervalId);
+
+            $scope.changeText = $scope.isWeek ? '{% trans "Change from last week" %}' : '{% trans "Change from last month" %}';
 
             var retrieve_type = ($scope.isWeek ? "weekly" : "monthly");
 
@@ -1008,7 +1010,7 @@
         var saving = saving_ds.data()[0];
 
         $scope.costChanged = saving.totalCostChanged;
-        $scope.costChangedDescText = saving.totalCostChanged > 0 ? 'Losted' : 'Saved';
+        $scope.costChangedDescText = saving.totalCostChanged > 0 ? 'Lost' : 'Saved';
     });
 
     ngapp.controller("WidgetGoalTracking", function($scope){
