@@ -229,11 +229,10 @@ class System(models.Model):
         return unit_rate
 
 
-    def get_money_unitrates(self, start_from):
-        target_unit='money'
+    def get_unitrates(self, start_from, target_unit='money'):
         unit_infos = json.loads(self.unit_info)
         unit_code = unit_infos[target_unit]
-        unit_rates = UnitRate.objects.filter(category_code=target_unit, code=unit_code, effective_date__gte=start_from).order_by('-effective_date')
+        unit_rates = UnitRate.objects.filter(category_code=target_unit, code=unit_code, effective_date__gte=start_from).order_by('effective_date')
         return unit_rates
 
 
@@ -262,6 +261,29 @@ class System(models.Model):
 
         if readings:
             return sum([self.get_unit_rate(r.datetime, 'co2').rate*r.value for r in readings])
+
+    def get_total_kwh(self, start_date, end_date):
+        mdb_conn = connection.get_db()
+        source_ids = [s.id for s in self.sources]
+
+        reading = mdb_conn.source_reading_day.aggregate([
+            {'$match': {
+                'source_id': {'$in': source_ids},
+                'datetime': {
+                    '$gte': start_date,
+                    '$lt': end_date
+                }
+            }},
+            {'$group': {
+                '_id': None,
+                'kwh': {'$sum': '$value'}
+            }}
+        ])
+
+        if reading['result']:
+            return reading['result'][0]['kwh']
+        else:
+            return 0
 
 
     def get_total_cost(self, start_dt, end_dt, date_type='day'):
