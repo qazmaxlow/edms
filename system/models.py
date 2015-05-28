@@ -3,6 +3,7 @@ import datetime
 import json
 import pytz
 import operator
+import copy
 
 from bson.objectid import ObjectId
 from collections import OrderedDict
@@ -419,6 +420,42 @@ class System(models.Model):
             dt = system_tz.localize(datetime.datetime.strptime(k, "%Y-%m-%d"))
             overnight_costs.append({'date':k, 'weekday':dt, 'value':v})
         return {'data': overnight_costs, 'total': total_values, 'number_of_days': total_days}
+
+    def convert_to_meter_ds(self, start_dt, end_dt):
+
+        source_ids = [s.id for s in self.sources]
+        system_tz = pytz.timezone(self.timezone)
+
+        readings = SourceReadingHour.objects(
+            source_id__in=source_ids,
+            datetime__gte=start_dt,
+            datetime__lt=end_dt).order_by('datetime')
+
+        hour_detail = {}
+
+        for i in range(60):
+            hour_detail['m%02d'%i] = 0.00
+
+        for r in readings:
+
+            e = Electricity(
+                    datetime_utc = r.datetime,
+                    datetime_local = r.datetime.astimezone(system_tz),
+                    total = r.value,
+                    overnight_date = int(r.datetime.strftime('%Y%m%d')),
+                    overnight_total = r.value,
+                    hour_detail = copy.deepcopy(hour_detail),
+                    system_ids = [1],
+                    source_id = r.source_id
+                )
+
+            minutes = SourceReadingMin.objects(
+                source_id__in=source_ids,
+                datetime__gte=r.datetime,
+                datetime__lt=r.datetime + relativedelta(hour=1)).order_by('datetime')
+
+            for m in minutes:
+                hour_detail['m%02d'%m.datetime.minute] = m.value
 
 
 class SystemHomeImage(models.Model):

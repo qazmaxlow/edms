@@ -71,6 +71,7 @@ INSTALLED_APPS = (
     'trails',
     'apis',
     'schedulers',
+    'meters',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -82,7 +83,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'entrak.middleware.timezone_middleware.TimezoneMiddleware',
-    'entrak.middleware.locale.LocaleMiddleware',    
+    'entrak.middleware.locale.LocaleMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
