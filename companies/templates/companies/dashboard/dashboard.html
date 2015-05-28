@@ -1012,6 +1012,9 @@
 
         $scope.costChanged = saving.totalCostChanged;
         $scope.costChangedDescText = saving.totalCostChanged > 0 ? 'Lost' : 'Saved';
+
+        $scope.co2Changed = saving.co2Changed;
+        $scope.co2ChangedDescText = saving.co2Changed > 0 ? 'Increased' : 'Decreased';
     });
 
     ngapp.controller("WidgetGoalTracking", function($scope){
