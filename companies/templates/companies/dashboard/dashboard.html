@@ -957,7 +957,8 @@
         });
 
         progress_ds.read();
-        $scope.soFarThisYear = progress_ds.data()[0];
+        var progress = progress_ds.data()[0];
+        $scope.compareToLastYear = progress.compareToLastYear;
 
         // $scope.toggle = function(){
         //     $scope.isPast12Month = !$scope.isPast12Month;
