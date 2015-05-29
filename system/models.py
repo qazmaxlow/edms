@@ -14,11 +14,11 @@ from django.utils import dateparse
 from dateutil.relativedelta import relativedelta
 from mongoengine import connection, Q as MQ
 
-from egauge.manager import SourceManager
 from egauge.models import Source, SourceReadingYear, SourceReadingMonth, SourceReadingDay, SourceReadingHour, SourceReadingMin
 from entrak.settings import BASE_DIR, LANG_CODE_EN, LANG_CODE_TC
 from holiday.models import CityHoliday, Holiday
 from unit.models import UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
+from meters.models import Electricity, HourDetail
 
 from system.constants import CITY_ALL
 from system.constants import CORPORATE
@@ -208,15 +208,19 @@ class System(models.Model):
         current_tz = pytz.timezone(self.timezone)
         datetime_in_current_tz = dt.astimezone(current_tz)
 
-        if self.night_time_start.hour <= 12:
+        night_start_hour_min = self.night_time_start.hour*100 + self.night_time_start.minute
+        night_end_hour_min = self.night_time_end.hour*100 + self.night_time_end.minute
+        datetime_hour_min = datetime_in_current_tz.hour*100 + datetime_in_current_tz.minute
+
+        if night_start_hour_min <= 1200:
             # datetime_in_current_tz BETWEEN the night time start and end hours
             # prevent miscalcuation when night time start is after 00:00am
-            if (self.night_time_start.hour <=  datetime_in_current_tz.hour < self.night_time_end.hour):
+            if (night_start_hour_min <= datetime_hour_min < night_end_hour_min):
                 return datetime_in_current_tz.date() - relativedelta(days=1)
         else:
-            if datetime_in_current_tz.hour >= self.night_time_start.hour:
+            if datetime_hour_min >= night_start_hour_min:
                 return datetime_in_current_tz.date()
-            elif datetime_in_current_tz.hour < self.night_time_end.hour:
+            elif datetime_hour_min < night_end_hour_min:
                 return datetime_in_current_tz.date() - relativedelta(days=1)
 
         return None
@@ -448,36 +452,61 @@ class System(models.Model):
         source_ids = [s.id for s in self.sources]
         system_tz = pytz.timezone(self.timezone)
 
+        parent_codes = [code for code in self.path.split(',') if code !='']
+        parent_codes.append(self.code)
+        parent_systems = System.objects.filter(code__in=parent_codes)
+
         readings = SourceReadingHour.objects(
             source_id__in=source_ids,
             datetime__gte=start_dt,
             datetime__lt=end_dt).order_by('datetime')
 
-        hour_detail = {}
+        hour_detail = HourDetail()
+        es = []
+        create_count = 0
+        update_count = 0
 
         for i in range(60):
             hour_detail['m%02d'%i] = 0.00
 
         for r in readings:
 
-            e = Electricity(
+            overnight_date = self.validate_overnight(r.datetime.astimezone(system_tz))
+
+            if overnight_date:
+                overnight_date = int(overnight_date.strftime("%Y%m%d"))
+
+            e, created = Electricity.objects.get_or_create(
                     datetime_utc = r.datetime,
-                    datetime_local = r.datetime.astimezone(system_tz),
-                    total = r.value,
-                    overnight_date = int(r.datetime.strftime('%Y%m%d')),
-                    overnight_total = r.value,
-                    hour_detail = copy.deepcopy(hour_detail),
-                    system_ids = [1],
                     source_id = r.source_id
                 )
 
+            e.datetime_local = r.datetime.astimezone(system_tz)
+            e.total = r.value
+            e.overnight_date = overnight_date
+            e.overnight_total = 0
+            e.hour_detail = copy.deepcopy(hour_detail)
+            e.parent_system_ids = [s.id for s in parent_systems]
+            e.system_id = self.id
+
             minutes = SourceReadingMin.objects(
-                source_id__in=source_ids,
+                source_id=r.source_id,
                 datetime__gte=r.datetime,
-                datetime__lt=r.datetime + relativedelta(hour=1)).order_by('datetime')
+                datetime__lt=r.datetime + relativedelta(hours=1)).order_by('datetime')
 
             for m in minutes:
-                hour_detail['m%02d'%m.datetime.minute] = m.value
+                if overnight_date:
+                    e.overnight_total += m.value
+                e.hour_detail['m%02d'%m.datetime.minute] = m.value
+
+            if created:
+                create_count += 1
+            else:
+                update_count += 1
+
+            e.save()
+
+        return (create_count, update_count)
 
 
 class SystemHomeImage(models.Model):
