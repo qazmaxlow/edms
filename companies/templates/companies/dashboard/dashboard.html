@@ -1008,7 +1008,8 @@
         });
 
         progress_ds.read();
-        $scope.soFarThisYear = progress_ds.data()[0];
+        var progress = progress_ds.data()[0];
+        $scope.compareToLastYear = progress.compareToLastYear;
 
         // $scope.toggle = function(){
         //     $scope.isPast12Month = !$scope.isPast12Month;
@@ -1062,6 +1063,8 @@
 
         $scope.costChanged = saving.totalCostChanged;
         $scope.costChangedDescText = saving.totalCostChanged > 0 ? '{% trans "Lost" %}' : '{% trans "Saved" %}';
+        $scope.co2Changed = saving.co2Changed;
+        $scope.co2ChangedDescText = saving.co2Changed > 0 ? '{% trans "Increased" %}' : '{% trans "Reduced" %}';
     });
 
     ngapp.controller("WidgetGoalTracking", function($scope){

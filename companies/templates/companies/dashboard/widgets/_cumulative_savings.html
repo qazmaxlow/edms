@@ -30,8 +30,8 @@
             <div class="normal-text" ng-bind="savedText2"></div>
         </div>
         <div class="bottom-box" ng-class="{saved : isSaved}">
-            <div class="light-text" ng-bind="reducedText1"></div>
-            <div class="amount-text" ng-bind="co2Amt | entrakNumber"></div> <div class="unit-text" ng-bind="tons"></div>
+            <div class="light-text" ng-bind="co2ChangedDescText"></div>
+            <div class="amount-text" ng-bind="co2Changed / 1000 | abs | entrakNumber"></div> <div class="unit-text" ng-bind="tons"></div>
             <div class="normal-text">{% trans "of CO<sub>2</sub> emissions" %}</div>
         </div>
         <div class="footer-text" ng-bind="footerText"></div>
