@@ -8,6 +8,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from baseline.models import BaselineUsage
 from system.models import System
 
 
@@ -102,6 +103,34 @@ class savingSoFarThisYear(APIView):
 class compareToBaseline(APIView):
 
     def get(self, request, *args, **kwargs):
-        info = {}
+        syscode = self.kwargs['system_code']
+        system = System.objects.get(code=syscode)
+
+        # first date using entrak
+        start_date = system.first_record
+        start_date_year = start_date.year
+
+        end_date = timezone.now()
+        unitrates = system.get_unitrates(start_from=start_date, target_unit='money')
+
+        # baseline, assume this is one year data
+        baselines = BaselineUsage.objects.filter(system=system).order_by('start_dt')
+        year_ranges = range(start_date_year, timezone.now().year+1)
+
+        total_changed = 0
+        for data_year in year_ranges:
+            baseline_year = baselines[0].start_dt.year
+            for baseline in baselines:
+                b = baseline
+                compare_year = data_year + (baseline.start_dt.year - baseline_year)
+                compare_start_date = baseline.start_dt.replace(year = compare_year)
+                compare_end_date = baseline.end_dt.replace(year = compare_year)
+
+                # get the engry used in the peroid
+                meter_kwh = system.get_total_kwh(compare_start_date, compare_end_date)
+                changed = meter_kwh - baseline.usage
+                total_changed += changed
+
+        info = {'costChanged': total_changed}
         response = Response(info, status=status.HTTP_200_OK)
         return response
