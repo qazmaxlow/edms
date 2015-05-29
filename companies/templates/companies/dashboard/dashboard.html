@@ -54,7 +54,7 @@
 {% block page_content %}
 
 {% ifequal LANGUAGE_CODE 'zh-tw' %}
-<div class="container chinese" ng-app="Entrak">
+<div class="container chinese" ng-app="Entrak" ng-controller="Dashboard">
 {% else %}
 <div class="container" ng-app="Entrak" ng-controller="Dashboard">
 {% endifequal %}
