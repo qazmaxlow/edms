@@ -12,6 +12,36 @@ from baseline.models import BaselineUsage
 from system.models import System
 
 
+def get_unitrate_daterange_map(system, start_from=None, end_to=None, unit_code='money'):
+    unitrates = system.get_unitrates(self, start_from, end_to, unit_code)
+    _unitrate = unitrates.first()
+
+    _ranges = []
+
+    # date_range
+    if _unitrate is None:
+        pass
+    else:
+        if _unitrate.effective_date > start_date:
+            # get the unit rate for start_date
+            unitrate = system.get_unit_rate(start_date, target_unit=unit_code)
+            _ranges.append({
+                'from': start_date,
+                'to': _unitrate.effective_date,
+                'unitrate': unitrate
+            })
+
+        for unitrate in unitrates[1:]:
+            _ranges.append({
+                'from': _unitrate.effective_date,
+                'to': unitrate.effective_date,
+                'unitrate': _unitrate
+            })
+            _unitrate = unitrate
+
+    return _ranges
+
+
 def get_saving(system, start_date, end_date, unit_code):
     unitrates = system.get_unitrates(start_from=start_date, target_unit=unit_code)
 
@@ -121,10 +151,21 @@ class compareToBaseline(APIView):
         for data_year in year_ranges:
             baseline_year = baselines[0].start_dt.year
             for baseline in baselines:
-                b = baseline
                 compare_year = data_year + (baseline.start_dt.year - baseline_year)
                 compare_start_date = baseline.start_dt.replace(year = compare_year)
                 compare_end_date = baseline.end_dt.replace(year = compare_year)
+
+                # get all money unit rates of the system
+                money_rates = system.get_unitrates(
+                    start_from=compare_start_date,
+                    to = compare_end_date,
+                    target_unit='money')
+
+                # slip date to map the unit rates {start: 2014-05-01, end: 2014-05-30, rate: money_rate}
+
+                # get the closest money rate
+                start_money_rate = system.get_unit_rate(compare_start_date)
+                end_money_rate = system.get_unit_rate(compare_end_date)
 
                 # get the engry used in the peroid
                 meter_kwh = system.get_total_kwh(compare_start_date, compare_end_date)
