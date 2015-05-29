@@ -121,9 +121,11 @@
 
             $scope.viewReportTitle = '{% trans "View Reports" %}';
             $scope.automatedReportTitle = '{% trans "Automated Reports" %}';
-            var etDropDown = new EtDropDown($("#rs-emailList"), []);
+
             $scope.isDisabled = true;
-            etDropDown.setOptions({readOnly: false, 
+            var etDropDown = $("#rs-emailList").etDropDown([]);
+            etDropDown.setOptions({
+                readOnly: false, 
                 buttonText: '{% trans "Add" context "dropdown" %}',
                 itemDisplayName: '{% trans "Emails" context "dropdown" %}',
                 emptyItemText: '{% trans "Add Email" context "dropdown" %}',

@@ -54,37 +54,33 @@
 {% block page_content %}
 
 {% ifequal LANGUAGE_CODE 'zh-tw' %}
-<div class="container chinese" ng-app="Entrak">
+<div class="container chinese" ng-app="Entrak" ng-controller="Dashboard">
 {% else %}
-<div class="container" ng-app="Entrak">
+<div class="container" ng-app="Entrak" ng-controller="Dashboard">
 {% endifequal %}
-    <div ng-cloak class="row">
-        <div class="col-md-8">
+    <div ng-cloak kendo-sortable="dashboardContainer" k-options="sortableOptions" class="row">
+        <div class="col-md-8" data-widgetId="4">
             {% include "companies/dashboard/widgets/_real_time.html" with widget_id=4 %}
         </div>
-        <div class="col-md-4 col-xs-6">
+        <div class="col-md-4 col-xs-6" data-widgetId="3">
             {% include "companies/dashboard/widgets/_tips.html" with widget_id=3 %}
         </div>
-<!--     </div>
-    <div ng-cloak class="row"> -->
-        <div class="col-md-4 col-xs-6">
+        <div class="col-md-4 col-xs-6" data-widgetId="1">
           {% include "companies/dashboard/widgets/_biggest_consumers.html" with widget_id=1 %}
         </div>
-        <div class="col-md-4 col-xs-6">
+        <div class="col-md-4 col-xs-6" data-widgetId="2">
           {% include "companies/dashboard/widgets/_so_far.html" with widget_id=2 %}
         </div>
-        <div class="col-md-4 col-xs-6">
+        <div class="col-md-4 col-xs-6" data-widgetId="5">
           {% include "companies/dashboard/widgets/_last_week_stats.html" with widget_id=5 %}
         </div>
-    <!-- </div>
-    <div ng-cloak class="row"> -->
-        <div class="col-md-4 col-xs-6">
+        <div class="col-md-4 col-xs-6" data-widgetId="6">
           {% include "companies/dashboard/widgets/_progress.html" with widget_id=6 %}
         </div>
-        <div class="col-md-4 col-xs-6">
+        <div class="col-md-4 col-xs-6" data-widgetId="7">
           {% include "companies/dashboard/widgets/_cumulative_savings.html" with widget_id=7 %}
         </div>
-        <div class="col-md-4 col-xs-6">
+        <div class="col-md-4 col-xs-6" data-widgetId="8">
           {% include "companies/dashboard/widgets/_goal_tracking.html" with widget_id=8 %}
         </div>
     </div>
@@ -134,6 +130,51 @@
                 return kendo.toString(val, "##,#");
             }
         }
+    });
+
+    ngapp.controller("Dashboard", function($scope){
+        $scope.updateWiget = function(e){
+            var childScope = e.item.children().scope();
+            if (childScope && typeof childScope.updateWidgetImpl == "function"){
+                if (!childScope.$$phase){
+                    childScope.$apply(function(){
+                        childScope.updateWidgetImpl();
+                    });
+                } else {
+                    childScope.updateWidgetImpl();
+                }
+            }
+        };
+
+        $scope.sortableOptions = {
+            // cursor: "pointer"
+            handler: ".widget-header *:not(.k-dropdown *, button)",
+            end: function(e){
+                if (e.action != "remove")
+                    $scope.updateWiget(e);
+            },
+            cancel: function(e){
+                $scope.updateWiget(e);
+            },
+            hint: function(element){
+                return element.clone().width(element.outerWidth());
+            },
+            placeholder: function(element){
+                return element.clone().css({"opacity": 0.3});
+            }
+        };
+
+        function getWidgetOrder(){
+            var order = [];
+            var items = $scope.dashboardContainer.items();
+            var tmp;
+            for (var i=0; i<items.length; i++){
+                order.push(items.eq(i).attr("data-widgetId"));
+            }
+
+            return order;
+        }
+
     });
 
     ngapp.controller("WidgetRealtime", function($scope) {
@@ -429,10 +470,15 @@
 
         // update the chart every 10 sec
         $scope.refreshHeader();
-        setInterval(function(){
+
+        $scope.updateWidgetImpl = function(){
+            console.log("update real time widget");
             $scope.updateTodayMeasure();
             $scope.refreshHeader();
-        }, 10000);
+        }
+
+        setInterval($scope.updateWidgetImpl, 10000);
+
     });
 
     ngapp.controller("WidgetBiggestConsumers", function($scope){
@@ -485,8 +531,12 @@
             refreshIntervalId = setInterval(function() { $scope.consumers.read({type:retrieve_type}) }, refreshPeriod);
         };
 
+        $scope.updateWidgetImpl = function(){
+            console.log("update biggest consumers widget");
+            $scope.consumers.read();
+        };
 
-        refreshIntervalId = setInterval(function() { $scope.consumers.read(); }, refreshPeriod);
+        refreshIntervalId = setInterval($scope.updateWidgetImpl, refreshPeriod);
 
     });
 
@@ -721,9 +771,12 @@
                 });
             }
         }, 300);
-        refreshIntervalId = setInterval(function() {
+
+        $scope.updateWidgetImpl = function(){
+            console.log("update so far widget");
             costs.read().then(updateChart);
-        }, refreshPeriod);
+        };
+        refreshIntervalId = setInterval($scope.updateWidgetImpl, refreshPeriod);
     });
 
     ngapp.controller("WidgetLastWeekStats", function($scope){
@@ -837,11 +890,9 @@
                 labels: {
                     font: "0.857em ITCAvantGardeStd-Bk",
                     color: "#4B4B4B",
-
-        dateFormats: {
-            days: "ddd"
-        }
-    
+                    dateFormats: {
+                        days: "ddd"
+                    }
                 },
                 line: {
                     color: "#ECECEC",
@@ -1011,10 +1062,9 @@
         var saving = saving_ds.data()[0];
 
         $scope.costChanged = saving.totalCostChanged;
-        $scope.costChangedDescText = saving.totalCostChanged > 0 ? 'Lost' : 'Saved';
-
+        $scope.costChangedDescText = saving.totalCostChanged > 0 ? '{% trans "Lost" %}' : '{% trans "Saved" %}';
         $scope.co2Changed = saving.co2Changed;
-        $scope.co2ChangedDescText = saving.co2Changed > 0 ? 'Increased' : 'Decreased';
+        $scope.co2ChangedDescText = saving.co2Changed > 0 ? '{% trans "Increased" %}' : '{% trans "Reduced" %}';
     });
 
     ngapp.controller("WidgetGoalTracking", function($scope){
