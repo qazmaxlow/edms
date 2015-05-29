@@ -24,7 +24,7 @@
         <div class="description-6 top-space">{{isPast12Month == "1" ? p12DescLine1Text : thisYrDescLine1Text}}</div>
         <div class="description-6">{{isIncrease ? increaseLine2Text : decreaseLine2Text}}</div>
         <div class="percent">
-            <span class="percentNum">{{ soFarThisYear.compareToLastYearDetail.percentAbs | number:0 }}</span><span class="percentSign">%</span>
+            <span class="percentNum">{{ compareToLastYear * 100 | abs | number:0 }}</span><span class="percentSign">%</span>
         </div>
         <div class="description-6">{{isPast12Month == "1" ? fromBaselineText : comparedToText}}</div>
         <div class="description-6">{{isPast12Month == "1" ? yearRangeText : ""}}</div>
