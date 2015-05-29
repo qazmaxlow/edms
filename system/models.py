@@ -228,10 +228,18 @@ class System(models.Model):
         return unit_rate
 
 
-    def get_unitrates(self, start_from, target_unit='money'):
+    def get_unitrates(self, start_from=None, end_to=None, target_unit='money'):
         unit_infos = json.loads(self.unit_info)
         unit_code = unit_infos[target_unit]
-        unit_rates = UnitRate.objects.filter(category_code=target_unit, code=unit_code, effective_date__gte=start_from).order_by('effective_date')
+        kwargs = {}
+
+        if start_from is not None:
+            kwargs['effective_date__gte'] = start_from
+
+        if end_to is not None:
+            kwargs['effective_date__lte'] = end_to
+
+        unit_rates = UnitRate.objects.filter(category_code=target_unit, code=unit_code, **kwargs).order_by('effective_date')
         return unit_rates
 
 
