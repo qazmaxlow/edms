@@ -96,7 +96,6 @@ var EtDropDown = function(elm, data){
         if (checkDuplicate(item) && that.options.isEmail && validateEmail(item)){
             that.addItem(item);
             that.container.find(".error-label").removeClass("invalid-msg").addClass("valid-msg");
-            console.log(that.container.find(".error-label"));
             that.container.find("INPUT").val("");
             that.updatePopup();
                     
@@ -135,7 +134,6 @@ var EtDropDown = function(elm, data){
     });
 
 };
-
 
 EtDropDown.prototype = {
     ITEM: '<DIV class="k-itemRow"><DIV class="k-highlight"><SPAN class="k-item"></SPAN>'
@@ -232,3 +230,7 @@ EtDropDown.prototype = {
         this.popup.close();
     }
 }
+
+$.fn.etDropDown = function(data){
+    return new EtDropDown(this, data);
+};
