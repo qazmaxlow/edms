@@ -13,20 +13,28 @@ from system.models import System
 
 
 def get_unitrate_daterange_map(system, start_from=None, end_to=None, unit_code='money'):
-    unitrates = system.get_unitrates(self, start_from, end_to, unit_code)
+    unitrates = system.get_unitrates(start_from, end_to, unit_code)
     _unitrate = unitrates.first()
 
     _ranges = []
 
+
     # date_range
     if _unitrate is None:
-        pass
+        unitrate = system.get_unit_rate(start_from, target_unit=unit_code)
+        _ranges.append({
+            'from': start_from,
+            'to': end_to,
+            'unitrate': unitrate
+        })
+        assert False
+        return _ranges
     else:
-        if _unitrate.effective_date > start_date:
+        if _unitrate.effective_date > start_from:
             # get the unit rate for start_date
-            unitrate = system.get_unit_rate(start_date, target_unit=unit_code)
+            unitrate = system.get_unit_rate(start_from, target_unit=unit_code)
             _ranges.append({
-                'from': start_date,
+                'from': start_from,
                 'to': _unitrate.effective_date,
                 'unitrate': unitrate
             })
@@ -38,6 +46,13 @@ def get_unitrate_daterange_map(system, start_from=None, end_to=None, unit_code='
                 'unitrate': _unitrate
             })
             _unitrate = unitrate
+
+        if _unitrate.effective_date < end_to:
+            _ranges.append({
+                'from': _unitrate.effective_date,
+                'to': end_to,
+                'unitrate': _unitrate
+            })
 
     return _ranges
 
@@ -167,9 +182,20 @@ class compareToBaseline(APIView):
                 start_money_rate = system.get_unit_rate(compare_start_date)
                 end_money_rate = system.get_unit_rate(compare_end_date)
 
+                # kwh per day
+                kwh_per_day = baseline.usage / (baseline.end_dt - baseline.start_dt).days
+                # daterange_rates = get_unitrate_daterange_map(system, start_date, end_date, unit_code)
+                daterange_rates = get_unitrate_daterange_map(system, start_date, end_date, unit_code)
+
+                baseline_cost = 0
+                for daterange_rate in daterange_rates:
+                    baseline_cost += (daterange_rate['to'] - daterange_rate['from']).days * kwh_per_day * daterange_rate['unitrate'].rate
+
+
                 # get the engry used in the peroid
                 meter_kwh = system.get_total_kwh(compare_start_date, compare_end_date)
-                changed = meter_kwh - baseline.usage
+                # changed = meter_kwh - baseline.usage
+                changed = meter_kwh - baseline_cost
                 total_changed += changed
 
         info = {'costChanged': total_changed}
