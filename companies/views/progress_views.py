@@ -118,7 +118,7 @@ class progressCompareToBaseline(APIView):
 
         system_now = timezone.now().astimezone(system.time_zone)
         # pass 12 months, last year this month 31th > kwh < this month 1st
-        pass_12months_end = timezone.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        pass_12months_end = system_now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
         pass_12months_start = pass_12months_end - relativedelta.relativedelta(years=1)
 
         pass_12months_kwh = system.get_total_kwh(pass_12months_start, pass_12months_end)
