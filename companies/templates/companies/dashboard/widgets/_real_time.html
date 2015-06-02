@@ -27,10 +27,10 @@
         </div>
         <div ng-show="realTimeSelect=='graph'">
             <div class="row">
-                <div class="col-sm-3 no-x-padding">
+                <div class="col-xs-3 no-x-padding">
                     <span class="legend-label yaxis-legend">kWh</span>
                 </div>
-                <div class="col-sm-9 right-legend">
+                <div class="col-xs-9 right-legend">
                     <span class="dash today"></span><span class="today-mark">{{axisToday}}</span><span class="dash last-week"></span><span class="last-week-mark">{{axisLast}}</span>
                 </div>
             </div>
@@ -44,7 +44,7 @@
         <div ng-show="realTimeSelect=='rates'">
             <div class="row">
             {% verbatim %}
-            <div class="col-sm-6 rt-left-box">
+            <div class="col-xs-6 rt-left-box">
                 <div id="animationContainerMoney" class="rt-animate-money"><div id="stageMoney" class="EDGE-9220080"></div></div>
                 <div class="rt-overlay">
                     <h3 class="description-5 rt-top-text">${{ total_per_day.cost | number:0 }}</h3>
@@ -52,7 +52,7 @@
                 </div>
             </div>
             {% endverbatim %}
-            <div class="col-sm-6 rt-right-box">
+            <div class="col-xs-6 rt-right-box">
                 <div id="animationContainerCO2" class="rt-animate-co2"><div id="stageCO2" class="EDGE-18660633"></div></div>
                 <div class="rt-overlay">
                     <div class="rt-top-text">
