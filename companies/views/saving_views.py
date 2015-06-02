@@ -170,22 +170,8 @@ class compareToBaseline(APIView):
                 compare_start_date = baseline.start_dt.replace(year = compare_year)
                 compare_end_date = baseline.end_dt.replace(year = compare_year)
 
-                # get all money unit rates of the system
-                money_rates = system.get_unitrates(
-                    start_from=compare_start_date,
-                    to = compare_end_date,
-                    target_unit='money')
-
-                # slip date to map the unit rates {start: 2014-05-01, end: 2014-05-30, rate: money_rate}
-
-                # get the closest money rate
-                start_money_rate = system.get_unit_rate(compare_start_date)
-                end_money_rate = system.get_unit_rate(compare_end_date)
-
-                # kwh per day
                 kwh_per_day = baseline.usage / (baseline.end_dt - baseline.start_dt).days
-                # daterange_rates = get_unitrate_daterange_map(system, start_date, end_date, unit_code)
-                daterange_rates = get_unitrate_daterange_map(system, start_date, end_date, unit_code)
+                daterange_rates = get_unitrate_daterange_map(system, start_date, end_date, 'money')
 
                 baseline_cost = 0
                 for daterange_rate in daterange_rates:
@@ -193,9 +179,8 @@ class compareToBaseline(APIView):
 
 
                 # get the engry used in the peroid
-                meter_kwh = system.get_total_kwh(compare_start_date, compare_end_date)
-                # changed = meter_kwh - baseline.usage
-                changed = meter_kwh - baseline_cost
+                meter_cost = system.get_total_cost(compare_start_date, compare_end_date)
+                changed = meter_cost - baseline_cost
                 total_changed += changed
 
         info = {'costChanged': total_changed}
