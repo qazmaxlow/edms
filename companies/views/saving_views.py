@@ -160,6 +160,8 @@ class compareToBaseline(APIView):
         year_ranges = range(start_date_year, timezone.now().year+1)
 
         total_changed = 0
+        total_co2_changed = 0
+
         for data_year in year_ranges:
             baseline_year = baselines[0].start_dt.year
             for baseline in baselines:
@@ -174,12 +176,21 @@ class compareToBaseline(APIView):
                 for daterange_rate in daterange_rates:
                     baseline_cost += (daterange_rate['to'] - daterange_rate['from']).days * kwh_per_day * daterange_rate['unitrate'].rate
 
-
                 # get the engry used in the peroid
                 meter_cost = system.get_total_cost(compare_start_date, compare_end_date)
                 changed = meter_cost - baseline_cost
                 total_changed += changed
 
-        info = {'costChanged': total_changed}
+                # get the co2 used in the peroid
+                baseline_co2 = 0
+                daterange_co2rates = get_unitrate_daterange_map(system, start_date, end_date, 'co2')
+                for daterange_co2rate in daterange_co2rates:
+                    baseline_co2 += (daterange_co2rate['to'] - daterange_co2rate['from']).days * kwh_per_day * daterange_co2rate['unitrate'].rate
+                meter_co2 = system.get_total_co2(compare_start_date, compare_end_date)
+                co2_changed = meter_co2 - baseline_co2
+                total_co2_changed += co2_changed
+
+
+        info = {'costChanged': total_changed, 'co2Changed': total_co2_changed}
         response = Response(info, status=status.HTTP_200_OK)
         return response
