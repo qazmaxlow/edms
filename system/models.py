@@ -273,6 +273,8 @@ class System(models.Model):
 
         if readings:
             return sum([self.get_unit_rate(r.datetime, 'co2').rate*r.value for r in readings])
+        else:
+            return 0
 
     def get_total_kwh(self, start_date, end_date):
         mdb_conn = connection.get_db()
