@@ -18,8 +18,6 @@ def get_unitrate_daterange_map(system, start_from=None, end_to=None, unit_code='
 
     _ranges = []
 
-
-    # date_range
     if _unitrate is None:
         unitrate = system.get_unit_rate(start_from, target_unit=unit_code)
         _ranges.append({
@@ -27,7 +25,6 @@ def get_unitrate_daterange_map(system, start_from=None, end_to=None, unit_code='
             'to': end_to,
             'unitrate': unitrate
         })
-        assert False
         return _ranges
     else:
         if _unitrate.effective_date > start_from:
