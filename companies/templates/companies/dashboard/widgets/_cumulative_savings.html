@@ -25,13 +25,13 @@
     <div class="widget-content row">
         <div class="description-1" ng-bind="isPast12Month == '1' ? p12HeaderText : thisYrHeaderText"></div>
         <div class="top-box" ng-class="{saved : isSaved}">
-            <div class="light-text" ng-bind="costChangedDescText"></div>
-            <div class="amount-text" ng-bind="costChanged | abs | entrakNumber"></div> <div class="unit-text" ng-bind="currencyUnit"></div>
+            <div class="light-text" ng-bind="saving.costChangedDescText"></div>
+            <div class="amount-text" ng-bind="saving.costChanged | abs | entrakNumber"></div> <div class="unit-text" ng-bind="saving.currencyUnit"></div>
             <div class="normal-text" ng-bind="savedText2"></div>
         </div>
         <div class="bottom-box" ng-class="{saved : isSaved}">
-            <div class="light-text" ng-bind="co2ChangedDescText"></div>
-            <div class="amount-text" ng-bind="co2Changed / 1000 | abs | entrakNumber"></div> <div class="unit-text" ng-bind="tons"></div>
+            <div class="light-text" ng-bind="saving.co2ChangedDescText"></div>
+            <div class="amount-text" ng-bind="saving.co2Changed / 1000 | abs | entrakNumber"></div> <div class="unit-text" ng-bind="tons"></div>
             <div class="normal-text">{% trans "of CO<sub>2</sub> emissions" %}</div>
         </div>
         <div class="footer-text" ng-bind="footerText"></div>

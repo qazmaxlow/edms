@@ -1041,56 +1041,73 @@
         //     $scope.isPast12Month = !$scope.isPast12Month;
         // }
 
-        $scope.changeCumulativeOption = function(e) {
-            if ($scope.cumulativeDropdown.value() == 'sinceUsingEntrak' ) {
-                var saving_ds = new kendo.data.DataSource({
-                    transport: {
-                        read: {
-                            async: false,
-                            url: "{% url 'companies.savings.compare-to-baseline' current_system.code %}",
-                            type: 'GET',
-                            dataType: "json"
-                        }
-                    },
-                    schema: {
-                        // Fix for single result
-                        data: function(response) {
-                            return [response];
-                        }
+        function getComparedWithBaselineData() {
+            var saving_ds = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        async: false,
+                        url: "{% url 'companies.savings.compare-to-baseline' current_system.code %}",
+                        type: 'GET',
+                        dataType: "json"
                     }
-                });
+                },
+                schema: {
+                    // Fix for single result
+                    data: function(response) {
+                        return [response];
+                    }
+                }
+            });
+            saving_ds.read();
+            var saving = saving_ds.data()[0];
+            saving.costChangedDescText = saving.totalCostChanged > 0 ? '{% trans "Lost" %}' : '{% trans "Saved" %}';
+            saving.co2ChangedDescText = saving.co2Changed > 0 ? '{% trans "Increased" %}' : '{% trans "Reduced" %}';
 
-                saving_ds.read();
-                var saving = saving_ds.data()[0];
-
-                $scope.costChanged = saving.costChanged;
-            }
+            return saving;
         }
 
-        var saving_ds = new kendo.data.DataSource({
-            transport: {
-                read: {
-                    async: false,
-                    url: "{% url 'companies.savings.so-far-this-year' current_system.code %}",
-                    type: 'GET',
-                    dataType: "json"
+        function getPast12MonthData() {
+            var saving_ds = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        async: false,
+                        url: "{% url 'companies.savings.so-far-this-year' current_system.code %}",
+                        type: 'GET',
+                        dataType: "json"
+                    }
+                },
+                schema: {
+                    // Fix for single result
+                    data: function(response) {
+                        return [response];
+                    }
                 }
-            },
-            schema: {
-                // Fix for single result
-                data: function(response) {
-                    return [response];
-                }
+            });
+
+            saving_ds.read();
+            var saving = saving_ds.data()[0];
+            saving.costChangedDescText = saving.totalCostChanged > 0 ? '{% trans "Lost" %}' : '{% trans "Saved" %}';
+            saving.co2ChangedDescText = saving.co2Changed > 0 ? '{% trans "Increased" %}' : '{% trans "Reduced" %}';
+
+            return saving;
+        }
+
+        $scope.changeCumulativeOption = function(e) {
+            var saving;
+            if ($scope.cumulativeDropdown.value() == 'sinceUsingEntrak' ) {
+                saving = getComparedWithBaselineData();
             }
-        });
+            else if ($scope.cumulativeDropdown.value() == 'soFarThisYear' ) {
+                saving = getPast12MonthData();
+            }
 
-        saving_ds.read();
-        var saving = saving_ds.data()[0];
+            // saving.costChanged = 0;
+            $scope.saving = saving;
+        }
 
-        $scope.costChanged = saving.totalCostChanged;
-        $scope.costChangedDescText = saving.totalCostChanged > 0 ? '{% trans "Lost" %}' : '{% trans "Saved" %}';
-        $scope.co2Changed = saving.co2Changed;
-        $scope.co2ChangedDescText = saving.co2Changed > 0 ? '{% trans "Increased" %}' : '{% trans "Reduced" %}';
+
+        var saving = getPast12MonthData();
+        $scope.saving = saving;
     });
 
     ngapp.controller("WidgetGoalTracking", function($scope){
