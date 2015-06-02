@@ -323,6 +323,8 @@ class System(models.Model):
 
         if readings:
             return sum([self.get_unit_rate(r.datetime, 'money').rate*r.value for r in readings])
+        else:
+            return 0
 
 
     def get_total_cost_with_source_id(self, start_dt, end_dt):
