@@ -990,31 +990,64 @@
         $scope.comparedToText = '{% trans "compared to " %}' + $scope.lastYear;
         $scope.yearRangeText = $scope.lastYear + ' - ' + ($scope.lastYear + 1);
 
-        var progress_ds = new kendo.data.DataSource({
-            transport: {
-                read: {
-                    async: false,
-                    url: "{% url 'companies.progesses.so-far-this-year' current_system.code %}",
-                    type: 'GET',
-                    dataType: "json"
+        function getSoFarThisYearData() {
+            var progress_ds = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        async: false,
+                        url: "{% url 'companies.progesses.so-far-this-year' current_system.code %}",
+                        type: 'GET',
+                        dataType: "json"
+                    }
+                },
+                schema: {
+                    // Fix for single result
+                    data: function(response) {
+                        return [response];
+                    }
                 }
-            },
-            schema: {
-                // Fix for single result
-                data: function(response) {
-                    return [response];
+            });
+
+            progress_ds.read();
+            var progress = progress_ds.data()[0];
+            return progress;
+        }
+
+        function getComparedToBaselineData() {
+            var progress_ds = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        async: false,
+                        url: "{% url 'companies.progesses.compare-to-baseline' current_system.code %}",
+                        type: 'GET',
+                        dataType: "json"
+                    }
+                },
+                schema: {
+                    // Fix for single result
+                    data: function(response) {
+                        return [response];
+                    }
                 }
+            });
+
+            progress_ds.read();
+            var progress = progress_ds.data()[0];
+            return progress;
+        }
+
+        $scope.changeProgressOption = function(e) {
+            if ($scope.progressDropdown.value() == 'pass12Months' ) {
+                progress = getComparedToBaselineData();
             }
-        });
+            else if ($scope.progressDropdown.value() == 'soFarThisYear' ) {
+                progress = getSoFarThisYearData();
+            }
 
-        progress_ds.read();
-        var progress = progress_ds.data()[0];
-        $scope.compareToLastYear = progress.compareToLastYear;
+            $scope.progress = progress;
+        };
 
-        // $scope.toggle = function(){
-        //     $scope.isPast12Month = !$scope.isPast12Month;
-        // }
-
+        $scope.progress = getSoFarThisYearData();
     });
 
     ngapp.controller("WidgetCumulative", function($scope){
