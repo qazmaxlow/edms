@@ -73,7 +73,7 @@ class Electricity(Document):
     meta = {
         'indexes': [
             {'fields': [('source_id', 1), ("datetime_utc", 1)], 'unique': True},
-            {'fields': [('system_id', 1), ("datetime_utc", 1)]}
+            {'fields': [('system_id', 1), ("datetime_local", 1)]}
         ]
     }
 
@@ -86,3 +86,6 @@ class Electricity(Document):
     parent_system_ids = ListField(IntField())
     system_id = IntField()
     source_id = ObjectIdField()
+    rate_co2 = FloatField()
+    rate_money = FloatField()
+

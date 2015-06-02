@@ -226,14 +226,14 @@ class System(models.Model):
         return None
 
 
-    def get_unit_rate(self, datetime, target_unit='money'):
+    def get_unit_rate(self, datetime, target_unit=MONEY_CATEGORY_CODE):
         unit_infos = json.loads(self.unit_info)
         unit_code = unit_infos[target_unit]
         unit_rate = UnitRate.objects.filter(category_code=target_unit, code=unit_code, effective_date__lte=datetime).order_by('-effective_date').first()
         return unit_rate
 
 
-    def get_unitrates(self, start_from, target_unit='money'):
+    def get_unitrates(self, start_from, target_unit=MONEY_CATEGORY_CODE):
         unit_infos = json.loads(self.unit_info)
         unit_code = unit_infos[target_unit]
         unit_rates = UnitRate.objects.filter(category_code=target_unit, code=unit_code, effective_date__gte=start_from).order_by('effective_date')
@@ -472,6 +472,8 @@ class System(models.Model):
         for r in readings:
 
             overnight_date = self.validate_overnight(r.datetime.astimezone(system_tz))
+            unit_rate_co2 = self.get_unit_rate(r.datetime, CO2_CATEGORY_CODE)
+            unit_rate_money = self.get_unit_rate(r.datetime, MONEY_CATEGORY_CODE)
 
             if overnight_date:
                 overnight_date = int(overnight_date.strftime("%Y%m%d"))
@@ -488,6 +490,8 @@ class System(models.Model):
             e.hour_detail = copy.deepcopy(hour_detail)
             e.parent_system_ids = [s.id for s in parent_systems]
             e.system_id = self.id
+            e.rate_co2 = unit_rate_co2.rate
+            e.rate_money = unit_rate_money.rate
 
             minutes = SourceReadingMin.objects(
                 source_id=r.source_id,

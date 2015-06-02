@@ -9,6 +9,7 @@ from bson.objectid import ObjectId
 from mongoengine import connection, Q, NotUniqueError
 from egauge.models import Source, SourceMember, SourceReadingMin, SourceReadingHour,\
     SourceReadingDay, SourceReadingWeek, SourceReadingMonth, SourceReadingYear, SourceReadingMinInvalid
+from system.models import System
 from lxml import etree
 from collections import defaultdict
 from utils.utils import Utils
