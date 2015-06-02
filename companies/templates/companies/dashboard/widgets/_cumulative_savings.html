@@ -10,9 +10,9 @@
         <div class="widget-title col-xs-6">{{title}}</div>
         <div class="widget-toggle col-xs-6">
             <div class="pull-right">
-                <select kendo-dropdownlist ng-model="isPast12Month">
-                    <option value="0">{{p12BtnText}}</option>
-                    <option value="1">{{thisYrBtnText}}</option>
+                <select kendo-dropdownlist="cumulativeDropdown" ng-model="isPast12Month" k-on-change="changeCumulativeOption(kendoEvent)">
+                    <option value="sinceUsingEntrak">{{p12BtnText}}</option>
+                    <option value="soFarThisYear">{{thisYrBtnText}}</option>
                 </select>
                 <!-- <div class="long-text-toggle" ng-click="toggle()">
                     <span class="button-left">{{ isPast12Month ? p12BtnText : thisYrBtnText }}</span><span class="button-right"></span>

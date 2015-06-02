@@ -1041,6 +1041,32 @@
         //     $scope.isPast12Month = !$scope.isPast12Month;
         // }
 
+        $scope.changeCumulativeOption = function(e) {
+            if ($scope.cumulativeDropdown.value() == 'sinceUsingEntrak' ) {
+                var saving_ds = new kendo.data.DataSource({
+                    transport: {
+                        read: {
+                            async: false,
+                            url: "{% url 'companies.savings.compare-to-baseline' current_system.code %}",
+                            type: 'GET',
+                            dataType: "json"
+                        }
+                    },
+                    schema: {
+                        // Fix for single result
+                        data: function(response) {
+                            return [response];
+                        }
+                    }
+                });
+
+                saving_ds.read();
+                var saving = saving_ds.data()[0];
+
+                $scope.costChanged = saving.costChanged;
+            }
+        }
+
         var saving_ds = new kendo.data.DataSource({
             transport: {
                 read: {
