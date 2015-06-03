@@ -294,11 +294,12 @@
             stage.css('-moz-transform', 'scale(' + rescaleWidth + ', ' + rescaleHeight + ')');
             stage.css('-o-transform', 'scale(' + rescaleWidth + ', ' + rescaleHeight + ')');
         }
-
-        $(window).on('resize', function(){
+        
+        function resizeAmination() {
             scaleStage("stageCO2", "animationContainerCO2");
             scaleStage("stageMoney", "animationContainerMoney");
-        });
+        }
+        $(window).on('resize', resizeAmination);
 
         $scope.refreshHeader = function(){
             var d = new Date();
@@ -505,10 +506,7 @@
                 $scope.updateTodayMeasure();
             } else {
                 $scope.updateRates();
-                setTimeout(function(){  //without timeout, the parent dimension is incorrect
-                    scaleStage("stageCO2", "animationContainerCO2");
-                    scaleStage("stageMoney", "animationContainerMoney");
-                }, 150);
+                setTimeout(resizeAmination, 150);   //without timeout, the parent dimension is incorrect
             }
             $scope.refreshHeader();
         }
@@ -521,6 +519,9 @@
             console.log("update real time widget");
             $scope.updateTodayMeasure();
             $scope.refreshHeader();
+            if (!$scope.isGraph){
+                resizeAmination();
+            }
         }
 
         setInterval($scope.updateWidgetImpl, 10000);
