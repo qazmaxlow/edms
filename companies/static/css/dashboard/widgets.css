@@ -617,6 +617,19 @@
     background-position: left;
 }
 
+.widget-content .rt-legend {
+    height: 37px;
+}
+
+.widget-content .rt-graph {
+    height: calc(100% - 37px);
+    padding-bottom: 10px;
+}
+
+.widget-content .rt-graph .k-chart {
+    height: 200px;
+}
+
 .widget-content .xaxis-legend {
     width: 30px;
     text-align: right;
@@ -1070,6 +1083,9 @@
     height: calc(100% - 50px);
 }
 .fullscreen .rt-content {
+    height: 100%;
+}
+.fullscreen .widget-content .rt-graph .k-chart {
     height: 100%;
 }
 /* -----fullscreen */

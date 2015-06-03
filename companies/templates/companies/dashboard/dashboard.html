@@ -144,16 +144,20 @@
     ngapp.controller("Dashboard", function($scope){
         $("#exit-fullscreen-btn").click(function(){
             $("body").removeClass("fullscreen");
-            angular.element($("#dashboardController")).scope().updateWiget();
+            angular.element($("#dashboardController")).scope().updateWidget();
         });
 
         $scope.setFullscreenMode = function(){
             $("body").addClass("fullscreen");
-            $scope.updateWiget();            
+            $scope.updateWidget();            
+        };
+
+        $scope.isFullscreen = function(){
+            return $("body").hasClass("fullscreen");
         };
 
         //update all if e is null
-        $scope.updateWiget = function(e){
+        $scope.updateWidget = function(e){
             var widget;
             if (e == null){
                 widget = $("#dashboardContainer .widget-container");
@@ -193,17 +197,17 @@
             handler: ".widget-header *:not(.k-dropdown *, button)",
             end: function(e){
                 if (e.action != "remove"){
-                    $scope.updateWiget();
+                    $scope.updateWidget();
                 }
             },
             change: function(e){
                 console.log("call save layout = " + JSON.stringify($scope.getWidgetOrder()));
             },
             cancel: function(e){
-                $scope.updateWiget(e);
+                $scope.updateWidget(e);
             },
             hint: function(element){
-                return element.clone().width(element.outerWidth());
+                return element.clone().width(element.outerWidth()).height(element.outerHeight());
             },
             placeholder: function(element){
                 return element.clone().css({"opacity": 0.3});
@@ -373,7 +377,6 @@
         $scope.realTimeOptions = {
             transitions: false,
             chartArea: {
-                height: 200,
                 margin: 0,
                 background: "#FCFCFC"
             },
