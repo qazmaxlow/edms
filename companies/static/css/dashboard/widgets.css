@@ -300,7 +300,6 @@
     padding: 0px 10px 0px 15px;
 }
 
-
 /*widget content-------*/
 .widget-content {
     border-radius: 0 0 8px 8px;
@@ -516,19 +515,24 @@
 
 .eu-widget-graph {
     padding: 0 7px;
+    height: calc(100% - 50px);
 }
 
 .eu-widget-graph .eu-left-chart {
     display: inline-block;
     border-right: 1px solid #F2F2F2;
-    padding: 5px 15px;
-    height: 250px;
+    padding: 5px 15px 10px 15px;
+    height: 100%;
 }
 
 .eu-widget-graph .eu-right-chart {
     display: inline-block;
-    padding: 5px 15px;
-    height: 250px;
+    padding: 5px 15px 10px 15px;
+    height: 100%;
+}
+
+.eu-widget-graph .k-chart {
+    height: 100%;
 }
 /*-------energy use widget*/
 
@@ -697,6 +701,19 @@
 }
 /*-------real time widget*/
 
+
+/* last week stats -----*/
+.lw-graph {
+    margin-top: -5px;
+    padding: 0px 10px 0px 15px;
+    height: calc(100% - 100px);
+}
+
+.lw-graph .k-content,
+.lw-graph .k-content .k-chart {
+    height: 100%;
+}
+/* last week stats -----*/
 
 /* progess widget -----*/
 .progress-widget .bg-image {
@@ -1099,4 +1116,6 @@
 .fullscreen .long-desc-holder p {
     height: 100%;
 }
+
+
 /* -----fullscreen */

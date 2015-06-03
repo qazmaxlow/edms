@@ -150,7 +150,7 @@
         //update widgets when resize
         var rtime = new Date();;
         var timeout = false;
-        var delta = 200;
+        var delta = 150;
         $(window).on('resize', function(){
             rtime = new Date();
             if (timeout == false){
@@ -174,28 +174,31 @@
             $scope.updateWidget();            
         };
 
-        //update all if e is null
+        //update all widget if e is null
+        //setTimeout to prevent incorrect graph size (drag last week stats)
         $scope.updateWidget = function(e){
-            var widget;
-            if (e == null){
-                widget = $("#dashboardContainer .widget-container");
-            } else {
-                widget = [e.item.children()];
-            }
-
-            var wScope = null;
-            for (var i=0; i<widget.length; i++){
-                wScope = angular.element(widget[i]).scope();
-                if (wScope && typeof wScope.updateWidgetImpl == "function"){
-                    if (!wScope.$$phase){
-                        wScope.$apply(function(){
-                            wScope.updateWidgetImpl();
-                        });
-                    } else {
-                        wScope.updateWidgetImpl();
-                    }
+            setTimeout(function(){
+                var widget;
+                if (e == null){
+                    widget = $("#dashboardContainer .widget-container");
+                } else {
+                    widget = [e.item.children()];
                 }
-            }
+
+                var wScope = null;
+                for (var i=0; i<widget.length; i++){
+                    wScope = angular.element(widget[i]).scope();
+                    if (wScope && typeof wScope.updateWidgetImpl == "function"){
+                        if (!wScope.$$phase){
+                            wScope.$apply(function(){
+                                wScope.updateWidgetImpl();
+                            });
+                        } else {
+                            wScope.updateWidgetImpl();
+                        }
+                    }
+                }                
+            }, 50);
         };
 
         $scope.getWidgetOrder = function(){
@@ -215,10 +218,11 @@
             handler: ".widget-header *:not(.k-dropdown *, button)",
             end: function(e){
                 if (e.action != "remove"){
-                    $scope.updateWidget();
+                    $scope.updateWidget(e);
                 }
             },
             change: function(e){
+                //TODO save change when order changed
                 console.log("call save layout = " + JSON.stringify($scope.getWidgetOrder()));
             },
             cancel: function(e){
@@ -709,7 +713,6 @@
         }
 
         var ca = {
-            height: 230,
             margin: 0,
             background: '#FCFCFC'
         };
@@ -883,8 +886,11 @@
         $scope.percentage_change = 0;
         $scope.isWeekday = true;
 
-        function updateChart() {
+        $scope.updateWidgetImpl = function(){
+            $scope.lastWeekStatChart.refresh();
+        }
 
+        function updateChart() {
             if ($scope.isWeekday) {
                 $scope.lastWeekStatChart.setOptions({valueAxis: {max: dayMaxStep, majorUnit: dayStep}});
                 $scope.lastWeekStatChart.dataSource.data(dayUsage.data);
@@ -909,7 +915,6 @@
                 data: []
             },
             chartArea: {
-                height: 190,
                 margin: 0,
                 background: "#FCFCFC"
             },
