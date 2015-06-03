@@ -26,7 +26,7 @@
             </div>
         </div>
         <div ng-show="realTimeSelect=='graph'" class="rt-graph-container">
-            <div class="row">
+            <div class="row rt-legend">
                 <div class="col-xs-3 no-x-padding">
                     <span class="legend-label yaxis-legend">kWh</span>
                 </div>
@@ -34,8 +34,8 @@
                     <span class="dash today"></span><span class="today-mark">{{axisToday}}</span><span class="dash last-week"></span><span class="last-week-mark">{{axisLast}}</span>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-12 no-x-padding">
+            <div class="row rt-graph">
+                <div class="col-sm-12 no-x-padding rt-content">
                     <div kendo-chart="realTimeChart" k-options="realTimeOptions" class="auto-width widget-graph"></div>
                 </div>
             </div>

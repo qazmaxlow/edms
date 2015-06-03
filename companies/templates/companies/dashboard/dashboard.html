@@ -144,36 +144,61 @@
     ngapp.controller("Dashboard", function($scope){
         $("#exit-fullscreen-btn").click(function(){
             $("body").removeClass("fullscreen");
-            angular.element($("#dashboardController")).scope().updateWiget();
+            angular.element($("#dashboardController")).scope().updateWidget();
         });
+
+        //update widgets when resize
+        var rtime = new Date();;
+        var timeout = false;
+        var delta = 150;
+        $(window).on('resize', function(){
+            rtime = new Date();
+            if (timeout == false){
+                timeout = true;
+                setTimeout(resizeUpdate, delta);
+            }
+        });
+        function resizeUpdate(){
+            if (new Date() - rtime < delta){
+                setTimeout(resizeUpdate, delta);
+            } else {
+                timeout = false;
+                if ($("body").hasClass("fullscreen")){  //fix height for non-fullscreen, no need update chart
+                    angular.element($("#dashboardController")).scope().updateWidget();    
+                }
+            }
+        }
 
         $scope.setFullscreenMode = function(){
             $("body").addClass("fullscreen");
-            $scope.updateWiget();            
+            $scope.updateWidget();            
         };
 
-        //update all if e is null
-        $scope.updateWiget = function(e){
-            var widget;
-            if (e == null){
-                widget = $("#dashboardContainer .widget-container");
-            } else {
-                widget = [e.item.children()];
-            }
-
-            var wScope = null;
-            for (var i=0; i<widget.length; i++){
-                wScope = angular.element(widget[i]).scope();
-                if (wScope && typeof wScope.updateWidgetImpl == "function"){
-                    if (!wScope.$$phase){
-                        wScope.$apply(function(){
-                            wScope.updateWidgetImpl();
-                        });
-                    } else {
-                        wScope.updateWidgetImpl();
-                    }
+        //update all widget if e is null
+        //setTimeout to prevent incorrect graph size (drag last week stats)
+        $scope.updateWidget = function(e){
+            setTimeout(function(){
+                var widget;
+                if (e == null){
+                    widget = $("#dashboardContainer .widget-container");
+                } else {
+                    widget = [e.item.children()];
                 }
-            }
+
+                var wScope = null;
+                for (var i=0; i<widget.length; i++){
+                    wScope = angular.element(widget[i]).scope();
+                    if (wScope && typeof wScope.updateWidgetImpl == "function"){
+                        if (!wScope.$$phase){
+                            wScope.$apply(function(){
+                                wScope.updateWidgetImpl();
+                            });
+                        } else {
+                            wScope.updateWidgetImpl();
+                        }
+                    }
+                }                
+            }, 50);
         };
 
         $scope.getWidgetOrder = function(){
@@ -193,17 +218,18 @@
             handler: ".widget-header *:not(.k-dropdown *, button)",
             end: function(e){
                 if (e.action != "remove"){
-                    $scope.updateWiget();
+                    $scope.updateWidget(e);
                 }
             },
             change: function(e){
+                //TODO save change when order changed
                 console.log("call save layout = " + JSON.stringify($scope.getWidgetOrder()));
             },
             cancel: function(e){
-                $scope.updateWiget(e);
+                $scope.updateWidget(e);
             },
             hint: function(element){
-                return element.clone().width(element.outerWidth());
+                return element.clone().width(element.outerWidth()).height(element.outerHeight());
             },
             placeholder: function(element){
                 return element.clone().css({"opacity": 0.3});
@@ -299,7 +325,6 @@
             scaleStage("stageCO2", "animationContainerCO2");
             scaleStage("stageMoney", "animationContainerMoney");
         }
-        $(window).on('resize', resizeAmination);
 
         $scope.refreshHeader = function(){
             var d = new Date();
@@ -373,7 +398,6 @@
         $scope.realTimeOptions = {
             transitions: false,
             chartArea: {
-                height: 200,
                 margin: 0,
                 background: "#FCFCFC"
             },
@@ -689,7 +713,6 @@
         }
 
         var ca = {
-            height: 230,
             margin: 0,
             background: '#FCFCFC'
         };
@@ -863,8 +886,11 @@
         $scope.percentage_change = 0;
         $scope.isWeekday = true;
 
-        function updateChart() {
+        $scope.updateWidgetImpl = function(){
+            $scope.lastWeekStatChart.refresh();
+        }
 
+        function updateChart() {
             if ($scope.isWeekday) {
                 $scope.lastWeekStatChart.setOptions({valueAxis: {max: dayMaxStep, majorUnit: dayStep}});
                 $scope.lastWeekStatChart.dataSource.data(dayUsage.data);
@@ -889,7 +915,6 @@
                 data: []
             },
             chartArea: {
-                height: 190,
                 margin: 0,
                 background: "#FCFCFC"
             },
