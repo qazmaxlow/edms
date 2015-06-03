@@ -74,9 +74,11 @@
 }
 
 .widget-content .full-width-img {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
     width: 100%;
-    height: auto;
-    max-height: 170px
+    height: 100px;
 }
 
 .left-padding-15 {
@@ -1039,7 +1041,7 @@
 
 .fullscreen #page-container .container {
     width: 86%;
-    min-width: 1280px;
+    min-width: 800px;
     margin-left: 7%;
     margin-right: 7%;
     padding: 10px 0 0 0;
@@ -1086,6 +1088,15 @@
     height: 100%;
 }
 .fullscreen .widget-content .rt-graph .k-chart {
+    height: 100%;
+}
+
+/*tips*/
+.fullscreen .full-width-img,
+.fullscreen .long-desc-holder {
+    height: calc(50% - 30px);
+}
+.fullscreen .long-desc-holder p {
     height: 100%;
 }
 /* -----fullscreen */

@@ -147,13 +147,31 @@
             angular.element($("#dashboardController")).scope().updateWidget();
         });
 
+        //update widgets when resize
+        var rtime = new Date();;
+        var timeout = false;
+        var delta = 200;
+        $(window).on('resize', function(){
+            rtime = new Date();
+            if (timeout == false){
+                timeout = true;
+                setTimeout(resizeUpdate, delta);
+            }
+        });
+        function resizeUpdate(){
+            if (new Date() - rtime < delta){
+                setTimeout(resizeUpdate, delta);
+            } else {
+                timeout = false;
+                if ($("body").hasClass("fullscreen")){  //fix height for non-fullscreen, no need update chart
+                    angular.element($("#dashboardController")).scope().updateWidget();    
+                }
+            }
+        }
+
         $scope.setFullscreenMode = function(){
             $("body").addClass("fullscreen");
             $scope.updateWidget();            
-        };
-
-        $scope.isFullscreen = function(){
-            return $("body").hasClass("fullscreen");
         };
 
         //update all if e is null
@@ -303,7 +321,6 @@
             scaleStage("stageCO2", "animationContainerCO2");
             scaleStage("stageMoney", "animationContainerMoney");
         }
-        $(window).on('resize', resizeAmination);
 
         $scope.refreshHeader = function(){
             var d = new Date();
