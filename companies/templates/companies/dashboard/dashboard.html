@@ -54,33 +54,42 @@
 {% block page_content %}
 
 {% ifequal LANGUAGE_CODE 'zh-tw' %}
-<div class="container chinese" ng-app="Entrak" ng-controller="Dashboard">
+<div id="dashboardController" class="container chinese" ng-app="Entrak" ng-controller="Dashboard">
 {% else %}
-<div class="container" ng-app="Entrak" ng-controller="Dashboard">
+<div id="dashboardController" class="container" ng-app="Entrak" ng-controller="Dashboard">
 {% endifequal %}
-    <div ng-cloak kendo-sortable="dashboardContainer" k-options="sortableOptions" class="row">
-        <div class="col-md-8" data-widgetId="4">
+    <div ng-cloak class="dashboard-toolbar row">
+        <div class="pull-right buttons-wrap">
+            <button ng-click="setFullscreenMode()"></button>
+        </div>
+        <div id="widgetContainer" class="widget-icon" kendo-sortable="widgetContainer" k-options="iconSortableOpt">
+
+        </div>
+    </div>
+
+    <div ng-cloak id="dashboardContainer" kendo-sortable="dashboardContainer" k-options="dashboardSortableOpt" class="row">
+        <div class="col-md-8 col-xs-12 realTimeIcon" data-widgetId="4">
             {% include "companies/dashboard/widgets/_real_time.html" with widget_id=4 %}
         </div>
-        <div class="col-md-4 col-xs-6" data-widgetId="3">
+        <div class="col-md-4 col-xs-6 tipsIcon" data-widgetId="3">
             {% include "companies/dashboard/widgets/_tips.html" with widget_id=3 %}
         </div>
-        <div class="col-md-4 col-xs-6" data-widgetId="1">
+        <div class="col-md-4 col-xs-6 biggestConsumerIcon" data-widgetId="1">
           {% include "companies/dashboard/widgets/_biggest_consumers.html" with widget_id=1 %}
         </div>
-        <div class="col-md-4 col-xs-6" data-widgetId="2">
+        <div class="col-md-4 col-xs-6 soFarIcon" data-widgetId="2">
           {% include "companies/dashboard/widgets/_so_far.html" with widget_id=2 %}
         </div>
-        <div class="col-md-4 col-xs-6" data-widgetId="5">
+        <div class="col-md-4 col-xs-6 lastWeekStatsIcon" data-widgetId="5">
           {% include "companies/dashboard/widgets/_last_week_stats.html" with widget_id=5 %}
         </div>
-        <div class="col-md-4 col-xs-6" data-widgetId="6">
+        <div class="col-md-4 col-xs-6 progressIcon" data-widgetId="6">
           {% include "companies/dashboard/widgets/_progress.html" with widget_id=6 %}
         </div>
-        <div class="col-md-4 col-xs-6" data-widgetId="7">
+        <div class="col-md-4 col-xs-6 cumulativeIcon" data-widgetId="7">
           {% include "companies/dashboard/widgets/_cumulative_savings.html" with widget_id=7 %}
         </div>
-        <div class="col-md-4 col-xs-6" data-widgetId="8">
+        <div class="col-md-4 col-xs-6 goalTrackingIcon" data-widgetId="8">
           {% include "companies/dashboard/widgets/_goal_tracking.html" with widget_id=8 %}
         </div>
     </div>
@@ -133,25 +142,62 @@
     });
 
     ngapp.controller("Dashboard", function($scope){
+        $("#exit-fullscreen-btn").click(function(){
+            $("body").removeClass("fullscreen");
+            angular.element($("#dashboardController")).scope().updateWiget();
+        });
+
+        $scope.setFullscreenMode = function(){
+            $("body").addClass("fullscreen");
+            $scope.updateWiget();            
+        };
+
+        //update all if e is null
         $scope.updateWiget = function(e){
-            var childScope = e.item.children().scope();
-            if (childScope && typeof childScope.updateWidgetImpl == "function"){
-                if (!childScope.$$phase){
-                    childScope.$apply(function(){
-                        childScope.updateWidgetImpl();
-                    });
-                } else {
-                    childScope.updateWidgetImpl();
+            var widget;
+            if (e == null){
+                widget = $("#dashboardContainer .widget-container");
+            } else {
+                widget = [e.item.children()];
+            }
+
+            var wScope = null;
+            for (var i=0; i<widget.length; i++){
+                wScope = angular.element(widget[i]).scope();
+                if (wScope && typeof wScope.updateWidgetImpl == "function"){
+                    if (!wScope.$$phase){
+                        wScope.$apply(function(){
+                            wScope.updateWidgetImpl();
+                        });
+                    } else {
+                        wScope.updateWidgetImpl();
+                    }
                 }
             }
         };
 
-        $scope.sortableOptions = {
-            // cursor: "pointer"
+        $scope.getWidgetOrder = function(){
+            var order = [];
+            var items = $scope.dashboardContainer.items();
+            var tmp;
+            for (var i=0; i<items.length; i++){
+                order.push(items.eq(i).attr("data-widgetId"));
+            }
+
+            return order;
+        };
+
+        $scope.dashboardSortableOpt = {
+            // cursor: "url('/static/images/dashboard/grabbing.cur'), default",
+            connectWith: "#widgetContainer",
             handler: ".widget-header *:not(.k-dropdown *, button)",
             end: function(e){
-                if (e.action != "remove")
-                    $scope.updateWiget(e);
+                if (e.action != "remove"){
+                    $scope.updateWiget();
+                }
+            },
+            change: function(e){
+                console.log("call save layout = " + JSON.stringify($scope.getWidgetOrder()));
             },
             cancel: function(e){
                 $scope.updateWiget(e);
@@ -164,16 +210,16 @@
             }
         };
 
-        function getWidgetOrder(){
-            var order = [];
-            var items = $scope.dashboardContainer.items();
-            var tmp;
-            for (var i=0; i<items.length; i++){
-                order.push(items.eq(i).attr("data-widgetId"));
+        $scope.iconSortableOpt = {
+            // cursor: "url('/static/images/dashboard/grabbing.cur'), default",
+            connectWith: "#dashboardContainer",
+            hint: function(element){
+                return $('<div class="widget-icon"><div class="' + element.attr("class") + '"></div>');
+            },
+            placeholder: function(element){
+                return element.clone().css({"opacity": 0.3});
             }
-
-            return order;
-        }
+        };
 
     });
 
@@ -248,11 +294,12 @@
             stage.css('-moz-transform', 'scale(' + rescaleWidth + ', ' + rescaleHeight + ')');
             stage.css('-o-transform', 'scale(' + rescaleWidth + ', ' + rescaleHeight + ')');
         }
-
-        $(window).on('resize', function(){
+        
+        function resizeAmination() {
             scaleStage("stageCO2", "animationContainerCO2");
             scaleStage("stageMoney", "animationContainerMoney");
-        });
+        }
+        $(window).on('resize', resizeAmination);
 
         $scope.refreshHeader = function(){
             var d = new Date();
@@ -459,10 +506,7 @@
                 $scope.updateTodayMeasure();
             } else {
                 $scope.updateRates();
-                setTimeout(function(){  //without timeout, the parent dimension is incorrect
-                    scaleStage("stageCO2", "animationContainerCO2");
-                    scaleStage("stageMoney", "animationContainerMoney");
-                }, 150);
+                setTimeout(resizeAmination, 150);   //without timeout, the parent dimension is incorrect
             }
             $scope.refreshHeader();
         }
@@ -475,6 +519,9 @@
             console.log("update real time widget");
             $scope.updateTodayMeasure();
             $scope.refreshHeader();
+            if (!$scope.isGraph){
+                resizeAmination();
+            }
         }
 
         setInterval($scope.updateWidgetImpl, 10000);

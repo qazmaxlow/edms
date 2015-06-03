@@ -1,10 +1,11 @@
-
-/*<!-- hack css for pdf -->*/
-.container {
-        width: 1024px !important;
-        padding: 20px 20px 30px 20px;
+#page-container .container {
+    width: 1024px;
+    padding: 20px 20px 30px 20px;
 }
 
+#dashboardContainer {
+    min-height: 300px;
+}
 
 /*widget common-------*/
 .widget-container {
@@ -896,3 +897,179 @@
 }
 
 /* -----goal tracking widget */
+
+
+/* widget drag drop----- */
+.dashboard-toolbar {
+    margin-left: 0;
+    width: 100%;
+    height: 70px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #D2D2D2;
+}
+
+.dashboard-toolbar .buttons-wrap {
+    width: 150px;
+    height: 100%;
+}
+
+.dashboard-toolbar #widgetContainer {
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.widget-icon .realTimeIcon {
+    background-image: url(../../images/dashboard/tips-arrow-toggle.png);
+}
+
+.widget-icon .tipsIcon {
+    background-image: url(../../images/dashboard/tips-arrow-toggle.png);
+}
+
+.widget-icon .biggestConsumerIcon {
+    background-image: url(../../images/dashboard/tips-arrow-toggle.png);
+}
+
+.widget-icon .soFarIcon {
+    background-image: url(../../images/dashboard/tips-arrow-toggle.png);
+}
+
+.widget-icon .lastWeekStatsIcon {
+    background-image: url(../../images/dashboard/tips-arrow-toggle.png);
+}
+
+.widget-icon .progressIcon {
+    background-image: url(../../images/dashboard/tips-arrow-toggle.png);
+}
+
+.widget-icon .cumulativeIcon {
+    background-image: url(../../images/dashboard/tips-arrow-toggle.png);
+}
+
+.widget-icon .goalTrackingIcon {
+    background-image: url(../../images/dashboard/tips-arrow-toggle.png);
+}
+
+.widget-icon .widget-container {
+    display: none;
+}
+
+.widget-icon .realTimeIcon,
+.widget-icon .tipsIcon,
+.widget-icon .biggestConsumerIcon,
+.widget-icon .soFarIcon,
+.widget-icon .lastWeekStatsIcon,
+.widget-icon .progressIcon,
+.widget-icon .cumulativeIcon,
+.widget-icon .goalTrackingIcon {
+    height: 50px;
+    width: 50px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 0;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.widget-header {
+    /*cursor: url('/static/images/dashboard/grab.cur'), default;*/
+}
+
+/* -----widget drag drop */
+
+
+/* fullscreen----- */
+.fullscreen #menu,
+.fullscreen .site-footer,
+.fullscreen #header .change-lang-block,
+.fullscreen #header .image-carousel,
+.fullscreen .dashboard-toolbar,
+.fullscreen #heading,
+.fullscreen #sub-heading,
+.fullscreen .right-content .blue-bar {
+    display: none;
+}
+
+.fullscreen #sub-heading-facilities {
+    padding-left: 7%;
+}
+
+.fullscreen #page-container,
+.fullscreen #page-container .right-content,
+.fullscreen #dashboardContainer,
+.fullscreen .widget-container {
+    height: 100%;
+}
+
+.fullscreen #system-menu img {
+    margin-left: 0;
+}
+
+.fullscreen #page-container .right-content .container {
+    height: calc(100% - 105px);
+}
+
+.fullscreen #dashboardContainer>div {
+    height: 50%;
+}
+
+.fullscreen #page-container {
+    width: 100%;
+}
+
+.fullscreen #page-container .right-content {
+    padding-left: 0;
+    width: 100%;
+}
+
+.fullscreen #page-container .container {
+    width: 86%;
+    min-width: 1280px;
+    margin-left: 7%;
+    margin-right: 7%;
+    padding: 10px 0 0 0;
+}
+
+.fullscreen .widget-content {
+    height: calc(100% - 40px);
+}
+
+.fullscreen #header {
+    height: 70px;
+}
+
+.fullscreen #header #exit-fullscreen-btn {
+    display: block !important;
+    position: absolute;
+    margin-top: 20px;
+    height: 30px;
+    width: 30px;
+    right: 7%;
+    background-image: url(../../images/dashboard/closeButton.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+}
+
+.fullscreen #header #entrakLogo {
+    display: block !important;
+    height: 100%;
+    width: 400px;
+    left: 7%;
+    position: absolute;
+    background-image: url(../../images/dashboard/entrak-logo.png);
+    background-repeat: no-repeat;
+    background-position: left center;
+}
+
+/*real time*/
+.fullscreen .rt-graph-container {
+    height: calc(100% - 50px);
+}
+.fullscreen .rt-content {
+    height: 100%;
+}
+/* -----fullscreen */
