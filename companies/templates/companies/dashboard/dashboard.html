@@ -60,14 +60,14 @@
 {% endifequal %}
     <div ng-cloak class="dashboard-toolbar row">
         <div class="pull-right buttons-wrap">
-            <button ng-click="setFullscreenMode()"></button>
+            <button class="k-button" ng-click="setFullscreenMode()"></button>
         </div>
         <div id="widgetContainer" class="widget-icon" kendo-sortable="widgetContainer" k-options="iconSortableOpt">
-
         </div>
     </div>
 
     <div ng-cloak id="dashboardContainer" kendo-sortable="dashboardContainer" k-options="dashboardSortableOpt" class="row">
+    <!-- <div ng-cloak id="dashboardContainer" class="row"> -->
         <div class="col-md-8 col-xs-12 realTimeIcon" data-widgetId="4">
             {% include "companies/dashboard/widgets/_real_time.html" with widget_id=4 %}
         </div>
@@ -705,7 +705,14 @@
                     lastCost.push(data[i].value);
                 }
             }
-            var yMax = Math.max(thisCost[0], lastCost[0]) / 0.85;  //give move space to the text
+            // var yMax = Math.max(thisCost[0], lastCost[0]) / 0.85;  //give move space to the text
+            // $scope.soFarChartThis.setOptions({valueAxis: {max: yMax}}); //use same scale for both chart
+            // $scope.soFarChartLast.setOptions({valueAxis: {max: yMax}});
+            // $scope.soFarChartThis.refresh();
+            // $scope.soFarChartLast.refresh();
+
+            var yMax = $(".eu-left-chart").height();
+            yMax = Math.max(thisCost[0], lastCost[0]) * (yMax / (yMax - 35));  //give 35px space to the text above
             $scope.soFarChartThis.setOptions({valueAxis: {max: yMax}}); //use same scale for both chart
             $scope.soFarChartLast.setOptions({valueAxis: {max: yMax}});
             $scope.soFarChartThis.refresh();

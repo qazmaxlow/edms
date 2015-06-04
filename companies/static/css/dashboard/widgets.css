@@ -941,8 +941,16 @@
 }
 
 .dashboard-toolbar .buttons-wrap {
-    width: 150px;
     height: 100%;
+}
+
+.dashboard-toolbar .k-button,
+.dashboard-toolbar .k-button:focus:active,
+.dashboard-toolbar .k-button:focus:not(:disabled):not(.k-state-disabled),
+.dashboard-toolbar .k-button:focus:active:not(:disabled):not(.k-state-disabled) {
+    height: 25px;
+    width: 25px;
+    box-shadow: 0px 2px 0px #6b9aa5;
 }
 
 .dashboard-toolbar #widgetContainer {
@@ -1097,6 +1105,12 @@
     background-position: left center;
 }
 
+@media screen and (min-width: 1340px) and (min-height: 800px){
+    .fullscreen .widget-container {
+        font-size: 16px;
+    }
+}
+
 /*real time*/
 .fullscreen .rt-graph-container {
     height: calc(100% - 50px);
@@ -1116,6 +1130,5 @@
 .fullscreen .long-desc-holder p {
     height: 100%;
 }
-
 
 /* -----fullscreen */
