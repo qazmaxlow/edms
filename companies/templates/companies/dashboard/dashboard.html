@@ -58,16 +58,16 @@
 {% else %}
 <div id="dashboardController" class="container" ng-app="Entrak" ng-controller="Dashboard">
 {% endifequal %}
-    <div ng-cloak class="dashboard-toolbar row">
+    <div ng-cloak class="dashboard-toolbar row" style="height: 35px;margin:0;border:none;">
         <div class="pull-right buttons-wrap">
-            <button ng-click="setFullscreenMode()"></button>
+            <button class="k-button" ng-click="setFullscreenMode()"></button>
         </div>
-        <div id="widgetContainer" class="widget-icon" kendo-sortable="widgetContainer" k-options="iconSortableOpt">
-
-        </div>
+        <!-- <div id="widgetContainer" class="widget-icon" kendo-sortable="widgetContainer" k-options="iconSortableOpt">
+        </div> -->
     </div>
 
-    <div ng-cloak id="dashboardContainer" kendo-sortable="dashboardContainer" k-options="dashboardSortableOpt" class="row">
+    <!-- <div ng-cloak id="dashboardContainer" kendo-sortable="dashboardContainer" k-options="dashboardSortableOpt" class="row"> -->
+    <div ng-cloak id="dashboardContainer" class="row">
         <div class="col-md-8 col-xs-12 realTimeIcon" data-widgetId="4">
             {% include "companies/dashboard/widgets/_real_time.html" with widget_id=4 %}
         </div>
@@ -142,10 +142,17 @@
     });
 
     ngapp.controller("Dashboard", function($scope){
+        //fullscren btn action
         $("#exit-fullscreen-btn").click(function(){
             $("body").removeClass("fullscreen");
             angular.element($("#dashboardController")).scope().updateWidget();
+            angular.element($("#dashboardController")).scope().autoToggle(false);
         });
+        $scope.setFullscreenMode = function(){
+            $("body").addClass("fullscreen");
+            $scope.updateWidget();
+            $scope.autoToggle(true);
+        };
 
         //update widgets when resize
         var rtime = new Date();;
@@ -168,11 +175,6 @@
                 }
             }
         }
-
-        $scope.setFullscreenMode = function(){
-            $("body").addClass("fullscreen");
-            $scope.updateWidget();            
-        };
 
         //update all widget if e is null
         //setTimeout to prevent incorrect graph size (drag last week stats)
@@ -197,10 +199,38 @@
                             wScope.updateWidgetImpl();
                         }
                     }
-                }                
+                }
             }, 50);
-        };
+        }
 
+        //auto toggle widget
+        var autoToggleTimer = null;
+        $scope.autoToggle = function(isAuto){
+            if (isAuto){
+                autoToggleTimer = setInterval(autoToggleCore, 10000, isAuto);
+            } else {
+                clearInterval(autoToggleTimer);
+                autoToggleCore(isAuto);
+            }
+        }
+        function autoToggleCore(isAuto){
+            var widget = $("#dashboardContainer .widget-container");
+            var wScope = null;
+            for (var i=0; i<widget.length; i++){
+                wScope = angular.element(widget[i]).scope();
+                if (wScope && typeof wScope.autoToggleImpl == "function"){
+                    if (!wScope.$$phase){
+                        wScope.$apply(function(){
+                            wScope.autoToggleImpl(isAuto);
+                        });
+                    } else {
+                        wScope.autoToggleImpl(isAuto);
+                    }
+                }
+            }            
+        }
+
+        //get current widget order
         $scope.getWidgetOrder = function(){
             var order = [];
             var items = $scope.dashboardContainer.items();
@@ -210,7 +240,7 @@
             }
 
             return order;
-        };
+        }
 
         $scope.dashboardSortableOpt = {
             // cursor: "url('/static/images/dashboard/grabbing.cur'), default",
@@ -258,6 +288,7 @@
         $scope.axisLast = '{% trans "Last week" %}';
         $scope.perDay = '{% trans "per day" %}';
 
+        var autoReloadTimer = null;
         var today_measures = [];
         var last_week_measures = [];
         for (var i = 0; i < 24; i++) last_week_measures[i] = null;
@@ -285,7 +316,6 @@
                 }, {"dom":{}}, {"dom":{}});
             }
         });
-
 
         // Reference from https://www.youtube.com/watch?feature=player_embedded&v=hrLt0Y9QAY8
         $("#stageMoney,#stageCO2").css({ // Set the transform origin so we always scale to the top left corner of the stage
@@ -394,7 +424,6 @@
         $.each(hours, function(i, h) { per_hour_measures[h] = null; });
         //$.each(hours, function(i, h) { last_week_measures[h] = h*5+54;per_hour_measures[h] = h*5+123; });
 
-        $scope.realTimeSelect = 'graph';
         $scope.realTimeOptions = {
             transitions: false,
             chartArea: {
@@ -534,22 +563,30 @@
             }
             $scope.refreshHeader();
         }
-        $scope.toggle(true);
-
-        // update the chart every 10 sec
-        $scope.refreshHeader();
 
         $scope.updateWidgetImpl = function(){
             console.log("update real time widget");
-            $scope.updateTodayMeasure();
+            
             $scope.refreshHeader();
-            if (!$scope.isGraph){
+            if ($scope.isGraph){
+                $scope.updateTodayMeasure();
+            } else {
                 resizeAmination();
             }
         }
 
-        setInterval($scope.updateWidgetImpl, 10000);
+        $scope.autoToggleImpl = function(isAuto){
+            if (isAuto){
+                clearInterval(autoReloadTimer);
+                $scope.toggle(!$scope.isGraph);
+            } else {
+                autoReloadTimer = setInterval($scope.updateWidgetImpl, 10000);
+            }
+        }
 
+        // update the chart every 10 sec
+        $scope.toggle(true);
+        $scope.autoToggleImpl(false);
     });
 
     ngapp.controller("WidgetBiggestConsumers", function($scope){
@@ -560,7 +597,7 @@
         $scope.changeText = $scope.isWeek ? '{% trans "Change from last week" %}' : '{% trans "Change from last month" %}';
         $scope.energyCost = '{% trans "Energy cost so far" %}';
         
-        var refreshIntervalId;
+        var refreshIntervalId = null;
         var refreshPeriod = 30000;
 
         $scope.consumers = new kendo.data.DataSource({
@@ -589,26 +626,33 @@
 
         $scope.consumers.read().done(function() {$scope.$digest()});
 
-        $scope.toggle = function(clickWeek){
-
-            $scope.isWeek = clickWeek;
-            clearInterval(refreshIntervalId);
-
+        $scope.toggle = function(isWeek){
+            $scope.isWeek = isWeek;
             $scope.changeText = $scope.isWeek ? '{% trans "Change from last week" %}' : '{% trans "Change from last month" %}';
 
             var retrieve_type = ($scope.isWeek ? "weekly" : "monthly");
-
             $scope.consumers.read({type:retrieve_type}).done(function() {$scope.$digest() });
-            refreshIntervalId = setInterval(function() { $scope.consumers.read({type:retrieve_type}) }, refreshPeriod);
         };
 
         $scope.updateWidgetImpl = function(){
             console.log("update biggest consumers widget");
-            $scope.consumers.read();
+            if ($scope.isWeek){
+                $scope.consumers.read({type: "weekly"});
+            } else {
+                $scope.consumers.read({type: "monthly"});
+            }
         };
 
-        refreshIntervalId = setInterval($scope.updateWidgetImpl, refreshPeriod);
+        $scope.autoToggleImpl = function(isAuto){
+            if (isAuto){
+                clearInterval(refreshIntervalId);
+                $scope.toggle(!$scope.isWeek);
+            } else {
+                refreshIntervalId = setInterval($scope.updateWidgetImpl, refreshPeriod);
+            }
+        }
 
+        $scope.autoToggleImpl(false);
     });
 
     ngapp.controller("WidgetTips", function($scope){
@@ -658,6 +702,12 @@
 
             update();
         }
+
+        $scope.autoToggleImpl = function(isAuto){
+            if (isAuto){
+                $scope.showNext(1);
+            }
+        }
     });
 
 
@@ -666,7 +716,7 @@
         $scope.btnLeft = '{% trans "Week" context "dashboard" %}';
         $scope.btnRight = '{% trans "Month" context "dashboard" %}';
 
-        var refreshIntervalId;
+        var refreshIntervalId = null;
         var refreshPeriod = 30000;
 
         var costs = new kendo.data.DataSource({
@@ -705,7 +755,9 @@
                     lastCost.push(data[i].value);
                 }
             }
-            var yMax = Math.max(thisCost[0], lastCost[0]) / 0.85;  //give move space to the text
+
+            var yMax = $(".eu-left-chart").height();
+            yMax = Math.max(thisCost[0], lastCost[0]) * (yMax / (yMax - 35));  //give 35px space to the text above
             $scope.soFarChartThis.setOptions({valueAxis: {max: yMax}}); //use same scale for both chart
             $scope.soFarChartLast.setOptions({valueAxis: {max: yMax}});
             $scope.soFarChartThis.refresh();
@@ -807,45 +859,53 @@
             categoryAxis: catAxis
         }
 
-
         $scope.isWeek = true;
         var setTitle = function(){
             $scope.leftBoxTitle = $scope.isWeek ? '{% trans "So far this week" %}' : '{% trans "So far this month" %}';
             $scope.rightBoxTitle = $scope.isWeek ? '{% trans "By this time last week" %}' : '{% trans "By this time last month" %}';
         }
-
         setTitle();
 
         $scope.toggle = function(isWeek) {
             $scope.isWeek = isWeek;
             setTitle();
-            clearInterval(refreshIntervalId);
 
             var retrieve_date = new Date();
             var retrieve_type = ($scope.isWeek ? "weekly" : "monthly");
 
             costs.read({datetime:retrieve_date, type:retrieve_type}).then(updateChart);
-            refreshIntervalId = setInterval(function() {
-                costs.read({datetime:retrieve_date, type:retrieve_type}).then(updateChart);
-            }, refreshPeriod);
         }
 
+        $scope.updateWidgetImpl = function(){
+            console.log("update so far widget");
+            if ($scope.isWeek){
+                costs.read({type: "weekly"}).then(updateChart);
+            } else {
+                costs.read({type: "monthly"}).then(updateChart);
+            }
+        }
+
+        $scope.autoToggleImpl = function(isAuto){
+            if (isAuto){
+                clearInterval(refreshIntervalId);
+                $scope.toggle(!$scope.isWeek);
+            } else {
+                refreshIntervalId = setInterval($scope.updateWidgetImpl, refreshPeriod);
+            }
+        }
+
+        //first load
         setTimeout(function(){
             if (angular.isDefined($scope.soFarChartThis) && angular.isDefined($scope.soFarChartLast)){
-                costs.read().then(updateChart);
+                $scope.updateWidgetImpl();
             } else {
                 $scope.$watchGroup(["soFarChartThis", "soFarChartLast"], function(nVal, oVal, scope){
                     if (angular.isDefined(nVal[0]) && angular.isDefined(nVal[1])){
-                        costs.read().then(updateChart);
+                        $scope.updateWidgetImpl();
                     }
                 });
             }
         }, 300);
-
-        $scope.updateWidgetImpl = function(){
-            console.log("update so far widget");
-            costs.read().then(updateChart);
-        };
         refreshIntervalId = setInterval($scope.updateWidgetImpl, refreshPeriod);
     });
 

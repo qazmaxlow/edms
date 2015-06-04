@@ -18,7 +18,7 @@ from egauge.models import Source, SourceReadingYear, SourceReadingMonth, SourceR
 from entrak.settings import BASE_DIR, LANG_CODE_EN, LANG_CODE_TC
 from holiday.models import CityHoliday, Holiday
 from unit.models import UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
-from meters.models import Electricity, HourDetail
+from meters.models import Electricity, HourDetail, SystemId
 
 from system.constants import CITY_ALL
 from system.constants import CORPORATE
@@ -226,14 +226,14 @@ class System(models.Model):
         return None
 
 
-    def get_unit_rate(self, datetime, target_unit='money'):
+    def get_unit_rate(self, datetime, target_unit=MONEY_CATEGORY_CODE):
         unit_infos = json.loads(self.unit_info)
         unit_code = unit_infos[target_unit]
         unit_rate = UnitRate.objects.filter(category_code=target_unit, code=unit_code, effective_date__lte=datetime).order_by('-effective_date').first()
         return unit_rate
 
 
-    def get_unitrates(self, start_from=None, end_to=None, target_unit='money'):
+    def get_unitrates(self, start_from=None, end_to=None, target_unit=MONEY_CATEGORY_CODE):
         unit_infos = json.loads(self.unit_info)
         unit_code = unit_infos[target_unit]
         kwargs = {}
@@ -484,22 +484,25 @@ class System(models.Model):
         for r in readings:
 
             overnight_date = self.validate_overnight(r.datetime.astimezone(system_tz))
-
-            if overnight_date:
-                overnight_date = int(overnight_date.strftime("%Y%m%d"))
+            unit_rate_co2 = self.get_unit_rate(r.datetime, CO2_CATEGORY_CODE)
+            unit_rate_money = self.get_unit_rate(r.datetime, MONEY_CATEGORY_CODE)
 
             e, created = Electricity.objects.get_or_create(
                     datetime_utc = r.datetime,
                     source_id = r.source_id
                 )
 
-            e.datetime_local = r.datetime.astimezone(system_tz)
             e.total = r.value
-            e.overnight_date = overnight_date
             e.overnight_total = 0
+
+            if overnight_date:
+                e.overnight_date = int(overnight_date.strftime("%Y%m%d"))
             e.hour_detail = copy.deepcopy(hour_detail)
-            e.parent_system_ids = [s.id for s in parent_systems]
+            e.parent_systems = [SystemId(sid=s.id) for s in parent_systems]
+
             e.system_id = self.id
+            e.rate_co2 = unit_rate_co2.rate
+            e.rate_money = unit_rate_money.rate
 
             minutes = SourceReadingMin.objects(
                 source_id=r.source_id,
@@ -507,7 +510,8 @@ class System(models.Model):
                 datetime__lt=r.datetime + relativedelta(hours=1)).order_by('datetime')
 
             for m in minutes:
-                if overnight_date:
+                overnight = self.validate_overnight(m.datetime.astimezone(system_tz))
+                if overnight:
                     e.overnight_total += m.value
                 e.hour_detail['m%02d'%m.datetime.minute] = m.value
 
@@ -519,6 +523,50 @@ class System(models.Model):
             e.save()
 
         return (create_count, update_count)
+
+    def overnight_avg_cost(self, start_dt, end_dt, source_ids=None):
+
+        print('{0:-^80}'.format('  overnigh_avg_cost called   '))
+        print('{0:-^80}'.format(start_dt.strftime('%Y-%m-%d %H:%M:%S')))
+        print('{0:-^80}'.format(end_dt.strftime('%Y-%m-%d %H:%M:%S')))
+
+        int_start_dt = int(start_dt.strftime("%Y%m%d"))
+        int_end_dt = int(end_dt.strftime("%Y%m%d"))
+
+        current_db_conn = connection.get_db()
+        aggregate_pipeline = [
+            { "$match":
+                {"$and": [
+                    {"overnight_date": {"$gte": int_start_dt}},
+                    {"overnight_date": {"$lt": int_end_dt}},
+                    {"parent_systems": {"$elemMatch": {"sid": self.id}}},
+                ]}},
+            { "$project": {"_id": 1, "overnight_date": 1, "overnight_total": 1, "rate_co2": 1, "rate_money": 1}},
+            {
+                "$group": {
+                    "_id" : "$overnight_date",
+                    "totalKwh": {"$sum": "$overnight_total"},
+                    "totalCo2": {"$sum": {"$multiply": ["$overnight_total", "$rate_co2"]}},
+                    "totalMoney": {"$sum": {"$multiply": ["$overnight_total", "$rate_money"]}}
+                }
+            }
+        ]
+
+        if source_ids:
+            aggregate_pipeline[0]["$match"]["$and"].append({"source_id": {"$in": source_ids}})
+
+        result =  current_db_conn.electricity.aggregate(aggregate_pipeline)
+
+        if result['result']:
+            total = 0
+            for r in result['result']:
+                total += r['totalMoney']
+            days = len(result['result'])
+            return total/days
+        else:
+            return 0
+
+
 
 
 class SystemHomeImage(models.Model):
