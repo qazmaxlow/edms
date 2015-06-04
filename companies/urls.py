@@ -31,6 +31,7 @@ urlpatterns = patterns(
     url(r'^measures/last_week_stats/$', measure_views.LastWeekDailyCostList.as_view(), name='companies.measures.last-week-stats'),
     url(r'^progresses/so-far-this-year/$', progress_views.progressSoFarThisYear.as_view(), name='companies.progesses.so-far-this-year'),
     url(r'^savings/so-far-this-year/$', saving_views.savingSoFarThisYear.as_view(), name='companies.savings.so-far-this-year'),
+    url(r'^savings/compare-to-baseline/$', saving_views.compareToBaseline.as_view(), name='companies.savings.compare-to-baseline'),
     url(r'^export/$', export_views.ExportView.as_view(), name='companies.export'),
     url(r'^export/download/$', export_views.DownloadView.as_view(), name='companies.export.download'),
     url(r'^report-schedule/$', report_schedule_views.ReportScheduleView.as_view(), name='companies.report-schedule'),
