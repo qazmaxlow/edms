@@ -58,16 +58,16 @@
 {% else %}
 <div id="dashboardController" class="container" ng-app="Entrak" ng-controller="Dashboard">
 {% endifequal %}
-    <div ng-cloak class="dashboard-toolbar row">
+    <div ng-cloak class="dashboard-toolbar row" style="height: 35px;margin:0;border:none;">
         <div class="pull-right buttons-wrap">
             <button class="k-button" ng-click="setFullscreenMode()"></button>
         </div>
-        <div id="widgetContainer" class="widget-icon" kendo-sortable="widgetContainer" k-options="iconSortableOpt">
-        </div>
+        <!-- <div id="widgetContainer" class="widget-icon" kendo-sortable="widgetContainer" k-options="iconSortableOpt">
+        </div> -->
     </div>
 
-    <div ng-cloak id="dashboardContainer" kendo-sortable="dashboardContainer" k-options="dashboardSortableOpt" class="row">
-    <!-- <div ng-cloak id="dashboardContainer" class="row"> -->
+    <!-- <div ng-cloak id="dashboardContainer" kendo-sortable="dashboardContainer" k-options="dashboardSortableOpt" class="row"> -->
+    <div ng-cloak id="dashboardContainer" class="row">
         <div class="col-md-8 col-xs-12 realTimeIcon" data-widgetId="4">
             {% include "companies/dashboard/widgets/_real_time.html" with widget_id=4 %}
         </div>
