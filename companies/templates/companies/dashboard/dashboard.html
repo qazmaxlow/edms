@@ -716,7 +716,7 @@
         $scope.btnLeft = '{% trans "Week" context "dashboard" %}';
         $scope.btnRight = '{% trans "Month" context "dashboard" %}';
 
-        var refreshIntervalId;
+        var refreshIntervalId = null;
         var refreshPeriod = 30000;
 
         var costs = new kendo.data.DataSource({
@@ -755,11 +755,6 @@
                     lastCost.push(data[i].value);
                 }
             }
-            // var yMax = Math.max(thisCost[0], lastCost[0]) / 0.85;  //give move space to the text
-            // $scope.soFarChartThis.setOptions({valueAxis: {max: yMax}}); //use same scale for both chart
-            // $scope.soFarChartLast.setOptions({valueAxis: {max: yMax}});
-            // $scope.soFarChartThis.refresh();
-            // $scope.soFarChartLast.refresh();
 
             var yMax = $(".eu-left-chart").height();
             yMax = Math.max(thisCost[0], lastCost[0]) * (yMax / (yMax - 35));  //give 35px space to the text above
@@ -864,45 +859,53 @@
             categoryAxis: catAxis
         }
 
-
         $scope.isWeek = true;
         var setTitle = function(){
             $scope.leftBoxTitle = $scope.isWeek ? '{% trans "So far this week" %}' : '{% trans "So far this month" %}';
             $scope.rightBoxTitle = $scope.isWeek ? '{% trans "By this time last week" %}' : '{% trans "By this time last month" %}';
         }
-
         setTitle();
 
         $scope.toggle = function(isWeek) {
             $scope.isWeek = isWeek;
             setTitle();
-            clearInterval(refreshIntervalId);
 
             var retrieve_date = new Date();
             var retrieve_type = ($scope.isWeek ? "weekly" : "monthly");
 
             costs.read({datetime:retrieve_date, type:retrieve_type}).then(updateChart);
-            refreshIntervalId = setInterval(function() {
-                costs.read({datetime:retrieve_date, type:retrieve_type}).then(updateChart);
-            }, refreshPeriod);
         }
 
+        $scope.updateWidgetImpl = function(){
+            console.log("update so far widget");
+            if ($scope.isWeek){
+                costs.read({type: "weekly"}).then(updateChart);
+            } else {
+                costs.read({type: "monthly"}).then(updateChart);
+            }
+        }
+
+        $scope.autoToggleImpl = function(isAuto){
+            if (isAuto){
+                clearInterval(refreshIntervalId);
+                $scope.toggle(!$scope.isWeek);
+            } else {
+                refreshIntervalId = setInterval($scope.updateWidgetImpl, refreshPeriod);
+            }
+        }
+
+        //first load
         setTimeout(function(){
             if (angular.isDefined($scope.soFarChartThis) && angular.isDefined($scope.soFarChartLast)){
-                costs.read().then(updateChart);
+                $scope.updateWidgetImpl();
             } else {
                 $scope.$watchGroup(["soFarChartThis", "soFarChartLast"], function(nVal, oVal, scope){
                     if (angular.isDefined(nVal[0]) && angular.isDefined(nVal[1])){
-                        costs.read().then(updateChart);
+                        $scope.updateWidgetImpl();
                     }
                 });
             }
         }, 300);
-
-        $scope.updateWidgetImpl = function(){
-            console.log("update so far widget");
-            costs.read().then(updateChart);
-        };
         refreshIntervalId = setInterval($scope.updateWidgetImpl, refreshPeriod);
     });
 
