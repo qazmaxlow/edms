@@ -51,6 +51,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'oauth2_provider',
     'rest_framework',
     'rest_framework.authtoken',
     'south',
@@ -73,6 +74,12 @@ INSTALLED_APPS = (
     'schedulers',
     'meters',
 )
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
+    )
+}
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
