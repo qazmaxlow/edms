@@ -702,6 +702,12 @@
 
             update();
         }
+
+        $scope.autoToggleImpl = function(isAuto){
+            if (isAuto){
+                $scope.showNext(1);
+            }
+        }
     });
 
 
