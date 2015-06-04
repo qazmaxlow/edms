@@ -524,7 +524,7 @@ class System(models.Model):
 
         return (create_count, update_count)
 
-    def overnight_avg_cost(self, start_dt, end_dt):
+    def overnight_avg_cost(self, start_dt, end_dt, source_ids=None):
 
         print('{0:-^80}'.format('  overnigh_avg_cost called   '))
         print('{0:-^80}'.format(start_dt.strftime('%Y-%m-%d %H:%M:%S')))
@@ -551,6 +551,9 @@ class System(models.Model):
                 }
             }
         ]
+
+        if source_ids:
+            aggregate_pipeline[0]["$match"]["$and"].append({"source_id": {"$in": source_ids}})
 
         result =  current_db_conn.electricity.aggregate(aggregate_pipeline)
 
