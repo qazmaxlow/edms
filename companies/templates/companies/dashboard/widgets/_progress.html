@@ -12,9 +12,9 @@
                 <!-- <div class="long-text-toggle" ng-click="toggle()">
                     <span class="button-left">{{ isPast12Month ? p12BtnText : thisYrBtnText }}</span><span class="button-right"></span>
                 </div> -->
-                <select kendo-dropdownlist ng-model="isPast12Month">
-                    <option value="1">{{p12BtnText}}</option>
-                    <option value="0">{{thisYrBtnText}}</option>
+                <select kendo-dropdownlist="progressDropdown" ng-model="isPast12Month" k-on-change="changeProgressOption(kendoEvent)">
+                    <option value="pass12Months">{{p12BtnText}}</option>
+                    <option value="soFarThisYear">{{thisYrBtnText}}</option>
                 </select>
             </div>
         </div>
@@ -24,7 +24,7 @@
         <div class="description-6 top-space">{{isPast12Month == "1" ? p12DescLine1Text : thisYrDescLine1Text}}</div>
         <div class="description-6">{{isIncrease ? increaseLine2Text : decreaseLine2Text}}</div>
         <div class="percent">
-            <span class="percentNum">{{ compareToLastYear * 100 | abs | number:0 }}</span><span class="percentSign">%</span>
+            <span class="percentNum">{{ progress.compared_percent | abs | number:0 }}</span><span class="percentSign">%</span>
         </div>
         <div class="description-6">{{isPast12Month == "1" ? fromBaselineText : comparedToText}}</div>
         <div class="description-6">{{isPast12Month == "1" ? yearRangeText : ""}}</div>

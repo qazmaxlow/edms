@@ -1,10 +1,11 @@
-
-/*<!-- hack css for pdf -->*/
-.container {
-        width: 1024px !important;
-        padding: 20px 20px 30px 20px;
+#page-container .container {
+    width: 1024px;
+    padding: 20px 20px 30px 20px;
 }
 
+#dashboardContainer {
+    min-height: 300px;
+}
 
 /*widget common-------*/
 .widget-container {
@@ -73,9 +74,11 @@
 }
 
 .widget-content .full-width-img {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
     width: 100%;
-    height: auto;
-    max-height: 170px
+    height: 100px;
 }
 
 .left-padding-15 {
@@ -297,7 +300,6 @@
     padding: 0px 10px 0px 15px;
 }
 
-
 /*widget content-------*/
 .widget-content {
     border-radius: 0 0 8px 8px;
@@ -513,19 +515,24 @@
 
 .eu-widget-graph {
     padding: 0 7px;
+    height: calc(100% - 50px);
 }
 
 .eu-widget-graph .eu-left-chart {
     display: inline-block;
     border-right: 1px solid #F2F2F2;
-    padding: 5px 15px;
-    height: 250px;
+    padding: 5px 15px 10px 15px;
+    height: 100%;
 }
 
 .eu-widget-graph .eu-right-chart {
     display: inline-block;
-    padding: 5px 15px;
-    height: 250px;
+    padding: 5px 15px 10px 15px;
+    height: 100%;
+}
+
+.eu-widget-graph .k-chart {
+    height: 100%;
 }
 /*-------energy use widget*/
 
@@ -616,6 +623,19 @@
     background-position: left;
 }
 
+.widget-content .rt-legend {
+    height: 37px;
+}
+
+.widget-content .rt-graph {
+    height: calc(100% - 37px);
+    padding-bottom: 10px;
+}
+
+.widget-content .rt-graph .k-chart {
+    height: 200px;
+}
+
 .widget-content .xaxis-legend {
     width: 30px;
     text-align: right;
@@ -681,6 +701,19 @@
 }
 /*-------real time widget*/
 
+
+/* last week stats -----*/
+.lw-graph {
+    margin-top: -5px;
+    padding: 0px 10px 0px 15px;
+    height: calc(100% - 100px);
+}
+
+.lw-graph .k-content,
+.lw-graph .k-content .k-chart {
+    height: 100%;
+}
+/* last week stats -----*/
 
 /* progess widget -----*/
 .progress-widget .bg-image {
@@ -896,3 +929,216 @@
 }
 
 /* -----goal tracking widget */
+
+
+/* widget drag drop----- */
+.dashboard-toolbar {
+    margin-left: 0;
+    width: 100%;
+    height: 70px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #D2D2D2;
+}
+
+.dashboard-toolbar .buttons-wrap {
+    height: 100%;
+}
+
+.dashboard-toolbar .k-button,
+.dashboard-toolbar .k-button:focus:active,
+.dashboard-toolbar .k-button:focus:not(:disabled):not(.k-state-disabled),
+.dashboard-toolbar .k-button:focus:active:not(:disabled):not(.k-state-disabled) {
+    height: 25px;
+    width: 25px;
+    margin: 0;
+    box-shadow: 0px 2px 0px #6b9aa5;
+    background-image: url(../../images/dashboard/entrak-logo.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.dashboard-toolbar #widgetContainer {
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.widget-icon .realTimeIcon {
+    background-image: url(../../images/dashboard/tips-arrow-toggle.png);
+}
+
+.widget-icon .tipsIcon {
+    background-image: url(../../images/dashboard/tips-arrow-toggle.png);
+}
+
+.widget-icon .biggestConsumerIcon {
+    background-image: url(../../images/dashboard/tips-arrow-toggle.png);
+}
+
+.widget-icon .soFarIcon {
+    background-image: url(../../images/dashboard/tips-arrow-toggle.png);
+}
+
+.widget-icon .lastWeekStatsIcon {
+    background-image: url(../../images/dashboard/tips-arrow-toggle.png);
+}
+
+.widget-icon .progressIcon {
+    background-image: url(../../images/dashboard/tips-arrow-toggle.png);
+}
+
+.widget-icon .cumulativeIcon {
+    background-image: url(../../images/dashboard/tips-arrow-toggle.png);
+}
+
+.widget-icon .goalTrackingIcon {
+    background-image: url(../../images/dashboard/tips-arrow-toggle.png);
+}
+
+.widget-icon .widget-container {
+    display: none;
+}
+
+.widget-icon .realTimeIcon,
+.widget-icon .tipsIcon,
+.widget-icon .biggestConsumerIcon,
+.widget-icon .soFarIcon,
+.widget-icon .lastWeekStatsIcon,
+.widget-icon .progressIcon,
+.widget-icon .cumulativeIcon,
+.widget-icon .goalTrackingIcon {
+    height: 50px;
+    width: 50px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 0;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.widget-header {
+    /*cursor: url('/static/images/dashboard/grab.cur'), default;*/
+}
+
+/* -----widget drag drop */
+
+
+/* fullscreen----- */
+.fullscreen #menu,
+.fullscreen .site-footer,
+.fullscreen #header .change-lang-block,
+.fullscreen #header .image-carousel,
+.fullscreen .dashboard-toolbar,
+.fullscreen #heading,
+.fullscreen #sub-heading,
+.fullscreen .right-content .blue-bar {
+    display: none;
+}
+
+.fullscreen #sub-heading-facilities {
+    padding-left: 7%;
+}
+
+.fullscreen #page-container,
+.fullscreen #page-container .right-content,
+.fullscreen #dashboardContainer,
+.fullscreen .widget-container {
+    height: 100%;
+}
+
+.fullscreen #system-menu img {
+    margin-left: 0;
+}
+
+.fullscreen #page-container .right-content .container {
+    height: calc(100% - 105px);
+}
+
+.fullscreen #dashboardContainer>div {
+    height: 50%;
+}
+
+.fullscreen #page-container {
+    width: 100%;
+}
+
+.fullscreen #page-container .right-content {
+    padding-left: 0;
+    width: 100%;
+}
+
+.fullscreen #page-container .container {
+    width: 86%;
+    min-width: 800px;
+    margin-left: 7%;
+    margin-right: 7%;
+    padding: 10px 0 0 0;
+}
+
+.fullscreen .widget-content {
+    height: calc(100% - 40px);
+}
+
+.fullscreen #header {
+    height: 70px;
+}
+
+.fullscreen #header #exit-fullscreen-btn {
+    display: block !important;
+    position: absolute;
+    margin-top: 20px;
+    height: 30px;
+    width: 30px;
+    right: 7%;
+    background-image: url(../../images/dashboard/closeButton.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+}
+
+.fullscreen #header #entrakLogo {
+    display: block !important;
+    height: 100%;
+    width: 400px;
+    left: 7%;
+    position: absolute;
+    background-image: url(../../images/dashboard/entrak-logo.png);
+    background-repeat: no-repeat;
+    background-position: left center;
+}
+
+@media screen and (min-width: 1340px) and (min-height: 800px){
+    .fullscreen .widget-container {
+        font-size: 16px;
+    }
+}
+
+/*real time*/
+.fullscreen .rt-graph-container {
+    height: calc(100% - 50px);
+}
+.fullscreen .rt-content {
+    height: 100%;
+}
+.fullscreen .widget-content .rt-graph .k-chart {
+    height: 100%;
+}
+
+/*tips*/
+.fullscreen .full-width-img,
+.fullscreen .long-desc-holder {
+    height: calc(50% - 30px);
+}
+.fullscreen .long-desc-holder p {
+    height: 100%;
+}
+
+/*so far*/
+.fullscreen .eu-widget-graph .eu-left-chart {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+/* -----fullscreen */
