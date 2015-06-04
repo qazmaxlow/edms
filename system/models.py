@@ -17,7 +17,7 @@ from mongoengine import connection, Q as MQ
 from egauge.models import Source, SourceReadingYear, SourceReadingMonth, SourceReadingDay, SourceReadingHour, SourceReadingMin
 from entrak.settings import BASE_DIR, LANG_CODE_EN, LANG_CODE_TC
 from holiday.models import CityHoliday, Holiday
-from unit.models import UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
+from unit.models import UnitRate, UnitCategory, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
 from meters.models import Electricity, HourDetail, SystemId
 
 from system.constants import CITY_ALL
@@ -166,6 +166,11 @@ class System(models.Model):
     @property
     def is_education(self):
         return self.company_type == EDUCATION
+
+
+    @property
+    def money_unit(self):
+        return UnitCategory.electric_units.filter(Q(city=self.city)&Q(code=MONEY_CATEGORY_CODE)).first()
 
 
     def get_all_holidays(self, timestamp_info=None):
@@ -488,6 +493,7 @@ class System(models.Model):
             unit_rate_money = self.get_unit_rate(r.datetime, MONEY_CATEGORY_CODE)
 
             e, created = Electricity.objects.get_or_create(
+                    system_id = self.id,
                     datetime_utc = r.datetime,
                     source_id = r.source_id
                 )
@@ -500,7 +506,6 @@ class System(models.Model):
             e.hour_detail = copy.deepcopy(hour_detail)
             e.parent_systems = [SystemId(sid=s.id) for s in parent_systems]
 
-            e.system_id = self.id
             e.rate_co2 = unit_rate_co2.rate
             e.rate_money = unit_rate_money.rate
 
@@ -526,9 +531,8 @@ class System(models.Model):
 
     def overnight_avg_cost(self, start_dt, end_dt, source_ids=None):
 
-        print('{0:-^80}'.format('  overnigh_avg_cost called   '))
-        print('{0:-^80}'.format(start_dt.strftime('%Y-%m-%d %H:%M:%S')))
-        print('{0:-^80}'.format(end_dt.strftime('%Y-%m-%d %H:%M:%S')))
+        #print('{0:-^80}'.format(' overnigh_avg_cost called '))
+        #print('{0:-^80}'.format(' start_dt: ' + start_dt.strftime('%Y-%m-%d %H:%M:%S')) + ' | end_dt: ' + end_dt.strftime('%Y-%m-%d %H:%M:%S') + ' '))
 
         int_start_dt = int(start_dt.strftime("%Y%m%d"))
         int_end_dt = int(end_dt.strftime("%Y%m%d"))
@@ -565,8 +569,6 @@ class System(models.Model):
             return total/days
         else:
             return 0
-
-
 
 
 class SystemHomeImage(models.Model):
