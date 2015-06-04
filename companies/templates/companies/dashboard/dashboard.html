@@ -145,6 +145,7 @@
         $("#exit-fullscreen-btn").click(function(){
             $("body").removeClass("fullscreen");
             angular.element($("#dashboardController")).scope().updateWidget();
+            angular.element($("#dashboardController")).scope().autoToggle(false);
         });
 
         //update widgets when resize
@@ -171,7 +172,8 @@
 
         $scope.setFullscreenMode = function(){
             $("body").addClass("fullscreen");
-            $scope.updateWidget();            
+            $scope.updateWidget();
+            $scope.autoToggle(true);
         };
 
         //update all widget if e is null
@@ -197,9 +199,36 @@
                             wScope.updateWidgetImpl();
                         }
                     }
-                }                
+                }
             }, 50);
-        };
+        }
+
+        function autoToggleCore(isAuto){
+            var widget = $("#dashboardContainer .widget-container");
+            var wScope = null;
+            for (var i=0; i<widget.length; i++){
+                wScope = angular.element(widget[i]).scope();
+                if (wScope && typeof wScope.autoToggleImpl == "function"){
+                    if (!wScope.$$phase){
+                        wScope.$apply(function(){
+                            wScope.autoToggleImpl(isAuto);
+                        });
+                    } else {
+                        wScope.autoToggleImpl(isAuto);
+                    }
+                }
+            }            
+        }
+
+        var autoToggleTimer = null;
+        $scope.autoToggle = function(isAuto){
+            if (isAuto){
+                autoToggleTimer = setInterval(autoToggleCore, 10000, isAuto);
+            } else {
+                clearInterval(autoToggleTimer);
+                autoToggleCore(isAuto);
+            }
+        }
 
         $scope.getWidgetOrder = function(){
             var order = [];
@@ -210,7 +239,7 @@
             }
 
             return order;
-        };
+        }
 
         $scope.dashboardSortableOpt = {
             // cursor: "url('/static/images/dashboard/grabbing.cur'), default",
@@ -258,6 +287,7 @@
         $scope.axisLast = '{% trans "Last week" %}';
         $scope.perDay = '{% trans "per day" %}';
 
+        var autoReloadTimer = null;
         var today_measures = [];
         var last_week_measures = [];
         for (var i = 0; i < 24; i++) last_week_measures[i] = null;
@@ -285,7 +315,6 @@
                 }, {"dom":{}}, {"dom":{}});
             }
         });
-
 
         // Reference from https://www.youtube.com/watch?feature=player_embedded&v=hrLt0Y9QAY8
         $("#stageMoney,#stageCO2").css({ // Set the transform origin so we always scale to the top left corner of the stage
@@ -394,7 +423,6 @@
         $.each(hours, function(i, h) { per_hour_measures[h] = null; });
         //$.each(hours, function(i, h) { last_week_measures[h] = h*5+54;per_hour_measures[h] = h*5+123; });
 
-        $scope.realTimeSelect = 'graph';
         $scope.realTimeOptions = {
             transitions: false,
             chartArea: {
@@ -534,22 +562,30 @@
             }
             $scope.refreshHeader();
         }
-        $scope.toggle(true);
-
-        // update the chart every 10 sec
-        $scope.refreshHeader();
 
         $scope.updateWidgetImpl = function(){
             console.log("update real time widget");
-            $scope.updateTodayMeasure();
+            
             $scope.refreshHeader();
-            if (!$scope.isGraph){
+            if ($scope.isGraph){
+                $scope.updateTodayMeasure();
+            } else {
                 resizeAmination();
             }
         }
 
-        setInterval($scope.updateWidgetImpl, 10000);
+        $scope.autoToggleImpl = function(isAuto){
+            if (isAuto){
+                clearInterval(autoReloadTimer);
+                $scope.toggle(!$scope.isGraph);
+            } else {
+                autoReloadTimer = setInterval($scope.updateWidgetImpl, 10000);
+            }
+        }
 
+        // update the chart every 10 sec
+        $scope.toggle(true);
+        $scope.autoToggleImpl(false);
     });
 
     ngapp.controller("WidgetBiggestConsumers", function($scope){
