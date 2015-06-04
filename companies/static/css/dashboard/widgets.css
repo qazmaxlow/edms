@@ -950,7 +950,11 @@
 .dashboard-toolbar .k-button:focus:active:not(:disabled):not(.k-state-disabled) {
     height: 25px;
     width: 25px;
+    margin: 0;
     box-shadow: 0px 2px 0px #6b9aa5;
+    background-image: url(../../images/dashboard/entrak-logo.png);
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .dashboard-toolbar #widgetContainer {
@@ -1129,6 +1133,12 @@
 }
 .fullscreen .long-desc-holder p {
     height: 100%;
+}
+
+/*so far*/
+.fullscreen .eu-widget-graph .eu-left-chart {
+    padding-left: 10%;
+    padding-right: 10%;
 }
 
 /* -----fullscreen */
