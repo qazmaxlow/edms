@@ -143,6 +143,9 @@
             <div>
                 <img src="{% static 'images/report/car.png' %}">
                 <div class="basic-info-text-container">
+                  {% if saving_energy == None %}
+                    <span id="car-impact">N/A</span>
+                  {% else %}
                   <span id="car-impact">
                     {% ifequal LANGUAGE_CODE 'zh-tw' %}
                       {% if is_saving %}
@@ -159,12 +162,16 @@
                       {% else %}
                       {% trans "on the road for a month" %}
                       {% endif %}</span>
+                    {% endif %}
                 </div>
             </div>
             <hr class="current-usage-separator-dark-grey">
             <div>
                 <img src="{% static 'images/report/trees.png' %}">
                 <div class="basic-info-text-container">
+                  {% if saving_energy == None %}
+                    <span id="forest-impact">N/A</span>
+                  {% else %}
                     {% ifequal LANGUAGE_CODE 'zh-tw' %}
                     <span id="forest-impact-subtext" class="basic-info-col-subtext">
                       {% if is_saving %}
@@ -184,12 +191,16 @@
                       {% endif %}
                     </span>
                     {% endifequal %}
+                  {% endif %}
                 </div>
             </div>
             <hr class="current-usage-separator-dark-grey">
             <div class="bottom-margin-20">
                 <img src="{% static 'images/report/ac.png' %}">
                 <div class="basic-info-text-container">
+                  {% if saving_energy == None %}
+                    <span id="panda-impact">N/A</span>
+                  {% else %}
                     <span id="panda-impact">{{ co2_in_elephant|floatformat:"0"|intcomma }}{% trans " aircons" %}</span>
                     <span id="panda-impact-subtext" class="basic-info-col-subtext">
                       {% if is_saving %}
@@ -198,6 +209,7 @@
                       {% trans "turned on for one day" %}
                       {% endif %}
                     </span>
+                  {% endif %}
                 </div>
             </div>
         </div>
