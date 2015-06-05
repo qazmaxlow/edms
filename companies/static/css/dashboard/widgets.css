@@ -7,6 +7,17 @@
     min-height: 300px;
 }
 
+.vMid {
+
+}
+
+.vMidParent {
+    white-space: nowrap;
+}
+
+.vMidParent:before {
+}
+
 /*widget common-------*/
 .widget-container {
     padding:  10px 10px 20px 10px;
@@ -88,6 +99,9 @@
 
 /*widget header-------*/
 .widget-header {
+    min-height: 40px;
+    max-height: 60px;
+    height: 12.25%;
     border-radius: 8px 8px 0 0;
     background-color: #9BCEDA;
     -webkit-box-shadow: -2px 2px 3px rgba(0,0,0,0.1);
@@ -144,10 +158,10 @@
 }
 
 .widget-title {
+    height: 100%;
 	letter-spacing: 0.01em;
     padding-left: 15px;
     padding-right: 0px;
-    height: 40px;
     line-height: 39px;
     color: #FFF;
     font-size: 1.0em;
@@ -157,8 +171,7 @@
 .widget-toggle {
     padding-right: 13px;
     padding-left: 0px;
-    height: 40px;
-    line-height: 40px;
+    height: 100%;
 }
 
 /*.long-text-toggle {
@@ -1087,9 +1100,9 @@
 .fullscreen #header #exit-fullscreen-btn {
     display: block !important;
     position: absolute;
-    margin-top: 20px;
-    height: 30px;
-    width: 30px;
+    margin-top: 15px;
+    height: 15px;
+    width: 15px;
     right: 7%;
     background-image: url(../../images/dashboard/closeButton.png);
     background-size: contain;
@@ -1109,9 +1122,15 @@
     background-position: left center;
 }
 
-@media screen and (min-width: 1340px) and (min-height: 800px){
+/* fullscreen with large screen (1920x1080)*/
+@media screen and (min-width: 1850px) and (min-height: 1000px){
     .fullscreen .widget-container {
-        font-size: 16px;
+        font-size: 20px;
+    }
+
+    .fullscreen .widget-message {
+        min-height: 60px;
+        height: 20%;
     }
 }
 

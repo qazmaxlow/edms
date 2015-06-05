@@ -339,7 +339,6 @@
 
             var desiredWidth = Math.round(parentWidth * 1); // Set the new width of the stage as it scales
             var desiredHeight = Math.round(parentHeight * 1); // Set the new height of the stage as it scales
-
             var rescaleWidth = (desiredWidth / stageWidth); // Set a variable to calculate the new width of the stage as it scales
             var rescaleHeight = stageHeight > 0 ? (desiredHeight / stageHeight) : rescaleWidth; // Set a variable to calculate the new height of the stage as it scales
 
@@ -1092,6 +1091,12 @@
             if (isWkDay != $scope.isWeekday){
                 $scope.isWeekday = isWkDay;
                 updateChart();
+            }
+        }
+
+        $scope.autoToggleImpl = function(isAuto){
+            if (isAuto){
+                $scope.toggle(!$scope.isWeekday);
             }
         }
 
