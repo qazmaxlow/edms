@@ -483,6 +483,7 @@ class System(models.Model):
         create_count = 0
         update_count = 0
 
+
         for i in range(60):
             hour_detail['m%02d'%i] = 0.00
 
@@ -492,11 +493,22 @@ class System(models.Model):
             unit_rate_co2 = self.get_unit_rate(r.datetime, CO2_CATEGORY_CODE)
             unit_rate_money = self.get_unit_rate(r.datetime, MONEY_CATEGORY_CODE)
 
-            e, created = Electricity.objects.get_or_create(
-                    system_id = self.id,
-                    datetime_utc = r.datetime,
-                    source_id = r.source_id
-                )
+            hour_total = 0
+
+            try:
+                e = Electricity.objects.get(
+                        system_id = self.id,
+                        datetime_utc = r.datetime,
+                        source_id = r.source_id
+                    )
+                update_count += 1
+            except Electricity.DoesNotExist:
+                e = Electricity(
+                        system_id = self.id,
+                        datetime_utc = r.datetime,
+                        source_id = r.source_id
+                    )
+                create_count += 1
 
             e.total = r.value
             e.overnight_total = 0
@@ -516,14 +528,10 @@ class System(models.Model):
 
             for m in minutes:
                 overnight = self.validate_overnight(m.datetime.astimezone(system_tz))
+                hour_total += m.value
                 if overnight:
-                    e.overnight_total += m.value
-                e.hour_detail['m%02d'%m.datetime.minute] = m.value
-
-            if created:
-                create_count += 1
-            else:
-                update_count += 1
+                    e.overnight_total = hour_total
+                e.hour_detail['m%02d'%m.datetime.minute] = hour_total
 
             e.save()
 
@@ -557,7 +565,7 @@ class System(models.Model):
         ]
 
         if source_ids:
-            aggregate_pipeline[0]["$match"]["$and"].append({"source_id": {"$in": source_ids}})
+            aggregate_pipeline[0]["$match"]["$and"].append({"source_id": {"$in": [ObjectId(s) for s in source_ids]}})
 
         result =  current_db_conn.electricity.aggregate(aggregate_pipeline)
 

@@ -341,14 +341,14 @@ def summary_ajax(request, system_code):
 
 
     # overnight_avg_cost = get_overnight_avg_cost(current_system, source_ids, start_dt, end_dt)
-    overnight_avg_cost = current_system.overnight_avg_cost(start_dt, end_dt)
+    overnight_avg_cost = current_system.overnight_avg_cost(start_dt, end_dt, source_ids)
     # overnight_avg_cost = total_on_sum / (end_dt - start_dt).days
     # overnight_avg_cost = get_overnight_avg_cost(source_ids, start_dt, end_dt)
     m['formated_overnight_avg_cost'] = '${0:,.0f}'.format(overnight_avg_cost) if overnight_avg_cost else None
 
     compare_to_last_overnight_avg_cost = None
     # last_overnight_avg_cost = get_overnight_avg_cost(current_system, source_ids, last_start_dt, last_end_dt)
-    last_overnight_avg_cost = current_system.overnight_avg_cost(last_start_dt, last_end_dt)
+    last_overnight_avg_cost = current_system.overnight_avg_cost(last_start_dt, last_end_dt, source_ids)
 
     if last_overnight_avg_cost > 0 and overnight_avg_cost is not None:
         compare_to_last_overnight_avg_cost = float(overnight_avg_cost-last_overnight_avg_cost)/last_overnight_avg_cost*100

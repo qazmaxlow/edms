@@ -51,7 +51,7 @@ def ranking_data_view(request, system_code=None):
     if ranking_type == RANKING_TYPE_PERCENT:
         last_start_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('last_start_dt')))
         last_end_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('last_end_dt')))
-        last_source_readings = SourceManager.get_readings(all_source_ids, range_type, last_start_dt, last_end_dt)
+        last_source_readings = SourceManager.get_readings(all_source_ids, 'hour', last_start_dt, last_end_dt)
 
     systems = None
     sources = None
