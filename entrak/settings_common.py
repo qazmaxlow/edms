@@ -52,6 +52,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'oauth2_provider',
+    'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
     'south',
@@ -91,7 +92,10 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'entrak.middleware.timezone_middleware.TimezoneMiddleware',
     'entrak.middleware.locale.LocaleMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 )
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
     'django.core.context_processors.request',
