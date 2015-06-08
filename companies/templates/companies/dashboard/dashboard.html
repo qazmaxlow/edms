@@ -171,7 +171,7 @@
             } else {
                 timeout = false;
                 if ($("body").hasClass("fullscreen")){  //fix height for non-fullscreen, no need update chart
-                    angular.element($("#dashboardController")).scope().updateWidget();    
+                    angular.element($("#dashboardController")).scope().updateWidget();
                 }
             }
         }
@@ -227,7 +227,7 @@
                         wScope.autoToggleImpl(isAuto);
                     }
                 }
-            }            
+            }
         }
 
         //get current widget order
@@ -287,6 +287,7 @@
         $scope.axisToday = '{% trans "Today" %}';
         $scope.axisLast = '{% trans "Last week" %}';
         $scope.perDay = '{% trans "per day" %}';
+        $scope.yAxisTitle = '{{current_system.money_unit.name}}';
 
         var autoReloadTimer = null;
         var today_measures = [];
@@ -338,7 +339,6 @@
 
             var desiredWidth = Math.round(parentWidth * 1); // Set the new width of the stage as it scales
             var desiredHeight = Math.round(parentHeight * 1); // Set the new height of the stage as it scales
-
             var rescaleWidth = (desiredWidth / stageWidth); // Set a variable to calculate the new width of the stage as it scales
             var rescaleHeight = stageHeight > 0 ? (desiredHeight / stageHeight) : rescaleWidth; // Set a variable to calculate the new height of the stage as it scales
 
@@ -350,7 +350,7 @@
             stage.css('-moz-transform', 'scale(' + rescaleWidth + ', ' + rescaleHeight + ')');
             stage.css('-o-transform', 'scale(' + rescaleWidth + ', ' + rescaleHeight + ')');
         }
-        
+
         function resizeAmination() {
             scaleStage("stageCO2", "animationContainerCO2");
             scaleStage("stageMoney", "animationContainerMoney");
@@ -459,7 +459,7 @@
                 labels: {
                     step: 2,
                     font: "0.857em ITCAvantGardeStd-Bk",
-                    padding: { 
+                    padding: {
                      top: 5
                     },
                     color: "#4B4B4B",
@@ -566,7 +566,7 @@
 
         $scope.updateWidgetImpl = function(){
             console.log("update real time widget");
-            
+
             $scope.refreshHeader();
             if ($scope.isGraph){
                 $scope.updateTodayMeasure();
@@ -596,7 +596,7 @@
         $scope.btnRight = '{% trans "Month" context "dashboard" %}';
         $scope.changeText = $scope.isWeek ? '{% trans "Change from last week" %}' : '{% trans "Change from last month" %}';
         $scope.energyCost = '{% trans "Energy cost so far" %}';
-        
+
         var refreshIntervalId = null;
         var refreshPeriod = 30000;
 
@@ -1089,8 +1089,14 @@
 
         $scope.toggle = function(isWkDay) {
             if (isWkDay != $scope.isWeekday){
-                $scope.isWeekday = isWkDay;    
+                $scope.isWeekday = isWkDay;
                 updateChart();
+            }
+        }
+
+        $scope.autoToggleImpl = function(isAuto){
+            if (isAuto){
+                $scope.toggle(!$scope.isWeekday);
             }
         }
 
@@ -1107,7 +1113,7 @@
         $scope.isPast12Month = "1";
         $scope.percent = 14;
         $scope.lastYear = 2014;
-        
+
         $scope.isIncrease = $scope.percent > 0;
         $scope.percent = Math.abs($scope.percent);
 
@@ -1279,7 +1285,7 @@
         $scope.selectedGoal = "0";
         $scope.changeGoal = function(){
             console.log($scope.selectedGoal);
-            
+
             $scope.compareDate = new Date();
             $scope.fromDate = new Date();
             $scope.toDate = new Date();

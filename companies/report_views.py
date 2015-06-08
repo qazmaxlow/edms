@@ -340,13 +340,15 @@ def summary_ajax(request, system_code):
 
 
 
-    overnight_avg_cost = get_overnight_avg_cost(current_system, source_ids, start_dt, end_dt)
+    # overnight_avg_cost = get_overnight_avg_cost(current_system, source_ids, start_dt, end_dt)
+    overnight_avg_cost = current_system.overnight_avg_cost(start_dt, end_dt, source_ids)
     # overnight_avg_cost = total_on_sum / (end_dt - start_dt).days
     # overnight_avg_cost = get_overnight_avg_cost(source_ids, start_dt, end_dt)
     m['formated_overnight_avg_cost'] = '${0:,.0f}'.format(overnight_avg_cost) if overnight_avg_cost else None
 
     compare_to_last_overnight_avg_cost = None
-    last_overnight_avg_cost = get_overnight_avg_cost(current_system, source_ids, last_start_dt, last_end_dt)
+    # last_overnight_avg_cost = get_overnight_avg_cost(current_system, source_ids, last_start_dt, last_end_dt)
+    last_overnight_avg_cost = current_system.overnight_avg_cost(last_start_dt, last_end_dt, source_ids)
 
     if last_overnight_avg_cost > 0 and overnight_avg_cost is not None:
         compare_to_last_overnight_avg_cost = float(overnight_avg_cost-last_overnight_avg_cost)/last_overnight_avg_cost*100
@@ -802,9 +804,11 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
 
         # for overnight
-        last_overnight_usage = get_overnight_avg_cost(current_system, g['sourceIds'], report_date - relativedelta(months=1), report_end_date - relativedelta(months=1))
+        # last_overnight_usage = get_overnight_avg_cost(current_system, g['sourceIds'], report_date - relativedelta(months=1), report_end_date - relativedelta(months=1))
+        last_overnight_usage = current_system.overnight_avg_cost(report_date - relativedelta(months=1), report_end_date - relativedelta(months=1), g['sourceIds'])
 
-        current_overnight_usage = get_overnight_avg_cost(current_system, g['sourceIds'], report_date, report_end_date)
+        # current_overnight_usage = get_overnight_avg_cost(current_system, g['sourceIds'], report_date, report_end_date)
+        current_overnight_usage = current_system.overnight_avg_cost(report_date, report_end_date, g['sourceIds'])
 
         overnight = {'bill': current_overnight_usage}
 
@@ -1241,8 +1245,10 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     overnight_usage = {}
     overnight_bill = sum([ g['currentOvernightInfo']['average'] for g in group_data])
     # overnight_usage['bill'] = overnight_bill * money_unit_rate.rate
-    overnight_usage['bill'] = get_overnight_avg_cost(current_system, source_ids, report_date, report_end_date + datetime.timedelta(days=1))
-    last_overnight_usage = get_overnight_avg_cost(current_system, source_ids, last_start_dt, last_end_dt + datetime.timedelta(days=1))
+    # overnight_usage['bill'] = get_overnight_avg_cost(current_system, source_ids, report_date, report_end_date + datetime.timedelta(days=1))
+    # last_overnight_usage = get_overnight_avg_cost(current_system, source_ids, last_start_dt, last_end_dt + datetime.timedelta(days=1))
+    overnight_usage['bill'] = current_system.overnight_avg_cost(report_date, report_end_date + datetime.timedelta(days=1), source_ids)
+    last_overnight_usage = current_system.overnight_avg_cost(last_start_dt, last_end_dt + datetime.timedelta(days=1), source_ids)
 
     overnight_beginning_usage = sum([ g['beginningOvernightInfo']['average'] for g in group_data])
     overnight_average_usage = sum([ g['currentOvernightInfo']['average'] for g in group_data])

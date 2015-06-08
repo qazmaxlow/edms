@@ -7,6 +7,10 @@
     min-height: 300px;
 }
 
+.h-center {
+    text-align: center;
+}
+
 /*widget common-------*/
 .widget-container {
     padding:  10px 10px 20px 10px;
@@ -79,6 +83,7 @@
     background-position: center;
     width: 100%;
     height: 100px;
+    background-color: #d9d9d9;
 }
 
 .left-padding-15 {
@@ -88,6 +93,7 @@
 
 /*widget header-------*/
 .widget-header {
+    height: 40px;
     border-radius: 8px 8px 0 0;
     background-color: #9BCEDA;
     -webkit-box-shadow: -2px 2px 3px rgba(0,0,0,0.1);
@@ -144,11 +150,11 @@
 }
 
 .widget-title {
+    height: 100%;
+    line-height: 40px;
 	letter-spacing: 0.01em;
     padding-left: 15px;
     padding-right: 0px;
-    height: 40px;
-    line-height: 39px;
     color: #FFF;
     font-size: 1.0em;
     font-weight: 500;
@@ -157,7 +163,7 @@
 .widget-toggle {
     padding-right: 13px;
     padding-left: 0px;
-    height: 40px;
+    height: 100%;
     line-height: 40px;
 }
 
@@ -215,7 +221,7 @@
     border: none;
     min-width: 55px;
     height: 20px;
-    line-height: 22px;
+    line-height: 20px;
     vertical-align: middle;
     outline:none;
 }
@@ -259,20 +265,19 @@
 
 .widget-message .single-box {
     height: 60px;
-    line-height: 40px;
-    padding: 10px 15px;
+    line-height: 60px;
     text-align: center;
     width: 100%;
 }
 
 .widget-message .left-box {
-    height: 60px;
+    height: 100%;
     background-color: #FCFCFC;
     padding: 12px 10px 11px 15px;
 }
 
 .widget-message .right-box {
-    height: 60px;
+    height: 100%;
     background-color: #E5E8E9;
     padding: 12px 10px 11px 15px;
     background-image: url(../../images/dashboard/left-arrow-widget.png);
@@ -334,7 +339,6 @@
     border: none;
     width: 18px;
     height: 20px;
-    line-height: 22px;
     vertical-align: middle;
     outline: none;
 
@@ -368,7 +372,8 @@
 
 /*biggest consumers widget-------*/
 .widget-content .bc-right-box {
-    width: 105px;
+    min-width: 105px;
+    width: 25%;
     border-left: 1px solid #F2F2F2;
 }
 
@@ -405,10 +410,8 @@
 
 .horizontal-bars .bc-change-percent {
     display: inline-block;
-    margin-left: 17px;
-    padding-left: 18px;
     margin-top: 7px;
-    text-align: left;
+    text-align: right;
     font-size: 1.357em;
     font-weight: 500;
 }
@@ -419,19 +422,13 @@
     font-size: 1.071em;
 }
 
-.horizontal-bars .bc-change-percent.red-text {
-    background: url(../../images/dashboard/arrow-up.png) no-repeat center left;     
-}
-
-.horizontal-bars .bc-change-percent.green-text {
-    background: url(../../images/dashboard/arrow-down.png) no-repeat center left;   
-}
-
 .horizontal-bars tr {
     border-top: 1px solid #F2F2F2;
 }
 
-.horizontal-bars div.bc-right-box, .horizontal-bars div.bc-left-box {
+.bc-right-box,
+.bc-left-box {
+/*.horizontal-bars div.bc-right-box, .horizontal-bars div.bc-left-box {*/    
     height: 100%;
 }
 
@@ -462,7 +459,11 @@
     padding-right: 10px;
 }
 
-.horizontal-bars .bar-row img {
+.horizontal-bars .bar-row .direction-icon {
+    margin-bottom: 4px;
+}
+
+.horizontal-bars .bar-row .ranking-icon {
     position: absolute;
     z-index: 10;
 }
@@ -1057,6 +1058,7 @@
 
 .fullscreen #dashboardContainer>div {
     height: 50%;
+    min-height: 350px;
 }
 
 .fullscreen #page-container {
@@ -1087,9 +1089,9 @@
 .fullscreen #header #exit-fullscreen-btn {
     display: block !important;
     position: absolute;
-    margin-top: 20px;
-    height: 30px;
-    width: 30px;
+    margin-top: 15px;
+    height: 15px;
+    width: 15px;
     right: 7%;
     background-image: url(../../images/dashboard/closeButton.png);
     background-size: contain;
@@ -1109,9 +1111,73 @@
     background-position: left center;
 }
 
-@media screen and (min-width: 1340px) and (min-height: 800px){
+/* fullscreen with large screen (1280x800)*/
+@media screen and (min-width: 1250px) and (min-height: 780px) and (max-width: 1849px){
     .fullscreen .widget-container {
         font-size: 16px;
+    }
+
+    .fullscreen .widget-header,
+    .fullscreen .widget-header .widget-title,
+    .fullscreen .widget-header .widget-toggle {
+        height: 45px;
+        line-height: 45px;
+    }
+
+    .fullscreen .toggle-button {
+        min-width: 60px;
+        height: 25px;
+        line-height: 25px;
+    }
+
+    .fullscreen .widget-header .tips-button {
+        width: 23px;
+        height: 25px;
+    }
+
+    .fullscreen .widget-message {
+        height: 65px;
+    }
+
+    .fullscreen .widget-message .single-box,
+    .fullscreen .widget-content .bc-left-box.first-row h3 {
+        height: 65px;
+        line-height: 65px;
+    }
+}
+
+/* fullscreen with large screen (1920x1080)*/
+@media screen and (min-width: 1850px) and (min-height: 1000px){
+    .fullscreen .widget-container {
+        font-size: 19px;
+    }
+
+    .fullscreen .widget-header,
+    .fullscreen .widget-header .widget-title,
+    .fullscreen .widget-header .widget-toggle {
+        height: 50px;
+        line-height: 50px;
+    }
+
+    .fullscreen .toggle-button {
+        min-width: 65px;
+        height: 30px;
+        line-height: 30px;
+    }
+
+    .fullscreen .widget-header .tips-button {
+        width: 28px;
+        height: 30px;
+    }
+
+    .fullscreen .widget-message {
+        height: 70px;
+    }
+
+    .fullscreen .widget-message .single-box,
+    .fullscreen .widget-content .bc-left-box.first-row h3 {
+        height: 70px;
+        line-height: 70px;
     }
 }
 
@@ -1133,6 +1199,8 @@
 }
 .fullscreen .long-desc-holder p {
     height: 100%;
+    max-width: 500px;
+    margin: auto;
 }
 
 /*so far*/
