@@ -428,7 +428,7 @@
         //$.each(hours, function(i, h) { last_week_measures[h] = h*5+54;per_hour_measures[h] = h*5+123; });
 
         $scope.realTimeOptions = {
-            transitions: false,
+            // transitions: false,
             chartArea: {
                 margin: 0,
                 background: "#FCFCFC"
@@ -713,7 +713,6 @@
         }
     });
 
-
     ngapp.controller("WidgetSoFar", function($scope){
         $scope.title = '{% trans "Comparison" %}';
         $scope.btnLeft = '{% trans "Week" context "dashboard" %}';
@@ -804,6 +803,7 @@
         };
 
         $scope.soFarOptionsThis = {
+            // transitions: false,
             series: [{
                 markers: { visible: true },
                 data: thisCost,
@@ -833,6 +833,7 @@
             categoryAxis: catAxis
         }
         $scope.soFarOptionsLast = {
+            // transitions: false,
             series: [{
                 markers: { visible: true },
                 data: lastCost,
@@ -1313,8 +1314,8 @@
         $scope.thirdRowPart3Text = '{% trans "from " %}';
         $scope.thirdRowPart4Text = '{% trans " to " %}';
 
-
     });
+
 </script>
 
 {% endblock %}

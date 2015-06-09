@@ -24,7 +24,7 @@
                 <div class="bc-right-box pull-right">
                     <div class="name-row"></div>
                     <div class="bar-row h-center" ng-if="c.percentage_change != null">
-                        <img class="direction-icon" ng-src="/static/images/dashboard/arrow-{{c.percentage_change > 0 ? 'down' : 'up'}}.png"></img>
+                        <img class="direction-icon" ng-src="/static/images/dashboard/arrow-{{c.percentage_change > 0 ? 'up' : 'down'}}.png"></img>
                         <span class="bc-change-percent" ng-class="{'red-text' : c.percentage_change > 0, 'green-text' : c.percentage_change <= 0}" ng-bind="c.percentage_change | abs | entrakNumber"></span><!--
                         --><span class="bc-percent-unit" ng-class="{'red-text' : c.percentage_change > 0, 'green-text' : c.percentage_change <= 0}">%</span>
                     </div>
