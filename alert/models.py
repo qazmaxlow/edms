@@ -20,6 +20,7 @@ ALERT_COMPARE_METHOD_BELOW = 'below'
 ALERT_COMPARE_METHOD_CHOICES = (
     (ALERT_COMPARE_METHOD_ABOVE, 'above'),
     (ALERT_COMPARE_METHOD_BELOW, 'below'),
+    ('above-threshold', 'above threshold'),
 )
 
 CONTINUOUS_INTERVAL_MIN = 10
@@ -124,6 +125,10 @@ class Alert(models.Model):
                     elif self.compare_method == ALERT_COMPARE_METHOD_BELOW:
                         if value < recent_value*(1-(self.compare_percent/100.0)):
                             pass_verify = False
+                    elif self.compare_method == 'above-threshold':
+                        if value > self.peak_threshold:
+                            pass_verify = False
+
                     diff_percent = int(((float(value)/recent_value)-1)*100)
 
         verify_result = {
