@@ -20,7 +20,7 @@
     </div>
     <div class="bc-graph">
         <table class="horizontal-bars">
-            <tr ng-repeat="c in consumers.data()"><td>
+            <tr ng-repeat="c in consumers.data()" on-last-repeat><td>
                 <div class="bc-right-box pull-right">
                     <div class="name-row"></div>
                     <div class="bar-row h-center" ng-if="c.percentage_change != null">
@@ -40,7 +40,7 @@
                     <div class="bar-row">
                         <img class="ranking-icon" ng-src="/static/images/dashboard/consumer-{{$index+1}}.png"></img>
                         <div class="bar-container">
-                            <div class="bar" ng-if="c.value != null" style="width: {{100 * c.value / consumers.data()[0].value}}%">
+                            <div class="bar" ng-if="c.value != null" >
                                 <span class="bar-value" ng-bind="c.value | entrakNumber"></span>
                             </div>
                             <div class="bar" ng-if="c.value == null" style="width: 0px">

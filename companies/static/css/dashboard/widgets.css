@@ -473,6 +473,14 @@
     border-top-right-radius: 22px;
     border-bottom-right-radius: 22px;
     position: relative;
+    width: 0px;
+}
+
+.horizontal-bars .bar-row .bar-container .bar.animation-bar {
+    transition: width 0.25s ease-out;
+    -webkit-transition: width 0.25s ease-out;
+    -moz-transition: width 0.25s ease-out;
+    -o-transition: width 0.25s ease-out;
 }
 
 .horizontal-bars .bar-row .bar-container .bar .bar-value {
@@ -649,13 +657,13 @@
 }
 
 .widget-content .rt-left-box {
-    height: 250px;
+    height: 240px;
     padding: 0;
 }
 
 .widget-content .rt-right-box {
     border-left: 2px solid #F2F2F2;
-    height: 250px;
+    height: 240px;
     position: relative;
     padding: 0;
 }
@@ -1063,6 +1071,14 @@
 .fullscreen #dashboardContainer>div {
     height: 50%;
     min-height: 350px;
+}
+
+.fullscreen #dashboardContainer>div.col-xs-12 {
+    min-width: 676px;
+}
+
+.fullscreen #dashboardContainer>div.col-xs-6 {
+    min-width: 338px;
 }
 
 .fullscreen #page-container {
