@@ -85,7 +85,7 @@ class progressSoFarThisYear(APIView):
         info = {
             'thisYearKwh': this_year_kwh,
             'lastYearKwh': last_year_kwh,
-            'compared_percent': compare_to_last_year * 100
+            'compared_percent': (compare_to_last_year or 0) * 100
         }
         response = Response(info, status=status.HTTP_200_OK)
         return response
@@ -112,7 +112,7 @@ class progressCompareToBaseline(APIView):
         baselines = BaselineUsage.objects.filter(system=system).order_by('start_dt')
         year_ranges = range(start_date_year, timezone.now().year+1)
 
-        # this_year_kwh = 
+        # this_year_kwh =
         total_changed = 0
         total_co2_changed = 0
 

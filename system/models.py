@@ -464,6 +464,7 @@ class System(models.Model):
             overnight_costs.append({'date':k, 'weekday':dt, 'value':v})
         return {'data': overnight_costs, 'total': total_values, 'number_of_days': total_days}
 
+
     def convert_to_meter_ds(self, start_dt, end_dt):
 
         source_ids = [s.id for s in self.sources]
@@ -537,10 +538,11 @@ class System(models.Model):
 
         return (create_count, update_count)
 
+
     def overnight_avg_cost(self, start_dt, end_dt, source_ids=None):
 
         #print('{0:-^80}'.format(' overnigh_avg_cost called '))
-        #print('{0:-^80}'.format(' start_dt: ' + start_dt.strftime('%Y-%m-%d %H:%M:%S')) + ' | end_dt: ' + end_dt.strftime('%Y-%m-%d %H:%M:%S') + ' '))
+        #print('{0:-^80}'.format(' start_dt: ' + start_dt.strftime('%Y-%m-%d %H:%M:%S') + ' | end_dt: ' + end_dt.strftime('%Y-%m-%d %H:%M:%S') + ' '))
 
         int_start_dt = int(start_dt.strftime("%Y%m%d"))
         int_end_dt = int(end_dt.strftime("%Y%m%d"))
@@ -578,6 +580,102 @@ class System(models.Model):
         else:
             return 0
 
+
+    def total_usage(self, start_dt, end_dt):
+
+        current_db_conn = connection.get_db()
+        minute = 0
+
+        minute = end_dt.minute
+        end_dt = end_dt.replace(minute=0, second=0, microsecond=0)
+
+        aggregate_pipeline = [
+            { "$match":
+                {"$and": [
+                    {"datetime_utc": {"$gte": start_dt}},
+                    {"datetime_utc": {"$lt": end_dt}},
+                    {"parent_systems": {"sid": self.id}},
+                ]}},
+            { "$project": {"total": 1, "rate_co2": 1, "rate_money": 1}},
+            {
+                "$group": {
+                    "_id": None,
+                    "totalKwh": {"$sum": "$total"},
+                    "totalCo2": {"$sum": {"$multiply": ["$total", "$rate_co2"]}},
+                    "totalMoney": {"$sum": {"$multiply": ["$total", "$rate_money"]}},
+                }
+            }
+        ]
+
+        result =  current_db_conn.electricity.aggregate(aggregate_pipeline)
+
+        if result['result']:
+            total_money = result['result'][0]['totalMoney']
+            total_co2 = result['result'][0]['totalCo2']
+        else:
+            total_money = 0
+            total_co2 = 0
+
+        if minute != 0:
+            try:
+                usages = Electricity.objects.filter(datetime_utc=end_dt, parent_systems={"sid": self.id})
+                for u in usages:
+                    total_money += u.hour_detail['m%02d'%(minute-1)] * u.rate_money
+                    total_co2 += u.hour_detail['m%02d'%(minute-1)] * u.rate_co2
+            except Electricity.DoesNotExist as e:
+                print(e)
+
+        return {"total_money": total_money, "total_co2": total_co2}
+
+
+    def total_usage_by_source_id(self, start_dt, end_dt):
+
+        print('{0:-^80}'.format(' start_dt: ' + start_dt.strftime('%Y-%m-%d %H:%M:%S') + ' | end_dt: ' + end_dt.strftime('%Y-%m-%d %H:%M:%S') + ' '))
+
+        current_db_conn = connection.get_db()
+        minute = 0
+
+        minute = end_dt.minute
+        end_dt = end_dt.replace(minute=0, second=0, microsecond=0)
+
+        aggregate_pipeline = [
+            { "$match":
+                {"$and": [
+                    {"datetime_utc": {"$gte": start_dt}},
+                    {"datetime_utc": {"$lt": end_dt}},
+                    {"parent_systems": {"sid": self.id}},
+                ]}},
+            { "$project": {"_id": 1, "source_id": 1, "total": 1, "rate_co2": 1, "rate_money": 1}},
+            {
+                "$group": {
+                    "_id": "$source_id",
+                    "totalKwh": {"$sum": "$total"},
+                    "totalCo2": {"$sum": {"$multiply": ["$total", "$rate_co2"]}},
+                    "totalMoney": {"$sum": {"$multiply": ["$total", "$rate_money"]}},
+                }
+            }
+        ]
+
+        result =  current_db_conn.electricity.aggregate(aggregate_pipeline)
+
+        total = {}
+
+        for s in self.sources:
+            total[s.id] = 0
+
+        if result['result']:
+            for r in result['result']:
+                total[r['_id']] = r['totalMoney']
+
+        if minute != 0:
+            try:
+                usages = Electricity.objects.filter(datetime_utc=end_dt, parent_systems={"sid": self.id})
+                for u in usages:
+                    total[u.source_id] += u.hour_detail['m%02d'%(minute-1)] * u.rate_money
+            except Electricity.DoesNotExist as e:
+                print(e)
+
+        return total
 
 class SystemHomeImage(models.Model):
     image = models.ImageField(upload_to="system_home/%Y/%m")

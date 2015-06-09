@@ -519,7 +519,7 @@ class SourceManager:
             raise SourceManager.GetEgaugeDataError(str(e))
 
         if response.status_code != 200:
-            raise SourceManager.GetEgaugeDataError("Response status code: %d"%response.status_code)
+            raise SourceManager.GetEgaugeDataError("Request URL: %s, Response status code: %d"%(xml_url, response.status_code))
         xml_content = response.content
 
         root = etree.XML(xml_content)
