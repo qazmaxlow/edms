@@ -112,6 +112,14 @@
 
     var ngapp = angular.module("Entrak", [ "kendo.directives" ]);
 
+    ngapp.directive("onLastRepeat", function(){
+        return function(scope, element, attrs){
+            if (scope.$last){
+                setTimeout(function(){scope.$emit('onRepeatEnd', element, attrs);},1);
+            }
+        }
+    });
+
     ngapp.filter('abs', function () {
         return function(val) {
             return Math.abs(val);
@@ -583,11 +591,11 @@
                 clearInterval(autoReloadTimer);
                 $scope.toggle(!$scope.isGraph);
             } else {
-                autoReloadTimer = setInterval($scope.updateWidgetImpl, 10000);
+                autoReloadTimer = setInterval($scope.updateWidgetImpl, 60000);
             }
         }
 
-        // update the chart every 10 sec
+        // update the chart every 60 sec
         $scope.toggle(true);
         $scope.autoToggleImpl(false);
     });
@@ -601,7 +609,7 @@
         $scope.energyCost = '{% trans "Energy cost so far" %}';
 
         var refreshIntervalId = null;
-        var refreshPeriod = 30000;
+        var refreshPeriod = 60000;
 
         $scope.consumers = new kendo.data.DataSource({
             transport: {
@@ -633,16 +641,28 @@
             $scope.isWeek = isWeek;
             $scope.changeText = $scope.isWeek ? '{% trans "Change from last week" %}' : '{% trans "Change from last month" %}';
 
-            var retrieve_type = ($scope.isWeek ? "weekly" : "monthly");
-            $scope.consumers.read({type:retrieve_type}).done(function() {$scope.$digest() });
+            $scope.updateWidgetImpl();
         };
+
+        function updateUI(){
+            var bars = $(".bc-graph .bar-container .bar").removeClass("animation-bar").width("0%").addClass("animation-bar");
+            var percent;
+            var data = $scope.consumers.data();
+            for (var i=0; i<bars.length; i++){
+                if (data[i].value != null){
+                    percent = 100 * data[i].value / data[0].value;
+                    bars.eq(i).width(percent+"%");    
+                }
+            }
+        }
+        $scope.$on("onRepeatEnd", updateUI);    //will trigger this every time when data is updated
 
         $scope.updateWidgetImpl = function(){
             console.log("update biggest consumers widget");
             if ($scope.isWeek){
-                $scope.consumers.read({type: "weekly"});
+                $scope.consumers.read({type: "weekly"}).done(function(){$scope.$digest();});
             } else {
-                $scope.consumers.read({type: "monthly"});
+                $scope.consumers.read({type: "monthly"}).done(function(){$scope.$digest();});
             }
         };
 
@@ -719,7 +739,7 @@
         $scope.btnRight = '{% trans "Month" context "dashboard" %}';
 
         var refreshIntervalId = null;
-        var refreshPeriod = 30000;
+        var refreshPeriod = 60000;
 
         var costs = new kendo.data.DataSource({
             transport: {

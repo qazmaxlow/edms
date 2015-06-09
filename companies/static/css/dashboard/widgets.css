@@ -473,6 +473,14 @@
     border-top-right-radius: 22px;
     border-bottom-right-radius: 22px;
     position: relative;
+    width: 0px;
+}
+
+.horizontal-bars .bar-row .bar-container .bar.animation-bar {
+    transition: width 0.25s ease-out;
+    -webkit-transition: width 0.25s ease-out;
+    -moz-transition: width 0.25s ease-out;
+    -o-transition: width 0.25s ease-out;
 }
 
 .horizontal-bars .bar-row .bar-container .bar .bar-value {
