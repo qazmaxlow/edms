@@ -259,7 +259,7 @@
 }
 
 .widget-message2 {
-    height: 50px;
+    overflow: auto;
     border-bottom: 1px solid #F2F2F2;
 }
 
@@ -399,7 +399,6 @@
 }
 
 .widget-content .bc-graph {
-    height: 240px;
     height: calc(100% - 60px);
 }
 
@@ -498,7 +497,6 @@
 
 /*energy use widget-------*/
 .widget-message2 .eu-box {
-    height: 50px;
     padding: 0px 5px;
 }
 
@@ -506,17 +504,18 @@
     border-right: 1px solid #F2F2F2;
 }
 
-.widget-message2 .eu-box .description-1, .widget-message2 .eu-box .description-2 {
+.widget-message2 .eu-box .description-1,
+.widget-message2 .eu-box .description-2 {
     text-align: center;
     display: inline-block;
     width: 100%;
-    height: 50px;
-    line-height: 50px;
+    height: 60px;
+    line-height: 60px;
 }
 
 .eu-widget-graph {
     padding: 0 7px;
-    height: calc(100% - 50px);
+    height: calc(100% - 60px);
 }
 
 .eu-widget-graph .eu-left-chart {
@@ -586,8 +585,8 @@
 
 .widget-message2 .message-text {
     text-align: left;
-    height: 50px;
-    line-height: 50px;
+    height: 60px;
+    line-height: 60px;
     display: inline-block;
     vertical-align: middle;
 }
@@ -624,12 +623,16 @@
     background-position: left;
 }
 
+.rt-graph-container {
+    height: calc(100% - 60px);
+}
+
 .widget-content .rt-legend {
     height: 37px;
 }
 
 .widget-content .rt-graph {
-    height: calc(100% - 37px);
+    height: calc(100% - 40px);
     padding-bottom: 10px;
 }
 
@@ -1031,6 +1034,7 @@
 .fullscreen #header .change-lang-block,
 .fullscreen #header .image-carousel,
 .fullscreen .dashboard-toolbar,
+.fullscreen #system-menu,
 .fullscreen #heading,
 .fullscreen #sub-heading,
 .fullscreen .right-content .blue-bar {
@@ -1140,9 +1144,31 @@
     }
 
     .fullscreen .widget-message .single-box,
-    .fullscreen .widget-content .bc-left-box.first-row h3 {
+    .fullscreen .widget-message2 .message-text,
+    .fullscreen .widget-content .bc-left-box.first-row h3,
+    .fullscreen .widget-message2 .eu-box .description-1,
+    .fullscreen .widget-message2 .eu-box .description-2 {
         height: 65px;
         line-height: 65px;
+    }
+
+    .fullscreen .widget-content {
+        height: calc(100% - 45px);
+    }
+
+    .fullscreen .widget-content .bc-graph,
+    .fullscreen .rt-graph-container,
+    .fullscreen .eu-widget-graph {
+        height: calc(100% - 65px);
+    }
+    
+    .fullscreen .full-width-img,
+    .fullscreen .long-desc-holder {
+        height: calc(50% - 33px);
+    }
+
+    .fullscreen .lw-graph {
+        height: calc(100% - 110px);
     }
 }
 
@@ -1150,6 +1176,10 @@
 @media screen and (min-width: 1850px) and (min-height: 1000px){
     .fullscreen .widget-container {
         font-size: 19px;
+    }
+
+    .fullscreen #dashboardContainer>div {
+        padding: 5px 25px;
     }
 
     .fullscreen .widget-header,
@@ -1175,16 +1205,39 @@
     }
 
     .fullscreen .widget-message .single-box,
-    .fullscreen .widget-content .bc-left-box.first-row h3 {
+    .fullscreen .widget-message2 .message-text,
+    .fullscreen .widget-content .bc-left-box.first-row h3,
+    .fullscreen .widget-message2 .eu-box .description-1,
+    .fullscreen .widget-message2 .eu-box .description-2 {
         height: 70px;
         line-height: 70px;
+    }
+
+    .fullscreen .widget-content {
+        height: calc(100% - 50px);
+    }
+
+    .fullscreen .widget-content .bc-graph,
+    .fullscreen .rt-graph-container,
+    .fullscreen .eu-widget-graph {
+        height: calc(100% - 70px);
+    }
+
+    .fullscreen .full-width-img,
+    .fullscreen .long-desc-holder {
+        height: calc(50% - 35px);
+    }
+
+    .fullscreen .long-desc-holder {
+        padding-top: 38px;
+    }
+
+    .fullscreen .lw-graph {
+        height: calc(100% - 120px);
     }
 }
 
 /*real time*/
-.fullscreen .rt-graph-container {
-    height: calc(100% - 50px);
-}
 .fullscreen .rt-content {
     height: 100%;
 }
@@ -1193,10 +1246,6 @@
 }
 
 /*tips*/
-.fullscreen .full-width-img,
-.fullscreen .long-desc-holder {
-    height: calc(50% - 30px);
-}
 .fullscreen .long-desc-holder p {
     height: 100%;
     max-width: 500px;

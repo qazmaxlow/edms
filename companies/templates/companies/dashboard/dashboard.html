@@ -62,10 +62,12 @@
         <div class="pull-right buttons-wrap">
             <button class="k-button" ng-click="setFullscreenMode()"></button>
         </div>
+        <!--for drag and drop-->
         <!-- <div id="widgetContainer" class="widget-icon" kendo-sortable="widgetContainer" k-options="iconSortableOpt">
         </div> -->
     </div>
 
+    <!--for drag and drop-->
     <!-- <div ng-cloak id="dashboardContainer" kendo-sortable="dashboardContainer" k-options="dashboardSortableOpt" class="row"> -->
     <div ng-cloak id="dashboardContainer" class="row">
         <div class="col-md-8 col-xs-12 realTimeIcon" data-widgetId="4">
@@ -155,9 +157,9 @@
         };
 
         //update widgets when resize
-        var rtime = new Date();;
+        var rtime = new Date();
         var timeout = false;
-        var delta = 150;
+        var delta = 200;
         $(window).on('resize', function(){
             rtime = new Date();
             if (timeout == false){
@@ -170,6 +172,7 @@
                 setTimeout(resizeUpdate, delta);
             } else {
                 timeout = false;
+                console.log("resize end");
                 if ($("body").hasClass("fullscreen")){  //fix height for non-fullscreen, no need update chart
                     angular.element($("#dashboardController")).scope().updateWidget();
                 }
@@ -241,8 +244,8 @@
 
             return order;
         }
-
-        $scope.dashboardSortableOpt = {
+//for drag and drop
+/*        $scope.dashboardSortableOpt = {
             // cursor: "url('/static/images/dashboard/grabbing.cur'), default",
             connectWith: "#widgetContainer",
             handler: ".widget-header *:not(.k-dropdown *, button)",
@@ -276,7 +279,7 @@
                 return element.clone().css({"opacity": 0.3});
             }
         };
-
+*/
     });
 
     ngapp.controller("WidgetRealtime", function($scope) {
