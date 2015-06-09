@@ -541,8 +541,8 @@ class System(models.Model):
 
     def overnight_avg_cost(self, start_dt, end_dt, source_ids=None):
 
-        #print('{0:-^80}'.format(' overnigh_avg_cost called '))
-        #print('{0:-^80}'.format(' start_dt: ' + start_dt.strftime('%Y-%m-%d %H:%M:%S') + ' | end_dt: ' + end_dt.strftime('%Y-%m-%d %H:%M:%S') + ' '))
+        # print('{0:-^80}'.format(' overnigh_avg_cost called '))
+        # print('{0:-^80}'.format(' start_dt: ' + start_dt.strftime('%Y-%m-%d %H:%M:%S') + ' | end_dt: ' + end_dt.strftime('%Y-%m-%d %H:%M:%S') + ' '))
 
         int_start_dt = int(start_dt.strftime("%Y%m%d"))
         int_end_dt = int(end_dt.strftime("%Y%m%d"))
@@ -630,7 +630,7 @@ class System(models.Model):
 
     def total_usage_by_source_id(self, start_dt, end_dt):
 
-        print('{0:-^80}'.format(' start_dt: ' + start_dt.strftime('%Y-%m-%d %H:%M:%S') + ' | end_dt: ' + end_dt.strftime('%Y-%m-%d %H:%M:%S') + ' '))
+        # print('{0:-^80}'.format(' start_dt: ' + start_dt.strftime('%Y-%m-%d %H:%M:%S') + ' | end_dt: ' + end_dt.strftime('%Y-%m-%d %H:%M:%S') + ' '))
 
         current_db_conn = connection.get_db()
         minute = 0
