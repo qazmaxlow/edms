@@ -11,7 +11,7 @@ from egauge.manager import SourceManager
 from egauge.models import SourceReadingHour
 from mongoengine import connection
 from rest_framework import viewsets, filters
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
@@ -20,12 +20,12 @@ from utils.auth import permission_required
 from common import return_error_response
 
 @api_view(['GET'])
-@authentication_classes((TokenAuthentication,))
+@authentication_classes((TokenAuthentication,SessionAuthentication,))
 @permission_classes((IsAuthenticated,))
 def DailyElectricityUsageDetail(request, api_version, format=None):
 
     date = request.QUERY_PARAMS.get('date', '')
-    system_code = request.QUERY_PARAMS.get('system_code', '')
+    system_code = request.QUERY_PARAMS.get('system_code', request.user.system.code)
 
     systems_info = System.get_systems_info(system_code, request.user.system.code)
 
