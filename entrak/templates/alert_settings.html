@@ -810,10 +810,20 @@ $(function() {
             }
         } else  if (alertHistory.alert_type === 'summary' || alertHistory.alert_type === 'still_on') {
             info.issueLine1 = alertHistory.nameInfo[settings.langCode] + '{% trans "alert_history_used" %}';
-            if (settings.langCode === 'zh-tw') {
-                info.issueLine2 = '已超過近期' + createdDt.format('dddd') + '平均值的' + formatDiffPercent(alertHistory.diff_percent) + '%';
-            } else {
-                info.issueLine2 = formatDiffPercent(alertHistory.diff_percent) + '% MORE than recent ' + createdDt.format('dddd') + ' average';
+
+            if (alertHistory.alert_compare_method == 'above-threshold') {
+                if (settings.langCode === 'zh-tw') {
+                    info.issueLine2 = formatDiffPercent(alertHistory.diff_percent) + '% 高於您設定的水平';
+                } else {
+                    info.issueLine2 = formatDiffPercent(alertHistory.diff_percent) + '% higher than your set threshold';
+                }
+            }
+            else {
+                if (settings.langCode === 'zh-tw') {
+                    info.issueLine2 = '已超過近期' + createdDt.format('dddd') + '平均值的' + formatDiffPercent(alertHistory.diff_percent) + '%';
+                } else {
+                    info.issueLine2 = formatDiffPercent(alertHistory.diff_percent) + '% MORE than recent ' + createdDt.format('dddd') + ' average';
+                }
             }
         }
 

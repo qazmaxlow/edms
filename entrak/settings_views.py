@@ -47,6 +47,7 @@ def alert_settings_view(request, system_code=None):
             'created': calendar.timegm(alert_history.created.utctimetuple()),
             'nameInfo': alert_history.alert.source_info['nameInfo'],
             'alert_type': alert_history.alert.type,
+            'alert_compare_method': alert_history.alert.compare_method,
             'diff_percent': alert_history.diff_percent,
             'check_weekdays': alert_history.alert.check_weekdays,
             'resolved': alert_history.resolved,

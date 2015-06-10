@@ -96,7 +96,7 @@ class EntrakUser(AbstractUser):
             utc_timestamp = encrypter.decode(ucode)
             utc_dt = datetime.fromtimestamp(float(utc_timestamp))
 
-            return (user_id == str(self.id) and (datetime.now() - utc_dt).days < days)
+            return (user_id == str(self.id) and (datetime.now() - utc_dt).days < 7)
 
         except (TypeError, ValueError) as e:
             print(e)

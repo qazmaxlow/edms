@@ -198,7 +198,7 @@
             var version = parseInt(browser['major'])
             var browserSupported = false;
 
-            if ($.inArray(browser['name'], ['IE', 'Chrome', 'Safari', 'Firefox', 'Mobile Safari'])) {
+            if ($.inArray(browser['name'], ['IE', 'Chrome', 'Safari', 'Firefox', 'Mobile Safari']) >= 0) {
                 if (browser['name'] == 'IE' && version < 9) {
                     browserSupported = false;
                 } else {
