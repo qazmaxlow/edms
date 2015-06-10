@@ -149,7 +149,8 @@ class TopThreeConsumersList(generics.ListAPIView):
         if query_dt is not None and query_type in ['weekly', 'monthly']:
 
             json_data = []
-            date_end = dateutil.parser.parse(query_dt).astimezone(pytz.timezone(sys.timezone))
+            dt = datetime.datetime.strptime(query_dt, "%Y-%m-%dT%H:%M:%S.%fZ")
+            date_end = pytz.timezone("UTC").localize(dt).astimezone(pytz.timezone(sys.timezone))
 
             if query_type == "weekly":
                 date_start = date_end.replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=date_end.isoweekday())
