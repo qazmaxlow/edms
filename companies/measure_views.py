@@ -149,7 +149,7 @@ class TopThreeConsumersList(generics.ListAPIView):
         if query_dt is not None and query_type in ['weekly', 'monthly']:
 
             json_data = []
-            date_end = dateutil.parser.parse(query_dt).astimezone(pytz.timezone('UTC'))
+            date_end = dateutil.parser.parse(query_dt).astimezone(pytz.timezone(sys.timezone))
 
             if query_type == "weekly":
                 date_start = date_end.replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=date_end.isoweekday())
@@ -164,6 +164,9 @@ class TopThreeConsumersList(generics.ListAPIView):
 
             # current_money_rate = sys.get_unit_rate(date_end, 'money')
             # previous_money_rate = sys.get_unit_rate(previous_date_end, 'money')
+
+            utc_naive  = date_end.replace(tzinfo=None) - date_end.utcoffset()
+            print((utc_naive - datetime.datetime(1970, 1, 1)).total_seconds())
 
             if childs:
 
