@@ -149,7 +149,7 @@ class TopThreeConsumersList(generics.ListAPIView):
         if query_dt is not None and query_type in ['weekly', 'monthly']:
 
             json_data = []
-            date_end = dateutil.parser.parse(query_dt).astimezone(pytz.timezone(sys.timezone))
+            date_end = dateutil.parser.parse(query_dt).astimezone(pytz.timezone('UTC'))
 
             if query_type == "weekly":
                 date_start = date_end.replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=date_end.isoweekday())
@@ -162,8 +162,8 @@ class TopThreeConsumersList(generics.ListAPIView):
 
             childs = sys.child_systems
 
-            current_money_rate = sys.get_unit_rate(date_end, 'money')
-            previous_money_rate = sys.get_unit_rate(previous_date_end, 'money')
+            # current_money_rate = sys.get_unit_rate(date_end, 'money')
+            # previous_money_rate = sys.get_unit_rate(previous_date_end, 'money')
 
             if childs:
 
@@ -171,7 +171,7 @@ class TopThreeConsumersList(generics.ListAPIView):
                     # c_cost = SourceReadingDay.total_used([s.id for s in child_sys.sources], date_start, date_end)
                     # p_cost = SourceReadingHour.total_used([s.id for s in child_sys.sources], previous_date_start, previous_date_end)
 
-                    c_cost = child_sys.total_usage(date_start, date_end + relativedelta(minutes=1))
+                    c_cost = child_sys.total_usage(date_start, date_end)
                     p_cost = child_sys.total_usage(previous_date_start, previous_date_end)
 
                     if c_cost['total_money'] > 0:
@@ -190,7 +190,7 @@ class TopThreeConsumersList(generics.ListAPIView):
 
             else:
 
-                current_cost = sys.total_usage_by_source_id(date_start, date_end + relativedelta(minutes=1))
+                current_cost = sys.total_usage_by_source_id(date_start, date_end)
                 previous_cost = sys.total_usage_by_source_id(previous_date_start, previous_date_end)
 
                 for s in sys.sources:
