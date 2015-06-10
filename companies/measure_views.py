@@ -171,7 +171,7 @@ class TopThreeConsumersList(generics.ListAPIView):
                     # c_cost = SourceReadingDay.total_used([s.id for s in child_sys.sources], date_start, date_end)
                     # p_cost = SourceReadingHour.total_used([s.id for s in child_sys.sources], previous_date_start, previous_date_end)
 
-                    c_cost = child_sys.total_usage(date_start, date_end)
+                    c_cost = child_sys.total_usage(date_start, date_end + relativedelta(minutes=1))
                     p_cost = child_sys.total_usage(previous_date_start, previous_date_end)
 
                     if c_cost['total_money'] > 0:
@@ -190,7 +190,7 @@ class TopThreeConsumersList(generics.ListAPIView):
 
             else:
 
-                current_cost = sys.total_usage_by_source_id(date_start, date_end)
+                current_cost = sys.total_usage_by_source_id(date_start, date_end + relativedelta(minutes=1))
                 previous_cost = sys.total_usage_by_source_id(previous_date_start, previous_date_end)
 
                 for s in sys.sources:
