@@ -3,6 +3,7 @@ import calendar
 import datetime
 import json
 import pytz
+import string
 
 from django.views.generic import TemplateView, View
 from django.utils.decorators import method_decorator
@@ -100,7 +101,7 @@ class DownloadView(View):
         result_rows = [];
 
         source_headers = [s.name for s in sources]
-        csv_header = ["Date Time"] + [s.d_name for s in sources]
+        csv_header = ["Date Time"] + ["%s (%s)"%(s.d_name, unit_category_code) for s in sources]
 
         result_rows.append(csv_header)
 
@@ -144,8 +145,19 @@ class DownloadView(View):
         result = [last_ts] + [ source_vals.get(s.name, '') for s in sources]
         result_rows.append(result)
 
+        valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
+
+        filename = "%s_from_%s_to_%s_by_%s.csv"%(
+                system.name,
+                start_dt.astimezone(system.time_zone).strftime("%Y-%m-%d"),
+                end_dt.astimezone(system.time_zone).strftime("%Y-%m-%d"),
+                interval
+            )
+
+        validated_filename = ''.join(c for c in filename if c in valid_chars)
+
         response = StreamingHttpResponse((csv_writer.writerow(row) for row in result_rows),
             content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="raw_data.csv"'
+        response['Content-Disposition'] = 'attachment; filename="%s"'%(validated_filename)
 
         return response
