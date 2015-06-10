@@ -165,9 +165,6 @@ class TopThreeConsumersList(generics.ListAPIView):
             # current_money_rate = sys.get_unit_rate(date_end, 'money')
             # previous_money_rate = sys.get_unit_rate(previous_date_end, 'money')
 
-            utc_naive  = date_end.replace(tzinfo=None) - date_end.utcoffset()
-            print((utc_naive - datetime.datetime(1970, 1, 1)).total_seconds())
-
             if childs:
 
                 for child_sys in childs:
