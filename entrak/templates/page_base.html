@@ -213,14 +213,13 @@ $(function() {
             <div id="heading"><h1>{% block page_title %}{% endblock %}</h1></div>
             <div id="sub-heading"><h2>{% block page_subtitle %}{% endblock %}</h2></div>
 
-            <div style="display:none;" id="entrakLogo"></div>
-
             <div class="change-lang-block">
                 <a lang_code="zh-tw" class="{% ifequal LANGUAGE_CODE 'zh-tw' %}current-lang{% endifequal %}" href="#">繁體中文</a>
                 <span> / </span>
                 <a lang_code="en" class="{% ifequal LANGUAGE_CODE 'en' %}current-lang{% endifequal %}" href="#">ENGLISH</a>
             </div>
 
+            <div id="fullscreen-title" style="display: none;">Real Time Energy Monitoring System</div>
             <div id="exit-fullscreen-btn" style="display: none;"></div>
 
             <div style="display:none;">
@@ -245,7 +244,7 @@ $(function() {
                 </li>
             </ul>
 
-            <span><h3>{% trans "You are viewing:" %}</h3></span>
+            <span id="system-name-label"><h3>{% trans "You are viewing:" %}</h3></span>
             <span id="breadcrumbs-path">
 
                 {% for info in system_path_components %}

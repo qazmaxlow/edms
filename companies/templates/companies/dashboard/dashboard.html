@@ -63,37 +63,37 @@
             <button class="k-button" ng-click="setFullscreenMode()"></button>
         </div>
         <!--for drag and drop-->
-        <!-- <div id="widgetContainer" class="widget-icon" kendo-sortable="widgetContainer" k-options="iconSortableOpt">
-        </div> -->
+        <div id="widgetContainer" class="widget-icon" kendo-sortable="widgetContainer" k-options="iconSortableOpt">
+            <div class="col-md-8 col-xs-12 realTimeIcon" data-widgetId="4">
+                 {% include "companies/dashboard/widgets/_real_time.html" with widget_id=4  %}
+            </div>
+            <div class="col-md-4 col-xs-6 tipsIcon" data-widgetId="3">
+                {% include "companies/dashboard/widgets/_tips.html" with widget_id=3 %}
+            </div>
+            <div class="col-md-4 col-xs-6 biggestConsumerIcon" data-widgetId="1">
+              {% include "companies/dashboard/widgets/_biggest_consumers.html" with widget_id=1 %}
+            </div>
+            <div class="col-md-4 col-xs-6 soFarIcon" data-widgetId="2">
+              {% include "companies/dashboard/widgets/_so_far.html" with widget_id=2 %}
+            </div>
+            <div class="col-md-4 col-xs-6 lastWeekStatsIcon" data-widgetId="5">
+              {% include "companies/dashboard/widgets/_last_week_stats.html" with widget_id=5 %}
+            </div>
+            <div class="col-md-4 col-xs-6 progressIcon" data-widgetId="6">
+              {% include "companies/dashboard/widgets/_progress.html" with widget_id=6 %}
+            </div>
+            <div class="col-md-4 col-xs-6 cumulativeIcon" data-widgetId="7">
+              {% include "companies/dashboard/widgets/_cumulative_savings.html" with widget_id=7 %}
+            </div>
+            <div class="col-md-4 col-xs-6 goalTrackingIcon" data-widgetId="8">
+              {% include "companies/dashboard/widgets/_goal_tracking.html" with widget_id=8 %}
+            </div>        
+        </div>
     </div>
 
     <!--for drag and drop-->
-    <!-- <div ng-cloak id="dashboardContainer" kendo-sortable="dashboardContainer" k-options="dashboardSortableOpt" class="row"> -->
-    <div ng-cloak id="dashboardContainer" class="row">
-        <div class="col-md-8 col-xs-12 realTimeIcon" data-widgetId="4">
-            {% include "companies/dashboard/widgets/_real_time.html" with widget_id=4 %}
-        </div>
-        <div class="col-md-4 col-xs-6 tipsIcon" data-widgetId="3">
-            {% include "companies/dashboard/widgets/_tips.html" with widget_id=3 %}
-        </div>
-        <div class="col-md-4 col-xs-6 biggestConsumerIcon" data-widgetId="1">
-          {% include "companies/dashboard/widgets/_biggest_consumers.html" with widget_id=1 %}
-        </div>
-        <div class="col-md-4 col-xs-6 soFarIcon" data-widgetId="2">
-          {% include "companies/dashboard/widgets/_so_far.html" with widget_id=2 %}
-        </div>
-        <div class="col-md-4 col-xs-6 lastWeekStatsIcon" data-widgetId="5">
-          {% include "companies/dashboard/widgets/_last_week_stats.html" with widget_id=5 %}
-        </div>
-        <div class="col-md-4 col-xs-6 progressIcon" data-widgetId="6">
-          {% include "companies/dashboard/widgets/_progress.html" with widget_id=6 %}
-        </div>
-        <div class="col-md-4 col-xs-6 cumulativeIcon" data-widgetId="7">
-          {% include "companies/dashboard/widgets/_cumulative_savings.html" with widget_id=7 %}
-        </div>
-        <div class="col-md-4 col-xs-6 goalTrackingIcon" data-widgetId="8">
-          {% include "companies/dashboard/widgets/_goal_tracking.html" with widget_id=8 %}
-        </div>
+    <div ng-cloak id="dashboardContainer" kendo-sortable="dashboardContainer" k-options="dashboardSortableOpt" class="row">
+    <!-- <div ng-cloak id="dashboardContainer" class="row"> -->
     </div>
 </div>
 
@@ -155,11 +155,13 @@
         //fullscren btn action
         $("#exit-fullscreen-btn").click(function(){
             $("body").removeClass("fullscreen");
+            $("#dashboardController .disableSort").removeClass("disableSort");
             angular.element($("#dashboardController")).scope().updateWidget();
             angular.element($("#dashboardController")).scope().autoToggle(false);
         });
         $scope.setFullscreenMode = function(){
             $("body").addClass("fullscreen");
+            $("#dashboardContainer>div").addClass("disableSort");
             $scope.updateWidget();
             $scope.autoToggle(true);
         };
@@ -241,6 +243,15 @@
             }
         }
 
+        //TODO load user saved layout
+        //set timeout so that the widget can be initialized first
+        setTimeout(function(){
+            var userLayout = [1, 2, 3, 4, 5];
+            for (var i=0; i<userLayout.length; i++){
+                $("#dashboardContainer").append($("#widgetContainer div[data-widgetId='" + userLayout[i] + "']").detach());
+            }
+        }, 1);
+
         //get current widget order
         $scope.getWidgetOrder = function(){
             var order = [];
@@ -252,18 +263,19 @@
 
             return order;
         }
-//for drag and drop
-/*        $scope.dashboardSortableOpt = {
+
+        $scope.dashboardSortableOpt = {
             // cursor: "url('/static/images/dashboard/grabbing.cur'), default",
             connectWith: "#widgetContainer",
             handler: ".widget-header *:not(.k-dropdown *, button)",
+            disabled: ".disableSort",
             end: function(e){
                 if (e.action != "remove"){
                     $scope.updateWidget(e);
                 }
             },
             change: function(e){
-                //TODO save change when order changed
+                //TODO save layout change
                 console.log("call save layout = " + JSON.stringify($scope.getWidgetOrder()));
             },
             cancel: function(e){
@@ -287,7 +299,7 @@
                 return element.clone().css({"opacity": 0.3});
             }
         };
-*/
+
     });
 
     ngapp.controller("WidgetRealtime", function($scope) {
