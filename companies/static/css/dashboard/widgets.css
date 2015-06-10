@@ -259,7 +259,7 @@
 }
 
 .widget-message2 {
-    overflow: auto;
+    overflow: hidden;
     border-bottom: 1px solid #F2F2F2;
 }
 
@@ -964,7 +964,7 @@
     width: 25px;
     margin: 0;
     box-shadow: 0px 2px 0px #6b9aa5;
-    background-image: url(../../images/dashboard/entrak-logo.png);
+    background-image: url(../../images/dashboard/fullscreen-icon.png);
     background-repeat: no-repeat;
     background-position: center;
 }
@@ -1045,12 +1045,9 @@
 .fullscreen #system-menu,
 .fullscreen #heading,
 .fullscreen #sub-heading,
+.fullscreen #system-name-label,
 .fullscreen .right-content .blue-bar {
     display: none;
-}
-
-.fullscreen #sub-heading-facilities {
-    padding-left: 7%;
 }
 
 .fullscreen #page-container,
@@ -1060,12 +1057,25 @@
     height: 100%;
 }
 
+.fullscreen #sub-heading-facilities {
+    height: 50px;
+    text-align: center;
+    box-shadow: 0px 3px 5px #bbbbbb;
+}
+
+.fullscreen #breadcrumbs-path a {
+    font-size: 22px;
+    bottom: 0;
+    height: 50px;
+    line-height: 50px;
+}
+
 .fullscreen #system-menu img {
     margin-left: 0;
 }
 
 .fullscreen #page-container .right-content .container {
-    height: calc(100% - 105px);
+    height: calc(100% - 145px);
 }
 
 .fullscreen #dashboardContainer>div {
@@ -1103,18 +1113,31 @@
 }
 
 .fullscreen #header {
-    height: 70px;
+    height: 90px;
+    background-image: url(../../images/dashboard/entrak-logo.png);
+    background-repeat: no-repeat;
+    background-position: 7% center;
+}
+
+.fullscreen #header #fullscreen-title {
+    display: inline-block !important;
+    margin-left: calc(7% + 45px);
+    width: calc(86% - 90px);
+    height: 100%;
+    text-align: center;
+    vertical-align: middle;
+    padding-top: 30px;
+    font-size: 24px;
+    color: #FFF;
 }
 
 .fullscreen #header #exit-fullscreen-btn {
-    display: block !important;
-    position: absolute;
-    margin-top: 15px;
-    height: 15px;
-    width: 15px;
-    right: 7%;
+    display: inline-block !important;
+    height: 100%;
+    width: 45px;
+    vertical-align: middle;
     background-image: url(../../images/dashboard/closeButton.png);
-    background-size: contain;
+    background-size: 43px 43px;
     background-repeat: no-repeat;
     background-position: center;
     cursor: pointer;
@@ -1122,13 +1145,7 @@
 
 .fullscreen #header #entrakLogo {
     display: block !important;
-    height: 100%;
-    width: 400px;
-    left: 7%;
-    position: absolute;
-    background-image: url(../../images/dashboard/entrak-logo.png);
-    background-repeat: no-repeat;
-    background-position: left center;
+
 }
 
 /* fullscreen with large screen (1280x800)*/
@@ -1192,6 +1209,10 @@
 @media screen and (min-width: 1850px) and (min-height: 1000px){
     .fullscreen .widget-container {
         font-size: 19px;
+    }
+
+    .fullscreen #dashboardContainer {
+        padding-top: 5px;
     }
 
     .fullscreen #dashboardContainer>div {
