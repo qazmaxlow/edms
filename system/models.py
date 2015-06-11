@@ -618,7 +618,7 @@ class System(models.Model):
 
         if minute != 0:
             try:
-                usages = Electricity.objects.filter(datetime_utc=end_dt, parent_systems={"sid": self.id})
+                usages = Electricity.objects.filter(datetime_utc=end_dt, parent_systems={"$elemMatch": {"sid": self.id}})
                 for u in usages:
                     total_money += u.hour_detail['m%02d'%(minute-1)] * u.rate_money
                     total_co2 += u.hour_detail['m%02d'%(minute-1)] * u.rate_co2
@@ -669,7 +669,7 @@ class System(models.Model):
 
         if minute != 0:
             try:
-                usages = Electricity.objects.filter(datetime_utc=end_dt, parent_systems={"sid": self.id})
+                usages = Electricity.objects.filter(datetime_utc=end_dt, parent_systems={"$elemMatch": {"sid": self.id}})
                 for u in usages:
                     total[u.source_id] += u.hour_detail['m%02d'%(minute-1)] * u.rate_money
             except Electricity.DoesNotExist as e:

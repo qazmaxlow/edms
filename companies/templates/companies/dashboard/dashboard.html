@@ -87,7 +87,7 @@
             </div>
             <div class="col-md-4 col-xs-6 goalTrackingIcon" data-widgetId="8">
               {% include "companies/dashboard/widgets/_goal_tracking.html" with widget_id=8 %}
-            </div>        
+            </div>
         </div>
     </div>
 
@@ -622,6 +622,7 @@
         $scope.btnRight = '{% trans "Month" context "dashboard" %}';
         $scope.changeText = $scope.isWeek ? '{% trans "Change from last week" %}' : '{% trans "Change from last month" %}';
         $scope.energyCost = '{% trans "Energy cost so far" %}';
+        $scope.costUnit = '{{current_system.money_unit.name}}';
 
         var refreshIntervalId = null;
         var refreshPeriod = 60000;
