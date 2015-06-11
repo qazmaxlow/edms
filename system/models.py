@@ -537,7 +537,7 @@ class System(models.Model):
                 hour_total += m.value
                 if overnight:
                     e.overnight_total = hour_total
-                e.hour_detail['m%02d'%m.datetime.minute] = hour_total
+                e.hour_detail['m%02d'%m.datetime.minute] = m.value
 
             e.save()
 
@@ -625,8 +625,9 @@ class System(models.Model):
             try:
                 usages = Electricity.objects.filter(datetime_utc=end_dt, parent_systems={"$elemMatch": {"sid": self.id}})
                 for u in usages:
-                    total_money += u.hour_detail['m%02d'%(minute-1)] * u.rate_money
-                    total_co2 += u.hour_detail['m%02d'%(minute-1)] * u.rate_co2
+                    for i in range(minute):
+                        total_money += u.hour_detail['m%02d'%i] * u.rate_money
+                        total_co2 += u.hour_detail['m%02d'%i] * u.rate_co2
             except Electricity.DoesNotExist as e:
                 print(e)
 
@@ -676,7 +677,8 @@ class System(models.Model):
             try:
                 usages = Electricity.objects.filter(datetime_utc=end_dt, parent_systems={"$elemMatch": {"sid": self.id}})
                 for u in usages:
-                    total[u.source_id] += u.hour_detail['m%02d'%(minute-1)] * u.rate_money
+                    for i in range(minute):
+                        total[u.source_id] += u.hour_detail['m%02d'%i] * u.rate_money
             except Electricity.DoesNotExist as e:
                 print(e)
 
