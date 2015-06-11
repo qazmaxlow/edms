@@ -168,7 +168,10 @@ class Alert(models.Model):
         if self.type == ALERT_TYPE_PEAK:
             sub_msg += '  of previous peak of %d kVA'%self.peak_threshold
         else:
-            sub_msg += '  higher than recent average'
+            if self.compare_method == 'above-threshold':
+                sub_msg += ' higher than your set threshold'
+            else:
+                sub_msg += '  higher than recent average'
 
         return sub_msg
 
