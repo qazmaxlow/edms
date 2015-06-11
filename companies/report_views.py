@@ -511,7 +511,7 @@ class CompareTplHepler:
         }
 
 
-def _popup_report_view(request, system_code, year=None, month=None, report_type=None, to_pdf=False):
+def _popup_report_view(request, system_code, year=None, month=None, report_type=None, to_pdf=False, share=False):
     # systems_info = System.get_systems_info(system_code, request.user.system.code)
     systems_info = System.get_systems_info(system_code, system_code) # in fact just using systems no user systems
     systems = systems_info['systems']
@@ -1312,9 +1312,13 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
             },
         )
 
-
+    if share:
+        return render(request, 'companies/reports/share_report.html', m)
     return render(request, 'companies/reports/popup_report.html', m)
 
+# @permission_required()
+def share_popup_report_view(request, system_code, year=None, month=None, report_type=None, to_pdf=False):
+    return _popup_report_view(request, system_code, share=True)
 
 from tokens.models import UrlToken
 @require_passes_test(

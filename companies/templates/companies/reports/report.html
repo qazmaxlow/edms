@@ -45,6 +45,247 @@
 
     <script>
       {% include "companies/reports/_report_script.html" %}
+                      angular.module('Entrak', ["kendo.directives"]).controller('ReportController', ['$scope', function ($scope) {
+                        var date_offset = null;
+                        $scope.cgDatas = cg_ds;
+                        $scope.transformedPieOptions = {
+                            legend: {
+                                visible: false
+                            },
+                            seriesDefaults: {
+                                type: "donut",
+                                labels: {
+                                    template: "#= kendo.format('{0:p0}', percentage)#",
+                                    position: "Center",
+                                    distance: 20,
+                                    visible: true,
+                                    background: "transparent",
+                                    font: "bold 14px Arial",
+                                    color: function(e) {
+                                        return e.dataItem.color;
+                                    },
+                                    border: {
+                                        width: 0,
+                                        color: "white"
+                                    }
+                                },
+                                overlay: {
+                                    gradient: "none"
+                                }
+                            },
+                            plotArea: {
+                                margin: 10
+                            },
+                            chartArea: {
+                                height: 250,
+                                width: 300
+                            },
+                            series: [{
+                                startAngle: 150,
+                                data: pieDataSorted
+                            }],
+                            tooltip: {
+                                visible: true,
+                                format: "{0}%",
+                                template: "#= category #: #= kendo.format('{0:n0}',value) #"
+                            }
+                        };
+                        $scope.barOptions = {
+                            dataSource: {
+                                data: barData,
+                                schema: {
+                                    model: {
+                                        fields: {
+                                            datetime: { type: "string"}
+                                        }
+                                    }
+                                }
+                            },
+                            title: {
+                                text: barTitle,
+                                color: "#edbe4a"
+                            },
+                            legend: {
+                                visible: false
+                            },
+                            chartArea: {
+                                background: "",
+                                margin: {top: 20, bottom: 20}
+                            },
+                            seriesDefaults: {
+                                type: "column",
+                                labels: {
+                                    visible: true,
+                                    background: "transparent",
+                                    template: "# if ( value > 0) { # #= kendo.toString(value, 'n0') # # } else { # N/A # } #"
+                                }
+                            },
+                            series: [{
+                                field: "value",
+                                color: "#eab541",
+                                border: {
+                                    width: 0
+                                },
+                                overlay: {
+                                    gradient: "none"
+                                }
+                            }],
+                            valueAxis: {
+                                visible: false,
+                                line: {
+                                    visible: false
+                                },
+                                minorGridLines: {
+                                    visible: false
+                                }
+                            },
+                            categoryAxis: {
+                                type: 'category',
+                                field: 'formated_date',
+                                majorTicks: {
+                                    size: 0,
+                                    width: 0
+                                },
+                                majorGridLines: {
+                                    visible: false
+                                }
+                            },
+                            tooltip: {
+                                visible: true,
+                                template: "#= dataItem.month #: #= kendo.toString(value, 'n0') #"
+                            }
+                        };
+                        $scope.lineOptions = {
+                            width: 1000,
+                            title: {
+                                text: line_title,
+                                color: "#354960",
+                                font: "bold 1.145em Arial"
+                            },
+                            legend: {
+                                position: "top"
+                            },
+                            chartArea: {
+                                background: "",
+                                margin: {top: 20, bottom: 20}
+                            },
+                            dataSource: {
+                                data: powers,
+                                group: [{field: "type", dir: "desc"}],
+                                schema:{
+                                    parse:function (response) {
+                                        $.each(response, function (idx, elem) {
+                                            if (elem.datetime && typeof elem.datetime === "string") {
+                                                elem.datetime = kendo.parseDate(elem.datetime);
+                                                if (elem.type == "last") {
+                                                    shift_series_date(elem);
+                                                }
+                                            }
+                                        });
+                                        return response;
+                                    }
+                                }
+                            },
+                            seriesColors: ["#edba3c", "#047fa1"],
+                            series: [
+                                {
+                                    type: "line",
+                                    markers: {
+                                        visible: false
+                                    },
+                                    // aggregate: "avg",
+                                    name: lineTitle,
+                                    color: "#edba3c",
+                                    field: "value",
+                                    categoryField: "datetime"
+                                }
+                            ],
+                            tooltip: {
+                                visible: true,
+                                format: "{0:n0} kWh"
+                            },
+                            valueAxis: {
+                                line: {
+                                    visible: false
+                                },
+                                title: {
+                                    text: "kWh",
+                                    color: "#9F9F9F",
+                                    font: "0.9em Arial"
+                                },
+                                minorGridLines: {
+                                    visible: false
+                                }
+                            },
+                            categoryAxis: {
+                                baseUnit: "days",
+                                majorGridLines: {
+                                    visible: false
+                                },
+                                majorTicks: {
+                                    step: line_step,
+                                    size: 0,
+                                    width: 0
+                                },
+                                labels: line_labels
+                            }
+                        };
+                        $scope.subLineOptions = {
+                            legend: {
+                                position: "top"
+                            },
+                            chartArea: {
+                                background: "",
+                                margin: {bottom: 20}
+                            },
+                            // seriesColors: ["#047fa1", "#edba3c"],
+                            seriesDefaults:
+                            {
+                                type: 'line',
+                                format: '{0:n0}',
+                                labels: {
+                                    visible: false
+                                },
+                                field: 'value',
+                                categoryField: 'datetime',
+                                markers: {
+                                    visible: false
+                                }
+                            },
+                            tooltip: {
+                                visible: true,
+                                format: "{0:n0} kWh"
+                            },
+                            valueAxis: {
+                                line: {
+                                    visible: false
+                                },
+                                title: {
+                                    text: "kWh",
+                                    color: "#9F9F9F",
+                                    font: "0.9em Arial"
+                                },
+                                minorGridLines: {
+                                    visible: false
+                                }
+                            },
+                            categoryAxis: {
+                                baseUnit: "days",
+                                majorGridLines: {
+                                    visible: false
+                                },
+                                majorTicks: {
+                                    step: line_step,
+                                    size: 0,
+                                    width: 0
+                                },
+                                labels: line_labels
+                            }
+                        };
+                      }]);
+                      angular.element(tTwo).ready(function() {
+                        angular.bootstrap(tTwo, ['Entrak']);
+                      });
     </script>
   </body>
 </html>
