@@ -63,7 +63,7 @@
             <button class="k-button" ng-click="setFullscreenMode()"></button>
         </div>
         <!--for drag and drop-->
-        <div id="widgetContainer" class="widget-icon" kendo-sortable="widgetContainer" k-options="iconSortableOpt">
+        <div id="widgetContainer" style="display: none;" class="widget-icon" kendo-sortable="widgetContainer" k-options="iconSortableOpt">
             <div class="col-md-8 col-xs-12 realTimeIcon" data-widgetId="4">
                  {% include "companies/dashboard/widgets/_real_time.html" with widget_id=4  %}
             </div>
@@ -155,7 +155,8 @@
         //fullscren btn action
         $("#exit-fullscreen-btn").click(function(){
             $("body").removeClass("fullscreen");
-            $("#dashboardController .disableSort").removeClass("disableSort");
+            //TODO uncomment it when drag and drop ready
+            // $("#dashboardController .disableSort").removeClass("disableSort");
             angular.element($("#dashboardController")).scope().updateWidget();
             angular.element($("#dashboardController")).scope().autoToggle(false);
         });
@@ -243,13 +244,15 @@
             }
         }
 
-        //TODO load user saved layout
+        //TODO load user saved layout from server
         //set timeout so that the widget can be initialized first
+        var userLayout = [1, 2, 3, 4, 5];
         setTimeout(function(){
-            var userLayout = [1, 2, 3, 4, 5];
             for (var i=0; i<userLayout.length; i++){
                 $("#dashboardContainer").append($("#widgetContainer div[data-widgetId='" + userLayout[i] + "']").detach());
             }
+            //TODO remove below line when drag and drop ready
+            $("#dashboardContainer>div").addClass("disableSort");
         }, 1);
 
         //get current widget order
@@ -275,8 +278,8 @@
                 }
             },
             change: function(e){
-                //TODO save layout change
                 console.log("call save layout = " + JSON.stringify($scope.getWidgetOrder()));
+                //TODO save layout change to server
             },
             cancel: function(e){
                 $scope.updateWidget(e);
