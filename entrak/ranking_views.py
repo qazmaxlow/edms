@@ -46,12 +46,12 @@ def ranking_data_view(request, system_code=None):
     source_group_map = Utils.gen_source_group_map(grouped_source_infos)
     all_source_ids = Utils.get_source_ids_from_grouped_source_info(grouped_source_infos)
 
-    source_readings = SourceManager.get_readings(all_source_ids, range_type, start_dt, end_dt)
+    source_readings = SourceManager.get_readings(all_source_ids, range_type, start_dt, end_dt.replace(second=0, microsecond=0))
 
     if ranking_type == RANKING_TYPE_PERCENT:
         last_start_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('last_start_dt')))
         last_end_dt = Utils.utc_dt_from_utc_timestamp(int(request.POST.get('last_end_dt')))
-        last_source_readings = SourceManager.get_readings(all_source_ids, range_type, last_start_dt, last_end_dt)
+        last_source_readings = SourceManager.get_readings(all_source_ids, 'hour', last_start_dt, last_end_dt.replace(second=0, microsecond=0))
 
     systems = None
     sources = None
