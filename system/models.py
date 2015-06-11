@@ -146,6 +146,11 @@ class System(models.Model):
 
 
     @property
+    def direct_sources(self):
+        return Source.objects.filter(system_code=self.code)
+
+
+    @property
     def child_systems(self):
 
         if self.path:
@@ -467,7 +472,7 @@ class System(models.Model):
 
     def convert_to_meter_ds(self, start_dt, end_dt):
 
-        source_ids = [s.id for s in self.sources]
+        source_ids = [s.id for s in self.direct_sources]
         system_tz = pytz.timezone(self.timezone)
 
         parent_codes = [code for code in self.path.split(',') if code !='']
