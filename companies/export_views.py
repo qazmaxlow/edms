@@ -87,10 +87,13 @@ class DownloadView(View):
 
         money_unit_rates = None
         co2_unit_rates = None
+        display_unit = 'kWh'
         if unit_category_code == 'money':
             money_unit_rates = UnitRate.objects.filter(category_code='money')
+            display_unit = system.money_unit.name
         elif unit_category_code == 'co2':
             co2_unit_rates = UnitRate.objects.filter(category_code='co2')
+            display_unit = 'kg CO2'
 
 
         pseudo_buffer = PseudoBuffer()
@@ -101,7 +104,7 @@ class DownloadView(View):
         result_rows = [];
 
         source_headers = [s.name for s in sources]
-        csv_header = ["Date Time"] + ["%s (%s)"%(s.d_name, unit_category_code) for s in sources]
+        csv_header = ["Date Time"] + ["%s (%s)"%(s.d_name, display_unit) for s in sources]
 
         result_rows.append(csv_header)
 
