@@ -3,6 +3,7 @@ from mongoengine.document import Document
 from mongoengine.document import EmbeddedDocument
 from mongoengine.fields import *
 from mongoengine import connection
+from unit.models import CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
 
 
 class HourDetail(EmbeddedDocument):
@@ -92,3 +93,15 @@ class Electricity(Document):
     rate_co2 = FloatField()
     rate_money = FloatField()
 
+
+    def usage_up_to_minute(self, minute, unit=MONEY_CATEGORY_CODE):
+
+        minute_total = 0
+
+        for i in range(minute):
+            minute_total += self.hour_detail['m%02d'%i]
+
+        if unit != CO2_CATEGORY_CODE:
+            return minute_total*self.rate_money
+        else:
+            return minute_total*self.rate_co2

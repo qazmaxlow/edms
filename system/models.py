@@ -623,9 +623,8 @@ class System(models.Model):
 
         usages = Electricity.objects.filter(datetime_utc=end_dt, parent_systems={"$elemMatch": {"sid": self.id}})
         for u in usages:
-            for i in range(minute-1):
-                total_money += u.hour_detail['m%02d'%i] * u.rate_money
-                total_co2 += u.hour_detail['m%02d'%i] * u.rate_co2
+            total_money += u.usage_up_to_minute(minute-1)
+            total_co2 += u.usage_up_to_minute(minute-1, CO2_CATEGORY_CODE)
 
         return {"total_money": total_money, "total_co2": total_co2}
 
@@ -671,8 +670,7 @@ class System(models.Model):
 
         usages = Electricity.objects.filter(datetime_utc=end_dt, parent_systems={"$elemMatch": {"sid": self.id}})
         for u in usages:
-            for i in range(minute-1):
-                total[u.source_id] += u.hour_detail['m%02d'%i] * u.rate_money
+            total[u.source_id] += u.usage_up_to_minute(minute-1)
 
         return total
 
