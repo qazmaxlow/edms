@@ -621,15 +621,11 @@ class System(models.Model):
             total_money = 0
             total_co2 = 0
 
-        if minute != 0:
-            try:
-                usages = Electricity.objects.filter(datetime_utc=end_dt, parent_systems={"$elemMatch": {"sid": self.id}})
-                for u in usages:
-                    for i in range(minute-1):
-                        total_money += u.hour_detail['m%02d'%i] * u.rate_money
-                        total_co2 += u.hour_detail['m%02d'%i] * u.rate_co2
-            except Electricity.DoesNotExist as e:
-                print(e)
+        usages = Electricity.objects.filter(datetime_utc=end_dt, parent_systems={"$elemMatch": {"sid": self.id}})
+        for u in usages:
+            for i in range(minute-1):
+                total_money += u.hour_detail['m%02d'%i] * u.rate_money
+                total_co2 += u.hour_detail['m%02d'%i] * u.rate_co2
 
         return {"total_money": total_money, "total_co2": total_co2}
 
@@ -673,14 +669,10 @@ class System(models.Model):
             for r in result['result']:
                 total[r['_id']] = r['totalMoney']
 
-        if minute != 0:
-            try:
-                usages = Electricity.objects.filter(datetime_utc=end_dt, parent_systems={"$elemMatch": {"sid": self.id}})
-                for u in usages:
-                    for i in range(minute-1):
-                        total[u.source_id] += u.hour_detail['m%02d'%i] * u.rate_money
-            except Electricity.DoesNotExist as e:
-                print(e)
+        usages = Electricity.objects.filter(datetime_utc=end_dt, parent_systems={"$elemMatch": {"sid": self.id}})
+        for u in usages:
+            for i in range(minute-1):
+                total[u.source_id] += u.hour_detail['m%02d'%i] * u.rate_money
 
         return total
 
