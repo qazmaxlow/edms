@@ -129,7 +129,10 @@ class Alert(models.Model):
                         if value > self.peak_threshold:
                             pass_verify = False
 
-                    diff_percent = int(((float(value)/recent_value)-1)*100)
+                    if self.compare_method == 'above-threshold':
+                        diff_percent = int(float(value - self.peak_threshold)/self.peak_threshold*100)
+                    else:
+                        diff_percent = int(((float(value)/recent_value)-1)*100)
 
         verify_result = {
             'start_dt': start_dt,
