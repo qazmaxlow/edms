@@ -129,7 +129,10 @@ class Alert(models.Model):
                         if value > self.peak_threshold:
                             pass_verify = False
 
-                    diff_percent = int(((float(value)/recent_value)-1)*100)
+                    if self.compare_method == 'above-threshold':
+                        diff_percent = int(float(value - self.peak_threshold)/self.peak_threshold*100)
+                    else:
+                        diff_percent = int(((float(value)/recent_value)-1)*100)
 
         verify_result = {
             'start_dt': start_dt,
@@ -168,7 +171,10 @@ class Alert(models.Model):
         if self.type == ALERT_TYPE_PEAK:
             sub_msg += '  of previous peak of %d kVA'%self.peak_threshold
         else:
-            sub_msg += '  higher than recent average'
+            if self.compare_method == 'above-threshold':
+                sub_msg += ' higher than your set threshold'
+            else:
+                sub_msg += '  higher than recent average'
 
         return sub_msg
 
