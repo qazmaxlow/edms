@@ -69,7 +69,7 @@ def send_report_by_schedulers():
             'report_date_text': report_date_text,
             'description_1': "Your energy report for",
             'description_2': "is ready for your review",
-            'description_3': "This link will expire 72 hours after sending\nIf you wish to view this report after that period,\nsimply log into your En-trak system and go to the Report Pager",
+            'description_3': "This link will expire 72 hours after sending\nIf you wish to view this report after that period,\nsimply log into your En-trak system and go to the Report Page",
             'button_text': 'View Report',
         }
 
