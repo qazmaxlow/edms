@@ -338,9 +338,6 @@ setCalendar(
 
 ngapp.controller("ReportController", function($scope) {
 
-
-
-
     var cg_ds = {};
     // compare graph datasources... should use APIs
     {% for cg in sub_compare_graphs  %}
@@ -631,6 +628,7 @@ ngapp.controller("ReportController", function($scope) {
         }
 
     };
+
 })
 
 setCalendar = function(currentDt, currentEndDt, eleSel, readings, averageUsage, isNotConcernFunc) {
