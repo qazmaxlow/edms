@@ -8,6 +8,9 @@ from django.utils.decorators import method_decorator
 from rest_framework import generics, serializers, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import authentication_classes, permission_classes
 
 from constants import schedulers as scheduler_constants
 from schedulers.models import AutoSendReportSchedular, AutoSendReportReceiver
@@ -117,19 +120,27 @@ class UpdateReportScheduleSerializer(serializers.ModelSerializer):
 
 
 class CreateReportScheduleView(generics.CreateAPIView):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = CreateReportScheduleSerializer
 
 
 class ReportScheduleTaskListView(generics.ListAPIView):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = ReportScheduleSerializer
     queryset = AutoSendReportSchedular.objects.all()
 
 
 class ReportScheduleTaskDestoryView(generics.DestroyAPIView):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (IsAuthenticated,)
     queryset = AutoSendReportSchedular.objects.all()
 
 
 class ReportScheduleTaskUpdateView(generics.UpdateAPIView):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = UpdateReportScheduleSerializer
     queryset = AutoSendReportSchedular.objects.all()
 

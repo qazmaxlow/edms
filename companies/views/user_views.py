@@ -3,6 +3,9 @@ import re
 from rest_framework import generics
 from rest_framework import serializers
 from rest_framework import validators
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from user.models import EntrakUser
 from system.models import System
@@ -16,6 +19,8 @@ class EntrakUserSerializer(serializers.ModelSerializer):
         model = EntrakUser
 
 
+@authentication_classes((SessionAuthentication,))
+@permission_classes((IsAuthenticated,))
 class CompanyAuthenticatedUserView(generics.RetrieveAPIView):
 
     serializer_class = EntrakUserSerializer
