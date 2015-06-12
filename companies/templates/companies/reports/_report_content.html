@@ -5,16 +5,16 @@
 
 
     <div>
-    <div ng-controller="ReportController">
+    <div id="tTwo" ng-controller="ReportController">
 
 {% load l10n %}
 <div class="row report-head">
-        <div class="system-name">{{ company_system.fullname }}</div>
-        <div class="report-name text-center">{% localize on %}{{ report_date_text }}{% endlocalize %}</div>
+        <div class="system-name-popup">{{ company_system.fullname }}</div>
+        <div class="report-name-popup text-center">{% localize on %}{{ report_date_text }}{% endlocalize %}</div>
 </div>
 
 <div id="report_key_statistics" class="page-break-after">
-    <div class="row report-component-header">
+    <div class="row report-component-header-popup">
       <div class="col-xs-12 section-title">
         {%blocktrans%}What are our key statistics for this {{ report_type_name }}?{%endblocktrans%}
       </div>
@@ -238,43 +238,43 @@
         </div>
     </div>
     <div class="row detail-container bottom-border-2">
-      <div class="col-xs-12 x-padding-5">
-<div>
-    <table>
-      <thead>
-        <tr class="detail-title">
-            <th>
-                {% trans "Usage Type" %}</th><th>
-                {% trans "Total Energy (kWh)" %}</th><th>
-                {% trans "Total CO<sub>2</sub> (kg)" %}</th><th>
-                {% trans "Total Cost ($)" %}</th>
-            <th>{% trans "&#37; Change in kWh" %}<br>{% trans "Year-on-year" %}</th>
-            <th>{% trans "Change in Cost" %}<br>{% trans "Year-on-year" %}</th>
-        </tr>
-      </thead>
-      <tbody id="key-statistic-sub-data">
-        {% for td in transformed_datas %}
-        <tr class="key-statistics-row ">
-          <td class="usage-type-name">{{ td.name }}</td><td>
-            {{ td.total_energy|floatformat:"0"|intcomma }}</td><td>
-            {{ td.co2_val|floatformat:"0"|intcomma }}</td><td>
-            {{ td.money_val|floatformat:"0"|intcomma }}</td>
-          <td>{% if not td.change_in_kwh == None %} {{ td.change_in_kwh|floatformat:"0"|intcomma }} {% else %} N/A {% endif %}</td>
-          <td>{% if not td.change_in_money == None %} {{ td.change_in_money|floatformat:"0"|intcomma }} {% else %} N/A {% endif %}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        <div class="col-xs-12 x-padding-5">
+        <div>
+        <table>
+          <thead>
+            <tr class="detail-title">
+                <th>
+                    {% trans "Usage Type" %}</th><th>
+                    {% trans "Total Energy (kWh)" %}</th><th>
+                    {% trans "Total CO<sub>2</sub> (kg)" %}</th><th>
+                    {% trans "Total Cost ($)" %}</th>
+                <th>{% trans "&#37; Change in kWh" %}<br>{% trans "Year-on-year" %}</th>
+                <th>{% trans "Change in Cost" %}<br>{% trans "Year-on-year" %}</th>
+            </tr>
+          </thead>
+          <tbody id="key-statistic-sub-data">
+            {% for td in transformed_datas %}
+            <tr class="key-statistics-row ">
+              <td class="usage-type-name">{{ td.name }}</td><td>
+                {{ td.total_energy|floatformat:"0"|intcomma }}</td><td>
+                {{ td.co2_val|floatformat:"0"|intcomma }}</td><td>
+                {{ td.money_val|floatformat:"0"|intcomma }}</td>
+              <td>{% if not td.change_in_kwh == None %} {{ td.change_in_kwh|floatformat:"0"|intcomma }} {% else %} N/A {% endif %}</td>
+              <td>{% if not td.change_in_money == None %} {{ td.change_in_money|floatformat:"0"|intcomma }} {% else %} N/A {% endif %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
 
+        </div>
+        </div>
     </div>
-    </div>
-</div>
 
 </div>
 
 <div class="page-break-after">
 <div id="report_compared_to_last" class="xreport-component page-break-after">
-    <div class="row report-component-header">
+    <div class="row report-component-header-popup">
       <div class="col-xs-12 section-title">
         {%blocktrans%}How much more / less did we use compared to last {{ report_type_name }}?{%endblocktrans%}
       </div>
@@ -333,7 +333,7 @@
 </div>
 
 <div id="weekday-info" class="page-break-after">
-    <div class="row report-component-header">
+    <div class="row report-component-header-popup">
       <div class="col-xs-12">
         {% trans "HOW MUCH ENERGY DID WE USE ON WEEKDAYS?" %}</div>
     </div>
@@ -541,7 +541,7 @@
 </div>
 
 <div id="weekend-info" class="xreport-component xcalendar-component page-break-after">
-    <div class="row report-component-header">
+    <div class="row report-component-header-popup">
       <div class="col-xs-12">
         {% trans "HOW MUCH ENERGY DID WE USE ON WEEKENDS AND HOLIDAYS?" %}</div>
     </div>
@@ -749,7 +749,7 @@
 </div>
 
 <div id="overnight-info">
-    <div class="row report-component-header">
+    <div class="row report-component-header-popup">
       <div class="col-xs-12">
         {% trans "HOW MUCH ENERGY DID WE USE OVERNIGHT " %}<span style="font-weight:300;">({{ overnight_timerange_text }})</span></div>
     </div>

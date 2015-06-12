@@ -47,4 +47,6 @@ urlpatterns = patterns(
     url(r'^systems/company-systems/$', system_views.CompanySystemList.as_view(), name='companies.systems.company-systems'),
 
     url(r'^users/authenticated-user/$', user_views.CompanyAuthenticatedUserView.as_view(), name='companies.users.authenticated-user'),
+    url(r'^report/share-report/$', report_views.share_popup_report_view, name='companies.reports.popup-report.custom-dates'),
+    url(r'^report/share-report/(?P<year>\d{4})/(?P<month>[a-z]{3})/$', report_views.share_popup_report_view, name='companies.reports.popup-report'),
 )
