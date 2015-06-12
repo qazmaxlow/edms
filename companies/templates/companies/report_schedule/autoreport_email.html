@@ -1,76 +1,102 @@
-{% load static %}<!DOCTYPE html>
+{% load static %}
+
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Auto-report</title>
+    <title>Automated Report</title>
 </head>
-<body style="font-family: &quot;century gothic&quot: ;,helvetica, sans serif: ;text-align: center;font-size: 16px;">
+<body style="font-family: 'Century Gothic',Helvetica, 'Sans Serif'; text-align: center;">
   <style>
     body {
-      font-family:"Century Gothic",Helvetica, Sans Serif;
+      font-family:"Century Gothic",Helvetica, "Sans Serif";
         text-align:center;
         font-size: 16px;
     }
     .background {
-        padding-top:25px;
         background-color:#EFEFEF;
-        padding-bottom: 15px;
+        padding-top:25px;
+        padding-bottom:40px;
+        mso-para-margin-top:25px;
+        mso-para-margin-bottom:40px;
     }
     .invite {
       font-weight:bold;
       color:#354960;
-    }
-    .description_big {
-      font-size:1em;
-      color:#354960;
+      max-width:450px;
+      margin: auto;
     }
     .description {
-      font-size:0.938em;
+      font-size:15px;
       color:#354960;
+      max-width:450px;
+      margin: auto;
     }
     .create {
       background-color:#93CFD9;
       border-color:#93CFD9;
       margin-top:25px;
-      margin-bottom:40px;
-      font-size:0.938em;
+      mso-para-margin-top:25px;
+      font-size:15px;
       font-weight:bold;
       border-radius:8px;
       border:0;
       cursor:pointer;
       height:34px;
+      width:120px;
       color:white;
     }
     .slogan {
       font-weight:bold;
       color:#8dc63F;
-      font-size:0.813em;
+      font-size:13px;
     }
     .link {
       color:#8dc63F;
-      font-size:0.813em;
+      font-size:13px;
     }
     a {
       text-decoration:none;
     }
+    <!--[if gte mso 9]>
+    <style type="text/css">
+      .create {
+        background-color:#FFFFFF;
+    </style>
+<![endif]-->
   </style>
-    <a href="https://www.en-trak.com/" style="text-decoration: none;"><img src="https://{{ site.domain }}{% static 'images/product-logo.png' %}"></a>
-    <div class="background" style="padding-top: 25px;background-color: #EFEFEF;padding-bottom: 15px;">
-        <img alt="actionIcon" src="https://{{ site.domain }}{% static 'images/companies/report_schedule/mail/top_icon.png' %}">
+    <a href="https://www.en-trak.com/" style="text-decoration: none;"><img src="https://{{domain}}{% static 'images/product-logo.png' %}"></a>
+    <table width="100%" cellpadding="25" border="0" align="center">
+      <tr>
+        <td bgcolor="#EFEFEF" style="background-color: #EFEFEF; max-width:450px; margin: auto;" align="center">
+        <img alt="actionIcon" src="https://{{domain}}{% static 'images/companies/report_schedule/mail/top_icon.png' %}">
         <br>
-        <div class="description_big" style="font-size: 1em;color: #354960;">Your energy report for</div>
-        <div class="invite" style="font-weight: bold;color: #354960;">En-trak Headquarter - {{ report_date_text }}</div>
-        <div class="description_big" style="font-size: 1em;color: #354960;">is ready for your review</div>
-        <a href="{{ report_url|safe }}" style="text-decoration: none;"><button class="create" style="background-color: #93CFD9;border-color: #93CFD9;margin-top: 25px;font-size: 0.938em;font-weight: bold;border-radius: 8px;border: 0;cursor: pointer;height: 34px;color: white;margin-bottom: 40px;">View Report</button></a>
-        <div class="description" style="font-size: 0.938em;color: #354960;">
-          This link will expire 72 hours after sending<br>
-          If you wish to view this report after that period,<br>
-          simply log into your En-trak system and go to the Report Page
+        <div class="description" style="font-size: 15px;color: #354960; max-width:450px; margin: auto;">{{description_1|linebreaks}}
         </div>
-    </div>
-    <p class="slogan" style="font-weight: bold;color: #8dc63F;font-size: 0.813em;">Turning Data into Actionable Intelligence</p>
-    <a href="http://www.en-trak.com/" style="text-decoration: none;"><p class="link" style="color: #8dc63F;font-size: 0.813em;">www.en-trak.com</p></a>
-    <a href="https://www.facebook.com/entrak.hk" style="text-decoration: none;"><img alt="Facebook" src="https://test-dms.en-trak.com{% static 'images/fb-icon.png' %}"></a>
-    <a href="https://www.linkedin.com/company/en-trak-hong-kong-limited" style="text-decoration: none;"><img alt="Linkedin" src="https://test-dms.en-trak.com{% static 'images/linkedin-icon.png' %}"></a>
+        <div class="invite" style="font-weight: bold;color: #354960;">{{system.name}} - {{report_date_text}}
+        </div>
+        <div class="description" style="font-size: 15px;color: #354960; max-width:450px; margin: auto;">{{description_2|linebreaks}}
+        </div>
+
+        <!--[if mso]>
+          <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{report_url|safe}}" style="height:36px;v-text-anchor:middle;width:280px;" arcsize="20%" stroke="f" fillcolor="#93CFD9">
+            <w:anchorlock/>
+            <center style="color:#ffffff; font-family:'Century Gothic',Helvetica, 'Sans Serif'; font-size: 15px;">
+              {{button_text}}
+            </center>
+          </v:roundrect>
+        <![endif]-->
+        <![if !mso]>
+        <a href="{{report_url|safe}}" style="text-decoration: none;"><button class="create" style="background-color: #93CFD9;border-color: #93CFD9;margin-top: 25px;font-size: 15px;font-weight: bold;border-radius: 8px;border: 0;cursor: pointer;height: 34px; width:220px; color: white;">{{button_text}}</button></a>
+        <![endif]>
+        <div class="description" style="font-size: 15px;color: #354960;">
+          {{description_3|linebreaks}}
+        </div>
+        </td>
+      </tr>
+    </table>
+    <p class="slogan" style="font-weight: bold;color: #8dc63F;font-size: 13px;">Turning Data into Actionable Intelligence</p>
+    <a href="http://www.en-trak.com/" style="text-decoration: none;"><p class="link" style="color: #8dc63F;font-size: 13px;">www.en-trak.com</p></a>
+    <a href="https://www.facebook.com/entrak.hk" style="text-decoration: none;"><img alt="Facebook" src="https://{{domain}}{% static 'images/fb-icon.png' %}"></a>
+    <a href="https://www.linkedin.com/company/en-trak-hong-kong-limited" style="text-decoration: none;"><img alt="Linkedin" src="https://{{domain}}{% static 'images/linkedin-icon.png' %}"></a>
 
 </body>
-</html>
