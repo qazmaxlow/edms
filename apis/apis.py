@@ -16,7 +16,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from system.models import System
-from utils.auth import permission_required
+from utils.auth import has_permission
 from common import return_error_response
 
 @api_view(['GET'])
@@ -25,17 +25,19 @@ from common import return_error_response
 def DailyElectricityUsageDetail(request, api_version, format=None):
 
     date = request.QUERY_PARAMS.get('date', '')
-    system_code = request.QUERY_PARAMS.get('system_code', request.user.system.code)
+    system_code = request.QUERY_PARAMS.get('system_code', "")
 
-    systems_info = System.get_systems_info(system_code, request.user.system.code)
+    systems = System.objects.filter(code=system_code)
 
-    if not systems_info:
+    if not systems:
+        return return_error_response()
+    else:
+        system = systems[0]
+
+    if not has_permission(request, request.user, system):
         return return_error_response()
 
-    systems = systems_info['systems']
-
-    sources = SourceManager.get_sources(systems[0])
-    source_ids = [str(source.id) for source in sources]
+    source_ids = [str(source.id) for source in system.sources]
 
     try:
         user_tz = pytz.timezone(systems[0].timezone)
