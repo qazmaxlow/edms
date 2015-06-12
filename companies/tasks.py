@@ -2,20 +2,23 @@ import datetime
 import json
 from dateutil import relativedelta
 
+from django.contrib.sites.models import Site
 from django.core.mail import EmailMultiAlternatives
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
-from django.contrib.sites.models import Site
 from django.http import QueryDict
 from django.template.loader import render_to_string
 from django.utils import formats
 from django.utils import timezone
+from django.utils import translation
+from django.utils.translation import ugettext as _
 
 from celery import shared_task
 
 from constants import schedulers as scheduler_constants
 from schedulers.models import AutoSendReportSchedular
 from tokens.models import UrlToken
+from entrak.settings_common import LANG_CODE_EN, LANG_CODE_TC
 
 
 @shared_task(ignore_result=True)
@@ -62,15 +65,22 @@ def send_report_by_schedulers():
 
         report_url = 'https://%s%s?%s' % (site.domain, url, qd.urlencode())
 
+        translation.activate(owner.language)
+
+        if translation.get_language() == LANG_CODE_TC:
+            system_name = scheduler.system.name_tc
+        else:
+            system_name = scheduler.system.name
+
         ctx_dict = {
-            'system': scheduler.system,
             'domain': site.domain,
             'report_url': report_url,
+            'description_1': _("automated report description 1"),
+            'description_2': _("automated report description 2"),
+            'system_name': system_name,
             'report_date_text': report_date_text,
-            'description_1': "Your energy report for",
-            'description_2': "is ready for your review",
-            'description_3': "This link will expire in 72 hours after sending\nIf you wish to view this report after that period,\nsimply log into your En-trak system and go to the Report Page",
-            'button_text': 'View Report',
+            'remark': _("automated report remark"),
+            'button_text': _("automated report button"),
         }
 
         message_txt = render_to_string('companies/report_schedule/autoreport_email.txt', ctx_dict)
