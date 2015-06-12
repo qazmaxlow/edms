@@ -129,7 +129,11 @@ class ReportScheduleTaskListView(generics.ListAPIView):
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsAuthenticated,)
     serializer_class = ReportScheduleSerializer
-    queryset = AutoSendReportSchedular.objects.all()
+
+    def get_queryset(self):
+        syscode = self.kwargs['system_code']
+        systems = System.get_systems_within_root(syscode)
+        return AutoSendReportSchedular.objects.filter(system_id__in=[s.id for s in systems])
 
 
 class ReportScheduleTaskDestoryView(generics.DestroyAPIView):
