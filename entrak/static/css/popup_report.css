@@ -114,6 +114,7 @@ body {
 }
 
 .sidebar-left {
+    box-shadow: 0 1px 2px rgba(0,0,0,.2);
     background-color: #f6f6f6;
     padding: 0;
     padding-bottom: 15px;
@@ -153,6 +154,10 @@ body {
     display: inline-block !important;
     vertical-align: middle !important;
     line-height: normal !important;
+}
+
+.sidebar-left .section .k-header {
+    background-color: #e3e3e3 !important;
 }
 
 .sidebar-left .btn-section {
