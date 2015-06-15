@@ -174,3 +174,9 @@ class EntrakUser(AbstractUser):
         msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
         msg.attach_alternative(html_content, "text/html")
         msg.send()
+
+
+class UserMessages(models.Model):
+    user = models.ForeignKey('user.EntrakUser')
+    message = models.ForeignKey('notifications.Message')
+    read_at = models.DateTimeField()
