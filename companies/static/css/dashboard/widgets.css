@@ -373,7 +373,8 @@
 /*biggest consumers widget-------*/
 .widget-content .bc-right-box {
     min-width: 105px;
-    width: 25%;
+    max-width: 145px;
+    width: 35%;
     border-left: 1px solid #F2F2F2;
 }
 
@@ -390,6 +391,7 @@
 
 .widget-content .bc-right-box.first-row h3 {
     padding-left: 6px;
+    padding-right: 6px;
     line-height: 1.5em;
     color: #878787;
     font-size: 0.857em;
