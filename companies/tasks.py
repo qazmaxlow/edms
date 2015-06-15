@@ -1,5 +1,6 @@
 import datetime
 import json
+import pytz
 from dateutil import relativedelta
 
 from django.contrib.sites.models import Site
@@ -23,7 +24,8 @@ from entrak.settings_common import LANG_CODE_EN, LANG_CODE_TC
 
 @shared_task(ignore_result=True)
 def send_report_by_schedulers():
-    schedulers = AutoSendReportSchedular.objects.filter(execute_time__lte=timezone.now())
+    time_now = datetime.datetime.now(pytz.utc)
+    schedulers = AutoSendReportSchedular.objects.filter(execute_time__lte=time_now)
 
     site = Site.objects.get_current()
     subject = 'Your En-trak report is ready'
@@ -38,6 +40,10 @@ def send_report_by_schedulers():
         url_regex = r'^%s(download/)?$' % url
         user_tz = scheduler.system.time_zone
         execute_time = scheduler.execute_time.astimezone(user_tz)
+
+        # skip sending report before 8:00am in user's time zone
+        if time_now.astimezone(user_tz).hour < 7:
+            return None
 
         if scheduler.frequency == scheduler_constants.MONTHLY:
             last_report_day = execute_time + relativedelta.relativedelta(day=1, days=-1)
