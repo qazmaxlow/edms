@@ -18,8 +18,8 @@
     <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
     <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
 <html lang="en">
-    <span role="presentation" id="popup_close" class="k-icon k-i-close">Close</span>
-    <div class="container" ng-app="Entraks">
+    <!-- <span role="presentation" id="popup_close" class="k-icon k-i-close">Close</span> -->
+    <div class="container" ng-app="Entraks" style="width: 1171px !important;">
     <div class="row">
       <div class="col-xs-2 x-padding-25">
 
@@ -52,14 +52,14 @@
 
     <script>
       {% include "companies/reports/_report_script.html" %}
-      var ngapp = angular.module("Entraks", [ "kendo.directives" ]);
+      // var ngapp = angular.module("Entraks", [ "kendo.directives" ]);
                 ngapp.controller('MyCtrl', ['$scope', function ($scope) {
                       $scope.onSelect = function(ev) {
                           var anchor = $(ev.item).data('anchor');
                           location.href = "#"+anchor;
                       };
                 }]);
-                ngapp.controller('ReportController', ['$scope', function ($scope) {
+                ngapp.controller('ReportController', ['$scope', function ($scope) {//TODO why need duplicate this?
                   var date_offset = null;
                   $scope.cgDatas = cg_ds;
                   $scope.transformedPieOptions = {
@@ -297,6 +297,11 @@
                       }
                   };
                 }]);
+
+    $(window).scroll(function (event) {
+        var scroll = $(window).scrollTop();
+        $("#tOne").parent().css("top",scroll);
+    });
  
     </script>
 </html>
