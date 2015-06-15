@@ -9,6 +9,7 @@ from bson.objectid import ObjectId
 from mongoengine import connection, Q, NotUniqueError
 from egauge.models import Source, SourceMember, SourceReadingMin, SourceReadingHour,\
     SourceReadingDay, SourceReadingWeek, SourceReadingMonth, SourceReadingYear, SourceReadingMinInvalid
+from system.models import System
 from lxml import etree
 from collections import defaultdict
 from utils.utils import Utils
@@ -185,6 +186,7 @@ class SourceManager:
         ]
 
         local_retrieve_time = retrieve_time.astimezone(pytz.timezone(source_tz))
+
         for sum_info in sum_infos:
             start_time, end_time = Utils.get_datetime_range(sum_info['range_type'], local_retrieve_time)
 
@@ -207,6 +209,13 @@ class SourceManager:
                 sum_info['update_class'].objects(
                     source_id=info['_id'], datetime=start_time
                 ).update_one(set__value=info['value'], upsert=True)
+
+        start_time, end_time = Utils.get_datetime_range(Utils.RANGE_TYPE_HOUR, local_retrieve_time)
+        system_codes = [s.system_code for s in Source.objects.filter(id__in=source_ids)]
+        systems = System.objects.filter(code__in=system_codes)
+
+        for s in systems:
+            s.convert_to_meter_ds(start_time, end_time)
 
     @staticmethod
     def get_grouped_invalid_readings(xml_url):
@@ -510,7 +519,7 @@ class SourceManager:
             raise SourceManager.GetEgaugeDataError(str(e))
 
         if response.status_code != 200:
-            raise SourceManager.GetEgaugeDataError("Response status code: %d"%response.status_code)
+            raise SourceManager.GetEgaugeDataError("Request URL: %s, Response status code: %d"%(xml_url, response.status_code))
         xml_content = response.content
 
         root = etree.XML(xml_content)
