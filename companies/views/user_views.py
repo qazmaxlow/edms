@@ -17,6 +17,7 @@ PASSWORD_REGEX = re.compile(r'^.*(?=.{8,})(?=.*[A-Za-z]+)(?=.*\d).*$')
 class EntrakUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = EntrakUser
+        fields = ['id', 'username', 'fullname', 'email', 'is_active', 'is_staff', 'role_level']
 
 
 @authentication_classes((SessionAuthentication,))
