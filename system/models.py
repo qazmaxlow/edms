@@ -3,6 +3,7 @@ import datetime
 import json
 import pytz
 import operator
+import copy
 
 from bson.objectid import ObjectId
 from collections import OrderedDict
@@ -13,11 +14,11 @@ from django.utils import dateparse
 from dateutil.relativedelta import relativedelta
 from mongoengine import connection, Q as MQ
 
-from egauge.manager import SourceManager
 from egauge.models import Source, SourceReadingYear, SourceReadingMonth, SourceReadingDay, SourceReadingHour, SourceReadingMin
 from entrak.settings import BASE_DIR, LANG_CODE_EN, LANG_CODE_TC
 from holiday.models import CityHoliday, Holiday
-from unit.models import UnitRate, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
+from unit.models import UnitRate, UnitCategory, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
+from meters.models import Electricity, HourDetail, SystemId
 
 from system.constants import CITY_ALL
 from system.constants import CORPORATE
@@ -145,6 +146,11 @@ class System(models.Model):
 
 
     @property
+    def direct_sources(self):
+        return Source.objects.filter(system_code=self.code)
+
+
+    @property
     def child_systems(self):
 
         if self.path:
@@ -165,6 +171,11 @@ class System(models.Model):
     @property
     def is_education(self):
         return self.company_type == EDUCATION
+
+
+    @property
+    def money_unit(self):
+        return UnitCategory.electric_units.filter(Q(city=self.city)&Q(code=MONEY_CATEGORY_CODE)).first()
 
 
     def get_all_holidays(self, timestamp_info=None):
@@ -207,25 +218,44 @@ class System(models.Model):
         current_tz = pytz.timezone(self.timezone)
         datetime_in_current_tz = dt.astimezone(current_tz)
 
-        if self.night_time_start.hour <= 12:
+        night_start_hour_min = self.night_time_start.hour*100 + self.night_time_start.minute
+        night_end_hour_min = self.night_time_end.hour*100 + self.night_time_end.minute
+        datetime_hour_min = datetime_in_current_tz.hour*100 + datetime_in_current_tz.minute
+
+        if night_start_hour_min <= 1200:
             # datetime_in_current_tz BETWEEN the night time start and end hours
             # prevent miscalcuation when night time start is after 00:00am
-            if (self.night_time_start.hour <=  datetime_in_current_tz.hour < self.night_time_end.hour):
+            if (night_start_hour_min <= datetime_hour_min < night_end_hour_min):
                 return datetime_in_current_tz.date() - relativedelta(days=1)
         else:
-            if datetime_in_current_tz.hour >= self.night_time_start.hour:
+            if datetime_hour_min >= night_start_hour_min:
                 return datetime_in_current_tz.date()
-            elif datetime_in_current_tz.hour < self.night_time_end.hour:
+            elif datetime_hour_min < night_end_hour_min:
                 return datetime_in_current_tz.date() - relativedelta(days=1)
 
         return None
 
 
-    def get_unit_rate(self, datetime, target_unit='money'):
+    def get_unit_rate(self, datetime, target_unit=MONEY_CATEGORY_CODE):
         unit_infos = json.loads(self.unit_info)
         unit_code = unit_infos[target_unit]
         unit_rate = UnitRate.objects.filter(category_code=target_unit, code=unit_code, effective_date__lte=datetime).order_by('-effective_date').first()
         return unit_rate
+
+
+    def get_unitrates(self, start_from=None, end_to=None, target_unit=MONEY_CATEGORY_CODE):
+        unit_infos = json.loads(self.unit_info)
+        unit_code = unit_infos[target_unit]
+        kwargs = {}
+
+        if start_from is not None:
+            kwargs['effective_date__gte'] = start_from
+
+        if end_to is not None:
+            kwargs['effective_date__lte'] = end_to
+
+        unit_rates = UnitRate.objects.filter(category_code=target_unit, code=unit_code, **kwargs).order_by('effective_date')
+        return unit_rates
 
 
     def get_total_co2(self, start_dt, end_dt, date_type='day'):
@@ -253,6 +283,31 @@ class System(models.Model):
 
         if readings:
             return sum([self.get_unit_rate(r.datetime, 'co2').rate*r.value for r in readings])
+        else:
+            return 0
+
+    def get_total_kwh(self, start_date, end_date):
+        mdb_conn = connection.get_db()
+        source_ids = [s.id for s in self.sources]
+
+        reading = mdb_conn.source_reading_day.aggregate([
+            {'$match': {
+                'source_id': {'$in': source_ids},
+                'datetime': {
+                    '$gte': start_date,
+                    '$lt': end_date
+                }
+            }},
+            {'$group': {
+                '_id': None,
+                'kwh': {'$sum': '$value'}
+            }}
+        ])
+
+        if reading['result']:
+            return reading['result'][0]['kwh']
+        else:
+            return 0
 
 
     def get_total_cost(self, start_dt, end_dt, date_type='day'):
@@ -280,6 +335,8 @@ class System(models.Model):
 
         if readings:
             return sum([self.get_unit_rate(r.datetime, 'money').rate*r.value for r in readings])
+        else:
+            return 0
 
 
     def get_total_cost_with_source_id(self, start_dt, end_dt):
@@ -412,6 +469,210 @@ class System(models.Model):
             overnight_costs.append({'date':k, 'weekday':dt, 'value':v})
         return {'data': overnight_costs, 'total': total_values, 'number_of_days': total_days}
 
+
+    def convert_to_meter_ds(self, start_dt, end_dt):
+
+        source_ids = [s.id for s in self.direct_sources]
+        system_tz = pytz.timezone(self.timezone)
+
+        parent_codes = [code for code in self.path.split(',') if code !='']
+        parent_codes.append(self.code)
+        parent_systems = System.objects.filter(code__in=parent_codes)
+
+        readings = SourceReadingHour.objects(
+            source_id__in=source_ids,
+            datetime__gte=start_dt,
+            datetime__lt=end_dt).order_by('datetime')
+
+        hour_detail = HourDetail()
+        es = []
+        create_count = 0
+        update_count = 0
+
+
+        for i in range(60):
+            hour_detail['m%02d'%i] = 0.00
+
+        for r in readings:
+
+            overnight_date = self.validate_overnight(r.datetime.astimezone(system_tz))
+            unit_rate_co2 = self.get_unit_rate(r.datetime, CO2_CATEGORY_CODE)
+            unit_rate_money = self.get_unit_rate(r.datetime, MONEY_CATEGORY_CODE)
+
+            hour_total = 0
+
+            try:
+                e = Electricity.objects.get(
+                        system_id = self.id,
+                        datetime_utc = r.datetime,
+                        source_id = r.source_id
+                    )
+                update_count += 1
+            except Electricity.DoesNotExist:
+                e = Electricity(
+                        system_id = self.id,
+                        datetime_utc = r.datetime,
+                        source_id = r.source_id
+                    )
+                create_count += 1
+
+            e.total = r.value
+            e.overnight_total = 0
+
+            if overnight_date:
+                e.overnight_date = int(overnight_date.strftime("%Y%m%d"))
+            e.hour_detail = copy.deepcopy(hour_detail)
+            e.parent_systems = [SystemId(sid=s.id) for s in parent_systems]
+
+            e.rate_co2 = unit_rate_co2.rate
+            e.rate_money = unit_rate_money.rate
+
+            minutes = SourceReadingMin.objects(
+                source_id=r.source_id,
+                datetime__gte=r.datetime,
+                datetime__lt=r.datetime + relativedelta(hours=1)).order_by('datetime')
+
+            for m in minutes:
+                overnight = self.validate_overnight(m.datetime.astimezone(system_tz))
+                hour_total += m.value
+                if overnight:
+                    e.overnight_total = hour_total
+                e.hour_detail['m%02d'%m.datetime.minute] = m.value
+
+            e.save()
+
+        return (create_count, update_count)
+
+
+    def overnight_avg_cost(self, start_dt, end_dt, source_ids=None):
+
+        # print('{0:-^80}'.format(' overnigh_avg_cost called '))
+        # print('{0:-^80}'.format(' start_dt: ' + start_dt.strftime('%Y-%m-%d %H:%M:%S') + ' | end_dt: ' + end_dt.strftime('%Y-%m-%d %H:%M:%S') + ' '))
+
+        int_start_dt = int(start_dt.strftime("%Y%m%d"))
+        int_end_dt = int(end_dt.strftime("%Y%m%d"))
+
+        current_db_conn = connection.get_db()
+        aggregate_pipeline = [
+            { "$match":
+                {"$and": [
+                    {"overnight_date": {"$gte": int_start_dt}},
+                    {"overnight_date": {"$lt": int_end_dt}},
+                    {"parent_systems": {"$elemMatch": {"sid": self.id}}},
+                ]}},
+            { "$project": {"_id": 1, "overnight_date": 1, "overnight_total": 1, "rate_co2": 1, "rate_money": 1}},
+            {
+                "$group": {
+                    "_id" : "$overnight_date",
+                    "totalKwh": {"$sum": "$overnight_total"},
+                    "totalCo2": {"$sum": {"$multiply": ["$overnight_total", "$rate_co2"]}},
+                    "totalMoney": {"$sum": {"$multiply": ["$overnight_total", "$rate_money"]}}
+                }
+            }
+        ]
+
+        if source_ids:
+            aggregate_pipeline[0]["$match"]["$and"].append({"source_id": {"$in": [ObjectId(s) for s in source_ids]}})
+
+        result =  current_db_conn.electricity.aggregate(aggregate_pipeline)
+
+        if result['result']:
+            total = 0
+            for r in result['result']:
+                total += r['totalMoney']
+            days = len(result['result'])
+            return total/days
+        else:
+            return 0
+
+
+    def total_usage(self, start_dt, end_dt):
+
+        current_db_conn = connection.get_db()
+        minute = 0
+
+        minute = end_dt.minute
+        end_dt = end_dt.replace(minute=0, second=0, microsecond=0)
+
+        aggregate_pipeline = [
+            { "$match":
+                {"$and": [
+                    {"datetime_utc": {"$gte": start_dt}},
+                    {"datetime_utc": {"$lt": end_dt}},
+                    {"parent_systems": {"sid": self.id}},
+                ]}},
+            { "$project": {"total": 1, "rate_co2": 1, "rate_money": 1}},
+            {
+                "$group": {
+                    "_id": None,
+                    "totalKwh": {"$sum": "$total"},
+                    "totalCo2": {"$sum": {"$multiply": ["$total", "$rate_co2"]}},
+                    "totalMoney": {"$sum": {"$multiply": ["$total", "$rate_money"]}},
+                }
+            }
+        ]
+
+        result =  current_db_conn.electricity.aggregate(aggregate_pipeline)
+
+        if result['result']:
+            total_money = result['result'][0]['totalMoney']
+            total_co2 = result['result'][0]['totalCo2']
+        else:
+            total_money = 0
+            total_co2 = 0
+
+        usages = Electricity.objects.filter(datetime_utc=end_dt, parent_systems={"$elemMatch": {"sid": self.id}})
+        for u in usages:
+            total_money += u.usage_up_to_minute(minute)
+            total_co2 += u.usage_up_to_minute(minute-1, CO2_CATEGORY_CODE)
+
+        return {"total_money": total_money, "total_co2": total_co2}
+
+
+    def total_usage_by_source_id(self, start_dt, end_dt):
+
+        # print('{0:-^80}'.format(' start_dt: ' + start_dt.strftime('%Y-%m-%d %H:%M:%S') + ' | end_dt: ' + end_dt.strftime('%Y-%m-%d %H:%M:%S') + ' '))
+
+        current_db_conn = connection.get_db()
+        minute = 0
+
+        minute = end_dt.minute
+        end_dt = end_dt.replace(minute=0, second=0, microsecond=0)
+
+        aggregate_pipeline = [
+            { "$match":
+                {"$and": [
+                    {"datetime_utc": {"$gte": start_dt}},
+                    {"datetime_utc": {"$lt": end_dt}},
+                    {"parent_systems": {"sid": self.id}},
+                ]}},
+            { "$project": {"_id": 1, "source_id": 1, "total": 1, "rate_co2": 1, "rate_money": 1}},
+            {
+                "$group": {
+                    "_id": "$source_id",
+                    "totalKwh": {"$sum": "$total"},
+                    "totalCo2": {"$sum": {"$multiply": ["$total", "$rate_co2"]}},
+                    "totalMoney": {"$sum": {"$multiply": ["$total", "$rate_money"]}},
+                }
+            }
+        ]
+
+        result =  current_db_conn.electricity.aggregate(aggregate_pipeline)
+
+        total = {}
+
+        for s in self.sources:
+            total[s.id] = 0
+
+        if result['result']:
+            for r in result['result']:
+                total[r['_id']] = r['totalMoney']
+
+        usages = Electricity.objects.filter(datetime_utc=end_dt, parent_systems={"$elemMatch": {"sid": self.id}})
+        for u in usages:
+            total[u.source_id] += u.usage_up_to_minute(minute)
+
+        return total
 
 class SystemHomeImage(models.Model):
     image = models.ImageField(upload_to="system_home/%Y/%m")
