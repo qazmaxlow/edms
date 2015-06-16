@@ -120,9 +120,6 @@ report.reportGeneratorMultiLangTexts = {
 
 {% block extra_script %}
 {{block.super}}
-<script>
-    $(function() {noti_datasource.read();});
-</script>
 {% get_current_language as LANGUAGE_CODE %}
 
 {% include "report_inner_template.html" %}
@@ -275,7 +272,7 @@ $(function() {
     <div ng-app="Entrak">
     <div ng-controller="ReportControllers">
         <!--<button ng-click="win2.close()" ng-show="win2visible">close</button>
-        
+
         <div kendo-window="win_report" k-visible="false" k-iframe="true"
              k-width="1200" k-height="14000" k-modal="true"
              k-resizable="false" k-draggable="false"
@@ -315,7 +312,7 @@ $(function() {
           <p>{{ get_total_energy_cost_text() }}</p>
           {% endverbatim %}
       </div></div>
-      
+
       {% ifequal LANGUAGE_CODE 'zh-tw' %}
       {% verbatim %}
       <div class="row content end"><div class="col-xs-12">
@@ -333,7 +330,7 @@ $(function() {
       </div></div>
       {% endverbatim %}
       {% endifequal %}
-      
+
     </div>
     <div class="col-xs-3">
       <div class="row time-type"><div class="col-xs-12">

@@ -3,6 +3,7 @@ from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
 from django.contrib.staticfiles import views
 from django.views.generic.base import RedirectView
+from notifications.views import ReadMessageView
 from rest_framework import routers
 from entrak import settings
 
@@ -82,6 +83,7 @@ urlpatterns = patterns('',
     url(r'^users/create_shared_user', user.views.CreateSharedUserView.as_view(), name='users.create_shared_user'),
     url(r'^users/send_password_reset_email', user.views.SendPasswordResetEmailView.as_view(), name='users.send_password_reset_email'),
     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+    url(r'^messages/(?P<message_id>\d+)/read', ReadMessageView.as_view(), name='notifications.read_message'),
 )
 
 if settings.DEBUG:

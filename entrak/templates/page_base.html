@@ -30,8 +30,8 @@
 {% get_current_language as LANGUAGE_CODE %}
 
 var page = {};
-
 var noti_datasource;
+
 $(function() {
     {% for system in user_systems %}
         var system = {};
@@ -125,7 +125,23 @@ $(function() {
             }
         }
     });
+
+    noti_datasource.read();
 });
+
+function readMeesage(id) {
+    $.ajax({
+        url: "{% url 'notifications.read_message' 999999 %}".replace(999999, id),
+        method: "PUT"
+    }).done(function(data) {
+        $('#notifications').data('kendoWindow').close();
+        if (data["unread_messages"] >= 1) {
+            setTimeout(function() {
+                noti_datasource.read();
+            }, 1000);
+        }
+    })
+}
 </script>
 
 {% endblock %}
@@ -351,7 +367,7 @@ $(function() {
       <p>#:body#</p>
     </div>
     <div class="actions">
-    <button class="xk-button" onclick="$('\\#notifications').data('kendoWindow').close();">OK</button>
+    <button class="xk-button" onclick="readMeesage(#:id#);">OK</button>
     </div>
 </script>
 <div id="notifications"></div>
