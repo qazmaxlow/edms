@@ -485,10 +485,8 @@ class System(models.Model):
             datetime__lt=end_dt).order_by('datetime')
 
         hour_detail = HourDetail()
-        es = []
         create_count = 0
         update_count = 0
-
 
         for i in range(60):
             hour_detail['m%02d'%i] = 0.00
@@ -500,6 +498,7 @@ class System(models.Model):
             unit_rate_money = self.get_unit_rate(r.datetime, MONEY_CATEGORY_CODE)
 
             hour_total = 0
+            minute_readings = 0
 
             try:
                 e = Electricity.objects.get(
@@ -537,8 +536,11 @@ class System(models.Model):
                 hour_total += m.value
                 if overnight:
                     e.overnight_total = hour_total
+                if m.value > 0:
+                    minute_readings += 1
                 e.hour_detail['m%02d'%m.datetime.minute] = m.value
 
+            e.is_data_completed = (minute_readings == 60)
             e.save()
 
         return (create_count, update_count)

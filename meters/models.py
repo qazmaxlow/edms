@@ -79,6 +79,7 @@ class Electricity(Document):
         'indexes': [
             {'fields': [('system_id', 1), ('source_id', 1), ("datetime_utc", 1)], 'unique': True},
             {'fields': [('system_id', 1), ("datetime_utc", 1)]},
+            {'fields': [('is_data_completed', 1), ("datetime_utc", 1)]},
         ]
     }
 
@@ -90,6 +91,7 @@ class Electricity(Document):
     parent_systems = ListField(EmbeddedDocumentField(SystemId))
     system_id = IntField()
     source_id = ObjectIdField()
+    is_data_completed = BooleanField()
     rate_co2 = FloatField()
     rate_money = FloatField()
 
