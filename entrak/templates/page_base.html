@@ -12,16 +12,27 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="{% static 'js/superfish-master/dist/css/superfish.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'js/superfish-master/dist/css/superfish-vertical.css' %}">
+
 <script src="{% static 'assets/jquery/jquery-1.11.0.min.js' %}"></script>
 <script src="{% static 'assets/jquery/jquery-ui.js' %}"></script>
 <script src="{% static 'js/arboreal-customized.js' %}"></script>
 <script src="{% static 'js/moment.min.js' %}"></script>
 <script src="{% static 'js/superfish-master/dist/js/superfish.min.js' %}"></script>
 
+<script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
+<script src="{% static 'js/csrf_ajax.js' %}"></script>
+
 <link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/kendo.entrak.theme.css' %}" rel="stylesheet">
 <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
 <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
+
+<!-- copied from bootstrap -->
+<style>
+.text-center {
+    text-align: center;
+}
+</style>
 {% endblock %}
 
 {% block extra_script %}
@@ -33,6 +44,7 @@ var page = {};
 var noti_datasource;
 
 $(function() {
+    setupAjaxForCsrf($.cookie('csrftoken'));
     {% for system in user_systems %}
         var system = {};
         system.code = '{{system.code}}';

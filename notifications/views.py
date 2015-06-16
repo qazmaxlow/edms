@@ -21,7 +21,6 @@ class MessageList(generics.ListAPIView):
         user = self.request.user
         read_messages = UserMessages.objects.filter(user_id=user.id).exclude(read_at=None)
         unread_messages = Message.objects.published().exclude(id__in=[m.message_id for m in read_messages])
-        print(unread_messages.query)
         return unread_messages
 
 
