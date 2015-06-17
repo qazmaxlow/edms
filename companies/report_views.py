@@ -127,6 +127,9 @@ def get_weekdays_cost(system, start_dt, end_dt):
 
 
 def get_overnight_avg_cost(system, source_ids, start_dt, end_dt):
+
+    return system.overnight_avg_cost(start_dt, end_dt, source_ids)
+
     date_ranges = []
 
     unit_infos = json.loads(system.unit_info)
