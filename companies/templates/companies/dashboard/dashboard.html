@@ -58,7 +58,7 @@
 {% else %}
 <div id="dashboardController" class="container" ng-app="Entrak" ng-controller="Dashboard">
 {% endifequal %}
-    <div ng-cloak class="dashboard-toolbar row" style="height: 35px;margin:0;border:none;">
+    <div ng-cloak class="dashboard-toolbar row" style="display: none;">
         <div class="pull-right buttons-wrap">
             <button class="k-button" ng-click="setFullscreenMode()"></button>
         </div>
@@ -159,7 +159,13 @@
             // $("#dashboardController .disableSort").removeClass("disableSort");
             angular.element($("#dashboardController")).scope().updateWidget();
             angular.element($("#dashboardController")).scope().autoToggle(false);
+            $("#fullscreen-btn").show();//TODO remove this when the btn is moved back to the widget icon bar
         });
+        $("#fullscreen-btn").click(function(){
+            angular.element($("#dashboardController")).scope().setFullscreenMode();
+            $("#fullscreen-btn").hide();
+        });
+        $("#fullscreen-btn").show();
         $scope.setFullscreenMode = function(){
             $("body").addClass("fullscreen");
             $("#dashboardContainer>div").addClass("disableSort");
