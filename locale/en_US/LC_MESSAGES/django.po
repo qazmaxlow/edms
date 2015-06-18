@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-17 02:42+0000\n"
+"POT-Creation-Date: 2015-06-18 05:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,14 +16,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: companies/report_views.py:475
+#: companies/report_views.py:476
 #, python-brace-format
 msgid "{0:.0f}% {1}"
 msgstr ""
 
-#: companies/report_views.py:479
-#: companies/templates/companies/dashboard/dashboard.html:1005
-#: companies/templates/companies/dashboard/dashboard.html:1144
+#: companies/report_views.py:480
+#: companies/templates/companies/dashboard/dashboard.html:1011
+#: companies/templates/companies/dashboard/dashboard.html:1150
 #: companies/templates/companies/reports/_report_content.html:70
 #: companies/templates/companies/reports/_report_content.html:79
 #: companies/templates/companies/reports/_report_content.html:97
@@ -35,9 +35,9 @@ msgstr ""
 msgid "more"
 msgstr ""
 
-#: companies/report_views.py:479
-#: companies/templates/companies/dashboard/dashboard.html:1005
-#: companies/templates/companies/dashboard/dashboard.html:1144
+#: companies/report_views.py:480
+#: companies/templates/companies/dashboard/dashboard.html:1011
+#: companies/templates/companies/dashboard/dashboard.html:1150
 #: companies/templates/companies/reports/_report_content.html:68
 #: companies/templates/companies/reports/_report_content.html:77
 #: companies/templates/companies/reports/_report_content.html:95
@@ -49,149 +49,149 @@ msgstr ""
 msgid "less"
 msgstr ""
 
-#: companies/report_views.py:499
+#: companies/report_views.py:500
 #, python-brace-format
 msgid "{self.compared_percent_abs:.0f}% {self.change_desc}"
 msgstr ""
 
-#: companies/report_views.py:594 companies/report_views.py:619
+#: companies/report_views.py:595 companies/report_views.py:620
 msgid "month"
 msgstr ""
 
-#: companies/report_views.py:595 companies/report_views.py:620
+#: companies/report_views.py:596 companies/report_views.py:621
 msgid "Compared to Last Month"
 msgstr ""
 
-#: companies/report_views.py:597
+#: companies/report_views.py:598
 #, python-brace-format
 msgid "{0}{1} - Monthly Energy Report"
 msgstr ""
 
-#: companies/report_views.py:599
+#: companies/report_views.py:600
 #, python-brace-format
 msgid "{0} - Monthly Energy Report"
 msgstr ""
 
-#: companies/report_views.py:601
+#: companies/report_views.py:602
 msgid "week"
 msgstr ""
 
-#: companies/report_views.py:602
+#: companies/report_views.py:603
 msgid "Compared to Last Week"
 msgstr ""
 
-#: companies/report_views.py:604 companies/report_views.py:622
+#: companies/report_views.py:605 companies/report_views.py:623
 #, python-brace-format
 msgid "{0}{1}{2} - "
 msgstr ""
 
-#: companies/report_views.py:605
+#: companies/report_views.py:606
 #, python-brace-format
 msgid "{0}{1}{2} Weekly Energy Report"
 msgstr ""
 
-#: companies/report_views.py:608
+#: companies/report_views.py:609
 #, python-brace-format
 msgid "{0} Weekly Energy Report"
 msgstr ""
 
-#: companies/report_views.py:610
+#: companies/report_views.py:611
 msgid "quarter"
 msgstr ""
 
-#: companies/report_views.py:611
-msgid "Compared to Last Quarter"
-msgstr ""
-
 #: companies/report_views.py:612
-#, python-brace-format
-msgid "{0} Q{1}"
+msgid "Compared to Last Quarter"
 msgstr ""
 
 #: companies/report_views.py:613
 #, python-brace-format
+msgid "{0} Q{1}"
+msgstr ""
+
+#: companies/report_views.py:614
+#, python-brace-format
 msgid "{0} - Quarterly Energy Report"
 msgstr ""
 
-#: companies/report_views.py:615
+#: companies/report_views.py:616
 msgid "year"
 msgstr ""
 
-#: companies/report_views.py:616
+#: companies/report_views.py:617
 msgid "Compared to Last Year"
 msgstr ""
 
-#: companies/report_views.py:617
+#: companies/report_views.py:618
 #, python-brace-format
 msgid "{0} - Yearly Energy Report"
 msgstr ""
 
-#: companies/report_views.py:623
+#: companies/report_views.py:624
 #, python-brace-format
 msgid "{0}{1}{2}"
 msgstr ""
 
-#: companies/report_views.py:834 companies/report_views.py:835
+#: companies/report_views.py:832 companies/report_views.py:833
 msgid "tcmonth"
 msgstr ""
 
-#: companies/report_views.py:840
+#: companies/report_views.py:838
 msgid "This week"
 msgstr ""
 
-#: companies/report_views.py:841
-#: companies/templates/companies/dashboard/dashboard.html:314
+#: companies/report_views.py:839
+#: companies/templates/companies/dashboard/dashboard.html:320
 msgid "Last week"
 msgstr ""
 
-#: companies/report_views.py:843
+#: companies/report_views.py:841
 msgid "This quarter"
 msgstr ""
 
-#: companies/report_views.py:844
+#: companies/report_views.py:842
 msgid "Last quarter"
 msgstr ""
 
-#: companies/report_views.py:849
+#: companies/report_views.py:847
 msgid "This period"
 msgstr ""
 
-#: companies/report_views.py:850
+#: companies/report_views.py:848
 msgid "Last same period"
 msgstr ""
 
-#: companies/report_views.py:913
+#: companies/report_views.py:911
 #, python-brace-format
 msgid "Overall: {0.compared_percent_abs:.0f}&#37; more energy than last {1}"
 msgstr ""
 
-#: companies/report_views.py:915
+#: companies/report_views.py:913
 #, python-brace-format
 msgid "Overall: {0.compared_percent_abs:.0f}&#37; less energy than last {1}"
 msgstr ""
 
-#: companies/report_views.py:1128
+#: companies/report_views.py:1126
 #, python-brace-format
 msgid "Your energy consumption this {1} was {0} than it was last {1}"
 msgstr ""
 
-#: companies/report_views.py:1133
+#: companies/report_views.py:1131
 msgid "Total energy consumption for the last 6 months (kWh)"
 msgstr ""
 
-#: companies/report_views.py:1136
+#: companies/report_views.py:1134
 msgid "Total energy consumption for the last 6 weeks (kWh)"
 msgstr ""
 
-#: companies/report_views.py:1138
+#: companies/report_views.py:1136
 msgid "Total energy consumption for the last 6 quarters (kWh)"
 msgstr ""
 
-#: companies/report_views.py:1140
+#: companies/report_views.py:1138
 msgid "Total energy consumption for the last 6 years (kWh)"
 msgstr ""
 
-#: companies/report_views.py:1142
+#: companies/report_views.py:1140
 msgid "Total energy consumption for the last 6 same periods (kWh)"
 msgstr ""
 
@@ -222,306 +222,306 @@ msgstr "DASHBOARD"
 msgid "Grab a snapshot of your performance at the"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:309
+#: companies/templates/companies/dashboard/dashboard.html:315
 msgid "Real-Time"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:310
+#: companies/templates/companies/dashboard/dashboard.html:316
 #: entrak/templates/page_base.html:186
 msgid "Graph"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:311
+#: companies/templates/companies/dashboard/dashboard.html:317
 msgid "Rates"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:312
+#: companies/templates/companies/dashboard/dashboard.html:318
 msgid "So far today you have used: "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:313
+#: companies/templates/companies/dashboard/dashboard.html:319
 #: entrak/templates/display.html:274
 msgid "Today"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:315
+#: companies/templates/companies/dashboard/dashboard.html:321
 msgid "per day"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:620
+#: companies/templates/companies/dashboard/dashboard.html:626
 msgid "Biggest Consumers"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:621
-#: companies/templates/companies/dashboard/dashboard.html:754
+#: companies/templates/companies/dashboard/dashboard.html:627
+#: companies/templates/companies/dashboard/dashboard.html:760
 msgctxt "dashboard"
 msgid "Week"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:622
-#: companies/templates/companies/dashboard/dashboard.html:755
+#: companies/templates/companies/dashboard/dashboard.html:628
+#: companies/templates/companies/dashboard/dashboard.html:761
 msgctxt "dashboard"
 msgid "Month"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:623
-#: companies/templates/companies/dashboard/dashboard.html:658
+#: companies/templates/companies/dashboard/dashboard.html:629
+#: companies/templates/companies/dashboard/dashboard.html:664
 msgid "Change from last week"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:623
-#: companies/templates/companies/dashboard/dashboard.html:658
+#: companies/templates/companies/dashboard/dashboard.html:629
+#: companies/templates/companies/dashboard/dashboard.html:664
 msgid "Change from last month"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:624
+#: companies/templates/companies/dashboard/dashboard.html:630
 msgid "Energy cost so far"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:698
+#: companies/templates/companies/dashboard/dashboard.html:704
 msgid "Energy Saving Tips"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:700
+#: companies/templates/companies/dashboard/dashboard.html:706
 msgid "Put a ribbon on it"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:701
+#: companies/templates/companies/dashboard/dashboard.html:707
 msgid ""
 "Tie a ribbon to the vent of each aircon unit so you can easily tell if "
 "aircon has actually been turned off."
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:705
+#: companies/templates/companies/dashboard/dashboard.html:711
 msgid "Label your plugs"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:706
+#: companies/templates/companies/dashboard/dashboard.html:712
 #: entrak/templates/display.html:174
 msgid ""
 "Label your plugs so you can unplug appliances without accidentally turning "
 "off important things!"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:710
+#: companies/templates/companies/dashboard/dashboard.html:716
 msgid "Remove a tube"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:711
+#: companies/templates/companies/dashboard/dashboard.html:717
 #: entrak/templates/display.html:171
 msgid ""
 "If you have more light than you need in an area, you can remove one light "
 "tube to save energy!"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:715
+#: companies/templates/companies/dashboard/dashboard.html:721
 msgid "Turn off the socket"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:716
+#: companies/templates/companies/dashboard/dashboard.html:722
 #, python-format
 msgid ""
 "Even if an appliance is off, it can still consume 10%(percent)s of normal "
 "energy. Remember to turn off the socket switch too!"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:720
+#: companies/templates/companies/dashboard/dashboard.html:726
 msgid "Adjust aircon temperature"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:721
+#: companies/templates/companies/dashboard/dashboard.html:727
 #: entrak/templates/display.html:172
 msgid ""
 "30 minutes after turning on aircon, adjust the temperature to minimize "
 "energy wastage."
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:753
+#: companies/templates/companies/dashboard/dashboard.html:759
 msgid "Comparison"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:904
+#: companies/templates/companies/dashboard/dashboard.html:910
 msgid "So far this week"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:904
+#: companies/templates/companies/dashboard/dashboard.html:910
 msgid "So far this month"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:905
+#: companies/templates/companies/dashboard/dashboard.html:911
 msgid "By this time last week"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:905
+#: companies/templates/companies/dashboard/dashboard.html:911
 msgid "By this time last month"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:953
+#: companies/templates/companies/dashboard/dashboard.html:959
 msgid "Last Week Stats"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:954
+#: companies/templates/companies/dashboard/dashboard.html:960
 msgid "Day"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:955
+#: companies/templates/companies/dashboard/dashboard.html:961
 msgid "Night"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:956
+#: companies/templates/companies/dashboard/dashboard.html:962
 msgid "than two weeks ago"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1148
+#: companies/templates/companies/dashboard/dashboard.html:1154
 msgid "average weekday"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1148
+#: companies/templates/companies/dashboard/dashboard.html:1154
 msgid "average overnight"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1160
+#: companies/templates/companies/dashboard/dashboard.html:1166
 #: entrak/templates/page_base.html:192
 msgid "Progress"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1161
-#: companies/templates/companies/dashboard/dashboard.html:1241
-#: companies/templates/companies/dashboard/dashboard.html:1341
+#: companies/templates/companies/dashboard/dashboard.html:1167
+#: companies/templates/companies/dashboard/dashboard.html:1247
+#: companies/templates/companies/dashboard/dashboard.html:1347
 msgid "Past 12 months"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1162
-#: companies/templates/companies/dashboard/dashboard.html:1164
-#: companies/templates/companies/dashboard/dashboard.html:1242
+#: companies/templates/companies/dashboard/dashboard.html:1168
+#: companies/templates/companies/dashboard/dashboard.html:1170
+#: companies/templates/companies/dashboard/dashboard.html:1248
 msgid "So far this year"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1163
+#: companies/templates/companies/dashboard/dashboard.html:1169
 #: entrak/templates/display.html:100 entrak/templates/display.html.py:102
 msgid "Over the past 12 months"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1165
+#: companies/templates/companies/dashboard/dashboard.html:1171
 msgid "you have increased your energy use"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1166
+#: companies/templates/companies/dashboard/dashboard.html:1172
 msgid "you have decreased your energy use"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1167
+#: companies/templates/companies/dashboard/dashboard.html:1173
 msgid "from your baseline of"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1168
+#: companies/templates/companies/dashboard/dashboard.html:1174
 msgid "compared to "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1240
+#: companies/templates/companies/dashboard/dashboard.html:1246
 #: entrak/templates/progress.html:90
 msgid "Cumulative Savings"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1243
+#: companies/templates/companies/dashboard/dashboard.html:1249
 msgid "Since "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1243
+#: companies/templates/companies/dashboard/dashboard.html:1249
 msgid " you have"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1244
+#: companies/templates/companies/dashboard/dashboard.html:1250
 msgid "So far this year you have"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1245
+#: companies/templates/companies/dashboard/dashboard.html:1251
 msgid "Compared with your baseline year of "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1246
-#: companies/templates/companies/dashboard/dashboard.html:1274
-#: companies/templates/companies/dashboard/dashboard.html:1300
+#: companies/templates/companies/dashboard/dashboard.html:1252
+#: companies/templates/companies/dashboard/dashboard.html:1280
+#: companies/templates/companies/dashboard/dashboard.html:1306
 msgid "Saved"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1246
-#: companies/templates/companies/dashboard/dashboard.html:1248
-#: companies/templates/companies/dashboard/dashboard.html:1275
-#: companies/templates/companies/dashboard/dashboard.html:1301
+#: companies/templates/companies/dashboard/dashboard.html:1252
+#: companies/templates/companies/dashboard/dashboard.html:1254
+#: companies/templates/companies/dashboard/dashboard.html:1281
+#: companies/templates/companies/dashboard/dashboard.html:1307
 msgid "Increased"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1247
+#: companies/templates/companies/dashboard/dashboard.html:1253
 msgid "on energy costs"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1248
-#: companies/templates/companies/dashboard/dashboard.html:1275
-#: companies/templates/companies/dashboard/dashboard.html:1301
+#: companies/templates/companies/dashboard/dashboard.html:1254
+#: companies/templates/companies/dashboard/dashboard.html:1281
+#: companies/templates/companies/dashboard/dashboard.html:1307
 msgid "Reduced"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1249
+#: companies/templates/companies/dashboard/dashboard.html:1255
 msgid "Tons"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1274
-#: companies/templates/companies/dashboard/dashboard.html:1300
+#: companies/templates/companies/dashboard/dashboard.html:1280
+#: companies/templates/companies/dashboard/dashboard.html:1306
 msgid "Lost"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1336
+#: companies/templates/companies/dashboard/dashboard.html:1342
 msgid "increased"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1336
+#: companies/templates/companies/dashboard/dashboard.html:1342
 msgid "reduced"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1340
+#: companies/templates/companies/dashboard/dashboard.html:1346
 msgid "Goal Tracking"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1342
+#: companies/templates/companies/dashboard/dashboard.html:1348
 msgid "Goal-1"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1343
+#: companies/templates/companies/dashboard/dashboard.html:1349
 msgid "Reduce energy use in "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1344
+#: companies/templates/companies/dashboard/dashboard.html:1350
 msgid "by "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1345
+#: companies/templates/companies/dashboard/dashboard.html:1351
 msgid " compared to "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1346
+#: companies/templates/companies/dashboard/dashboard.html:1352
 msgid "So far you have "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1347
+#: companies/templates/companies/dashboard/dashboard.html:1353
 msgid "your energy use by"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1348
+#: companies/templates/companies/dashboard/dashboard.html:1354
 msgid "To meet your goal, you need to use"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1349
+#: companies/templates/companies/dashboard/dashboard.html:1355
 #, python-format
 msgid "%% less"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1350
+#: companies/templates/companies/dashboard/dashboard.html:1356
 #: entrak/templates/progress.html:121
 msgid "from "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1351
+#: companies/templates/companies/dashboard/dashboard.html:1357
 #: companies/templates/companies/reports/summary.html:80
 #: entrak/templates/progress.html:121 entrak/templates/report.html:40
 msgid " to "
