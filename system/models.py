@@ -485,10 +485,8 @@ class System(models.Model):
             datetime__lt=end_dt).order_by('datetime')
 
         hour_detail = HourDetail()
-        es = []
         create_count = 0
         update_count = 0
-
 
         for i in range(60):
             hour_detail['m%02d'%i] = 0.00
@@ -507,14 +505,14 @@ class System(models.Model):
                         datetime_utc = r.datetime,
                         source_id = r.source_id
                     )
-                update_count += 1
+                newly_created = False
             except Electricity.DoesNotExist:
                 e = Electricity(
                         system_id = self.id,
                         datetime_utc = r.datetime,
                         source_id = r.source_id
                     )
-                create_count += 1
+                newly_created = True
 
             e.total = r.value
             e.overnight_total = 0
@@ -539,7 +537,12 @@ class System(models.Model):
                     e.overnight_total = hour_total
                 e.hour_detail['m%02d'%m.datetime.minute] = m.value
 
-            e.save()
+            if hour_total > 0 :
+                e.save()
+                if newly_created:
+                    create_count += 1
+                else:
+                    update_count += 1
 
         return (create_count, update_count)
 
