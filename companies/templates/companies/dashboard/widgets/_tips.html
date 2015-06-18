@@ -1,8 +1,8 @@
 {% verbatim %}
 <div class="widget-container" ng-controller="WidgetTips">
 <div class="widget-header row">
-    <div class="widget-title col-sm-7" ng-bind="title"></div>
-    <div class="widget-toggle col-sm-5">
+    <div class="widget-title col-xs-7" ng-bind="title"></div>
+    <div class="widget-toggle col-xs-5">
         <div class="pull-right">
             <button id="day_button_{{widget_id}}" class="tips-button tips-button-left" ng-click="showNext(-1)"></button><!--
             --><button id="night_button_{{widget_id}}" class="tips-button tips-button-right" ng-click="showNext(1)"></button>
@@ -13,7 +13,7 @@
     <div class="widget-message">
     	<h3 class="description-1 single-box" ng-bind="shortDesc"></h3>
     </div>
-    <img ng-src="{{imgPath}}" class="full-width-img"></img>
+    <div style="background-image: url({{imgPath}})" class="full-width-img"></div>
     <div class="long-desc-holder">
     	<p class="description-3" ng-bind="longDesc"></p>
     </div>

@@ -62,6 +62,19 @@ class EntrakUser(AbstractUser):
         return "https://%s/users/%d/activate?uid=%s&ucode=%s"%(site.domain, self.id, uid, ucode)
 
     @property
+    def reset_password_url(self):
+
+        utc_time_now = datetime.now()
+        utc_timestamp = (utc_time_now - datetime(1970,1,1)).total_seconds()
+
+        encrypter = EntrakEncrypter(self.get_or_create_salt)
+        uid = encrypter.encode(str(self.id))
+        ucode = encrypter.encode(str(utc_timestamp))
+        site = Site.objects.get_current()
+
+        return "https://%s/users/%d/reset_password?uid=%s&ucode=%s"%(site.domain, self.id, uid, ucode)
+
+    @property
     def get_or_create_salt(self):
         if not self.salt or self.salt == "":
             self.salt = uuid.uuid4().hex
@@ -75,7 +88,7 @@ class EntrakUser(AbstractUser):
         return self.role_level >= USER_ROLE_ADMIN_LEVEL
 
 
-    def validate_activation_url(self, uid, ucode):
+    def validate_uid_and_ucode(self, uid, ucode, days=3):
 
         try:
             encrypter = EntrakEncrypter(self.get_or_create_salt)
@@ -128,3 +141,42 @@ class EntrakUser(AbstractUser):
         msg.attach_alternative(html_content, "text/html")
         msg.send()
 
+
+    def send_password_reset_email(self):
+
+        self.salt = self.get_or_create_salt
+        self.save()
+
+        plaintext = get_template('reset_password_email.txt')
+        htmly     = get_template('reset_password_email.html')
+
+        translation.activate(LANG_CODE_EN)
+
+        title = _("reset password title")
+        heading = _("reset password heading")
+        description = _("reset password description")
+
+        site = Site.objects.get_current()
+
+        d = Context({
+                'domain': site.domain,
+                'url': self.reset_password_url,
+                'heading': heading,
+                'description': description,
+                'button': _('reset password button')
+            })
+
+        subject, from_email, to_email = title, "info@en-trak.com", [self.email]
+
+        text_content = plaintext.render(d)
+        html_content = htmly.render(d)
+
+        msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+
+
+class UserMessages(models.Model):
+    user = models.ForeignKey('user.EntrakUser')
+    message = models.ForeignKey('notifications.Message')
+    read_at = models.DateTimeField()

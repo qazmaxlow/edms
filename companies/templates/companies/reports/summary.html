@@ -29,6 +29,35 @@
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
 
+<!-- for pop-up report -->
+<link rel="stylesheet" type="text/css" href="{% static 'css/popup_report.css' %}">
+<link href="{% static 'assets/kendoui/styles/kendo.dataviz.min.css' %}" rel="stylesheet">
+<link href="{% static 'assets/kendoui/styles/kendo.dataviz.default.min.css' %}" rel="stylesheet">
+<!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<!-- hack for combining bootstrap -->
+<style>
+  #menu-links li:hover, #menu-links li.menu-links-selected {
+     height: auto;
+  }
+
+  .panel-header-left-menu h3 {
+    margin: 0;
+    height: 33px;
+  }
+
+  #sub-heading-facilities h3 {
+    font-size: 15px;
+  }
+
+  #sub-heading h2 { font-size: 16px; }
+  #heading h1 { font-size: 30px; }
+
+</style>
+
 <style>
   .report-summary img.icon {
     padding-left: 20px;
@@ -91,9 +120,6 @@ report.reportGeneratorMultiLangTexts = {
 
 {% block extra_script %}
 {{block.super}}
-<script>
-    $(function() {noti_datasource.read();});
-</script>
 {% get_current_language as LANGUAGE_CODE %}
 
 {% include "report_inner_template.html" %}
@@ -242,24 +268,24 @@ $(function() {
 
 {% block page_content %}
 
+    <div id="win_report_ajax"></div>
     <div ng-app="Entrak">
-    <div ng-controller="ReportController">
-        <button ng-click="win2.close()" ng-show="win2visible">close</button>
-        <!-- extra height for sub graphs -->
+    <div ng-controller="ReportControllers">
+        <!--<button ng-click="win2.close()" ng-show="win2visible">close</button>
+
         <div kendo-window="win_report" k-visible="false" k-iframe="true"
              k-width="1200" k-height="14000" k-modal="true"
              k-resizable="false" k-draggable="false"
              >
-        </div>
-
+        </div>-->
 
 <div class="summary">
     <div class="row drop-down-panel-header">
         <div class="panel-header-left-menu">
             <h3 panel="monthly-report">
-                <a>{% trans "View Report" %}</a></h3>
-            <h3 panel="download-data"><a>{% trans "Download Data" %}</a></h3>
-                <!-- <h3><a href="{% url 'companies.report-schedule' system_code=systems.0.code %}">{% trans "Automated Reports" %}</a></h3> -->
+                <a>{% trans "View Reports" %}</a></h3><!--
+                --><h3><a href="{% url 'companies.report-schedule' system_code=systems.0.code %}">{% trans "Automated Reports" %}</a></h3>
+                <!-- <h3 panel="download-data"><a>{% trans "Download Data" %}</a></h3> -->
         </div>
     </div>
     <div id="panel-content">
@@ -286,7 +312,7 @@ $(function() {
           <p>{{ get_total_energy_cost_text() }}</p>
           {% endverbatim %}
       </div></div>
-      
+
       {% ifequal LANGUAGE_CODE 'zh-tw' %}
       {% verbatim %}
       <div class="row content end"><div class="col-xs-12">
@@ -304,7 +330,7 @@ $(function() {
       </div></div>
       {% endverbatim %}
       {% endifequal %}
-      
+
     </div>
     <div class="col-xs-3">
       <div class="row time-type"><div class="col-xs-12">
@@ -366,8 +392,8 @@ $(function() {
         <img src="{% static "images/reports/sky.png" %}">
       </div>
       <div id="view_report_btn" class="view-report">
-        <img class="img-button" src="{% static "images/reports/view_report.svg" %}" ng-click="view_report()">
-        <button class="k-button" ng-click="view_report()">{% trans "View Full Report" %}</button>
+        <img class="img-button" src="{% static "images/reports/view_report.svg" %}" ng-click="view_report_ajax()">
+        <button class="k-button" ng-click="view_report_ajax()">{% trans "View Full Report" %}</button>
       </div>
       <div class="flower-bg">
         <img src="{% static "images/reports/flower.png" %}">
@@ -441,7 +467,7 @@ $(function() {
 <!-- end ng-app -->
 <script>
     angular.module("Entrak", [ "kendo.directives" ])
-        .controller("ReportController", function($scope){
+        .controller("ReportControllers", function($scope){
             // var selected_time_type = "month";
             // var start_time;
             // var end_time;
@@ -510,7 +536,7 @@ $(function() {
                 return text;
             }
 
-            $scope.view_report = function() {
+            $scope.view_report_ajax = function() {
                 if (!$scope.summary_report.formated_total_cost) {
                     if ($scope.notf.getNotifications().length == 0){
                       $scope.notf.show('No data', 'error');
@@ -523,17 +549,300 @@ $(function() {
 
                 var report_type = $scope.dateToolbar.getSelectedFromGroup('time').attr('id');
                 if (report_type=='custom') {
-                    var start_date = kendo.toString($scope.report_date_start.value(), 'yyyy-MM-dd')
-                    var end_date = kendo.toString($scope.report_date_end.value(), 'yyyy-MM-dd')
+                    var start_date = kendo.toString($scope.report_date_start.value(), 'yyyy-MM-dd');
+                    var end_date = kendo.toString($scope.report_date_end.value(), 'yyyy-MM-dd');
                 }
                 else {
-                    var start_date = kendo.toString($scope.report_date.getSelectedStartDate(), 'yyyy-MM-dd')
-                    var end_date = kendo.toString($scope.report_date.getSelectedEndDate(), 'yyyy-MM-dd')
+                    var start_date = kendo.toString($scope.report_date.getSelectedStartDate(), 'yyyy-MM-dd');
+                    var end_date = kendo.toString($scope.report_date.getSelectedEndDate(), 'yyyy-MM-dd');
                 }
 
-                $scope.win_report.refresh({ url: '../report/popup-report/?start_date=' + start_date + '&end_date=' + end_date + '&report_type='+report_type});
-                $scope.win_report.open().center();
+                $.ajax({url: '../report/popup-report/?start_date=' + start_date + '&end_date=' + end_date + '&report_type='+report_type, success: function(result){
+                    $("#win_report_ajax").html(result);
+
+                    angular.module('Entraks', ["kendo.directives"]).controller('MyCtrl', ['$scope', function ($scope) {
+                        $scope.onSelect = function(ev) {
+                            var anchor = $(ev.item).data('anchor');
+                            location.href = "#"+anchor;
+                        };
+                    }]);
+
+                    angular.element(tOne).ready(function() {
+                        angular.bootstrap(tOne, ['Entraks']);
+                    });
+
+                    angular.module('Entraks', ["kendo.directives"]).controller('ReportController', ['$scope', function ($scope) {
+                        var date_offset = null;
+                        $scope.cgDatas = cg_ds;
+                        $scope.transformedPieOptions = {
+                            legend: {
+                                visible: false
+                            },
+                            seriesDefaults: {
+                                type: "donut",
+                                labels: {
+                                    template: "#= kendo.format('{0:p0}', percentage)#",
+                                    position: "Center",
+                                    distance: 20,
+                                    visible: true,
+                                    background: "transparent",
+                                    font: "bold 14px Arial",
+                                    color: function(e) {
+                                        return e.dataItem.color;
+                                    },
+                                    border: {
+                                        width: 0,
+                                        color: "white"
+                                    }
+                                },
+                                overlay: {
+                                    gradient: "none"
+                                }
+                            },
+                            plotArea: {
+                                margin: 10
+                            },
+                            chartArea: {
+                                height: 250,
+                                width: 300
+                            },
+                            series: [{
+                                startAngle: 150,
+                                data: pieDataSorted
+                            }],
+                            tooltip: {
+                                visible: true,
+                                format: "{0}%",
+                                template: "#= category #: #= kendo.format('{0:n0}',value) #"
+                            }
+                        };
+
+                        $scope.barOptions = {
+                            dataSource: {
+                                data: barData,
+                                schema: {
+                                    model: {
+                                        fields: {
+                                            datetime: { type: "string"}
+                                        }
+                                    }
+                                }
+                            },
+                            title: {
+                                text: barTitle,
+                                color: "#edbe4a"
+                            },
+                            legend: {
+                                visible: false
+                            },
+                            chartArea: {
+                                background: "",
+                                margin: {top: 20, bottom: 20}
+                            },
+                            seriesDefaults: {
+                                type: "column",
+                                labels: {
+                                    visible: true,
+                                    background: "transparent",
+                                    template: "# if ( value > 0) { # #= kendo.toString(value, 'n0') # # } else { # N/A # } #"
+                                }
+                            },
+                            series: [{
+                                field: "value",
+                                color: "#eab541",
+                                border: {
+                                    width: 0
+                                },
+                                overlay: {
+                                    gradient: "none"
+                                }
+                            }],
+
+                           valueAxis: {
+                                visible: false,
+                                line: {
+                                    visible: false
+                                },
+                                minorGridLines: {
+                                    visible: false
+                                }
+                            },
+                            categoryAxis: {
+                                type: 'category',
+                                field: 'formated_date',
+                                majorTicks: {
+                                    size: 0,
+                                    width: 0
+                                },
+                                majorGridLines: {
+                                    visible: false
+                                }
+                            },
+                            tooltip: {
+                                visible: true,
+                                template: "#= dataItem.month #: #= kendo.toString(value, 'n0') #"
+                            }
+                        };
+
+                        $scope.lineOptions = {
+                            width: 1000,
+                            title: {
+                                text: line_title,
+                                color: "#354960",
+                                font: "bold 1.145em Arial"
+                            },
+                            legend: {
+                                position: "top"
+                            },
+                            chartArea: {
+                                background: "",
+                                margin: {top: 20, bottom: 20}
+                            },
+
+
+                            dataSource: {
+                                data: powers,
+                                group: [{field: "type", dir: "desc"}],
+                                schema:{
+                                    parse:function (response) {
+                                        $.each(response, function (idx, elem) {
+                                            if (elem.datetime && typeof elem.datetime === "string") {
+                                                elem.datetime = kendo.parseDate(elem.datetime);
+                                                if (elem.type == "last") {
+                                                    shift_series_date(elem);
+                                                }
+                                            }
+                                        });
+                                        return response;
+                                    }
+                                }
+                            },
+
+
+                            seriesColors: ["#edba3c", "#047fa1"],
+                            series: [
+                                {
+                                    type: "line",
+                                    markers: {
+                                        visible: false
+                                    },
+                                    // aggregate: "avg",
+                                    name: lineTitle,
+                                    color: "#edba3c",
+                                    field: "value",
+                                    categoryField: "datetime"
+                                }
+                            ],
+
+                            tooltip: {
+                                visible: true,
+                                format: "{0:n0} kWh"
+                            },
+
+                            valueAxis: {
+                                line: {
+                                    visible: false
+                                },
+                                title: {
+                                    text: "kWh",
+                                    color: "#9F9F9F",
+                                    font: "0.9em Arial"
+                                },
+                                minorGridLines: {
+                                    visible: false
+                                }
+                            },
+                            categoryAxis: {
+                                baseUnit: "days",
+                                majorGridLines: {
+                                    visible: false
+                                },
+                                majorTicks: {
+                                    step: line_step,
+                                    size: 0,
+                                    width: 0
+                                },
+                                labels: line_labels
+                            }
+
+                        };
+
+                        $scope.subLineOptions = {
+                            legend: {
+                                position: "top"
+                            },
+                            chartArea: {
+                                background: "",
+                                margin: {bottom: 20}
+                            },
+
+
+                            // seriesColors: ["#047fa1", "#edba3c"],
+                            seriesDefaults:
+                            {
+                                type: 'line',
+                                format: '{0:n0}',
+                                labels: {
+                                    visible: false
+                                },
+                                field: 'value',
+                                categoryField: 'datetime',
+                                markers: {
+                                    visible: false
+                                }
+                            },
+
+                            tooltip: {
+                                visible: true,
+                                format: "{0:n0} kWh"
+                            },
+
+                            valueAxis: {
+                                line: {
+                                    visible: false
+                                },
+                                title: {
+                                    text: "kWh",
+                                    color: "#9F9F9F",
+                                    font: "0.9em Arial"
+                                },
+                                minorGridLines: {
+                                    visible: false
+                                }
+                            },
+                            categoryAxis: {
+                                baseUnit: "days",
+                                majorGridLines: {
+                                    visible: false
+                                },
+                                majorTicks: {
+                                    step: line_step,
+                                    size: 0,
+                                    width: 0
+                                },
+                                labels: line_labels
+                            }
+
+                        };
+
+                    }]);
+
+                    angular.element(tTwo).ready(function() {
+                        angular.bootstrap(tTwo, ['Entraks']);
+                        $(".grey_layer").css("height",$("#win_report_ajax").css("height"));
+                    });
+                }});
+
+                $("#win_report_ajax").fadeIn(function(){
+                    $("html, body").animate({ scrollTop: 0 }, "slow");
+                });
+                $(".grey_layer").fadeIn();
             }
+
+            $(".grey_layer").click(function(){
+                $("#win_report_ajax").fadeOut();
+                $(".grey_layer").fadeOut();
+            });
 
             var summary_report_ds = new kendo.data.DataSource({
                 transport: {
@@ -697,18 +1006,15 @@ $(function() {
 
                 $scope.compare_to_text = "Compare to last peroid";
             }
-        })
+        });
 
 
 </script>
 <script>
-    // hack for close window when click outside
-    $(document).on('click', '.k-overlay', function () {
-        var kendoWindow = $('.k-window-content.k-content', $(this).next('div.k-widget.k-window'));
-        if (kendoWindow == null || kendoWindow.length == 0) {
-            return;
-        }
-        kendoWindow.data('kendoWindow').close();
+    $(window).scroll(function (event) {
+        var scroll = $(window).scrollTop();
+        $("#tOne").parent().css("top",scroll);
+        $(".grey_layer").css("height",$("#win_report_ajax").css("height"));
     });
 </script>
 {% endblock %}

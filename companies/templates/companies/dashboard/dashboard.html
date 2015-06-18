@@ -54,28 +54,46 @@
 {% block page_content %}
 
 {% ifequal LANGUAGE_CODE 'zh-tw' %}
-<div class="container chinese" ng-app="Entrak">
+<div id="dashboardController" class="container chinese" ng-app="Entrak" ng-controller="Dashboard">
 {% else %}
-<div class="container" ng-app="Entrak">
+<div id="dashboardController" class="container" ng-app="Entrak" ng-controller="Dashboard">
 {% endifequal %}
-    <div ng-cloak class="row">
-        <div class="col-md-8">
-            {% include "companies/dashboard/widgets/_real_time.html" with widget_id=4 %}
+    <div ng-cloak class="dashboard-toolbar row" style="display: none;">
+        <div class="pull-right buttons-wrap">
+            <button class="k-button" ng-click="setFullscreenMode()"></button>
         </div>
-        <div class="col-md-4">
-            {% include "companies/dashboard/widgets/_tips.html" with widget_id=3 %}
+        <!--for drag and drop-->
+        <div id="widgetContainer" style="display: none;" class="widget-icon" kendo-sortable="widgetContainer" k-options="iconSortableOpt">
+            <div class="col-md-8 col-xs-12 realTimeIcon" data-widgetId="4">
+                 {% include "companies/dashboard/widgets/_real_time.html" with widget_id=4  %}
+            </div>
+            <div class="col-md-4 col-xs-6 tipsIcon" data-widgetId="3">
+                {% include "companies/dashboard/widgets/_tips.html" with widget_id=3 %}
+            </div>
+            <div class="col-md-4 col-xs-6 biggestConsumerIcon" data-widgetId="1">
+              {% include "companies/dashboard/widgets/_biggest_consumers.html" with widget_id=1 %}
+            </div>
+            <div class="col-md-4 col-xs-6 soFarIcon" data-widgetId="2">
+              {% include "companies/dashboard/widgets/_so_far.html" with widget_id=2 %}
+            </div>
+            <div class="col-md-4 col-xs-6 lastWeekStatsIcon" data-widgetId="5">
+              {% include "companies/dashboard/widgets/_last_week_stats.html" with widget_id=5 %}
+            </div>
+            <div class="col-md-4 col-xs-6 progressIcon" data-widgetId="6">
+              {% include "companies/dashboard/widgets/_progress.html" with widget_id=6 %}
+            </div>
+            <div class="col-md-4 col-xs-6 cumulativeIcon" data-widgetId="7">
+              {% include "companies/dashboard/widgets/_cumulative_savings.html" with widget_id=7 %}
+            </div>
+            <div class="col-md-4 col-xs-6 goalTrackingIcon" data-widgetId="8">
+              {% include "companies/dashboard/widgets/_goal_tracking.html" with widget_id=8 %}
+            </div>
         </div>
     </div>
-    <div ng-cloak class="row">
-        <div class="col-md-4">
-          {% include "companies/dashboard/widgets/_biggest_consumers.html" with widget_id=1 %}
-        </div>
-        <div class="col-md-4">
-          {% include "companies/dashboard/widgets/_so_far.html" with widget_id=2 %}
-        </div>
-        <div class="col-md-4">
-          {% include "companies/dashboard/widgets/_last_week_stats.html" with widget_id=5 %}
-        </div>
+
+    <!--for drag and drop-->
+    <div ng-cloak id="dashboardContainer" kendo-sortable="dashboardContainer" k-options="dashboardSortableOpt" class="row">
+    <!-- <div ng-cloak id="dashboardContainer" class="row"> -->
     </div>
 </div>
 
@@ -94,9 +112,28 @@
 
     var ngapp = angular.module("Entrak", [ "kendo.directives" ]);
 
+    ngapp.directive("onLastRepeat", function(){
+        return function(scope, element, attrs){
+            if (scope.$last){
+                setTimeout(function(){scope.$emit('onRepeatEnd', element, attrs);},1);
+            }
+        }
+    });
+
     ngapp.filter('abs', function () {
         return function(val) {
             return Math.abs(val);
+        }
+    });
+
+    ngapp.filter('dateFmt', function () {
+        return function(val, fmtStr) {
+            if (!val){
+                return "";
+            } else if (!fmtStr){
+                return kendo.toString(val, "D");
+            }
+            return kendo.toString(val, fmtStr);
         }
     });
 
@@ -114,6 +151,166 @@
         }
     });
 
+    ngapp.controller("Dashboard", function($scope){
+        //fullscren btn action
+        $("#exit-fullscreen-btn").click(function(){
+            $("body").removeClass("fullscreen");
+            //TODO uncomment it when drag and drop ready
+            // $("#dashboardController .disableSort").removeClass("disableSort");
+            angular.element($("#dashboardController")).scope().updateWidget();
+            angular.element($("#dashboardController")).scope().autoToggle(false);
+            $("#fullscreen-btn").show();//TODO remove this when the btn is moved back to the widget icon bar
+        });
+        $("#fullscreen-btn").click(function(){
+            angular.element($("#dashboardController")).scope().setFullscreenMode();
+            $("#fullscreen-btn").hide();
+        });
+        $("#fullscreen-btn").show();
+        $scope.setFullscreenMode = function(){
+            $("body").addClass("fullscreen");
+            $("#dashboardContainer>div").addClass("disableSort");
+            $scope.updateWidget();
+            $scope.autoToggle(true);
+        };
+
+        //update widgets when resize
+        var rtime = new Date();
+        var timeout = false;
+        var delta = 200;
+        $(window).on('resize', function(){
+            rtime = new Date();
+            if (timeout == false){
+                timeout = true;
+                setTimeout(resizeUpdate, delta);
+            }
+        });
+        function resizeUpdate(){
+            if (new Date() - rtime < delta){
+                setTimeout(resizeUpdate, delta);
+            } else {
+                timeout = false;
+                console.log("resize end");
+                if ($("body").hasClass("fullscreen")){  //fix height for non-fullscreen, no need update chart
+                    angular.element($("#dashboardController")).scope().updateWidget();
+                }
+            }
+        }
+
+        //update all widget if e is null
+        //setTimeout to prevent incorrect graph size (drag last week stats)
+        $scope.updateWidget = function(e){
+            setTimeout(function(){
+                var widget;
+                if (e == null){
+                    widget = $("#dashboardContainer .widget-container");
+                } else {
+                    widget = [e.item.children()];
+                }
+
+                var wScope = null;
+                for (var i=0; i<widget.length; i++){
+                    wScope = angular.element(widget[i]).scope();
+                    if (wScope && typeof wScope.updateWidgetImpl == "function"){
+                        if (!wScope.$$phase){
+                            wScope.$apply(function(){
+                                wScope.updateWidgetImpl();
+                            });
+                        } else {
+                            wScope.updateWidgetImpl();
+                        }
+                    }
+                }
+            }, 50);
+        }
+
+        //auto toggle widget
+        var autoToggleTimer = null;
+        $scope.autoToggle = function(isAuto){
+            if (isAuto){
+                autoToggleTimer = setInterval(autoToggleCore, 10000, isAuto);
+            } else {
+                clearInterval(autoToggleTimer);
+                autoToggleCore(isAuto);
+            }
+        }
+        function autoToggleCore(isAuto){
+            var widget = $("#dashboardContainer .widget-container");
+            var wScope = null;
+            for (var i=0; i<widget.length; i++){
+                wScope = angular.element(widget[i]).scope();
+                if (wScope && typeof wScope.autoToggleImpl == "function"){
+                    if (!wScope.$$phase){
+                        wScope.$apply(function(){
+                            wScope.autoToggleImpl(isAuto);
+                        });
+                    } else {
+                        wScope.autoToggleImpl(isAuto);
+                    }
+                }
+            }
+        }
+
+        //TODO load user saved layout from server
+        //set timeout so that the widget can be initialized first
+        var userLayout = [1, 2, 3, 4, 5];
+        setTimeout(function(){
+            for (var i=0; i<userLayout.length; i++){
+                $("#dashboardContainer").append($("#widgetContainer div[data-widgetId='" + userLayout[i] + "']").detach());
+            }
+            //TODO remove below line when drag and drop ready
+            $("#dashboardContainer>div").addClass("disableSort");
+        }, 1);
+
+        //get current widget order
+        $scope.getWidgetOrder = function(){
+            var order = [];
+            var items = $scope.dashboardContainer.items();
+            var tmp;
+            for (var i=0; i<items.length; i++){
+                order.push(items.eq(i).attr("data-widgetId"));
+            }
+
+            return order;
+        }
+
+        $scope.dashboardSortableOpt = {
+            // cursor: "url('/static/images/dashboard/grabbing.cur'), default",
+            connectWith: "#widgetContainer",
+            handler: ".widget-header *:not(.k-dropdown *, button)",
+            disabled: ".disableSort",
+            end: function(e){
+                if (e.action != "remove"){
+                    $scope.updateWidget(e);
+                }
+            },
+            change: function(e){
+                console.log("call save layout = " + JSON.stringify($scope.getWidgetOrder()));
+                //TODO save layout change to server
+            },
+            cancel: function(e){
+                $scope.updateWidget(e);
+            },
+            hint: function(element){
+                return element.clone().width(element.outerWidth()).height(element.outerHeight());
+            },
+            placeholder: function(element){
+                return element.clone().css({"opacity": 0.3});
+            }
+        };
+
+        $scope.iconSortableOpt = {
+            // cursor: "url('/static/images/dashboard/grabbing.cur'), default",
+            connectWith: "#dashboardContainer",
+            hint: function(element){
+                return $('<div class="widget-icon"><div class="' + element.attr("class") + '"></div>');
+            },
+            placeholder: function(element){
+                return element.clone().css({"opacity": 0.3});
+            }
+        };
+
+    });
+
     ngapp.controller("WidgetRealtime", function($scope) {
         $scope.title = '{% trans "Real-Time" %}';
         $scope.btnLeft = '{% trans "Graph" %}';
@@ -122,7 +319,9 @@
         $scope.axisToday = '{% trans "Today" %}';
         $scope.axisLast = '{% trans "Last week" %}';
         $scope.perDay = '{% trans "per day" %}';
+        $scope.yAxisTitle = '{{current_system.money_unit.name}}';
 
+        var autoReloadTimer = null;
         var today_measures = [];
         var last_week_measures = [];
         for (var i = 0; i < 24; i++) last_week_measures[i] = null;
@@ -151,7 +350,6 @@
             }
         });
 
-
         // Reference from https://www.youtube.com/watch?feature=player_embedded&v=hrLt0Y9QAY8
         $("#stageMoney,#stageCO2").css({ // Set the transform origin so we always scale to the top left corner of the stage
             "transform-origin":"0 0",
@@ -173,7 +371,6 @@
 
             var desiredWidth = Math.round(parentWidth * 1); // Set the new width of the stage as it scales
             var desiredHeight = Math.round(parentHeight * 1); // Set the new height of the stage as it scales
-
             var rescaleWidth = (desiredWidth / stageWidth); // Set a variable to calculate the new width of the stage as it scales
             var rescaleHeight = stageHeight > 0 ? (desiredHeight / stageHeight) : rescaleWidth; // Set a variable to calculate the new height of the stage as it scales
 
@@ -186,10 +383,10 @@
             stage.css('-o-transform', 'scale(' + rescaleWidth + ', ' + rescaleHeight + ')');
         }
 
-        $(window).on('resize', function(){
+        function resizeAmination() {
             scaleStage("stageCO2", "animationContainerCO2");
             scaleStage("stageMoney", "animationContainerMoney");
-        });
+        }
 
         $scope.refreshHeader = function(){
             var d = new Date();
@@ -259,11 +456,9 @@
         $.each(hours, function(i, h) { per_hour_measures[h] = null; });
         //$.each(hours, function(i, h) { last_week_measures[h] = h*5+54;per_hour_measures[h] = h*5+123; });
 
-        $scope.realTimeSelect = 'graph';
         $scope.realTimeOptions = {
-            transitions: false,
+            // transitions: false,
             chartArea: {
-                height: 200,
                 margin: 0,
                 background: "#FCFCFC"
             },
@@ -296,7 +491,7 @@
                 labels: {
                     step: 2,
                     font: "0.857em ITCAvantGardeStd-Bk",
-                    padding: { 
+                    padding: {
                      top: 5
                     },
                     color: "#4B4B4B",
@@ -396,32 +591,47 @@
                 $scope.updateTodayMeasure();
             } else {
                 $scope.updateRates();
-                setTimeout(function(){  //without timeout, the parent dimension is incorrect
-                    scaleStage("stageCO2", "animationContainerCO2");
-                    scaleStage("stageMoney", "animationContainerMoney");
-                }, 150);
+                setTimeout(resizeAmination, 150);   //without timeout, the parent dimension is incorrect
             }
             $scope.refreshHeader();
         }
-        $scope.toggle(true);
 
-        // update the chart every 10 sec
-        $scope.refreshHeader();
-        setInterval(function(){
-            $scope.updateTodayMeasure();
+        $scope.updateWidgetImpl = function(){
+            console.log("update real time widget");
+
             $scope.refreshHeader();
-        }, 10000);
+            if ($scope.isGraph){
+                $scope.updateTodayMeasure();
+            } else {
+                resizeAmination();
+            }
+        }
+
+        $scope.autoToggleImpl = function(isAuto){
+            if (isAuto){
+                clearInterval(autoReloadTimer);
+                $scope.toggle(!$scope.isGraph);
+            } else {
+                autoReloadTimer = setInterval($scope.updateWidgetImpl, 60000);
+            }
+        }
+
+        // update the chart every 60 sec
+        $scope.toggle(true);
+        $scope.autoToggleImpl(false);
     });
 
     ngapp.controller("WidgetBiggestConsumers", function($scope){
+        $scope.isWeek = true;
         $scope.title = '{% trans "Biggest Consumers" %}';
         $scope.btnLeft = '{% trans "Week" context "dashboard" %}';
         $scope.btnRight = '{% trans "Month" context "dashboard" %}';
         $scope.changeText = $scope.isWeek ? '{% trans "Change from last week" %}' : '{% trans "Change from last month" %}';
         $scope.energyCost = '{% trans "Energy cost so far" %}';
-        
-        var refreshIntervalId;
-        var refreshPeriod = 30000;
+        $scope.costUnit = '{{current_system.money_unit.name}}';
+
+        var refreshIntervalId = null;
+        var refreshPeriod = 60000;
 
         $scope.consumers = new kendo.data.DataSource({
             transport: {
@@ -449,21 +659,45 @@
 
         $scope.consumers.read().done(function() {$scope.$digest()});
 
-        $scope.isWeek = true;
-        $scope.toggle = function(clickWeek){
+        $scope.toggle = function(isWeek){
+            $scope.isWeek = isWeek;
+            $scope.changeText = $scope.isWeek ? '{% trans "Change from last week" %}' : '{% trans "Change from last month" %}';
 
-            $scope.isWeek = clickWeek;
-            clearInterval(refreshIntervalId);
-
-            var retrieve_type = ($scope.isWeek ? "weekly" : "monthly");
-
-            $scope.consumers.read({type:retrieve_type}).done(function() {$scope.$digest() });
-            refreshIntervalId = setInterval(function() { $scope.consumers.read({type:retrieve_type}) }, refreshPeriod);
+            $scope.updateWidgetImpl();
         };
 
+        function updateUI(){
+            var bars = $(".bc-graph .bar-container .bar").removeClass("animation-bar").width("0%").addClass("animation-bar");
+            var percent;
+            var data = $scope.consumers.data();
+            for (var i=0; i<bars.length; i++){
+                if (data[i].value != null){
+                    percent = 100 * data[i].value / data[0].value;
+                    bars.eq(i).width(percent+"%");
+                }
+            }
+        }
+        $scope.$on("onRepeatEnd", updateUI);    //will trigger this every time when data is updated
 
-        refreshIntervalId = setInterval(function() { $scope.consumers.read(); }, refreshPeriod);
+        $scope.updateWidgetImpl = function(){
+            console.log("update biggest consumers widget");
+            if ($scope.isWeek){
+                $scope.consumers.read({type: "weekly"}).done(function(){$scope.$digest();});
+            } else {
+                $scope.consumers.read({type: "monthly"}).done(function(){$scope.$digest();});
+            }
+        };
 
+        $scope.autoToggleImpl = function(isAuto){
+            if (isAuto){
+                clearInterval(refreshIntervalId);
+                $scope.toggle(!$scope.isWeek);
+            } else {
+                refreshIntervalId = setInterval($scope.updateWidgetImpl, refreshPeriod);
+            }
+        }
+
+        $scope.autoToggleImpl(false);
     });
 
     ngapp.controller("WidgetTips", function($scope){
@@ -513,16 +747,21 @@
 
             update();
         }
-    });
 
+        $scope.autoToggleImpl = function(isAuto){
+            if (isAuto){
+                $scope.showNext(1);
+            }
+        }
+    });
 
     ngapp.controller("WidgetSoFar", function($scope){
         $scope.title = '{% trans "Comparison" %}';
         $scope.btnLeft = '{% trans "Week" context "dashboard" %}';
         $scope.btnRight = '{% trans "Month" context "dashboard" %}';
 
-        var refreshIntervalId;
-        var refreshPeriod = 30000;
+        var refreshIntervalId = null;
+        var refreshPeriod = 60000;
 
         var costs = new kendo.data.DataSource({
             transport: {
@@ -560,7 +799,9 @@
                     lastCost.push(data[i].value);
                 }
             }
-            var yMax = Math.max(thisCost[0], lastCost[0]) / 0.85;  //give move space to the text
+
+            var yMax = $(".eu-left-chart").height();
+            yMax = Math.max(thisCost[0], lastCost[0]) * (yMax / (yMax - 35));  //give 35px space to the text above
             $scope.soFarChartThis.setOptions({valueAxis: {max: yMax}}); //use same scale for both chart
             $scope.soFarChartLast.setOptions({valueAxis: {max: yMax}});
             $scope.soFarChartThis.refresh();
@@ -568,7 +809,6 @@
         }
 
         var ca = {
-            height: 230,
             margin: 0,
             background: '#FCFCFC'
         };
@@ -605,6 +845,7 @@
         };
 
         $scope.soFarOptionsThis = {
+            // transitions: false,
             series: [{
                 markers: { visible: true },
                 data: thisCost,
@@ -634,6 +875,7 @@
             categoryAxis: catAxis
         }
         $scope.soFarOptionsLast = {
+            // transitions: false,
             series: [{
                 markers: { visible: true },
                 data: lastCost,
@@ -663,43 +905,54 @@
             categoryAxis: catAxis
         }
 
-
         $scope.isWeek = true;
         var setTitle = function(){
             $scope.leftBoxTitle = $scope.isWeek ? '{% trans "So far this week" %}' : '{% trans "So far this month" %}';
             $scope.rightBoxTitle = $scope.isWeek ? '{% trans "By this time last week" %}' : '{% trans "By this time last month" %}';
         }
-
         setTitle();
 
         $scope.toggle = function(isWeek) {
             $scope.isWeek = isWeek;
             setTitle();
-            clearInterval(refreshIntervalId);
 
             var retrieve_date = new Date();
             var retrieve_type = ($scope.isWeek ? "weekly" : "monthly");
 
             costs.read({datetime:retrieve_date, type:retrieve_type}).then(updateChart);
-            refreshIntervalId = setInterval(function() {
-                costs.read({datetime:retrieve_date, type:retrieve_type}).then(updateChart);
-            }, refreshPeriod);
         }
 
+        $scope.updateWidgetImpl = function(){
+            console.log("update so far widget");
+            if ($scope.isWeek){
+                costs.read({type: "weekly"}).then(updateChart);
+            } else {
+                costs.read({type: "monthly"}).then(updateChart);
+            }
+        }
+
+        $scope.autoToggleImpl = function(isAuto){
+            if (isAuto){
+                clearInterval(refreshIntervalId);
+                $scope.toggle(!$scope.isWeek);
+            } else {
+                refreshIntervalId = setInterval($scope.updateWidgetImpl, refreshPeriod);
+            }
+        }
+
+        //first load
         setTimeout(function(){
             if (angular.isDefined($scope.soFarChartThis) && angular.isDefined($scope.soFarChartLast)){
-                costs.read().then(updateChart);
+                $scope.updateWidgetImpl();
             } else {
                 $scope.$watchGroup(["soFarChartThis", "soFarChartLast"], function(nVal, oVal, scope){
                     if (angular.isDefined(nVal[0]) && angular.isDefined(nVal[1])){
-                        costs.read().then(updateChart);
+                        $scope.updateWidgetImpl();
                     }
                 });
             }
         }, 300);
-        refreshIntervalId = setInterval(function() {
-            costs.read().then(updateChart);
-        }, refreshPeriod);
+        refreshIntervalId = setInterval($scope.updateWidgetImpl, refreshPeriod);
     });
 
     ngapp.controller("WidgetLastWeekStats", function($scope){
@@ -739,8 +992,11 @@
         $scope.percentage_change = 0;
         $scope.isWeekday = true;
 
-        function updateChart() {
+        $scope.updateWidgetImpl = function(){
+            $scope.lastWeekStatChart.refresh();
+        }
 
+        function updateChart() {
             if ($scope.isWeekday) {
                 $scope.lastWeekStatChart.setOptions({valueAxis: {max: dayMaxStep, majorUnit: dayStep}});
                 $scope.lastWeekStatChart.dataSource.data(dayUsage.data);
@@ -765,7 +1021,6 @@
                 data: []
             },
             chartArea: {
-                height: 190,
                 margin: 0,
                 background: "#FCFCFC"
             },
@@ -813,11 +1068,9 @@
                 labels: {
                     font: "0.857em ITCAvantGardeStd-Bk",
                     color: "#4B4B4B",
-
-        dateFormats: {
-            days: "ddd"
-        }
-    
+                    dateFormats: {
+                        days: "ddd"
+                    }
                 },
                 line: {
                     color: "#ECECEC",
@@ -880,9 +1133,17 @@
             }
         }, 300);
 
-        $scope.toggle = function() {
-            $scope.isWeekday = !$scope.isWeekday;
-            updateChart();
+        $scope.toggle = function(isWkDay) {
+            if (isWkDay != $scope.isWeekday){
+                $scope.isWeekday = isWkDay;
+                updateChart();
+            }
+        }
+
+        $scope.autoToggleImpl = function(isAuto){
+            if (isAuto){
+                $scope.toggle(!$scope.isWeekday);
+            }
         }
 
         $scope.moreLessText = function(percentage_change){
@@ -893,6 +1154,210 @@
             return  ($scope.isWeekday) ? '{% trans "average weekday" %}' : '{% trans "average overnight" %}';
         };
     });
+
+    ngapp.controller("WidgetProgress", function($scope){
+        $scope.isPast12Month = "1";
+        $scope.percent = 14;
+        $scope.lastYear = 2014;
+
+        $scope.isIncrease = $scope.percent > 0;
+        $scope.percent = Math.abs($scope.percent);
+
+        $scope.title = '{% trans "Progress" %}';
+        $scope.p12BtnText = '{% trans "Past 12 months" %}';
+        $scope.thisYrBtnText = '{% trans "So far this year" %}';
+        $scope.p12DescLine1Text = '{% trans "Over the past 12 months" %}';
+        $scope.thisYrDescLine1Text = '{% trans "So far this year" %}';
+        $scope.increaseLine2Text = '{% trans "you have increased your energy use" %}';
+        $scope.decreaseLine2Text = '{% trans "you have decreased your energy use" %}';
+        $scope.fromBaselineText = '{% trans "from your baseline of" %}';
+        $scope.comparedToText = '{% trans "compared to " %}' + $scope.lastYear;
+        $scope.yearRangeText = $scope.lastYear + ' - ' + ($scope.lastYear + 1);
+
+        function getSoFarThisYearData() {
+            var progress_ds = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        async: false,
+                        url: "{% url 'companies.progesses.so-far-this-year' current_system.code %}",
+                        type: 'GET',
+                        dataType: "json"
+                    }
+                },
+                schema: {
+                    // Fix for single result
+                    data: function(response) {
+                        return [response];
+                    }
+                }
+            });
+
+            progress_ds.read();
+            var progress = progress_ds.data()[0];
+            return progress;
+        }
+
+        function getComparedToBaselineData() {
+            var progress_ds = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        async: false,
+                        url: "{% url 'companies.progesses.compare-to-baseline' current_system.code %}",
+                        type: 'GET',
+                        dataType: "json"
+                    }
+                },
+                schema: {
+                    // Fix for single result
+                    data: function(response) {
+                        return [response];
+                    }
+                }
+            });
+
+            progress_ds.read();
+            var progress = progress_ds.data()[0];
+            return progress;
+        }
+
+        $scope.changeProgressOption = function(e) {
+            if ($scope.progressDropdown.value() == 'pass12Months' ) {
+                progress = getComparedToBaselineData();
+            }
+            else if ($scope.progressDropdown.value() == 'soFarThisYear' ) {
+                progress = getSoFarThisYearData();
+            }
+
+            $scope.progress = progress;
+        };
+
+        $scope.progress = getSoFarThisYearData();
+    });
+
+    ngapp.controller("WidgetCumulative", function($scope){
+        $scope.isPast12Month = "1";
+        $scope.sinceDate = new Date();
+        $scope.baselineYear = "2014 - 15";
+        $scope.currencyUnit = "HKD";
+        $scope.savedAmt = 2345;
+        $scope.co2Amt = 3;
+        $scope.isSaved = false;
+
+        $scope.title = '{% trans "Cumulative Savings" %}';
+        $scope.p12BtnText = '{% trans "Past 12 months" %}';
+        $scope.thisYrBtnText = '{% trans "So far this year" %}';
+        $scope.p12HeaderText = '{% trans "Since " %}' + kendo.toString($scope.sinceDate, "D") + '{% trans " you have" %}';
+        $scope.thisYrHeaderText = '{% trans "So far this year you have" %}';
+        $scope.footerText = '{% trans "Compared with your baseline year of " %}' + $scope.baselineYear;
+        $scope.savedText1 = $scope.isSaved ? '{% trans "Saved" %}' : '{% trans "Increased" %}';
+        $scope.savedText2 = '{% trans "on energy costs" %}';
+        $scope.reducedText1 = $scope.isSaved ? '{% trans "Reduced" %}' : '{% trans "Increased" %}';
+        $scope.tons = '{% trans "Tons" %}';
+
+        // $scope.toggle = function(){
+        //     $scope.isPast12Month = !$scope.isPast12Month;
+        // }
+
+        function getComparedWithBaselineData() {
+            var saving_ds = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        async: false,
+                        url: "{% url 'companies.savings.compare-to-baseline' current_system.code %}",
+                        type: 'GET',
+                        dataType: "json"
+                    }
+                },
+                schema: {
+                    // Fix for single result
+                    data: function(response) {
+                        return [response];
+                    }
+                }
+            });
+            saving_ds.read();
+            var saving = saving_ds.data()[0];
+            saving.costChangedDescText = saving.totalCostChanged > 0 ? '{% trans "Lost" %}' : '{% trans "Saved" %}';
+            saving.co2ChangedDescText = saving.co2Changed > 0 ? '{% trans "Increased" %}' : '{% trans "Reduced" %}';
+
+            return saving;
+        }
+
+        function getPast12MonthData() {
+            var saving_ds = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        async: false,
+                        url: "{% url 'companies.savings.so-far-this-year' current_system.code %}",
+                        type: 'GET',
+                        dataType: "json"
+                    }
+                },
+                schema: {
+                    // Fix for single result
+                    data: function(response) {
+                        return [response];
+                    }
+                }
+            });
+
+            saving_ds.read();
+            var saving = saving_ds.data()[0];
+            saving.costChangedDescText = saving.totalCostChanged > 0 ? '{% trans "Lost" %}' : '{% trans "Saved" %}';
+            saving.co2ChangedDescText = saving.co2Changed > 0 ? '{% trans "Increased" %}' : '{% trans "Reduced" %}';
+
+            return saving;
+        }
+
+        $scope.changeCumulativeOption = function(e) {
+            var saving;
+            if ($scope.cumulativeDropdown.value() == 'sinceUsingEntrak' ) {
+                saving = getComparedWithBaselineData();
+            }
+            else if ($scope.cumulativeDropdown.value() == 'soFarThisYear' ) {
+                saving = getPast12MonthData();
+            }
+
+            // saving.costChanged = 0;
+            $scope.saving = saving;
+        }
+
+
+        var saving = getPast12MonthData();
+        $scope.saving = saving;
+    });
+
+    ngapp.controller("WidgetGoalTracking", function($scope){
+        $scope.selectedGoal = "0";
+        $scope.changeGoal = function(){
+            console.log($scope.selectedGoal);
+
+            $scope.compareDate = new Date();
+            $scope.fromDate = new Date();
+            $scope.toDate = new Date();
+            $scope.goalPercent = 10;
+            $scope.soFarPercent = 14;
+            $scope.todoPercent = 6;
+            $scope.isIncrease = true;
+            $scope.reducedText = $scope.isIncrease ? '{% trans "increased" %}' : '{% trans "reduced" %}';
+        }
+        $scope.changeGoal();
+
+        $scope.title = '{% trans "Goal Tracking" %}';
+        $scope.p12BtnText = '{% trans "Past 12 months" %}';
+        $scope.btnText = '{% trans "Goal-1" %}';
+        $scope.descPart1Text = '{% trans "Reduce energy use in " %}';
+        $scope.descPart2Text = '{% trans "by " %}';
+        $scope.descPart3Text = '{% trans " compared to " %}';
+        $scope.secondRowPart1Text = '{% trans "So far you have " %}';
+        $scope.secondRowPart2Text = '{% trans "your energy use by" %}';
+        $scope.thirdRowPart1Text = '{% trans "To meet your goal, you need to use" %}';
+        $scope.thirdRowPart2Text = '{% trans "% less" %}';
+        $scope.thirdRowPart3Text = '{% trans "from " %}';
+        $scope.thirdRowPart4Text = '{% trans " to " %}';
+
+    });
+
 </script>
 
 {% endblock %}

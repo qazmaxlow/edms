@@ -7,7 +7,7 @@ from . import report_views
 from . import dashboard_views
 from . import apis
 from . import measure_views, export_views, report_schedule_views
-from .views import system_views, user_views
+from .views import system_views, user_views, progress_views, saving_views, goal_views
 
 
 router = routers.DefaultRouter()
@@ -29,6 +29,11 @@ urlpatterns = patterns(
     url(r'^measures/total/$', measure_views.TotalDetail.as_view(), name='companies.measures.total'),
     url(r'^measures/top_three/$', measure_views.TopThreeConsumersList.as_view(), name='companies.measures.top-three'),
     url(r'^measures/last_week_stats/$', measure_views.LastWeekDailyCostList.as_view(), name='companies.measures.last-week-stats'),
+    url(r'^progresses/so-far-this-year/$', progress_views.progressSoFarThisYear.as_view(), name='companies.progesses.so-far-this-year'),
+    url(r'^progresses/compare-to-baseline/$', progress_views.progressCompareToBaseline.as_view(), name='companies.progesses.compare-to-baseline'), 
+    url(r'^goal/tracking/$', goal_views.goalTracking.as_view(), name='companies.goal.tracking'),
+    url(r'^savings/so-far-this-year/$', saving_views.savingSoFarThisYear.as_view(), name='companies.savings.so-far-this-year'),
+    url(r'^savings/compare-to-baseline/$', saving_views.compareToBaseline.as_view(), name='companies.savings.compare-to-baseline'),
     url(r'^export/$', export_views.ExportView.as_view(), name='companies.export'),
     url(r'^export/download/$', export_views.DownloadView.as_view(), name='companies.export.download'),
     url(r'^report-schedule/$', report_schedule_views.ReportScheduleView.as_view(), name='companies.report-schedule'),
@@ -42,4 +47,6 @@ urlpatterns = patterns(
     url(r'^systems/company-systems/$', system_views.CompanySystemList.as_view(), name='companies.systems.company-systems'),
 
     url(r'^users/authenticated-user/$', user_views.CompanyAuthenticatedUserView.as_view(), name='companies.users.authenticated-user'),
+    url(r'^report/share-report/$', report_views.share_popup_report_view, name='companies.reports.popup-report.custom-dates'),
+    url(r'^report/share-report/(?P<year>\d{4})/(?P<month>[a-z]{3})/$', report_views.share_popup_report_view, name='companies.reports.popup-report'),
 )

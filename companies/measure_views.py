@@ -82,18 +82,21 @@ class EnergyUsedList(generics.ListAPIView):
                 previous_date_start = date_start - relativedelta(months=1)
                 previous_date_end = date_end - relativedelta(months=1)
 
-            current = SourceReadingHour.total_used(source_ids, date_start, date_end)
-            previous = SourceReadingHour.total_used(source_ids, previous_date_start, previous_date_end)
+            # current = SourceReadingHour.total_used(source_ids, date_start, date_end)
+            # previous = SourceReadingHour.total_used(source_ids, previous_date_start, previous_date_end)
 
-            if current:
-                current_reading = current[0]['total']*money_rate.rate
-            else:
-                current_reading = 0
+            current_reading = sys.total_usage(date_start, date_end)['total_money']
+            previous_reading = sys.total_usage(previous_date_start, previous_date_end)['total_money']
 
-            if previous:
-                previous_reading = previous[0]['total']*money_rate.rate
-            else:
-                previous_reading = 0
+            # if current:
+            #     current_reading = current[0]['total']*money_rate.rate
+            # else:
+            #     current_reading = 0
+
+            # if previous:
+            #     previous_reading = previous[0]['total']*money_rate.rate
+            # else:
+            #     previous_reading = 0
 
             json_data = [
                 {'start_datetime': date_start, 'end_datetime': date_end, 'value': current_reading, 'is_today': True},
@@ -123,13 +126,9 @@ class TotalDetail(generics.RetrieveAPIView):
         if _date_end is not None:
             date_end = datetime.datetime.fromtimestamp(int(_date_end)/1000.0, tz=pytz.utc)
 
-        print(date_start)
-        print(date_end)
+        total = sys.total_usage(date_start, date_end)
 
-        total_cost = sys.get_total_cost(date_start, date_end)
-        total_co2 = sys.get_total_co2(date_start, date_end)
-
-        json_data = {'cost': total_cost, 'co2': total_co2}
+        json_data = {'cost': total['total_money'], 'co2': total['total_co2']}
 
         return json_data
 
@@ -150,7 +149,8 @@ class TopThreeConsumersList(generics.ListAPIView):
         if query_dt is not None and query_type in ['weekly', 'monthly']:
 
             json_data = []
-            date_end = dateutil.parser.parse(query_dt).astimezone(pytz.timezone(sys.timezone))
+            dt = datetime.datetime.strptime(query_dt, "%Y-%m-%dT%H:%M:%S.%fZ")
+            date_end = pytz.timezone("UTC").localize(dt).astimezone(pytz.timezone(sys.timezone))
 
             if query_type == "weekly":
                 date_start = date_end.replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=date_end.isoweekday())
@@ -163,22 +163,25 @@ class TopThreeConsumersList(generics.ListAPIView):
 
             childs = sys.child_systems
 
-            current_money_rate = sys.get_unit_rate(date_end, 'money')
-            previous_money_rate = sys.get_unit_rate(previous_date_end, 'money')
+            # current_money_rate = sys.get_unit_rate(date_end, 'money')
+            # previous_money_rate = sys.get_unit_rate(previous_date_end, 'money')
 
             if childs:
 
                 for child_sys in childs:
-                    c_cost = SourceReadingDay.total_used([s.id for s in child_sys.sources], date_start, date_end)
-                    p_cost = SourceReadingHour.total_used([s.id for s in child_sys.sources], previous_date_start, previous_date_end)
+                    # c_cost = SourceReadingDay.total_used([s.id for s in child_sys.sources], date_start, date_end)
+                    # p_cost = SourceReadingHour.total_used([s.id for s in child_sys.sources], previous_date_start, previous_date_end)
 
-                    if c_cost:
-                        cost_now = c_cost[0]['total']*current_money_rate.rate
+                    c_cost = child_sys.total_usage(date_start, date_end)
+                    p_cost = child_sys.total_usage(previous_date_start, previous_date_end)
+
+                    if c_cost['total_money'] > 0:
+                        cost_now = c_cost['total_money']
                     else:
                         cost_now = None
 
-                    if p_cost:
-                        cost_before = p_cost[0]['total']*previous_money_rate.rate
+                    if p_cost ['total_money'] > 0:
+                        cost_before = p_cost['total_money']
                         percentage_change = 100*((cost_now or 0) - cost_before)/float(cost_before)
                     else:
                         cost_before = None
@@ -188,20 +191,20 @@ class TopThreeConsumersList(generics.ListAPIView):
 
             else:
 
-                current_cost = sys.get_total_cost_with_source_id(date_start, date_end)
-                previous_cost = sys.get_total_cost_with_source_id(previous_date_start, previous_date_end)
+                current_cost = sys.total_usage_by_source_id(date_start, date_end)
+                previous_cost = sys.total_usage_by_source_id(previous_date_start, previous_date_end)
 
                 for s in sys.sources:
-                    c_cost = [c for c in current_cost if c['source_id'] == s.id]
-                    p_cost = [p for p in previous_cost if p['source_id'] == s.id]
 
-                    if c_cost:
-                        cost_now = c_cost[0]['cost']
+                    source_id = s.id
+
+                    if source_id in current_cost and current_cost[source_id] > 0:
+                        cost_now = current_cost[source_id]
                     else:
                         cost_now = None
 
-                    if p_cost:
-                        cost_before = p_cost[0]['cost']
+                    if source_id in previous_cost and previous_cost[source_id] > 0:
+                        cost_before = previous_cost[source_id]
                         percentage_change = 100*((cost_now or 0) - cost_before)/float(cost_before)
                     else:
                         cost_before = None

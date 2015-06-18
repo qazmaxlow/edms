@@ -77,7 +77,7 @@ sup {
 
 .login-panel {
     width: 460px;
-    height: 255px;
+    height: 290px;
     margin-left: auto;
     margin-right: auto;
     border-top-left-radius: .6em;
@@ -176,4 +176,52 @@ div.remember-me {
     height: 20px;
     padding-top: 15px;
     padding-bottom: 0px;
+    font-size: 14px;
+    color: #354960;
+}
+
+div.forget-pwd-container {
+    height: 20px;
+    padding-top: 15px;
+    padding-bottom: 0px;
+    font-size: 14px;
+    color: #354960;
+}
+
+a.forget-pwd-link {
+    color: #354960;
+}
+
+.forget-pwd-wrapper {
+    font-size: 14px;
+}
+
+.forget-pwd-wrapper .k-window-title {
+    font-size: 1em;
+    font-weight: 500;
+}
+
+.forget-pwd-wrapper .title-text {
+    text-align: center;
+    font-size: 1em;
+    color: #354960;
+    font-weight: 600;
+    margin: 15px 0;
+}
+
+.forget-pwd-wrapper .buttons-wrap {
+    text-align: center;
+    padding-top: 15px;
+}
+
+.forget-pwd-wrapper #msgBox {
+    margin-top: 12px;
+    text-align: center;
+    font-size: 1.071em;
+    font-weight: 500;
+    color: #FDB913;
+}
+
+.forget-pwd-wrapper #msgBox.error-text{
+    color: #e05d5d;
 }
