@@ -552,6 +552,11 @@ class System(models.Model):
         int_start_dt = int(start_dt.strftime("%Y%m%d"))
         int_end_dt = int(end_dt.strftime("%Y%m%d"))
 
+        if source_ids:
+            object_ids = [ObjectId(s) for s in source_ids]
+        else:
+            object_ids = [s.id for s in self.sources]
+
         current_db_conn = connection.get_db()
         aggregate_pipeline = [
             { "$match":
@@ -559,6 +564,7 @@ class System(models.Model):
                     {"overnight_date": {"$gte": int_start_dt}},
                     {"overnight_date": {"$lt": int_end_dt}},
                     {"parent_systems": {"$elemMatch": {"sid": self.id}}},
+                    {"source_id": {"$in": object_ids}},
                 ]}},
             { "$project": {"_id": 1, "overnight_date": 1, "overnight_total": 1, "rate_co2": 1, "rate_money": 1}},
             {
@@ -570,9 +576,6 @@ class System(models.Model):
                 }
             }
         ]
-
-        if source_ids:
-            aggregate_pipeline[0]["$match"]["$and"].append({"source_id": {"$in": [ObjectId(s) for s in source_ids]}})
 
         result =  current_db_conn.electricity.aggregate(aggregate_pipeline)
 
@@ -586,11 +589,16 @@ class System(models.Model):
             return 0
 
 
-    def total_usage(self, start_dt, end_dt):
+    def total_usage(self, start_dt, end_dt, source_ids=None):
 
         current_db_conn = connection.get_db()
-        minute = 0
 
+        if source_ids:
+            object_ids = [ObjectId(s) for s in source_ids]
+        else:
+            object_ids = [s.id for s in self.sources]
+
+        minute = 0
         minute = end_dt.minute
         end_dt = end_dt.replace(minute=0, second=0, microsecond=0)
 
@@ -600,6 +608,7 @@ class System(models.Model):
                     {"datetime_utc": {"$gte": start_dt}},
                     {"datetime_utc": {"$lt": end_dt}},
                     {"parent_systems": {"sid": self.id}},
+                    {"source_id": {"$in": object_ids}},
                 ]}},
             { "$project": {"total": 1, "rate_co2": 1, "rate_money": 1}},
             {
@@ -634,8 +643,13 @@ class System(models.Model):
         # print('{0:-^80}'.format(' start_dt: ' + start_dt.strftime('%Y-%m-%d %H:%M:%S') + ' | end_dt: ' + end_dt.strftime('%Y-%m-%d %H:%M:%S') + ' '))
 
         current_db_conn = connection.get_db()
-        minute = 0
 
+        if source_ids:
+            object_ids = [ObjectId(s) for s in source_ids]
+        else:
+            object_ids = [s.id for s in self.sources]
+
+        minute = 0
         minute = end_dt.minute
         end_dt = end_dt.replace(minute=0, second=0, microsecond=0)
 
@@ -645,6 +659,7 @@ class System(models.Model):
                     {"datetime_utc": {"$gte": start_dt}},
                     {"datetime_utc": {"$lt": end_dt}},
                     {"parent_systems": {"sid": self.id}},
+                    {"source_id": {"$in": object_ids}},
                 ]}},
             { "$project": {"_id": 1, "source_id": 1, "total": 1, "rate_co2": 1, "rate_money": 1}},
             {
