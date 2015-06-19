@@ -222,7 +222,7 @@ class System(models.Model):
         night_end_hour_min = self.night_time_end.hour*100 + self.night_time_end.minute
         datetime_hour_min = datetime_in_current_tz.hour*100 + datetime_in_current_tz.minute
 
-        if night_start_hour_min <= 1200:
+        if night_start_hour_min < night_end_hour_min:
             # datetime_in_current_tz BETWEEN the night time start and end hours
             # prevent miscalcuation when night time start is after 00:00am
             if (night_start_hour_min <= datetime_hour_min < night_end_hour_min):
@@ -497,7 +497,7 @@ class System(models.Model):
             unit_rate_co2 = self.get_unit_rate(r.datetime, CO2_CATEGORY_CODE)
             unit_rate_money = self.get_unit_rate(r.datetime, MONEY_CATEGORY_CODE)
 
-            hour_total = 0
+            minute_readings = 0
 
             try:
                 e = Electricity.objects.get(
@@ -514,11 +514,12 @@ class System(models.Model):
                     )
                 newly_created = True
 
-            e.total = r.value
+            e.total = 0
             e.overnight_total = 0
 
             if overnight_date:
                 e.overnight_date = int(overnight_date.strftime("%Y%m%d"))
+
             e.hour_detail = copy.deepcopy(hour_detail)
             e.parent_systems = [SystemId(sid=s.id) for s in parent_systems]
 
@@ -532,12 +533,18 @@ class System(models.Model):
 
             for m in minutes:
                 overnight = self.validate_overnight(m.datetime.astimezone(system_tz))
-                hour_total += m.value
-                if overnight:
-                    e.overnight_total = hour_total
-                e.hour_detail['m%02d'%m.datetime.minute] = m.value
 
-            if hour_total > 0 :
+                if m.value > 0:
+                    minute_readings += 1
+                    e.total += m.value
+                    e.hour_detail['m%02d'%m.datetime.minute] = m.value
+
+                if overnight:
+                    e.overnight_total = e.total
+
+            e.is_data_completed = (minute_readings == 60)
+
+            if e.total > 0 :
                 e.save()
                 if newly_created:
                     create_count += 1
@@ -641,7 +648,7 @@ class System(models.Model):
         return {"total_money": total_money, "total_co2": total_co2}
 
 
-    def total_usage_by_source_id(self, start_dt, end_dt):
+    def total_usage_by_source_id(self, start_dt, end_dt, source_ids=None):
 
         # print('{0:-^80}'.format(' start_dt: ' + start_dt.strftime('%Y-%m-%d %H:%M:%S') + ' | end_dt: ' + end_dt.strftime('%Y-%m-%d %H:%M:%S') + ' '))
 
@@ -649,8 +656,11 @@ class System(models.Model):
 
         if source_ids:
             object_ids = [ObjectId(s) for s in source_ids]
+            sources = Source.objects(id__in=object_ids)
         else:
-            object_ids = [s.id for s in self.sources]
+            sources = self.sources
+            object_ids = [s.id for s in sources]
+
 
         minute = 0
         minute = end_dt.minute

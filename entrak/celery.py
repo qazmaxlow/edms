@@ -19,6 +19,7 @@ app.conf.update(
     CELERY_TASK_RESULT_EXPIRES=10,
     CELERY_DISABLE_RATE_LIMITS=True,
     CELERY_IGNORE_RESULT=True,
+    CELERY_TIMEZONE = 'Asia/Hong_Kong',
 
     CELERYBEAT_SCHEDULE = {
         'retrieve-reading-every-min': {
@@ -51,7 +52,17 @@ app.conf.update(
         },
         'send-report-by-schedulers': {
             'task': 'companies.tasks.send_report_by_schedulers',
-            'schedule': crontab(),
+            'schedule': crontab(minute='*/10'),
+        },
+        'recap-missing-readings-hourly': {
+            'task': 'egauge.tasks.auto_recap',
+            'schedule': crontab(minute='05,35'),
+            'kwargs': {"mode": "hourly"},
+        },
+        'recap-missing-readings-daily': {
+            'task': 'egauge.tasks.auto_recap',
+            'schedule': crontab(minute='25', hour='0'),
+            'kwargs': {"mode": "daily"},
         },
     },
 
@@ -60,7 +71,7 @@ app.conf.update(
         'egauge.tasks.recover_all_invalid_reading': {'queue': 'recover'},
         'egauge.tasks.recover_min_reading_for_xml_url': {'queue': 'recover'},
         'egauge.tasks.force_retrieve_reading': {'queue': 'recap'},
-        'egauge.tasks.force_retrieve_hour_reading': {'queue': 'recap'},
+        'egauge.tasks.auto_recap': {'queue': 'recap'},
         'alert.tasks.invoke_check_all_alerts': {'queue': 'task_starter'},
     },
 )
