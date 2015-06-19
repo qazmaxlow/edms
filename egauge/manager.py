@@ -29,7 +29,7 @@ class SourceManager:
         pass
 
     @staticmethod
-    def get_grouped_sources(system_codes=None):
+    def get_grouped_sources(system_codes=None, source_object_ids=None):
         current_db_conn = connection.get_db()
         aggregate_pipeline = [
             { "$match": {"active": True, "$or": [{"source_members": {"$exists" : False}}, {"source_members": {"$size" : 0}}]}},
@@ -43,6 +43,8 @@ class SourceManager:
         ]
         if system_codes:
             aggregate_pipeline[0]["$match"]["system_code"] = {"$in": system_codes}
+        if source_object_ids:
+            aggregate_pipeline[0]["$match"]["_id"] = {"$in": source_object_ids}
         result = current_db_conn.source.aggregate(aggregate_pipeline)
 
         return result['result']
@@ -295,11 +297,10 @@ class SourceManager:
         end_timestamp = calendar.timegm(end_time.utctimetuple())
         reading_datetimes = [(end_time - datetime.timedelta(minutes=minute)) for minute in xrange(60)]
 
-        logger.info('force retrieve: %s'%start_time.strftime('%Y-%m-%d %H:%M'))
         for grouped_sources in all_grouped_sources:
             xml_url = grouped_sources['_id']
             sources = grouped_sources['sources']
-            logger.info('force retrieve: %s'%xml_url)
+            logger.info('force retrieve: [start_time: %s], [xml_url: %s]'%(start_time.strftime('%Y-%m-%d %H:%M'), xml_url))
 
             SourceReadingMin.objects(
                 source_id__in=[source['_id'] for source in sources],

@@ -2,8 +2,11 @@ from __future__ import absolute_import
 
 import pytz
 import datetime
+import celery
 from celery import shared_task
+from dateutil.relativedelta import relativedelta
 from .models import Source, SourceReadingMinInvalid
+from meters.models import Electricity
 from .manager import SourceManager
 
 @shared_task(ignore_result=True)
@@ -47,6 +50,58 @@ def force_retrieve_hour_reading(all_grouped_sources, start_dt, hour_idx):
 def force_retrieve_source_with_members_hour_reading(all_sources_with_members, start_dt, hour_idx):
     SourceManager.force_retrieve_source_with_members_hour_reading(all_sources_with_members, start_dt, hour_idx)
 
+
+@shared_task(ignore_result=True)
+def auto_recap(mode="hourly"):
+
+    hk_tz = pytz.timezone('Asia/Hong_Kong')
+    now_dt = datetime.datetime.now(hk_tz).replace(minute=0, second=0, microsecond=0)
+    systems = System.objects.filter(path="")
+
+    if mode == "daily":
+        recap_hours = 24
+    else:
+        recap_hours = 6
+
+    for i in range(recap_hours):
+        end_dt = now_dt - relativedelta(hours=i)
+        start_dt = end_dt - relativedelta(hours=1)
+
+        incomplete_readings = Electricity.objects(
+            is_data_completed=False,
+            datetime_utc__gte=start_dt,
+            datetime_utc__lt=end_dt).only('source_id')
+
+        source_ids = set()
+
+        for r in incomplete_readings:
+            source_ids.add(r.source_id)
+
+
+        for sys in systems:
+            usages = sys.total_usage_by_source_id(start_dt, end_dt)
+            for s in sys.sources:
+                if s.id not in usages.keys() or usages[s.id] == 0:
+                    source_ids.add(s.id)
+
+        sources_without_members = []
+        sources_with_members = []
+
+        sources = Source.objects(id__in=source_ids)
+        for source in sources:
+            if source.source_members:
+                sources_with_members.append(source)
+            else:
+                sources_without_members.append(source)
+
+        if sources_with_members:
+            force_retrieve_source_with_members_hour_reading.delay(sources_with_members, start_dt, 0)
+
+        if sources_without_members:
+            grouped_sources = SourceManager.get_grouped_sources(None, [s.id for s in sources_without_members])
+            force_retrieve_hour_reading.delay(grouped_sources, start_dt, 0)
+
+    return None
 
 import csv
 from ftplib import FTP

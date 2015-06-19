@@ -222,7 +222,7 @@ class System(models.Model):
         night_end_hour_min = self.night_time_end.hour*100 + self.night_time_end.minute
         datetime_hour_min = datetime_in_current_tz.hour*100 + datetime_in_current_tz.minute
 
-        if night_start_hour_min <= 1200:
+        if night_start_hour_min < night_end_hour_min:
             # datetime_in_current_tz BETWEEN the night time start and end hours
             # prevent miscalcuation when night time start is after 00:00am
             if (night_start_hour_min <= datetime_hour_min < night_end_hour_min):
@@ -485,10 +485,8 @@ class System(models.Model):
             datetime__lt=end_dt).order_by('datetime')
 
         hour_detail = HourDetail()
-        es = []
         create_count = 0
         update_count = 0
-
 
         for i in range(60):
             hour_detail['m%02d'%i] = 0.00
@@ -499,7 +497,7 @@ class System(models.Model):
             unit_rate_co2 = self.get_unit_rate(r.datetime, CO2_CATEGORY_CODE)
             unit_rate_money = self.get_unit_rate(r.datetime, MONEY_CATEGORY_CODE)
 
-            hour_total = 0
+            minute_readings = 0
 
             try:
                 e = Electricity.objects.get(
@@ -507,20 +505,21 @@ class System(models.Model):
                         datetime_utc = r.datetime,
                         source_id = r.source_id
                     )
-                update_count += 1
+                newly_created = False
             except Electricity.DoesNotExist:
                 e = Electricity(
                         system_id = self.id,
                         datetime_utc = r.datetime,
                         source_id = r.source_id
                     )
-                create_count += 1
+                newly_created = True
 
-            e.total = r.value
+            e.total = 0
             e.overnight_total = 0
 
             if overnight_date:
                 e.overnight_date = int(overnight_date.strftime("%Y%m%d"))
+
             e.hour_detail = copy.deepcopy(hour_detail)
             e.parent_systems = [SystemId(sid=s.id) for s in parent_systems]
 
@@ -534,12 +533,23 @@ class System(models.Model):
 
             for m in minutes:
                 overnight = self.validate_overnight(m.datetime.astimezone(system_tz))
-                hour_total += m.value
-                if overnight:
-                    e.overnight_total = hour_total
-                e.hour_detail['m%02d'%m.datetime.minute] = m.value
 
-            e.save()
+                if m.value > 0:
+                    minute_readings += 1
+                    e.total += m.value
+                    e.hour_detail['m%02d'%m.datetime.minute] = m.value
+
+                if overnight:
+                    e.overnight_total = e.total
+
+            e.is_data_completed = (minute_readings == 60)
+
+            if e.total > 0 :
+                e.save()
+                if newly_created:
+                    create_count += 1
+                else:
+                    update_count += 1
 
         return (create_count, update_count)
 
@@ -552,6 +562,11 @@ class System(models.Model):
         int_start_dt = int(start_dt.strftime("%Y%m%d"))
         int_end_dt = int(end_dt.strftime("%Y%m%d"))
 
+        if source_ids:
+            object_ids = [ObjectId(s) for s in source_ids]
+        else:
+            object_ids = [s.id for s in self.sources]
+
         current_db_conn = connection.get_db()
         aggregate_pipeline = [
             { "$match":
@@ -559,6 +574,7 @@ class System(models.Model):
                     {"overnight_date": {"$gte": int_start_dt}},
                     {"overnight_date": {"$lt": int_end_dt}},
                     {"parent_systems": {"$elemMatch": {"sid": self.id}}},
+                    {"source_id": {"$in": object_ids}},
                 ]}},
             { "$project": {"_id": 1, "overnight_date": 1, "overnight_total": 1, "rate_co2": 1, "rate_money": 1}},
             {
@@ -570,9 +586,6 @@ class System(models.Model):
                 }
             }
         ]
-
-        if source_ids:
-            aggregate_pipeline[0]["$match"]["$and"].append({"source_id": {"$in": [ObjectId(s) for s in source_ids]}})
 
         result =  current_db_conn.electricity.aggregate(aggregate_pipeline)
 
@@ -586,11 +599,16 @@ class System(models.Model):
             return 0
 
 
-    def total_usage(self, start_dt, end_dt):
+    def total_usage(self, start_dt, end_dt, source_ids=None):
 
         current_db_conn = connection.get_db()
-        minute = 0
 
+        if source_ids:
+            object_ids = [ObjectId(s) for s in source_ids]
+        else:
+            object_ids = [s.id for s in self.sources]
+
+        minute = 0
         minute = end_dt.minute
         end_dt = end_dt.replace(minute=0, second=0, microsecond=0)
 
@@ -600,6 +618,7 @@ class System(models.Model):
                     {"datetime_utc": {"$gte": start_dt}},
                     {"datetime_utc": {"$lt": end_dt}},
                     {"parent_systems": {"sid": self.id}},
+                    {"source_id": {"$in": object_ids}},
                 ]}},
             { "$project": {"total": 1, "rate_co2": 1, "rate_money": 1}},
             {
@@ -629,13 +648,21 @@ class System(models.Model):
         return {"total_money": total_money, "total_co2": total_co2}
 
 
-    def total_usage_by_source_id(self, start_dt, end_dt):
+    def total_usage_by_source_id(self, start_dt, end_dt, source_ids=None):
 
         # print('{0:-^80}'.format(' start_dt: ' + start_dt.strftime('%Y-%m-%d %H:%M:%S') + ' | end_dt: ' + end_dt.strftime('%Y-%m-%d %H:%M:%S') + ' '))
 
         current_db_conn = connection.get_db()
-        minute = 0
 
+        if source_ids:
+            object_ids = [ObjectId(s) for s in source_ids]
+            sources = Source.objects(id__in=object_ids)
+        else:
+            sources = self.sources
+            object_ids = [s.id for s in sources]
+
+
+        minute = 0
         minute = end_dt.minute
         end_dt = end_dt.replace(minute=0, second=0, microsecond=0)
 
@@ -645,6 +672,7 @@ class System(models.Model):
                     {"datetime_utc": {"$gte": start_dt}},
                     {"datetime_utc": {"$lt": end_dt}},
                     {"parent_systems": {"sid": self.id}},
+                    {"source_id": {"$in": object_ids}},
                 ]}},
             { "$project": {"_id": 1, "source_id": 1, "total": 1, "rate_co2": 1, "rate_money": 1}},
             {
