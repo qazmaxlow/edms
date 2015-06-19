@@ -56,12 +56,12 @@ app.conf.update(
         },
         'recap-missing-readings-hourly': {
             'task': 'egauge.tasks.auto_recap',
-            'schedule': crontab(minute='05,35'),
+            'schedule': crontab(minute='25'),
             'kwargs': {"mode": "hourly"},
         },
         'recap-missing-readings-daily': {
             'task': 'egauge.tasks.auto_recap',
-            'schedule': crontab(minute='25', hour='0'),
+            'schedule': crontab(minute='35', hour='0'),
             'kwargs': {"mode": "daily"},
         },
     },

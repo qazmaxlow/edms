@@ -56,6 +56,7 @@ def auto_recap(mode="hourly"):
 
     hk_tz = pytz.timezone('Asia/Hong_Kong')
     now_dt = datetime.datetime.now(hk_tz).replace(minute=0, second=0, microsecond=0)
+    systems = System.objects.filter(path="")
 
     if mode == "daily":
         recap_hours = 24
@@ -74,14 +75,14 @@ def auto_recap(mode="hourly"):
         source_ids = set()
 
         for r in incomplete_readings:
-            source_ids.add(r.soure_id)
+            source_ids.add(r.source_id)
 
-        systems = System.objects.filter(path="")
 
         for sys in systems:
             usages = sys.total_usage_by_source_id(start_dt, end_dt)
-            all_source_ids = set([s.id for s in sys.sources])
-            source_ids = source_ids | (all_source_ids - set(usages.keys()))
+            for s in sys.sources:
+                if s.id not in usages.keys() or usages[s.id] == 0:
+                    source_ids.add(s.id)
 
         sources_without_members = []
         sources_with_members = []
@@ -89,14 +90,16 @@ def auto_recap(mode="hourly"):
         sources = Source.objects(id__in=source_ids)
         for source in sources:
             if source.source_members:
-                sources_with_members.append(source.id)
+                sources_with_members.append(source)
             else:
-                sources_without_members.append(source.id)
+                sources_without_members.append(source)
 
-        #SourceManager.force_retrieve_hour_reading(sources_without_members, start_dt, 0)
-        #SourceManager.force_retrieve_source_with_members_hour_reading(sources_with_members, start_dt, 0)
-        celery.current_app.send_task('egauge.tasks.force_retrieve_hour_reading', args=[sources_without_members, start_dt, 0])
-        celery.current_app.send_task('egauge.tasks.force_retrieve_source_with_members_hour_reading', args=[sources_with_members, start_dt, 0])
+        if sources_with_members:
+            force_retrieve_source_with_members_hour_reading.delay(sources_with_members, start_dt, 0)
+
+        if sources_without_members:
+            grouped_sources = SourceManager.get_grouped_sources(None, [s.id for s in sources_without_members])
+            force_retrieve_hour_reading.delay(grouped_sources, start_dt, 0)
 
     return None
 
