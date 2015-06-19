@@ -301,11 +301,11 @@ $(function() {
   <div class="row">
     <div class="col-xs-3">
       {% verbatim %}
-      <div class="row time-type"><div class="col-xs-12">
+      <div ng-cloak class="row time-type"><div class="col-xs-12">
           {{ get_report_type_name() }}
       </div></div>
       {% endverbatim %}
-      <div class="row content"><div class="col-xs-12">
+      <div ng-cloak class="row content"><div class="col-xs-12">
           <img alt="power" class="icon" src="{% static 'images/reports/energy-icon.svg' %}">
           <h3>{% templatetag openvariable %} summary_report.formated_total_cost || default_null {% templatetag closevariable %}</h3>
           {% verbatim %}
@@ -315,7 +315,7 @@ $(function() {
 
       {% ifequal LANGUAGE_CODE 'zh-tw' %}
       {% verbatim %}
-      <div class="row content end"><div class="col-xs-12">
+      <div ng-cloak class="row content end"><div class="col-xs-12">
           <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_total.icon_path }}">
           <p style="padding:0;margin:0;">{{ get_compare_to_text() }}</p>
           <h3 style="padding-bottom:25px;">{{ summary_report.compare_to_last_total.formated_percent_change || default_null }}</h3>
@@ -323,7 +323,7 @@ $(function() {
       {% endverbatim %}
       {% else %}
       {% verbatim %}
-      <div class="row content end"><div class="col-xs-12">
+      <div ng-cloak class="row content end"><div class="col-xs-12">
           <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_total.icon_path }}">
           <h3>{{ summary_report.compare_to_last_total.formated_percent_change || default_null }}</h3>
           <p>{{ get_compare_to_text() }}</p>
@@ -333,17 +333,17 @@ $(function() {
 
     </div>
     <div class="col-xs-3">
-      <div class="row time-type"><div class="col-xs-12">
+      <div ng-cloak class="row time-type"><div class="col-xs-12">
           {% trans "Weekdays" %}
       </div></div>
-      <div class="row content"><div class="col-xs-12">
+      <div ng-cloak class="row content"><div class="col-xs-12">
           <img alt="power" class="icon" src="{% static 'images/reports/calendar_energy_icon.svg' %}">
           <h3>{% templatetag openvariable %} summary_report.formated_weekday_cost || default_null {% templatetag closevariable %}</h3>
           <p>{% trans "Average weekdays cost" %}</p>
       </div></div>
       {% ifequal LANGUAGE_CODE 'zh-tw' %}
       {% verbatim %}
-      <div class="row content end"><div class="col-xs-12">
+      <div ng-cloak class="row content end"><div class="col-xs-12">
           <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_weekdays.icon_path }}">
           <p style="padding:0;margin:0;">{{ get_compare_to_text() }}</p>
           <h3 style="padding-bottom:25px;">{{ summary_report.compare_to_last_weekdays.formated_percent_change || default_null }}</h3>
@@ -351,7 +351,7 @@ $(function() {
       {% endverbatim %}
       {% else %}
       {% verbatim %}
-      <div class="row content end"><div class="col-xs-12">
+      <div ng-cloak class="row content end"><div class="col-xs-12">
           <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_weekdays.icon_path }}">
           <h3>{{ summary_report.compare_to_last_weekdays.formated_percent_change || default_null }}</h3>
           <p>{{ get_compare_to_text() }}</p>
@@ -360,17 +360,17 @@ $(function() {
       {% endifequal %}
     </div>
     <div class="col-xs-3">
-      <div class="row time-type"><div class="col-xs-12">
+      <div ng-cloak class="row time-type"><div class="col-xs-12">
           {% trans "Overnight" %}
       </div></div>
-      <div class="row content"><div class="col-xs-12">
+      <div ng-cloak class="row content"><div class="col-xs-12">
           <img alt="power" class="icon" src="{% static 'images/reports/overnight_icon.svg' %}">
           <h3>{% templatetag openvariable %} summary_report.formated_overnight_avg_cost || default_null {% templatetag closevariable %}</h3>
           <p>{% trans "Average overnight cost" %}</p>
       </div></div>
       {% ifequal LANGUAGE_CODE 'zh-tw' %}
       {% verbatim %}
-      <div class="row content end"><div class="col-xs-12">
+      <div ng-cloak class="row content end"><div class="col-xs-12">
           <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_overnight_avg_cost.icon_path }}">
           <p style="padding:0;margin:0;">{{ get_compare_to_text() }}</p>
           <h3 style="padding-bottom:25px;">{{ summary_report.compare_to_last_overnight_avg_cost.formated_percent_change || default_null }}</h3>
@@ -378,7 +378,7 @@ $(function() {
       {% endverbatim %}
 	  {% else %}
       {% verbatim %}
-      <div class="row content end"><div class="col-xs-12">
+      <div ng-cloak class="row content end"><div class="col-xs-12">
           <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_overnight_avg_cost.icon_path }}">
           <h3>{{ summary_report.compare_to_last_overnight_avg_cost.formated_percent_change || default_null }}</h3>
           <p>{{ get_compare_to_text() }}</p>
