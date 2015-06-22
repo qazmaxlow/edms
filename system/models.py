@@ -501,14 +501,14 @@ class System(models.Model):
 
             try:
                 e = Electricity.objects.get(
-                        system_id = self.id,
+                        parent_systems = self.id,
                         datetime_utc = r.datetime,
                         source_id = r.source_id
                     )
                 newly_created = False
             except Electricity.DoesNotExist:
                 e = Electricity(
-                        system_id = self.id,
+                        parent_systems = [SystemId(sid=s.id) for s in parent_systems],
                         datetime_utc = r.datetime,
                         source_id = r.source_id
                     )
@@ -522,6 +522,7 @@ class System(models.Model):
 
             e.hour_detail = copy.deepcopy(hour_detail)
             e.parent_systems = [SystemId(sid=s.id) for s in parent_systems]
+            e.system_id = self.id
 
             e.rate_co2 = unit_rate_co2.rate
             e.rate_money = unit_rate_money.rate

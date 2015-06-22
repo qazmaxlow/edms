@@ -77,8 +77,8 @@ class Electricity(Document):
 
     meta = {
         'indexes': [
-            {'fields': [('system_id', 1), ('source_id', 1), ("datetime_utc", 1)], 'unique': True},
-            {'fields': [('system_id', 1), ("datetime_utc", 1)]},
+            {'fields': [('parent_systems', 1), ('source_id', 1), ("datetime_utc", 1)], 'unique': True},
+            {'fields': [('parent_systems', 1), ("datetime_utc", 1)]},
             {'fields': [('is_data_completed', 1), ("datetime_utc", 1)]},
         ]
     }
