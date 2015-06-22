@@ -906,12 +906,12 @@ $(function() {
                     }
                 },
                 change: function(data){
-                  if ($scope.isLoading > 0)
-                    $scope.isLoading--;
+                  console.log($scope.isLoading + "ch");
+                  $scope.isLoading--;
                 },
                 error: function(xhr, error){
-                  if ($scope.isLoading > 0)
-                    $scope.isLoading--;
+                  console.log($scope.isLoading + "e");
+                  $scope.isLoading--;
                 }
             });
 
@@ -970,6 +970,7 @@ $(function() {
                     compare_type: selected.attr('id')
                 };
                 $scope.isLoading++;
+                console.log($scope.isLoading + "++");
                 summary_report_ds.read().then(function(){
                   $scope.$apply(function(){
                     $scope.summary_report = summary_report_ds.data()[0];
