@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-18 05:09+0000\n"
+"POT-Creation-Date: 2015-06-22 08:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -227,7 +227,7 @@ msgid "Real-Time"
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:316
-#: entrak/templates/page_base.html:186
+#: entrak/templates/page_base.html:193
 msgid "Graph"
 msgstr ""
 
@@ -381,7 +381,7 @@ msgid "average overnight"
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:1166
-#: entrak/templates/page_base.html:192
+#: entrak/templates/page_base.html:199
 msgid "Progress"
 msgstr ""
 
@@ -620,7 +620,7 @@ msgid "Cost ($)"
 msgstr ""
 
 #: companies/templates/companies/export/index.html:188
-#: companies/templates/companies/reports/summary.html:437
+#: companies/templates/companies/reports/summary.html:446
 #: entrak/templates/report.html:788 entrak/templates/report.html.py:821
 #: entrak/templates/report.html:862
 msgid "From:"
@@ -641,7 +641,7 @@ msgstr ""
 
 #: companies/templates/companies/export/index.html:192
 #: companies/templates/companies/reports/popup_report_pdf.html:633
-#: entrak/templates/page_base.html:201 entrak/templates/report.html:713
+#: entrak/templates/page_base.html:208 entrak/templates/report.html:713
 #: entrak/templates/report.html.py:893
 msgid "Download"
 msgstr ""
@@ -663,12 +663,11 @@ msgid "Keep up to date with concise"
 msgstr ""
 
 #: companies/templates/companies/report_schedule/report_schedule.html:122
-#: companies/templates/companies/reports/summary.html:286
 msgid "View Reports"
 msgstr ""
 
 #: companies/templates/companies/report_schedule/report_schedule.html:123
-#: companies/templates/companies/reports/summary.html:287
+#: companies/templates/companies/reports/summary.html:288
 msgid "Automated Reports"
 msgstr ""
 
@@ -1125,7 +1124,7 @@ msgstr ""
 #: companies/templates/companies/reports/popup_report.html:23
 #: companies/templates/companies/reports/share_report.html:41
 #: companies/templates/companies/reports/summary.html:103
-#: companies/templates/companies/reports/summary.html:337
+#: companies/templates/companies/reports/summary.html:340
 #: entrak/templates/report.html:65
 msgid "Weekdays"
 msgstr ""
@@ -1139,7 +1138,7 @@ msgstr ""
 #: companies/templates/companies/reports/share_report.html:43
 #: companies/templates/companies/reports/summary.html:102
 #: companies/templates/companies/reports/summary.html:106
-#: companies/templates/companies/reports/summary.html:364
+#: companies/templates/companies/reports/summary.html:370
 #: entrak/templates/report.html:64 entrak/templates/report.html.py:68
 msgid "Overnight"
 msgstr ""
@@ -1435,142 +1434,150 @@ msgstr ""
 msgid "MMM D"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:288
+#: companies/templates/companies/reports/summary.html:286
+msgid "View Report"
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:287
 #: entrak/templates/report.html:702
 msgid "Download Data"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:342
+#: companies/templates/companies/reports/summary.html:346
 msgid "Average weekdays cost"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:369
+#: companies/templates/companies/reports/summary.html:376
 msgid "Average overnight cost"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:396
+#: companies/templates/companies/reports/summary.html:405
 msgid "View Full Report"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:410
+#: companies/templates/companies/reports/summary.html:419
 #: entrak/templates/report.html:833
 msgid "Here you can download your energy use data to files in .csv format."
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:411
+#: companies/templates/companies/reports/summary.html:420
 #: entrak/templates/report.html:834
 msgid ""
 "Simply select the start date, end date and the units that you would like to "
 "obtain from the system."
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:412
+#: companies/templates/companies/reports/summary.html:421
 #: entrak/templates/report.html:835
 msgid "Choose your date"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:416
+#: companies/templates/companies/reports/summary.html:425
 #: entrak/templates/report.html:806 entrak/templates/report.html.py:839
 msgid "Choose your start date"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:420
+#: companies/templates/companies/reports/summary.html:429
 #: entrak/templates/report.html:810 entrak/templates/report.html.py:843
 msgid "Choose your end date"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:426
+#: companies/templates/companies/reports/summary.html:435
 #: entrak/templates/report.html:849
 msgid "Select your units"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:432
+#: companies/templates/companies/reports/summary.html:441
 #: entrak/templates/report.html:856
 msgid "Download your file"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:435
+#: companies/templates/companies/reports/summary.html:444
 #: entrak/templates/report.html:786 entrak/templates/report.html.py:819
 #: entrak/templates/report.html:860
 msgid "Energy data - kWh"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:438
+#: companies/templates/companies/reports/summary.html:447
 #: entrak/templates/report.html:789 entrak/templates/report.html.py:822
 #: entrak/templates/report.html:863
 msgid "To:"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:441
+#: companies/templates/companies/reports/summary.html:450
 #: entrak/templates/report.html:866
 msgid "Download File"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:488
+#: companies/templates/companies/reports/summary.html:517
 msgid "Week Total"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:491
+#: companies/templates/companies/reports/summary.html:520
 msgid "Month Total"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:494
+#: companies/templates/companies/reports/summary.html:523
 msgid "Quarter Total"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:497
+#: companies/templates/companies/reports/summary.html:526
 msgid "Year Total"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:506
+#: companies/templates/companies/reports/summary.html:535
 msgid "Compared to last week"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:509
+#: companies/templates/companies/reports/summary.html:538
 msgid "Compared to last month"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:512
+#: companies/templates/companies/reports/summary.html:541
 msgid "Compared to last quarter"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:515
+#: companies/templates/companies/reports/summary.html:544
 msgid "Compared to last year"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:524
+#: companies/templates/companies/reports/summary.html:553
 msgid "Total week cost"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:527
+#: companies/templates/companies/reports/summary.html:556
 msgid "Total month cost"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:530
+#: companies/templates/companies/reports/summary.html:559
 msgid "Total quarter cost"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:533
+#: companies/templates/companies/reports/summary.html:562
 msgid "Total year cost"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:927
+#: companies/templates/companies/reports/summary.html:576
+msgid "Loading report..."
+msgstr ""
+
+#: companies/templates/companies/reports/summary.html:979
 msgid "Week"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:928
+#: companies/templates/companies/reports/summary.html:980
 msgid "Month"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:929
+#: companies/templates/companies/reports/summary.html:981
 msgid "Quarter"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:930
+#: companies/templates/companies/reports/summary.html:982
 msgid "Year"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:931
+#: companies/templates/companies/reports/summary.html:983
 msgid "Match my bills"
 msgstr ""
 
@@ -2608,39 +2615,39 @@ msgstr ""
 msgid "Password changed."
 msgstr ""
 
-#: entrak/templates/page_base.html:183
+#: entrak/templates/page_base.html:189
 msgid "Home"
 msgstr ""
 
-#: entrak/templates/page_base.html:189
+#: entrak/templates/page_base.html:196
 msgid "Ranking"
 msgstr ""
 
-#: entrak/templates/page_base.html:195
+#: entrak/templates/page_base.html:202
 msgid "Reports"
 msgstr ""
 
-#: entrak/templates/page_base.html:198
+#: entrak/templates/page_base.html:205
 msgid "Display"
 msgstr ""
 
-#: entrak/templates/page_base.html:210
+#: entrak/templates/page_base.html:217
 msgid "Alert"
 msgstr ""
 
-#: entrak/templates/page_base.html:214
+#: entrak/templates/page_base.html:221
 msgid "Paper"
 msgstr ""
 
-#: entrak/templates/page_base.html:218
+#: entrak/templates/page_base.html:225
 msgid "Settings"
 msgstr ""
 
-#: entrak/templates/page_base.html:221
+#: entrak/templates/page_base.html:228
 msgid "Logout"
 msgstr ""
 
-#: entrak/templates/page_base.html:281
+#: entrak/templates/page_base.html:288
 msgid "You are viewing:"
 msgstr ""
 
