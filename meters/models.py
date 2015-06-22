@@ -69,16 +69,12 @@ class HourDetail(EmbeddedDocument):
     m59 = FloatField()
 
 
-class SystemId(EmbeddedDocument):
-    sid = IntField()
-
-
 class Electricity(Document):
 
     meta = {
         'indexes': [
-            {'fields': [('parent_systems', 1), ('source_id', 1), ("datetime_utc", 1)], 'unique': True},
-            {'fields': [('parent_systems', 1), ("datetime_utc", 1)]},
+            {'fields': [('system_id', 1), ('source_id', 1), ("datetime_utc", 1)], 'unique': True},
+            {'fields': [('system_id', 1), ("datetime_utc", 1)]},
             {'fields': [('is_data_completed', 1), ("datetime_utc", 1)]},
         ]
     }
@@ -88,7 +84,6 @@ class Electricity(Document):
     overnight_date = IntField() #Date stored in YYYYMMDD numeric format
     overnight_total = FloatField()
     hour_detail = EmbeddedDocumentField(HourDetail)
-    parent_systems = ListField(EmbeddedDocumentField(SystemId))
     system_id = IntField()
     source_id = ObjectIdField()
     is_data_completed = BooleanField()
