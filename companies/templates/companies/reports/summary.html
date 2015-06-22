@@ -476,7 +476,7 @@ $(function() {
 <!-- end ng-app -->
 <script>
     angular.module("Entrak", [ "kendo.directives" ])
-        .controller("ReportControllers", function($scope){
+        .controller("ReportControllers", function($scope, $timeout){
             var overlay = $(".grey_layer");
             var report = $("#win_report_ajax");
             var overlayInfo = $(".grey_layer .loadingInfo");
@@ -967,8 +967,10 @@ $(function() {
                     compare_type: selected.attr('id')
                 };
                 $scope.isLoading++;
-                summary_report_ds.read();
-                $scope.summary_report = summary_report_ds.data()[0];
+                $timeout(function(){
+                  summary_report_ds.read();
+                  $scope.summary_report = summary_report_ds.data()[0];
+                }, 200);
             };
 
             $scope.timeToolbarOptions = {
@@ -1041,8 +1043,10 @@ $(function() {
                     compare_type: selected.attr('id')
                 };
                 $scope.isLoading++;
-                summary_report_ds.read();
-                $scope.summary_report = summary_report_ds.data()[0];
+                $timeout(function(){
+                  summary_report_ds.read();
+                  $scope.summary_report = summary_report_ds.data()[0];
+                }, 200);
             }
 
             $scope.on_custom_date_selected = function(e) {
@@ -1055,9 +1059,10 @@ $(function() {
                     compare_type: 'custom'
                 };
                 $scope.isLoading++;
-                summary_report_ds.read();
-                $scope.summary_report = summary_report_ds.data()[0];
-
+                $timeout(function(){
+                  summary_report_ds.read();
+                  $scope.summary_report = summary_report_ds.data()[0];
+                }, 200);
                 $scope.compare_to_text = "Compare to last peroid";
             }
         });
