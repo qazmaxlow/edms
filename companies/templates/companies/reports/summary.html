@@ -573,6 +573,7 @@ $(function() {
                     return false;
                 }
 
+                $(".grey_layer").width($("#page-container").outerWidth());
                 $(".grey_layer .loadingText").html("{% trans 'Loading report...' %}");
                 $(".grey_layer .loadingInfo").show();
                 $(".grey_layer").fadeIn();
@@ -883,14 +884,16 @@ $(function() {
             }
 
             $(".grey_layer").click(function(){
+              if (report.is(":visible")){
                 $("#win_report_ajax").fadeOut();
                 $(".grey_layer").fadeOut();
+              }
             });
 
             var summary_report_ds = new kendo.data.DataSource({
                 transport: {
                     read: {
-                        async: false,
+                        // async: false,
                         url: "{% url 'companies.reports.summary.ajax' systems.0.code %}",
                         type: 'GET',
                         dataType: "json"
@@ -967,10 +970,11 @@ $(function() {
                     compare_type: selected.attr('id')
                 };
                 $scope.isLoading++;
-                $timeout(function(){
-                  summary_report_ds.read();
-                  $scope.summary_report = summary_report_ds.data()[0];
-                }, 200);
+                summary_report_ds.read().then(function(){
+                  $scope.$apply(function(){
+                    $scope.summary_report = summary_report_ds.data()[0];
+                  });
+                });
             };
 
             $scope.timeToolbarOptions = {
@@ -1043,10 +1047,11 @@ $(function() {
                     compare_type: selected.attr('id')
                 };
                 $scope.isLoading++;
-                $timeout(function(){
-                  summary_report_ds.read();
-                  $scope.summary_report = summary_report_ds.data()[0];
-                }, 200);
+                summary_report_ds.read().then(function(){
+                  $scope.$apply(function(){
+                    $scope.summary_report = summary_report_ds.data()[0];
+                  });
+                });
             }
 
             $scope.on_custom_date_selected = function(e) {
@@ -1059,10 +1064,11 @@ $(function() {
                     compare_type: 'custom'
                 };
                 $scope.isLoading++;
-                $timeout(function(){
-                  summary_report_ds.read();
-                  $scope.summary_report = summary_report_ds.data()[0];
-                }, 200);
+                summary_report_ds.read().then(function(){
+                  $scope.$apply(function(){
+                    $scope.summary_report = summary_report_ds.data()[0];
+                  });
+                });
                 $scope.compare_to_text = "Compare to last peroid";
             }
         });
