@@ -306,8 +306,9 @@ $(function() {
       </div></div>
       {% endverbatim %}
       <div ng-cloak class="row content"><div class="col-xs-12">
-          <img alt="power" class="icon" src="{% static 'images/reports/energy-icon.svg' %}">
-          <h3>{% templatetag openvariable %} summary_report.formated_total_cost || default_null {% templatetag closevariable %}</h3>
+          <img alt="power" class="icon" ng-src="{% static 'images/reports/energy-icon.svg' %}">
+          <h3 ng-hide="isLoading">{% templatetag openvariable %} summary_report.formated_total_cost || default_null {% templatetag closevariable %}</h3>
+          <div class="loadingIcon" ng-hide="!isLoading"></div>
           {% verbatim %}
           <p>{{ get_total_energy_cost_text() }}</p>
           {% endverbatim %}
@@ -316,44 +317,49 @@ $(function() {
       {% ifequal LANGUAGE_CODE 'zh-tw' %}
       {% verbatim %}
       <div ng-cloak class="row content end"><div class="col-xs-12">
-          <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_total.icon_path }}">
+          <img alt="decrease energy" class="icon" src="/static/images/reports/na.gif" ng-src="{{ isLoading ? '/static/images/reports/na.gif' : summary_report.compare_to_last_total.icon_path }}">
           <p style="padding:0;margin:0;">{{ get_compare_to_text() }}</p>
-          <h3 style="padding-bottom:25px;">{{ summary_report.compare_to_last_total.formated_percent_change || default_null }}</h3>
+          <h3 ng-hide="isLoading" style="padding-bottom:25px;">{{ summary_report.compare_to_last_total.formated_percent_change || default_null }}</h3>
+          <div class="loadingIcon" ng-hide="!isLoading"></div>
       </div></div>
       {% endverbatim %}
       {% else %}
       {% verbatim %}
       <div ng-cloak class="row content end"><div class="col-xs-12">
-          <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_total.icon_path }}">
-          <h3>{{ summary_report.compare_to_last_total.formated_percent_change || default_null }}</h3>
+          <img alt="decrease energy" class="icon" src="/static/images/reports/na.gif" ng-src="{{ isLoading ? '/static/images/reports/na.gif' : summary_report.compare_to_last_total.icon_path }}">
+          <h3 ng-hide="isLoading">{{ summary_report.compare_to_last_total.formated_percent_change || default_null }}</h3>
+          <div class="loadingIcon" ng-hide="!isLoading"></div>
           <p>{{ get_compare_to_text() }}</p>
       </div></div>
       {% endverbatim %}
       {% endifequal %}
-
     </div>
+
     <div class="col-xs-3">
       <div ng-cloak class="row time-type"><div class="col-xs-12">
           {% trans "Weekdays" %}
       </div></div>
       <div ng-cloak class="row content"><div class="col-xs-12">
           <img alt="power" class="icon" src="{% static 'images/reports/calendar_energy_icon.svg' %}">
-          <h3>{% templatetag openvariable %} summary_report.formated_weekday_cost || default_null {% templatetag closevariable %}</h3>
+          <h3 ng-hide="isLoading">{% templatetag openvariable %} summary_report.formated_weekday_cost || default_null {% templatetag closevariable %}</h3>
+          <div class="loadingIcon" ng-hide="!isLoading"></div>
           <p>{% trans "Average weekdays cost" %}</p>
       </div></div>
       {% ifequal LANGUAGE_CODE 'zh-tw' %}
       {% verbatim %}
       <div ng-cloak class="row content end"><div class="col-xs-12">
-          <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_weekdays.icon_path }}">
+          <img alt="decrease energy" class="icon" src="/static/images/reports/na.gif" ng-src="{{ isLoading ? '/static/images/reports/na.gif' : summary_report.compare_to_last_weekdays.icon_path }}">
           <p style="padding:0;margin:0;">{{ get_compare_to_text() }}</p>
-          <h3 style="padding-bottom:25px;">{{ summary_report.compare_to_last_weekdays.formated_percent_change || default_null }}</h3>
+          <h3 ng-hide="isLoading" style="padding-bottom:25px;">{{ summary_report.compare_to_last_weekdays.formated_percent_change || default_null }}</h3>
+          <div class="loadingIcon" ng-hide="!isLoading"></div>
       </div></div>
       {% endverbatim %}
       {% else %}
       {% verbatim %}
       <div ng-cloak class="row content end"><div class="col-xs-12">
-          <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_weekdays.icon_path }}">
-          <h3>{{ summary_report.compare_to_last_weekdays.formated_percent_change || default_null }}</h3>
+          <img alt="decrease energy" class="icon" src="/static/images/reports/na.gif" ng-src="{{ isLoading ? '/static/images/reports/na.gif' : summary_report.compare_to_last_weekdays.icon_path }}">
+          <h3 ng-hide="isLoading">{{ summary_report.compare_to_last_weekdays.formated_percent_change || default_null }}</h3>
+          <div class="loadingIcon" ng-hide="!isLoading"></div>
           <p>{{ get_compare_to_text() }}</p>
       </div></div>
       {% endverbatim %}
@@ -365,22 +371,25 @@ $(function() {
       </div></div>
       <div ng-cloak class="row content"><div class="col-xs-12">
           <img alt="power" class="icon" src="{% static 'images/reports/overnight_icon.svg' %}">
-          <h3>{% templatetag openvariable %} summary_report.formated_overnight_avg_cost || default_null {% templatetag closevariable %}</h3>
+          <h3 ng-hide="isLoading">{% templatetag openvariable %} summary_report.formated_overnight_avg_cost || default_null {% templatetag closevariable %}</h3>
+          <div class="loadingIcon" ng-hide="!isLoading"></div>
           <p>{% trans "Average overnight cost" %}</p>
       </div></div>
       {% ifequal LANGUAGE_CODE 'zh-tw' %}
       {% verbatim %}
       <div ng-cloak class="row content end"><div class="col-xs-12">
-          <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_overnight_avg_cost.icon_path }}">
+          <img alt="decrease energy" class="icon" src="/static/images/reports/na.gif" ng-src="{{ isLoading ? '/static/images/reports/na.gif' : summary_report.compare_to_last_overnight_avg_cost.icon_path }}">
           <p style="padding:0;margin:0;">{{ get_compare_to_text() }}</p>
-          <h3 style="padding-bottom:25px;">{{ summary_report.compare_to_last_overnight_avg_cost.formated_percent_change || default_null }}</h3>
+          <h3 ng-hide="isLoading" style="padding-bottom:25px;">{{ summary_report.compare_to_last_overnight_avg_cost.formated_percent_change || default_null }}</h3>
+          <div class="loadingIcon" ng-hide="!isLoading"></div>
       </div></div>
       {% endverbatim %}
 	  {% else %}
       {% verbatim %}
       <div ng-cloak class="row content end"><div class="col-xs-12">
-          <img alt="decrease enegry" class="icon" src="{{ summary_report.compare_to_last_overnight_avg_cost.icon_path }}">
-          <h3>{{ summary_report.compare_to_last_overnight_avg_cost.formated_percent_change || default_null }}</h3>
+          <img alt="decrease energy" class="icon" src="/static/images/reports/na.gif" ng-src="{{ isLoading ? '/static/images/reports/na.gif' : summary_report.compare_to_last_overnight_avg_cost.icon_path }}">
+          <h3 ng-hide="isLoading">{{ summary_report.compare_to_last_overnight_avg_cost.formated_percent_change || default_null }}</h3>
+          <div class="loadingIcon" ng-hide="!isLoading"></div>
           <p>{{ get_compare_to_text() }}</p>
       </div></div>
       {% endverbatim %}
@@ -468,9 +477,29 @@ $(function() {
 <script>
     angular.module("Entrak", [ "kendo.directives" ])
         .controller("ReportControllers", function($scope){
+            var overlay = $(".grey_layer");
+            var report = $("#win_report_ajax");
+            var overlayInfo = $(".grey_layer .loadingInfo");
+            var pageHeight = $("footer.site-footer").outerHeight() + $("#menu").outerHeight();
+            var body = $("body");
+            var updateHeight = function(event) {
+                var scroll = $(window).scrollTop();
+                if (overlayInfo.is(":visible")){
+                    overlay.css("height", pageHeight);
+                    overlayInfo.css("padding-top", body.outerHeight()/2 + scroll - 50);
+                }
+
+                if (report.is(":visible")){
+                    $("#tOne").parent().css("top", scroll);
+                    overlay.css("height", report.css("height"));
+                }
+            }
+            $(window).scroll(updateHeight);
+
             // var selected_time_type = "month";
             // var start_time;
             // var end_time;
+            $scope.isLoading = 0;
             $scope.default_null = "N/A";
 
             $scope.report_type = "month";
@@ -544,6 +573,11 @@ $(function() {
                     return false;
                 }
 
+                $(".grey_layer .loadingText").html("Loading report...");
+                $(".grey_layer .loadingInfo").show();
+                $(".grey_layer").fadeIn();
+                updateHeight();
+
                 var date = $scope.report_date.value();
                 var year = date.getFullYear();
 
@@ -559,7 +593,8 @@ $(function() {
 
                 $.ajax({url: '../report/popup-report/?start_date=' + start_date + '&end_date=' + end_date + '&report_type='+report_type, success: function(result){
                     $("#win_report_ajax").html(result);
-
+                    $(".grey_layer .loadingInfo").hide();
+                    
                     angular.module('Entraks', ["kendo.directives"]).controller('MyCtrl', ['$scope', function ($scope) {
                         $scope.onSelect = function(ev) {
                             var anchor = $(ev.item).data('anchor');
@@ -829,14 +864,22 @@ $(function() {
 
                     angular.element(tTwo).ready(function() {
                         angular.bootstrap(tTwo, ['Entraks']);
-                        $(".grey_layer").css("height",$("#win_report_ajax").css("height"));
-                    });
-                }});
+                        $("#win_report_ajax").fadeIn(function(){
+                            updateHeight();
+                            $("html, body").animate({ scrollTop: 0 }, "slow");
+                        });
 
-                $("#win_report_ajax").fadeIn(function(){
-                    $("html, body").animate({ scrollTop: 0 }, "slow");
+                    });
+                  },
+                  error: function(jqXhr, textStatus, errorThrown){
+                    if (jqXhr && jqXhr.status == 401){
+                        window.location.assign("../login");
+                    } else {
+                        //handle other error code
+                        $(".grey_layer").fadeOut();
+                    }
+                  }
                 });
-                $(".grey_layer").fadeIn();
             }
 
             $(".grey_layer").click(function(){
@@ -858,6 +901,14 @@ $(function() {
                     data: function(response) {
                         return [response];
                     }
+                },
+                change: function(data){
+                  if ($scope.isLoading > 0)
+                    $scope.isLoading--;
+                },
+                error: function(xhr, error){
+                  if ($scope.isLoading > 0)
+                    $scope.isLoading--;
                 }
             });
 
@@ -915,6 +966,7 @@ $(function() {
                     end_date: kendo.toString(end_date, 'yyyy-MM-dd'),
                     compare_type: selected.attr('id')
                 };
+                $scope.isLoading++;
                 summary_report_ds.read();
                 $scope.summary_report = summary_report_ds.data()[0];
             };
@@ -988,6 +1040,7 @@ $(function() {
                     end_date: kendo.toString(end_date, 'yyyy-MM-dd'),
                     compare_type: selected.attr('id')
                 };
+                $scope.isLoading++;
                 summary_report_ds.read();
                 $scope.summary_report = summary_report_ds.data()[0];
             }
@@ -1001,6 +1054,7 @@ $(function() {
                     end_date: kendo.toString(end_date, 'yyyy-MM-dd'),
                     compare_type: 'custom'
                 };
+                $scope.isLoading++;
                 summary_report_ds.read();
                 $scope.summary_report = summary_report_ds.data()[0];
 
@@ -1009,12 +1063,5 @@ $(function() {
         });
 
 
-</script>
-<script>
-    $(window).scroll(function (event) {
-        var scroll = $(window).scrollTop();
-        $("#tOne").parent().css("top",scroll);
-        $(".grey_layer").css("height",$("#win_report_ajax").css("height"));
-    });
 </script>
 {% endblock %}
