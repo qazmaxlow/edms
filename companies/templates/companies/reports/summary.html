@@ -971,7 +971,7 @@ $(function() {
                 };
                 $scope.isLoading++;
                 console.log($scope.isLoading + "++");
-                summary_report_ds.read().then(function(){
+                summary_report_ds.read().then(function(){console.log($scope.isLoading + "then");
                   $scope.$apply(function(){
                     $scope.summary_report = summary_report_ds.data()[0];
                   });
