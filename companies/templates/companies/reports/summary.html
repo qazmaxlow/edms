@@ -970,7 +970,7 @@ $(function() {
                     compare_type: selected.attr('id')
                 };
                 $scope.isLoading++;
-                summary_report_ds.read().then(function(){$scope.isLoading + "then");
+                summary_report_ds.read().then(function(){
                   $scope.$apply(function(){
                     $scope.summary_report = summary_report_ds.data()[0];
                   });
