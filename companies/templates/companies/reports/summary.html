@@ -481,20 +481,30 @@ $(function() {
             var report = $("#win_report_ajax");
             var overlayInfo = $(".grey_layer .loadingInfo");
             var pageHeight = $("footer.site-footer").outerHeight() + $("#menu").outerHeight();
+            var pContainer = $("#page-container");
             var body = $("body");
             var updateHeight = function(event) {
                 var scroll = $(window).scrollTop();
-                if (overlayInfo.is(":visible")){
+                var infoShown = overlayInfo.is(":visible");
+                var reportShown = report.is(":visible");
+
+                if (infoShown){
                     overlay.css("height", pageHeight);
                     overlayInfo.css("padding-top", body.outerHeight()/2 + scroll - 50);
                 }
-
-                if (report.is(":visible")){
+                if (reportShown){
                     $("#tOne").parent().css("top", scroll);
                     overlay.css("height", report.css("height"));
                 }
             }
             $(window).scroll(updateHeight);
+            $(window).resize(function(){
+              var infoShown = overlayInfo.is(":visible");
+              var reportShown = report.is(":visible");
+              if (reportShown || infoShown){
+                    overlay.width(Math.max(pContainer.outerWidth(), body.outerWidth()));
+                }
+            });
 
             // var selected_time_type = "month";
             // var start_time;
