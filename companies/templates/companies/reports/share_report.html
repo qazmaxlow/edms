@@ -28,7 +28,7 @@
 
     <div id="tOne" class="sidebar-left" ng-controller="MyCtrl">
       <div class="section btn-section">
-              <a class="btn btn-save-report" href="popup-report/download/?{{ request.GET.urlencode }}" role="button">
+              <a class="btn btn-save-report" href="download/?{{ request.GET.urlencode }}" role="button">
                 <img src="{% static 'images/reports/popup_download.png' %}" alt="logo">
                 {% trans "Save Report" %}</a>
       </div>
@@ -305,6 +305,6 @@
         var scroll = $(window).scrollTop();
         $("#tOne").parent().css("top",scroll);
     });
- 
+
     </script>
 </html>
