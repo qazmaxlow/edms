@@ -1328,6 +1328,10 @@ def popup_report_view(request, system_code, year=None, month=None, report_type=N
 def download_popup_report_view(request, system_code):
     return _popup_report_view(request, system_code, to_pdf=True)
 
+@require_passes_test(
+    lambda r: UrlToken.objects.check_token_by_request(r) or r.user.is_authenticated())
+def download_share_report_view(request, system_code):
+    return _popup_report_view(request, system_code, to_pdf=True)
 
 # @permission_required()
 def download_report_view(request, system_code, start_timestamp, end_timestamp, report_type, report_layout=None):
