@@ -306,7 +306,7 @@ $(function() {
       </div></div>
       {% endverbatim %}
       <div ng-cloak class="row content"><div class="col-xs-12">
-          <img alt="power" class="icon" xmlns="http://www.w3.org/2000/svg" version="1.1" ng-src="{% static 'images/reports/energy-icon.svg' %}">
+          <img alt="power" class="icon" ng-src="{% static 'images/reports/energy-icon.svg' %}">
           <h3 ng-hide="isLoading">{% templatetag openvariable %} summary_report.formated_total_cost || default_null {% templatetag closevariable %}</h3>
           <div class="loadingIcon" ng-hide="!isLoading"></div>
           {% verbatim %}
@@ -340,7 +340,7 @@ $(function() {
           {% trans "Weekdays" %}
       </div></div>
       <div ng-cloak class="row content"><div class="col-xs-12">
-          <img alt="power" class="icon" xmlns="http://www.w3.org/2000/svg" version="1.1" src="{% static 'images/reports/calendar_energy_icon.svg' %}">
+          <img alt="power" class="icon" src="{% static 'images/reports/calendar_energy_icon.svg' %}">
           <h3 ng-hide="isLoading">{% templatetag openvariable %} summary_report.formated_weekday_cost || default_null {% templatetag closevariable %}</h3>
           <div class="loadingIcon" ng-hide="!isLoading"></div>
           <p>{% trans "Average weekdays cost" %}</p>
@@ -370,7 +370,7 @@ $(function() {
           {% trans "Overnight" %}
       </div></div>
       <div ng-cloak class="row content"><div class="col-xs-12">
-          <img alt="power" class="icon" xmlns="http://www.w3.org/2000/svg" version="1.1" src="{% static 'images/reports/overnight_icon.svg' %}">
+          <img alt="power" class="icon" src="{% static 'images/reports/overnight_icon.svg' %}">
           <h3 ng-hide="isLoading">{% templatetag openvariable %} summary_report.formated_overnight_avg_cost || default_null {% templatetag closevariable %}</h3>
           <div class="loadingIcon" ng-hide="!isLoading"></div>
           <p>{% trans "Average overnight cost" %}</p>
