@@ -906,12 +906,12 @@ $(function() {
                     }
                 },
                 change: function(data){
-                  console.log($scope.isLoading + "ch");
-                  $scope.isLoading--;
+                  // $scope.isLoading--;
+                  $scope.isLoading = 0;
                 },
                 error: function(xhr, error){
-                  console.log($scope.isLoading + "e");
-                  $scope.isLoading--;
+                  // $scope.isLoading--;
+                  $scope.isLoading = 0;
                 }
             });
 
@@ -970,8 +970,7 @@ $(function() {
                     compare_type: selected.attr('id')
                 };
                 $scope.isLoading++;
-                console.log($scope.isLoading + "++");
-                summary_report_ds.read().then(function(){console.log($scope.isLoading + "then");
+                summary_report_ds.read().then(function(){$scope.isLoading + "then");
                   $scope.$apply(function(){
                     $scope.summary_report = summary_report_ds.data()[0];
                   });
