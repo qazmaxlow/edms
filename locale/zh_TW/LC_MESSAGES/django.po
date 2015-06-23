@@ -2,12 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-18 05:09+0000\n"
+"POT-Creation-Date: 2015-06-23 05:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -163,7 +163,7 @@ msgstr "上期"
 #: companies/report_views.py:911
 #, python-brace-format
 msgid "Overall: {0.compared_percent_abs:.0f}&#37; more energy than last {1}"
-msgstr "總計: 比上{1}少用 {0.compared_percent_abs:.0f}&#37;"
+msgstr "總計: 比上{1}多用 {0.compared_percent_abs:.0f}&#37;"
 
 #: companies/report_views.py:913
 #, python-brace-format
@@ -228,7 +228,7 @@ msgid "Real-Time"
 msgstr "實時"
 
 #: companies/templates/companies/dashboard/dashboard.html:316
-#: entrak/templates/page_base.html:186
+#: entrak/templates/page_base.html:188
 msgid "Graph"
 msgstr "圖表"
 
@@ -388,7 +388,7 @@ msgid "average overnight"
 msgstr "晚間平均用電"
 
 #: companies/templates/companies/dashboard/dashboard.html:1166
-#: entrak/templates/page_base.html:192
+#: entrak/templates/page_base.html:194
 msgid "Progress"
 msgstr "進度"
 
@@ -654,7 +654,7 @@ msgstr "單位:"
 
 #: companies/templates/companies/export/index.html:192
 #: companies/templates/companies/reports/popup_report_pdf.html:633
-#: entrak/templates/page_base.html:201 entrak/templates/report.html:713
+#: entrak/templates/page_base.html:203 entrak/templates/report.html:713
 #: entrak/templates/report.html.py:893
 msgid "Download"
 msgstr "下載"
@@ -676,12 +676,11 @@ msgid "Keep up to date with concise"
 msgstr "想知道你在電力消耗方面的詳細分析，請看看"
 
 #: companies/templates/companies/report_schedule/report_schedule.html:122
-#: companies/templates/companies/reports/summary.html:286
 msgid "View Reports"
 msgstr "閱覽報告"
 
 #: companies/templates/companies/report_schedule/report_schedule.html:123
-#: companies/templates/companies/reports/summary.html:287
+#: companies/templates/companies/reports/summary.html:288
 msgid "Automated Reports"
 msgstr "自動發送報告"
 
@@ -1465,7 +1464,11 @@ msgstr "Ahh:mm"
 msgid "MMM D"
 msgstr "MMMD日"
 
-#: companies/templates/companies/reports/summary.html:288
+#: companies/templates/companies/reports/summary.html:286
+msgid "View Report"
+msgstr "閱覽報告"
+
+#: companies/templates/companies/reports/summary.html:287
 #: entrak/templates/report.html:702
 msgid "Download Data"
 msgstr "數據下載"
@@ -1632,11 +1635,11 @@ msgstr "新加坡機場"
 msgid "Marina Bay Sands"
 msgstr "濱海灣金沙"
 
-#: entrak/settings_common.py:125
+#: entrak/settings_common.py:126
 msgid "English"
 msgstr "英文"
 
-#: entrak/settings_common.py:126
+#: entrak/settings_common.py:127
 msgid "Traditional Chinese"
 msgstr "繁體中文"
 
@@ -2702,39 +2705,39 @@ msgstr "賬戶已刪除"
 msgid "Password changed."
 msgstr "密碼已變更"
 
-#: entrak/templates/page_base.html:183
+#: entrak/templates/page_base.html:184
 msgid "Home"
 msgstr ""
 
-#: entrak/templates/page_base.html:189
+#: entrak/templates/page_base.html:191
 msgid "Ranking"
 msgstr "用電量排行榜"
 
-#: entrak/templates/page_base.html:195
+#: entrak/templates/page_base.html:197
 msgid "Reports"
 msgstr "能源使用報告"
 
-#: entrak/templates/page_base.html:198
+#: entrak/templates/page_base.html:200
 msgid "Display"
 msgstr "顯示模式"
 
-#: entrak/templates/page_base.html:210
+#: entrak/templates/page_base.html:212
 msgid "Alert"
 msgstr "提示"
 
-#: entrak/templates/page_base.html:214
+#: entrak/templates/page_base.html:216
 msgid "Paper"
 msgstr ""
 
-#: entrak/templates/page_base.html:218
+#: entrak/templates/page_base.html:220
 msgid "Settings"
 msgstr "設置"
 
-#: entrak/templates/page_base.html:221
+#: entrak/templates/page_base.html:223
 msgid "Logout"
 msgstr "登出"
 
-#: entrak/templates/page_base.html:281
+#: entrak/templates/page_base.html:283
 msgid "You are viewing:"
 msgstr "你正在檢視:"
 
