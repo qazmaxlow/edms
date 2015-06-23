@@ -14,3 +14,20 @@ def analytics(request):
         'GA_USER_ID': ga_user_id
     }
     return context_extras
+
+
+def version_base_template(request):
+    from system.models import System
+
+    tpl_name = 'page_base.html'
+
+    system_code = resolve(request.path).kwargs.get('system_code')
+
+    try:
+        system = System.objects.get(code=system_code)
+        if system.version == '4.0':
+            tpl_name = 'page_base_v4.html'
+    except System.DoesNotExist:
+        pass
+
+    return {'base_template_name': tpl_name}
