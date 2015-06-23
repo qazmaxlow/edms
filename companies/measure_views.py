@@ -148,6 +148,8 @@ class TopThreeConsumersList(generics.ListAPIView):
 
             json_data = []
             date_end = dateutil.parser.parse(query_dt).astimezone(pytz.timezone(sys.timezone))
+            # temporary hack to compare only up to hour data
+            date_end = date_end.replace(minute=0,second=0,microsecond=0)
 
             if query_type == "weekly":
                 date_start = date_end.replace(hour=0, minute=0, second=0, microsecond=0) - datetime.timedelta(days=date_end.isoweekday())
