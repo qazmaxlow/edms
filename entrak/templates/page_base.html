@@ -160,7 +160,12 @@ function readMeesage(id) {
 
 {% block content %}
 {% get_current_language as LANGUAGE_CODE %}
-<div class="grey_layer"></div>
+<div class="grey_layer">
+    <div class="loadingInfo">
+        <div class="loadingIconBig"></div>
+        <div class="loadingText"></div>
+    </div>
+</div>
 <div id="page-container">
 
     <!-- Left Sidebar Main -->
