@@ -54,16 +54,16 @@ app.conf.update(
             'task': 'companies.tasks.send_report_by_schedulers',
             'schedule': crontab(minute='*/10'),
         },
-        'recap-missing-readings-hourly': {
-            'task': 'egauge.tasks.auto_recap',
-            'schedule': crontab(minute='25'),
-            'kwargs': {"mode": "hourly"},
-        },
-        'recap-missing-readings-daily': {
-            'task': 'egauge.tasks.auto_recap',
-            'schedule': crontab(minute='35', hour='0'),
-            'kwargs': {"mode": "daily"},
-        },
+        # 'recap-missing-readings-hourly': {
+        #     'task': 'egauge.tasks.auto_recap',
+        #     'schedule': crontab(minute='25'),
+        #     'kwargs': {"mode": "hourly"},
+        # },
+        # 'recap-missing-readings-daily': {
+        #     'task': 'egauge.tasks.auto_recap',
+        #     'schedule': crontab(minute='35', hour='0'),
+        #     'kwargs': {"mode": "daily"},
+        # },
     },
 
     CELERY_ROUTES = {

@@ -216,8 +216,8 @@ class SourceManager:
         system_codes = [s.system_code for s in Source.objects.filter(id__in=source_ids)]
         systems = System.objects.filter(code__in=system_codes)
 
-        for s in systems:
-            s.convert_to_meter_ds(start_time, end_time)
+        # for s in systems:
+        #     s.convert_to_meter_ds(start_time, end_time)
 
     @staticmethod
     def get_grouped_invalid_readings(xml_url):

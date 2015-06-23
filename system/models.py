@@ -18,7 +18,7 @@ from egauge.models import Source, SourceReadingYear, SourceReadingMonth, SourceR
 from entrak.settings import BASE_DIR, LANG_CODE_EN, LANG_CODE_TC
 from holiday.models import CityHoliday, Holiday
 from unit.models import UnitRate, UnitCategory, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
-from meters.models import Electricity, HourDetail, SystemId
+from meters.models import Electricity, HourDetail
 
 from system.constants import CITY_ALL
 from system.constants import CORPORATE
@@ -475,10 +475,6 @@ class System(models.Model):
         source_ids = [s.id for s in self.direct_sources]
         system_tz = pytz.timezone(self.timezone)
 
-        parent_codes = [code for code in self.path.split(',') if code !='']
-        parent_codes.append(self.code)
-        parent_systems = System.objects.filter(code__in=parent_codes)
-
         readings = SourceReadingHour.objects(
             source_id__in=source_ids,
             datetime__gte=start_dt,
@@ -521,7 +517,6 @@ class System(models.Model):
                 e.overnight_date = int(overnight_date.strftime("%Y%m%d"))
 
             e.hour_detail = copy.deepcopy(hour_detail)
-            e.parent_systems = [SystemId(sid=s.id) for s in parent_systems]
 
             e.rate_co2 = unit_rate_co2.rate
             e.rate_money = unit_rate_money.rate
@@ -559,6 +554,8 @@ class System(models.Model):
         # print('{0:-^80}'.format(' overnigh_avg_cost called '))
         # print('{0:-^80}'.format(' start_dt: ' + start_dt.strftime('%Y-%m-%d %H:%M:%S') + ' | end_dt: ' + end_dt.strftime('%Y-%m-%d %H:%M:%S') + ' '))
 
+        current_db_conn = connection.get_db()
+
         int_start_dt = int(start_dt.strftime("%Y%m%d"))
         int_end_dt = int(end_dt.strftime("%Y%m%d"))
 
@@ -567,13 +564,14 @@ class System(models.Model):
         else:
             object_ids = [s.id for s in self.sources]
 
-        current_db_conn = connection.get_db()
+        system_ids = [s.id for s in System.get_systems_within_root(self.code)]
+
         aggregate_pipeline = [
             { "$match":
                 {"$and": [
                     {"overnight_date": {"$gte": int_start_dt}},
                     {"overnight_date": {"$lt": int_end_dt}},
-                    {"parent_systems": {"$elemMatch": {"sid": self.id}}},
+                    {"system_id": {"$in": system_ids}},
                     {"source_id": {"$in": object_ids}},
                 ]}},
             { "$project": {"_id": 1, "overnight_date": 1, "overnight_total": 1, "rate_co2": 1, "rate_money": 1}},
@@ -608,6 +606,8 @@ class System(models.Model):
         else:
             object_ids = [s.id for s in self.sources]
 
+        system_ids = [s.id for s in System.get_systems_within_root(self.code)]
+
         minute = 0
         minute = end_dt.minute
         end_dt = end_dt.replace(minute=0, second=0, microsecond=0)
@@ -617,7 +617,7 @@ class System(models.Model):
                 {"$and": [
                     {"datetime_utc": {"$gte": start_dt}},
                     {"datetime_utc": {"$lt": end_dt}},
-                    {"parent_systems": {"sid": self.id}},
+                    {"system_id": {"$in": system_ids}},
                     {"source_id": {"$in": object_ids}},
                 ]}},
             { "$project": {"total": 1, "rate_co2": 1, "rate_money": 1}},
@@ -640,7 +640,7 @@ class System(models.Model):
             total_money = 0
             total_co2 = 0
 
-        usages = Electricity.objects.filter(datetime_utc=end_dt, parent_systems={"$elemMatch": {"sid": self.id}})
+        usages = Electricity.objects.filter(datetime_utc=end_dt, system_id__in=system_ids)
         for u in usages:
             total_money += u.usage_up_to_minute(minute)
             total_co2 += u.usage_up_to_minute(minute-1, CO2_CATEGORY_CODE)
@@ -661,6 +661,7 @@ class System(models.Model):
             sources = self.sources
             object_ids = [s.id for s in sources]
 
+        system_ids = [s.id for s in System.get_systems_within_root(self.code)]
 
         minute = 0
         minute = end_dt.minute
@@ -671,7 +672,7 @@ class System(models.Model):
                 {"$and": [
                     {"datetime_utc": {"$gte": start_dt}},
                     {"datetime_utc": {"$lt": end_dt}},
-                    {"parent_systems": {"sid": self.id}},
+                    {"system_id": {"$in": system_ids}},
                     {"source_id": {"$in": object_ids}},
                 ]}},
             { "$project": {"_id": 1, "source_id": 1, "total": 1, "rate_co2": 1, "rate_money": 1}},
@@ -696,7 +697,7 @@ class System(models.Model):
             for r in result['result']:
                 total[r['_id']] = r['totalMoney']
 
-        usages = Electricity.objects.filter(datetime_utc=end_dt, parent_systems={"$elemMatch": {"sid": self.id}})
+        usages = Electricity.objects.filter(datetime_utc=end_dt, system_id__in=system_ids)
         for u in usages:
             total[u.source_id] += u.usage_up_to_minute(minute)
 
