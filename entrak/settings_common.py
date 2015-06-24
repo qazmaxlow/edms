@@ -101,6 +101,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
     'django.core.context_processors.request',
     'entrak.context_processors.analytics',
+    'entrak.context_processors.version_base_template',
 )
 
 ROOT_URLCONF = 'entrak.urls'

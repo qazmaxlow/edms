@@ -55,6 +55,7 @@ class System(models.Model):
     night_time_end = models.TimeField(default=DEFAULT_NIGHT_TIME_END)
     login_required = models.BooleanField(default=True)
     unit_info = models.TextField(default='{}')
+    version = models.CharField(max_length=20, choices=(('3.0', '3.0'), ('4.0', '4.0'),), null=True, blank=True)
 
     objects = models.Manager()
 

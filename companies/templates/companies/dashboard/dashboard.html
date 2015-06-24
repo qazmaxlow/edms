@@ -275,7 +275,7 @@
 
         $scope.dashboardSortableOpt = {
             // cursor: "url('/static/images/dashboard/grabbing.cur'), default",
-            connectWith: "#widgetContainer",
+            connectWith: "#widgetContainer",    
             handler: ".widget-header *:not(.k-dropdown *, button)",
             disabled: ".disableSort",
             end: function(e){
@@ -566,7 +566,7 @@
                     $scope.total_cost = data[0].cost;
                 });
             });
-        }
+        }   
 
         $scope.updateRates = function () {
             var date_end = new Date();
