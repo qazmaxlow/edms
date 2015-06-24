@@ -554,7 +554,7 @@ class System(models.Model):
         # print('{0:-^80}'.format(' overnigh_avg_cost called '))
         # print('{0:-^80}'.format(' start_dt: ' + start_dt.strftime('%Y-%m-%d %H:%M:%S') + ' | end_dt: ' + end_dt.strftime('%Y-%m-%d %H:%M:%S') + ' '))
 
-        current_db_conn = connection.get_db()
+        current_db_conn = Electricity._get_db()
 
         int_start_dt = int(start_dt.strftime("%Y%m%d"))
         int_end_dt = int(end_dt.strftime("%Y%m%d"))
@@ -599,7 +599,7 @@ class System(models.Model):
 
     def total_usage(self, start_dt, end_dt, source_ids=None):
 
-        current_db_conn = connection.get_db()
+        current_db_conn = Electricity._get_db()
 
         if source_ids:
             object_ids = [ObjectId(s) for s in source_ids]
@@ -652,7 +652,7 @@ class System(models.Model):
 
         # print('{0:-^80}'.format(' start_dt: ' + start_dt.strftime('%Y-%m-%d %H:%M:%S') + ' | end_dt: ' + end_dt.strftime('%Y-%m-%d %H:%M:%S') + ' '))
 
-        current_db_conn = connection.get_db()
+        current_db_conn = Electricity._get_db()
 
         if source_ids:
             object_ids = [ObjectId(s) for s in source_ids]
