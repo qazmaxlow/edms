@@ -493,7 +493,7 @@ class System(models.Model):
 
         hour_detail = HourDetail()
         total_minute_count = SourceReadingMin.objects(
-            source_id=source_id,
+            source_id__in=source_ids,
             datetime__gte=start_dt,
             datetime__lt=end_dt
         )
