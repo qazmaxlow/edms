@@ -103,10 +103,15 @@ class DownloadView(View):
         # Storing csv rows
         result_rows = [];
 
-        source_headers = [s.name for s in sources]
-        csv_header = ["Date Time"] + ["%s (%s)"%(s.d_name, display_unit) for s in sources]
+        systems = System.objects.filter(code__in=[s.system_code for s in sources])
+        system_names = {}
+        for sys in systems:
+            system_names[sys.code] = sys.full_name
 
+        result_rows.append([""] + [system_names[s.system_code] for s in sources])
+        csv_header = ["Date Time"] + ["%s (%s)"%(s.d_name, display_unit) for s in sources]
         result_rows.append(csv_header)
+
 
         last_ts = None
         source_vals = {}

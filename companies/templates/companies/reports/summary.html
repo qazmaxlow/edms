@@ -18,9 +18,9 @@
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
 <script src="{% static 'js/moment-with-locales.js' %}"></script>
 <script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
-<script src="{% static 'js/entrak-system.js' %}"></script>
-<script src="{% static 'js/entrak-utils.js' %}"></script>
-<script src="{% static 'js/report-generator.js' %}"></script>
+<script src="{% static 'js/entrak-system.js' %}?v=3.1"></script>
+<script src="{% static 'js/entrak-utils.js' %}?v=3.1"></script>
+<script src="{% static 'js/report-generator.js' %}?v=3.1"></script>
 
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
@@ -284,8 +284,12 @@ $(function() {
         <div class="panel-header-left-menu">
             <h3 panel="monthly-report">
                 <a>{% trans "View Report" %}</a></h3>
-            <h3 panel="download-data"><a>{% trans "Download Data" %}</a></h3>
-                <!-- <h3><a href="{% url 'companies.report-schedule' system_code=systems.0.code %}">{% trans "Automated Reports" %}</a></h3> -->
+
+            {% if 'hkex' in systems.0.code %}
+                <h3><a href="{% url 'companies.report-schedule' system_code=systems.0.code %}">{% trans "Automated Reports" %}</a></h3>
+            {% else %}
+                <h3 panel="download-data"><a>{% trans "Download Data" %}</a></h3>
+            {% endif %}
         </div>
     </div>
     <div id="panel-content">
