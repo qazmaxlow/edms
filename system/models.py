@@ -473,84 +473,106 @@ class System(models.Model):
 
     def convert_to_meter_ds(self, start_dt, end_dt):
 
+        print('{0:-^80}'.format(' %s convert_to_meter_ds(%s, %s) called '%(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),start_dt.strftime('%Y-%m-%d %H:%M:%S'),end_dt.strftime('%Y-%m-%d %H:%M:%S'))))
+        started_at = datetime.datetime.now()
+
         source_ids = [s.id for s in self.direct_sources]
         system_tz = pytz.timezone(self.timezone)
 
-        readings = SourceReadingHour.objects(
-            source_id__in=source_ids,
-            datetime__gte=start_dt,
-            datetime__lt=end_dt).order_by('datetime')
+        # start_dt should be before first_record
+        if self.first_record > start_dt:
+            start_dt = self.first_record
+        # conversion is hour based, minutes and seconds are meaningless
+        start_dt = start_dt.replace(minute=0, second=0, microsecond=0)
+        end_dt = end_dt.replace(minute=0, second=0, microsecond=0)
 
-        hour_detail = HourDetail()
+        hours = int((end_dt - start_dt).total_seconds()/3600)
+
         create_count = 0
         update_count = 0
+
+        hour_detail = HourDetail()
+        total_minute_count = SourceReadingMin.objects(
+            source_id=source_id,
+            datetime__gte=start_dt,
+            datetime__lt=end_dt
+        )
+
+        if total_minute_count == 0:
+            return (create_count, update_count)
 
         for i in range(60):
             hour_detail['m%02d'%i] = 0.00
 
-        for r in readings:
+        for i in range(hours):
 
-            overnight_date = self.validate_overnight(r.datetime.astimezone(system_tz))
-            unit_rate_co2 = self.get_unit_rate(r.datetime, CO2_CATEGORY_CODE)
-            unit_rate_money = self.get_unit_rate(r.datetime, MONEY_CATEGORY_CODE)
+            current_dt = end_dt - relativedelta(hours=i+1)
+            print('{0:-^80}'.format(' %s: processing hour %s '%(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),current_dt.strftime('%Y-%m-%d %H:%M'))))
 
-            minute_readings = 0
+            for source_id in source_ids:
 
-            try:
-                e = Electricity.objects.get(
-                        system_id = self.id,
-                        datetime_utc = r.datetime,
-                        source_id = r.source_id
-                    )
-                newly_created = False
-            except Electricity.DoesNotExist:
-                e = Electricity(
-                        system_id = self.id,
-                        datetime_utc = r.datetime,
-                        source_id = r.source_id
-                    )
-                newly_created = True
+                minutes = SourceReadingMin.objects(
+                    source_id=source_id,
+                    datetime__gte=current_dt,
+                    datetime__lt=current_dt + relativedelta(hours=1)).order_by('datetime')
 
-            e.total = 0
-            e.overnight_total = 0
+                if len(minutes) == 0:
+                    continue
 
-            if overnight_date:
-                e.overnight_date = int(overnight_date.strftime("%Y%m%d"))
+                overnight_date = self.validate_overnight(current_dt.astimezone(system_tz))
+                unit_rate_co2 = self.get_unit_rate(current_dt, CO2_CATEGORY_CODE)
+                unit_rate_money = self.get_unit_rate(current_dt, MONEY_CATEGORY_CODE)
 
-            e.hour_detail = copy.deepcopy(hour_detail)
+                try:
+                    e = Electricity.objects.get(
+                            system_id = self.id,
+                            datetime_utc = current_dt,
+                            source_id = source_id
+                        )
+                    newly_created = False
+                except Electricity.DoesNotExist:
+                    e = Electricity(
+                            system_id = self.id,
+                            datetime_utc = current_dt,
+                            source_id = source_id
+                        )
+                    newly_created = True
 
-            e.rate_co2 = unit_rate_co2.rate
-            e.rate_money = unit_rate_money.rate
+                e.total = 0
+                e.local_date = int(current_dt.astimezone(system_tz).strftime("%Y%m%d"))
+                e.overnight_total = 0
 
-            minutes = SourceReadingMin.objects(
-                source_id=r.source_id,
-                datetime__gte=r.datetime,
-                datetime__lt=r.datetime + relativedelta(hours=1)).order_by('datetime')
+                if overnight_date:
+                    e.overnight_date = int(overnight_date.strftime("%Y%m%d"))
 
-            for m in minutes:
-                overnight = self.validate_overnight(m.datetime.astimezone(system_tz))
+                e.hour_detail = copy.deepcopy(hour_detail)
+                e.rate_co2 = unit_rate_co2.rate
+                e.rate_money = unit_rate_money.rate
 
-                if m.value > 0:
-                    minute_readings += 1
-                    e.total += m.value
-                    e.hour_detail['m%02d'%m.datetime.minute] = m.value
+                for m in minutes:
+                    overnight = self.validate_overnight(m.datetime.astimezone(system_tz))
 
-                if overnight:
-                    e.overnight_total = e.total
+                    if m.value > 0:
+                        e.total += m.value
+                        e.hour_detail['m%02d'%m.datetime.minute] = m.value
 
-            e.is_data_completed = (minute_readings == 60)
+                    if overnight:
+                        e.overnight_total = e.total
 
-            if e.total > 0 :
-                e.save()
-                if newly_created:
-                    create_count += 1
-                else:
-                    update_count += 1
+                e.is_data_completed = (len(minutes) == 60)
 
+                if e.total > 0 :
+                    e.save()
+                    if newly_created:
+                        create_count += 1
+                    else:
+                        update_count += 1
+
+        print('{0:-^80}'.format(' started at: %s, finished at : %s '%(started_at.strftime('%Y-%m-%d %H:%M:%S'), datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))))
         return (create_count, update_count)
 
 
-    def overnight_avg_cost(self, start_dt, end_dt, source_ids=None):
+    def overnight_usage(self, start_dt, end_dt, source_ids=None):
 
         # print('{0:-^80}'.format(' overnigh_avg_cost called '))
         # print('{0:-^80}'.format(' start_dt: ' + start_dt.strftime('%Y-%m-%d %H:%M:%S') + ' | end_dt: ' + end_dt.strftime('%Y-%m-%d %H:%M:%S') + ' '))
@@ -575,10 +597,11 @@ class System(models.Model):
                     {"system_id": {"$in": system_ids}},
                     {"source_id": {"$in": object_ids}},
                 ]}},
-            { "$project": {"_id": 1, "overnight_date": 1, "overnight_total": 1, "rate_co2": 1, "rate_money": 1}},
+            { "$project": {"_id": 1, "overnight_date": 1, "overnight_total": 1, "rate_co2": 1, "rate_money": 1,}},
             {
                 "$group": {
-                    "_id" : "$overnight_date",
+                    "_id" : None,
+                    "dates": {"$addToSet": "$overnight_date"},
                     "totalKwh": {"$sum": "$overnight_total"},
                     "totalCo2": {"$sum": {"$multiply": ["$overnight_total", "$rate_co2"]}},
                     "totalMoney": {"$sum": {"$multiply": ["$overnight_total", "$rate_money"]}}
@@ -589,13 +612,9 @@ class System(models.Model):
         result =  current_db_conn.electricity.aggregate(aggregate_pipeline)
 
         if result['result']:
-            total = 0
-            for r in result['result']:
-                total += r['totalMoney']
-            days = len(result['result'])
-            return total/days
+            return result['result']
         else:
-            return 0
+            return {"dates": [], "totalKwh": 0, "totalCo2": 0, "totalMoney": 0}
 
 
     def total_usage(self, start_dt, end_dt, source_ids=None):
@@ -609,7 +628,6 @@ class System(models.Model):
 
         system_ids = [s.id for s in System.get_systems_within_root(self.code)]
 
-        minute = 0
         minute = end_dt.minute
         end_dt = end_dt.replace(minute=0, second=0, microsecond=0)
 
@@ -621,10 +639,11 @@ class System(models.Model):
                     {"system_id": {"$in": system_ids}},
                     {"source_id": {"$in": object_ids}},
                 ]}},
-            { "$project": {"total": 1, "rate_co2": 1, "rate_money": 1}},
+            { "$project": {"total": 1, "rate_co2": 1, "rate_money": 1, "local_date": 1,}},
             {
                 "$group": {
                     "_id": None,
+                    "dates": {"$addToSet": "$local_date"},
                     "totalKwh": {"$sum": "$total"},
                     "totalCo2": {"$sum": {"$multiply": ["$total", "$rate_co2"]}},
                     "totalMoney": {"$sum": {"$multiply": ["$total", "$rate_money"]}},
@@ -635,18 +654,20 @@ class System(models.Model):
         result =  current_db_conn.electricity.aggregate(aggregate_pipeline)
 
         if result['result']:
-            total_money = result['result'][0]['totalMoney']
-            total_co2 = result['result'][0]['totalCo2']
+            print(result)
+            total = result['result']
         else:
-            total_money = 0
-            total_co2 = 0
+            total = {"dates": [], "totalKwh": 0, "totalCo2": 0, "totalMoney": 0}
 
         usages = Electricity.objects.filter(datetime_utc=end_dt, system_id__in=system_ids)
-        for u in usages:
-            total_money += u.usage_up_to_minute(minute)
-            total_co2 += u.usage_up_to_minute(minute-1, CO2_CATEGORY_CODE)
 
-        return {"total_money": total_money, "total_co2": total_co2}
+        for u in usages:
+            minute_usage = u.usage_up_to_minute(minute)
+            total["totalKwh"] += minute_usage["totalKwh"]
+            total["totalCo2"] += minute_usage["totalCo2"]
+            total["totalMoney"] += minute_usage["totalMoney"]
+
+        return total
 
 
     def total_usage_by_source_id(self, start_dt, end_dt, source_ids=None):
@@ -676,10 +697,11 @@ class System(models.Model):
                     {"system_id": {"$in": system_ids}},
                     {"source_id": {"$in": object_ids}},
                 ]}},
-            { "$project": {"_id": 1, "source_id": 1, "total": 1, "rate_co2": 1, "rate_money": 1}},
+            { "$project": {"_id": 1, "source_id": 1, "total": 1, "rate_co2": 1, "rate_money": 1, "local_date": 1,}},
             {
                 "$group": {
                     "_id": "$source_id",
+                    "dates": {"$addToSet": "$local_date"},
                     "totalKwh": {"$sum": "$total"},
                     "totalCo2": {"$sum": {"$multiply": ["$total", "$rate_co2"]}},
                     "totalMoney": {"$sum": {"$multiply": ["$total", "$rate_money"]}},
@@ -692,17 +714,27 @@ class System(models.Model):
         total = {}
 
         for s in self.sources:
-            total[s.id] = 0
+            total[s.id] = {"dates": [], "totalKwh": 0, "totalCo2": 0, "totalMoney": 0}
 
         if result['result']:
             for r in result['result']:
-                total[r['_id']] = r['totalMoney']
+                total[r['_id']] =   {
+                                        "dates": r['dates'],
+                                        "totalKwh": r['totalKwh'],
+                                        "totalCo2": r['totalCo2'],
+                                        "totalMoney": r['totalMoney'],
+                                    }
 
         usages = Electricity.objects.filter(datetime_utc=end_dt, system_id__in=system_ids)
+
         for u in usages:
-            total[u.source_id] += u.usage_up_to_minute(minute)
+            minute_usage = u.usage_up_to_minute(minute)
+            total[u.source_id]["totalKwh"] += minute_usage["totalKwh"]
+            total[u.source_id]["totalCo2"] += minute_usage["totalCo2"]
+            total[u.source_id]["totalMoney"] += minute_usage["totalMoney"]
 
         return total
+
 
 class SystemHomeImage(models.Model):
     image = models.ImageField(upload_to="system_home/%Y/%m")

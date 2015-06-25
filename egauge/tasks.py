@@ -52,16 +52,11 @@ def force_retrieve_source_with_members_hour_reading(all_sources_with_members, st
 
 
 @shared_task(ignore_result=True)
-def auto_recap(mode="hourly"):
+def auto_recap(recap_hours=6):
 
     hk_tz = pytz.timezone('Asia/Hong_Kong')
     now_dt = datetime.datetime.now(hk_tz).replace(minute=0, second=0, microsecond=0)
     systems = System.objects.filter(path="")
-
-    if mode == "daily":
-        recap_hours = 24
-    else:
-        recap_hours = 6
 
     for i in range(recap_hours):
         end_dt = now_dt - relativedelta(hours=i)
