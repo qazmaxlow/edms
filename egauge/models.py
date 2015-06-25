@@ -126,5 +126,5 @@ class StatusMonitor(models.Model):
     source_id = models.CharField(max_length=100)
     threshold = models.FloatField(null=True)
 
-    threshold_sdt = models.TimeField(null=True)
-    threshold_edt = models.TimeField(null=True)
+    threshold_starttime = models.TimeField(null=True)
+    threshold_endtime = models.TimeField(null=True)
