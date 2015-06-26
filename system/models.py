@@ -527,14 +527,14 @@ class System(models.Model):
                     e = Electricity.objects.get(
                             system_id = self.id,
                             datetime_utc = current_dt,
-                            source_id = source_id
+                            source_id = source_id,
                         )
                     newly_created = False
                 except Electricity.DoesNotExist:
                     e = Electricity(
                             system_id = self.id,
                             datetime_utc = current_dt,
-                            source_id = source_id
+                            source_id = source_id,
                         )
                     newly_created = True
 
@@ -658,7 +658,7 @@ class System(models.Model):
         else:
             total = {"dates": [], "totalKwh": 0, "totalCo2": 0, "totalMoney": 0}
 
-        usages = Electricity.objects.filter(datetime_utc=end_dt, system_id__in=system_ids)
+        usages = Electricity.objects.filter(datetime_utc=end_dt, system_id__in=system_ids, source_id__in=object_ids)
 
         for u in usages:
             minute_usage = u.usage_up_to_minute(minute)
@@ -724,7 +724,7 @@ class System(models.Model):
                                         "totalMoney": r['totalMoney'],
                                     }
 
-        usages = Electricity.objects.filter(datetime_utc=end_dt, system_id__in=system_ids)
+        usages = Electricity.objects.filter(datetime_utc=end_dt, system_id__in=system_ids, source_id__in=object_ids)
 
         for u in usages:
             minute_usage = u.usage_up_to_minute(minute)
