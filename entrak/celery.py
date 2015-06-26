@@ -77,6 +77,9 @@ app.conf.update(
         'egauge.tasks.retrieve_source_with_members_min_reading': {'queue': 'downloader'},
         'egauge.tasks.force_retrieve_hour_reading': {'queue': 'recap'},
         'egauge.tasks.force_retrieve_source_with_members_hour_reading': {'queue': 'recap'},
+        'egauge.tasks.retrieve_hkis_hs_measures': {'queue': 'recap'},
+        'egauge.tasks.retrieve_hkis_ms_measures': {'queue': 'recap'},
+        'egauge.tasks.retrieve_hkis_ups_measures': {'queue': 'recap'},
     },
 )
 
