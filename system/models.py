@@ -612,7 +612,7 @@ class System(models.Model):
         result =  current_db_conn.electricity.aggregate(aggregate_pipeline)
 
         if result['result']:
-            return result['result']
+            return result['result'][0]
         else:
             return {"dates": [], "totalKwh": 0, "totalCo2": 0, "totalMoney": 0}
 
@@ -654,8 +654,7 @@ class System(models.Model):
         result =  current_db_conn.electricity.aggregate(aggregate_pipeline)
 
         if result['result']:
-            print(result)
-            total = result['result']
+            total = result['result'][0]
         else:
             total = {"dates": [], "totalKwh": 0, "totalCo2": 0, "totalMoney": 0}
 
