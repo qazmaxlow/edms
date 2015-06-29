@@ -36,7 +36,7 @@ celerybase:
 
 cwcelery:
   image: entrakdms_celerybase
-  command: python -m celery worker --app=entrak --loglevel=INFO -Q celery
+  command: python -m celery worker --app=entrak --loglevel=INFO --concurrency=2 -Q celery
   volumes:
     - .:/srv
   links:
@@ -46,7 +46,7 @@ cwcelery:
 
 cwtaskstarter:
   image: entrakdms_celerybase
-  command: python -m celery worker --app=entrak --loglevel=INFO -Q task_starter
+  command: python -m celery worker --app=entrak --loglevel=INFO --concurrency=2 -Q task_starter
   volumes:
     - .:/srv
   links:
@@ -56,7 +56,7 @@ cwtaskstarter:
 
 cwrecap:
   image: entrakdms_celerybase
-  command: python -m celery worker --app=entrak --loglevel=INFO -Q recap
+  command: python -m celery worker --app=entrak --loglevel=INFO --concurrency=4 -Q recap
   volumes:
     - .:/srv
   links:
@@ -66,7 +66,7 @@ cwrecap:
 
 cwrecover:
   image: entrakdms_celerybase
-  command: python -m celery worker --app=entrak --loglevel=INFO -Q recover
+  command: python -m celery worker --app=entrak --loglevel=INFO --concurrency=4 -Q downloader
   volumes:
     - .:/srv
   links:
