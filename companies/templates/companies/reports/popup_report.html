@@ -1,20 +1,17 @@
 {% load i18n %}
 {% load static %}<!DOCTYPE html>
 <html lang="en">
-
-    <span role="presentation" id="popup_close" class="k-icon k-i-close">Close</span>
-
-    <div class="container" ng-app="Entrak">
+  <span role="presentation" id="popup_close" class="k-icon k-i-close">Close</span>
+  <div class="container" ng-app="Entrak">
     <div class="row">
       <div class="col-xs-2 x-padding-25">
-
-    <div id="tOne" class="sidebar-left" ng-controller="MyCtrl">
-      <div class="section btn-section">
-          <a class="btn btn-save-report" href="popup-report/download/?{{ request.GET.urlencode }}" role="button">
+        <div id="tOne" class="sidebar-left" ng-controller="MyCtrl">
+          <div class="section btn-section">
+            <a class="btn btn-save-report" href="popup-report/download/?{{ request.GET.urlencode }}" role="button">
             <img src="{% static 'images/reports/popup_download.png' %}" alt="logo">
             {% trans "Save Report" %}</a>
-      </div>
-      <div class="section">
+          </div>
+          <div class="section">
             <ul kendo-menu style="display: inline-block; min-width: 150px;"
                 k-orientation="'vertical'"
                 k-on-select="onSelect(kendoEvent)">
@@ -24,24 +21,20 @@
               <li data-anchor="weekend-info">{% trans "Weekends and Holidays" %}</li>
               <li data-anchor="overnight-info">{% trans "Overnight" %}</li>
             </ul>
-      </div>
-      <img src="{% static 'images/reports/popup_logo.png' %}" alt="logo">
-    </div>
-
+          </div>
+          <img src="{% static 'images/reports/popup_logo.png' %}" alt="logo">
+        </div>
       </div>
       <div class="col-xs-10">
         {% include "companies/reports/_report_content.html" %}
       </div>
     </div>
-    </div>
-
-    <script>
-
-      {% include "companies/reports/_report_script.html" %}
-      $("#popup_close").click(function(){
-          $("#win_report_ajax").fadeOut();
-          $(".grey_layer").fadeOut();
-      })
-    </script>
-
+  </div>
+  <script>
+    {% include "companies/reports/_report_script.html" %}
+    $("#popup_close").click(function(){
+        $("#win_report_ajax").fadeOut();
+        $(".grey_layer").fadeOut();
+    })
+  </script>
 </html>
