@@ -29,13 +29,14 @@ def send_report_by_schedulers():
 
     site = Site.objects.get_current()
     subject = 'Your En-trak report is ready'
-    from_email = 'noreply-en-trak.com'
+    from_email = 'En-trak<noreply@en-trak.com>'
 
     for scheduler in schedulers:
         last_execute_time = None
 
         owner = scheduler.created_by
-        url = reverse('companies.reports.popup-report.custom-dates', kwargs={ 'system_code': scheduler.system.code })
+        translation.activate(owner.language)
+        url = reverse('companies.reports.share-report.custom-dates', kwargs={ 'system_code': scheduler.system.code })
         # build regex to match both report page and dowload page view
         url_regex = r'^%s(download/)?$' % url
         user_tz = scheduler.system.time_zone
@@ -70,8 +71,6 @@ def send_report_by_schedulers():
         qd.update({'tk': url_token.token_key})
 
         report_url = 'https://%s%s?%s' % (site.domain, url, qd.urlencode())
-
-        translation.activate(owner.language)
 
         if translation.get_language() == LANG_CODE_TC:
             system_name = scheduler.system.name_tc

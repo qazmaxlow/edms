@@ -132,7 +132,7 @@ class EntrakUser(AbstractUser):
                 'create_account_button': _('invitation email button')
             })
 
-        subject, from_email, to_email = title, "info@en-trak.com", [self.email]
+        subject, from_email, to_email = title, "En-trak<info@en-trak.com>", [self.email]
 
         text_content = plaintext.render(d)
         html_content = htmly.render(d)
@@ -166,7 +166,7 @@ class EntrakUser(AbstractUser):
                 'button': _('reset password button')
             })
 
-        subject, from_email, to_email = title, "info@en-trak.com", [self.email]
+        subject, from_email, to_email = title, "En-trak<info@en-trak.com>", [self.email]
 
         text_content = plaintext.render(d)
         html_content = htmly.render(d)
