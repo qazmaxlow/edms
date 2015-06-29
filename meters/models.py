@@ -75,13 +75,15 @@ class Electricity(Document):
         'db_alias': 'entrakv4',
         'indexes': [
             {'fields': [('system_id', 1), ('source_id', 1), ("datetime_utc", 1)], 'unique': True},
-            {'fields': [('system_id', 1), ("datetime_utc", 1)]},
+            {'fields': [('system_id', 1), ('source_id', 1), ("local_date", 1)]},
+            {'fields': [('system_id', 1), ('source_id', 1), ("overnight_date", 1)]},
             {'fields': [('is_data_completed', 1), ("datetime_utc", 1)]},
         ]
     }
 
     datetime_utc = DateTimeField()
     total = FloatField()
+    local_date = IntField() #Date stored in YYYYMMDD numeric format
     overnight_date = IntField() #Date stored in YYYYMMDD numeric format
     overnight_total = FloatField()
     hour_detail = EmbeddedDocumentField(HourDetail)
@@ -92,14 +94,19 @@ class Electricity(Document):
     rate_money = FloatField()
 
 
-    def usage_up_to_minute(self, minute, unit=MONEY_CATEGORY_CODE):
+    def usage_up_to_minute(self, minute):
 
-        minute_total = 0
+        total = 0
+        count = 0
 
         for i in range(minute):
-            minute_total += self.hour_detail['m%02d'%i]
+            if self.hour_detail['m%02d'%i] > 0:
+                total += self.hour_detail['m%02d'%i]
+                count += 1
 
-        if unit != CO2_CATEGORY_CODE:
-            return minute_total*self.rate_money
-        else:
-            return minute_total*self.rate_co2
+        return {
+            "minutes": count,
+            "totalKwh": total,
+            "totalCo2": total*self.rate_co2,
+            "totalMoney": total*self.rate_money,
+        }

@@ -57,22 +57,29 @@ app.conf.update(
         # 'recap-missing-readings-hourly': {
         #     'task': 'egauge.tasks.auto_recap',
         #     'schedule': crontab(minute='25'),
-        #     'kwargs': {"mode": "hourly"},
+        #     'kwargs': {"hours": 6},
         # },
         # 'recap-missing-readings-daily': {
         #     'task': 'egauge.tasks.auto_recap',
         #     'schedule': crontab(minute='35', hour='0'),
-        #     'kwargs': {"mode": "daily"},
+        #     'kwargs': {"hours": 24},
         # },
     },
 
     CELERY_ROUTES = {
         'egauge.tasks.retrieve_all_reading': {'queue': 'task_starter'},
-        'egauge.tasks.recover_all_invalid_reading': {'queue': 'recover'},
-        'egauge.tasks.recover_min_reading_for_xml_url': {'queue': 'recover'},
-        'egauge.tasks.force_retrieve_reading': {'queue': 'recap'},
-        'egauge.tasks.auto_recap': {'queue': 'recap'},
+        'egauge.tasks.recover_all_invalid_reading': {'queue': 'task_starter'},
+        'egauge.tasks.auto_recap': {'queue': 'task_starter'},
+        'egauge.tasks.force_retrieve_reading': {'queue': 'task_starter'},
         'alert.tasks.invoke_check_all_alerts': {'queue': 'task_starter'},
+        'egauge.tasks.recover_min_reading_for_xml_url': {'queue': 'downloader'},
+        'egauge.tasks.retrieve_min_reading': {'queue': 'downloader'},
+        'egauge.tasks.retrieve_source_with_members_min_reading': {'queue': 'downloader'},
+        'egauge.tasks.force_retrieve_hour_reading': {'queue': 'recap'},
+        'egauge.tasks.force_retrieve_source_with_members_hour_reading': {'queue': 'recap'},
+        'egauge.tasks.retrieve_hkis_hs_measures': {'queue': 'recap'},
+        'egauge.tasks.retrieve_hkis_ms_measures': {'queue': 'recap'},
+        'egauge.tasks.retrieve_hkis_ups_measures': {'queue': 'recap'},
     },
 )
 
