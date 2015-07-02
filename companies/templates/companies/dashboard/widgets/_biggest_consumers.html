@@ -35,10 +35,12 @@
                 </div>
                 <div class="bc-left-box auto-width">
                     <div class="name-row">
+
                         <div class="name" ng-bind="c.d_name"></div>
                     </div>
                     <div class="bar-row">
                         <img class="ranking-icon" ng-src="/static/images/dashboard/consumer-{{$index+1}}.png"></img>
+                                          
                         <div class="bar-container">
                             <div class="bar" ng-if="c.value != null" >
                                 <span class="bar-value" ng-bind="c.value | entrakNumber"></span>

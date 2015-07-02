@@ -1,4 +1,4 @@
-{% extends "page_base.html" %}
+{% extends base_template_name %}
 
 {% load i18n %}
 {% load entrak_extras %}
@@ -12,6 +12,7 @@
 {% get_current_language as LANGUAGE_CODE %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
 
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
@@ -34,9 +35,16 @@
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
 
+<!-- <script src="{% static 'js/chart_theme_v3.js' %}"></script> -->
+<script src="{% static 'js/chart_theme_v4.js' %}"></script>
+
+
 <script type="text/javascript" charset="utf-8" src="/static/edges/dashboard/widgets/money/edge_includes/edge.5.0.1.min.js"></script>
 
-<link rel="stylesheet" type="text/css" href="{% static 'css/dashboard/widgets.css' %}">
+<!-- energy v3 css -->
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'css/dashboard/widgets.css' %}"> -->
+<link rel="stylesheet" type="text/css" href="{% static 'css/dashboard/widgets_v4.css' %}">
+
 <style>
     .edgeLoad-EDGE-18660633 { visibility:hidden; }
     .edgeLoad-EDGE-9220080 { visibility:hidden; }
@@ -56,9 +64,10 @@
 {% ifequal LANGUAGE_CODE 'zh-tw' %}
 <div id="dashboardController" class="container chinese" ng-app="Entrak" ng-controller="Dashboard">
 {% else %}
-<div id="dashboardController" class="container" ng-app="Entrak" ng-controller="Dashboard">
+<div id="dashboardController" class="container fullscreen" ng-app="Entrak" ng-controller="Dashboard">
 {% endifequal %}
     <div ng-cloak class="dashboard-toolbar row" style="display: none;">
+
         <div class="pull-right buttons-wrap">
             <button class="k-button" ng-click="setFullscreenMode()"></button>
         </div>
@@ -90,14 +99,56 @@
             </div>
         </div>
     </div>
+    
+
+
+    <!-- header title -->
+    <div class="title_wrapper">
+        <span class="page_title">{% trans "ENERGY DASHBOARD" %}</span> 
+        
+        <ul id="system-menu" class="sf-menu">
+        <li>
+            <span id="breadcrumbs-path">
+                {% for info in system_path_components %}
+                {{info.nameInfo|get_value_with_key:LANGUAGE_CODE}}
+                    {% if not forloop.last %}
+                    <span>-</span>
+                    {% endif %}
+                {% endfor %}
+            </span> 
+
+            <ul></ul>
+        </li>
+        </ul>   
+    </div>
+    
 
     <!--for drag and drop-->
     <div ng-cloak id="dashboardContainer" kendo-sortable="dashboardContainer" k-options="dashboardSortableOpt" class="row">
+
+        
     <!-- <div ng-cloak id="dashboardContainer" class="row"> -->
     </div>
 </div>
 
 <script>
+
+
+    //Override the theme for dataviz widgets from newtheme.js
+    // var themable = ["Chart", "TreeMap", "Diagram", "StockChart", "Sparkline", "RadialGauge", "LinearGauge"];
+
+    // if (kendo.dataviz) {
+    //     for (var i = 0; i < themable.length; i++) {
+    //         var widget = kendo.dataviz.ui[themable[i]];
+
+    //         if (widget) {
+    //             widget.fn.options.theme = "newTheme";
+    //         }
+    //     }
+    // }
+
+
+
     function to_ampm(h) {
         var ampm = h;
         if (ampm > 12) {
@@ -275,7 +326,7 @@
 
         $scope.dashboardSortableOpt = {
             // cursor: "url('/static/images/dashboard/grabbing.cur'), default",
-            connectWith: "#widgetContainer",    
+            connectWith: "#widgetContainer",
             handler: ".widget-header *:not(.k-dropdown *, button)",
             disabled: ".disableSort",
             end: function(e){
@@ -458,78 +509,48 @@
 
         $scope.realTimeOptions = {
             // transitions: false,
-            chartArea: {
-                margin: 0,
-                background: "#FCFCFC"
-            },
+            chartArea: rto.chartArea,
             series: [{
-                type: "column",
-                name: "Today",
-                color: "#81d51d",
-                gap: 1.2,
+                type: rto.series[0].type,
+                name: rto.series[0].name,
+                color: rto.series[0].color,
+                gap: rto.series[0].gap,
                 overlay: {
-                    gradient: "none"
+                    gradient: rto.series[0].overlay.gradient
                 },
                 border: {
-                    width: 0
+                    width: rto.series[0].border.width
                 },
                 data: today_measures
             }, {
-                type: "line",
-                name: "Last Week",
-                color: "#354960",
+                type: rto.series[1].type,
+                name: rto.series[1].name,
+                color: rto.series[1].color,
                 line: {
-                    width: 2
+                    width: rto.series[1].line.width
                 },
                 data: last_week_measures
             }],
-            legend: {
-                visible: false
-            },
+            legend: rto.legend,
             categoryAxis: {
                 categories: hours,
-                labels: {
-                    step: 2,
-                    font: "0.857em ITCAvantGardeStd-Bk",
-                    padding: {
-                     top: 5
-                    },
-                    color: "#4B4B4B",
-                    template: "#= to_ampm(value) #"
-                },
-                line: {
-                    visible: true,
-                    width: 2,
-                    color: "#ECECEC"
-                },
+                labels: rto.categoryAxis.labels,
+                line: rto.categoryAxis.line,
                 majorGridLines: {
-                    visible: false
+                    visible: rto.categoryAxis.majorGridLines.visible
                 },
                 majorTicks: {
-                    size: 0
+                    size: rto.categoryAxis.majorTicks.size
                 }
             },
             valueAxis: {
                 line: {
-                    visible: false
+                    visible: rto.valueAxis.line.visible 
                 },
-                labels: {
-                        format: "{0}",
-                        font: "0.857em ITCAvantGardeStd-Bk",
-                        color: "#4B4B4B"
-                    },
-                min: 0
+                labels: rto.valueAxis.labels,
+                min: rto.valueAxis.min
             },
-            tooltip: {
-                visible: true,
-                template: "# if (value < 1) { # #=kendo.toString(value, 'n2')# # } else if (value < 10) { # #=kendo.toString(value, 'n1') # # } else { # #=kendo.toString(value, 'n0') # # } #",
-                background: "#EFEFEF",
-                border: {
-                    color: "#333",
-                    width: 2
-                },
-            }
-
+            tooltip: rto.tooltip
         }
 
         // get last week data
@@ -566,7 +587,7 @@
                     $scope.total_cost = data[0].cost;
                 });
             });
-        }   
+        }
 
         $scope.updateRates = function () {
             var date_end = new Date();
@@ -677,6 +698,7 @@
                 }
             }
         }
+
         $scope.$on("onRepeatEnd", updateUI);    //will trigger this every time when data is updated
 
         $scope.updateWidgetImpl = function(){
@@ -808,7 +830,7 @@
             $scope.soFarChartLast.refresh();
         }
 
-        var ca = {
+        /*var ca = {
             margin: 0,
             background: '#FCFCFC'
         };
@@ -842,67 +864,57 @@
             majorTicks: {
                 size: 0
             }
-        };
+        };*/
 
         $scope.soFarOptionsThis = {
             // transitions: false,
             series: [{
-                markers: { visible: true },
+                markers: sfot.series[0].markers,
                 data: thisCost,
-                color: '#354960',
-                opacity: 0.6,
-                gap: 0.1,
+                color: sfot.series[0].color,
+                opacity: sfot.series[0].opacity,
+                gap: sfot.series[0].gap,
                 overlay: {
-                    gradient: "none"
+                    gradient: sfot.series[0].overlay.gradient
                 },
                 border: {
-                    width: 0
+                    width: sfot.series[0].border.width
                 },
                 highlight: {
-                    visible: false
+                    visible: sfot.series[0].highlight.visible
                 },
-                labels: {
-                    visible: true,
-                    font: "bold 1.357em ITCAvantGardeStd-Bk",
-                    color: "#354960",
-                    format: "$ ##,#"
-                }
+                labels: sfot.series[0].labels
             }],
-            chartArea: ca,
-            legend: le,
-            seriesDefaults: sd,
-            valueAxis: va,
-            categoryAxis: catAxis
+            chartArea: sfot.chartArea,
+            legend: sfot.legend,
+            seriesDefaults: sfot.seriesDefaults,
+            valueAxis: sfot.valueAxis,
+            categoryAxis: sfot.categoryAxis
         }
         $scope.soFarOptionsLast = {
             // transitions: false,
             series: [{
-                markers: { visible: true },
+                markers: sfol.series[0].markers,
                 data: lastCost,
-                color: '#7a7a7a',
-                opacity: 0.6,
-                gap: 0.1,
+                color: sfol.series[0].color,
+                opacity: sfol.series[0].opacity,
+                gap: sfol.series[0].gap,
                 overlay: {
-                    gradient: "none"
+                    gradient: sfol.series[0].overlay.gradient
                 },
                 border: {
-                    width: 0
+                    width: sfol.series[0].border.width
                 },
                 highlight: {
-                    visible: false
+                    visible: sfol.series[0].highlight.visible
                 },
-                labels: {
-                    visible: true,
-                    font: "bold 1.357em ITCAvantGardeStd-Bk",
-                    color: "#878787",
-                    format: "$ ##,#"
-                }
+                labels: sfol.series[0].labels
             }],
-            chartArea: ca,
-            legend: le,
-            seriesDefaults: sd,
-            valueAxis: va,
-            categoryAxis: catAxis
+            chartArea: sfol.chartArea,
+            legend: sfol.legend,
+            seriesDefaults: sfol.seriesDefaults,
+            valueAxis: sfol.valueAxis,
+            categoryAxis: sfol.categoryAxis
         }
 
         $scope.isWeek = true;
@@ -1020,78 +1032,15 @@
             dataSource: {
                 data: []
             },
-            chartArea: {
-                margin: 0,
-                background: "#FCFCFC"
-            },
+            chartArea: lwso.chartArea,
             // seriesDefaults: {
             //     type: "area",
             //     opacity: 0.6
             // },
-            series: [{
-                type: "area",
-                opacity: 0.6,
-                markers: {visible: true},
-                field: "value",
-                color: "#354960",
-                line: {
-                    width: 2
-                }
-            },{
-                type: "column", //add this to give some space before the first data point and after the last data point
-                field: "dummy"
-            }],
-            valueAxis: {
-                labels: {
-                    format: "{0}",
-                    font: "0.857em ITCAvantGardeStd-Bk",
-                    color: "#4B4B4B"
-                },
-                line: {
-                    visible: false
-                },
-                majorGridLines: {
-                    color: "#ECECEC",
-                    visible: true
-                },
-                majorUnit: dayStep,
-                max: dayMaxStep,
-                min: 0
-            },
-            categoryAxis: {
-                field: "weekday",
-                type: "date",
-                majorGridLines: {
-                    //color: "#ECECEC",
-                    visible: false
-                },
-                labels: {
-                    font: "0.857em ITCAvantGardeStd-Bk",
-                    color: "#4B4B4B",
-                    dateFormats: {
-                        days: "ddd"
-                    }
-                },
-                line: {
-                    color: "#ECECEC",
-                    width: 2,
-                    visible: true
-                },
-                majorTicks: {
-                    size: 0
-
-                }
-            },
-            tooltip: {
-                visible: true,
-                //format: "{0}%",
-                template: "# if (value < 1) { # #=kendo.toString(value, 'n2')# # } else if (value < 10) { # #=kendo.toString(value, 'n1') # # } else { # #=kendo.toString(value, 'n0') # # } #",
-                background: "#EFEFEF",
-                border: {
-                    color: "#333",
-                    width: 2
-                },
-            }
+            series: lwso.series,
+            valueAxis:lwso.valueAxis,
+            categoryAxis: lwso.categoryAxis,
+            tooltip: lwso.tooltip
         };
 
         function initChartData(){

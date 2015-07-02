@@ -1,0 +1,300 @@
+/* for paper theme */
+#menu .menuItem.selected .itemColor,
+#menu .menuItem:hover .itemColor {
+	background-color: #009382;
+}
+
+#menu .menuItem .dashboardIcon {
+	background-position: 7px center;
+	background-image: url(/static/images/icons_v4/dashboard.png);
+}
+
+#menu .menuItem .usersIcon {
+	background-position: 11px center;
+	background-image: url(/static/images/icons_v4/users.png);
+}
+
+#menu .menuItem .devicesIcon {
+	background-position: 11px center;
+	background-image: url(/static/images/icons_v4/devices.png);
+}
+
+#menu .menuItem .serversIcon {
+	background-position: 10px center;
+	background-image: url(/static/images/icons_v4/servers.png);
+}
+/* for paper theme */
+
+/* for energy side menu theme */
+#menu .menuItem.selected .itemColor,
+#menu .menuItem:hover .itemColor {
+	background-color: #009382;
+}
+
+#menu .menuItem .dashboardIcon {
+	background-position: 7px center;
+	background-image: url(/static/images/icons_v4/dashboard.png);
+}
+
+#menu .menuItem .exploreIcon {
+	background-position: 7px center;
+	background-image: url(/static/images/icons_v4/energy-explore.png);
+}
+
+#menu .menuItem .reportsIcon {
+	background-position: 7px center;
+	background-image: url(/static/images/icons_v4/energy-reports.png);
+}
+
+#menu .menuItem .alertsIcon {
+	background-position: 7px center;
+	background-image: url(/static/images/icons_v4/energy-alerts.png);
+}
+
+#menu .menuItem .downloadIcon {
+	background-position: 7px center;
+	background-image: url(/static/images/icons_v4/energy-download.png);
+}
+/* for energy side menu theme */
+
+
+body {
+	background-color: #d8e7e7;
+	font-family: 'Roboto', "Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
+        "Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
+	font-size: 14px;
+
+	height: 100%;
+	width: 100%;
+}
+
+html {
+	height: 100%;
+	width: 100%;	
+}
+
+.pageHeader {
+	width: 100%;
+	min-width: 1200px;
+	height: 66px;
+	background-color: #FFFFFF;
+}
+
+.headerLogo,
+.headerBtns,
+.headerBtns>* {
+	vertical-align: middle;
+	display: inline-block;
+	height: 100%;
+}
+
+.pageHeader .headerLogo {
+	box-sizing: content-box;
+	width: 165px;	/* =menu */
+	background-color: #8dc63e;
+	border-bottom: 1px solid #8dc63e;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-image: url(/static/images/icons_v4/en-trak-logo.png);
+}
+
+.pageHeader .headerBtns {
+	box-sizing: content-box;
+	border-bottom: 1px solid #999999;
+	min-width: 1035px; /* 1200 - menu */
+	width: calc(100% - 165px); /* 100% - menu */
+}
+
+.headerBtns .btnIcon {
+	width: 65px;
+	border-right: 1px solid #999999;
+	cursor: pointer;
+}
+
+.headerBtns .btnIcon>* {
+	text-align: center;
+}
+
+.headerBtns #menuIcon {
+	background-position: center;
+	background-repeat: no-repeat;
+	background-image: url(/static/images/icons_v4/hamburger.png);
+}
+
+.headerBtns #menuIcon:hover {
+	background-image: url(/static/images/icons_v4/hamburger-hover.png);
+}
+
+.headerBtns #energyIcon {
+	color: #fdb813;
+}
+
+.headerBtns .energyImg {
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+	background-image: url(/static/images/icons_v4/energy-main.png);
+	width: 32px;
+	height: 32px;
+	margin: 8px auto 0 auto;
+}
+
+.headerBtns #energyIcon.selected .energyImg,
+.headerBtns #energyIcon:hover .energyImg {
+	background-image: url(/static/images/icons_v4/energy-hover.png);
+}
+
+.headerBtns #energyIcon.selected,
+.headerBtns #energyIcon:hover {
+	background-color: #fdb813;
+	color: #ffffff;
+}
+
+.headerBtns #paperIcon {
+	color: #009382;
+}
+
+.headerBtns .paperImg {
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+	background-image: url(/static/images/icons_v4/paper-main.png);
+	width: 32px;
+	height: 32px;
+	margin: 8px auto 0 auto;
+}
+
+.headerBtns #paperIcon.selected .paperImg,
+.headerBtns #paperIcon:hover .paperImg {
+	background-image: url(/static/images/icons_v4/paper-hover.png);
+}
+
+.headerBtns #paperIcon.selected,
+.headerBtns #paperIcon:hover {
+	background-color: #009382;
+	color: #ffffff;
+}
+
+.headerBtns #waterIcon {
+	color: #40b4e5;
+}
+
+.headerBtns .waterImg {
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+	background-image: url(/static/images/icons_v4/water-main.png);
+	width: 32px;
+	height: 32px;
+	margin: 8px auto 0 auto;
+}
+
+.headerBtns #waterIcon.selected .waterImg,
+.headerBtns #waterIcon:hover .waterImg {
+	background-image: url(/static/images/icons_v4/water-hover.png);
+}
+
+.headerBtns #waterIcon.selected,
+.headerBtns #waterIcon:hover {
+	background-color: #40b4e5;
+	color: #ffffff;
+}
+
+.headerBtns .companyName {
+	padding-left: 20px;
+	font-size: 1.143em;
+	line-height: 65px;
+}
+
+.headerBtns .fxIcon {
+	background-repeat: no-repeat;
+	background-position: center;
+	background-image: url(/static/images/icons_v4/fujixerox.png);
+	float: right;
+	width: 150px;
+}
+
+.headerBtns .settingIcon {
+	background-repeat: no-repeat;
+	background-position: center;
+	background-image: url(/static/images/icons_v4/settings-main.png);
+	float: right;
+	width: 65px;
+	cursor: pointer;
+}
+
+.headerBtns .settingIcon:hover {
+	background-image: url(/static/images/icons_v4/settings-hover.png);
+	background-color: #999999;
+}
+
+#content {
+	width: 100%;
+	min-width: 1200px; /* =pageHeader */
+	position: relative;
+	min-height: calc(100% - 70px); /* may need to be overrided */
+	height: calc(100% - 70px); /* 100% - pageHeader */
+}
+
+#menu {
+	position: absolute;
+	left: 0;
+	display: inline-block;
+	height: 100%;
+	min-height: 100%;
+	width: 165px;
+	background-color: #344052;
+	transition: left 0.5s ease 0s;
+}
+#menu.animate {
+	left: -165px;
+}
+
+#menu .menuItem {
+	height: 50px;
+	width: 100%;
+	cursor: pointer;
+	display: block;
+}
+
+#menu .menuItem.selected,
+#menu .menuItem:hover {
+	background-color: #2e3949;
+}
+
+#menu .menuItem .itemColor {
+	height: 100%;
+	width: 5px;
+	float: left;
+}
+
+#menu .menuItem .itemContent {
+	height: 50px;
+	line-height: 50px;
+	width: calc(100% - 5px);
+	float: left;
+	padding-left: 45px;
+	color: #ffffff;
+	font-size: 1.143em;
+	font-weight: 300;
+	background-repeat: no-repeat;
+}
+
+#subPage {
+	box-sizing: content-box;
+	padding-left: 165px;	/* =menu */
+	display: inline-block;
+	min-height: 100%;
+	height: 100%;
+	width: calc(100% - 165px);  /* 100% - menu */
+	transition: 0.5s ease 0s;
+	transition-property: width, padding;
+}
+#subPage.animate {
+	padding-left: 0;
+	width: 100%;
+}
+
+.row {
+	margin: 0;
+}

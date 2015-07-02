@@ -8,7 +8,10 @@
 {{block.super}}
 
 <link rel="shortcut icon" href="{% static 'images/entrak-favicon.png' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+<!-- v4 side menu and header css -->
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<!-- v3 side menu and header css -->
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}"> -->
 <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
 <link rel="stylesheet" type="text/css" href="{% static 'js/superfish-master/dist/css/superfish.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'js/superfish-master/dist/css/superfish-vertical.css' %}">
@@ -66,6 +69,10 @@ $(function() {
         {% endif %}
     {% endfor %}
 
+
+
+
+
     var menuTreeDom = null;
     page.userSystemTree.traverseDown(function (node) {
         var aDom = $('<a href="#" onclick="return false;">' + node.data.name +'</a>');
@@ -95,7 +102,7 @@ $(function() {
         }
     });
 
-    
+
     $("#system-menu ul").append(menuTreeDom);
 
     $('#system-menu').superfish({
@@ -141,6 +148,14 @@ $(function() {
     });
 
     noti_datasource.read();
+
+
+    //v4 menu hide/show 
+    $("#menuIcon").click(function(){
+      $("#menu").toggleClass("animate");
+      $("#subPage").toggleClass("animate");
+    });
+
 });
 
 function readMeesage(id) {
@@ -158,6 +173,8 @@ function readMeesage(id) {
 }
 </script>
 
+
+
 {% endblock %}
 
 {% block content %}
@@ -169,156 +186,67 @@ function readMeesage(id) {
     </div>
 </div>
 
-
-<div id="page-container">
-
-    <!-- Left Sidebar Main -->
-    <div id="menu">
-
-        <!-- User's Company Logo -->
-        <div id="user-logo">
-            <div class="logo-circle-bound" style="background-image: url('{{systems.0.logo.url}}');">
-            </div>
-            <img src="{% static 'images/user-logo-bg.png' %}">
-        </div>
-
-        <!-- User's Company Name -->
-        <h2 id="company">{{systems.0|get_system_full_name:LANGUAGE_CODE|upper}}</h2>
-
-        <!-- Main Sidebar Links -->
-        <nav>
-            <ul id="menu-links">
-                {% if 'fujixerox' in systems.0.code %}
-                <li id="menu-link-dashboard">
-                    <a href="{% url 'companies.dashboard' system_code=systems.0.code %}"><img width="26" height="22" src="{% static 'images/home-icon.png' %}"><span>{% trans "Home" %}</span></a>
-                </li>
-                {% endif %}
-                <li id="menu-link-graph">
-                    <a href="{% url 'graph' system_code=systems.0.code %}"><img width="26" height="22" src="{% static 'images/graph-icon.png' %}"><span>{% trans "Graph" %}</span></a>
-                </li>
-                <li id="menu-link-ranking">
-                    <a href="{% url 'ranking' system_code=systems.0.code %}"><img width="26" height="23" src="{% static 'images/ranking-icon.png' %}"><span>{% trans "Ranking" %}</span></a>
-                </li>
-                <li id="menu-link-progress">
-                    <a href="{% url 'progress' system_code=systems.0.code %}"><img width="26" height="23" src="{% static 'images/progress-icon.png' %}"><span>{% trans "Progress" %}</span></a>
-                </li>
-                <li id="menu-link-report">
-                    <a href="{% url 'companies.report' system_code=systems.0.code %}"><img width="26" height="24" src="{% static 'images/reports-icon.png' %}"><span>{% trans "Reports" %}</span></a>
-                </li>
-                <li id="menu-link-display">
-                    <a href="{% url 'display' system_code=systems.0.code %}" target="_blank"><img width="26" height="22" src="{% static 'images/display-icon.png' %}"><span>{% trans "Display" %}</span></a>
-                </li>
-
-                {% if 'hkex' in systems.0.code %}
-                <li id="menu-link-export">
-                    <a href="{% url 'companies.export' system_code=systems.0.code %}"><img width="24" height="24" src="{% static 'images/dataDownload-icon.png' %}" style="margin-right:2px"><span>{% trans "Download" %}</span></a>
-                </li>
-                {% endif %}
-
-                {% comment %}
-                <li id="menu-link-pro-v">
-                    <a href="#"><img width="31" height="21" src="{% static 'images/prov-icon.png' %}"><span>Pro V</span></a>
-                </li>
-                {% endcomment %}
-                <li id="menu-link-alert">
-                    <a href="{% url 'alert_settings' system_code=systems.0.code %}"><img width="23" height="22" src="{% static 'images/alert-icon.png' %}" style="margin-right:3px"><span>{% trans "Alert" %}</span></a>
-                </li>
-                {% if systems.0.printers.count > 0 %}
-                <li id="menu-link-printer-graph">
-                    <a href="{% url 'printers.graph' system_code=systems.0.code %}"><img width="19" height="25" src="{% static 'images/paper-icon.png' %}"><span>{% trans "Paper" %}</span></a>
-                </li>
-                {% endif %}
-                <li id="menu-link-setting">
-                    <a href="{% url 'profile' system_code=systems.0.code %}"><img width="24" height="24" src="{% static 'images/settings-icon.png' %}" style="margin-right:2px"><span>{% trans "Settings" %}</span></a>
-                </li>
-                <li id="menu-link-logout">
-                    <a href="{% url 'logout' system_code=systems.0.code %}"><img width="23" height="24" src="{% static 'images/logout-icon.png' %}" style="margin-right:3px"><span>{% trans "Logout" %}</span></a>
-                </li>
-            </ul>
-        </nav>
-
+<!-- v4 page header -->
+<div class="pageHeader">
+  <div class="headerLogo">
+  </div><div class="headerBtns">
+    <div class="settingIcon"></div>
+    <div class="fxIcon"></div>
+    <div id="menuIcon" class="btnIcon">
+    </div><div id="energyIcon" class="btnIcon selected">
+      <div class="energyImg"></div>
+      <div>Energy</div>
+    </div><div id="paperIcon" class="btnIcon">
+      <div class="paperImg"></div>
+      <div>Paper</div>
+    </div><div id="waterIcon" class="btnIcon">
+      <div class="waterImg"></div>
+      <div>Water</div>
+    </div><div class="greyText companyName">
+      Sears Holding Global Sourcing
     </div>
-    <!-- Left Sidebar Main End -->
-
-    <!-- Main Content -->
-    <div class="right-content">
-
-        <!-- Blue Bar top -->
-        <div class="blue-bar"></div>
-
-        <!-- Header -->
-        <div id="header">
-
-          {% if 'fujixerox' in systems.0.code %}
-            <img class="image-carousel" style="right: 0;" src="{% static 'images/fujixerox/fujixerox_banner.jpeg' %}">
-          {% else %}
-            <img class="image-carousel" src="{% static 'images/banner-animation.gif' %}">
-          {% endif %}
-
-
-
-            <!-- Header Wording -->
-            <div id="heading"><h1>{% block page_title %}{% endblock %}</h1></div>
-            <div id="sub-heading"><h2>{% block page_subtitle %}{% endblock %}</h2></div>
-
-            <div class="change-lang-block">
-                <a lang_code="zh-tw" class="{% ifequal LANGUAGE_CODE 'zh-tw' %}current-lang{% endifequal %}" href="#">繁體中文</a>
-                <span> / </span>
-                <a lang_code="en" class="{% ifequal LANGUAGE_CODE 'en' %}current-lang{% endifequal %}" href="#">ENGLISH</a>
-            </div>
-
-            <div id="fullscreen-title" style="display: none;">Real Time Energy Monitoring System</div>
-            <div id="exit-fullscreen-btn" style="display: none;"></div>
-
-            <div style="display:none;">
-                <form class="change-lang-form" action="{% url 'set_language' %}" method="post">
-                    {% csrf_token %}
-                    <input name="language" type="hidden" value="" />
-                </form>
-            </div>
-
-        </div>
-        <!-- Header End -->
-
-        <!-- Blue Bar bottom -->
-        <div class="blue-bar"></div>
-
-        <div id="sub-heading-facilities">
-            <button id="fullscreen-btn" class="k-button" style="display:none;"></button>
-            <ul id="system-menu" class="sf-menu">
-                <li>
-                    <a><img src="{% static 'images/menu-icon.png' %}"></a>
-                    <ul></ul>
-                </li>
-            </ul>
-
-            <span id="system-name-label"><h3>{% trans "You are viewing:" %}</h3></span>
-            <span id="breadcrumbs-path">
-
-                {% for info in system_path_components %}
-                <a href="/{{info.code}}/{% block breadcrumb_target_view %}{% endblock %}/">{{info.nameInfo|get_value_with_key:LANGUAGE_CODE}}</a>
-                    {% if not forloop.last %}
-                    <span>-</span>
-                    {% endif %}
-                {% endfor %}
-            </span>
-        </div>
-
-        {% block page_content %}{% endblock %}
-
-    </div>
+  </div>
 </div>
+<!-- v4 page content -->
+<div id="content">
+  <div id="menu">
+    <a class="menuItem selected">
+      <div class="itemColor"></div>
+      <div class="itemContent dashboardIcon">Dashboard</div>
+    </a>
+    <a class="menuItem">
+      <div class="itemColor"></div>
+      <div class="itemContent exploreIcon">Explore</div>
+    </a>
+    <a class="menuItem">
+      <div class="itemColor"></div>
+      <div class="itemContent reportsIcon">Reports</div>
+    </a>
+    <a class="menuItem">
+      <div class="itemColor"></div>
+      <div class="itemContent alertsIcon">Alerts</div>
+    </a>
+    <a class="menuItem">
+      <div class="itemColor"></div>
+      <div class="itemContent downloadIcon">Download</div>
+    </a>
+  </div><div id="subPage"><!-- update height later-->
+     {% block page_content %}{% endblock %}
+  </div>
+</div>
+
+
 
 {% block footer %}
 {% get_current_language as LANGUAGE_CODE %}
 <footer class="site-footer">
-    <p style="clear: both;"></p>
-    <p id="copyright">Copyright © En-trak Hong Kong Ltd 2015. All rights reserved.</p>
+    <!-- <p style="clear: both;"></p>
+    <p id="copyright">Copyright © En-trak Hong Kong Ltd 2015. All rights reserved. </p>
     <a><img id="entrak-logo" src="{% static 'images/powered-by-logo.png' %}"></a>
-    <p class="footer-main"><a class="footer-link" href="{% url 'faq' system_code=systems.0.code %}">FAQ </a>
+    <p class="footer-main"><a class="footer-link" href="{% url 'faq' system_code=systems.0.code %}">FAQ </a> -->
     <!-- <a class="footer-link" href="{% url 'profile' system_code=systems.0.code %}"> |  Settings</a> -->
-    <a class="footer-link" href="{% url 'disclaimer' system_code=systems.0.code %}"> |  Legal </a></p>
-    <p style="clear: both;"></p>
+    <!-- <a class="footer-link" href="{% url 'disclaimer' system_code=systems.0.code %}"> |  Legal </a></p>
+    <p style="clear: both;"></p> -->
 </footer>
 {% endblock %}
 
