@@ -10,8 +10,10 @@ from egauge.models import StatusMonitor, Source
 class MeterStatusSerializer(serializers.Serializer):
     system_code = serializers.CharField()
     source_id = serializers.CharField()
+    source_name = serializers.CharField()
     value = serializers.FloatField()
     status = serializers.CharField()
+    threshold = serializers.FloatField()
 
 
 class MeterStatusList(generics.ListAPIView):
@@ -59,7 +61,9 @@ class MeterStatusList(generics.ListAPIView):
             status = {
                 'system_code': source.system_code,
                 'source_id': status_monitor.source_id,
+                'source_name': source.name,
                 'value': current_hour_kwh,
+                'threshold': status_monitor.threshold,
                 'status': status,
             }
 
