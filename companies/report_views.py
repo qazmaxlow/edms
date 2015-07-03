@@ -360,6 +360,7 @@ def summary_ajax(request, system_code):
     return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type="application/json")
 
 
+
 @permission_required()
 def report_view(request, system_code=None):
     systems_info = System.get_systems_info(system_code, request.user.system.code)
@@ -460,7 +461,12 @@ def report_view(request, system_code=None):
     m['default_custom_end_date'] = datetime.datetime.now(pytz.utc) - datetime.timedelta(days=1)
     m['default_custom_start_date'] = m['default_custom_end_date'] - datetime.timedelta(days=30)
     # return render(request, 'testing_code.html', m)
-    return render(request, 'companies/reports/summary.html', m)
+
+    if current_system == '4.0':
+        tpl_name = 'summary_v4.html'
+    elif current_system != '4.0':
+        tpl_name = 'summary_v4.html'
+    return render(request, 'companies/reports/' + tpl_name, m)
 
 
 class CompareTplHepler:
