@@ -355,7 +355,7 @@ class SourceManager:
                         Utils.log_error("no matching cname for source! source: %s, cname: %s"%(xml_url, source['name']))
 
             if source_reading_mins:
-                SourceReadingMin.objects.insert(source_reading_mins)
+                SourceReadingMin.objects.insert(source_reading_mins, write_concern={'continue_on_error': True})
             if source_reading_mins_invalid:
                 SourceReadingMinInvalid.objects.insert(source_reading_mins_invalid)
 
@@ -447,7 +447,7 @@ class SourceManager:
                 return
 
             if source_reading_mins:
-                SourceReadingMin.objects.insert(source_reading_mins)
+                SourceReadingMin.objects.insert(source_reading_mins, write_concern={'continue_on_error': True})
 
             if need_update_source_ids:
                 source_tz = source_with_members['tz']
