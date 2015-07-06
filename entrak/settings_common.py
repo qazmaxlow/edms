@@ -86,6 +86,7 @@ REST_FRAMEWORK = {
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -93,7 +94,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'entrak.middleware.timezone_middleware.TimezoneMiddleware',
     'entrak.middleware.locale.LocaleMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 )
 
 CORS_ORIGIN_ALLOW_ALL = True
