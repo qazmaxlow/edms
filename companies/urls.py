@@ -28,6 +28,8 @@ urlpatterns = patterns(
     url(r'^report/popup-report/(?P<year>\d{4})/(?P<month>[a-z]{3})/$', report_views.popup_report_view, name='companies.reports.popup-report'),
     url(r'^report/popup-report/download/$', report_views.download_popup_report_view, name='companies.reports.popup-report.download'),
     url(r'^report/share-report/download/$', report_views.download_share_report_view, name='companies.reports.share-report.download'),
+    url(r'^report/revamp/popup-report/download/$', report_revamp_views.download_popup_report_view, name='companies.report_revamp.popup-report.download'),
+    url(r'^report/revamp/share-report/download/$', report_revamp_views.download_share_report_view, name='companies.report_revamp.share-report.download'),
     url(r'^measures/daily/$', measure_views.DailyMeasureList.as_view(), name='companies.measures.daily'),
     url(r'^measures/up-till-now/$', measure_views.EnergyUsedList.as_view(), name='companies.measures.up-till-now'),
     url(r'^measures/total/$', measure_views.TotalDetail.as_view(), name='companies.measures.total'),
@@ -53,4 +55,6 @@ urlpatterns = patterns(
     url(r'^users/authenticated-user/$', user_views.CompanyAuthenticatedUserView.as_view(), name='companies.users.authenticated-user'),
     url(r'^report/share-report/$', report_views.share_popup_report_view, name='companies.reports.share-report.custom-dates'),
     url(r'^report/share-report/(?P<year>\d{4})/(?P<month>[a-z]{3})/$', report_views.share_popup_report_view, name='companies.reports.share-report'),
+    url(r'^report/revamp/share-report/$', report_revamp_views.share_popup_report_view, name='companies.report_revamp.share-report.custom-dates'),
+    url(r'^report/revamp/share-report/(?P<year>\d{4})/(?P<month>[a-z]{3})/$', report_revamp_views.share_popup_report_view, name='companies.report_revamp.share-report'),
 )

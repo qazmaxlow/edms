@@ -20,14 +20,14 @@
       </div>
     </div>
 
-    <div class="row top-content {{ css_class_energy_saving }}">
+    <div class="row top-content {{ s1_css_class_energy_saving }}">
         <div id="current-usage-col" class="col-xs-4 basic-info-col">
             <h4>{% trans "How much energy<br>did we use?" %}</h4>
             <hr class="current-usage-separator-dark-grey">
             <div>
                 <img src="{% static 'images/report/lightning-energy.png' %}">
                 <div class="basic-info-text-container">
-                    <span id="current-energy-usage">{{ total_kwh|floatformat:"0"|intcomma }}</span><span class="basic-info-col-unit"> kWh</span>
+                    <span id="current-energy-usage">{{ s1_total_kwh|floatformat:"0"|intcomma }}</span><span class="basic-info-col-unit"> kWh</span>
                     <br>
                     <span class="basic-info-col-subtext">{% trans "of electricity" %}</span>
                 </div>
@@ -36,7 +36,7 @@
             <div>
                 <img src="{% static 'images/report/factory-co2.png' %}">
                 <div class="basic-info-text-container">
-                    <span id="current-co2-usage">{{ total_co2|floatformat:"0"|intcomma }} {% trans "tons" %}</span><span class="basic-info-col-unit"> {% trans "CO<sub>2</sub>" %}</span>
+                    <span id="current-co2-usage">{{ s1_total_co2|floatformat:"0"|intcomma }} {% trans "tons" %}</span><span class="basic-info-col-unit"> {% trans "CO<sub>2</sub>" %}</span>
                     <br>
                     <span class="basic-info-col-subtext">{% trans "emitted" %}</span>
                 </div>
@@ -45,7 +45,7 @@
             <div class="bottom-margin-20">
                 <img src="{% static 'images/report/piggy.png' %}">
                 <div class="basic-info-text-container">
-                    <span id="current-money-usage">${{ total_money|floatformat:"0"|intcomma }}</span>
+                    <span id="current-money-usage">${{ s1_total_money|floatformat:"0"|intcomma }}</span>
                     <br>
                     <span class="basic-info-col-subtext">{% trans "in energy costs" %}</span>
                 </div>
@@ -60,20 +60,20 @@
             <div>
                 <img src="{% static 'images/report/lightning-energy.png' %}">
                 <div class="basic-info-text-container">
-                  {% if last_year_data_exist != True %}
+                  {% if s1_last_year_data_exist != True %}
                     <span id="save-energy-usage">N/A</span>
                   {% else %}
                     {% ifequal LANGUAGE_CODE 'zh-tw' %}
-                      {% if is_saving  %}
+                      {% if s1_is_saving  %}
                       <span class="basic-info-col-subtext">{% trans "less" %}</span>
                       {% else %}
                       <span class="basic-info-col-subtext">{% trans "more" %}</span>
                       {% endif %}
-                      <span id="save-energy-usage">{{ diff_kwh|stringformat:".0f"|intcomma }}%</span>
+                      <span id="save-energy-usage">{{ s1_diff_kwh|stringformat:".0f"|intcomma }}%</span>
                     {% else %}
-                      <span id="save-energy-usage">{{ diff_kwh|stringformat:".0f"|intcomma }}%</span>
+                      <span id="save-energy-usage">{{ s1_diff_kwh|stringformat:".0f"|intcomma }}%</span>
                       <br>
-                      {% if is_saving %}
+                      {% if s1_is_saving %}
                       <span class="basic-info-col-subtext">{% trans "less" %}</span>
                       {% else %}
                       <span class="basic-info-col-subtext">{% trans "more" %}</span>
@@ -86,21 +86,21 @@
             <div>
                 <img src="{% static 'images/report/factory-co2.png' %}">
                 <div class="basic-info-text-container">
-                  {% if last_year_data_exist != True %}
+                  {% if s1_last_year_data_exist != True %}
                     <span id="save-co2-usage">N/A</span>
                   {% else %}
 
                     {% ifequal LANGUAGE_CODE 'zh-tw' %}
-                      {% if is_saving %}
+                      {% if s1_is_saving %}
                       <span class="basic-info-col-subtext">{% trans "less" %}</span>
                       {% else %}
                       <span class="basic-info-col-subtext">{% trans "more" %}</span>
                       {% endif %}
-                      <span id="save-co2-usage">{{ diff_co2|stringformat:".0f"|intcomma }} {% trans "tons" %}</span><span class="basic-info-col-unit"> {% trans "CO<sub>2</sub>" %}</span>
+                      <span id="save-co2-usage">{{ s1_diff_co2|stringformat:".0f"|intcomma }} {% trans "tons" %}</span><span class="basic-info-col-unit"> {% trans "CO<sub>2</sub>" %}</span>
                     {% else %}
-                      <span id="save-co2-usage">{{ diff_co2|stringformat:".0f"|intcomma }} {% trans "tons" %}</span><span class="basic-info-col-unit"> {% trans "CO<sub>2</sub>" %}</span>
+                      <span id="save-co2-usage">{{ s1_diff_co2|stringformat:".0f"|intcomma }} {% trans "tons" %}</span><span class="basic-info-col-unit"> {% trans "CO<sub>2</sub>" %}</span>
                       <br>
-                      {% if is_saving %}
+                      {% if s1_is_saving %}
                       <span class="basic-info-col-subtext">{% trans "less" %}</span>
                       {% else %}
                       <span class="basic-info-col-subtext">{% trans "more" %}</span>
@@ -113,20 +113,20 @@
             <div class="bottom-margin-20">
                 <img src="{% static 'images/report/piggy.png' %}">
                 <div class="basic-info-text-container">
-                  {% if last_year_data_exist != True %}
+                  {% if s1_last_year_data_exist != True %}
                     <span id="save-money-usage">N/A</span>
                   {% else %}
                     {% ifequal LANGUAGE_CODE 'zh-tw' %}
-                      {% if is_saving %}
+                      {% if s1_is_saving %}
                       <span class="basic-info-col-subtext">{% trans "less" %}</span>
                       {% else %}
                       <span class="basic-info-col-subtext">{% trans "more" %}</span>
                       {% endif %}
-                      <span id="save-money-usage">${{ diff_money|stringformat:".0f"|intcomma }}</span>
+                      <span id="save-money-usage">${{ s1_diff_money|stringformat:".0f"|intcomma }}</span>
                     {% else %}
-                      <span id="save-money-usage">${{ diff_money|stringformat:".0f"|intcomma }}</span>
+                      <span id="save-money-usage">${{ s1_diff_money|stringformat:".0f"|intcomma }}</span>
                       <br>
-                      {% if is_saving %}
+                      {% if s1_is_saving %}
                       <span class="basic-info-col-subtext">{% trans "less" %}</span>
                       {% else %}
                       <span class="basic-info-col-subtext">{% trans "more" %}</span>
@@ -143,21 +143,21 @@
             <div>
                 <img src="{% static 'images/report/car.png' %}">
                 <div class="basic-info-text-container">
-                  {% if last_year_data_exist != True %}
+                  {% if s1_last_year_data_exist != True %}
                     <span id="car-impact">N/A</span>
                   {% else %}
                   <span id="car-impact">
                     {% ifequal LANGUAGE_CODE 'zh-tw' %}
-                      {% if is_saving %}
+                      {% if s1_is_saving %}
                          {% trans "reduce" %}
                       {% else %}
                          {% trans "increase" %}
                       {% endif %}
                     {% endifequal %}
-                    {{ co2_in_car|floatformat:"0"|intcomma }}
+                    {{ s1_co2_in_car|floatformat:"0"|intcomma }}
                     {% trans "cars" %}</span><br>
                     <span id="car-impact-subtext" class="basic-info-col-subtext">
-                      {% if is_saving %}
+                      {% if s1_is_saving %}
                       {% trans "off the road for a month" %}
                       {% else %}
                       {% trans "on the road for a month" %}
@@ -169,22 +169,22 @@
             <div>
                 <img src="{% static 'images/report/trees.png' %}">
                 <div class="basic-info-text-container">
-                  {% if last_year_data_exist != True %}
+                  {% if s1_last_year_data_exist != True %}
                     <span id="forest-impact">N/A</span>
                   {% else %}
                     {% ifequal LANGUAGE_CODE 'zh-tw' %}
                     <span id="forest-impact-subtext" class="basic-info-col-subtext">
-                      {% if is_saving %}
+                      {% if s1_is_saving %}
                       {% trans "of rainforest protected" %}
                       {% else %}
                       {% trans "of rainforest cut down" %}
                       {% endif %}
                     </span>
-                    <span id="forest-impact">{{ co2_in_forest|floatformat:"0"|intcomma }}{% trans "m<sup>2</sup>" %}</span>
+                    <span id="forest-impact">{{ s1_co2_in_forest|floatformat:"0"|intcomma }}{% trans "m<sup>2</sup>" %}</span>
                     {% else %}
-                    <span id="forest-impact">{{ co2_in_forest|floatformat:"0"|intcomma }} m<sup>2</sup></span><br>
+                    <span id="forest-impact">{{ s1_co2_in_forest|floatformat:"0"|intcomma }} m<sup>2</sup></span><br>
                     <span id="forest-impact-subtext" class="basic-info-col-subtext">
-                      {% if is_saving %}
+                      {% if s1_is_saving %}
                       of rainforest protected
                       {% else %}
                       of rainforest cut down
@@ -198,12 +198,12 @@
             <div class="bottom-margin-20">
                 <img src="{% static 'images/report/ac.png' %}">
                 <div class="basic-info-text-container">
-                  {% if last_year_data_exist != True %}
+                  {% if s1_last_year_data_exist != True %}
                     <span id="panda-impact">N/A</span>
                   {% else %}
-                    <span id="panda-impact">{{ co2_in_elephant|floatformat:"0"|intcomma }}{% trans " aircons" %}</span>
+                    <span id="panda-impact">{{ s1_kwh_in_aircons|floatformat:"0"|intcomma }}{% trans " aircons" %}</span>
                     <span id="panda-impact-subtext" class="basic-info-col-subtext">
-                      {% if is_saving %}
+                      {% if s1_is_saving %}
                       {% trans "turned off for one day" %}
                       {% else %}
                       {% trans "turned on for one day" %}
@@ -219,7 +219,7 @@
       <div class="row detail-container bottom-border-2 top-border-2{% if transformed_datas|length > 6 %} page-break-after{% endif %}">
         <div class="col-xs-8 x-padding-5-0 break-down-bar">
               <table class="transformed-bar-chart">
-                {% for td in sub_system_stats %}
+                {% for td in s1_sub_system_stats %}
                 <tr class="transformed-row-bg">
                   <td class="transformed-name" style="background-color:{{ td.color }};">{{ td.name }}</td>
                   <td>
@@ -253,7 +253,7 @@
             </tr>
           </thead>
           <tbody id="key-statistic-sub-data">
-            {% for td in sub_system_stats %}
+            {% for td in s1_sub_system_stats %}
             <tr class="key-statistics-row ">
               <td class="usage-type-name">{{ td.name }}</td><td>
                 {{ td.total_kwh|floatformat:"0"|intcomma }}</td><td>
@@ -282,7 +282,7 @@
 
     <div class="row top-content">
       <div class="col-xs-12 text-center">
-        <h4 class="report-subtitle-text">{{ barchart_compare_text }}</h4>
+        <h4 class="report-subtitle-text">{{ s2_barchart_compare_text }}</h4>
         <div kendo-chart k-options="barOptions" ></div>
       </div>
     </div>
@@ -297,7 +297,7 @@
 
     </div>
     <div class="row sub-graph-container page-break-after">
-      {% for subgraph in sub_compare_graphs %}
+      {% for subgraph in s2_sub_system_compare_graphs %}
       <div class="col-xs-6">
         <div class="row">
           <div class="col-xs-12 sub-graph-title" style="background-color: {{ subgraph.color }}">{{ subgraph.title }}</div>
@@ -310,12 +310,12 @@
                k-series="[
             {
                 data: cgDatas[{{ forloop.counter }}].last,
-                name: '{{ compare_last_name }}',
+                name: '{{ s2_compare_last_name }}',
                 color: '#edba3c'
             },
             {
                 data: cgDatas[{{ forloop.counter }}].current,
-                name: '{{ compare_current_name }}',
+                name: '{{ s2_compare_current_name }}',
                 color: '#047fa1'
             }
         ]" ></div></div>
