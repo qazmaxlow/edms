@@ -13,7 +13,7 @@ def login_view(request, system_code=None):
         del request.session['login_warning_msg']
 
     if request.method == 'POST':
-        username = request.POST.get('username')
+        username = request.POST.get('username','').lower()
         password = request.POST.get('password')
 
         user = authenticate(username=username, password=password)
@@ -47,7 +47,7 @@ def centeral_login_view(request):
         del request.session['login_warning_msg']
 
     if request.method == 'POST':
-        username = request.POST.get('username')
+        username = request.POST.get('username','').lower()
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)
 
