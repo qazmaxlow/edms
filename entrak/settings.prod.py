@@ -16,6 +16,7 @@ DATABASES = {
 }
 
 connect('entrak', username="entrak", password="entrak8888", tz_aware=True)
+#register_connection('entrakv4', name='entrakv4', host='ec2-54-169-90-169.ap-southeast-1.compute.amazonaws.com', tz_aware=True)
 
 MEDIA_URL = '/media/'
 LOGGING['handlers']['timed_rotating_handler']['filename'] = os.path.join('/mnt', 'logs', 'entrak', 'django_error.log')
