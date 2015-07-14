@@ -1,5 +1,6 @@
 import os
 from mongoengine import connect
+from mongoengine import register_connection
 from settings_common import *
 
 DEBUG = False
