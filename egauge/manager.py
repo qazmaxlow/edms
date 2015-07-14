@@ -178,7 +178,7 @@ class SourceManager:
 
 
     @staticmethod
-    def update_sum(retrieve_time, source_tz, source_ids):
+    def update_sum(retrieve_time, source_tz, source_ids, update_v4_ds=True):
         sum_infos = [
             {'range_type': Utils.RANGE_TYPE_HOUR, 'target_collection': 'source_reading_min', 'update_class': SourceReadingHour},
             {'range_type': Utils.RANGE_TYPE_DAY, 'target_collection': 'source_reading_hour', 'update_class': SourceReadingDay},
@@ -212,12 +212,14 @@ class SourceManager:
                     source_id=info['_id'], datetime=start_time
                 ).update_one(set__value=info['value'], upsert=True)
 
-        start_time, end_time = Utils.get_datetime_range(Utils.RANGE_TYPE_HOUR, local_retrieve_time)
-        system_codes = [s.system_code for s in Source.objects.filter(id__in=source_ids)]
-        systems = System.objects.filter(code__in=system_codes)
+        if update_v4_ds:
 
-        for s in systems:
-            s.convert_to_meter_ds(start_time, end_time)
+            start_time, end_time = Utils.get_datetime_range(Utils.RANGE_TYPE_HOUR, local_retrieve_time)
+            system_codes = [s.system_code for s in Source.objects.filter(id__in=source_ids)]
+            systems = System.objects.filter(code__in=system_codes)
+
+            for s in systems:
+                s.convert_to_meter_ds(start_time, end_time)
 
     @staticmethod
     def get_grouped_invalid_readings(xml_url):

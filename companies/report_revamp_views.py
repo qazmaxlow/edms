@@ -40,159 +40,163 @@ def current_lang():
         return "zh-tw"
     return "en"
 
+
+def int_date_to_datetime(int_date, system_tz):
+    return system_tz.localize(datetime.datetime.strptime('%d 00:00:00'%int_date, '%Y%m%d %H:%M:%S'))
+
+
+def int_date_to_timestamp(int_date, system_tz):
+    dt = system_tz.localize(datetime.datetime.strptime('%d 00:00:00'%int_date, '%Y%m%d %H:%M:%S'))
+    return int(time.mktime(dt.astimezone(pytz.utc).timetuple()))
+
+
 def get_source_name(source_id):
     source = Source.objects(id=str(source_id)).first()
     if (current_lang()=="zh-tw"):
         return source.d_name_tc
     return source.d_name
 
-def get_unitrate(source_id, datetime):
-    source = Source.objects(id=str(source_id)).first()
-    system = System.objects.get(code=source.system_code)
-    unit_infos = json.loads(system.unit_info)
-    money_unit_code = unit_infos['money']
-    money_unit_rates = UnitRate.objects.filter(category_code='money', code=unit_infos['money'])
-    dt = datetime
-    ur = money_unit_rates.filter(effective_date__lte=dt).order_by('-effective_date').first()
-    return ur
+
+def generate_weekday_weekend_overnight_details(system, start_date, end_date, interval_delta, sub_systems, type_colors, gen_type='weekday'):
+
+    if gen_type not in ['weekday', 'weekend', 'overnight']:
+        gen_type = 'weekday'
+
+    last_interval_start_date = start_date - interval_delta
+    last_interval_end_date = end_date - interval_delta
+
+    last_year_start_date = start_date - relativedelta(years=1)
+    last_year_end_date = end_date - relativedelta(years=1)
+
+    if gen_type in ['weekday', 'weekend']:
+        source_current_cost = system.weekday_weekend_usage_by_source(start_date, end_date, gen_type)
+        source_last_interval_cost = system.weekday_weekend_usage_by_source(last_interval_start_date, last_interval_end_date, gen_type)
+        source_last_year_cost = system.weekday_weekend_usage_by_source(last_year_start_date, last_year_end_date, gen_type)
+    else:
+        source_current_cost = system.overnight_usage_by_source(start_date, end_date)
+        source_last_interval_cost = system.overnight_usage_by_source(last_interval_start_date, last_interval_end_date)
+        source_last_year_cost = system.overnight_usage_by_source(last_year_start_date, last_year_end_date)
+
+    parent_current_cost = 0
+    parent_current_dates = set()
+    parent_last_interval_cost = 0
+    parent_last_interval_dates = set()
+    parent_last_year_cost = 0
+    parent_last_year_dates = set()
+
+    higest_cost_diff = 0
+    higest_cost_diff_system = None
+
+    sub_system_stats = []
+
+    for ix, sub_system in enumerate(sub_systems):
+
+        current_cost = 0
+        current_dates = set()
+        last_interval_cost = 0
+        last_interval_dates = set()
+        last_year_cost = 0
+        last_year_dates = set()
+
+        sys = sub_system["object"]
+
+        if isinstance(sys, System):
+            child_sources = sys.sources
+
+            for src in child_sources:
+                if src.id in source_current_cost:
+                    current_cost += source_current_cost[src.id]['totalMoney']
+                    current_dates |= set(source_current_cost[src.id]['dates'])
+                if src.id in source_last_interval_cost:
+                    last_interval_cost += source_last_interval_cost[src.id]['totalMoney']
+                    last_interval_dates |= set(source_last_interval_cost[src.id]['dates'])
+                if src.id in source_last_year_cost:
+                    last_year_cost += source_last_year_cost[src.id]['totalMoney']
+                    last_year_dates |= set(source_last_year_cost[src.id]['dates'])
+
+        else:
+            if sys.id in source_current_cost:
+                current_cost = source_current_cost[sys.id]['totalMoney']
+                current_dates = set(source_current_cost[sys.id]['dates'])
+            if sys.id in source_last_interval_cost:
+                last_interval_cost = source_last_interval_cost[sys.id]['totalMoney']
+                last_interval_dates = set(source_last_interval_cost[sys.id]['dates'])
+            if sys.id in source_last_year_cost:
+                last_year_cost = source_last_year_cost[sys.id]['totalMoney']
+                last_year_dates = set(source_last_year_cost[sys.id]['dates'])
+
+        parent_current_cost += current_cost
+        parent_current_dates |= current_dates
+        parent_last_interval_cost += last_interval_cost
+        parent_last_interval_dates |= last_interval_dates
+        parent_last_year_cost += last_year_cost
+        parent_last_year_dates |= last_year_dates
+
+        print(parent_current_dates)
+
+        diff_last_interval = None
+        diff_last_year = None
+
+        if current_cost - last_interval_cost > higest_cost_diff:
+            higest_cost_diff = current_cost - last_interval_cost
+            higest_cost_diff_system = sub_system['name']
+
+        if len(current_dates) > 0 :
+
+            current_average = current_cost / len(current_dates)
+
+            if last_interval_cost > 0 and len(last_interval_dates) > 0:
+
+                last_interval_average = last_interval_cost / len(last_interval_dates)
+                diff_last_interval = (current_average - last_interval_average)*100/last_interval_average
+
+            if last_year_cost > 0 and len(last_year_dates) > 0:
+
+                last_year_average = last_year_cost / len(last_year_dates)
+                diff_last_year = (current_average - last_year_average)*100/last_year_average
+
+        else:
+            current_average = None
 
 
-def get_unitrate_by_system(system, datetime):
-    unit_infos = json.loads(system.unit_info)
-    money_unit_code = unit_infos['money']
-    money_unit_rates = UnitRate.objects.filter(category_code='money', code=unit_infos['money'])
-    dt = datetime
-    ur = money_unit_rates.filter(effective_date__lte=dt).order_by('-effective_date').first()
-    return ur
+        sub_system_stat = {
+            'name': sub_system['name'],
+            'average_cost': current_average,
+            'diff_last_interval': CompareTplHepler(diff_last_interval),
+            'diff_last_year': CompareTplHepler(diff_last_year),
+            'color': type_colors[ix % len(type_colors)],
+        }
 
+        sub_system_stats.append(sub_system_stat)
 
-def get_total_cost(source_ids, start_dt, end_dt, date_type):
-    reading_map = {
-        'week': SourceReadingDay,
-        'month': SourceReadingMonth,
-        'quarter': SourceReadingMonth,
-        'year': SourceReadingYear,
-        'custom': SourceReadingDay
+    parent_diff_last_interval = None
+    parent_diff_last_year = None
+
+    if len(parent_current_dates) > 0 :
+
+        parent_current_average = parent_current_cost / len(parent_current_dates)
+
+        if parent_last_interval_cost > 0 and len(parent_last_interval_dates) > 0:
+
+            parent_last_interval_average = parent_last_interval_cost/len(parent_last_interval_dates)
+            parent_diff_last_interval = (parent_current_average - parent_last_interval_average)*100/parent_last_interval_average
+
+        if parent_last_year_cost > 0 and len(parent_last_year_dates) > 0:
+
+            parent_last_year_average = parent_last_year_cost/len(parent_last_year_dates)
+            parent_diff_last_year = (parent_current_average - parent_last_year_average)*100/parent_last_year_average
+
+    else:
+        parent_current_average = None
+
+    parent = {
+        'average_cost': parent_current_average,
+        'diff_last_interval': CompareTplHepler(parent_diff_last_interval),
+        'diff_last_year': CompareTplHepler(parent_diff_last_year),
+        'higest_cost_diff_system': higest_cost_diff_system,
     }
 
-    reading_cls = reading_map[date_type]
-
-    month_readings = reading_cls.objects(
-        source_id__in=source_ids,
-        datetime__gte=start_dt,
-        datetime__lt=end_dt)
-
-    if month_readings:
-        return sum([get_unitrate(r.source_id, r.datetime).rate*r.value for r in month_readings])
-
-
-def get_weekdays_cost_by_source_readings(system, source_id, start_dt, end_dt):
-    all_holidays = system.get_all_holidays()
-    total_day = 0
-    total_val = 0
-
-    readings = SourceReadingDay.objects(
-        source_id=source_id,
-        datetime__gte=start_dt,
-        datetime__lt=end_dt)
-
-    system_tz = pytz.timezone(system.timezone)
-    for sr in readings:
-        source_id = sr.source_id
-        dt = sr.datetime.astimezone(system_tz)
-
-        if dt.weekday() <= 4 and (dt.date() not in all_holidays):
-            total_val += get_unitrate(source_id, dt).rate * sr.value
-            total_day += 1
-
-    if total_day > 0:
-        return total_val / float(total_day)
-
-
-def get_weekdays_cost(system, start_dt, end_dt):
-    sources = SourceManager.get_sources(system)
-    source_ids = [str(source.id) for source in sources]
-
-    # group by source id
-    source_groups = {}
-    avgs = []
-
-    for sid in source_ids:
-        avg_cost = get_weekdays_cost_by_source_readings(system, sid, start_dt, end_dt)
-        if avg_cost is not None:
-            avgs.append(avg_cost)
-
-    if avgs:
-        return sum(avgs)
-
-
-def get_overnight_avg_cost(system, source_ids, start_dt, end_dt):
-
-    # return system.overnight_avg_cost(start_dt, end_dt, source_ids)
-
-    date_ranges = []
-
-    unit_infos = json.loads(system.unit_info)
-    # money_unit_code = unit_infos['money']
-    # money_unit_rate = UnitRate.objects.filter(category_code='money', code=unit_infos['money']).first()
-    money_unit_rates = UnitRate.objects.filter(category_code='money', code=unit_infos['money']).order_by('effective_date')
-    system_tz = system.time_zone
-
-    for ix, mr in enumerate(money_unit_rates):
-        c_rate_date = mr.effective_date.astimezone(system_tz)
-        if c_rate_date >= start_dt and c_rate_date < end_dt:
-            try:
-                n_rate_date = money_unit_rates[ix+1].effective_date.astimezone(system_tz)
-                if n_rate_date > end_dt:
-                    n_rate_date = end_dt
-
-                date_range = (c_rate_date, n_rate_date, mr)
-                date_ranges.append(date_range)
-            except IndexError:
-                date_range = (c_rate_date, end_dt, mr)
-                date_ranges.append(date_range)
-
-    # if no date ranges use the first rate as the default money rate
-    # else if first date range has gap between the start date
-    # use the first money_unit_rate as the default unit rate
-    if not date_ranges:
-        default_rate = money_unit_rates.first()
-        date_range = (start_dt, end_dt, default_rate)
-        date_ranges.append(date_range)
-    elif start_dt < date_ranges[0][0]:
-        default_rate = money_unit_rates.first()
-        date_range = (start_dt, date_ranges[0][0], default_rate)
-        date_ranges.append(date_range)
-
-    total_on_sum = 0
-
-    for date_range in date_ranges:
-        sd, ed, r = date_range
-        mqs = []
-        num_day = (ed.date() - sd.date()).days
-        rdays = [sd+datetime.timedelta(days=n) for n in range(num_day)]
-        for rday in rdays:
-            on_sd = rday.astimezone(system_tz).replace(hour=system.night_time_start.hour)
-            on_ed = rday.astimezone(system_tz).replace(hour=system.night_time_end.hour) + relativedelta(days=1)
-
-            q = MQ(datetime__gte=on_sd, datetime__lt=on_ed)
-            mqs.append(q)
-
-        conds = reduce(
-            operator.or_,
-            mqs
-        )
-
-        dr_sum = r.rate * SourceReadingHour.objects(conds, source_id__in=source_ids).sum('value')
-        total_on_sum += dr_sum
-
-    # dirty way to count number of days
-    total_day = (end_dt.date() - start_dt.date()).days + 1
-    today = datetime.datetime.now(pytz.utc).astimezone(system_tz)
-    if end_dt > today:
-        total_day = (today.date() - start_dt.date()).days + 1
-
-    return total_on_sum / total_day
+    return {"parent": parent, "details": sub_system_stats}
 
 
 @permission_required()
@@ -259,7 +263,7 @@ def summary_ajax(request, system_code):
     if last_total_cost > 0 and total_cost > 0:
         compare_to_last_total = float(total_cost-last_total_cost)/last_total_cost*100
 
-    weekday_usage = current_system.total_weekday_weekend_usage(start_dt, end_dt, "weekday")
+    weekday_usage = current_system.weekday_weekend_usage(start_dt, end_dt, "weekday")
 
     if len(weekday_usage['dates']) > 0:
         weekday_cost = weekday_usage['totalMoney'] / len(weekday_usage['dates'])
@@ -268,7 +272,7 @@ def summary_ajax(request, system_code):
 
     compare_to_last_weekday = None
 
-    last_weekday_usage = current_system.total_weekday_weekend_usage(last_start_dt, last_end_dt, "weekday")
+    last_weekday_usage = current_system.weekday_weekend_usage(last_start_dt, last_end_dt, "weekday")
 
     if len(last_weekday_usage['dates']) > 0:
         last_weekday_cost = last_weekday_usage['totalMoney'] / len(last_weekday_usage['dates'])
@@ -412,7 +416,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
     report_type = request.GET.get('report_type')
 
-    type_colors = ['#68c0d4', '#8c526f', '#d5c050', '#8B8250', '#5759A7', '#6EC395', '#ee9646', '#ee5351', '#178943', '#ba1e6a', '#045a6f', '#0298bb']
+    TYPE_COLORS = ['#68c0d4', '#8c526f', '#d5c050', '#8B8250', '#5759A7', '#6EC395', '#ee9646', '#ee5351', '#178943', '#ba1e6a', '#045a6f', '#0298bb']
 
     current_system_tz = pytz.timezone(current_system.timezone)
     first_record = min([system.first_record for system in systems])
@@ -511,7 +515,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         last_start_dt = report_date - relativedelta(months=1)
         last_end_dt = report_end_date - relativedelta(months=1)
 
-    m['sub_systems'] = current_system.direct_sources_and_systems(current_lang())
+    m['global_sub_systems'] = current_system.direct_sources_and_systems(current_lang())
 
     def generate_section_1_summary(system, start_date, end_date, m):
         # beginning of section 1a summary stats
@@ -553,10 +557,10 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         max_kwh = 0
         total_kwh = 0
 
-        sources_current_usage = system.total_usage_by_source_id(start_date, end_date, source_ids)
-        sources_last_year_usage = system.total_usage_by_source_id(start_date - relativedelta(years=1), end_date - relativedelta(years=1), source_ids)
+        sources_current_usage = system.total_usage_by_source(start_date, end_date, source_ids)
+        sources_last_year_usage = system.total_usage_by_source(start_date - relativedelta(years=1), end_date - relativedelta(years=1), source_ids)
 
-        for ix, sub_system in enumerate(m['sub_systems']):
+        for ix, sub_system in enumerate(m['global_sub_systems']):
 
             current_kwh = 0
             current_co2 = 0
@@ -594,8 +598,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
                 change_in_kwh = (current_kwh - last_year_kwh)*100/last_year_kwh
                 change_in_money = current_money - last_year_money
 
-            if max_kwh < current_kwh:
-                max_kwh = current_kwh
+            max_kwh = max(current_kwh, max_kwh)
 
             if current_kwh == 0:
                 current_kwh = None
@@ -610,12 +613,12 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
                 'diff_kwh': change_in_kwh,
                 'diff_money': change_in_money,
                 'percent_base_on_max': None,
-                'color': type_colors[ix % len(type_colors)],
+                'color': TYPE_COLORS[ix % len(TYPE_COLORS)],
             }
 
             sub_system_json = {
                 'category': sub_system['name'],
-                'color': type_colors[ix % len(type_colors)],
+                'color': TYPE_COLORS[ix % len(TYPE_COLORS)],
                 'value': current_kwh,
             }
 
@@ -661,6 +664,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
             m['s2_barchart_title'] = _('Total energy consumption for the last 6 same periods (kWh)')
 
         report_end_dt = end_date
+        m['global_interval_delta'] = interval_delta
 
         if report_type == 'custom':
             interval_usages = {}
@@ -763,9 +767,9 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
         current_daily_usage = system.total_usage_by_interval(start_date, end_date, "DAY")
         last_daily_usage = system.total_usage_by_interval(start_date - interval_delta, end_date - interval_delta, "DAY")
+        m['global_current_daily_usage'] = current_daily_usage
+        m['global_last_daily_usage'] = last_daily_usage
 
-        def int_date_to_datetime(int_date, system_tz):
-            return system_tz.localize(datetime.datetime.strptime('%d 00:00:00'%int_date, '%Y%m%d %H:%M:%S'))
 
         system_tz = system.time_zone
         current_series = [{'name': compare_current_name, 'type': 'current', 'value': v['totalKwh'], 'datetime': int_date_to_datetime(k, system_tz)} for k, v in current_daily_usage.items()]
@@ -774,7 +778,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
         m['s2_compare_series'] = json.dumps(compare_series, cls=DjangoJSONEncoder)
 
-        for ix, sub_system in enumerate(m['sub_systems']):
+        for ix, sub_system in enumerate(m['global_sub_systems']):
 
             if isinstance(sub_system['object'], System):
                 subsys_current_daily_usage = sub_system['object'].total_usage_by_interval(start_date, end_date, "DAY")
@@ -798,7 +802,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
                     chart_title = _('Overall: {0.compared_percent_abs:.0f}&#37; less energy than last {1}').format(CompareTplHepler(total_compare), report_type_name)
 
             graph = {
-                'color': type_colors[ix % len(type_colors)],
+                'color': TYPE_COLORS[ix % len(TYPE_COLORS)],
                 'title': sub_system['name'],
                 'current_series': json.dumps([{'name': compare_current_name, 'value': v['totalKwh'], 'datetime': int_date_to_datetime(k, system_tz)} for k, v in subsys_current_daily_usage.items()], cls=DjangoJSONEncoder),
                 'last_series': json.dumps([{'name': compare_last_name, 'value': v['totalKwh'], 'datetime': int_date_to_datetime(k, system_tz)} for k, v in subsys_last_daily_usage.items()], cls=DjangoJSONEncoder),
@@ -810,424 +814,77 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         return m
         # end of section 2 comparision
 
+
+    def generate_section_3_comparision(system, start_date, end_date, report_type, m):
+
+        system_tz = system.time_zone
+        all_holidays = system.get_all_holidays()
+        current_daily_usage = {}
+        overnight_daily_usage = {}
+
+        highest_weekday_cost = None
+        highest_weekday_date = None
+        highest_weekend_cost = None
+        highest_weekend_date = None
+        highest_overnight_cost = None
+        highest_overnight_date = None
+
+
+        for k, v in m['global_current_daily_usage'].items():
+            current_daily_usage[str(int_date_to_timestamp(k, system_tz))] = v['totalMoney']
+
+            dt = int_date_to_datetime(k, system_tz)
+            wd = dt.weekday()
+
+            if wd >= 0 and wd <=4 and dt.date() not in all_holidays:
+                if v['totalMoney'] > highest_weekday_cost:
+                    highest_weekday_cost = v['totalMoney']
+                    highest_weekday_date = dt
+
+            if (wd >= 5 and wd <=6) or dt.date() in all_holidays:
+                if v['totalMoney'] > highest_weekend_cost:
+                    highest_weekend_cost = v['totalMoney']
+                    highest_weekend_date = dt
+
+
+        for k, v in system.overnight_usage_by_day(start_date, end_date).items():
+            overnight_daily_usage[str(int_date_to_timestamp(k, system_tz))] = v['totalMoney']
+
+            if v['totalMoney'] > highest_overnight_cost:
+                highest_overnight_cost = v['totalMoney']
+                highest_overnight_date = int_date_to_datetime(k, system_tz)
+
+            if (wd >= 5 and wd <=6) or dt.date() in all_holidays:
+                if v['totalMoney'] > highest_weekend_cost:
+                    highest_weekend_cost = v['totalMoney']
+                    highest_weekend_date = dt
+
+        m['s3_current_daily_usage'] = json.dumps(current_daily_usage, cls=DjangoJSONEncoder)
+        m['s3_overnight_daily_usage'] = json.dumps(overnight_daily_usage, cls=DjangoJSONEncoder)
+
+        m['s3_holidays_json'] = json.dumps([d.strftime('%Y-%m-%d') for d in all_holidays])
+
+        m['s3_highest_weekday_cost'] = highest_weekday_cost
+        m['s3_highest_weekday_date'] = highest_weekday_date
+        m['s3_highest_weekend_cost'] = highest_weekend_cost
+        m['s3_highest_weekend_date'] = highest_weekend_date
+        m['s3_highest_overnight_cost'] = highest_overnight_cost
+        m['s3_highest_overnight_date'] = highest_overnight_date
+
+        m['s3_weekday'] = generate_weekday_weekend_overnight_details(system, start_date, end_date, m["global_interval_delta"], m["global_sub_systems"], TYPE_COLORS, 'weekday')
+        m['s3_weekend'] = generate_weekday_weekend_overnight_details(system, start_date, end_date, m["global_interval_delta"], m["global_sub_systems"], TYPE_COLORS, 'weekend')
+        m['s3_overnight'] = generate_weekday_weekend_overnight_details(system, start_date, end_date, m["global_interval_delta"], m["global_sub_systems"], TYPE_COLORS, 'overnight')
+
+        # m['s3_overnight'] = generate_weekday_weekend_details(system, start_date, end_date, m["global_interval_delta"], m["global_sub_systems"], TYPE_COLORS, 'weekday')
+
+        return m
+
     m = generate_section_1_summary(current_system, report_date, report_end_date + relativedelta(days=1), m)
     m = generate_section_2_comparision(current_system, report_date, report_end_date + relativedelta(days=1), report_type, m)
+    m = generate_section_3_comparision(current_system, report_date, report_end_date + relativedelta(days=1), report_type, m)
 
     m['report_start'] = report_date
     m['report_end'] = report_end_date
-
-    # oops! monkey code
-    report_data_type = report_type
-    if report_type == 'custom':
-        report_data_type = 'custom-month'
-
-    report_data = __generate_report_data(systems, report_data_type,
-                                  time.mktime(report_date.utctimetuple()),
-                                  time.mktime(report_end_date.utctimetuple())
-    )
-
-    m['report_data_json'] = json.dumps(report_data)
-
-    group_data = report_data['groupedSourceInfos']
-
-    unit_infos = json.loads(m['company_system'].unit_info)
-    money_unit_code = unit_infos['money']
-    # oops, wrong?
-    money_unit_rate = UnitRate.objects.filter(category_code='money', code=unit_infos['money']).first()
-
-    m['weekday_bill'] = get_weekdays_cost(current_system, report_date, report_end_date + datetime.timedelta(days=1))
-
-
-    # _fillInComparePercent = function(eleSel, oldUsage, newUsage, compareToDateText)
-    # var usagePercent = (oldUsage-newUsage)/oldUsage*100;
-
-    # beginning is for last month
-    # this._fillInComparePercent(targetSel+" .compare-beginning", beginningUsage, averageUsage, beginningDateText);
-    # this._fillInComparePercent(targetSel+" .compare-last", lastUsage, averageUsage, this.multiLangTexts.last_week);
-    # this._fillInComparePercent(targetSel+" .compare-last-same-period", lastSamePeriodUsage, averageUsage, this.multiLangTexts.samePeriodLastYear);
-    beginning_usage = sum([ g['beginningWeekdayInfo']['average'] for g in group_data])
-    average_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
-
-    last_weekday_usage = sum([ g['lastWeekdayInfo']['average'] for g in group_data])
-    current_weekday_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
-
-    weekday_compare_last = None
-    if last_weekday_usage > 0:
-        weekday_compare_last = float(current_weekday_usage - last_weekday_usage)/last_weekday_usage*100
-    m['weekday_month_compare_helper'] = CompareTplHepler(weekday_compare_last)
-
-    last_same_period = sum([ g['lastSamePeriodWeekdayInfo']['average'] for g in group_data])
-
-    weekday_compare_same_period = None
-    if last_same_period > 0 :
-        weekday_compare_same_period = float(average_usage - last_same_period)/last_same_period*100
-
-    m['weekday_compare_same_period'] = weekday_compare_same_period
-    m['weekday_same_period_compare_helper'] = CompareTplHepler(weekday_compare_same_period)
-
-    for ix, g in enumerate(group_data):
-        g['color'] = type_colors[ix % len(type_colors)]
-        g['system'] = System.objects.get(code=g['systemCode'])
-
-        if len(g['sourceIds']) == 1:
-            g['title'] = get_source_name(g['sourceIds'][0])
-        else:
-            g['title'] = g['system'].name
-
-        g['usage'] = g['currentWeekdayInfo']['average']
-        beginning_usage = g['beginningWeekdayInfo']['average']
-        average_usage = g['currentWeekdayInfo']['average']
-
-        unit_infos = json.loads(g['system'].unit_info)
-        money_unit_code = unit_infos['money']
-        money_unit_rate = UnitRate.objects.filter(category_code='money', code=unit_infos['money']).first()
-
-        weekday_costs = [get_weekdays_cost_by_source_readings(current_system, sid, report_date, report_end_date) for sid in g['sourceIds']]
-        g['usage_bill'] = sum([c for c in weekday_costs if c is not None])
-
-        compare_last_month = None
-        if beginning_usage > 0:
-            compare_last_month = float(average_usage - beginning_usage)/beginning_usage*100
-
-        g['compare_last_month'] = compare_last_month
-
-
-        # for weekday
-        weekday = {}
-
-        last_weekday_usage = g['lastWeekdayInfo']['average']
-        current_weekday_usage = g['currentWeekdayInfo']['average']
-
-        weekday_compare_last = None
-        if last_weekday_usage > 0:
-            weekday_compare_last = float(current_weekday_usage - last_weekday_usage)/last_weekday_usage*100
-
-        weekday['compare_last_helper'] = CompareTplHepler(weekday_compare_last)
-        g['weekday'] = weekday
-
-
-        compare_same_period = None
-        last_same_period = g['lastSamePeriodWeekdayInfo']['average']
-        if last_same_period > 0:
-            compare_same_period = float(average_usage - last_same_period)/last_same_period*100
-
-        g['compare_same_period'] = compare_same_period
-
-        weekend = {'bill': g['currentWeekendInfo']['average'] * money_unit_rate.rate}
-        weekend_beginning_usage = g['beginningWeekendInfo']['average']
-        weekend_average_usage = g['currentWeekendInfo']['average']
-
-        weekend_last_year_usage = g['lastWeekendInfo']['average']
-        weekend_current_usage = g['currentWeekendInfo']['average']
-
-        weekend_compare_last = None
-        if weekend_last_year_usage > 0:
-            weekend_compare_last = float(weekend_current_usage - weekend_last_year_usage)/weekend_last_year_usage*100
-
-        weekend['compare_last_helper'] = CompareTplHepler(weekend_compare_last)
-
-        weekend_compare_same = None
-        weekend_last_same_period_avg = g['lastSamePeriodWeekendInfo']['average']
-        if weekend_last_same_period_avg > 0:
-            weekend_compare_same = float(weekend_average_usage - weekend_last_same_period_avg)/weekend_last_same_period_avg*100
-
-        weekend['compare_same_period_helper'] = CompareTplHepler(weekend_compare_same)
-
-        g['weekend'] = weekend
-
-
-        # for overnight
-        last_overnight_usage = get_overnight_avg_cost(current_system, g['sourceIds'], report_date - relativedelta(months=1), report_end_date - relativedelta(months=1))
-        current_overnight_usage = get_overnight_avg_cost(current_system, g['sourceIds'], report_date, report_end_date)
-
-        overnight = {'bill': current_overnight_usage}
-
-        overnight_compare_last = None
-        if last_overnight_usage > 0:
-            overnight_compare_last = float(current_overnight_usage - last_overnight_usage)/last_overnight_usage*100
-
-        overnight['compare_last_helper'] = CompareTplHepler(overnight_compare_last)
-
-        overnight_compare_same = None
-        overnight_average_usage = g['currentOvernightInfo']['average']
-        overnight_last_same_period_avg = g['lastSamePeriodOvernightInfo']['average']
-        if overnight_last_same_period_avg > 0:
-            overnight_compare_same = float(overnight_average_usage - overnight_last_same_period_avg)/overnight_last_same_period_avg*100
-
-        overnight['compare_same_period_helper'] = CompareTplHepler(overnight_compare_same)
-
-
-        g['overnight'] = overnight
-
-
-    if current_lang()=="zh-tw":
-        compare_current_name = DateFormat(report_date).format("n")+_("tcmonth")
-        compare_last_name = DateFormat(report_date - relativedelta(months=1)).format("n")+_("tcmonth")
-    else:
-        compare_current_name = DateFormat(report_date).format("M")
-        compare_last_name = DateFormat(report_date - relativedelta(months=1)).format("M")
-    if report_type == 'week':
-        compare_current_name = _('This week')
-        compare_last_name = _('Last week')
-    elif report_type == 'quarter':
-        compare_current_name = _('This quarter')
-        compare_last_name = _('Last quarter')
-    elif report_type == 'year':
-        compare_current_name = report_date.strftime('%Y')
-        compare_last_name = (report_date-relativedelta(years=1)).strftime('%Y')
-    elif report_type == 'custom':
-        compare_current_name = _('This period')
-        compare_last_name = _('Last same period')
-
-
-
-    m['compare_current_name'] = compare_current_name
-    m['compare_last_name'] = compare_last_name
-
-    # sub compare graphs
-    sub_compare_graphs = []
-
-    combined_weekday_readings_g = {}
-    # this is combined current readings
-    combined_readings = {}
-    combined_readings_g = {}
-
-    combined_overnight_readings = {}
-    combined_overnight_readings_g = {}
-
-
-    # for weekday
-    # combined_current_readings = {};
-    combined_last_readings = {};
-    for ix, g in enumerate(group_data):
-        current_readings = g['currentReadings']
-        overnight_readings = g['overnightcurrentReadings']
-        g['compare_last_month_helper'] = CompareTplHepler(g['compare_last_month'])
-        g['compare_same_period_helper'] = CompareTplHepler(g['compare_same_period'])
-
-        for ts, val in current_readings.items():
-            if ts in combined_readings:
-                combined_readings[ts] += val
-                combined_readings_g[ts].append((g,val-g['currentWeekendInfo']['average']))
-                combined_weekday_readings_g[ts].append((g,val-g['currentWeekdayInfo']['average']))
-            else:
-                combined_readings[ts] = val
-                combined_readings_g[ts] = [(g,val-g['currentWeekendInfo']['average'])]
-                combined_weekday_readings_g[ts] = [(g,val-g['currentWeekdayInfo']['average'])]
-
-        for ts, val in overnight_readings.items():
-            if ts in combined_overnight_readings:
-                combined_overnight_readings[ts] += val
-                combined_overnight_readings_g[ts].append((g,val-g['currentOvernightInfo']['average']))
-            else:
-                combined_overnight_readings[ts] = val
-                combined_overnight_readings_g[ts] = [(g,val-g['currentOvernightInfo']['average'])]
-
-        last_readings = g['lastReadings']
-        for ts, val in last_readings.items():
-            if ts in combined_last_readings:
-                combined_last_readings[ts] += val
-            else:
-                combined_last_readings[ts] = val
-
-        current_day_readings = {}
-        # for day in range(1, 32):
-        #     current_day_readings[day] = None
-
-        for ts, v in current_readings.items():
-            dt = datetime.datetime.fromtimestamp(ts, pytz.utc)
-            dt = dt.astimezone(current_system_tz)
-            current_day_readings[dt] = v
-
-        last_day_readings = {}
-        # for day in range(1, 32):
-        #     last_day_readings[day] = None
-
-        for ts, v in last_readings.items():
-            dt = datetime.datetime.fromtimestamp(ts, pytz.utc)
-            dt = dt.astimezone(current_system_tz)
-            last_day_readings[dt] = v
-
-    # m['compare_last_categories'] = json.dumps(map(str, range(1, 32)))
-    m['compare_last_categories'] = json.dumps(range(1, 32))
-    m['compare_last_label_step'] = 2
-
-    if report_type == 'year':
-        m['compare_last_categories'] = range(366)
-        m['compare_last_label_step'] = 29
-
-
-    highest_datetime, highest_usage= sorted(combined_readings.items(), key=lambda x: x[1])[-1]
-
-    def weekday_filter(tv):
-        t, v = tv
-        wd = datetime.datetime.fromtimestamp(t, pytz.utc).weekday()
-        return wd >= 0 and wd <=4
-
-    only_weekday_readings = filter(weekday_filter, combined_readings.items())
-
-    wd_highest_usage = None
-    wd_highest_datetime = None
-
-    if only_weekday_readings:
-        wd_highest_datetime, wd_highest_usage= sorted(only_weekday_readings, key=lambda x: x[1])[-1]
-
-    # m['highest_value']
-
-    m['weekday_highest_usage'] = highest_usage
-    m['weekday_highest_datetime'] = datetime.datetime.fromtimestamp(highest_datetime, pytz.utc)
-
-    if wd_highest_datetime:
-        wd_highest_datetime = datetime.datetime.fromtimestamp(wd_highest_datetime, pytz.utc)
-        m['weekday_highest_usage'] = wd_highest_usage * get_unitrate_by_system(current_system, wd_highest_datetime).rate
-
-    m['weekday_highest_datetime'] = wd_highest_datetime
-
-    m['weekday_details'] = group_data
-    m['saving_info'] = report_data['savingInfo']
-
-    def weekend_filter(tv):
-        t, v = tv
-        dt = datetime.datetime.fromtimestamp(t, pytz.utc).astimezone(current_system_tz)
-        wd = dt.weekday()
-        all_holidays = system.get_all_holidays()
-        return (wd >= 5 and wd <=6) or dt.date() in all_holidays
-
-    only_weekend_readings = filter(weekend_filter, combined_readings.items())
-
-    we_highest_usage = None
-    we_highest_datetime = None
-
-    if only_weekend_readings:
-        we_highest_datetime, we_highest_usage= sorted(only_weekend_readings, key=lambda x: x[1])[-1]
-
-
-    if we_highest_datetime:
-        m['weekend_highest_g'], _v = sorted(combined_readings_g[we_highest_datetime], key=lambda x: x[1])[-1]
-        we_highest_datetime = datetime.datetime.fromtimestamp(we_highest_datetime, pytz.utc)
-
-        m['weekend_highest_usage'] = we_highest_usage*get_unitrate_by_system(current_system, we_highest_datetime).rate
-    m['weekend_highest_datetime'] = we_highest_datetime
-
-
-    if highest_datetime:
-        m['highest_diff_source'], _v = sorted(combined_weekday_readings_g[highest_datetime], key=lambda x: x[1])[-1]
-
-
-    only_overnight_readings = combined_overnight_readings.items()
-
-    overnight_highest_usage = None
-    overnight_highest_datetime = None
-
-    if only_overnight_readings:
-        overnight_highest_datetime, overnight_highest_usage= sorted(only_overnight_readings, key=lambda x: x[1])[-1]
-
-    if overnight_highest_datetime:
-        m['overnight_highest_g'], _v = sorted(combined_overnight_readings_g[overnight_highest_datetime], key=lambda x: x[1])[-1]
-        overnight_highest_datetime = datetime.datetime.fromtimestamp(overnight_highest_datetime, pytz.utc)
-
-        m['overnight_highest_usage'] = overnight_highest_usage * get_unitrate_by_system(current_system, overnight_highest_datetime).rate
-    m['overnight_highest_datetime'] = overnight_highest_datetime
-
-    transformed_datas = []
-    energy_percentsum = 0
-    energy_max_value = 0
-
-    for ix, g in enumerate(group_data):
-        if g['currentTotalEnergy'] > energy_max_value:
-            energy_max_value = g['currentTotalEnergy']
-
-    transformed_total_energy = sum([ g['currentTotalEnergy'] for g in group_data])
-    for ix, g in enumerate(group_data):
-        change_in_kwh = None
-        if 'last_year_this_month' in g and g['last_year_this_month']['money'] > 0:
-            change_in_kwh = (g['currentTotalMoney'] - g['last_year_this_month']['money'])/g['last_year_this_month']['money'] * 100
-
-        percent_in_total = float(g['currentTotalEnergy']/transformed_total_energy) * 100
-
-        percent_base_on_max = 0
-        if energy_max_value > 0:
-            percent_base_on_max = float(g['currentTotalEnergy']/energy_max_value) * 100
-
-        change_in_money = None
-        if 'last_year_this_month' in g and g['last_year_this_month']['money']:
-            change_in_money = g['currentTotalMoney']- g['last_year_this_month']['money']
-
-        data_info = {
-            'total_energy': g['currentTotalEnergy'],
-            'co2_val': g['currentTotalCo2'],
-            'money_val': g['currentTotalMoney'],
-            'change_in_kwh': change_in_kwh,
-            'change_in_money': change_in_money,
-            'percent_in_total': percent_in_total,
-            'percent_base_on_max': percent_base_on_max,
-            'color': type_colors[ix % len(type_colors)]
-        }
-        data_info['name'] = g['sourceNameInfo'][current_lang()] if g['systemCode'] == m['company_system'].code else g['system'].name
-        transformed_datas.append(data_info)
-
-
-
-    m['sum_up_usages'] = report_data['sumUpUsages']
-    # max_sum_up = max(report_data['sumUpUsages'])
-    sumup_usages = report_data['sumUpUsages']
-
-    # weekends
-    weekends_usage = {}
-    weekends_usage['total_bill'] = sum([ g['currentWeekendInfo']['average'] for g in group_data]) * money_unit_rate.rate;
-
-    # beginningWeekendInfo
-    weekends_beginning_usage = sum([ g['beginningWeekendInfo']['average'] for g in group_data])
-    weekends_average_usage = sum([ g['currentWeekendInfo']['average'] for g in group_data])
-
-    weekends_last_year_usage = sum([ g['lastWeekendInfo']['average'] for g in group_data])
-    weekends_current_usage = sum([ g['currentWeekendInfo']['average'] for g in group_data])
-
-    # average_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
-    weekends_compare_last = None
-    if weekends_last_year_usage > 0:
-        weekends_compare_last = float(weekends_current_usage - weekends_last_year_usage)/weekends_last_year_usage*100
-
-    weekends_usage['month_compare_helper'] = CompareTplHepler(weekends_compare_last)
-
-    weekends_last_same_period = sum([ g['lastSamePeriodWeekendInfo']['average'] for g in group_data])
-    weekends_compare_same_period = None
-    if weekends_last_same_period > 0 :
-        weekends_compare_same_period = float(weekends_average_usage - weekends_last_same_period)/weekends_last_same_period*100
-
-    weekends_usage['same_period_compare_helper'] = CompareTplHepler(weekends_compare_same_period)
-
-
-    m['weekends'] = weekends_usage
-
-    # overnight
-    overnight_usage = {}
-    overnight_bill = sum([ g['currentOvernightInfo']['average'] for g in group_data])
-    # overnight_usage['bill'] = overnight_bill * money_unit_rate.rate
-    overnight_usage['bill'] = get_overnight_avg_cost(current_system, source_ids, report_date, report_end_date + datetime.timedelta(days=1))
-    last_overnight_usage = get_overnight_avg_cost(current_system, source_ids, last_start_dt, last_end_dt + datetime.timedelta(days=1))
-
-    overnight_beginning_usage = sum([ g['beginningOvernightInfo']['average'] for g in group_data])
-    overnight_average_usage = sum([ g['currentOvernightInfo']['average'] for g in group_data])
-
-    overnight_last_year_usage = sum([ g['lastOvernightInfo']['average'] for g in group_data])
-    overnight_current_usage = sum([ g['currentOvernightInfo']['average'] for g in group_data])
-
-    # average_usage = sum([ g['currentWeekdayInfo']['average'] for g in group_data])
-    overnight_compare_last = None
-    if last_overnight_usage > 0:
-        overnight_compare_last = float(overnight_usage['bill'] - last_overnight_usage)/last_overnight_usage*100
-
-    overnight_usage['compare_last_helper'] = CompareTplHepler(overnight_compare_last)
-
-    overnight_last_same_period = sum([ g['lastSamePeriodOvernightInfo']['average'] for g in group_data])
-    overnight_compare_same_period = None
-    if overnight_last_same_period > 0 :
-        overnight_compare_same_period = float(overnight_average_usage - overnight_last_same_period)/overnight_last_same_period*100
-
-    overnight_usage['compare_same_period_helper'] = CompareTplHepler(overnight_compare_same_period)
-
-    m['overnight'] = overnight_usage
 
     if current_system.night_time_start.minute > 29:
         tmpDateStart = datetime.datetime.combine(datetime.date.today(), current_system.night_time_start) + datetime.timedelta(hours=1)
@@ -1241,13 +898,9 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
     else:
         tmpDateEnd = current_system.night_time_end
 
-    m['overnight_timerange_text'] = "{0} - {1}".format(
+    m['s3_overnight_timerange_text'] = "{0} - {1}".format(
         tmpDateStart.strftime('%l%p').strip(),
-        tmpDateEnd.strftime('%l%p').strip())
-
-    # holidays
-    m['holidays_json'] = json.dumps(report_data['holidays'])
-
+        tmpDateEnd.strftime('%l%p').strip(),)
 
     if to_pdf:
         return PDFTemplateResponse(

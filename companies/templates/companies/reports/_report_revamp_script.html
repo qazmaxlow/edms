@@ -209,23 +209,13 @@ if (report_type == 'quarter') {
     };
 }
 
-// var report_data = getReportData();
-var report_data = {{ report_data_json|safe }};
-
-var report_readings = {};
-$.each(report_data.groupedSourceInfos, function(groupIdx, info) {
-    $.each(info.currentReadings, function(timestamp, readingVal) {
-        report_readings[timestamp] = ((timestamp in report_readings) ? report_readings[timestamp] : 0) + readingVal;
-    });
-});
+//var report_data = {{ report_data_json|safe }};
+var overall_daily_usage = {{ s3_current_daily_usage|safe }};
 
 //average uage
-var average_usage = 0;
-$.each(report_data.groupedSourceInfos, function(groupIdx, info) {
-    average_usage += info['currentWeekdayInfo'].average;
-});
+var weekday_average = {{ s3_weekday.parent.average_cost }};
 
-var holidays = {{ holidays_json|safe }};
+var holidays = {{ s3_holidays_json|safe }};
 
 // for weekday report
 var isNotConcernFunc = null;
@@ -280,15 +270,12 @@ if (report_type == 'week') {
 
 setCalendar(
     creport_start, creport_end,
-    '#weekday-info .calendar-info-container', report_readings, average_usage, isNotConcernFunc);
+    '#weekday-info .calendar-info-container', overall_daily_usage, weekday_average, isNotConcernFunc);
 
-$('#weekday-info .average-usage').html(average_usage);
+$('#weekday-info .average-usage').html(weekday_average);
 
 
-var weekend_average_usage = 0;
-$.each(report_data.groupedSourceInfos, function(groupIdx, info) {
-    weekend_average_usage += info['currentWeekendInfo'].average;
-});
+var weekend_average = {{ s3_weekend.parent.average_cost }};
 
 if (report_type == 'week') {
     isNotConcernFunc = function(targetDt) {
@@ -307,15 +294,9 @@ if (report_type == 'week') {
 
 setCalendar(
     creport_start, creport_end,
-    '#weekend-info .calendar-info-container', report_readings, weekend_average_usage, isNotConcernFunc);
+    '#weekend-info .calendar-info-container', overall_daily_usage, weekend_average, isNotConcernFunc);
 
-var combinedOvernightCurrentReadings = {};
-$.each(report_data.groupedSourceInfos, function(groupIdx, info) {
-    $.each(info.overnightcurrentReadings, function(timestamp, readingVal) {
-        combinedOvernightCurrentReadings[timestamp] =
-            ((timestamp in combinedOvernightCurrentReadings) ? combinedOvernightCurrentReadings[timestamp] : 0) + readingVal;
-    });
-});
+var overnight_daily_usage = {{ s3_overnight_daily_usage|safe }};
 
 if (report_type == 'week') {
     isNotConcernFunc = function(targetDt) {
@@ -327,195 +308,10 @@ if (report_type == 'week') {
     }
 }
 
-var overnight_average_usage = 0;
-$.each(report_data.groupedSourceInfos, function(groupIdx, info) {
-    overnight_average_usage += info['currentOvernightInfo'].average;
-});
+var overnight_average = {{ s3_overnight.parent.average_cost }};
 
 setCalendar(
     creport_start, creport_end,
-    '#overnight-info .calendar-info-container', combinedOvernightCurrentReadings, overnight_average_usage, isNotConcernFunc);
-
-$(document).ready(function()  {
-
-    // using jQuery
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie != '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = jQuery.trim(cookies[i]);
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-    var csrftoken = getCookie('csrftoken');
-
-    function csrfSafeMethod(method) {
-        // these HTTP methods do not require CSRF protection
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
-
-    $.ajaxSetup({
-        beforeSend: function(xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            }
-        }
-    });
+    '#overnight-info .calendar-info-container', overnight_daily_usage, overnight_average, isNotConcernFunc);
 
 
-    // var report_data = getReportData();
-    var report_data = {{ report_data_json|safe }};
-
-    var report_readings = {};
-    $.each(report_data.groupedSourceInfos, function(groupIdx, info) {
-        $.each(info.currentReadings, function(timestamp, readingVal) {
-            report_readings[timestamp] = ((timestamp in report_readings) ? report_readings[timestamp] : 0) + readingVal;
-        });
-    });
-
-    //average uage
-    var average_usage = 0;
-    $.each(report_data.groupedSourceInfos, function(groupIdx, info) {
-        average_usage += info['currentWeekdayInfo'].average;
-    });
-
-    var holidays = {{ holidays_json|safe }};
-
-    // for weekday report
-    var isNotConcernFunc = null;
-    var report_start = new moment("{{ report_start.isoformat }}");
-    var report_start = report_start.tz('Asia/Hong_Kong');
-
-    var report_end = new moment("{{ report_end.isoformat }}");
-    var report_end = report_end.tz('Asia/Hong_Kong');
-
-    var creport_start = new moment(report_start);
-    var creport_end = new moment(report_end);
-    creport_end.add('days', 1);
-
-    var datesInWeek = [];
-    if (report_type == 'week') {
-        for (var i=0; i<7; i++){
-            var tmpDate = new Date(report_start);
-            tmpDate.setDate(tmpDate.getDate()+i);
-
-            var dateStr = tmpDate.getFullYear() + "-";
-            if (tmpDate.getMonth() > 8){
-                dateStr += (tmpDate.getMonth()+1) + "-";
-            } else {
-                dateStr += "0" + (tmpDate.getMonth()+1) + "-";
-            }
-            if (tmpDate.getDate() > 9){
-                dateStr += tmpDate.getDate();
-            } else {
-                dateStr += "0" + tmpDate.getDate();
-            }
-            datesInWeek.push(dateStr);
-        }
-
-        creport_start.startOf('month');
-        if (report_start.month() == report_end.month())
-            creport_end.endOf('month');
-
-        isNotConcernFunc = function(targetDt) {
-            return (targetDt.day() == 0
-                    || targetDt.day() == 6
-                    || ($.inArray(targetDt.format("YYYY-MM-DD"), holidays) != -1)
-                    || ($.inArray(targetDt.format("YYYY-MM-DD"), datesInWeek) == -1))
-        }
-    } else {
-        isNotConcernFunc = function(targetDt) {
-            return (targetDt.day() == 0
-                    || targetDt.day() == 6
-                    || ($.inArray(targetDt.format("YYYY-MM-DD"), holidays) != -1))
-            // || ($.inArray(targetDt.format("YYYY-MM-DD"), reportGenThis.holidays) != -1))
-        }
-    }
-
-    setCalendar(
-        creport_start, creport_end,
-        '#weekday-info .calendar-info-container', report_readings, average_usage, isNotConcernFunc);
-
-    $('#weekday-info .average-usage').html(average_usage);
-
-
-    var weekend_average_usage = 0;
-    $.each(report_data.groupedSourceInfos, function(groupIdx, info) {
-        weekend_average_usage += info['currentWeekendInfo'].average;
-    });
-
-    if (report_type == 'week') {
-        isNotConcernFunc = function(targetDt) {
-            return (targetDt.day() >= 1
-                    && targetDt.day() <= 5
-                    && ($.inArray(targetDt.format("YYYY-MM-DD"), holidays) == -1)
-                    || ($.inArray(targetDt.format("YYYY-MM-DD"), datesInWeek) == -1))
-        }
-    } else {
-        isNotConcernFunc = function(targetDt) {
-            return (targetDt.day() >= 1
-                && targetDt.day() <= 5
-                && ($.inArray(targetDt.format("YYYY-MM-DD"), holidays) == -1))
-        }
-    }
-
-    setCalendar(
-        creport_start, creport_end,
-        '#weekend-info .calendar-info-container', report_readings, weekend_average_usage, isNotConcernFunc);
-
-    var combinedOvernightCurrentReadings = {};
-    $.each(report_data.groupedSourceInfos, function(groupIdx, info) {
-        $.each(info.overnightcurrentReadings, function(timestamp, readingVal) {
-            combinedOvernightCurrentReadings[timestamp] =
-                ((timestamp in combinedOvernightCurrentReadings) ? combinedOvernightCurrentReadings[timestamp] : 0) + readingVal;
-        });
-    });
-
-    if (report_type == 'week') {
-        isNotConcernFunc = function(targetDt) {
-            return ($.inArray(targetDt.format("YYYY-MM-DD"), datesInWeek) == -1);
-        }
-    } else {
-        isNotConcernFunc = function(targetDt) {
-            return false;
-        }
-    }
-
-    var overnight_average_usage = 0;
-    $.each(report_data.groupedSourceInfos, function(groupIdx, info) {
-        overnight_average_usage += info['currentOvernightInfo'].average;
-    });
-
-    setCalendar(
-        creport_start, creport_end,
-        '#overnight-info .calendar-info-container', combinedOvernightCurrentReadings, overnight_average_usage, isNotConcernFunc);
-
-    // $('#weekday-info .average-usage').html(average_usage);
-
-    /*
-      var overnight_readings = {};
-      $.each(report_data.groupedSourceInfos, function(groupIdx, info) {
-      $.each(info.overnightcurrentReadings, function(timestamp, readingVal) {
-      overnight_readings[timestamp] =
-      ((timestamp in combinedOvernightCurrentReadings) ? overnight_readings[timestamp] : 0) + readingVal;
-      });
-      });
-    */
-
-
-    // $('#monthly-report-content div').each(function() {
-    //     var a = $(this).find('.menu-target:first');
-    //     var m = $(this).find('.menu-content:first').kendoContextMenu({
-    //         orientation: 'horizontal',
-    //         target: a,
-    //         showOn: 'click'
-    //     });
-    // });
-});

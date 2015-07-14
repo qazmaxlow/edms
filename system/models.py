@@ -496,7 +496,7 @@ class System(models.Model):
 
     def convert_to_meter_ds(self, start_dt, end_dt):
 
-        print('{0:-^80}'.format(' %s convert_to_meter_ds(%s, %s) called '%(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),start_dt.strftime('%Y-%m-%d %H:%M:%S'),end_dt.strftime('%Y-%m-%d %H:%M:%S'))))
+        # print('{0:-^80}'.format(' %s convert_to_meter_ds(%s, %s) called '%(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),start_dt.strftime('%Y-%m-%d %H:%M:%S'),end_dt.strftime('%Y-%m-%d %H:%M:%S'))))
         started_at = datetime.datetime.now()
 
         source_ids = [s.id for s in self.direct_sources]
@@ -530,7 +530,7 @@ class System(models.Model):
         for i in range(hours):
 
             current_dt = end_dt - relativedelta(hours=i+1)
-            print('{0:-^80}'.format(' %s: processing hour %s '%(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),current_dt.strftime('%Y-%m-%d %H:%M'))))
+            # print('{0:-^80}'.format(' %s: processing hour %s '%(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),current_dt.strftime('%Y-%m-%d %H:%M'))))
 
             for source_id in source_ids:
 
@@ -592,7 +592,7 @@ class System(models.Model):
                     else:
                         update_count += 1
 
-        print('{0:-^80}'.format(' started at: %s, finished at : %s '%(started_at.strftime('%Y-%m-%d %H:%M:%S'), datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))))
+        # print('{0:-^80}'.format(' started at: %s, finished at : %s '%(started_at.strftime('%Y-%m-%d %H:%M:%S'), datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))))
         return (create_count, update_count)
 
 
@@ -641,6 +641,109 @@ class System(models.Model):
             return {"dates": [], "totalKwh": 0, "totalCo2": 0, "totalMoney": 0}
 
 
+    def overnight_usage_by_day(self, start_dt, end_dt, source_ids=None):
+
+        # print('{0:-^80}'.format(' overnigh_avg_cost called '))
+        # print('{0:-^80}'.format(' start_dt: ' + start_dt.strftime('%Y-%m-%d %H:%M:%S') + ' | end_dt: ' + end_dt.strftime('%Y-%m-%d %H:%M:%S') + ' '))
+
+        current_db_conn = Electricity._get_db()
+
+        int_start_dt = int(start_dt.strftime("%Y%m%d"))
+        int_end_dt = int(end_dt.strftime("%Y%m%d"))
+
+        if source_ids:
+            object_ids = [ObjectId(s) for s in source_ids]
+        else:
+            object_ids = [s.id for s in self.sources]
+
+        system_ids = [s.id for s in System.get_systems_within_root(self.code)]
+
+        aggregate_pipeline = [
+            { "$match":
+                {"$and": [
+                    {"overnight_date": {"$gte": int_start_dt}},
+                    {"overnight_date": {"$lt": int_end_dt}},
+                    {"system_id": {"$in": system_ids}},
+                    {"source_id": {"$in": object_ids}},
+                ]}},
+            { "$project": {"_id": 1, "overnight_date": 1, "overnight_total": 1, "rate_co2": 1, "rate_money": 1,}},
+            {
+                "$group": {
+                    "_id" : "$overnight_date",
+                    "totalKwh": {"$sum": "$overnight_total"},
+                    "totalCo2": {"$sum": {"$multiply": ["$overnight_total", "$rate_co2"]}},
+                    "totalMoney": {"$sum": {"$multiply": ["$overnight_total", "$rate_money"]}}
+                }
+            }
+        ]
+
+        result =  current_db_conn.electricity.aggregate(aggregate_pipeline)
+
+        total = {}
+
+        if result['result']:
+            for r in result['result']:
+                total[r['_id']] =   {
+                                        "totalKwh": r['totalKwh'],
+                                        "totalCo2": r['totalCo2'],
+                                        "totalMoney": r['totalMoney'],
+                                    }
+
+        return total
+
+
+    def overnight_usage_by_source(self, start_dt, end_dt, source_ids=None):
+
+        # print('{0:-^80}'.format(' overnigh_avg_cost called '))
+        # print('{0:-^80}'.format(' start_dt: ' + start_dt.strftime('%Y-%m-%d %H:%M:%S') + ' | end_dt: ' + end_dt.strftime('%Y-%m-%d %H:%M:%S') + ' '))
+
+        current_db_conn = Electricity._get_db()
+
+        int_start_dt = int(start_dt.strftime("%Y%m%d"))
+        int_end_dt = int(end_dt.strftime("%Y%m%d"))
+
+        if source_ids:
+            object_ids = [ObjectId(s) for s in source_ids]
+        else:
+            object_ids = [s.id for s in self.sources]
+
+        system_ids = [s.id for s in System.get_systems_within_root(self.code)]
+
+        aggregate_pipeline = [
+            { "$match":
+                {"$and": [
+                    {"overnight_date": {"$gte": int_start_dt}},
+                    {"overnight_date": {"$lt": int_end_dt}},
+                    {"system_id": {"$in": system_ids}},
+                    {"source_id": {"$in": object_ids}},
+                ]}},
+            { "$project": {"_id": 1, "source_id": 1, "overnight_date": 1, "overnight_total": 1, "rate_co2": 1, "rate_money": 1,}},
+            {
+                "$group": {
+                    "_id" : "$source_id",
+                    "dates": {"$addToSet": "$overnight_date"},
+                    "totalKwh": {"$sum": "$overnight_total"},
+                    "totalCo2": {"$sum": {"$multiply": ["$overnight_total", "$rate_co2"]}},
+                    "totalMoney": {"$sum": {"$multiply": ["$overnight_total", "$rate_money"]}}
+                }
+            }
+        ]
+
+        result =  current_db_conn.electricity.aggregate(aggregate_pipeline)
+        total = {}
+
+        if result['result']:
+            for r in result['result']:
+                total[r['_id']] =   {
+                                        "dates": r['dates'],
+                                        "totalKwh": r['totalKwh'],
+                                        "totalCo2": r['totalCo2'],
+                                        "totalMoney": r['totalMoney'],
+                                    }
+
+        return total
+
+
     def total_usage(self, start_dt, end_dt, source_ids=None):
 
         current_db_conn = Electricity._get_db()
@@ -682,10 +785,15 @@ class System(models.Model):
         else:
             total = {"dates": [], "totalKwh": 0, "totalCo2": 0, "totalMoney": 0}
 
-        usages = Electricity.objects.filter(datetime_utc=end_dt, system_id__in=system_ids, source_id__in=object_ids)
+        if minute > 0:
+            usages = Electricity.objects.filter(datetime_utc=end_dt, system_id__in=system_ids, source_id__in=object_ids)
+        else:
+            usages = []
 
         for u in usages:
             minute_usage = u.usage_up_to_minute(minute)
+            total["dates"].append(u.local_date)
+            total["dates"] = list(set(total["dates"]))
             total["totalKwh"] += minute_usage["totalKwh"]
             total["totalCo2"] += minute_usage["totalCo2"]
             total["totalMoney"] += minute_usage["totalMoney"]
@@ -693,7 +801,7 @@ class System(models.Model):
         return total
 
 
-    def total_usage_by_source_id(self, start_dt, end_dt, source_ids=None):
+    def total_usage_by_source(self, start_dt, end_dt, source_ids=None):
 
         # print('{0:-^80}'.format(' start_dt: ' + start_dt.strftime('%Y-%m-%d %H:%M:%S') + ' | end_dt: ' + end_dt.strftime('%Y-%m-%d %H:%M:%S') + ' '))
 
@@ -745,7 +853,10 @@ class System(models.Model):
                                         "totalMoney": r['totalMoney'],
                                     }
 
-        usages = Electricity.objects.filter(datetime_utc=end_dt, system_id__in=system_ids, source_id__in=object_ids)
+        if minute > 0:
+            usages = Electricity.objects.filter(datetime_utc=end_dt, system_id__in=system_ids, source_id__in=object_ids)
+        else:
+            usages = []
 
         for u in usages:
             minute_usage = u.usage_up_to_minute(minute)
@@ -753,6 +864,8 @@ class System(models.Model):
             if u.source_id not in total:
                 total[u.source_id] = {"dates": [u.local_date], "totalKwh": 0, "totalCo2": 0, "totalMoney": 0}
 
+            total[u.source_id]["dates"].append(u.local_date)
+            total[u.source_id]["dates"] = list(set(total[u.source_id]["dates"]))
             total[u.source_id]["totalKwh"] += minute_usage["totalKwh"]
             total[u.source_id]["totalCo2"] += minute_usage["totalCo2"]
             total[u.source_id]["totalMoney"] += minute_usage["totalMoney"]
@@ -760,7 +873,7 @@ class System(models.Model):
         return total
 
 
-    def total_weekday_weekend_usage(self, start_dt, end_dt, weekday_weekend="weekday", source_ids=None):
+    def weekday_weekend_usage(self, start_dt, end_dt, weekday_weekend="weekday", source_ids=None):
 
         current_db_conn = Electricity._get_db()
 
@@ -769,28 +882,60 @@ class System(models.Model):
         else:
             object_ids = [s.id for s in self.sources]
 
-        holidays = [h for h in self.get_all_holidays() if h >= start_dt.date() and h < end_dt.date()]
-        holidays = [int(h.strftime("%Y%m%d")) for h in holidays]
-
-        if weekday_weekend != "weekday":
-            days = [1,7]
-            holidays_filter = {"$in": holidays}
-        else:
-            days = [2,3,4,5,6]
-            holidays_filter = {"$nin": holidays}
-
-
         system_ids = [s.id for s in System.get_systems_within_root(self.code)]
 
         minute = end_dt.minute
         end_dt = end_dt.replace(minute=0, second=0, microsecond=0)
+
+        holidays = [h for h in self.get_all_holidays() if h >= start_dt.date() and h < end_dt.date()]
+        holidays = [int(h.strftime("%Y%m%d")) for h in holidays]
+
+        week_day = end_dt.weekday()
+        include_end_hour = False
+
+        if weekday_weekend != "weekday":
+
+            days = [1,7]
+
+            if holidays:
+                holidays_filter = {
+                    "$or": [
+                        {"dow": {"$in": days}},
+                        {"local_date": {"$in": holidays}},
+                    ]
+                }
+            else:
+                holidays_filter = {"dow": {"$in": days}}
+
+            if int(end_dt.strftime("%Y%m%d")) in holidays or week_day in [5,6]:
+                include_end_hour = True
+        else:
+
+            days = [2,3,4,5,6]
+
+            if holidays:
+                holidays_filter = {
+                    "$and": [
+                        {"dow": {"$in": days}},
+                        {"local_date": {"$nin": holidays}},
+                    ]
+                }
+            else:
+                holidays_filter = {"dow": {"$in": days}}
+
+            if int(end_dt.strftime("%Y%m%d")) not in holidays and week_day in [0,1,2,3,4]:
+                include_end_hour = True
+
+        if include_end_hour and minute > 0:
+            usages = Electricity.objects.filter(datetime_utc=end_dt, system_id__in=system_ids, source_id__in=object_ids)
+        else:
+            usages = []
 
         aggregate_pipeline = [{
             "$match": {
                 "$and": [
                     {"datetime_local": {"$gte": start_dt.replace(tzinfo=pytz.utc)}},
                     {"datetime_local": {"$lt": end_dt.replace(tzinfo=pytz.utc)}},
-                    {"local_date": holidays_filter},
                     {"system_id": {"$in": system_ids}},
                     {"source_id": {"$in": object_ids}},
                 ]
@@ -803,9 +948,8 @@ class System(models.Model):
                 "local_date": 1,
                 "dow": {"$dayOfWeek": "$datetime_local"},
             }}, {
-            "$match": {
-                "dow": {"$in": days},
-            }}, {
+            "$match": holidays_filter
+            }, {
             "$group": {
                 "_id": None,
                 "dates": {"$addToSet": "$local_date"},
@@ -816,18 +960,135 @@ class System(models.Model):
         }]
 
         result =  current_db_conn.electricity.aggregate(aggregate_pipeline)
+
         if result['result']:
             total = result['result'][0]
         else:
             total = {"dates": [], "totalKwh": 0, "totalCo2": 0, "totalMoney": 0}
 
-        usages = Electricity.objects.filter(datetime_utc=end_dt, system_id__in=system_ids, source_id__in=object_ids)
-
         for u in usages:
             minute_usage = u.usage_up_to_minute(minute)
+            total["dates"].append(u.local_date)
+            total["dates"] = list(set(total["dates"]))
             total["totalKwh"] += minute_usage["totalKwh"]
             total["totalCo2"] += minute_usage["totalCo2"]
             total["totalMoney"] += minute_usage["totalMoney"]
+
+        return total
+
+
+    def weekday_weekend_usage_by_source(self, start_dt, end_dt, weekday_weekend="weekday", source_ids=None):
+
+        current_db_conn = Electricity._get_db()
+
+        if source_ids:
+            object_ids = [ObjectId(s) for s in source_ids]
+        else:
+            object_ids = [s.id for s in self.sources]
+
+        system_ids = [s.id for s in System.get_systems_within_root(self.code)]
+
+        minute = end_dt.minute
+        end_dt = end_dt.replace(minute=0, second=0, microsecond=0)
+
+        holidays = [h for h in self.get_all_holidays() if h >= start_dt.date() and h < end_dt.date()]
+        holidays = [int(h.strftime("%Y%m%d")) for h in holidays]
+
+        week_day = end_dt.weekday()
+        include_end_hour = False
+
+        if weekday_weekend != "weekday":
+
+            days = [1,7]
+
+            if holidays:
+                holidays_filter = {
+                    "$or": [
+                        {"dow": {"$in": days}},
+                        {"local_date": {"$in": holidays}},
+                    ]
+                }
+            else:
+                holidays_filter = {"dow": {"$in": days}}
+
+            if int(end_dt.strftime("%Y%m%d")) in holidays or week_day in [5,6]:
+                include_end_hour = True
+        else:
+
+            days = [2,3,4,5,6]
+
+            if holidays:
+                holidays_filter = {
+                    "$and": [
+                        {"dow": {"$in": days}},
+                        {"local_date": {"$nin": holidays}},
+                    ]
+                }
+            else:
+                holidays_filter = {"dow": {"$in": days}}
+
+            if int(end_dt.strftime("%Y%m%d")) not in holidays and week_day in [0,1,2,3,4]:
+                include_end_hour = True
+
+        if include_end_hour and minute > 0:
+            usages = Electricity.objects.filter(datetime_utc=end_dt, system_id__in=system_ids, source_id__in=object_ids)
+        else:
+            usages = []
+
+        aggregate_pipeline = [{
+            "$match": {
+                "$and": [
+                    {"datetime_local": {"$gte": start_dt.replace(tzinfo=pytz.utc)}},
+                    {"datetime_local": {"$lt": end_dt.replace(tzinfo=pytz.utc)}},
+                    {"system_id": {"$in": system_ids}},
+                    {"source_id": {"$in": object_ids}},
+                ]
+            }}, {
+            "$project": {
+                "total": 1,
+                "rate_co2": 1,
+                "rate_money": 1,
+                "datetime_local": 1,
+                "source_id": 1,
+                "local_date": 1,
+                "dow": {"$dayOfWeek": "$datetime_local"},
+            }}, {
+            "$match": holidays_filter
+            }, {
+            "$group": {
+                "_id": "$source_id",
+                "dates": {"$addToSet": "$local_date"},
+                "totalKwh": {"$sum": "$total"},
+                "totalCo2": {"$sum": {"$multiply": ["$total", "$rate_co2"]}},
+                "totalMoney": {"$sum": {"$multiply": ["$total", "$rate_money"]}},
+            }
+        }]
+
+        result =  current_db_conn.electricity.aggregate(aggregate_pipeline)
+
+        total = {}
+
+        if result['result']:
+            for r in result['result']:
+                total[r['_id']] = {
+                        "dates": r['dates'],
+                        "totalKwh": r['totalKwh'],
+                        "totalCo2": r['totalCo2'],
+                        "totalMoney": r['totalMoney'],
+                    }
+
+        for u in usages:
+
+            minute_usage = u.usage_up_to_minute(minute)
+
+            if u.source_id not in total:
+                total[u.source_id] = {"dates": [u.local_date], "totalKwh": 0, "totalCo2": 0, "totalMoney": 0}
+
+            total[u.source_id]["dates"].append(u.local_date)
+            total[u.source_id]["dates"] = list(set(total[u.source_id]["dates"]))
+            total[u.source_id]["totalKwh"] += minute_usage["totalKwh"]
+            total[u.source_id]["totalCo2"] += minute_usage["totalCo2"]
+            total[u.source_id]["totalMoney"] += minute_usage["totalMoney"]
 
         return total
 
@@ -886,7 +1147,7 @@ class System(models.Model):
                 "interval": project_interval,
             }},
             { "$group": {
-                "_id": {"interval": "$interval"},
+                "_id": "$interval",
                 "dates": {"$addToSet": "$local_date"},
                 "totalKwh": {"$sum": "$total"},
                 "totalCo2": {"$sum": {"$multiply": ["$total", "$rate_co2"]}},
@@ -900,14 +1161,17 @@ class System(models.Model):
 
         if result['result']:
             for r in result['result']:
-                total[r['_id']['interval']] =   {
+                total[r['_id']] =   {
                         "dates": r['dates'],
                         "totalKwh": r['totalKwh'],
                         "totalCo2": r['totalCo2'],
                         "totalMoney": r['totalMoney'],
                     }
 
-        usages = Electricity.objects.filter(datetime_utc=end_dt, system_id__in=system_ids, source_id__in=object_ids)
+        if minute > 0:
+            usages = Electricity.objects.filter(datetime_utc=end_dt, system_id__in=system_ids, source_id__in=object_ids)
+        else:
+            usages = []
 
         for u in usages:
             minute_usage = u.usage_up_to_minute(minute)
@@ -915,6 +1179,8 @@ class System(models.Model):
             if key not in total:
                 total[key] = {"dates": [u.local_date], "totalKwh": 0, "totalCo2": 0, "totalMoney": 0}
 
+            total[key]["dates"].append(u.local_date)
+            total[key]["dates"] = list(set(total[key]["dates"]))
             total[key]["totalKwh"] += minute_usage["totalKwh"]
             total[key]["totalCo2"] += minute_usage["totalCo2"]
             total[key]["totalMoney"] += minute_usage["totalMoney"]
