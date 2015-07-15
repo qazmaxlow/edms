@@ -44,7 +44,6 @@ def ranking_data_view(request, system_code=None):
     ranking_type = request.POST.get('ranking_type')
 
     source_group_map = Utils.gen_source_group_map(grouped_source_infos)
-    print(source_group_map)
     all_source_ids = Utils.get_source_ids_from_grouped_source_info(grouped_source_infos)
 
     source_readings = SourceManager.get_readings(all_source_ids, range_type, start_dt, end_dt.replace(second=0, microsecond=0))
@@ -98,16 +97,20 @@ def ranking_data_view(request, system_code=None):
                 if info['code']:
                     sys = [s for s in systems if s.code == info['code']]
 
-                if sys:
-                    if ranking_type == RANKING_TYPE_PER_PERSON:
+                if ranking_type == RANKING_TYPE_PER_PERSON:
+                    if sys and sys[0] and sys[0].population and sys[0].population > 0:
                         info['value'] /= sys[0].population
-                    elif ranking_type == 'per_sqfoot':
-                        info['value'] /= sys[0].area_sqfoot or 1
-                else:
-                    if ranking_type == RANKING_TYPE_PER_PERSON:
+                    elif current_sys and current_sys.population and current_sys.population > 0:
                         info['value'] /= current_sys.population
-                    elif ranking_type == 'per_sqfoot':
-                        info['value'] /= current_sys.area_sqfoot or 1
+                    else:
+                        pass
+                elif ranking_type == 'per_sqfoot':
+                    if sys and sys[0].area_sqfoot and sys[0].area_sqfoot > 0:
+                        info['value'] /= sys[0].area_sqfoot
+                    elif current_sys and current_sys.area_sqfoot and current_sys.area_sqfoot > 0:
+                        info['value'] /= current_sys.area_sqfoot
+                    else:
+                        pass
 
     elif ranking_type == RANKING_TYPE_PERCENT:
         for source_id, reading_val in sources_sum_info.items():
