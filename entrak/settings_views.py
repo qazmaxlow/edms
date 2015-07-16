@@ -45,7 +45,7 @@ def alert_settings_view(request, system_code=None):
     alert_history_infos = []
     for alert_history in alert_historys:
 
-        source = Source.objects.get(source_id=alert_history.alert.source_info['source_id'])
+        source = Source.objects.get(id=alert_history.alert.source_info['source_id'])
         system = System.objects.get(code=source.system_code)
 
         info = {
