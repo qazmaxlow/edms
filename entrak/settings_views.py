@@ -45,8 +45,7 @@ def alert_settings_view(request, system_code=None):
     alert_history_infos = []
     for alert_history in alert_historys:
 
-        source = Source.objects.get(id=alert_history.alert.source_info['source_id'])
-        system = System.objects.get(code=source.system_code)
+        system = System.objects.get(code=alert_history.alert.source.system_code)
 
         info = {
             'created': calendar.timegm(alert_history.created.utctimetuple()),
@@ -58,8 +57,10 @@ def alert_settings_view(request, system_code=None):
             'check_weekdays': alert_history.alert.check_weekdays,
             'resolved': alert_history.resolved,
         }
+
         if alert_history.resolved:
             info['resolved_datetime'] = calendar.timegm(alert_history.resolved_datetime.utctimetuple())
+
         if alert_history.alert.type == ALERT_TYPE_SUMMARY:
             info['start_time_h'] = alert_history.alert.start_time.hour
             info['start_time_m'] = alert_history.alert.start_time.minute
