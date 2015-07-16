@@ -63,7 +63,7 @@ class Alert(models.Model):
 
     @property
     def source(self):
-        Source.objects.get(id=self.source_info['source_id'])
+        return Source.objects.get(id=self.source_info['source_id'])
 
     def __unicode__(self):
         return '%d'%self.id
