@@ -165,49 +165,46 @@ class TopThreeConsumersList(generics.ListAPIView):
             current_money_rate = sys.get_unit_rate(date_end, 'money')
             previous_money_rate = sys.get_unit_rate(previous_date_end, 'money')
 
-            if childs:
+            for child_sys in childs:
+                c_cost = SourceReadingDay.total_used([s.id for s in child_sys.sources], date_start, date_end)
+                p_cost = SourceReadingHour.total_used([s.id for s in child_sys.sources], previous_date_start, previous_date_end)
 
-                for child_sys in childs:
-                    c_cost = SourceReadingDay.total_used([s.id for s in child_sys.sources], date_start, date_end)
-                    p_cost = SourceReadingHour.total_used([s.id for s in child_sys.sources], previous_date_start, previous_date_end)
+                if c_cost:
+                    cost_now = c_cost[0]['total']*current_money_rate.rate
+                else:
+                    cost_now = None
 
-                    if c_cost:
-                        cost_now = c_cost[0]['total']*current_money_rate.rate
-                    else:
-                        cost_now = None
+                if p_cost:
+                    cost_before = p_cost[0]['total']*previous_money_rate.rate
+                    percentage_change = 100*((cost_now or 0) - cost_before)/float(cost_before)
+                else:
+                    cost_before = None
+                    percentage_change = None
 
-                    if p_cost:
-                        cost_before = p_cost[0]['total']*previous_money_rate.rate
-                        percentage_change = 100*((cost_now or 0) - cost_before)/float(cost_before)
-                    else:
-                        cost_before = None
-                        percentage_change = None
+                json_data.append({'d_name': child_sys.full_name, 'd_name_tc': child_sys.full_name_tc, 'value': cost_now, 'previous_value': cost_before, 'percentage_change': percentage_change})
 
-                    json_data.append({'d_name': child_sys.full_name, 'd_name_tc': child_sys.full_name_tc, 'value': cost_now, 'previous_value': cost_before, 'percentage_change': percentage_change})
+            from companies.report_views import get_source_name
 
-            else:
+            current_cost = sys.get_total_cost_with_source_id(date_start, date_end)
+            previous_cost = sys.get_total_cost_with_source_id(previous_date_start, previous_date_end)
 
-                from companies.report_views import get_source_name
-                current_cost = sys.get_total_cost_with_source_id(date_start, date_end)
-                previous_cost = sys.get_total_cost_with_source_id(previous_date_start, previous_date_end)
+            for s in sys.direct_sources:
+                c_cost = [c for c in current_cost if c['source_id'] == s.id]
+                p_cost = [p for p in previous_cost if p['source_id'] == s.id]
 
-                for s in sys.sources:
-                    c_cost = [c for c in current_cost if c['source_id'] == s.id]
-                    p_cost = [p for p in previous_cost if p['source_id'] == s.id]
+                if c_cost:
+                    cost_now = c_cost[0]['cost']
+                else:
+                    cost_now = None
 
-                    if c_cost:
-                        cost_now = c_cost[0]['cost']
-                    else:
-                        cost_now = None
+                if p_cost:
+                    cost_before = p_cost[0]['cost']
+                    percentage_change = 100*((cost_now or 0) - cost_before)/float(cost_before)
+                else:
+                    cost_before = None
+                    percentage_change = None
 
-                    if p_cost:
-                        cost_before = p_cost[0]['cost']
-                        percentage_change = 100*((cost_now or 0) - cost_before)/float(cost_before)
-                    else:
-                        cost_before = None
-                        percentage_change = None
-
-                    json_data.append({'d_name': get_source_name(s.id), 'd_name_tc': s['d_name_tc'], 'value': cost_now, 'previous_value': cost_before, 'percentage_change': percentage_change})
+                json_data.append({'d_name': get_source_name(s.id), 'd_name_tc': s['d_name_tc'], 'value': cost_now, 'previous_value': cost_before, 'percentage_change': percentage_change})
 
             if json_data:
                 json_data.sort(key=lambda r: ((-1*r['value'] if r['value'] else 0), (r['d_name'])))
