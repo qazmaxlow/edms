@@ -183,10 +183,11 @@ class TopThreeConsumersList(generics.ListAPIView):
                         cost_before = None
                         percentage_change = None
 
-                    json_data.append({'d_name': child_sys.full_name, 'd_name_tc': child_sys.full_name_tc, 'value': cost_now, 'previous_value': cost_before, 'percentage_change': percentage_change})
+                    json_data.append({'d_name': child_sys.fullname, 'd_name_tc': child_sys.full_name_tc, 'value': cost_now, 'previous_value': cost_before, 'percentage_change': percentage_change})
 
             else:
 
+                from companies.report_views import get_source_name
                 current_cost = sys.get_total_cost_with_source_id(date_start, date_end)
                 previous_cost = sys.get_total_cost_with_source_id(previous_date_start, previous_date_end)
 
@@ -206,7 +207,7 @@ class TopThreeConsumersList(generics.ListAPIView):
                         cost_before = None
                         percentage_change = None
 
-                    json_data.append({'d_name': s['d_name'], 'd_name_tc': s['d_name_tc'], 'value': cost_now, 'previous_value': cost_before, 'percentage_change': percentage_change})
+                    json_data.append({'d_name': get_source_name(s.id), 'd_name_tc': s['d_name_tc'], 'value': cost_now, 'previous_value': cost_before, 'percentage_change': percentage_change})
 
             if json_data:
                 json_data.sort(key=lambda r: ((-1*r['value'] if r['value'] else 0), (r['d_name'])))

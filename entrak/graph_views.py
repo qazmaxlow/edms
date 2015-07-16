@@ -5,7 +5,7 @@ import json
 import itertools
 from django.shortcuts import render
 from django.core.context_processors import csrf
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.db.models import Q
 from settings import STATIC_URL
 from system.models import System, CITY_ALL
@@ -36,7 +36,8 @@ def graph_view(request, system_code=None):
     m.update(csrf(request))
 
     return render(request, 'graph.html', m)
-
+    
+@csrf_exempt
 def source_readings_view(request, system_code):
     grouped_source_infos = json.loads(request.POST.get('grouped_source_infos'))
     range_type = request.POST.get('range_type')
