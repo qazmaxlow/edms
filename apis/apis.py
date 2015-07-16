@@ -4,6 +4,7 @@ import pytz
 from bson.objectid import ObjectId
 from datetime import datetime
 from datetime import timedelta
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import Http404
 from django.utils import timezone, dateparse
@@ -11,6 +12,8 @@ from egauge.manager import SourceManager
 from egauge.models import SourceReadingHour
 from mongoengine import connection
 from rest_framework import viewsets, filters
+from rest_framework import generics
+from rest_framework import permissions
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
@@ -18,6 +21,7 @@ from rest_framework.response import Response
 from system.models import System
 from utils.auth import has_permission
 from common import return_error_response
+from serializers import SystemSerializer
 
 @api_view(['GET'])
 @authentication_classes((TokenAuthentication,SessionAuthentication,))
@@ -82,3 +86,16 @@ def DailyElectricityUsageDetail(request, api_version, format=None):
             'kWh' : round(comparing_to_readings,4)
         },
     })
+
+
+class SystemListView(generics.ListAPIView):
+
+    serializer_class = SystemSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+
+        current_user = self.request.user
+        system = current_user.system
+
+        return [system]
