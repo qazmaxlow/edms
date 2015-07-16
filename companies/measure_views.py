@@ -181,7 +181,7 @@ class TopThreeConsumersList(generics.ListAPIView):
                     cost_before = None
                     percentage_change = None
 
-                json_data.append({'d_name': child_sys.full_name, 'd_name_tc': child_sys.full_name_tc, 'value': cost_now, 'previous_value': cost_before, 'percentage_change': percentage_change})
+                json_data.append({'d_name': child_sys.name, 'd_name_tc': child_sys.name_tc, 'value': cost_now, 'previous_value': cost_before, 'percentage_change': percentage_change})
 
             from companies.report_views import get_source_name
 
