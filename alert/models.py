@@ -159,7 +159,7 @@ class Alert(models.Model):
 
     def gen_email_sub_msg(self, info, prev_history):
 
-        system = System.objects.get(self.source.system_code)
+        system = System.objects.get(code=self.source.system_code)
         full_name = {'en': system.full_name, 'zh-tw': system.full_name_tc}
 
         if info['pass_verify']:
