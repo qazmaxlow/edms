@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from jsonfield import JSONField
 from egauge.manager import SourceManager
 from egauge.models import Source
+from system.models import System
 from entrak.settings import SITE_LINK_FORMAT, LANG_CODE_EN
 
 ALERT_TYPE_STILL_ON     = 'still_on'
