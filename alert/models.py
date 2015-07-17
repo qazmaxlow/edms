@@ -167,7 +167,7 @@ class Alert(models.Model):
         verify_result = {
             'start_dt': start_dt,
             'end_dt': end_dt,
-            'pass_verify': False,
+            'pass_verify': pass_verify,
             'threshold_kwh' : threshold_kwh,
             'current_kwh' : current_kwh,
             'diff_percent': diff_percent,
