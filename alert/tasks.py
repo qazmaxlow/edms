@@ -85,6 +85,8 @@ def check_all_alerts(check_dt):
                 alert_id=alert.id,
                 created=check_dt,
                 resolved=False,
+                threshold_kwh=verify_result['threshold_kwh'],
+                current_kwh=verify_result['current_kwh'],
                 diff_percent=verify_result['diff_percent'])
 
             need_send_email = True

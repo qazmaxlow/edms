@@ -18,10 +18,12 @@ from rest_framework.authentication import TokenAuthentication, SessionAuthentica
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 from system.models import System
+from alert.models import Alert, AlertHistory
 from utils.auth import has_permission
 from common import return_error_response
-from serializers import SystemSerializer
+from serializers import SystemSerializer, AlertHistorySerializer
 
 @api_view(['GET'])
 @authentication_classes((TokenAuthentication,SessionAuthentication,))
@@ -88,6 +90,12 @@ def DailyElectricityUsageDetail(request, api_version, format=None):
     })
 
 
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 25
+    page_size_query_param = 'per_page'
+    max_page_size = 100
+
+
 class SystemListView(generics.ListAPIView):
 
     serializer_class = SystemSerializer
@@ -99,3 +107,17 @@ class SystemListView(generics.ListAPIView):
         system = current_user.system
 
         return [system]
+
+
+class AlertHistoryListView(generics.ListAPIView):
+
+    serializer_class = AlertHistorySerializer
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = StandardResultsSetPagination
+
+    def get_queryset(self):
+
+        syscode = self.kwargs['system_code']
+        sys = System.objects.get(code=syscode)
+        alert_ids = Alert.objects.filter(system_id=sys.id).only('id')
+        return AlertHistory.objects.filter(alert_id__in=alert_ids)

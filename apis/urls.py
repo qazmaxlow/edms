@@ -11,4 +11,5 @@ urlpatterns = patterns(
     url(r'^v(?P<api_version>\d+)/systems/(?P<system_code>[\w-]+)/meter-statuses/$', meter_views.MeterStatusList.as_view()),
     url(r'^v(?P<api_version>\d+)/systems/(?P<system_code>[\w-]+)/meter-statuses/$', meter_views.MeterStatusList.as_view()),
     url(r'^v(?P<api_version>\d+)/systems/$', apis.SystemListView.as_view(), name='system-list'),
+    url(r'^v(?P<api_version>\d+)/systems/(?P<system_code>[\w-]+)/alert_histories/$', apis.AlertHistoryListView.as_view(), name='alert-list'),
 )

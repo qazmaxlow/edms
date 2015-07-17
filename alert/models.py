@@ -66,6 +66,20 @@ class Alert(models.Model):
     def source(self):
         return Source.objects.get(id=self.all_source_ids[0])
 
+    @property
+    def parent_system(self):
+        return System.objects.get(code=self.source.system_code)
+
+    @property
+    def parent_system_name(self):
+        system = self.parent_system
+        return {'en': system.full_name, 'zh-tw': system.full_name_tc}
+
+    @property
+    def source_name(self):
+        source = self.source
+        return {'en': source.d_name, 'zh-tw': source.d_name_tc}
+
     def __unicode__(self):
         return '%d'%self.id
 
@@ -99,13 +113,19 @@ class Alert(models.Model):
 
         pass_verify = True
         diff_percent = None
+        threshold = None
+        current_value = None
 
         # need to make sure summary and still on alert don't have missing data
         if self.type == ALERT_TYPE_SUMMARY \
             or (num_of_reading == len(all_source_ids)*CONTINUOUS_INTERVAL_MIN):
 
             if self.type == ALERT_TYPE_PEAK:
+
                 transformed_peak_threshold = self.peak_threshold*KVA_TO_KWH_FACTOR*(CONTINUOUS_INTERVAL_MIN/60.0)
+                threshold_kwh = transformed_peak_threshold
+                current_kwh = value
+
                 if value > transformed_peak_threshold*(self.compare_percent/100.0):
                     pass_verify = False
                 diff_percent = int((float(value)/transformed_peak_threshold)*100)
@@ -125,6 +145,10 @@ class Alert(models.Model):
                 recent_value = float(recent_value)/num_of_compare_weeks
 
                 if recent_value != 0:
+
+                    threshold_kwh = recent_value
+                    current_kwh = value
+
                     if self.compare_method == ALERT_COMPARE_METHOD_ABOVE:
                         if value > recent_value*(1+(self.compare_percent/100.0)):
                             pass_verify = False
@@ -143,8 +167,10 @@ class Alert(models.Model):
         verify_result = {
             'start_dt': start_dt,
             'end_dt': end_dt,
-            'pass_verify': pass_verify,
-            'diff_percent': diff_percent
+            'pass_verify': False,
+            'threshold_kwh' : threshold_kwh,
+            'current_kwh' : current_kwh,
+            'diff_percent': diff_percent,
         }
 
         return verify_result
@@ -159,8 +185,7 @@ class Alert(models.Model):
 
     def gen_email_sub_msg(self, info, prev_history):
 
-        system = System.objects.get(code=self.source.system_code)
-        full_name = {'en': system.full_name, 'zh-tw': system.full_name_tc}
+        full_name = self.parent_system_name
 
         if info['pass_verify']:
             sub_msg = "RESOLVED - "
@@ -229,6 +254,8 @@ class AlertHistory(models.Model):
     resolved = models.BooleanField()
     resolved_datetime = models.DateTimeField(blank=True, null=True)
     diff_percent = models.SmallIntegerField()
+    threshold_kwh = models.FloatField(null=True)
+    current_kwh = models.FloatField(null=True)
 
 class AlertEmail(models.Model):
     created = models.DateTimeField(auto_now_add=True)
