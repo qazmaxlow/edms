@@ -63,17 +63,17 @@ class Alert(models.Model):
 
     @property
     def source(self):
-        return Source.objects.get(id=self.source_info['source_id'])
+        return Source.objects.get(id=self.all_source_ids[0])
 
     def __unicode__(self):
         return '%d'%self.id
 
-    def get_all_source_ids(self):
+    @property
+    def all_source_ids(self):
         if 'source_ids' in self.source_info:
             source_ids = self.source_info['source_ids']
         elif 'source_id' in self.source_info:
             source_ids = [self.source_info['source_id']]
-
         return source_ids
 
     def gen_start_end_dt(self, now):
@@ -92,7 +92,7 @@ class Alert(models.Model):
 
     def verify(self, utc_now):
         now = utc_now.astimezone(pytz.timezone(self.system.timezone))
-        all_source_ids = self.get_all_source_ids()
+        all_source_ids = self.all_source_ids
         start_dt, end_dt = self.gen_start_end_dt(now)
         value, num_of_reading = SourceManager.get_readings_sum(all_source_ids, start_dt, end_dt)
 
