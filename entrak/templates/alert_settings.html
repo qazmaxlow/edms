@@ -74,8 +74,12 @@
     <div class="date-col">
         <div class="created-date">{% templatetag openvariable %}createdDate{% templatetag closevariable %}</div>
         <div class="created-time">{% templatetag openvariable %}createdTime{% templatetag closevariable %}</div>
-    </div><div class="source-col">{% templatetag openvariable %}sourceName{% templatetag closevariable %}
-    </div><div class="issue-col">
+    </div>
+    <div class="source-col">
+        <div class="source-line-1">{% templatetag openvariable %}systemName{% templatetag closevariable %}</div>
+        <div class="source-line-2">{% templatetag openvariable %}sourceName{% templatetag closevariable %}</div>
+    </div>
+    <div class="issue-col">
         <div class="issue-line-1">{% templatetag openvariable %}issueLine1{% templatetag closevariable %}</div>
         <div class="issue-line-2">{% templatetag openvariable %}issueLine2{% templatetag closevariable %}</div>
         <div class="issue-line-3">{% templatetag openvariable %}issueLine3{% templatetag closevariable %}</div>
@@ -798,7 +802,9 @@ $(function() {
         var info = {
             createdDate: createdDt.format('{% trans "DD MMM YYYY, ddd" %}'),
             createdTime: createdDt.format('{% trans "hh:mma" %}'),
+            systemName: alertHistory.systemInfo[settings.langCode],
             sourceName: alertHistory.nameInfo[settings.langCode],
+
         };
 
         if (alertHistory.alert_type === 'peak') {

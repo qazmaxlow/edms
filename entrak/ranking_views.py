@@ -73,37 +73,44 @@ def ranking_data_view(request, system_code=None):
                 calculation.transform_source_readings_with_global_rate(last_source_readings, global_rate)
 
     sources_sum_info = {}
+
     for source_id, info in source_readings.items():
         total = reduce(lambda prev, reading: prev+reading[1], info.items(), 0)
         sources_sum_info[source_id] = total
-
-    if ranking_type == RANKING_TYPE_PER_PERSON:
-        if systems is None:
-            systems = System.get_systems_within_root(system_code)
-        if sources is None:
-            sources = Source.objects(id__in=all_source_ids)
-
-        system_source_mapping = calculation.gen_source_system_mapping(systems, sources)
-        for source_id in sources_sum_info.keys():
-            sources_sum_info[source_id] /= system_source_mapping[source_id].population
-
-    elif ranking_type == 'per_sqfoot':
-        if systems is None:
-            systems = System.get_systems_within_root(system_code)
-        if sources is None:
-            sources = Source.objects(id__in=all_source_ids)
-
-        system_source_mapping = calculation.gen_source_system_mapping(systems, sources)
-        for source_id in sources_sum_info.keys():
-            sqft = system_source_mapping[source_id].area_sqfoot or 1
-            sources_sum_info[source_id] /= sqft
-
 
     grouped_readings = [{'name': info['name'], 'code': info.get('code', None), 'value': 0} for info in grouped_source_infos]
     if ranking_type == RANKING_TYPE_TOTAL or ranking_type == RANKING_TYPE_PER_PERSON or ranking_type == 'per_sqfoot':
         for source_id, reading_val in sources_sum_info.items():
             target_group = grouped_readings[source_group_map[source_id]]
             target_group['value'] += reading_val
+
+        if ranking_type == RANKING_TYPE_PER_PERSON or ranking_type == 'per_sqfoot':
+            if systems is None:
+                systems = System.get_systems_within_root(system_code)
+
+            current_sys = System.objects.get(code=system_code)
+
+            for info in grouped_readings:
+
+                sys = None
+
+                if info['code']:
+                    sys = [s for s in systems if s.code == info['code']]
+
+                if ranking_type == RANKING_TYPE_PER_PERSON:
+                    if sys and sys[0] and sys[0].population and sys[0].population > 0:
+                        info['value'] /= sys[0].population
+                    elif current_sys and current_sys.population and current_sys.population > 0:
+                        info['value'] /= current_sys.population
+                    else:
+                        pass
+                elif ranking_type == 'per_sqfoot':
+                    if sys and sys[0].area_sqfoot and sys[0].area_sqfoot > 0:
+                        info['value'] /= sys[0].area_sqfoot
+                    elif current_sys and current_sys.area_sqfoot and current_sys.area_sqfoot > 0:
+                        info['value'] /= current_sys.area_sqfoot
+                    else:
+                        pass
 
     elif ranking_type == RANKING_TYPE_PERCENT:
         for source_id, reading_val in sources_sum_info.items():

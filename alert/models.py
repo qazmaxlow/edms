@@ -4,6 +4,7 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from jsonfield import JSONField
 from egauge.manager import SourceManager
+from egauge.models import Source
 from entrak.settings import SITE_LINK_FORMAT, LANG_CODE_EN
 
 ALERT_TYPE_STILL_ON     = 'still_on'
@@ -60,15 +61,19 @@ class Alert(models.Model):
     contacts = models.ManyToManyField('contact.Contact', blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
+    @property
+    def source(self):
+        return Source.objects.get(id=self.all_source_ids[0])
+
     def __unicode__(self):
         return '%d'%self.id
 
-    def get_all_source_ids(self):
+    @property
+    def all_source_ids(self):
         if 'source_ids' in self.source_info:
             source_ids = self.source_info['source_ids']
         elif 'source_id' in self.source_info:
             source_ids = [self.source_info['source_id']]
-
         return source_ids
 
     def gen_start_end_dt(self, now):
@@ -87,7 +92,7 @@ class Alert(models.Model):
 
     def verify(self, utc_now):
         now = utc_now.astimezone(pytz.timezone(self.system.timezone))
-        all_source_ids = self.get_all_source_ids()
+        all_source_ids = self.all_source_ids
         start_dt, end_dt = self.gen_start_end_dt(now)
         value, num_of_reading = SourceManager.get_readings_sum(all_source_ids, start_dt, end_dt)
 
@@ -152,6 +157,10 @@ class Alert(models.Model):
         return ALERT_EMAIL_TITLE%(substitute_text)
 
     def gen_email_sub_msg(self, info, prev_history):
+
+        system = System.objects.get(self.source.system_code)
+        full_name = {'en': system.full_name, 'zh-tw': system.full_name_tc}
+
         if info['pass_verify']:
             sub_msg = "RESOLVED - "
             created_dt = prev_history.created.astimezone(pytz.timezone(self.system.timezone))
@@ -163,11 +172,13 @@ class Alert(models.Model):
             sub_msg = ""
             sub_msg += info['start_dt'].strftime('%d %b %Y, %I:%M%p')
             sub_msg += info['end_dt'].strftime('-%I:%M%p')
-        sub_msg += '   %s - %s'%(self.system.full_name, self.source_info['nameInfo'][LANG_CODE_EN])
+
+        sub_msg += '   %s - %s'%(full_name[LANG_CODE_EN], self.source_info['nameInfo'][LANG_CODE_EN])
+
         if (not info['pass_verify']) and info['diff_percent'] is not None:
             diff_percent_text = "%d"%abs(info['diff_percent']) if abs(info['diff_percent']) <= MAX_DIFF_PERCENT_DISPLAY else ">%d"%MAX_DIFF_PERCENT_DISPLAY
             sub_msg += '   %s%%'%diff_percent_text
-            
+
         if self.type == ALERT_TYPE_PEAK:
             sub_msg += '  of previous peak of %d kVA'%self.peak_threshold
         else:

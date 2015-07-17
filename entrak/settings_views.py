@@ -11,6 +11,7 @@ from django.db.models import Q
 from django.db import transaction, IntegrityError
 from system.models import System
 from egauge.manager import SourceManager
+from egauge.models import Source
 from alert.models import Alert, AlertHistory, ALERT_TYPE_STILL_ON, ALERT_TYPE_SUMMARY, ALERT_TYPE_PEAK, ALERT_COMPARE_METHOD_ABOVE
 from contact.models import Contact
 from user.models import EntrakUser, USER_ROLE_ADMIN_LEVEL, USER_ROLE_VIEWER_LEVEL
@@ -43,8 +44,12 @@ def alert_settings_view(request, system_code=None):
 
     alert_history_infos = []
     for alert_history in alert_historys:
+
+        system = System.objects.get(code=alert_history.alert.source.system_code)
+
         info = {
             'created': calendar.timegm(alert_history.created.utctimetuple()),
+            'systemInfo': {'en': system.name, 'zh-tw': system.name_tc},
             'nameInfo': alert_history.alert.source_info['nameInfo'],
             'alert_type': alert_history.alert.type,
             'alert_compare_method': alert_history.alert.compare_method,
@@ -52,8 +57,10 @@ def alert_settings_view(request, system_code=None):
             'check_weekdays': alert_history.alert.check_weekdays,
             'resolved': alert_history.resolved,
         }
+
         if alert_history.resolved:
             info['resolved_datetime'] = calendar.timegm(alert_history.resolved_datetime.utctimetuple())
+
         if alert_history.alert.type == ALERT_TYPE_SUMMARY:
             info['start_time_h'] = alert_history.alert.start_time.hour
             info['start_time_m'] = alert_history.alert.start_time.minute
