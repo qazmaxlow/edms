@@ -75,6 +75,7 @@ class Electricity(Document):
         'db_alias': 'entrakv4',
         'indexes': [
             {'fields': [('system_id', 1), ('source_id', 1), ("datetime_utc", 1)], 'unique': True},
+            {'fields': [('system_id', 1), ('source_id', 1), ("datetime_local", 1)]},
             {'fields': [('system_id', 1), ('source_id', 1), ("local_date", 1)]},
             {'fields': [('system_id', 1), ('source_id', 1), ("overnight_date", 1)]},
             {'fields': [('is_data_completed', 1), ("datetime_utc", 1)]},
@@ -82,9 +83,10 @@ class Electricity(Document):
     }
 
     datetime_utc = DateTimeField()
+    datetime_local = DateTimeField() # Local time stored as UTC timezone mainly used for grouping
     total = FloatField()
-    local_date = IntField() #Date stored in YYYYMMDD numeric format
-    overnight_date = IntField() #Date stored in YYYYMMDD numeric format
+    local_date = IntField() # Date stored in YYYYMMDD numeric format
+    overnight_date = IntField() # Date stored in YYYYMMDD numeric format
     overnight_total = FloatField()
     hour_detail = EmbeddedDocumentField(HourDetail)
     system_id = IntField()

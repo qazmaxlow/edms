@@ -72,11 +72,10 @@ def auto_recap(hours=6):
         for r in incomplete_readings:
             source_ids.add(r.source_id)
 
-
         for sys in systems:
-            usages = sys.total_usage_by_source_id(start_dt, end_dt)
+            usages = sys.total_usage_by_source(start_dt, end_dt)
             for s in sys.sources:
-                if s.id not in usages.keys() or usages[s.id] == 0:
+                if s.id not in usages.keys() or usages[s.id]['totalKwh'] == 0:
                     source_ids.add(s.id)
 
         sources_without_members = []

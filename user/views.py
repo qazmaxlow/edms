@@ -73,7 +73,7 @@ def activate_account(request, user_id):
 
                 user.first_name = data.get('first_name', None)
                 user.last_name = data.get('last_name', None)
-                user.username = user.email
+                user.username = user.email.lower()
                 user.department = data.get('department', None)
                 user.language = data.get('language', None)
                 user.set_password(data.get('password', None))

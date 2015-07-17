@@ -1097,7 +1097,6 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         if 'last_year_this_month' in g and g['last_year_this_month']['money']:
             change_in_money = g['currentTotalMoney']- g['last_year_this_month']['money']
 
-
         data_info = {
             'total_energy': g['currentTotalEnergy'],
             'co2_val': g['currentTotalCo2'],

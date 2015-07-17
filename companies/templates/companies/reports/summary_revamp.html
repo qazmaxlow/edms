@@ -1,0 +1,1092 @@
+{% extends "page_base.html" %}
+
+{% load i18n %}
+{% load entrak_extras %}
+{% load static %}
+{% load humanize %}
+
+{% block ga_page_title %}report{% endblock %}
+
+{% block extra_head %}
+{{block.super}}
+{% get_current_language as LANGUAGE_CODE %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/summary_report.css' %}">
+
+<script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
+<script src="{% static 'js/csrf_ajax.js' %}"></script>
+<script src="{% static 'js/moment-with-locales.js' %}"></script>
+<script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
+<script src="{% static 'js/entrak-system.js' %}?v=3.1"></script>
+<script src="{% static 'js/entrak-utils.js' %}?v=3.1"></script>
+<script src="{% static 'js/report-generator.js' %}?v=3.1"></script>
+
+<link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
+
+<script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
+<script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
+<script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
+
+<!-- for pop-up report -->
+<link rel="stylesheet" type="text/css" href="{% static 'css/popup_report.css' %}">
+<link href="{% static 'assets/kendoui/styles/kendo.dataviz.min.css' %}" rel="stylesheet">
+<link href="{% static 'assets/kendoui/styles/kendo.dataviz.default.min.css' %}" rel="stylesheet">
+<!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<!-- hack for combining bootstrap -->
+<style>
+  #menu-links li:hover, #menu-links li.menu-links-selected {
+     height: auto;
+  }
+
+  .panel-header-left-menu h3 {
+    margin: 0;
+    height: 33px;
+  }
+
+  #sub-heading-facilities h3 {
+    font-size: 15px;
+  }
+
+  #sub-heading h2 { font-size: 16px; }
+  #heading h1 { font-size: 30px; }
+
+</style>
+
+<style>
+  .report-summary img.icon {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 13px;
+    padding-bottom: 27px;
+    height: 120px;
+    width: 120px;
+  }
+</style>
+
+<script type="text/javascript">
+// put here to share with extended template
+var report = {};
+report.reportGeneratorMultiLangTexts = {
+    'reportTypeMonthDtFormat': '{% trans "MMM YYYY" %}',
+    'reportTypeYearDtFormat': '{% trans "YYYY" %}',
+    'reportTypeCustomMonthDtFormat': '{% trans "D MMM YYYY, ddd" %}',
+    'reportTypeWeekDtFormat': '{% trans "D MMM YYYY, ddd" %}',
+    'genDtTo': '{% trans " to " %}',
+    'tons': '{% trans " tons" %}',
+    'tonsCo2': '{% blocktrans %} tons<span class="basic-info-col-unit"> CO<sub>2</sub></span>{% endblocktrans %}',
+    'reportTypeNameMonth': '{% trans "report_type_name_month" %}',
+    'reportTypeNameYear': '{% trans "report_type_name_year" %}',
+    'reportTypeNameQuarter': '{% trans "report_type_name_quarter" %}',
+    'reportTypeNameWeek': '{% trans "report_type_name_week" %}',
+    'more': '{% trans "more" %}',
+    'less': '{% trans "less" %}',
+    'overall': '{% trans "Overall: " %}',
+    'calendarMore': '{% trans "calendar_more" %}',
+    'calendarLess': '{% trans "calendar_less" %}',
+    'comparedTo': '{% trans "compared<br>to " %}',
+    'mSquare': '{% trans " m²" %}',
+    'pandas': '{% trans " pandas" %}',
+    'beginDtFormat': '{% trans "MMMM YYYY" %}',
+    'lastMonth': '{% trans "last month" %}',
+    'last_week': '{% trans "last week" %}',
+    'samePeriodLastYear': '{% trans "same period last year" %}',
+    'calendarUsageDtFormat': '{% trans "D MMM YYYY" %}',
+    'calendarTypeWeekday': '{% trans "Weekday" %}',
+    'calendarTypeWeekend': '{% trans "Weekend" %}',
+    'calendarTypeOvernight': '{% trans "Overnight" %}',
+    'calendarSplitWeekdays': '{% trans "Weekdays" %}',
+    'calendarSplitWeekends': '{% trans "Weekends" %}',
+    'calendarSplitDaytime': '{% trans "Daytime" %}',
+    'calendarSplitOvernight': '{% trans "Overnight" %}',
+    'overnightFootnoteFormat': '{% trans "hh:mmA" %}',
+    'comparePastLabelFormat': '{% trans "MMM D" %}',
+};
+
+</script>
+{% endblock %}
+
+{% block selected-menu-link-id %}menu-link-report{% endblock %}
+{% block system_menu_target_view %}report{% endblock %}
+{% block breadcrumb_target_view %}report{% endblock %}
+
+{% block page_title %}{% trans "THE REPORTS PAGE" %}{% endblock %}
+{% block page_subtitle %}{% trans "Get all your information here at the" %}{% endblock %}
+
+{% block extra_script %}
+{{block.super}}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% include "report_inner_template.html" %}
+
+<script>
+function dlRawDataSelected() {
+    $(".datetime-result .from-date").text('');
+    $(".datetime-result .to-date").text('');
+    $(".create-report-btn").addClass("btn-disable");
+
+    $('.unit-container>span').removeClass('selected-unit')
+    $('.unit-container>span:eq(0)').addClass('selected-unit');
+
+    report.dlRawDataStartDt = null;
+    report.dlRawDataEndDt = null;
+    report.dlRawDataUnit = 'kwh';
+
+    $("#download-raw-data .report-datepicker").datepicker('destroy');
+    $("#dl-data-start-datepicker").datepicker({
+        minDate: report.firstRecord.toDate(),
+        maxDate: '-1d',
+        onSelect: function(dateText, inst) {
+            var selectDt = moment($(this).datepicker('getDate')).tz(report.timezone);
+            var boundMinDate = moment(selectDt).add(1, 'd').toDate();
+            $("#dl-data-end-datepicker").datepicker("option", "minDate", boundMinDate);
+
+            if (report.dlRawDataEndDt !== null
+                && (selectDt.isSame(report.dlRawDataEndDt)) || selectDt.isAfter(report.dlRawDataEndDt)) {
+                var endDt = moment($("#dl-data-end-datepicker").datepicker('getDate')).tz(report.timezone);
+                report.dlRawDataEndDt = endDt;
+                $(".datetime-result .to-date").text(endDt.format('{% trans "D MMM YYYY, ddd" %}'));
+            }
+
+            report.dlRawDataStartDt = selectDt;
+            $(".datetime-result .from-date").text(selectDt.format('{% trans "D MMM YYYY, ddd" %}'));
+
+            updateDlRawBtnStatus();
+        },
+    });
+    $("#dl-data-end-datepicker").datepicker({
+        minDate: report.firstRecord.toDate(),
+        maxDate: '0d',
+        onSelect: function(dateText, inst) {
+            var selectDt = moment($(this).datepicker('getDate')).tz(report.timezone);
+            report.dlRawDataEndDt = selectDt;
+            $(".datetime-result .to-date").text(selectDt.format('{% trans "D MMM YYYY, ddd" %}'));
+
+            updateDlRawBtnStatus();
+        },
+    });
+}
+
+function canDlRawData() {
+    return (report.dlRawDataStartDt !== null
+        && report.dlRawDataEndDt !== null
+        && report.dlRawDataEndDt.isAfter(report.dlRawDataStartDt))
+}
+
+function updateDlRawBtnStatus() {
+    if (canDlRawData()) {
+        $(".create-report-btn").removeClass("btn-disable");
+    } else {
+        $(".create-report-btn").addClass("btn-disable");
+    }
+}
+
+
+$(function() {
+    setupAjaxForCsrf($.cookie('csrftoken'));
+    report.langCode = '{{LANGUAGE_CODE}}';
+    kendo.culture(report.langCode.substring(0,3)+report.langCode.substring(3,5).toUpperCase());
+    moment.locale(report.langCode);
+
+    report.entrakSystem = new EntrakSystem();
+    report.entrakSystem.langCode = report.langCode;
+    report.entrakSystem.assignSystemTree('{{systems|jsonifySystems}}');
+
+    report.currentReportType = ReportGenerator.REPORT_TYPE_MONTH;
+    report.timezone = '{{systems.0.timezone}}';
+    report.firstRecord = moment.unix(report.entrakSystem.systemTree.data.firstRecord).tz(report.timezone);
+    {% if monthly_summary|length >= 1 %}
+    report.currentDt =  moment.unix({{monthly_summary.0.timestamp}}).tz(report.timezone);
+    {% endif %}
+
+    $(".report-component").css("opacity", 0.0);
+
+    report.reportGenerator = new ReportGenerator(report.entrakSystem.systemTree, report.timezone,
+        ReportGenerator.REPORT_TYPE_MONTH, report.reportGeneratorMultiLangTexts);
+    report.reportGenerator.langCode = '{{LANGUAGE_CODE}}';
+
+    $(".panel-header-left-menu h3").each(function(btnIdx) {
+        $(this).click({btnIdx: btnIdx}, function(event) {
+            var btnIdx = event.data.btnIdx;
+
+            $(".panel-header-left-menu h3").removeClass('selected-tab');
+            $(this).addClass('selected-tab');
+
+            var panelContentHeight;
+            if (btnIdx === 0) {
+                panelContentHeight = '162px';
+            } else if (btnIdx === 1) {
+                panelContentHeight = '608px';
+                dlRawDataSelected();
+            }
+            $("#panel-content").css("height", panelContentHeight);
+
+            var targetPanel = $($('#panel-content>div')[btnIdx]);   //switch between View-Reports and Download-data
+            if (targetPanel.css("display") == 'none') {
+                $('#panel-content>div').fadeOut();
+                targetPanel.fadeIn();
+            }
+        });
+    });
+    $(".panel-header-left-menu h3:eq(0)").click();
+
+
+    $(".unit-container>span").each(function(btnIdx) {
+        $(this).click({btnIdx: btnIdx}, function(event) {
+            var btnIdx = event.data.btnIdx;
+            if (btnIdx === 0) {
+                report.dlRawDataUnit = 'kwh';
+            } else if (btnIdx === 1) {
+                report.dlRawDataUnit = 'money';
+            } else if (btnIdx === 2) {
+                report.dlRawDataUnit = 'co2';
+            } else if (btnIdx === 3) {
+                report.dlRawDataUnit = 'all';
+            }
+
+            $(".unit-container>span").removeClass('selected-unit');
+            $(this).addClass('selected-unit');
+        });
+    });
+
+    $("#download-raw-data .create-report-btn").click(function() {
+        if (canDlRawData()) {
+            $(".download-raw-data-form input[name='start_timestamp']").attr("value", report.dlRawDataStartDt.unix());
+            $(".download-raw-data-form input[name='end_timestamp']").attr("value", report.dlRawDataEndDt.unix());
+            $(".download-raw-data-form input[name='unit']").attr("value", report.dlRawDataUnit);
+            $(".download-raw-data-form").submit();
+        }
+    });
+});
+</script>
+{% endblock %}
+
+{% block page_content %}
+
+    <div id="win_report_ajax"></div>
+    <div ng-app="Entrak">
+    <div ng-controller="ReportControllers">
+        <!--<button ng-click="win2.close()" ng-show="win2visible">close</button>
+
+        <div kendo-window="win_report" k-visible="false" k-iframe="true"
+             k-width="1200" k-height="14000" k-modal="true"
+             k-resizable="false" k-draggable="false"
+             >
+        </div>-->
+
+<div class="summary">
+    <div class="row drop-down-panel-header">
+        <div class="panel-header-left-menu">
+            <h3 panel="monthly-report">
+                <a>{% trans "View Report" %}</a></h3>
+
+            {% if 'hkex' in systems.0.code %}
+                <h3><a href="{% url 'companies.report-schedule' system_code=systems.0.code %}">{% trans "Automated Reports" %}</a></h3>
+            {% else %}
+                <h3 panel="download-data"><a>{% trans "Download Data" %}</a></h3>
+            {% endif %}
+        </div>
+    </div>
+    <div id="panel-content">
+        <div id="monthly-report">
+          <div class="report-summary text-center">
+    <div class="time-bar row text-left">
+      <div class="col-xs-12">
+          <div kendo-toolbar="dateToolbar" k-options="timeToolbarOptions" k-on-toggle="selectTimeType(kendoEvent)"></div>
+      </div>
+
+    </div>
+
+  <div class="row">
+    <div class="col-xs-3">
+      {% verbatim %}
+      <div ng-cloak class="row time-type"><div class="col-xs-12">
+          {{ get_report_type_name() }}
+      </div></div>
+      {% endverbatim %}
+      <div ng-cloak class="row content"><div class="col-xs-12">
+          <img alt="power" class="icon" ng-src="{% static 'images/reports/energy-icon.svg' %}">
+          <h3 ng-hide="isLoading">{% templatetag openvariable %} summary_report.formated_total_cost || default_null {% templatetag closevariable %}</h3>
+          <div class="loadingIcon" ng-hide="!isLoading"></div>
+          {% verbatim %}
+          <p>{{ get_total_energy_cost_text() }}</p>
+          {% endverbatim %}
+      </div></div>
+
+      {% ifequal LANGUAGE_CODE 'zh-tw' %}
+      {% verbatim %}
+      <div ng-cloak class="row content end"><div class="col-xs-12">
+          <img alt="decrease energy" class="icon" src="/static/images/reports/na.gif" ng-src="{{ isLoading ? '/static/images/reports/na.gif' : summary_report.compare_to_last_total.icon_path }}">
+          <p style="padding:0;margin:0;">{{ get_compare_to_text() }}</p>
+          <h3 ng-hide="isLoading" style="padding-bottom:25px;">{{ summary_report.compare_to_last_total.formated_percent_change || default_null }}</h3>
+          <div class="loadingIcon" ng-hide="!isLoading"></div>
+      </div></div>
+      {% endverbatim %}
+      {% else %}
+      {% verbatim %}
+      <div ng-cloak class="row content end"><div class="col-xs-12">
+          <img alt="decrease energy" class="icon" src="/static/images/reports/na.gif" ng-src="{{ isLoading ? '/static/images/reports/na.gif' : summary_report.compare_to_last_total.icon_path }}">
+          <h3 ng-hide="isLoading">{{ summary_report.compare_to_last_total.formated_percent_change || default_null }}</h3>
+          <div class="loadingIcon" ng-hide="!isLoading"></div>
+          <p>{{ get_compare_to_text() }}</p>
+      </div></div>
+      {% endverbatim %}
+      {% endifequal %}
+    </div>
+
+    <div class="col-xs-3">
+      <div ng-cloak class="row time-type"><div class="col-xs-12">
+          {% trans "Weekdays" %}
+      </div></div>
+      <div ng-cloak class="row content"><div class="col-xs-12">
+          <img alt="power" class="icon" src="{% static 'images/reports/calendar_energy_icon.svg' %}">
+          <h3 ng-hide="isLoading">{% templatetag openvariable %} summary_report.formated_weekday_cost || default_null {% templatetag closevariable %}</h3>
+          <div class="loadingIcon" ng-hide="!isLoading"></div>
+          <p>{% trans "Average weekdays cost" %}</p>
+      </div></div>
+      {% ifequal LANGUAGE_CODE 'zh-tw' %}
+      {% verbatim %}
+      <div ng-cloak class="row content end"><div class="col-xs-12">
+          <img alt="decrease energy" class="icon" src="/static/images/reports/na.gif" ng-src="{{ isLoading ? '/static/images/reports/na.gif' : summary_report.compare_to_last_weekday.icon_path }}">
+          <p style="padding:0;margin:0;">{{ get_compare_to_text() }}</p>
+          <h3 ng-hide="isLoading" style="padding-bottom:25px;">{{ summary_report.compare_to_last_weekday.formated_percent_change || default_null }}</h3>
+          <div class="loadingIcon" ng-hide="!isLoading"></div>
+      </div></div>
+      {% endverbatim %}
+      {% else %}
+      {% verbatim %}
+      <div ng-cloak class="row content end"><div class="col-xs-12">
+          <img alt="decrease energy" class="icon" src="/static/images/reports/na.gif" ng-src="{{ isLoading ? '/static/images/reports/na.gif' : summary_report.compare_to_last_weekday.icon_path }}">
+          <h3 ng-hide="isLoading">{{ summary_report.compare_to_last_weekday.formated_percent_change || default_null }}</h3>
+          <div class="loadingIcon" ng-hide="!isLoading"></div>
+          <p>{{ get_compare_to_text() }}</p>
+      </div></div>
+      {% endverbatim %}
+      {% endifequal %}
+    </div>
+    <div class="col-xs-3">
+      <div ng-cloak class="row time-type"><div class="col-xs-12">
+          {% trans "Overnight" %}
+      </div></div>
+      <div ng-cloak class="row content"><div class="col-xs-12">
+          <img alt="power" class="icon" src="{% static 'images/reports/overnight_icon.svg' %}">
+          <h3 ng-hide="isLoading">{% templatetag openvariable %} summary_report.formated_overnight_avg_cost || default_null {% templatetag closevariable %}</h3>
+          <div class="loadingIcon" ng-hide="!isLoading"></div>
+          <p>{% trans "Average overnight cost" %}</p>
+      </div></div>
+      {% ifequal LANGUAGE_CODE 'zh-tw' %}
+      {% verbatim %}
+      <div ng-cloak class="row content end"><div class="col-xs-12">
+          <img alt="decrease energy" class="icon" src="/static/images/reports/na.gif" ng-src="{{ isLoading ? '/static/images/reports/na.gif' : summary_report.compare_to_last_overnight_avg_cost.icon_path }}">
+          <p style="padding:0;margin:0;">{{ get_compare_to_text() }}</p>
+          <h3 ng-hide="isLoading" style="padding-bottom:25px;">{{ summary_report.compare_to_last_overnight_avg_cost.formated_percent_change || default_null }}</h3>
+          <div class="loadingIcon" ng-hide="!isLoading"></div>
+      </div></div>
+      {% endverbatim %}
+	  {% else %}
+      {% verbatim %}
+      <div ng-cloak class="row content end"><div class="col-xs-12">
+          <img alt="decrease energy" class="icon" src="/static/images/reports/na.gif" ng-src="{{ isLoading ? '/static/images/reports/na.gif' : summary_report.compare_to_last_overnight_avg_cost.icon_path }}">
+          <h3 ng-hide="isLoading">{{ summary_report.compare_to_last_overnight_avg_cost.formated_percent_change || default_null }}</h3>
+          <div class="loadingIcon" ng-hide="!isLoading"></div>
+          <p>{{ get_compare_to_text() }}</p>
+      </div></div>
+      {% endverbatim %}
+      {% endifequal %}
+    </div>
+    <div class="col-xs-3">
+
+      <div class="sky-bg">
+        <img src="{% static "images/reports/sky.png" %}">
+      </div>
+      <div id="view_report_btn" class="view-report">
+        <img class="img-button" src="{% static "images/reports/view_report.svg" %}" ng-click="view_report_ajax()">
+        <button class="k-button" ng-click="view_report_ajax()">{% trans "View Full Report" %}</button>
+      </div>
+      <div class="flower-bg">
+        <img src="{% static "images/reports/flower.png" %}">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+        </div>
+
+
+        <div id="download-raw-data">
+            <div class="row dl-data-title">{% trans "Here you can download your energy use data to files in .csv format." %}</div>
+            <div class="row dl-data-title">{% trans "Simply select the start date, end date and the units that you would like to obtain from the system." %}</div>
+            <div class="row customize-section-title"><span>1</span>{% trans "Choose your date" %}</div>
+
+            <div class="row dl-choose-date-section">
+                <div class="report-datepicker-container">
+                    <div>{% trans "Choose your start date" %}</div>
+                    <div id="dl-data-start-datepicker" class="report-datepicker"></div>
+                </div>
+                <div class="report-datepicker-container">
+                    <div>{% trans "Choose your end date" %}</div>
+                    <div id="dl-data-end-datepicker" class="report-datepicker"></div>
+                </div>
+            </div>
+            <div class="two-column-section row">
+                <div class="choose-unit-section pull-left">
+                    <div class="customize-section-title"><span>2</span>{% trans "Select your units" %}</div>
+                    <div class="unit-container">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+                <div class="pull-left">
+                    <div class="customize-section-title"><span>3</span>{% trans "Download your file" %}</div>
+                    <div class="create-report-section">
+                        <div class="datetime-result">
+                            <div class="datetime-result-title">{% trans "Energy data - kWh" %}</div>
+                            <div class="datetime-result-from-to">
+                                <div><span>{% trans "From:" %}</span><span class="from-date"></span></div>
+                                <div><span>{% trans "To:" %}</span><span class="to-date"></span></div>
+                            </div>
+                            <hr class="hr-y-margin">
+                            <div class="create-report-btn">{% trans "Download File" %}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<span kendo-notification="notf" k-allow-hide-after="0" k-append-to="'#view_report_btn'"></span>
+
+
+<form class="download-pdf-form" action="{% url 'report_pdf' system_code=systems.0.code %}" method="POST">{% csrf_token %}
+        <input name="start_timestamp" value="">
+        <input name="end_timestamp" value="">
+        <input name="report_type" value="">
+        <input name="report_layout" value="">
+</form>
+
+<form class="download-raw-data-form" action="{% url 'export_data' system_code=systems.0.code %}" method="POST">{% csrf_token %}
+        <input name="start_timestamp" value="">
+        <input name="end_timestamp" value="">
+        <input name="unit" value="">
+</form>
+
+</div></div>
+<!-- end ng-app -->
+<script>
+    angular.module("Entrak", [ "kendo.directives" ])
+        .controller("ReportControllers", function($scope, $timeout){
+            var overlay = $(".grey_layer");
+            var report = $("#win_report_ajax");
+            var overlayInfo = $(".grey_layer .loadingInfo");
+            var pageHeight = $("footer.site-footer").outerHeight() + $("#menu").outerHeight();
+            var pContainer = $("#page-container");
+            var body = $("body");
+            var updateHeight = function(event) {
+                var scroll = $(window).scrollTop();
+                var infoShown = overlayInfo.is(":visible");
+                var reportShown = report.is(":visible");
+
+                if (infoShown){
+                    overlay.css("height", pageHeight);
+                    overlayInfo.css("padding-top", body.outerHeight()/2 + scroll - 50);
+                }
+                if (reportShown){
+                    $("#tOne").parent().css("top", scroll);
+                    overlay.css("height", report.css("height"));
+                }
+            }
+            $(window).scroll(updateHeight);
+            $(window).resize(function(){
+              var infoShown = overlayInfo.is(":visible");
+              var reportShown = report.is(":visible");
+              if (reportShown || infoShown){
+                    overlay.width(Math.max(pContainer.outerWidth(), body.outerWidth()));
+                }
+            });
+
+            // var selected_time_type = "month";
+            // var start_time;
+            // var end_time;
+            $scope.isLoading = 0;
+            $scope.default_null = "N/A";
+
+            $scope.report_type = "month";
+            $scope.pass_week = new Date("{{ today_date.isoformat }}");
+            $scope.pass_week.setDate($scope.pass_week.getDate()-7);
+            $scope.default_date = new Date("{{ today_date.isoformat }}");
+            $scope.default_date.setMonth($scope.pass_week.getMonth()-1);
+
+            $scope.default_date = new Date("{{ default_date.isoformat }}");
+            $scope.default_custom_end_date = new Date("{{ default_custom_end_date.isoformat }}");
+            $scope.default_custom_start_date = new Date("{{ default_custom_start_date.isoformat }}");
+            $scope.get_report_type_name = function() {
+                var report_type_name;
+                if ($scope.report_type == 'week') {
+                    report_type_name = '{% trans "Week Total" %}';
+                }
+                else if ($scope.report_type == 'month' || $scope.report_type == 'custom') {
+                    report_type_name = '{% trans "Month Total" %}';
+                }
+                else if ($scope.report_type == 'quarter') {
+                    report_type_name = '{% trans "Quarter Total" %}';
+                }
+                else if ($scope.report_type == 'year') {
+                    report_type_name = '{% trans "Year Total" %}';
+                }
+
+                return report_type_name
+            }
+
+            $scope.get_compare_to_text = function() {
+                var compare_to_text;
+                if ($scope.report_type == 'week') {
+                    compare_to_text = "{% trans "Compared to last week" %}";
+                }
+                else if ($scope.report_type == 'month' || $scope.report_type == 'custom') {
+                    compare_to_text = "{% trans "Compared to last month" %}";
+                }
+                else if ($scope.report_type == 'quarter') {
+                    compare_to_text = "{% trans "Compared to last quarter" %}";
+                }
+                else if ($scope.report_type == 'year') {
+                    compare_to_text = "{% trans "Compared to last year" %}";
+                }
+
+                return compare_to_text
+            }
+
+            $scope.get_total_energy_cost_text = function() {
+                var text;
+                if ($scope.report_type == 'week') {
+                    text = '{% trans "Total week cost" %}';
+                }
+                else if ($scope.report_type == 'month' || $scope.report_type == 'custom') {
+                    text = '{% trans "Total month cost" %}';
+                }
+                else if ($scope.report_type == 'quarter') {
+                    text = '{% trans "Total quarter cost" %}';
+                }
+                else if ($scope.report_type == 'year') {
+                    text = '{% trans "Total year cost" %}';
+                }
+
+                return text;
+            }
+
+            $scope.view_report_ajax = function() {
+                if (!$scope.summary_report.formated_total_cost) {
+                    if ($scope.notf.getNotifications().length == 0){
+                      $scope.notf.show('No data', 'error');
+                    }
+                    return false;
+                }
+
+                $(".grey_layer").width(Math.max($("#page-container").outerWidth(), $("body").outerWidth()));
+                $(".grey_layer .loadingText").html("{% trans 'Loading report...' %}");
+                $(".grey_layer .loadingInfo").show();
+                $(".grey_layer").fadeIn();
+                updateHeight();
+
+                var date = $scope.report_date.value();
+                var year = date.getFullYear();
+
+                var report_type = $scope.dateToolbar.getSelectedFromGroup('time').attr('id');
+                if (report_type=='custom') {
+                    var start_date = kendo.toString($scope.report_date_start.value(), 'yyyy-MM-dd');
+                    var end_date = kendo.toString($scope.report_date_end.value(), 'yyyy-MM-dd');
+                }
+                else {
+                    var start_date = kendo.toString($scope.report_date.getSelectedStartDate(), 'yyyy-MM-dd');
+                    var end_date = kendo.toString($scope.report_date.getSelectedEndDate(), 'yyyy-MM-dd');
+                }
+
+                $.ajax({url: '../report/revamp/popup-report/?start_date=' + start_date + '&end_date=' + end_date + '&report_type='+report_type, success: function(result){
+                    $("#win_report_ajax").html(result);
+                    $(".grey_layer .loadingInfo").hide();
+
+                    angular.module('Entraks', ["kendo.directives"]).controller('MyCtrl', ['$scope', function ($scope) {
+                        $scope.onSelect = function(ev) {
+                            var anchor = $(ev.item).data('anchor');
+                            location.href = "#"+anchor;
+                        };
+                    }]);
+
+                    angular.element(tOne).ready(function() {
+                        angular.bootstrap(tOne, ['Entraks']);
+                    });
+
+                    angular.module('Entraks', ["kendo.directives"]).controller('ReportController', ['$scope', function ($scope) {
+                        var date_offset = null;
+                        $scope.cgDatas = cg_ds;
+                        $scope.transformedPieOptions = {
+                            legend: {
+                                visible: false
+                            },
+                            seriesDefaults: {
+                                type: "donut",
+                                labels: {
+                                    template: "#= kendo.format('{0:p0}', percentage)#",
+                                    position: "Center",
+                                    distance: 20,
+                                    visible: true,
+                                    background: "transparent",
+                                    font: "bold 14px Arial",
+                                    color: function(e) {
+                                        return e.dataItem.color;
+                                    },
+                                    border: {
+                                        width: 0,
+                                        color: "white"
+                                    }
+                                },
+                                overlay: {
+                                    gradient: "none"
+                                }
+                            },
+                            plotArea: {
+                                margin: 10
+                            },
+                            chartArea: {
+                                height: 250,
+                                width: 300
+                            },
+                            series: [{
+                                startAngle: 150,
+                                data: pieDataSorted
+                            }],
+                            tooltip: {
+                                visible: true,
+                                format: "{0}%",
+                                template: "#= category #: #= kendo.format('{0:n0}',value) #"
+                            }
+                        };
+
+                        $scope.barOptions = {
+                            dataSource: {
+                                data: barData,
+                                schema: {
+                                    model: {
+                                        fields: {
+                                            datetime: { type: "string"}
+                                        }
+                                    }
+                                }
+                            },
+                            title: {
+                                text: barTitle,
+                                color: "#edbe4a"
+                            },
+                            legend: {
+                                visible: false
+                            },
+                            chartArea: {
+                                background: "",
+                                margin: {top: 20, bottom: 20}
+                            },
+                            seriesDefaults: {
+                                type: "column",
+                                labels: {
+                                    visible: true,
+                                    background: "transparent",
+                                    template: "# if ( value > 0) { # #= kendo.toString(value, 'n0') # # } else { # N/A # } #"
+                                }
+                            },
+                            series: [{
+                                field: "value",
+                                color: "#eab541",
+                                border: {
+                                    width: 0
+                                },
+                                overlay: {
+                                    gradient: "none"
+                                }
+                            }],
+
+                           valueAxis: {
+                                visible: false,
+                                line: {
+                                    visible: false
+                                },
+                                minorGridLines: {
+                                    visible: false
+                                }
+                            },
+                            categoryAxis: {
+                                type: 'category',
+                                field: 'formated_date',
+                                majorTicks: {
+                                    size: 0,
+                                    width: 0
+                                },
+                                majorGridLines: {
+                                    visible: false
+                                }
+                            },
+                            tooltip: {
+                                visible: true,
+                                template: "#= dataItem.month #: #= kendo.toString(value, 'n0') #"
+                            }
+                        };
+
+                        $scope.lineOptions = {
+                            width: 1000,
+                            title: {
+                                text: line_title,
+                                color: "#354960",
+                                font: "bold 1.145em Arial"
+                            },
+                            legend: {
+                                position: "top"
+                            },
+                            chartArea: {
+                                background: "",
+                                margin: {top: 20, bottom: 20}
+                            },
+
+
+                            dataSource: {
+                                data: powers,
+                                group: [{field: "type", dir: "desc"}],
+                                schema:{
+                                    parse:function (response) {
+                                        $.each(response, function (idx, elem) {
+                                            if (elem.datetime && typeof elem.datetime === "string") {
+                                                elem.datetime = kendo.parseDate(elem.datetime);
+                                                if (elem.type == "last") {
+                                                    shift_series_date(elem);
+                                                }
+                                            }
+                                        });
+                                        return response;
+                                    }
+                                }
+                            },
+
+
+                            seriesColors: ["#edba3c", "#047fa1"],
+                            series: [
+                                {
+                                    type: "line",
+                                    markers: {
+                                        visible: false
+                                    },
+                                    // aggregate: "avg",
+                                    name: lineTitle,
+                                    color: "#edba3c",
+                                    field: "value",
+                                    categoryField: "datetime"
+                                }
+                            ],
+
+                            tooltip: {
+                                visible: true,
+                                format: "{0:n0} kWh"
+                            },
+
+                            valueAxis: {
+                                line: {
+                                    visible: false
+                                },
+                                title: {
+                                    text: "kWh",
+                                    color: "#9F9F9F",
+                                    font: "0.9em Arial"
+                                },
+                                minorGridLines: {
+                                    visible: false
+                                }
+                            },
+                            categoryAxis: {
+                                baseUnit: "days",
+                                majorGridLines: {
+                                    visible: false
+                                },
+                                majorTicks: {
+                                    step: line_step,
+                                    size: 0,
+                                    width: 0
+                                },
+                                labels: line_labels
+                            }
+
+                        };
+
+                        $scope.subLineOptions = {
+                            legend: {
+                                position: "top"
+                            },
+                            chartArea: {
+                                background: "",
+                                margin: {bottom: 20}
+                            },
+
+
+                            // seriesColors: ["#047fa1", "#edba3c"],
+                            seriesDefaults:
+                            {
+                                type: 'line',
+                                format: '{0:n0}',
+                                labels: {
+                                    visible: false
+                                },
+                                field: 'value',
+                                categoryField: 'datetime',
+                                markers: {
+                                    visible: false
+                                }
+                            },
+
+                            tooltip: {
+                                visible: true,
+                                format: "{0:n0} kWh"
+                            },
+
+                            valueAxis: {
+                                line: {
+                                    visible: false
+                                },
+                                title: {
+                                    text: "kWh",
+                                    color: "#9F9F9F",
+                                    font: "0.9em Arial"
+                                },
+                                minorGridLines: {
+                                    visible: false
+                                }
+                            },
+                            categoryAxis: {
+                                baseUnit: "days",
+                                majorGridLines: {
+                                    visible: false
+                                },
+                                majorTicks: {
+                                    step: line_step,
+                                    size: 0,
+                                    width: 0
+                                },
+                                labels: line_labels
+                            }
+
+                        };
+
+                    }]);
+
+                    angular.element(tTwo).ready(function() {
+                        angular.bootstrap(tTwo, ['Entraks']);
+                        $("#win_report_ajax").fadeIn(function(){
+                            updateHeight();
+                            $("html, body").animate({ scrollTop: 0 }, "slow");
+                        });
+
+                    });
+                  },
+                  error: function(jqXhr, textStatus, errorThrown){
+                    if (jqXhr && jqXhr.status == 401){
+                        window.location.assign("../login");
+                    } else {
+                        //handle other error code
+                        $(".grey_layer").fadeOut();
+                    }
+                  }
+                });
+            }
+
+            $(".grey_layer").click(function(){
+              if (report.is(":visible")){
+                $("#win_report_ajax").fadeOut();
+                $(".grey_layer").fadeOut();
+              }
+            });
+
+            var summary_report_ds = new kendo.data.DataSource({
+                transport: {
+                    read: {
+                        // async: false,
+                        url: "{% url 'companies.report_revamp.summary.ajax' systems.0.code %}",
+                        type: 'GET',
+                        dataType: "json"
+                    }
+                },
+                schema: {
+                    // Fix for single result
+                    data: function(response) {
+                        return [response];
+                    }
+                },
+                change: function(data){
+                  // $scope.isLoading--;
+                  $scope.isLoading = 0;
+                },
+                error: function(xhr, error){
+                  // $scope.isLoading--;
+                  $scope.isLoading = 0;
+                }
+            });
+
+            $scope.$on("kendoRendered", function(e) {
+                $scope.report_date.trigger('change');
+            });
+
+
+            $scope.custom_time = false;
+            $scope.selectTimeType = function (e) {
+                var tb = e.sender;
+                var selected = $scope.dateToolbar.getSelectedFromGroup('time');
+                $scope.report_type = selected.attr('id');
+
+                if ($scope.report_type == 'month') {
+                  $scope.default_date = new Date("{{ today_date.isoformat }}");
+                  $scope.default_date.setMonth($scope.pass_week.getMonth()-1);
+                } else if ($scope.report_type == 'week') {
+                  $scope.default_date = new Date("{{ today_date.isoformat }}");
+                  $scope.default_date.setDate($scope.pass_week.getDate()-7);
+                } else if ($scope.report_type == 'quarter') {
+                  $scope.default_date = new Date("{{ today_date.isoformat }}");
+                  $scope.default_date.setMonth($scope.pass_week.getMonth()-3);
+                } else if ($scope.report_type == 'year') {
+                  $scope.default_date = new Date("{{ today_date.isoformat }}");
+                  $scope.default_date.setFullYear($scope.pass_week.getFullYear()-1);
+                }
+
+                var start_date, end_date;
+
+                if ($scope.report_type == 'custom') {
+                    $scope.custom_time = true;
+
+                    start_date = $scope.report_date_start.value();
+                    end_date = $scope.report_date_end.value();
+                }
+                else {
+                    $scope.custom_time = false;
+                    $scope.monthSelectorOptions.select = $scope.report_type; // could bind?
+                    $scope.report_date.options.select = $scope.report_type;
+
+                    // hack? the date value didn't update inside the date picker that needs to set manually
+                    $scope.report_date.value($scope.default_date);
+
+                    start_date = $scope.report_date.getSelectedStartDate();
+                    end_date = $scope.report_date.getSelectedEndDate();
+                }
+
+                // hack? or can bind this?
+                $scope.report_date.options.select = selected.attr('id');
+
+                // refreash datasource
+                summary_report_ds.transport.options.read['data'] = {
+                    start_date: kendo.toString(start_date, 'yyyy-MM-dd'),
+                    end_date: kendo.toString(end_date, 'yyyy-MM-dd'),
+                    compare_type: selected.attr('id')
+                };
+                $scope.isLoading++;
+                summary_report_ds.read().then(function(){
+                  $scope.$apply(function(){
+                    $scope.summary_report = summary_report_ds.data()[0];
+                  });
+                });
+            };
+
+            $scope.timeToolbarOptions = {
+                items: [
+                    {
+                      type: "buttonGroup",
+                      buttons: [
+                          { text: "{% trans "Week" %}", id: "week", togglable: true, group: "time"},
+                          { text: "{% trans "Month" %}", id: "month", togglable: true, group: "time", selected: true },
+                          { text: "{% trans "Quarter" %}", id: "quarter", togglable: true, group: "time" },
+                          { text: "{% trans "Year" %}", id: "year", togglable: true, group: "time" },
+                          { text: "{% trans "Match my bills" %}", id: "custom", togglable: true, group: "time" }
+                      ]
+                    },
+                    {
+                        template: '<div ng-show="!custom_time"><input id="et-datepicker" kendo-et-date-picker="report_date" style="width: 250px;" k-on-change="on_date_selected(kendoEvent)" k-options="monthSelectorOptions" k-rebind="monthSelectorOptions" k-value="default_date" ></div>',
+                        overflow: "never"
+                    },
+                    {
+                        template: '<div ng-show="custom_time"><input kendo-et-date-picker="report_date_start" style="width: 220px;" k-on-change="on_start_date_selected(kendoEvent);on_custom_date_selected(kendoEvent)" k-options="customStartDateOptions" k-value="default_custom_start_date" ></div>',
+                        overflow: "never"
+                    },
+                    {
+                        template: '<div ng-show="custom_time"><input kendo-et-date-picker="report_date_end" style="width: 220px;" k-on-change="on_end_date_selected(kendoEvent);on_custom_date_selected(kendoEvent)" k-options="customEndDateOptions" k-value="default_custom_end_date" ></div>',
+                        overflow: "never"
+                    }
+
+                ]
+            };
+
+            $scope.monthSelectorOptions = {
+                format: 'MMM yyyy',
+                select: "month",
+                clickPopup: true
+            };
+
+            $scope.customStartDateOptions = {
+                format: 'd MMM yyyy, ddd',
+                max: $scope.default_custom_end_date,
+                clickPopup: true
+            };
+
+            $scope.customEndDateOptions = {
+                format: 'd MMM yyyy, ddd',
+                min: $scope.default_custom_start_date,
+                clickPopup: true
+            };
+
+            $scope.on_start_date_selected = function(e) {
+                var startDate = $scope.report_date_start.value();
+                $scope.report_date_end.min(startDate);
+            };
+
+            $scope.on_end_date_selected = function(e) {
+                var endDate = $scope.report_date_end.value();
+                $scope.report_date_start.max(endDate);
+            };
+
+
+            $scope.on_date_selected = function(e) {
+                var dp = e.sender;
+                var start_date = dp.getSelectedStartDate();
+                var end_date = dp.getSelectedEndDate();
+
+                var selected = $scope.dateToolbar.getSelectedFromGroup('time');
+                // selected.attr('id')
+                summary_report_ds.transport.options.read['data'] = {
+                    start_date: kendo.toString(start_date, 'yyyy-MM-dd'),
+                    end_date: kendo.toString(end_date, 'yyyy-MM-dd'),
+                    compare_type: selected.attr('id')
+                };
+                $scope.isLoading++;
+                summary_report_ds.read().then(function(){
+                  $scope.$apply(function(){
+                    $scope.summary_report = summary_report_ds.data()[0];
+                  });
+                });
+            }
+
+            $scope.on_custom_date_selected = function(e) {
+                var start_date = $scope.report_date_start.value();
+                var end_date = $scope.report_date_end.value();
+
+                summary_report_ds.transport.options.read['data'] = {
+                    start_date: kendo.toString(start_date, 'yyyy-MM-dd'),
+                    end_date: kendo.toString(end_date, 'yyyy-MM-dd'),
+                    compare_type: 'custom'
+                };
+                $scope.isLoading++;
+                summary_report_ds.read().then(function(){
+                  $scope.$apply(function(){
+                    $scope.summary_report = summary_report_ds.data()[0];
+                  });
+                });
+                $scope.compare_to_text = "Compare to last peroid";
+            }
+        });
+
+
+</script>
+{% endblock %}
