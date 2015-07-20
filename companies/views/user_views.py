@@ -50,7 +50,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'fullname', 'department', 'language', 'email', 'is_email_verified', 'is_personal_account', 'is_active']
 
 
-class resetPasswordSerializer(serializers.ModelSerializer):
+class ResetPasswordSerializer(serializers.ModelSerializer):
 
     new_password = serializers.CharField(write_only=True)
     confirm_password = serializers.CharField(write_only=True)

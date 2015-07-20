@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from system.models import System
 from alert.models import AlertHistory
+from user.models import EntrakUser
 
 
 class RecursiveField(serializers.Serializer):
@@ -27,3 +28,10 @@ class AlertHistorySerializer(serializers.ModelSerializer):
         model = AlertHistory
         fields = ("id", "created", "resolved", "resolved_datetime", "diff_percent", "threshold_kwh", "current_kwh", "system_name", "source_name")
 
+
+class RegisterDeviceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = EntrakUser
+        fields = ['id', 'fullname', 'language', 'email', 'is_personal_account', 'is_active', 'device_id', 'device_type']
+        read_only_fields = ['id', 'fullname', 'language', 'email', 'is_personal_account', 'is_active']

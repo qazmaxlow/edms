@@ -33,7 +33,7 @@ from user.models import EntrakUser
 from utils.utils import Utils
 from rest_framework import generics
 from companies.views.user_views import UserSerializer
-from companies.views.user_views import resetPasswordSerializer
+from companies.views.user_views import ResetPasswordSerializer
 from rest_framework import serializers
 from django.utils import translation
 from entrak.settings_common import LANG_CODE_EN, LANG_CODE_TC
@@ -302,7 +302,7 @@ class DeleteUserView(generics.DestroyAPIView):
 
 
 class UpdateUserView(generics.UpdateAPIView):
-    serializer_class = resetPasswordSerializer
+    serializer_class = ResetPasswordSerializer
     permission_classes = (IsAuthenticated,)
     lookup_field = 'user_id'
     lookup_url_kwarg = 'user_id'
@@ -324,7 +324,7 @@ class UpdateUserView(generics.UpdateAPIView):
         elif not system_info or not request_user.is_manager:
             raise PermissionDenied()
 
-        serializer = resetPasswordSerializer(user, data=request_data)
+        serializer = ResetPasswordSerializer(user, data=request_data)
 
         serializer.is_valid(raise_exception=True)
         user.set_password(request.data.get('new_password', None))
@@ -356,7 +356,7 @@ class SendPasswordResetEmailView(generics.CreateAPIView):
 
 class ResetPasswordView(generics.UpdateAPIView):
 
-    serializer_class = resetPasswordSerializer
+    serializer_class = ResetPasswordSerializer
     lookup_field = 'user_id'
     lookup_url_kwarg = 'user_id'
 
@@ -370,7 +370,7 @@ class ResetPasswordView(generics.UpdateAPIView):
             'confirm_password': request.data.get('confirm_password', None)
         }
 
-        serializer = resetPasswordSerializer(user, data=request_data)
+        serializer = ResetPasswordSerializer(user, data=request_data)
         serializer.is_valid(raise_exception=True)
 
         user.set_password(request.data.get('new_password', None))
