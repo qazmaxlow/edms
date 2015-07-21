@@ -23,10 +23,13 @@ class AlertHistorySerializer(serializers.ModelSerializer):
 
     system_name = serializers.DictField(source='alert.parent_system_name')
     source_name = serializers.DictField(source='alert.source_name')
+    start_time = serializers.TimeField(source='alert.start_time')
+    end_time = serializers.TimeField(source='alert.end_time')
+    check_date = serializers.DateField(source='alert.create_date')
 
     class Meta:
         model = AlertHistory
-        fields = ("id", "created", "resolved", "resolved_datetime", "diff_percent", "threshold_kwh", "current_kwh", "system_name", "source_name")
+        fields = ("id", "created", "resolved", "resolved_datetime", "diff_percent", "threshold_kwh", "current_kwh", "system_name", "source_name", "start_time", "end_time", "check_date")
 
 
 class RegisterDeviceSerializer(serializers.ModelSerializer):

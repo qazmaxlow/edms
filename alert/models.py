@@ -80,6 +80,11 @@ class Alert(models.Model):
         source = self.source
         return {'en': source.d_name, 'zh-tw': source.d_name_tc}
 
+    @property
+    def create_date(self):
+        system_tz = self.system.time_zone
+        return self.created.astimezone(system_tz).date()
+
     def __unicode__(self):
         return '%d'%self.id
 
