@@ -202,3 +202,10 @@ ENTRAK_BROKER_URL = 'amqp://guest:entrak8888@localhost' # should be removed
 
 # Site
 SITE_ID = 1
+
+# One Signal App Alert
+ONESIGNAL = {
+    'user_auth_key': '<YOUR ONESIGNAL KEYS>',
+    'app_id': '<YOUR ONESIGNAL KEYS>',
+    'api_key': '<YOUR ONESIGNAL KEYS>',
+}

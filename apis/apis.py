@@ -140,9 +140,12 @@ class RegisterDeviceView(generics.UpdateAPIView):
 
             user.device_id = request.data.get('device_id', None)
             user.device_type = request.data.get('device_type', None)
+            user.save()
 
             serializer = RegisterDeviceSerializer(user, data=request.data)
             serializer.is_valid(raise_exception=True)
+
+            # TODO: handle multiple users logging into the same device
             return Response(serializer.data)
 
         else:
