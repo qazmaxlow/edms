@@ -118,8 +118,8 @@ class Alert(models.Model):
 
         pass_verify = True
         diff_percent = None
-        threshold = None
-        current_value = None
+        threshold_kwh = None
+        current_kwh = None
 
         # need to make sure summary and still on alert don't have missing data
         if self.type == ALERT_TYPE_SUMMARY \
