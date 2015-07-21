@@ -98,7 +98,7 @@
             <div class="row records">
                 <div class="col-md-12">
                     <div class="header">{{recordTitle}}</div>
-                    <div kendo-grid k-options="taskGridOptions(dataItem)"></div>
+                    <div id="taskGrid" kendo-grid k-options="taskGridOptions(dataItem)"></div>
                 </div>
             </div>
             <div kendo-window="deleteGridRowWin" k-title="delWinTitle"
@@ -125,7 +125,7 @@
             $scope.isDisabled = true;
             var etDropDown = $("#rs-emailList").etDropDown([]);
             etDropDown.setOptions({
-                readOnly: false, 
+                readOnly: false,
                 buttonText: '{% trans "Add" context "dropdown" %}',
                 itemDisplayName: '{% trans "Emails" context "dropdown" %}',
                 emptyItemText: '{% trans "Add Email" context "dropdown" %}',
@@ -250,6 +250,24 @@
                     model: { id: "id" } // identifier for map to kendo model, must be defined for create, update or delete
                 }
             });
+
+            function onDataBound(e) {
+
+                var grid = $("#taskGrid").data("kendoGrid");
+                var gridData = scheduleTaskDataSource.view();
+
+                for (var i = 0; i < gridData.length; i++) {
+                    var currentUid = gridData[i].uid;
+                    if (gridData[i].created_by_id != {{current_user.id}} && "{{current_user.is_manager}}" != "True") {
+                        var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+                        var editButton = $(currenRow).find(".k-grid-edit");
+                        var deleteButton = $(currenRow).find(".k-grid-mydestroy");
+                        editButton.hide();
+                        deleteButton.hide();
+                    }
+                }
+            }
+
             $scope.confirmAdd = function() {
                 var emails = [];
                 if ($scope.user_group == 'manager') {
@@ -275,6 +293,7 @@
             $scope.taskGridOptions = function(dataItem) {
                 return {
                     dataSource: scheduleTaskDataSource,
+                    dataBound: onDataBound,
                     columns: [
                         { field: "system_id", title: '{% trans "Scope" %}', width: "26%", editor: systemDropDownEditor,
                               template: function(dataItem) {
@@ -290,14 +309,14 @@
                               })[0].name;
                           }
                         },
-                        
+
                         { field: "receivers", title: '{% trans "Email" %}', width: "20%", editor: receivers_editor,
                           template: function(dataItem) {
                               var arr = $.map(dataItem.receivers, function(r) { return r.email; });
                               return arr.join(',');
                           }
                         },
-                        { 
+                        {
                             command: [{
                                 name: "edit",
                                 text: {
@@ -320,9 +339,9 @@
 
                                     $scope.deleteGridRowWin.center().open();
                                 }
-                            }], 
-                            title: '{% trans "Actions" %}', 
-                            width: "160px" 
+                            }],
+                            title: '{% trans "Actions" %}',
+                            width: "160px"
                         }
                     ],
                     editable: "inline"
