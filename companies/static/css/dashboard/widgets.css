@@ -13,7 +13,9 @@
 
 /*widget common-------*/
 .widget-container {
-    padding:  10px;
+    position: relative;
+    padding:  10px 15px;
+    margin: 0 -5px;
 	font-family: 'ITCAvantGardeStd', "Helvetica Neue Light",
  	"Helvetica Neue", Helvetica, Arial, "Lucida Grande", "Microsoft YaHei New",
  	"Microsoft Yahei", "微软雅黑", 宋体, SimSun , STXihei, "华文细黑", sans-serif;
@@ -1060,6 +1062,11 @@
     height: 100%;
 }
 
+.fullscreen .widget-container {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
 .fullscreen #sub-heading-facilities {
     height: 50px;
     text-align: center;
@@ -1087,6 +1094,8 @@
 .fullscreen #dashboardContainer>div {
     height: 50%;
     min-height: 350px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .fullscreen #dashboardContainer>div.col-xs-12 {
