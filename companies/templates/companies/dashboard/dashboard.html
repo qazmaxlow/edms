@@ -316,6 +316,7 @@
         $scope.btnLeft = '{% trans "Graph" %}';
         $scope.btnRight = '{% trans "Rates" %}';
         $scope.usedSoFar = '{% trans "So far today you have used: " %}';
+        $scope.yourRate = '{% trans "Your current rate of energy use." %}';
         $scope.axisToday = '{% trans "Today" %}';
         $scope.axisLast = '{% trans "Last week" %}';
         $scope.perDay = '{% trans "per day" %}';
@@ -626,7 +627,7 @@
         $scope.title = '{% trans "Biggest Consumers" %}';
         $scope.btnLeft = '{% trans "Week" context "dashboard" %}';
         $scope.btnRight = '{% trans "Month" context "dashboard" %}';
-        $scope.changeText = $scope.isWeek ? '{% trans "Change from last week" %}' : '{% trans "Change from last month" %}';
+        $scope.changeText = $scope.isWeek ? '{% trans "change from last week" %}' : '{% trans "change from last month" %}';
         $scope.energyCost = '{% trans "Energy cost so far" %}';
         $scope.costUnit = '{{current_system.money_unit.name}}';
 
@@ -661,7 +662,7 @@
 
         $scope.toggle = function(isWeek){
             $scope.isWeek = isWeek;
-            $scope.changeText = $scope.isWeek ? '{% trans "Change from last week" %}' : '{% trans "Change from last month" %}';
+            $scope.changeText = $scope.isWeek ? '{% trans "change from last week" %}' : '{% trans "change from last month" %}';
 
             $scope.updateWidgetImpl();
         };
