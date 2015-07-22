@@ -1062,6 +1062,11 @@
     height: 100%;
 }
 
+.fullscreen .widget-container {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
 .fullscreen #sub-heading-facilities {
     height: 50px;
     text-align: center;
@@ -1089,6 +1094,8 @@
 .fullscreen #dashboardContainer>div {
     height: 50%;
     min-height: 350px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .fullscreen #dashboardContainer>div.col-xs-12 {
