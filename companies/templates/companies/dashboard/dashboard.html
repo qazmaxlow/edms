@@ -227,7 +227,7 @@
         var autoToggleTimer = null;
         $scope.autoToggle = function(isAuto){
             if (isAuto){
-                autoToggleTimer = setInterval(autoToggleCore, 10000, isAuto);
+                autoToggleTimer = setInterval(autoToggleCore, 16000, isAuto);
             } else {
                 clearInterval(autoToggleTimer);
                 autoToggleCore(isAuto);
