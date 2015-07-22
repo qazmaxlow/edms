@@ -1077,7 +1077,10 @@
 }
 
 .fullscreen #page-container .right-content .container {
-    height: calc(100% - 145px);
+    position: absolute;
+    height: 100%;
+    top: 0;
+    padding-top: 145px;
 }
 
 .fullscreen #dashboardContainer>div {
@@ -1098,6 +1101,7 @@
 }
 
 .fullscreen #page-container .right-content {
+    position: relative;
     padding-left: 0;
     width: 100%;
 }
