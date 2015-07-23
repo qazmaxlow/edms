@@ -499,6 +499,7 @@
     min-width: 50px;
     width: 100%;
     text-align: right;
+    display: block;
 }
 
 .horizontal-bars .bar-value-na {
@@ -1197,6 +1198,15 @@
     padding-right: 15px;
 }
 
+.fullscreen .widget-content .rt-graph {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    padding-bottom: 5px;
+    padding-top: 101px;
+}
+
 .fullscreen .lw-graph {
     position: absolute;
     top: 0;
@@ -1253,6 +1263,10 @@
 
     .fullscreen .rt-graph-container {
         padding-top: 66px;
+    }
+
+    .fullscreen .widget-content .rt-graph {
+        padding-top: 106px;
     }
     
     .fullscreen .full-width-img,
@@ -1321,6 +1335,10 @@
 
     .fullscreen .rt-graph-container {
         padding-top: 71px;
+    }
+
+    .fullscreen .widget-content .rt-graph {
+        padding-top: 111px;
     }
 
     .fullscreen .full-width-img,
