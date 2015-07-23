@@ -802,7 +802,7 @@
             }
 
             var yMax = $(".eu-left-chart").height();
-            yMax = Math.max(thisCost[0], lastCost[0]) * (yMax / (yMax - 35));  //give 35px space to the text above
+            yMax = Math.max(thisCost[0], lastCost[0]) * (yMax / (yMax - 45));  //give 35px space to the text above
             $scope.soFarChartThis.setOptions({valueAxis: {max: yMax}}); //use same scale for both chart
             $scope.soFarChartLast.setOptions({valueAxis: {max: yMax}});
             $scope.soFarChartThis.refresh();
