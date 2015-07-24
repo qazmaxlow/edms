@@ -45,8 +45,8 @@
 {% endblock %}
 
 {% block selected-menu-link-id %}menu-link-dashboard{% endblock %}
-{% block system_menu_target_view %}report{% endblock %}
-{% block breadcrumb_target_view %}report{% endblock %}
+{% block system_menu_target_view %}dashboard{% endblock %}
+{% block breadcrumb_target_view %}dashboard{% endblock %}
 
 {% block page_title %}{% trans "ENERGY DASHBOARD" %}{% endblock %}
 {% block page_subtitle %}{% trans "Grab a snapshot of your performance at the" %}{% endblock %}
@@ -227,7 +227,7 @@
         var autoToggleTimer = null;
         $scope.autoToggle = function(isAuto){
             if (isAuto){
-                autoToggleTimer = setInterval(autoToggleCore, 10000, isAuto);
+                autoToggleTimer = setInterval(autoToggleCore, 16000, isAuto);
             } else {
                 clearInterval(autoToggleTimer);
                 autoToggleCore(isAuto);
@@ -316,6 +316,7 @@
         $scope.btnLeft = '{% trans "Graph" %}';
         $scope.btnRight = '{% trans "Rates" %}';
         $scope.usedSoFar = '{% trans "So far today you have used: " %}';
+        $scope.yourRate = '{% trans "Your current rate of energy use." %}';
         $scope.axisToday = '{% trans "Today" %}';
         $scope.axisLast = '{% trans "Last week" %}';
         $scope.perDay = '{% trans "per day" %}';
@@ -626,7 +627,7 @@
         $scope.title = '{% trans "Biggest Consumers" %}';
         $scope.btnLeft = '{% trans "Week" context "dashboard" %}';
         $scope.btnRight = '{% trans "Month" context "dashboard" %}';
-        $scope.changeText = $scope.isWeek ? '{% trans "Change from last week" %}' : '{% trans "Change from last month" %}';
+        $scope.changeText = $scope.isWeek ? '{% trans "change from last week" %}' : '{% trans "change from last month" %}';
         $scope.energyCost = '{% trans "Energy cost so far" %}';
         $scope.costUnit = '{{current_system.money_unit.name}}';
 
@@ -661,7 +662,7 @@
 
         $scope.toggle = function(isWeek){
             $scope.isWeek = isWeek;
-            $scope.changeText = $scope.isWeek ? '{% trans "Change from last week" %}' : '{% trans "Change from last month" %}';
+            $scope.changeText = $scope.isWeek ? '{% trans "change from last week" %}' : '{% trans "change from last month" %}';
 
             $scope.updateWidgetImpl();
         };
@@ -801,7 +802,7 @@
             }
 
             var yMax = $(".eu-left-chart").height();
-            yMax = Math.max(thisCost[0], lastCost[0]) * (yMax / (yMax - 35));  //give 35px space to the text above
+            yMax = Math.max(thisCost[0], lastCost[0]) * (yMax / (yMax - 45));  //give 35px space to the text above
             $scope.soFarChartThis.setOptions({valueAxis: {max: yMax}}); //use same scale for both chart
             $scope.soFarChartLast.setOptions({valueAxis: {max: yMax}});
             $scope.soFarChartThis.refresh();

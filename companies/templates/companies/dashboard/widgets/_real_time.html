@@ -20,9 +20,12 @@
     <div class="widget-content row"><div class="col-sm-12 rt-content">
     	{% verbatim %}
         <div class="row">
-            <div class="widget-message2 left-padding-15 col-sm-12">
+            <div ng-show="isGraph" class="widget-message2 left-padding-15 col-sm-12">
                 <span class="description-1 message-text">{{usedSoFar}}</span>
                 <span class="description-4 message-text">${{ total_cost | number:0 }}</span>
+            </div>
+            <div ng-show="!isGraph" class="widget-message2 left-padding-15 col-sm-12">
+                <span class="description-1 message-text">{{yourRate}}</span>
             </div>
         </div>
         <div ng-show="isGraph" class="rt-graph-container">
