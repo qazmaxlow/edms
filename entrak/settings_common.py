@@ -74,6 +74,7 @@ INSTALLED_APPS = (
     'apis',
     'schedulers',
     'meters',
+    'keyserver',
 )
 
 REST_FRAMEWORK = {

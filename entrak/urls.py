@@ -84,6 +84,7 @@ urlpatterns = patterns('',
     url(r'^users/send_password_reset_email', user.views.SendPasswordResetEmailView.as_view(), name='users.send_password_reset_email'),
     url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     url(r'^messages/(?P<message_id>\d+)/read', ReadMessageView.as_view(), name='notifications.read_message'),
+    url(r'^product/', include('keyserver.urls')),
 )
 
 if settings.DEBUG:

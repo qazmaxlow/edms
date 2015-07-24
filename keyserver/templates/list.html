@@ -1,0 +1,155 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Audit trails</title>
+    <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/kendoui/styles/kendo.common-bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/kendoui/styles/kendo.default.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/forms.css' %}" rel="stylesheet">
+    <script src="{% static 'assets/kendoui/js/jquery.min.js' %}"></script>
+    <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
+    <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>.logo-circle-bound {
+      width: 170px;
+      height: 170px;
+      position: relative;
+      top: 1px;
+      left: 1px;
+      background-size: 170px;
+      -webkit-border-radius: 90px;
+      -moz-border-radius: 90px;
+      border-radius: 90px;
+      }
+      #user-logo{
+      #width: 172px;
+      height: 172px;
+      margin-top: 15px;
+      margin-right: auto;
+      padding-bottom: 200px;
+      position: relative;
+      }
+      #user-logo img{
+      position: absolute;
+      top: 0px;
+      }
+      #title-text{
+      float: left;
+      padding-left: 200px;
+      padding-top: 55px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div id="user-logo">
+        <h1 id="title-text">Product Keys </h1>
+        <div class="logo-circle-bound" style="background-image: url('{{company_system.logo.url}}');">
+        </div>
+        <img src="{% static 'images/user-logo-bg.png' %}">
+      </div>
+      <div ng-app="Entrak">
+        <div ng-controller="MyCtrl">
+          <div class="bs-action">
+            <form ng-submit="refreshGrid()" class="pull-left">
+              <select kendo-drop-down-list ng-model="user">
+              <option value="">All user</option>
+              {% for u in users %}
+              <option value="{{ u.id }}">{{ u.username }}</option>
+              {% endfor %}
+              </select>
+              &nbsp;<input kendo-date-picker="dateFromFilter"
+                k-format="'yyyy-MM-dd'"
+                k-parse-format="'yyyy-MM-dd'"
+                name="{{ filter.form.created_time__gte.name }}"
+                value="{{ filter.form.created_time__gte.value|default_if_none:'' }}"
+                placeholder="From"
+                ng-model="dateFrom"
+                >
+              &nbsp;<input kendo-date-picker="dateToFilter"
+                k-format="'yyyy-MM-dd'"
+                name="{{ filter.form.created_time__lte.name }}"
+                value="{{ filter.form.created_time__lte.value|default_if_none:'' }}"
+                placeholder="To"
+                ng-model="dateTo"
+                >
+              <button class="k-button btn btn-default" type="submit">Update</button>
+            </form>
+            <form action="." method="post" class="pull-left">
+              {% csrf_token %}
+              <input type="hidden" name="{{ filter.form.user.name }}" value="{% templatetag openvariable %} user {% templatetag closevariable %}">
+              <input type="hidden" name="{{ filter.form.created_time__gte.name }}" value="{% templatetag openvariable %} dateFrom {% templatetag closevariable %}">
+              <input type="hidden" name="{{ filter.form.created_time__lte.name }}" value="{% templatetag openvariable %} dateTo {% templatetag closevariable %}">
+              &nbsp;<button class="k-button btn btn-default" name="generate_new_key" type="submit">Generate New Key</button>
+            </form>
+            <div class="clearfix"></div>
+          </div>
+          <div kendo-grid="grid" k-options="mainGridOptions">
+          </div>
+        </div>
+      </div>
+    </div>
+    </div
+      >
+    <script>
+      angular.module("Entrak", [ "kendo.directives" ])
+          .controller("MyCtrl", function($scope){
+              $scope.mainGridOptions = {
+                  dataSource: {
+                      transport: {
+                          read: {
+                              url: "{% url 'product-key-list' %}",
+                              type: 'GET',
+                              dataType: "json"
+                          }
+                      },
+                      pageSize: 30,
+                      serverPaging: true,
+                      schema: {
+                          data: "results",
+                          total: "count"
+                      }
+                  },
+                  scrollable: false,
+                  pageable: true,
+                  columns: [{
+                      field: "key",
+                      title: "Product Key",
+                  },{
+                      field: "remark",
+                      title: "Remarks",
+                  },{
+                      field: "created_at",
+                      title: "Generated At",
+                  },{
+                      field: "created_by.fullname",
+                      title: "Generated By"
+                  },{
+                      field: "activated_at",
+                      title: "Activated At",
+                  },{
+                      field: "activated_by",
+                      title: "Activated By",
+                      template: function(dataItem) {
+                        console.log(dataItem);
+                        if (dataItem && dataItem.fullname) {
+                          return dataItem.fullname;
+                        } else {
+                          return "N/A";
+                        }
+                      }
+                  }]
+              };
+
+          })
+    </script>
+    </div>
+  </body>
+</html>
