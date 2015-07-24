@@ -9,7 +9,7 @@ class ProductKeySerializer(serializers.ModelSerializer):
     created_at = DateTimeTzAwareField(format='%Y-%m-%d %H:%m:%S HKT')
     created_by = EntrakuserSerializer()
     activated_at = DateTimeTzAwareField(format='%Y-%m-%d %H:%m:%S HKT')
-
+    activated_by = EntrakuserSerializer()
 
     class Meta:
         model = ProductKey
