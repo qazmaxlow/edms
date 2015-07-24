@@ -16,13 +16,20 @@ class SystemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = System
-        fields = ('code', 'name', 'name_tc', 'full_name', 'full_name_tc', 'child_systems')
+        fields = ('id', 'code', 'name', 'name_tc', 'full_name', 'full_name_tc', 'child_systems')
+
+
+class SystemOnlySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = System
+        fields = ('id', 'code', 'name', 'name_tc', 'full_name', 'full_name_tc')
 
 
 class AlertHistorySerializer(serializers.ModelSerializer):
 
     source_id = serializers.CharField(source='alert.source.id')
-    system_name = serializers.DictField(source='alert.parent_system_name')
+    system = SystemOnlySerializer(source='alert.parent_system')
     source_name = serializers.DictField(source='alert.source_name')
     start_time = serializers.TimeField(source='alert.start_time')
     end_time = serializers.TimeField(source='alert.end_time')
@@ -30,7 +37,7 @@ class AlertHistorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AlertHistory
-        fields = ("id", "created", "resolved", "resolved_datetime", "diff_percent", "threshold_kwh", "current_kwh", "system_name", "source_id", "source_name", "start_time", "end_time", "check_date")
+        fields = ("id", "created", "resolved", "resolved_datetime", "diff_percent", "threshold_kwh", "current_kwh", "system", "source_id", "source_name", "start_time", "end_time", "check_date")
 
 
 class RegisterDeviceSerializer(serializers.ModelSerializer):
