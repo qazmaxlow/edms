@@ -555,6 +555,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
                 m['s1_css_class_energy_saving'] = 'negative-saving'
         else:
             m['s1_last_year_data_exist'] = False
+            m['s1_css_class_energy_saving'] = 'neutral-saving'
         # end of section 1a summary stats
 
         # start of section 1b sub-systems bar chart and table

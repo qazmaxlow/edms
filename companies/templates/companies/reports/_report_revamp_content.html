@@ -429,7 +429,7 @@
                 <div class="col-xs-4">
                   <img src="{% static 'images/reports/icon_money.png'  %}">
                 </div>
-                <div class="col-xs-8">
+                <div class="col-xs-8 no-x-padding">
                   <h3 class="used-money">${{ s3_weekday.parent.average_cost|floatformat:"0"|intcomma }}</h3>
                   <p>{% trans "Average Weekday Energy Use" %}</p>
                 </div>
@@ -440,7 +440,7 @@
                 <div class="col-xs-4">
                   <img src="{% static s3_weekday.parent.diff_last_interval.change_icon_path  %}">
                 </div>
-                <div class="col-xs-8">
+                <div class="col-xs-8 no-x-padding">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
                   <p class="bottom-margin-4">{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
                   <h3 class="{{ s3_weekday.parent.diff_last_interval.change_css_class }}">
@@ -460,7 +460,7 @@
                 <div class="col-xs-4">
                   <img src="{% static s3_weekday.parent.diff_last_year.change_icon_path %}">
                 </div>
-                <div class="col-xs-8">
+                <div class="col-xs-8 no-x-padding">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
                   <p class="bottom-margin-4">{% trans "Compared to same period last year" %}</p>
                   <h3 class="{{ s3_weekday.parent.diff_last_year.change_css_class }}">
@@ -637,7 +637,7 @@
                 <div class="col-xs-4">
                   <img src="{% static 'images/reports/icon_money.png'  %}">
                 </div>
-                <div class="col-xs-8">
+                <div class="col-xs-8 no-x-padding">
                   <h3 class="used-money">${{ s3_weekend.parent.average_cost|floatformat:"0"|intcomma }}</h3>
                   <p>{% trans "Average Weekend/Holiday Energy Use" %}</p>
                 </div>
@@ -646,12 +646,12 @@
           <div class="col-xs-4">
               <div class="row inner">
                 <div class="col-xs-4">
-                  <img src="{% static s3_weekend.diff_last_interval.change_icon_path  %}">
+                  <img src="{% static s3_weekend.parent.diff_last_interval.change_icon_path  %}">
                 </div>
-                <div class="col-xs-8">
+                <div class="col-xs-8 no-x-padding">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
                   <p class="bottom-margin-4">{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
-                  <h3 class="{{ s3_weekend.diff_last_interval.change_css_class }}">
+                  <h3 class="{{ s3_weekend.parent.diff_last_interval.change_css_class }}">
                     {{ s3_weekend.parent.diff_last_interval.text_desc }}
                   </h3>
                   {% else %}
@@ -668,7 +668,7 @@
                 <div class="col-xs-4">
                   <img src="{% static s3_weekend.parent.diff_last_year.change_icon_path %}">
                 </div>
-                <div class="col-xs-8">
+                <div class="col-xs-8 no-x-padding">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
                   <p class="bottom-margin-4">{% trans "Compared to same period last year" %}</p>
                   <h3 class="{{ s3_weekend.parent.diff_last_year.change_css_class }}">
@@ -774,7 +774,7 @@
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
                   <p class="bottom-margin-4">{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
                   <h3 class="{{ s3_overnight.parent.diff_last_interval.change_css_class }}">
-                    {{ s3_overnightparent..diff_last_interval.text_desc }}
+                    {{ s3_overnight.parent.diff_last_interval.text_desc }}
                   </h3>
                   {% else %}
                   <h3 class="{{ s3_overnight.parent.diff_last_interval.change_css_class }}">
@@ -845,8 +845,8 @@
                 <div class="col-xs-4">
                   <img src="{% static 'images/reports/icon_money.png'  %}">
                 </div>
-                <div class="col-xs-8">
-                  <h3 class="used-money">${{ s3_overnight.average_cost|floatformat:"0"|intcomma }}</h3>
+                <div class="col-xs-8 no-x-padding">
+                  <h3 class="used-money">${{ s3_overnight.parent.average_cost|floatformat:"0"|intcomma }}</h3>
                   <p>{% trans "Average Overnight Energy Use" %}</p>
                 </div>
               </div>
@@ -854,17 +854,17 @@
           <div class="col-xs-4">
               <div class="row inner">
                 <div class="col-xs-4">
-                  <img src="{% static s3_overnight.diff_last_interval.change_icon_path  %}">
+                  <img src="{% static s3_overnight.parent.diff_last_interval.change_icon_path  %}">
                 </div>
-                <div class="col-xs-8">
+                <div class="col-xs-8 no-x-padding">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
                   <p class="bottom-margin-4">{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
-                  <h3 class="{{ s3_overnight.diff_last_interval.change_css_class }}">
-                    {{ s3_overnight.diff_last_interval.text_desc }}
+                  <h3 class="{{ s3_overnight.parent.diff_last_interval.change_css_class }}">
+                    {{ s3_overnight.parent.diff_last_interval.text_desc }}
                   </h3>
                   {% else %}
-                  <h3 class="{{ s3_overnight.diff_last_interval.change_css_class }}">
-                    {{ s3_overnight.diff_last_interval.text_desc }}
+                  <h3 class="{{ s3_overnight.parent.diff_last_interval.change_css_class }}">
+                    {{ s3_overnight.parent.diff_last_interval.text_desc }}
                   </h3>
                   <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
                   {% endifequal %}
@@ -874,17 +874,17 @@
           <div class="col-xs-4">
               <div class="row inner">
                 <div class="col-xs-4">
-                  <img src="{% static s3_overnight.diff_last_year.change_icon_path %}">
+                  <img src="{% static s3_overnight.parent.diff_last_year.change_icon_path %}">
                 </div>
-                <div class="col-xs-8">
+                <div class="col-xs-8 no-x-padding">
                   {% ifequal LANGUAGE_CODE 'zh-tw' %}
                   <p class="bottom-margin-4">{% trans "Compared to same period last year" %}</p>
-                  <h3 class="{{ s3_overnight.diff_last_year.change_css_class }}">
-                    {{ s3_overnight.diff_last_year.text_desc }}
+                  <h3 class="{{ s3_overnight.parent.diff_last_year.change_css_class }}">
+                    {{ s3_overnight.parent.diff_last_year.text_desc }}
                   </h3>
                   {% else %}
-                  <h3 class="{{ s3_overnight.diff_last_year.change_css_class }}">
-                    {{ s3_overnight.diff_last_year.text_desc }}
+                  <h3 class="{{ s3_overnight.parent.diff_last_year.change_css_class }}">
+                    {{ s3_overnight.parent.diff_last_year.text_desc }}
                   </h3>
                   <p>{% trans "Compared to same period last year" %}</p>
                   {% endifequal %}
