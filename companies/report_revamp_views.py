@@ -165,7 +165,6 @@ def generate_weekday_weekend_overnight_details(system, start_date, end_date, int
         else:
             current_average_cost = None
 
-
         sub_system_stat = {
             'name': sub_system['name'],
             'average_cost': current_average_cost,
@@ -178,11 +177,13 @@ def generate_weekday_weekend_overnight_details(system, start_date, end_date, int
 
     parent_diff_last_interval = None
     parent_diff_last_year = None
+    parent_last_interval_average_kwh = 0
+    parent_last_year_average_kwh = 0
 
     if len(parent_current_dates) > 0 :
 
         parent_current_average_cost = parent_current_cost / len(parent_current_dates)
-        parent_current_average_kwh = parent_current_cost / len(parent_current_dates)
+        parent_current_average_kwh = parent_current_kwh / len(parent_current_dates)
 
         if parent_last_interval_kwh > 0 and len(parent_last_interval_dates) > 0:
 
