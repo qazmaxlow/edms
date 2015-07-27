@@ -382,7 +382,12 @@ class CompareTplHepler:
 
     @property
     def change_css_class(self):
-        return 'more-usage' if self.compared_percent >=0 else 'less-usage'
+        if self.compared_percent is None or self.compared_percent == 0:
+            return 'neutral-usage'
+        elif self.compared_percent > 0:
+            return 'more-usage'
+        elif self.compared_percent < 0:
+            return 'less-usage'
 
     @property
     def change_icon_path(self):
@@ -390,7 +395,7 @@ class CompareTplHepler:
             return 'images/reports/na.gif'
 
         path = 'images/reports/decrease_energy.png'
-        if self.compared_percent >=0:
+        if self.compared_percent >= 0:
             path = 'images/reports/increase_energy.png'
 
         return path
