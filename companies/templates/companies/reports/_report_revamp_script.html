@@ -1,6 +1,6 @@
 {% load i18n %}
-var barTitle = ("{{ barchart_title }}");
-var lineTitle = ('# if (group.value == "last") { # {{ compare_last_name }} # } else { # {{ compare_current_name }} # } #');
+var barTitle = ("{{ s2_barchart_title }}");
+var lineTitle = ('# if (group.value == "last") { # {{ s2_compare_last_name }} # } else { # {{ s2_compare_current_name }} # } #');
 setCalendar = function(currentDt, currentEndDt, eleSel, readings, averageUsage, isNotConcernFunc) {
     // var reportGenThis = this;
     var calendarInfoContainer = $(eleSel);
