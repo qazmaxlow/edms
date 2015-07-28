@@ -196,7 +196,7 @@ def generate_weekday_weekend_overnight_details(system, start_date, end_date, int
             parent_diff_last_year = (parent_current_average_kwh - parent_last_year_average_kwh)*100/parent_last_year_average_kwh
 
     else:
-        parent_current_average_cost = None
+        parent_current_average_cost = 0
 
     parent = {
         'average_cost': parent_current_average_cost,
