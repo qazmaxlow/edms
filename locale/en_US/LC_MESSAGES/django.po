@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-23 08:26+0000\n"
+"POT-Creation-Date: 2015-07-22 04:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,8 +22,8 @@ msgid "{0:.0f}% {1}"
 msgstr ""
 
 #: companies/report_views.py:480
-#: companies/templates/companies/dashboard/dashboard.html:1011
-#: companies/templates/companies/dashboard/dashboard.html:1150
+#: companies/templates/companies/dashboard/dashboard.html:1012
+#: companies/templates/companies/dashboard/dashboard.html:1151
 #: companies/templates/companies/reports/_report_content.html:70
 #: companies/templates/companies/reports/_report_content.html:79
 #: companies/templates/companies/reports/_report_content.html:97
@@ -36,8 +36,8 @@ msgid "more"
 msgstr ""
 
 #: companies/report_views.py:480
-#: companies/templates/companies/dashboard/dashboard.html:1011
-#: companies/templates/companies/dashboard/dashboard.html:1150
+#: companies/templates/companies/dashboard/dashboard.html:1012
+#: companies/templates/companies/dashboard/dashboard.html:1151
 #: companies/templates/companies/reports/_report_content.html:68
 #: companies/templates/companies/reports/_report_content.html:77
 #: companies/templates/companies/reports/_report_content.html:95
@@ -140,7 +140,7 @@ msgid "This week"
 msgstr ""
 
 #: companies/report_views.py:839
-#: companies/templates/companies/dashboard/dashboard.html:320
+#: companies/templates/companies/dashboard/dashboard.html:321
 msgid "Last week"
 msgstr ""
 
@@ -195,22 +195,22 @@ msgstr ""
 msgid "Total energy consumption for the last 6 same periods (kWh)"
 msgstr ""
 
-#: companies/tasks.py:84
+#: companies/tasks.py:83
 msgid "automated report description 1"
 msgstr "Your energy report for "
 
-#: companies/tasks.py:85
+#: companies/tasks.py:84
 msgid "automated report description 2"
 msgstr "is ready for your review!"
 
-#: companies/tasks.py:88
+#: companies/tasks.py:87
 msgid "automated report remark"
 msgstr ""
 "This link will expire in 72 hours after sending.\n"
 "If you wish to view this report after that period,\n"
 " simply log into your En-trak system and go to the Reports page."
 
-#: companies/tasks.py:89
+#: companies/tasks.py:88
 msgid "automated report button"
 msgstr "View Report"
 
@@ -240,288 +240,292 @@ msgid "So far today you have used: "
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:319
+msgid "Your current rate of energy use."
+msgstr ""
+
+#: companies/templates/companies/dashboard/dashboard.html:320
 #: entrak/templates/display.html:274
 msgid "Today"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:321
+#: companies/templates/companies/dashboard/dashboard.html:322
 msgid "per day"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:626
-msgid "Biggest Consumers"
-msgstr ""
-
 #: companies/templates/companies/dashboard/dashboard.html:627
-#: companies/templates/companies/dashboard/dashboard.html:760
-msgctxt "dashboard"
-msgid "Week"
+msgid "Biggest Consumers"
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:628
 #: companies/templates/companies/dashboard/dashboard.html:761
 msgctxt "dashboard"
+msgid "Week"
+msgstr ""
+
+#: companies/templates/companies/dashboard/dashboard.html:629
+#: companies/templates/companies/dashboard/dashboard.html:762
+msgctxt "dashboard"
 msgid "Month"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:629
-#: companies/templates/companies/dashboard/dashboard.html:664
-msgid "Change from last week"
-msgstr ""
-
-#: companies/templates/companies/dashboard/dashboard.html:629
-#: companies/templates/companies/dashboard/dashboard.html:664
-msgid "Change from last month"
+#: companies/templates/companies/dashboard/dashboard.html:630
+#: companies/templates/companies/dashboard/dashboard.html:665
+msgid "change from last week"
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:630
+#: companies/templates/companies/dashboard/dashboard.html:665
+msgid "change from last month"
+msgstr ""
+
+#: companies/templates/companies/dashboard/dashboard.html:631
 msgid "Energy cost so far"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:704
+#: companies/templates/companies/dashboard/dashboard.html:705
 msgid "Energy Saving Tips"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:706
+#: companies/templates/companies/dashboard/dashboard.html:707
 msgid "Put a ribbon on it"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:707
+#: companies/templates/companies/dashboard/dashboard.html:708
 msgid ""
 "Tie a ribbon to the vent of each aircon unit so you can easily tell if "
 "aircon has actually been turned off."
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:711
+#: companies/templates/companies/dashboard/dashboard.html:712
 msgid "Label your plugs"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:712
+#: companies/templates/companies/dashboard/dashboard.html:713
 #: entrak/templates/display.html:174
 msgid ""
 "Label your plugs so you can unplug appliances without accidentally turning "
 "off important things!"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:716
+#: companies/templates/companies/dashboard/dashboard.html:717
 msgid "Remove a tube"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:717
+#: companies/templates/companies/dashboard/dashboard.html:718
 #: entrak/templates/display.html:171
 msgid ""
 "If you have more light than you need in an area, you can remove one light "
 "tube to save energy!"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:721
+#: companies/templates/companies/dashboard/dashboard.html:722
 msgid "Turn off the socket"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:722
+#: companies/templates/companies/dashboard/dashboard.html:723
 #, python-format
 msgid ""
 "Even if an appliance is off, it can still consume 10%(percent)s of normal "
 "energy. Remember to turn off the socket switch too!"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:726
+#: companies/templates/companies/dashboard/dashboard.html:727
 msgid "Adjust aircon temperature"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:727
+#: companies/templates/companies/dashboard/dashboard.html:728
 #: entrak/templates/display.html:172
 msgid ""
 "30 minutes after turning on aircon, adjust the temperature to minimize "
 "energy wastage."
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:759
+#: companies/templates/companies/dashboard/dashboard.html:760
 msgid "Comparison"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:910
+#: companies/templates/companies/dashboard/dashboard.html:911
 msgid "So far this week"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:910
+#: companies/templates/companies/dashboard/dashboard.html:911
 msgid "So far this month"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:911
+#: companies/templates/companies/dashboard/dashboard.html:912
 msgid "By this time last week"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:911
+#: companies/templates/companies/dashboard/dashboard.html:912
 msgid "By this time last month"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:959
+#: companies/templates/companies/dashboard/dashboard.html:960
 msgid "Last Week Stats"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:960
+#: companies/templates/companies/dashboard/dashboard.html:961
 msgid "Day"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:961
+#: companies/templates/companies/dashboard/dashboard.html:962
 msgid "Night"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:962
+#: companies/templates/companies/dashboard/dashboard.html:963
 msgid "than two weeks ago"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1154
+#: companies/templates/companies/dashboard/dashboard.html:1155
 msgid "average weekday"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1154
+#: companies/templates/companies/dashboard/dashboard.html:1155
 msgid "average overnight"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1166
-#: entrak/templates/page_base.html:199
+#: companies/templates/companies/dashboard/dashboard.html:1167
+#: entrak/templates/page_base.html:200
 msgid "Progress"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1167
-#: companies/templates/companies/dashboard/dashboard.html:1247
-#: companies/templates/companies/dashboard/dashboard.html:1347
+#: companies/templates/companies/dashboard/dashboard.html:1168
+#: companies/templates/companies/dashboard/dashboard.html:1248
+#: companies/templates/companies/dashboard/dashboard.html:1348
 msgid "Past 12 months"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1168
-#: companies/templates/companies/dashboard/dashboard.html:1170
-#: companies/templates/companies/dashboard/dashboard.html:1248
+#: companies/templates/companies/dashboard/dashboard.html:1169
+#: companies/templates/companies/dashboard/dashboard.html:1171
+#: companies/templates/companies/dashboard/dashboard.html:1249
 msgid "So far this year"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1169
+#: companies/templates/companies/dashboard/dashboard.html:1170
 #: entrak/templates/display.html:100 entrak/templates/display.html.py:102
 msgid "Over the past 12 months"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1171
+#: companies/templates/companies/dashboard/dashboard.html:1172
 msgid "you have increased your energy use"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1172
+#: companies/templates/companies/dashboard/dashboard.html:1173
 msgid "you have decreased your energy use"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1173
+#: companies/templates/companies/dashboard/dashboard.html:1174
 msgid "from your baseline of"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1174
+#: companies/templates/companies/dashboard/dashboard.html:1175
 msgid "compared to "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1246
+#: companies/templates/companies/dashboard/dashboard.html:1247
 #: entrak/templates/progress.html:90
 msgid "Cumulative Savings"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1249
+#: companies/templates/companies/dashboard/dashboard.html:1250
 msgid "Since "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1249
+#: companies/templates/companies/dashboard/dashboard.html:1250
 msgid " you have"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1250
+#: companies/templates/companies/dashboard/dashboard.html:1251
 msgid "So far this year you have"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1251
+#: companies/templates/companies/dashboard/dashboard.html:1252
 msgid "Compared with your baseline year of "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1252
-#: companies/templates/companies/dashboard/dashboard.html:1280
-#: companies/templates/companies/dashboard/dashboard.html:1306
+#: companies/templates/companies/dashboard/dashboard.html:1253
+#: companies/templates/companies/dashboard/dashboard.html:1281
+#: companies/templates/companies/dashboard/dashboard.html:1307
 msgid "Saved"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1252
-#: companies/templates/companies/dashboard/dashboard.html:1254
-#: companies/templates/companies/dashboard/dashboard.html:1281
-#: companies/templates/companies/dashboard/dashboard.html:1307
+#: companies/templates/companies/dashboard/dashboard.html:1253
+#: companies/templates/companies/dashboard/dashboard.html:1255
+#: companies/templates/companies/dashboard/dashboard.html:1282
+#: companies/templates/companies/dashboard/dashboard.html:1308
 msgid "Increased"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1253
+#: companies/templates/companies/dashboard/dashboard.html:1254
 msgid "on energy costs"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1254
-#: companies/templates/companies/dashboard/dashboard.html:1281
-#: companies/templates/companies/dashboard/dashboard.html:1307
+#: companies/templates/companies/dashboard/dashboard.html:1255
+#: companies/templates/companies/dashboard/dashboard.html:1282
+#: companies/templates/companies/dashboard/dashboard.html:1308
 msgid "Reduced"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1255
+#: companies/templates/companies/dashboard/dashboard.html:1256
 msgid "Tons"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1280
-#: companies/templates/companies/dashboard/dashboard.html:1306
+#: companies/templates/companies/dashboard/dashboard.html:1281
+#: companies/templates/companies/dashboard/dashboard.html:1307
 msgid "Lost"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1342
+#: companies/templates/companies/dashboard/dashboard.html:1343
 msgid "increased"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1342
+#: companies/templates/companies/dashboard/dashboard.html:1343
 msgid "reduced"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1346
+#: companies/templates/companies/dashboard/dashboard.html:1347
 msgid "Goal Tracking"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1348
+#: companies/templates/companies/dashboard/dashboard.html:1349
 msgid "Goal-1"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1349
+#: companies/templates/companies/dashboard/dashboard.html:1350
 msgid "Reduce energy use in "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1350
+#: companies/templates/companies/dashboard/dashboard.html:1351
 msgid "by "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1351
+#: companies/templates/companies/dashboard/dashboard.html:1352
 msgid " compared to "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1352
+#: companies/templates/companies/dashboard/dashboard.html:1353
 msgid "So far you have "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1353
+#: companies/templates/companies/dashboard/dashboard.html:1354
 msgid "your energy use by"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1354
+#: companies/templates/companies/dashboard/dashboard.html:1355
 msgid "To meet your goal, you need to use"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1355
+#: companies/templates/companies/dashboard/dashboard.html:1356
 #, python-format
 msgid "%% less"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1356
+#: companies/templates/companies/dashboard/dashboard.html:1357
 #: entrak/templates/progress.html:121
 msgid "from "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1357
+#: companies/templates/companies/dashboard/dashboard.html:1358
 #: companies/templates/companies/reports/summary.html:80
 #: entrak/templates/progress.html:121 entrak/templates/report.html:40
 msgid " to "
@@ -531,7 +535,7 @@ msgstr ""
 msgid "of CO<sub>2</sub> emissions"
 msgstr ""
 
-#: companies/templates/companies/dashboard/widgets/_real_time.html:62
+#: companies/templates/companies/dashboard/widgets/_real_time.html:65
 #: companies/templates/companies/reports/_report_content.html:39
 #: companies/templates/companies/reports/_report_content.html:99
 #: companies/templates/companies/reports/_report_content.html:101
@@ -620,7 +624,7 @@ msgid "Cost ($)"
 msgstr ""
 
 #: companies/templates/companies/export/index.html:188
-#: companies/templates/companies/reports/summary.html:446
+#: companies/templates/companies/reports/summary.html:445
 #: entrak/templates/report.html:788 entrak/templates/report.html.py:821
 #: entrak/templates/report.html:862
 msgid "From:"
@@ -641,7 +645,7 @@ msgstr ""
 
 #: companies/templates/companies/export/index.html:192
 #: companies/templates/companies/reports/popup_report_pdf.html:633
-#: entrak/templates/page_base.html:208 entrak/templates/report.html:713
+#: entrak/templates/page_base.html:213 entrak/templates/report.html:713
 #: entrak/templates/report.html.py:893
 msgid "Download"
 msgstr ""
@@ -667,39 +671,39 @@ msgid "View Reports"
 msgstr ""
 
 #: companies/templates/companies/report_schedule/report_schedule.html:123
-#: companies/templates/companies/reports/summary.html:288
+#: companies/templates/companies/reports/summary.html:287
 msgid "Automated Reports"
 msgstr ""
 
 #: companies/templates/companies/report_schedule/report_schedule.html:129
-#: companies/templates/companies/report_schedule/report_schedule.html:354
+#: companies/templates/companies/report_schedule/report_schedule.html:373
 #: entrak/templates/manage_accounts.html:182
 msgctxt "dropdown"
 msgid "Add"
 msgstr ""
 
 #: companies/templates/companies/report_schedule/report_schedule.html:130
-#: companies/templates/companies/report_schedule/report_schedule.html:355
+#: companies/templates/companies/report_schedule/report_schedule.html:374
 #: entrak/templates/manage_accounts.html:180
 msgctxt "dropdown"
 msgid "Emails"
 msgstr ""
 
 #: companies/templates/companies/report_schedule/report_schedule.html:131
-#: companies/templates/companies/report_schedule/report_schedule.html:356
+#: companies/templates/companies/report_schedule/report_schedule.html:375
 #: entrak/templates/manage_accounts.html:181
 msgctxt "dropdown"
 msgid "Add Email"
 msgstr ""
 
 #: companies/templates/companies/report_schedule/report_schedule.html:133
-#: companies/templates/companies/report_schedule/report_schedule.html:358
+#: companies/templates/companies/report_schedule/report_schedule.html:377
 msgctxt "dropdown"
 msgid "Duplicated Email"
 msgstr ""
 
 #: companies/templates/companies/report_schedule/report_schedule.html:134
-#: companies/templates/companies/report_schedule/report_schedule.html:359
+#: companies/templates/companies/report_schedule/report_schedule.html:378
 msgctxt "dropdown"
 msgid "Invalid Email"
 msgstr ""
@@ -709,10 +713,10 @@ msgid "Set the system to email you an energy report each month or week."
 msgstr ""
 
 #: companies/templates/companies/report_schedule/report_schedule.html:148
-#: companies/templates/companies/report_schedule/report_schedule.html:305
+#: companies/templates/companies/report_schedule/report_schedule.html:324
 #: entrak/templates/alert_settings.html:52
 #: entrak/templates/alert_settings.html:67
-#: entrak/templates/alert_settings.html:1096
+#: entrak/templates/alert_settings.html:1102
 #: entrak/templates/general_settings.html:394
 #: entrak/templates/manage_accounts.html:88
 msgid "Confirm"
@@ -739,7 +743,7 @@ msgid "Manage Automated Reports"
 msgstr ""
 
 #: companies/templates/companies/report_schedule/report_schedule.html:157
-#: companies/templates/companies/report_schedule/report_schedule.html:310
+#: companies/templates/companies/report_schedule/report_schedule.html:329
 #: entrak/templates/general_settings.html:35
 #: entrak/templates/manage_accounts.html:362
 #: entrak/templates/manage_accounts.html:373
@@ -751,10 +755,10 @@ msgid "Are you sure you want to delete the item?"
 msgstr ""
 
 #: companies/templates/companies/report_schedule/report_schedule.html:159
-#: companies/templates/companies/report_schedule/report_schedule.html:306
+#: companies/templates/companies/report_schedule/report_schedule.html:325
 #: entrak/templates/alert_settings.html:51
 #: entrak/templates/alert_settings.html:66
-#: entrak/templates/alert_settings.html:1095
+#: entrak/templates/alert_settings.html:1101
 #: entrak/templates/general_settings.html:34
 #: entrak/templates/general_settings.html:369
 #: entrak/templates/general_settings.html:382
@@ -764,25 +768,25 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: companies/templates/companies/report_schedule/report_schedule.html:279
+#: companies/templates/companies/report_schedule/report_schedule.html:298
 msgid "Scope"
 msgstr ""
 
-#: companies/templates/companies/report_schedule/report_schedule.html:286
+#: companies/templates/companies/report_schedule/report_schedule.html:305
 msgid "Frequency"
 msgstr ""
 
-#: companies/templates/companies/report_schedule/report_schedule.html:294
+#: companies/templates/companies/report_schedule/report_schedule.html:313
 #: entrak/templates/manage_accounts.html:359 entrak/templates/profile.html:99
 #: user/templates/activate_account.html:140
 msgid "Email"
 msgstr ""
 
-#: companies/templates/companies/report_schedule/report_schedule.html:304
+#: companies/templates/companies/report_schedule/report_schedule.html:323
 msgid "Edit"
 msgstr ""
 
-#: companies/templates/companies/report_schedule/report_schedule.html:324
+#: companies/templates/companies/report_schedule/report_schedule.html:343
 #: entrak/templates/general_settings.html:332
 #: entrak/templates/general_settings.html:351
 msgid "Actions"
@@ -1101,42 +1105,42 @@ msgstr ""
 msgid "When did we achieve our savings?"
 msgstr ""
 
-#: companies/templates/companies/reports/popup_report.html:15
+#: companies/templates/companies/reports/popup_report.html:12
 #: companies/templates/companies/reports/popup_report_pdf.html:65
-#: companies/templates/companies/reports/share_report.html:33
+#: companies/templates/companies/reports/share_report.html:43
 #: entrak/templates/report.html:879
 msgid "Save Report"
 msgstr ""
 
-#: companies/templates/companies/reports/popup_report.html:21
-#: companies/templates/companies/reports/share_report.html:39
+#: companies/templates/companies/reports/popup_report.html:18
+#: companies/templates/companies/reports/share_report.html:49
 msgid "Key Statistics"
 msgstr ""
 
-#: companies/templates/companies/reports/popup_report.html:22
-#: companies/templates/companies/reports/share_report.html:40
+#: companies/templates/companies/reports/popup_report.html:19
+#: companies/templates/companies/reports/share_report.html:50
 #, python-format
 msgid "Compared to Last %(report_type_name)s"
 msgstr ""
 
-#: companies/templates/companies/reports/popup_report.html:23
-#: companies/templates/companies/reports/share_report.html:41
+#: companies/templates/companies/reports/popup_report.html:20
+#: companies/templates/companies/reports/share_report.html:51
 #: companies/templates/companies/reports/summary.html:103
-#: companies/templates/companies/reports/summary.html:340
+#: companies/templates/companies/reports/summary.html:339
 #: entrak/templates/report.html:65
 msgid "Weekdays"
 msgstr ""
 
-#: companies/templates/companies/reports/popup_report.html:24
-#: companies/templates/companies/reports/share_report.html:42
+#: companies/templates/companies/reports/popup_report.html:21
+#: companies/templates/companies/reports/share_report.html:52
 msgid "Weekends and Holidays"
 msgstr ""
 
-#: companies/templates/companies/reports/popup_report.html:25
-#: companies/templates/companies/reports/share_report.html:43
+#: companies/templates/companies/reports/popup_report.html:22
+#: companies/templates/companies/reports/share_report.html:53
 #: companies/templates/companies/reports/summary.html:102
 #: companies/templates/companies/reports/summary.html:106
-#: companies/templates/companies/reports/summary.html:370
+#: companies/templates/companies/reports/summary.html:369
 #: entrak/templates/report.html:64 entrak/templates/report.html.py:68
 msgid "Overnight"
 msgstr ""
@@ -1420,9 +1424,9 @@ msgid "Daytime"
 msgstr ""
 
 #: companies/templates/companies/reports/summary.html:107
-#: entrak/templates/alert_settings.html:834
-#: entrak/templates/alert_settings.html:836
-#: entrak/templates/alert_settings.html:838 entrak/templates/report.html:69
+#: entrak/templates/alert_settings.html:840
+#: entrak/templates/alert_settings.html:842
+#: entrak/templates/alert_settings.html:844 entrak/templates/report.html:69
 msgid "hh:mmA"
 msgstr ""
 
@@ -1436,146 +1440,141 @@ msgstr ""
 msgid "View Report"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:287
-#: entrak/templates/report.html:702
-msgid "Download Data"
-msgstr ""
-
-#: companies/templates/companies/reports/summary.html:346
+#: companies/templates/companies/reports/summary.html:345
 msgid "Average weekdays cost"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:376
+#: companies/templates/companies/reports/summary.html:375
 msgid "Average overnight cost"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:405
+#: companies/templates/companies/reports/summary.html:404
 msgid "View Full Report"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:419
+#: companies/templates/companies/reports/summary.html:418
 #: entrak/templates/report.html:833
 msgid "Here you can download your energy use data to files in .csv format."
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:420
+#: companies/templates/companies/reports/summary.html:419
 #: entrak/templates/report.html:834
 msgid ""
 "Simply select the start date, end date and the units that you would like to "
 "obtain from the system."
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:421
+#: companies/templates/companies/reports/summary.html:420
 #: entrak/templates/report.html:835
 msgid "Choose your date"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:425
+#: companies/templates/companies/reports/summary.html:424
 #: entrak/templates/report.html:806 entrak/templates/report.html.py:839
 msgid "Choose your start date"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:429
+#: companies/templates/companies/reports/summary.html:428
 #: entrak/templates/report.html:810 entrak/templates/report.html.py:843
 msgid "Choose your end date"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:435
+#: companies/templates/companies/reports/summary.html:434
 #: entrak/templates/report.html:849
 msgid "Select your units"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:441
+#: companies/templates/companies/reports/summary.html:440
 #: entrak/templates/report.html:856
 msgid "Download your file"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:444
+#: companies/templates/companies/reports/summary.html:443
 #: entrak/templates/report.html:786 entrak/templates/report.html.py:819
 #: entrak/templates/report.html:860
 msgid "Energy data - kWh"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:447
+#: companies/templates/companies/reports/summary.html:446
 #: entrak/templates/report.html:789 entrak/templates/report.html.py:822
 #: entrak/templates/report.html:863
 msgid "To:"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:450
+#: companies/templates/companies/reports/summary.html:449
 #: entrak/templates/report.html:866
 msgid "Download File"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:527
+#: companies/templates/companies/reports/summary.html:526
 msgid "Week Total"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:530
+#: companies/templates/companies/reports/summary.html:529
 msgid "Month Total"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:533
+#: companies/templates/companies/reports/summary.html:532
 msgid "Quarter Total"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:536
+#: companies/templates/companies/reports/summary.html:535
 msgid "Year Total"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:545
+#: companies/templates/companies/reports/summary.html:544
 msgid "Compared to last week"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:548
+#: companies/templates/companies/reports/summary.html:547
 msgid "Compared to last month"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:551
+#: companies/templates/companies/reports/summary.html:550
 msgid "Compared to last quarter"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:554
+#: companies/templates/companies/reports/summary.html:553
 msgid "Compared to last year"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:563
+#: companies/templates/companies/reports/summary.html:562
 msgid "Total week cost"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:566
+#: companies/templates/companies/reports/summary.html:565
 msgid "Total month cost"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:569
+#: companies/templates/companies/reports/summary.html:568
 msgid "Total quarter cost"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:572
+#: companies/templates/companies/reports/summary.html:571
 msgid "Total year cost"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:587
+#: companies/templates/companies/reports/summary.html:586
 msgid "Loading report..."
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:995
+#: companies/templates/companies/reports/summary.html:994
 msgid "Week"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:996
+#: companies/templates/companies/reports/summary.html:995
 msgid "Month"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:997
+#: companies/templates/companies/reports/summary.html:996
 msgid "Quarter"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:998
+#: companies/templates/companies/reports/summary.html:997
 msgid "Year"
 msgstr ""
 
-#: companies/templates/companies/reports/summary.html:999
+#: companies/templates/companies/reports/summary.html:998
 msgid "Match my bills"
 msgstr ""
 
@@ -1615,11 +1614,11 @@ msgstr ""
 msgid "Traditional Chinese"
 msgstr ""
 
-#: entrak/settings_views.py:194
+#: entrak/settings_views.py:201
 msgid "Change password failed, old password does not match"
 msgstr ""
 
-#: entrak/settings_views.py:208
+#: entrak/settings_views.py:215
 msgid "Username has already been taken"
 msgstr ""
 
@@ -1668,106 +1667,106 @@ msgid ""
 "    "
 msgstr ""
 
-#: entrak/templates/alert_settings.html:85
+#: entrak/templates/alert_settings.html:89
 msgid "Resolved at"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:174
-#: entrak/templates/alert_settings.html:268
+#: entrak/templates/alert_settings.html:178
+#: entrak/templates/alert_settings.html:272
 msgid "alert_options_all"
 msgstr "All"
 
-#: entrak/templates/alert_settings.html:176
-#: entrak/templates/alert_settings.html:269
+#: entrak/templates/alert_settings.html:180
+#: entrak/templates/alert_settings.html:273
 msgid "alert_options_weekdays"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:178
-#: entrak/templates/alert_settings.html:270
+#: entrak/templates/alert_settings.html:182
+#: entrak/templates/alert_settings.html:274
 msgid "alert_options_weekends"
 msgstr "Weekends"
 
-#: entrak/templates/alert_settings.html:799
-#: entrak/templates/alert_settings.html:840
+#: entrak/templates/alert_settings.html:803
+#: entrak/templates/alert_settings.html:846
 msgid "DD MMM YYYY, ddd"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:800 entrak/templates/graph.html:146
+#: entrak/templates/alert_settings.html:804 entrak/templates/graph.html:146
 #: printers/templates/system/printers/graph.html:146
 msgid "hh:mma"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:805
+#: entrak/templates/alert_settings.html:811
 msgid " energy use reached"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:812
+#: entrak/templates/alert_settings.html:818
 msgid "alert_history_used"
 msgstr " used"
 
-#: entrak/templates/alert_settings.html:830
+#: entrak/templates/alert_settings.html:836
 msgid "alert_history_on"
 msgstr "on "
 
-#: entrak/templates/alert_settings.html:844
+#: entrak/templates/alert_settings.html:850
 msgid "hh:mmA DD MMM YYYY,ddd"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:956
+#: entrak/templates/alert_settings.html:962
 msgid "Alert History"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:957
+#: entrak/templates/alert_settings.html:963
 msgid "Create/Manage Alerts"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:964
+#: entrak/templates/alert_settings.html:970
 msgid "Date"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:965
+#: entrak/templates/alert_settings.html:971
 msgid "End-Source"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:966
+#: entrak/templates/alert_settings.html:972
 msgid "Alert Issue"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:968
+#: entrak/templates/alert_settings.html:974
 msgid "Alert Status"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:969
+#: entrak/templates/alert_settings.html:975
 msgid "Unresolved"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:969
+#: entrak/templates/alert_settings.html:975
 msgid "Resolved"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:977
+#: entrak/templates/alert_settings.html:983
 msgid "Choose Alert Type:"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:984
+#: entrak/templates/alert_settings.html:990
 msgid ""
 "Peak Demand Alert will notify you immediately when your energy consumption "
 "(in kVA) is about to reach your peak level (see your utility bill for this "
 "peak level). This can help you avoid peak demand surcharge."
 msgstr ""
 
-#: entrak/templates/alert_settings.html:985
-#: entrak/templates/alert_settings.html:996
-#: entrak/templates/alert_settings.html:1007
+#: entrak/templates/alert_settings.html:991
+#: entrak/templates/alert_settings.html:1002
+#: entrak/templates/alert_settings.html:1013
 msgid "Close"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:988
-#: entrak/templates/alert_settings.html:1017
+#: entrak/templates/alert_settings.html:994
+#: entrak/templates/alert_settings.html:1023
 msgid "Create Peak Demand Alert"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:995
+#: entrak/templates/alert_settings.html:1001
 msgid ""
 "Summary Alert will notify you when your total energy consumption over your "
 "selected time period(s) is higher than average (calculated over the last "
@@ -1776,12 +1775,12 @@ msgid ""
 "the end of the selected time period(s)."
 msgstr ""
 
-#: entrak/templates/alert_settings.html:999
-#: entrak/templates/alert_settings.html:1040
+#: entrak/templates/alert_settings.html:1005
+#: entrak/templates/alert_settings.html:1046
 msgid "Create Summary Alert"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:1006
+#: entrak/templates/alert_settings.html:1012
 msgid ""
 "Instance Alert will notify you immediately when your energy consumption "
 "(every 5 minutes intervals) over your selected time period(s) is higher than "
@@ -1789,61 +1788,61 @@ msgid ""
 "and respond to energy abnormalities for critical equipment/ areas."
 msgstr ""
 
-#: entrak/templates/alert_settings.html:1010
-#: entrak/templates/alert_settings.html:1065
+#: entrak/templates/alert_settings.html:1016
+#: entrak/templates/alert_settings.html:1071
 msgid "Create Instance Alert"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:1023
-#: entrak/templates/alert_settings.html:1046
-#: entrak/templates/alert_settings.html:1071
+#: entrak/templates/alert_settings.html:1029
+#: entrak/templates/alert_settings.html:1052
+#: entrak/templates/alert_settings.html:1077
 msgid "End-Use"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:1025
+#: entrak/templates/alert_settings.html:1031
 msgid "Threshold"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:1026
-#: entrak/templates/alert_settings.html:1051
-#: entrak/templates/alert_settings.html:1076
+#: entrak/templates/alert_settings.html:1032
+#: entrak/templates/alert_settings.html:1057
+#: entrak/templates/alert_settings.html:1082
 msgid "Send to"
-msgstr ""
-
-#: entrak/templates/alert_settings.html:1027
-#: entrak/templates/alert_settings.html:1052
-#: entrak/templates/alert_settings.html:1077
-msgid "Date Created"
-msgstr ""
-
-#: entrak/templates/alert_settings.html:1028
-#: entrak/templates/alert_settings.html:1053
-#: entrak/templates/alert_settings.html:1078
-msgid "Action"
 msgstr ""
 
 #: entrak/templates/alert_settings.html:1033
 #: entrak/templates/alert_settings.html:1058
 #: entrak/templates/alert_settings.html:1083
+msgid "Date Created"
+msgstr ""
+
+#: entrak/templates/alert_settings.html:1034
+#: entrak/templates/alert_settings.html:1059
+#: entrak/templates/alert_settings.html:1084
+msgid "Action"
+msgstr ""
+
+#: entrak/templates/alert_settings.html:1039
+#: entrak/templates/alert_settings.html:1064
+#: entrak/templates/alert_settings.html:1089
 msgid "Back to Top"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:1048
-#: entrak/templates/alert_settings.html:1073
+#: entrak/templates/alert_settings.html:1054
+#: entrak/templates/alert_settings.html:1079
 msgid "Time from"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:1049
-#: entrak/templates/alert_settings.html:1074
+#: entrak/templates/alert_settings.html:1055
+#: entrak/templates/alert_settings.html:1080
 msgid "Time to"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:1050
-#: entrak/templates/alert_settings.html:1075
+#: entrak/templates/alert_settings.html:1056
+#: entrak/templates/alert_settings.html:1081
 msgid "alert_weekdays"
 msgstr ""
 
-#: entrak/templates/alert_settings.html:1093
+#: entrak/templates/alert_settings.html:1099
 msgid "Are you sure you want to remove?"
 msgstr ""
 
@@ -2621,31 +2620,31 @@ msgstr ""
 msgid "Ranking"
 msgstr ""
 
-#: entrak/templates/page_base.html:202
+#: entrak/templates/page_base.html:204
 msgid "Reports"
 msgstr ""
 
-#: entrak/templates/page_base.html:205
+#: entrak/templates/page_base.html:208
 msgid "Display"
 msgstr ""
 
-#: entrak/templates/page_base.html:217
+#: entrak/templates/page_base.html:223
 msgid "Alert"
 msgstr ""
 
-#: entrak/templates/page_base.html:221
+#: entrak/templates/page_base.html:227
 msgid "Paper"
 msgstr ""
 
-#: entrak/templates/page_base.html:225
+#: entrak/templates/page_base.html:231
 msgid "Settings"
 msgstr ""
 
-#: entrak/templates/page_base.html:228
+#: entrak/templates/page_base.html:234
 msgid "Logout"
 msgstr ""
 
-#: entrak/templates/page_base.html:288
+#: entrak/templates/page_base.html:294
 msgid "You are viewing:"
 msgstr ""
 
@@ -2875,6 +2874,10 @@ msgstr ""
 
 #: entrak/templates/report.html:702
 msgid "Customize Report"
+msgstr ""
+
+#: entrak/templates/report.html:702
+msgid "Download Data"
 msgstr ""
 
 #: entrak/templates/report.html:709
