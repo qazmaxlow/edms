@@ -202,7 +202,7 @@ def generate_weekday_weekend_overnight_details(system, start_date, end_date, int
         'average_cost': parent_current_average_cost,
         'diff_last_interval': CompareTplHepler(parent_diff_last_interval),
         'diff_last_year': CompareTplHepler(parent_diff_last_year),
-        #'higest_cost_diff_system': higest_cost_diff_system,
+        #'highest_cost_diff_system': highest_cost_diff_system,
     }
 
     return {"parent": parent, "details": sub_system_stats}
@@ -899,17 +899,17 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
         # Get the highest date systems usage
         if highest_weekday_date:
-            higest_weekday_usage = generate_weekday_weekend_overnight_details(system, highest_weekday_date, highest_weekday_date + relativedelta(days=1), m["global_interval_delta"], m["global_sub_systems"], TYPE_COLORS, 'weekday')
+            highest_weekday_usage = generate_weekday_weekend_overnight_details(system, highest_weekday_date, highest_weekday_date + relativedelta(days=1), m["global_interval_delta"], m["global_sub_systems"], TYPE_COLORS, 'weekday')
         else:
             highest_date_weekday_system = None
 
         if highest_weekend_date:
-            higest_weekend_usage = generate_weekday_weekend_overnight_details(system, highest_weekend_date, highest_weekend_date + relativedelta(days=1), m["global_interval_delta"], m["global_sub_systems"], TYPE_COLORS, 'weekend')
+            highest_weekend_usage = generate_weekday_weekend_overnight_details(system, highest_weekend_date, highest_weekend_date + relativedelta(days=1), m["global_interval_delta"], m["global_sub_systems"], TYPE_COLORS, 'weekend')
         else:
             highest_date_weekend_system = None
 
         if highest_overnight_date:
-            higest_overnight_usage = generate_weekday_weekend_overnight_details(system, highest_overnight_date, highest_overnight_date + relativedelta(days=1), m["global_interval_delta"], m["global_sub_systems"], TYPE_COLORS, 'overnight')
+            highest_overnight_usage = generate_weekday_weekend_overnight_details(system, highest_overnight_date, highest_overnight_date + relativedelta(days=1), m["global_interval_delta"], m["global_sub_systems"], TYPE_COLORS, 'overnight')
         else:
             highest_date_overnight_system = None
 
@@ -921,26 +921,26 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         overnight_diff_system = None
 
         for avg in m['s3_weekday']['details']:
-            for higest in higest_weekday_usage['details']:
-                if avg['name'] == higest['name'] and higest['average_cost'] - avg['average_cost'] > weekday_diff:
-                    weekday_diff = higest['average_cost'] - avg['average_cost']
-                    highest_date_weekday_system = higest['name']
+            for highest in highest_weekday_usage['details']:
+                if avg['name'] == highest['name'] and highest['average_cost'] and avg['average_cost'] and highest['average_cost'] - avg['average_cost'] > weekday_diff:
+                    weekday_diff = highest['average_cost'] - avg['average_cost']
+                    highest_date_weekday_system = highest['name']
 
         for avg in m['s3_weekend']['details']:
-            for higest in higest_weekend_usage['details']:
-                if avg['name'] == higest['name'] and higest['average_cost'] - avg['average_cost'] > weekend_diff:
-                    weekend_diff = higest['average_cost'] - avg['average_cost']
-                    highest_date_weekend_system = higest['name']
+            for highest in highest_weekend_usage['details']:
+                if avg['name'] == highest['name'] and highest['average_cost'] and avg['average_cost'] and highest['average_cost'] - avg['average_cost'] > weekend_diff:
+                    weekend_diff = highest['average_cost'] - avg['average_cost']
+                    highest_date_weekend_system = highest['name']
 
         for avg in m['s3_overnight']['details']:
-            for higest in higest_overnight_usage['details']:
-                if avg['name'] == higest['name'] and higest['average_cost'] - avg['average_cost'] > overnight_diff:
-                    overnight_diff = higest['average_cost'] - avg['average_cost']
-                    highest_date_overnight_system = higest['name']
+            for highest in highest_overnight_usage['details']:
+                if avg['name'] == highest['name'] and highest['average_cost'] and avg['average_cost'] and highest['average_cost'] - avg['average_cost'] > overnight_diff:
+                    overnight_diff = highest['average_cost'] - avg['average_cost']
+                    highest_date_overnight_system = highest['name']
 
-        m['s3_weekday']['parent']['higest_date_higest_diff_system'] = highest_date_weekday_system
-        m['s3_weekend']['parent']['higest_date_higest_diff_system'] = highest_date_weekend_system
-        m['s3_overnight']['parent']['higest_date_higest_diff_system'] = highest_date_overnight_system
+        m['s3_weekday']['parent']['highest_date_highest_diff_system'] = highest_date_weekday_system
+        m['s3_weekend']['parent']['highest_date_highest_diff_system'] = highest_date_weekend_system
+        m['s3_overnight']['parent']['highest_date_highest_diff_system'] = highest_date_overnight_system
 
         # m['s3_overnight'] = generate_weekday_weekend_details(system, start_date, end_date, m["global_interval_delta"], m["global_sub_systems"], TYPE_COLORS, 'weekday')
 
