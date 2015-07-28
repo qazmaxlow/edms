@@ -4,6 +4,7 @@ from rest_framework import routers
 
 from . import audit_views
 from . import report_views
+from . import report_revamp_views
 from . import dashboard_views
 from . import apis
 from . import measure_views, export_views, report_schedule_views
@@ -18,12 +19,17 @@ urlpatterns = patterns(
     url('^audit/trails/$', audit_views.CompanyAuditTrailsListView.as_view()),
     url(r'^apis/', include(router.urls)),
     url(r'^report/$', report_views.report_view, name='companies.report'),
+    url(r'^report/revamp$', report_revamp_views.report_view, name='companies.report_revamp'),
     url(r'^dashboard/$', dashboard_views.dashboard_view, name='companies.dashboard'),
     url(r'^report/summary/ajax/$', report_views.summary_ajax, name='companies.reports.summary.ajax'),
+    url(r'^report/revamp/summary/ajax/$', report_revamp_views.summary_ajax, name='companies.report_revamp.summary.ajax'),
     url(r'^report/popup-report/$', report_views.popup_report_view, name='companies.reports.popup-report.custom-dates'),
+    url(r'^report/revamp/popup-report/$', report_revamp_views.popup_report_view, name='companies.report_revamp.popup-report.custom-dates'),
     url(r'^report/popup-report/(?P<year>\d{4})/(?P<month>[a-z]{3})/$', report_views.popup_report_view, name='companies.reports.popup-report'),
     url(r'^report/popup-report/download/$', report_views.download_popup_report_view, name='companies.reports.popup-report.download'),
     url(r'^report/share-report/download/$', report_views.download_share_report_view, name='companies.reports.share-report.download'),
+    url(r'^report/revamp/popup-report/download/$', report_revamp_views.download_popup_report_view, name='companies.report_revamp.popup-report.download'),
+    url(r'^report/revamp/share-report/download/$', report_revamp_views.download_share_report_view, name='companies.report_revamp.share-report.download'),
     url(r'^measures/daily/$', measure_views.DailyMeasureList.as_view(), name='companies.measures.daily'),
     url(r'^measures/up-till-now/$', measure_views.EnergyUsedList.as_view(), name='companies.measures.up-till-now'),
     url(r'^measures/total/$', measure_views.TotalDetail.as_view(), name='companies.measures.total'),
@@ -49,4 +55,6 @@ urlpatterns = patterns(
     url(r'^users/authenticated-user/$', user_views.CompanyAuthenticatedUserView.as_view(), name='companies.users.authenticated-user'),
     url(r'^report/share-report/$', report_views.share_popup_report_view, name='companies.reports.share-report.custom-dates'),
     url(r'^report/share-report/(?P<year>\d{4})/(?P<month>[a-z]{3})/$', report_views.share_popup_report_view, name='companies.reports.share-report'),
+    url(r'^report/revamp/share-report/$', report_revamp_views.share_popup_report_view, name='companies.report_revamp.share-report.custom-dates'),
+    url(r'^report/revamp/share-report/(?P<year>\d{4})/(?P<month>[a-z]{3})/$', report_revamp_views.share_popup_report_view, name='companies.report_revamp.share-report'),
 )

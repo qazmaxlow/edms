@@ -76,7 +76,7 @@ body {
     width: 160px;
     color: white;
     text-align: left;
-    padding-left: 10px;
+    padding-left: 15px;
     padding-right: 5px;
     font-weight: 600;
     font-size: 0.9em;
@@ -251,9 +251,8 @@ body {-webkit-print-color-adjust: exact;}
     background-color: #68C0D4;
     color: white;
     font-weight: 600;
-    padding: 2px;
     height: 30px;
-    padding: 5px 0;
+    padding: 5px 15px;
 }
 
 /* hack */
@@ -315,6 +314,12 @@ body {-webkit-print-color-adjust: exact;}
 .less-usage {
     margin: 0;
     color: #81d51d;
+    font-weight: 600;
+}
+
+.neutral-usage {
+    margin: 0;
+    color: #354960;
     font-weight: 600;
 }
 
@@ -537,8 +542,8 @@ body {-webkit-print-color-adjust: exact;}
 .basic-info-col .basic-info-text-container {
     display: inline-block;
     height: 70px;
-    margin-top: 30px;
-    padding-left: 14px;
+    margin-top: 10px;
+    padding-left: 10px;
     vertical-align: middle;
 }
 
@@ -597,6 +602,9 @@ body {-webkit-print-color-adjust: exact;}
 }
 .negative-saving .basic-info-col span {
     color: #C96344;
+}
+.neutral-saving .basic-info-col span {
+    color: #354960;
 }
 .basic-info-col .basic-info-col-unit{
     font-size: 13pt;
@@ -795,7 +803,7 @@ body {-webkit-print-color-adjust: exact;}
 
 .usage-type-name{
     text-align: left;
-    padding-left: 10px;
+    padding-left: 15px;
     padding-right: 5px;
     width: 160px !important;
     color: #FFF;

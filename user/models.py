@@ -88,6 +88,12 @@ class EntrakUser(AbstractUser):
         return self.role_level >= USER_ROLE_ADMIN_LEVEL
 
 
+    def save(self, *args, **kwargs):
+        self.username = self.username.lower()
+        self.email = self.email.lower()
+        super(EntrakUser, self).save( *args, **kwargs) # Call the "real" save() method.
+
+
     def validate_uid_and_ucode(self, uid, ucode, days=3):
 
         try:

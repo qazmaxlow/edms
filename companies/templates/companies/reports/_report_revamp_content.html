@@ -1,0 +1,958 @@
+{% load i18n %}
+{% load entrak_extras %}
+{% load static %}
+{% load humanize %}
+
+
+    <div>
+    <div id="tTwo" ng-controller="ReportController">
+
+{% load l10n %}
+<div class="row report-head">
+        <div class="system-name-popup">{{ company_system.fullname }}</div>
+        <div class="report-name-popup text-center">{% localize on %}{{ report_date_text }}{% endlocalize %}</div>
+</div>
+
+<div id="report_key_statistics" class="page-break-after">
+    <div class="row report-component-header-popup">
+      <div class="col-xs-12 section-title">
+        {%blocktrans%}What are our key statistics for this {{ report_type_name }}?{%endblocktrans%}
+      </div>
+    </div>
+
+    <div class="row top-content {{ s1_css_class_energy_saving }}">
+        <div id="current-usage-col" class="col-xs-4 basic-info-col">
+            <h4>{% trans "How much energy<br>did we use?" %}</h4>
+            <hr class="current-usage-separator-dark-grey">
+            <div>
+                <img src="{% static 'images/report/lightning-energy.png' %}">
+                <div class="basic-info-text-container">
+                    <span id="current-energy-usage">{{ s1_total_kwh|floatformat:"0"|intcomma }}</span><span class="basic-info-col-unit"> kWh</span>
+                    <br>
+                    <span class="basic-info-col-subtext">{% trans "of electricity" %}</span>
+                </div>
+            </div>
+            <hr class="current-usage-separator-dark-grey">
+            <div>
+                <img src="{% static 'images/report/factory-co2.png' %}">
+                <div class="basic-info-text-container">
+                    <span id="current-co2-usage">{{ s1_total_co2|floatformat:"0"|intcomma }} {% trans "tons" %}</span><span class="basic-info-col-unit"> {% trans "CO<sub>2</sub>" %}</span>
+                    <br>
+                    <span class="basic-info-col-subtext">{% trans "emitted" %}</span>
+                </div>
+            </div>
+            <hr class="current-usage-separator-dark-grey">
+            <div class="bottom-margin-20">
+                <img src="{% static 'images/report/piggy.png' %}">
+                <div class="basic-info-text-container">
+                    <span id="current-money-usage">${{ s1_total_money|floatformat:"0"|intcomma }}</span>
+                    <br>
+                    <span class="basic-info-col-subtext">{% trans "in energy costs" %}</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="save-usage-col" class="col-xs-4 basic-info-col">
+            <h4>{% trans "How much energy<br>did we save?" %}
+                <span class="basic-info-col-subtext">{% trans "(year-on-year)" %}</span>
+            </h4>
+            <hr class="current-usage-separator-dark-grey">
+            <div>
+                <img src="{% static 'images/report/lightning-energy.png' %}">
+                <div class="basic-info-text-container">
+                  {% if s1_last_year_data_exist != True %}
+                    <span id="save-energy-usage">N/A</span>
+                  {% else %}
+                    {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                      {% if s1_is_saving  %}
+                      <span class="basic-info-col-subtext">{% trans "less" %}</span>
+                      {% else %}
+                      <span class="basic-info-col-subtext">{% trans "more" %}</span>
+                      {% endif %}
+                      <span id="save-energy-usage">{{ s1_diff_kwh|stringformat:".0f"|intcomma }}%</span>
+                    {% else %}
+                      <span id="save-energy-usage">{{ s1_diff_kwh|stringformat:".0f"|intcomma }}%</span>
+                      <br>
+                      {% if s1_is_saving %}
+                      <span class="basic-info-col-subtext">{% trans "less" %}</span>
+                      {% else %}
+                      <span class="basic-info-col-subtext">{% trans "more" %}</span>
+                      {% endif %}
+                    {% endifequal %}
+                   {% endif %}
+                </div>
+            </div>
+            <hr class="current-usage-separator-dark-grey">
+            <div>
+                <img src="{% static 'images/report/factory-co2.png' %}">
+                <div class="basic-info-text-container">
+                  {% if s1_last_year_data_exist != True %}
+                    <span id="save-co2-usage">N/A</span>
+                  {% else %}
+
+                    {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                      {% if s1_is_saving %}
+                      <span class="basic-info-col-subtext">{% trans "less" %}</span>
+                      {% else %}
+                      <span class="basic-info-col-subtext">{% trans "more" %}</span>
+                      {% endif %}
+                      <span id="save-co2-usage">{{ s1_diff_co2|stringformat:".0f"|intcomma }} {% trans "tons" %}</span><span class="basic-info-col-unit"> {% trans "CO<sub>2</sub>" %}</span>
+                    {% else %}
+                      <span id="save-co2-usage">{{ s1_diff_co2|stringformat:".0f"|intcomma }} {% trans "tons" %}</span><span class="basic-info-col-unit"> {% trans "CO<sub>2</sub>" %}</span>
+                      <br>
+                      {% if s1_is_saving %}
+                      <span class="basic-info-col-subtext">{% trans "less" %}</span>
+                      {% else %}
+                      <span class="basic-info-col-subtext">{% trans "more" %}</span>
+                      {% endif %}
+                    {% endifequal %}
+                  {% endif %}
+                </div>
+            </div>
+            <hr class="current-usage-separator-dark-grey">
+            <div class="bottom-margin-20">
+                <img src="{% static 'images/report/piggy.png' %}">
+                <div class="basic-info-text-container">
+                  {% if s1_last_year_data_exist != True %}
+                    <span id="save-money-usage">N/A</span>
+                  {% else %}
+                    {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                      {% if s1_is_saving %}
+                      <span class="basic-info-col-subtext">{% trans "less" %}</span>
+                      {% else %}
+                      <span class="basic-info-col-subtext">{% trans "more" %}</span>
+                      {% endif %}
+                      <span id="save-money-usage">${{ s1_diff_money|stringformat:".0f"|intcomma }}</span>
+                    {% else %}
+                      <span id="save-money-usage">${{ s1_diff_money|stringformat:".0f"|intcomma }}</span>
+                      <br>
+                      {% if s1_is_saving %}
+                      <span class="basic-info-col-subtext">{% trans "less" %}</span>
+                      {% else %}
+                      <span class="basic-info-col-subtext">{% trans "more" %}</span>
+                      {% endif %}
+                    {% endifequal %}
+                  {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div id="impact-col" class="col-xs-4 basic-info-col">
+            <h4>{% trans "How did our<br>carbon footprint change?" %}</h4>
+            <hr class="current-usage-separator-dark-grey">
+            <div>
+                <img src="{% static 'images/report/car.png' %}">
+                <div class="basic-info-text-container">
+                  {% if s1_last_year_data_exist != True %}
+                    <span id="car-impact">N/A</span>
+                  {% else %}
+                  <span id="car-impact">
+                    {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                      {% if s1_is_saving %}
+                         {% trans "reduce" %}
+                      {% else %}
+                         {% trans "increase" %}
+                      {% endif %}
+                    {% endifequal %}
+                    {{ s1_co2_in_car|floatformat:"0"|intcomma }}
+                    {% trans "cars" %}</span><br>
+                    <span id="car-impact-subtext" class="basic-info-col-subtext">
+                      {% if s1_is_saving %}
+                      {% trans "off the road for a month" %}
+                      {% else %}
+                      {% trans "on the road for a month" %}
+                      {% endif %}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <hr class="current-usage-separator-dark-grey">
+            <div>
+                <img src="{% static 'images/report/trees.png' %}">
+                <div class="basic-info-text-container">
+                  {% if s1_last_year_data_exist != True %}
+                    <span id="forest-impact">N/A</span>
+                  {% else %}
+                    {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                    <span id="forest-impact-subtext" class="basic-info-col-subtext">
+                      {% if s1_is_saving %}
+                      {% trans "of rainforest protected" %}
+                      {% else %}
+                      {% trans "of rainforest cut down" %}
+                      {% endif %}
+                    </span>
+                    <span id="forest-impact">{{ s1_co2_in_forest|floatformat:"0"|intcomma }}{% trans "m<sup>2</sup>" %}</span>
+                    {% else %}
+                    <span id="forest-impact">{{ s1_co2_in_forest|floatformat:"0"|intcomma }} m<sup>2</sup></span><br>
+                    <span id="forest-impact-subtext" class="basic-info-col-subtext">
+                      {% if s1_is_saving %}
+                      of rainforest protected
+                      {% else %}
+                      of rainforest cut down
+                      {% endif %}
+                    </span>
+                    {% endifequal %}
+                  {% endif %}
+                </div>
+            </div>
+            <hr class="current-usage-separator-dark-grey">
+            <div class="bottom-margin-20">
+                <img src="{% static 'images/report/ac.png' %}">
+                <div class="basic-info-text-container">
+                  {% if s1_last_year_data_exist != True %}
+                    <span id="panda-impact">N/A</span>
+                  {% else %}
+                    <span id="panda-impact">{{ s1_kwh_in_aircons|floatformat:"0"|intcomma }}{% trans " aircons" %}</span>
+                    <span id="panda-impact-subtext" class="basic-info-col-subtext">
+                      {% if s1_is_saving %}
+                      {% trans "turned off for one day" %}
+                      {% else %}
+                      {% trans "turned on for one day" %}
+                      {% endif %}
+                    </span>
+                  {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row detail-container"><h4>{% trans "How did that break down by usage type?" %}</h4></div>
+      <div class="row detail-container bottom-border-2 top-border-2{% if transformed_datas|length > 6 %} page-break-after{% endif %}">
+        <div class="col-xs-8 x-padding-5-0 break-down-bar">
+              <table class="transformed-bar-chart">
+                {% for td in s1_sub_system_stats %}
+                <tr class="transformed-row-bg">
+                  <td class="transformed-name" style="background-color:{{ td.color }};">{{ td.name }}</td>
+                  <td>
+                    <div class="transformed-bar" style="width:{{ td.percent_base_on_max }}%; background-image: linear-gradient(left, #eeeeee 0%, {{ td.color }} 100%); background: -moz-linear-gradient(left, #eeeeee 0%, {{ td.color }} 100%); background-image: -webkit-linear-gradient(left, #eeeeee 0%, {{ td.color }} 100%); background: -ms-linear-gradient(left, #eeeeee 0%, {{ td.color }} 100%); background-image: -o-linear-gradient(left, #eeeeee 0%, {{ td.color }} 100%);"></div>
+                    </div>
+                  </td>
+                  <td class="transformed-label" style="color:{{ td.color }};">
+                    {{ td.total_kwh|floatformat:"0"|intcomma }} kWh
+                  </td>
+                </tr>
+                {% endfor %}
+              </table>
+        </div>
+        <div class="col-xs-4">
+          <div kendo-chart k-options="transformedPieOptions" ></div>
+        </div>
+    </div>
+    <div class="row detail-container bottom-border-2">
+        <div class="col-xs-12 x-padding-5">
+        <div>
+        <table>
+          <thead>
+            <tr class="detail-title">
+                <th>
+                    {% trans "Usage Type" %}</th><th>
+                    {% trans "Total Energy (kWh)" %}</th><th>
+                    {% trans "Total CO<sub>2</sub> (kg)" %}</th><th>
+                    {% trans "Total Cost ($)" %}</th>
+                <th>{% trans "&#37; Change in kWh" %}<br>{% trans "Year-on-year" %}</th>
+                <th>{% trans "Change in Cost" %}<br>{% trans "Year-on-year" %}</th>
+            </tr>
+          </thead>
+          <tbody id="key-statistic-sub-data">
+            {% for td in s1_sub_system_stats %}
+            <tr class="key-statistics-row ">
+              <td class="usage-type-name">{{ td.name }}</td><td>
+                {{ td.total_kwh|floatformat:"0"|intcomma }}</td><td>
+                {{ td.total_co2|floatformat:"0"|intcomma }}</td><td>
+                {{ td.total_money|floatformat:"0"|intcomma }}</td>
+              <td>{% if not td.diff_kwh == None %} {{ td.diff_kwh|floatformat:"0"|intcomma }} {% else %} N/A {% endif %}</td>
+              <td>{% if not td.diff_money == None %} {{ td.diff_money|floatformat:"0"|intcomma }} {% else %} N/A {% endif %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="page-break-after">
+<div id="report_compared_to_last" class="xreport-component page-break-after">
+    <div class="row report-component-header-popup">
+      <div class="col-xs-12 section-title">
+        {%blocktrans%}How much more / less did we use compared to last {{ report_type_name }}?{%endblocktrans%}
+      </div>
+    </div>
+
+    <div class="row top-content">
+      <div class="col-xs-12 text-center">
+        <h4 class="report-subtitle-text">{{ s2_barchart_compare_text }}</h4>
+        <div kendo-chart k-options="barOptions" ></div>
+      </div>
+    </div>
+
+    <div class="row detail-content">
+      <div class="col-xs-12">
+        <div kendo-chart k-options="lineOptions" ></div>
+        {% if report_type == 'quarter' or report_type == 'month' or report_type == 'custom' %}
+        <p class="x-padding-25">* {% trans "For comparison purpose, in this section, the graph of the earlier period has been shifted to match the current period by day of the week." %}</p>
+        {% endif %}
+      </div>
+
+    </div>
+    <div class="row sub-graph-container page-break-after">
+      {% for subgraph in s2_sub_system_compare_graphs %}
+      <div class="col-xs-6">
+        <div class="row">
+          <div class="col-xs-12 sub-graph-title" style="background-color: {{ subgraph.color }}">{{ subgraph.title }}</div>
+        </div>
+        <div class="row detail-content">
+          <div class="col-xs-12 left-padding-10">
+          <div kendo-chart k-options="subLineOptions"
+               k-title="{text: '{{ subgraph.chart_title }}', font: '1em Arial'}"
+
+               k-series="[
+            {
+                data: cgDatas[{{ forloop.counter }}].last,
+                name: '{{ s2_compare_last_name }}',
+                color: '#edba3c'
+            },
+            {
+                data: cgDatas[{{ forloop.counter }}].current,
+                name: '{{ s2_compare_current_name }}',
+                color: '#047fa1'
+            }
+        ]" ></div></div>
+
+        </div>
+      </div>
+      {% if forloop.counter|divisibleby:2 %}
+        </div><div class="row {% if forloop.counter|divisibleby:6 %}page-break-after{% endif %}">
+      {% endif %}
+
+      {% endfor %}
+
+    </div>
+</div>
+</div>
+
+<div id="weekday-info" class="page-break-after">
+    <div class="row report-component-header-popup">
+      <div class="col-xs-12">
+        {% trans "HOW MUCH ENERGY DID WE USE ON WEEKDAYS?" %}</div>
+    </div>
+
+      {% if report_type != 'quarter' and report_type != 'year' and report_type != 'custom' %}
+        <div class="row top-section border-bottom-5px">
+        <div class="col-xs-4 side-bar">
+          <div class="row item start">
+                <div class="col-xs-4">
+                  <img src="{% static 'images/reports/icon_money.png' %}">
+                </div>
+                <div class="col-xs-8 top-padding-18">
+                  <h3 class="used-money">${{ s3_weekday.parent.average_cost|floatformat:"0"|intcomma }}</h3>
+                  <p>{% trans "Average Weekday Energy Use" %}</p>
+                </div>
+          </div>
+          <div class="row item">
+                <div class="col-xs-4">
+                  <img src="{% static s3_weekday.parent.diff_last_interval.change_icon_path  %}">
+                </div>
+                <div class="col-xs-8 top-padding-18">
+                {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                  <p class="bottom-margin-4">{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  <h3 class="{{ s3_weekday.parent.diff_last_interval.change_css_class }}">
+                      {{ s3_weekday.parent.diff_last_interval.text_desc }}
+                  </h3>
+                {% else %}
+                  <h3 class="{{ s3_weekday.parent.diff_last_interval.change_css_class }}">
+                      {{ s3_weekday.parent.diff_last_interval.text_desc }}
+                  </h3>
+                  <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                {% endifequal %}
+                </div>
+          </div>
+          <div class="row item end">
+                <div class="col-xs-4">
+                  <img src="{% static s3_weekday.parent.diff_last_year.change_icon_path %}">
+                </div>
+                <div class="col-xs-8 top-padding-18">
+                {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                  <p class="bottom-margin-4">{% trans "Compared to same period last year" %}</p>
+                  <h3 class="{{ s3_weekday.parent.diff_last_year.change_css_class }}">
+                      {{ s3_weekday.parent.diff_last_year.text_desc }}
+                  </h3>
+                {% else %}
+                  <h3 class="{{ s3_weekday.parent.diff_last_year.change_css_class }}">
+                      {{ s3_weekday.parent.diff_last_year.text_desc }}
+                  </h3>
+                  <p>{% trans "Compared to same period last year" %}</p>
+                {% endifequal %}
+                </div>
+              </div>
+        </div>
+        <div class="col-xs-8 calendar-content">
+          <div class="row text-center border-bottom-2px">
+            <div class="col-xs-12 date-header">{{ report_start|date:"YEAR_MONTH_FORMAT" }}</div>
+          </div>
+          <div class="row text-center height-50 font-09em">
+            <div class="col-xs-4 border-right top-padding-6"><h9 class="better-mark">{% trans "Better" %}</h9><p>{% trans "than average weekday" %}</p></div>
+            <div class="col-xs-4 border-right top-padding-6"><h9 class="worse-mark">{% trans "Worse" %}</h9><p>{% trans "than average weekday" %}</p></div>
+            <div class="col-xs-4 top-padding-6"><h9 class="average-mark">{% trans "Average" %}</h9><p>{% trans "weekday" %}</p></div>
+          </div>
+
+          <div class="row"><div class="col-xs-12">
+        <div class="calendar-info-container calendar-width">
+            <div class='calendar-weekday-header'>
+                {% trans "<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>" %}
+            </div>
+            <div class="calendar-day-container"></div>
+            <div></div>
+        </div>
+          </div></div>
+
+          <div class="text-center calendar-width">
+            <div class="highest-weekday-enegry">
+              <h6 class="font-09em">{% trans "Highest Weekday Energy Use" %}</h6>
+              <h5 class="font-1em">${{ s3_highest_weekday_cost|floatformat:"0"|intcomma }}</h5>
+              <p class="font-09em">{{ s3_highest_weekday_date|date:"DATE_FORMAT" }}</p>
+            </div>
+            <div class="most-increase-from"><h6 class="font-09em">{% trans "Most of the increase was from" %}</h6>
+              <p class="font-1em">{{ s3_weekday.parent.higest_date_higest_diff_system }}</p></div>
+          </div>
+
+        </div>
+        </div>
+        {% else %}
+        <div class="row report-overall-header">
+          <div class="col-xs-12">{% trans "Overall" %}</div>
+        </div>
+        <div class="row report-detail-body">
+          <div class="col-xs-4">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static 'images/reports/icon_money.png'  %}">
+                </div>
+                <div class="col-xs-8 no-x-padding">
+                  <h3 class="used-money">${{ s3_weekday.parent.average_cost|floatformat:"0"|intcomma }}</h3>
+                  <p>{% trans "Average Weekday Energy Use" %}</p>
+                </div>
+              </div>
+          </div>
+          <div class="col-xs-4">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static s3_weekday.parent.diff_last_interval.change_icon_path  %}">
+                </div>
+                <div class="col-xs-8 no-x-padding">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                  <p class="bottom-margin-4">{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  <h3 class="{{ s3_weekday.parent.diff_last_interval.change_css_class }}">
+                    {{ s3_weekday.parent.diff_last_interval.text_desc }}
+                  </h3>
+                  {% else %}
+                  <h3 class="{{ s3_weekday.parent.diff_last_interval.change_css_class }}">
+                    {{ s3_weekday.parent.diff_last_interval.text_desc }}
+                  </h3>
+                  <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  {% endifequal %}
+                </div>
+              </div>
+          </div>
+          <div class="col-xs-4">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static s3_weekday.parent.diff_last_year.change_icon_path %}">
+                </div>
+                <div class="col-xs-8 no-x-padding">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                  <p class="bottom-margin-4">{% trans "Compared to same period last year" %}</p>
+                  <h3 class="{{ s3_weekday.parent.diff_last_year.change_css_class }}">
+                    {{ s3_weekday.parent.diff_last_year.text_desc }}
+                  </h3>
+                  {% else %}
+                  <h3 class="{{ s3_weekday.parent.diff_last_year.change_css_class }}">
+                    {{ s3_weekday.parent.diff_last_year.text_desc }}
+                  </h3>
+                  <p>{% trans "Compared to same period last year" %}</p>
+                  {% endifequal %}
+                </div>
+              </div>
+          </div>
+        </div>
+        {% endif %}
+
+    {% for wd in s3_weekday.details %}
+      <div class="row report-detail-header" style="background-color: {{ wd.color }};">
+        <div class="col-xs-12">
+        {{ wd.name }}
+        </div>
+      </div>
+      <div class="row report-detail-body {% if forloop.last %}content-footer bottom-border-2{% endif %} {% if forloop.counter == 6 %}page-break-after{% elif forloop.counter > 6 and forloop.counter|add:-6|divisibleby:9 %}page-break-after{% endif %}">
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <img src="{% static 'images/reports/icon_money.png'  %}">
+            </div>
+            <div class="col-xs-8 no-x-padding">
+              <h3 class="used-money">${{  wd.average_cost|floatformat:"0"|intcomma }}</h3>
+              <p>{% trans "Average Weekday Energy Use" %}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <img src="{% static wd.diff_last_interval.change_icon_path %}">
+            </div>
+            <div class="col-xs-8 no-x-padding">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                    <p class="bottom-margin-4">{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                    <h3 class="{{ wd.diff_last_interval.change_css_class }}">
+                        {{ wd.diff_last_interval.text_desc }}
+                    </h3>
+                  {% else %}
+                    <h3 class="{{ wd.diff_last_interval.change_css_class }}">
+                      {{ wd.diff_last_interval.text_desc }}
+                    </h3>
+                    <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  {% endifequal %}
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <img src="{% static wd.diff_last_year.change_icon_path %}">
+            </div>
+            <div class="col-xs-8 no-x-padding">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                <p class="bottom-margin-4">{% trans "Compared to same period last year" %}</p>
+                <h3 class="{{ wd.diff_last_year.change_css_class }}">
+                  {{ wd.diff_last_year.text_desc }}
+                </h3>
+                  {% else %}
+                <h3 class="{{ wd.diff_last_year.change_css_class }}">
+                  {{ wd.diff_last_year.text_desc }}
+                </h3>
+                <p>{% trans "Compared to same period last year" %}</p>
+                  {% endifequal %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+</div>
+
+<div id="weekend-info" class="xreport-component xcalendar-component page-break-after">
+    <div class="row report-component-header-popup">
+      <div class="col-xs-12">
+        {% trans "HOW MUCH ENERGY DID WE USE ON WEEKENDS AND HOLIDAYS?" %}</div>
+    </div>
+      {% if report_type != 'quarter' and report_type != 'year' and report_type != 'custom' %}
+        <div class="row top-section border-bottom-5px">
+        <div class="col-xs-4 side-bar">
+          <div class="row item start">
+                <div class="col-xs-4">
+                  <img src="{% static 'images/reports/icon_money.png'  %}">
+                </div>
+                <div class="col-xs-8 top-padding-18">
+                  <h3 class="used-money">${{ s3_weekend.parent.average_cost|floatformat:"0"|intcomma }}</h3>
+                  <p>{% trans "Average Weekend/Holiday Energy Use" %}</p>
+                </div>
+          </div>
+          <div class="row item">
+                <div class="col-xs-4">
+                  <img src="{% static s3_weekend.parent.diff_last_interval.change_icon_path  %}">
+                </div>
+                <div class="col-xs-8 top-padding-18">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                  <p class="bottom-margin-4">{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  <h3 class="{{ s3_weekend.parent.diff_last_interval.change_css_class }}">
+                    {{ s3_weekend.parent.diff_last_interval.text_desc }}
+                  </h3>
+                  {% else %}
+                  <h3 class="{{ s3_weekend.parent.diff_last_interval.change_css_class }}">
+                    {{ s3_weekend.parent.diff_last_interval.text_desc }}
+                  </h3>
+                  <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  {% endifequal %}
+                </div>
+          </div>
+          <div class="row item end">
+                <div class="col-xs-4">
+                  <img src="{% static s3_weekend.parent.diff_last_year.change_icon_path %}">
+                </div>
+                <div class="col-xs-8 top-padding-18">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                  <p class="bottom-margin-4">{% trans "Compared to same period last year" %}</p>
+                  <h3 class="{{ s3_weekend.parent.diff_last_year.change_css_class }}">
+                    {{ s3_weekend.parent.diff_last_year.text_desc }}
+                  </h3>
+                  {% else %}
+                  <h3 class="{{ s3_weekend.parent.diff_last_year.change_css_class }}">
+                    {{ s3_weekend.parent.diff_last_year.text_desc }}
+                  </h3>
+                  <p>{% trans "Compared to same period last year" %}</p>
+                  {% endifequal %}
+                </div>
+          </div>
+        </div>
+        <div class="col-xs-8 calendar-content">
+          <div class="row text-center border-bottom-2px">
+            <div class="col-xs-12 date-header">{{ report_start|date:"YEAR_MONTH_FORMAT" }}</div>
+          </div>
+          <div class="row text-center height-50 font-09em">
+            <div class="col-xs-4 top-padding-6 border-right"><h9 class="better-mark">{% trans "Better" %}</h9><p>{% trans "than average weekend" %}</p></div>
+            <div class="col-xs-4 top-padding-6 border-right"><h9 class="worse-mark">{% trans "Worse" %}</h9><p>{% trans "than average weekend" %}</p></div>
+            <div class="col-xs-4 top-padding-6"><h9 class="average-mark">{% trans "Average" %}</h9><p>{% trans "weekend" %}</p></div>
+          </div>
+
+          <div class="row"><div class="col-xs-12">
+        <div class="calendar-info-container calendar-width">
+            <div class='calendar-weekday-header'>
+                {% trans "<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>" %}
+            </div>
+            <div class="calendar-day-container"></div>
+            <div></div>
+        </div>
+          </div></div>
+
+          <div class="text-center calendar-width">
+            <div class="highest-weekday-enegry">
+
+              <h6 class="font-09em">{% trans "Highest Weekend/Holiday Energy Use" %}</h6>
+              <h5 class="font-1em">${{ s3_highest_weekend_cost|floatformat:"0"|intcomma }}</h5>
+              <p class="font-09em">{{ s3_highest_weekend_date|date:"DATE_FORMAT" }}</p>
+            </div>
+            <div class="most-increase-from"><h6 class="font-09em">{% trans "Most of the increase was from" %}</h6>
+              <p class="font-1em">{{ s3_weekend.parent.higest_date_higest_diff_system }}</p></div>
+          </div>
+
+        </div>
+        </div>
+        {% else %}
+        <div class="row report-overall-header">
+          <div class="col-xs-12">{% trans "Overall" %}</div>
+        </div>
+        <div class="row report-detail-body">
+        <div class="col-xs-4">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static 'images/reports/icon_money.png'  %}">
+                </div>
+                <div class="col-xs-8 no-x-padding">
+                  <h3 class="used-money">${{ s3_weekend.parent.average_cost|floatformat:"0"|intcomma }}</h3>
+                  <p>{% trans "Average Weekend/Holiday Energy Use" %}</p>
+                </div>
+              </div>
+          </div>
+          <div class="col-xs-4">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static s3_weekend.parent.diff_last_interval.change_icon_path  %}">
+                </div>
+                <div class="col-xs-8 no-x-padding">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                  <p class="bottom-margin-4">{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  <h3 class="{{ s3_weekend.parent.diff_last_interval.change_css_class }}">
+                    {{ s3_weekend.parent.diff_last_interval.text_desc }}
+                  </h3>
+                  {% else %}
+                  <h3 class="{{ s3_weekend.parent.diff_last_interval.change_css_class }}">
+                    {{ s3_weekend.parent.diff_last_interval.text_desc }}
+                  </h3>
+                  <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  {% endifequal %}
+                </div>
+              </div>
+          </div>
+          <div class="col-xs-4">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static s3_weekend.parent.diff_last_year.change_icon_path %}">
+                </div>
+                <div class="col-xs-8 no-x-padding">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                  <p class="bottom-margin-4">{% trans "Compared to same period last year" %}</p>
+                  <h3 class="{{ s3_weekend.parent.diff_last_year.change_css_class }}">
+                    {{ s3_weekend.parent.diff_last_year.text_desc }}
+                  </h3>
+                  {% else %}
+                  <h3 class="{{ s3_weekend.parent.diff_last_year.change_css_class }}">
+                    {{ s3_weekend.parent.diff_last_year.text_desc }}
+                  </h3>
+                  <p>{% trans "Compared to same period last year" %}</p>
+                  {% endifequal %}
+                </div>
+              </div>
+          </div>
+          </div>
+        {% endif %}
+
+    {% for we in s3_weekend.details %}
+      <div class="row report-detail-header" style="background-color: {{ we.color }};">
+        <div class="col-xs-12">
+        {{ we.name }}
+        </div>
+      </div>
+      <div class="row report-detail-body {% if forloop.last %}content-footer bottom-border-2{% endif %} {% if forloop.counter == 6 %}page-break-after{% elif forloop.counter > 6 and forloop.counter|add:-6|divisibleby:9 %}page-break-after{% endif %}">
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <img src="{% static 'images/reports/icon_money.png'  %}">
+            </div>
+            <div class="col-xs-8 no-x-padding">
+              <h3 class="used-money">${{ we.average_cost|floatformat:"0"|intcomma }}</h3>
+              <p>{% trans "Average Weekend/Holiday Energy Use" %}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <img src="{% static we.diff_last_interval.change_icon_path %}">
+            </div>
+            <div class="col-xs-8 no-x-padding">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+              <p class="bottom-margin-4">{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+              <h3 class="{{ we.diff_last_interval.change_css_class }}">
+                {{ we.diff_last_interval.text_desc }}
+              </h3>
+                  {% else %}
+              <h3 class="{{ we.diff_last_interval.change_css_class }}">
+                {{ we.diff_last_interval.text_desc }}
+              </h3>
+              <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  {% endifequal %}
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <img src="{% static we.diff_last_year.change_icon_path %}">
+            </div>
+            <div class="col-xs-8 no-x-padding">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+              <p class="bottom-margin-4">{% trans "Compared to same period last year" %}</p>
+              <h3 class="{{ we.diff_last_year.change_css_class }}">
+                {{ we.diff_last_year.text_desc }}
+              </h3>
+                  {% else %}
+              <h3 class="{{ we.diff_last_year.change_css_class }}">
+                {{ we.diff_last_year.text_desc }}
+              </h3>
+              <p>{% trans "Compared to same period last year" %}</p>
+                  {% endifequal %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+</div>
+
+<div id="overnight-info">
+    <div class="row report-component-header-popup">
+      <div class="col-xs-12">
+        {% trans "HOW MUCH ENERGY DID WE USE OVERNIGHT " %}<span style="font-weight:300;">({{ s3_overnight_timerange_text }})</span></div>
+    </div>
+
+      {% if report_type != 'quarter' and report_type != 'year' and report_type != 'custom' %}
+        <div class="row top-section border-bottom-5px">
+        <div class="col-xs-4 side-bar">
+          <div class="row item start">
+                <div class="col-xs-4">
+                  <img src="{% static 'images/reports/icon_money.png'  %}">
+                </div>
+                <div class="col-xs-8 top-padding-18">
+                  <h3 class="used-money">${{ s3_overnight.parent.average_cost|floatformat:"0"|intcomma }}</h3>
+                  <p>{% trans "Average Overnight Energy Use" %}</p>
+                </div>
+          </div>
+          <div class="row item">
+                <div class="col-xs-4">
+                  <img src="{% static s3_overnight.parent.diff_last_interval.change_icon_path  %}">
+                </div>
+                <div class="col-xs-8 top-padding-18">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                  <p class="bottom-margin-4">{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  <h3 class="{{ s3_overnight.parent.diff_last_interval.change_css_class }}">
+                    {{ s3_overnight.parent.diff_last_interval.text_desc }}
+                  </h3>
+                  {% else %}
+                  <h3 class="{{ s3_overnight.parent.diff_last_interval.change_css_class }}">
+                    {{ s3_overnight.parent.diff_last_interval.text_desc }}
+                  </h3>
+                  <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  {% endifequal %}
+                </div>
+          </div>
+          <div class="row item end">
+                <div class="col-xs-4">
+                  <img src="{% static s3_overnight.parent.diff_last_year.change_icon_path %}">
+                </div>
+                <div class="col-xs-8 top-padding-18">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                  <p class="bottom-margin-4">{% trans "Compared to same period last year" %}</p>
+                  <h3 class="{{ s3_overnight.parent.diff_last_year.change_css_class }}">
+                    {{ s3_overnight.parent.diff_last_year.text_desc }}
+                  </h3>
+                  {% else %}
+                  <h3 class="{{ s3_overnight.parent.diff_last_year.change_css_class }}">
+                    {{ s3_overnight.parent.diff_last_year.text_desc }}
+                  </h3>
+                  <p>{% trans "Compared to same period last year" %}</p>
+                  {% endifequal %}
+                </div>
+          </div>
+        </div>
+        <div class="col-xs-8 calendar-content">
+          <div class="row text-center border-bottom-2px">
+            <div class="col-xs-12 date-header">{{ report_start|date:"YEAR_MONTH_FORMAT" }}</div>
+          </div>
+          <div class="row text-center height-50 font-09em">
+            <div class="col-xs-4 border-right top-padding-6"><h9 class="better-mark">{% trans "Better" %}</h9><p>{% trans "than average night" %}</p></div>
+            <div class="col-xs-4 border-right top-padding-6"><h9 class="worse-mark">{% trans "Worse" %}</h9><p>{% trans "than average night" %}</p></div>
+            <div class="col-xs-4 top-padding-6"><h9 class="average-mark">{% trans "Average" %}</h9><p>{% trans "night" %}</p></div>
+          </div>
+
+          <div class="row"><div class="col-xs-12">
+        <div class="calendar-info-container calendar-width">
+            <div class='calendar-weekday-header'>
+                {% trans "<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>" %}
+            </div>
+            <div class="calendar-day-container"></div>
+            <div></div>
+        </div>
+          </div></div>
+
+          <div class="text-center calendar-width">
+            <div class="highest-weekday-enegry">
+              <h6 class="font-09em">{% trans "Highest Overnight Energy Use" %}</h6>
+              <h5 class="font-1em">${{ s3_highest_overnight_cost|floatformat:"0"|intcomma }}</h5>
+              <p class="font-09em">{{ s3_highest_overnight_date|date:"DATE_FORMAT" }}</p>
+            </div>
+            <div class="most-increase-from"><h6 class="font-09em">{% trans "Most of the increase was from" %}</h6>
+              <p class="font-1em">{{ s3_overnight.parent.higest_date_higest_diff_system }}</p></div>
+          </div>
+
+        </div>
+        </div>
+        {% else %}
+        <div class="row report-overall-header">
+          <div class="col-xs-12">{% trans "Overall" %}</div>
+        </div>
+        <div class="row report-detail-body">
+          <div class="col-xs-4">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static 'images/reports/icon_money.png'  %}">
+                </div>
+                <div class="col-xs-8 no-x-padding">
+                  <h3 class="used-money">${{ s3_overnight.parent.average_cost|floatformat:"0"|intcomma }}</h3>
+                  <p>{% trans "Average Overnight Energy Use" %}</p>
+                </div>
+              </div>
+          </div>
+          <div class="col-xs-4">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static s3_overnight.parent.diff_last_interval.change_icon_path  %}">
+                </div>
+                <div class="col-xs-8 no-x-padding">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                  <p class="bottom-margin-4">{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  <h3 class="{{ s3_overnight.parent.diff_last_interval.change_css_class }}">
+                    {{ s3_overnight.parent.diff_last_interval.text_desc }}
+                  </h3>
+                  {% else %}
+                  <h3 class="{{ s3_overnight.parent.diff_last_interval.change_css_class }}">
+                    {{ s3_overnight.parent.diff_last_interval.text_desc }}
+                  </h3>
+                  <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  {% endifequal %}
+                </div>
+              </div>
+          </div>
+          <div class="col-xs-4">
+              <div class="row inner">
+                <div class="col-xs-4">
+                  <img src="{% static s3_overnight.parent.diff_last_year.change_icon_path %}">
+                </div>
+                <div class="col-xs-8 no-x-padding">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                  <p class="bottom-margin-4">{% trans "Compared to same period last year" %}</p>
+                  <h3 class="{{ s3_overnight.parent.diff_last_year.change_css_class }}">
+                    {{ s3_overnight.parent.diff_last_year.text_desc }}
+                  </h3>
+                  {% else %}
+                  <h3 class="{{ s3_overnight.parent.diff_last_year.change_css_class }}">
+                    {{ s3_overnight.parent.diff_last_year.text_desc }}
+                  </h3>
+                  <p>{% trans "Compared to same period last year" %}</p>
+                  {% endifequal %}
+                </div>
+              </div>
+          </div>
+        </div>
+        {% endif %}
+
+    {% for ovn in s3_overnight.details %}
+      <div class="row report-detail-header" style="background-color: {{ ovn.color }};">
+        <div class="col-xs-12">
+        {{ ovn.name }}
+        </div>
+      </div>
+      <div class="row report-detail-body {% if forloop.last %}content-footer bottom-border-2{% endif %} {% if forloop.counter == 6 %}page-break-after{% elif forloop.counter > 6 and forloop.counter|add:-6|divisibleby:9 %}page-break-after{% endif %}">
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <img src="{% static 'images/reports/icon_money.png'  %}">
+            </div>
+            <div class="col-xs-8 no-x-padding">
+              <h3 class="used-money">${{  ovn.average_cost|floatformat:"0"|intcomma }}</h3>
+              <p>{% trans "Average Overnight Energy Use" %}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <img src="{% static ovn.diff_last_interval.change_icon_path %}">
+            </div>
+            <div class="col-xs-8 no-x-padding">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+              <p class="bottom-margin-4">{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+              <h3 class="{{ ovn.diff_last_interval.change_css_class }}">
+                {{ ovn.diff_last_interval.text_desc }}
+              </h3>
+                  {% else %}
+              <h3 class="{{ ovn.diff_last_interval.change_css_class }}">
+                {{ ovn.diff_last_interval.text_desc }}
+              </h3>
+              <p>{%blocktrans%}Compared to last {{ report_type_name }}{%endblocktrans%}</p>
+                  {% endifequal %}
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <div class="row">
+            <div class="col-xs-4">
+              <img src="{% static ovn.diff_last_year.change_icon_path %}">
+            </div>
+            <div class="col-xs-8 no-x-padding">
+                  {% ifequal LANGUAGE_CODE 'zh-tw' %}
+              <p class="bottom-margin-4">{% trans "Compared to same period last year" %}</p>
+              <h3 class="{{ ovn.diff_last_year.change_css_class }}">
+                {{ ovn.diff_last_year.text_desc }}
+              </h3>
+                  {% else %}
+              <h3 class="{{ ovn.diff_last_year.change_css_class }}">
+                {{ ovn.diff_last_year.text_desc }}
+              </h3>
+              <p>{% trans "Compared to same period last year" %}</p>
+                  {% endifequal %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+</div>
+</div></div>

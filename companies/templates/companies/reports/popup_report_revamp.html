@@ -1,0 +1,40 @@
+{% load i18n %}
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+  <span role="presentation" id="popup_close" class="k-icon k-i-close">Close</span>
+  <div class="container" ng-app="Entrak">
+    <div class="row">
+      <div class="col-xs-2 x-padding-25">
+        <div id="tOne" class="sidebar-left" ng-controller="MyCtrl">
+          <div class="section btn-section">
+            <a class="btn btn-save-report" href="revamp/popup-report/download/?{{ request.GET.urlencode }}" role="button">
+            <img src="{% static 'images/reports/popup_download.png' %}" alt="logo">
+            {% trans "Save Report" %}</a>
+          </div>
+          <div class="section">
+            <ul kendo-menu style="display: inline-block; min-width: 150px;"
+                k-orientation="'vertical'"
+                k-on-select="onSelect(kendoEvent)">
+              <li data-anchor="report_key_statistics">{% trans "Key Statistics" %}</li>
+              <li data-anchor="report_compared_to_last">{% filter title %}{% blocktrans %}Compared to Last {{ report_type_name }}{% endblocktrans %}{% endfilter %}</li>
+              <li data-anchor="weekday-info">{% trans "Weekdays" %}</li>
+              <li data-anchor="weekend-info">{% trans "Weekends and Holidays" %}</li>
+              <li data-anchor="overnight-info">{% trans "Overnight" %}</li>
+            </ul>
+          </div>
+          <img src="{% static 'images/reports/popup_logo.png' %}" alt="logo">
+        </div>
+      </div>
+      <div class="col-xs-10">
+        {% include "companies/reports/_report_revamp_content.html" %}
+      </div>
+    </div>
+  </div>
+  <script>
+    {% include "companies/reports/_report_revamp_script.html" %}
+    $("#popup_close").click(function(){
+        $("#win_report_ajax").fadeOut();
+        $(".grey_layer").fadeOut();
+    })
+  </script>
+</html>
