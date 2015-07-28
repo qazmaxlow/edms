@@ -901,16 +901,19 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         if highest_weekday_date:
             highest_weekday_usage = generate_weekday_weekend_overnight_details(system, highest_weekday_date, highest_weekday_date + relativedelta(days=1), m["global_interval_delta"], m["global_sub_systems"], TYPE_COLORS, 'weekday')
         else:
+            highest_weekday_usage = {'details': []}
             highest_date_weekday_system = None
 
         if highest_weekend_date:
             highest_weekend_usage = generate_weekday_weekend_overnight_details(system, highest_weekend_date, highest_weekend_date + relativedelta(days=1), m["global_interval_delta"], m["global_sub_systems"], TYPE_COLORS, 'weekend')
         else:
+            highest_weekend_usage = {'details': []}
             highest_date_weekend_system = None
 
         if highest_overnight_date:
             highest_overnight_usage = generate_weekday_weekend_overnight_details(system, highest_overnight_date, highest_overnight_date + relativedelta(days=1), m["global_interval_delta"], m["global_sub_systems"], TYPE_COLORS, 'overnight')
         else:
+            highest_overnight_usage = {'details': []}
             highest_date_overnight_system = None
 
         weekday_diff = 0
