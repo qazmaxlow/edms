@@ -641,7 +641,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
             sub_system_jsons.append(sub_system_json)
 
         for s in sub_system_stats:
-            if max_kwh > 0:
+            if s['total_kwh'] and max_kwh > 0:
                 s['percent_base_on_max'] = s['total_kwh']*100/max_kwh
 
 
