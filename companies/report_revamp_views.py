@@ -69,33 +69,36 @@ def generate_weekday_weekend_overnight_details(system, start_date, end_date, int
     last_year_end_date = end_date - relativedelta(years=1)
 
     if gen_type in ['weekday', 'weekend']:
-        source_current_cost = system.weekday_weekend_usage_by_source(start_date, end_date, gen_type)
-        source_last_interval_cost = system.weekday_weekend_usage_by_source(last_interval_start_date, last_interval_end_date, gen_type)
-        source_last_year_cost = system.weekday_weekend_usage_by_source(last_year_start_date, last_year_end_date, gen_type)
+        source_current_usage = system.weekday_weekend_usage_by_source(start_date, end_date, gen_type)
+        source_last_interval_usage = system.weekday_weekend_usage_by_source(last_interval_start_date, last_interval_end_date, gen_type)
+        source_last_year_usage = system.weekday_weekend_usage_by_source(last_year_start_date, last_year_end_date, gen_type)
     else:
-        source_current_cost = system.overnight_usage_by_source(start_date, end_date)
-        source_last_interval_cost = system.overnight_usage_by_source(last_interval_start_date, last_interval_end_date)
-        source_last_year_cost = system.overnight_usage_by_source(last_year_start_date, last_year_end_date)
+        source_current_usage = system.overnight_usage_by_source(start_date, end_date)
+        source_last_interval_usage = system.overnight_usage_by_source(last_interval_start_date, last_interval_end_date)
+        source_last_year_usage = system.overnight_usage_by_source(last_year_start_date, last_year_end_date)
 
     parent_current_cost = 0
+    parent_current_kwh = 0
     parent_current_dates = set()
     parent_last_interval_cost = 0
+    parent_last_interval_kwh = 0
     parent_last_interval_dates = set()
     parent_last_year_cost = 0
+    parent_last_year_kwh = 0
     parent_last_year_dates = set()
-
-    higest_cost_diff = 0
-    higest_cost_diff_system = None
 
     sub_system_stats = []
 
     for ix, sub_system in enumerate(sub_systems):
 
         current_cost = 0
+        current_kwh = 0
         current_dates = set()
         last_interval_cost = 0
+        last_interval_kwh = 0
         last_interval_dates = set()
         last_year_cost = 0
+        last_year_kwh = 0
         last_year_dates = set()
 
         sys = sub_system["object"]
@@ -104,64 +107,67 @@ def generate_weekday_weekend_overnight_details(system, start_date, end_date, int
             child_sources = sys.sources
 
             for src in child_sources:
-                if src.id in source_current_cost:
-                    current_cost += source_current_cost[src.id]['totalMoney']
-                    current_dates |= set(source_current_cost[src.id]['dates'])
-                if src.id in source_last_interval_cost:
-                    last_interval_cost += source_last_interval_cost[src.id]['totalMoney']
-                    last_interval_dates |= set(source_last_interval_cost[src.id]['dates'])
-                if src.id in source_last_year_cost:
-                    last_year_cost += source_last_year_cost[src.id]['totalMoney']
-                    last_year_dates |= set(source_last_year_cost[src.id]['dates'])
+                if src.id in source_current_usage:
+                    current_cost += source_current_usage[src.id]['totalMoney']
+                    current_kwh += source_current_usage[src.id]['totalKwh']
+                    current_dates |= set(source_current_usage[src.id]['dates'])
+                if src.id in source_last_interval_usage:
+                    last_interval_cost += source_last_interval_usage[src.id]['totalMoney']
+                    last_interval_kwh += source_last_interval_usage[src.id]['totalKwh']
+                    last_interval_dates |= set(source_last_interval_usage[src.id]['dates'])
+                if src.id in source_last_year_usage:
+                    last_year_cost += source_last_year_usage[src.id]['totalMoney']
+                    last_year_kwh += source_last_year_usage[src.id]['totalKwh']
+                    last_year_dates |= set(source_last_year_usage[src.id]['dates'])
 
         else:
-            if sys.id in source_current_cost:
-                current_cost = source_current_cost[sys.id]['totalMoney']
-                current_dates = set(source_current_cost[sys.id]['dates'])
-            if sys.id in source_last_interval_cost:
-                last_interval_cost = source_last_interval_cost[sys.id]['totalMoney']
-                last_interval_dates = set(source_last_interval_cost[sys.id]['dates'])
-            if sys.id in source_last_year_cost:
-                last_year_cost = source_last_year_cost[sys.id]['totalMoney']
-                last_year_dates = set(source_last_year_cost[sys.id]['dates'])
+            if sys.id in source_current_usage:
+                current_cost = source_current_usage[sys.id]['totalMoney']
+                current_kwh = source_current_usage[sys.id]['totalKwh']
+                current_dates = set(source_current_usage[sys.id]['dates'])
+            if sys.id in source_last_interval_usage:
+                last_interval_cost = source_last_interval_usage[sys.id]['totalMoney']
+                last_interval_kwh = source_last_interval_usage[sys.id]['totalKwh']
+                last_interval_dates = set(source_last_interval_usage[sys.id]['dates'])
+            if sys.id in source_last_year_usage:
+                last_year_cost = source_last_year_usage[sys.id]['totalMoney']
+                last_year_kwh = source_last_year_usage[sys.id]['totalKwh']
+                last_year_dates = set(source_last_year_usage[sys.id]['dates'])
 
         parent_current_cost += current_cost
+        parent_current_kwh += current_kwh
         parent_current_dates |= current_dates
         parent_last_interval_cost += last_interval_cost
+        parent_last_interval_kwh += last_interval_kwh
         parent_last_interval_dates |= last_interval_dates
         parent_last_year_cost += last_year_cost
+        parent_last_year_kwh += last_year_kwh
         parent_last_year_dates |= last_year_dates
-
-        print(parent_current_dates)
 
         diff_last_interval = None
         diff_last_year = None
 
-        if current_cost - last_interval_cost > higest_cost_diff:
-            higest_cost_diff = current_cost - last_interval_cost
-            higest_cost_diff_system = sub_system['name']
-
         if len(current_dates) > 0 :
 
-            current_average = current_cost / len(current_dates)
+            current_average_cost = current_cost / len(current_dates)
+            current_average_kwh = current_kwh / len(current_dates)
 
-            if last_interval_cost > 0 and len(last_interval_dates) > 0:
+            if last_interval_kwh > 0 and len(last_interval_dates) > 0:
 
-                last_interval_average = last_interval_cost / len(last_interval_dates)
-                diff_last_interval = (current_average - last_interval_average)*100/last_interval_average
+                last_interval_average_kwh = last_interval_kwh / len(last_interval_dates)
+                diff_last_interval = (current_average_kwh - last_interval_average_kwh)*100/last_interval_average_kwh
 
-            if last_year_cost > 0 and len(last_year_dates) > 0:
+            if last_year_kwh > 0 and len(last_year_dates) > 0:
 
-                last_year_average = last_year_cost / len(last_year_dates)
-                diff_last_year = (current_average - last_year_average)*100/last_year_average
+                last_year_average_kwh = last_year_kwh / len(last_year_dates)
+                diff_last_year = (current_average_kwh - last_year_average_kwh)*100/last_year_average_kwh
 
         else:
-            current_average = None
-
+            current_average_cost = None
 
         sub_system_stat = {
             'name': sub_system['name'],
-            'average_cost': current_average,
+            'average_cost': current_average_cost,
             'diff_last_interval': CompareTplHepler(diff_last_interval),
             'diff_last_year': CompareTplHepler(diff_last_year),
             'color': type_colors[ix % len(type_colors)],
@@ -171,29 +177,32 @@ def generate_weekday_weekend_overnight_details(system, start_date, end_date, int
 
     parent_diff_last_interval = None
     parent_diff_last_year = None
+    parent_last_interval_average_kwh = 0
+    parent_last_year_average_kwh = 0
 
     if len(parent_current_dates) > 0 :
 
-        parent_current_average = parent_current_cost / len(parent_current_dates)
+        parent_current_average_cost = parent_current_cost / len(parent_current_dates)
+        parent_current_average_kwh = parent_current_kwh / len(parent_current_dates)
 
-        if parent_last_interval_cost > 0 and len(parent_last_interval_dates) > 0:
+        if parent_last_interval_kwh > 0 and len(parent_last_interval_dates) > 0:
 
-            parent_last_interval_average = parent_last_interval_cost/len(parent_last_interval_dates)
-            parent_diff_last_interval = (parent_current_average - parent_last_interval_average)*100/parent_last_interval_average
+            parent_last_interval_average_kwh = parent_last_interval_kwh/len(parent_last_interval_dates)
+            parent_diff_last_interval = (parent_current_average_kwh - parent_last_interval_average_kwh)*100/parent_last_interval_average_kwh
 
-        if parent_last_year_cost > 0 and len(parent_last_year_dates) > 0:
+        if parent_last_year_kwh > 0 and len(parent_last_year_dates) > 0:
 
-            parent_last_year_average = parent_last_year_cost/len(parent_last_year_dates)
-            parent_diff_last_year = (parent_current_average - parent_last_year_average)*100/parent_last_year_average
+            parent_last_year_average_kwh = parent_last_year_kwh/len(parent_last_year_dates)
+            parent_diff_last_year = (parent_current_average_kwh - parent_last_year_average_kwh)*100/parent_last_year_average_kwh
 
     else:
-        parent_current_average = None
+        parent_current_average_cost = 0
 
     parent = {
-        'average_cost': parent_current_average,
+        'average_cost': parent_current_average_cost,
         'diff_last_interval': CompareTplHepler(parent_diff_last_interval),
         'diff_last_year': CompareTplHepler(parent_diff_last_year),
-        'higest_cost_diff_system': higest_cost_diff_system,
+        #'highest_cost_diff_system': highest_cost_diff_system,
     }
 
     return {"parent": parent, "details": sub_system_stats}
@@ -373,7 +382,12 @@ class CompareTplHepler:
 
     @property
     def change_css_class(self):
-        return 'more-usage' if self.compared_percent >=0 else 'less-usage'
+        if self.compared_percent is None or self.compared_percent == 0:
+            return 'neutral-usage'
+        elif self.compared_percent > 0:
+            return 'more-usage'
+        elif self.compared_percent < 0:
+            return 'less-usage'
 
     @property
     def change_icon_path(self):
@@ -381,7 +395,7 @@ class CompareTplHepler:
             return 'images/reports/na.gif'
 
         path = 'images/reports/decrease_energy.png'
-        if self.compared_percent >=0:
+        if self.compared_percent >= 0:
             path = 'images/reports/increase_energy.png'
 
         return path
@@ -546,6 +560,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
                 m['s1_css_class_energy_saving'] = 'negative-saving'
         else:
             m['s1_last_year_data_exist'] = False
+            m['s1_css_class_energy_saving'] = 'neutral-saving'
         # end of section 1a summary stats
 
         # start of section 1b sub-systems bar chart and table
@@ -626,7 +641,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
             sub_system_jsons.append(sub_system_json)
 
         for s in sub_system_stats:
-            if max_kwh > 0:
+            if s['total_kwh'] and max_kwh > 0:
                 s['percent_base_on_max'] = s['total_kwh']*100/max_kwh
 
 
@@ -710,14 +725,21 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
                     formats.date_format(interval_end_dt, 'MONTH_DAY_FORMAT'),
                 )
 
-            if interval_key in interval_usages:
+            if report_type == "quarter":
+                value = 0
+                for y in range(3):
+                    interval_key = (interval_start_dt + relativedelta(months=y)).strftime('%Y%m')
+                    if interval_key in interval_usages:
+                        value += interval_usages[interval_key]['totalKwh']
+            elif interval_key in interval_usages:
                 value = interval_usages[interval_key]['totalKwh']
-                if x == 5:
-                    last_value = value
-                if x == 4:
-                    compare_value = value
             else:
                 value = 0
+
+            if x == 5:
+                last_value = value
+            if x == 4:
+                compare_value = value
 
             compare_datasource.append({
                 'value': value,
@@ -874,6 +896,51 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         m['s3_weekday'] = generate_weekday_weekend_overnight_details(system, start_date, end_date, m["global_interval_delta"], m["global_sub_systems"], TYPE_COLORS, 'weekday')
         m['s3_weekend'] = generate_weekday_weekend_overnight_details(system, start_date, end_date, m["global_interval_delta"], m["global_sub_systems"], TYPE_COLORS, 'weekend')
         m['s3_overnight'] = generate_weekday_weekend_overnight_details(system, start_date, end_date, m["global_interval_delta"], m["global_sub_systems"], TYPE_COLORS, 'overnight')
+
+        # Get the highest date systems usage
+        if highest_weekday_date:
+            highest_weekday_usage = generate_weekday_weekend_overnight_details(system, highest_weekday_date, highest_weekday_date + relativedelta(days=1), m["global_interval_delta"], m["global_sub_systems"], TYPE_COLORS, 'weekday')
+        else:
+            highest_weekday_usage = {'details': []}
+
+        if highest_weekend_date:
+            highest_weekend_usage = generate_weekday_weekend_overnight_details(system, highest_weekend_date, highest_weekend_date + relativedelta(days=1), m["global_interval_delta"], m["global_sub_systems"], TYPE_COLORS, 'weekend')
+        else:
+            highest_weekend_usage = {'details': []}
+
+        if highest_overnight_date:
+            highest_overnight_usage = generate_weekday_weekend_overnight_details(system, highest_overnight_date, highest_overnight_date + relativedelta(days=1), m["global_interval_delta"], m["global_sub_systems"], TYPE_COLORS, 'overnight')
+        else:
+            highest_overnight_usage = {'details': []}
+
+        weekday_diff = 0
+        highest_date_weekday_system = None
+        weekend_diff = 0
+        highest_date_weekend_system = None
+        overnight_diff = 0
+        highest_date_overnight_system = None
+
+        for avg in m['s3_weekday']['details']:
+            for highest in highest_weekday_usage['details']:
+                if avg['name'] == highest['name'] and highest['average_cost'] and avg['average_cost'] and highest['average_cost'] - avg['average_cost'] > weekday_diff:
+                    weekday_diff = highest['average_cost'] - avg['average_cost']
+                    highest_date_weekday_system = highest['name']
+
+        for avg in m['s3_weekend']['details']:
+            for highest in highest_weekend_usage['details']:
+                if avg['name'] == highest['name'] and highest['average_cost'] and avg['average_cost'] and highest['average_cost'] - avg['average_cost'] > weekend_diff:
+                    weekend_diff = highest['average_cost'] - avg['average_cost']
+                    highest_date_weekend_system = highest['name']
+
+        for avg in m['s3_overnight']['details']:
+            for highest in highest_overnight_usage['details']:
+                if avg['name'] == highest['name'] and highest['average_cost'] and avg['average_cost'] and highest['average_cost'] - avg['average_cost'] > overnight_diff:
+                    overnight_diff = highest['average_cost'] - avg['average_cost']
+                    highest_date_overnight_system = highest['name']
+
+        m['s3_weekday']['parent']['highest_date_highest_diff_system'] = highest_date_weekday_system
+        m['s3_weekend']['parent']['highest_date_highest_diff_system'] = highest_date_weekend_system
+        m['s3_overnight']['parent']['highest_date_highest_diff_system'] = highest_date_overnight_system
 
         # m['s3_overnight'] = generate_weekday_weekend_details(system, start_date, end_date, m["global_interval_delta"], m["global_sub_systems"], TYPE_COLORS, 'weekday')
 

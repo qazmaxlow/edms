@@ -2,12 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-22 04:25+0000\n"
+"POT-Creation-Date: 2015-07-28 08:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,12 +16,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: companies/report_revamp_views.py:368 companies/report_views.py:476
+#: companies/report_revamp_views.py:377 companies/report_views.py:476
 #, python-brace-format
 msgid "{0:.0f}% {1}"
 msgstr "{1} {0:.0f}%"
 
-#: companies/report_revamp_views.py:372 companies/report_views.py:480
+#: companies/report_revamp_views.py:381 companies/report_views.py:480
 #: companies/templates/companies/dashboard/dashboard.html:1012
 #: companies/templates/companies/dashboard/dashboard.html:1151
 #: companies/templates/companies/reports/_report_content.html:70
@@ -42,7 +42,7 @@ msgstr "{1} {0:.0f}%"
 msgid "more"
 msgstr "增加了"
 
-#: companies/report_revamp_views.py:372 companies/report_views.py:480
+#: companies/report_revamp_views.py:381 companies/report_views.py:480
 #: companies/templates/companies/dashboard/dashboard.html:1012
 #: companies/templates/companies/dashboard/dashboard.html:1151
 #: companies/templates/companies/reports/_report_content.html:68
@@ -63,152 +63,152 @@ msgstr "增加了"
 msgid "less"
 msgstr "減少了"
 
-#: companies/report_revamp_views.py:392 companies/report_views.py:500
+#: companies/report_revamp_views.py:406 companies/report_views.py:500
 #, python-brace-format
 msgid "{self.compared_percent_abs:.0f}% {self.change_desc}"
 msgstr "{self.change_desc} {self.compared_percent_abs:.0f}%"
 
-#: companies/report_revamp_views.py:465 companies/report_revamp_views.py:490
+#: companies/report_revamp_views.py:479 companies/report_revamp_views.py:504
 #: companies/report_views.py:595 companies/report_views.py:620
 msgid "month"
 msgstr "月"
 
-#: companies/report_revamp_views.py:466 companies/report_revamp_views.py:491
+#: companies/report_revamp_views.py:480 companies/report_revamp_views.py:505
 #: companies/report_views.py:596 companies/report_views.py:621
 msgid "Compared to Last Month"
 msgstr "相比上月"
 
-#: companies/report_revamp_views.py:468 companies/report_views.py:598
+#: companies/report_revamp_views.py:482 companies/report_views.py:598
 #, python-brace-format
 msgid "{0}{1} - Monthly Energy Report"
 msgstr "{0}年{1}月 - 能源使用報告"
 
-#: companies/report_revamp_views.py:470 companies/report_views.py:600
+#: companies/report_revamp_views.py:484 companies/report_views.py:600
 #, python-brace-format
 msgid "{0} - Monthly Energy Report"
 msgstr "{0} - 能源使用報告"
 
-#: companies/report_revamp_views.py:472 companies/report_views.py:602
+#: companies/report_revamp_views.py:486 companies/report_views.py:602
 msgid "week"
 msgstr "週"
 
-#: companies/report_revamp_views.py:473 companies/report_views.py:603
+#: companies/report_revamp_views.py:487 companies/report_views.py:603
 msgid "Compared to Last Week"
 msgstr "相比上週"
 
-#: companies/report_revamp_views.py:475 companies/report_revamp_views.py:493
+#: companies/report_revamp_views.py:489 companies/report_revamp_views.py:507
 #: companies/report_views.py:605 companies/report_views.py:623
 #, python-brace-format
 msgid "{0}{1}{2} - "
 msgstr "{0}年{1}月{2}日 - "
 
-#: companies/report_revamp_views.py:476 companies/report_views.py:606
+#: companies/report_revamp_views.py:490 companies/report_views.py:606
 #, python-brace-format
 msgid "{0}{1}{2} Weekly Energy Report"
 msgstr "{0}年{1}月{2}日 - 能源使用報告"
 
-#: companies/report_revamp_views.py:479 companies/report_views.py:609
+#: companies/report_revamp_views.py:493 companies/report_views.py:609
 #, fuzzy, python-brace-format
 msgid "{0} Weekly Energy Report"
 msgstr "{0} - 能源使用報告"
 
-#: companies/report_revamp_views.py:481 companies/report_views.py:611
+#: companies/report_revamp_views.py:495 companies/report_views.py:611
 msgid "quarter"
 msgstr "季"
 
-#: companies/report_revamp_views.py:482 companies/report_views.py:612
+#: companies/report_revamp_views.py:496 companies/report_views.py:612
 msgid "Compared to Last Quarter"
 msgstr "相比上季"
 
-#: companies/report_revamp_views.py:483 companies/report_views.py:613
+#: companies/report_revamp_views.py:497 companies/report_views.py:613
 #, python-brace-format
 msgid "{0} Q{1}"
 msgstr "{0}年 第{1}季"
 
-#: companies/report_revamp_views.py:484 companies/report_views.py:614
+#: companies/report_revamp_views.py:498 companies/report_views.py:614
 #, python-brace-format
 msgid "{0} - Quarterly Energy Report"
 msgstr "{0} - 能源使用報告"
 
-#: companies/report_revamp_views.py:486 companies/report_views.py:616
+#: companies/report_revamp_views.py:500 companies/report_views.py:616
 msgid "year"
 msgstr "年"
 
-#: companies/report_revamp_views.py:487 companies/report_views.py:617
+#: companies/report_revamp_views.py:501 companies/report_views.py:617
 msgid "Compared to Last Year"
 msgstr "相比上年"
 
-#: companies/report_revamp_views.py:488 companies/report_views.py:618
+#: companies/report_revamp_views.py:502 companies/report_views.py:618
 #, python-brace-format
 msgid "{0} - Yearly Energy Report"
 msgstr "{0} - 能源使用報告"
 
-#: companies/report_revamp_views.py:494 companies/report_views.py:624
+#: companies/report_revamp_views.py:508 companies/report_views.py:624
 #, python-brace-format
 msgid "{0}{1}{2}"
 msgstr "{0}年{1}月{2}日"
 
-#: companies/report_revamp_views.py:645 companies/report_views.py:1130
+#: companies/report_revamp_views.py:660 companies/report_views.py:1130
 msgid "Total energy consumption for the last 6 months (kWh)"
 msgstr "過去6個月的電力消耗 (kWh)"
 
-#: companies/report_revamp_views.py:650 companies/report_views.py:1133
+#: companies/report_revamp_views.py:665 companies/report_views.py:1133
 msgid "Total energy consumption for the last 6 weeks (kWh)"
 msgstr "過去6週的電力消耗 (kWh)"
 
-#: companies/report_revamp_views.py:655 companies/report_views.py:1135
+#: companies/report_revamp_views.py:670 companies/report_views.py:1135
 msgid "Total energy consumption for the last 6 quarters (kWh)"
 msgstr "過去6季的電力消耗 (kWh)"
 
-#: companies/report_revamp_views.py:660 companies/report_views.py:1137
+#: companies/report_revamp_views.py:675 companies/report_views.py:1137
 msgid "Total energy consumption for the last 6 years (kWh)"
 msgstr "過去6年的電力消耗 (kWh)"
 
-#: companies/report_revamp_views.py:664 companies/report_views.py:1139
+#: companies/report_revamp_views.py:679 companies/report_views.py:1139
 msgid "Total energy consumption for the last 6 same periods (kWh)"
 msgstr "過去6週的電力消耗 (kWh)"
 
-#: companies/report_revamp_views.py:740 companies/report_views.py:1125
+#: companies/report_revamp_views.py:762 companies/report_views.py:1125
 #, python-brace-format
 msgid "Your energy consumption this {1} was {0} than it was last {1}"
 msgstr "你本月的電力消耗比起上{1}{0}"
 
-#: companies/report_revamp_views.py:747 companies/report_revamp_views.py:748
+#: companies/report_revamp_views.py:769 companies/report_revamp_views.py:770
 #: companies/report_views.py:832 companies/report_views.py:833
 msgid "tcmonth"
 msgstr "月"
 
-#: companies/report_revamp_views.py:753 companies/report_views.py:838
+#: companies/report_revamp_views.py:775 companies/report_views.py:838
 msgid "This week"
 msgstr "本週"
 
-#: companies/report_revamp_views.py:754 companies/report_views.py:839
+#: companies/report_revamp_views.py:776 companies/report_views.py:839
 #: companies/templates/companies/dashboard/dashboard.html:321
 msgid "Last week"
 msgstr "上週"
 
-#: companies/report_revamp_views.py:756 companies/report_views.py:841
+#: companies/report_revamp_views.py:778 companies/report_views.py:841
 msgid "This quarter"
 msgstr "本季"
 
-#: companies/report_revamp_views.py:757 companies/report_views.py:842
+#: companies/report_revamp_views.py:779 companies/report_views.py:842
 msgid "Last quarter"
 msgstr "上季"
 
-#: companies/report_revamp_views.py:762 companies/report_views.py:847
+#: companies/report_revamp_views.py:784 companies/report_views.py:847
 msgid "This period"
 msgstr "本期"
 
-#: companies/report_revamp_views.py:763 companies/report_views.py:848
+#: companies/report_revamp_views.py:785 companies/report_views.py:848
 msgid "Last same period"
 msgstr "上期"
 
-#: companies/report_revamp_views.py:800 companies/report_views.py:911
+#: companies/report_revamp_views.py:822 companies/report_views.py:911
 #, python-brace-format
 msgid "Overall: {0.compared_percent_abs:.0f}&#37; more energy than last {1}"
 msgstr "總計: 比上{1}多用 {0.compared_percent_abs:.0f}&#37;"
 
-#: companies/report_revamp_views.py:802 companies/report_views.py:913
+#: companies/report_revamp_views.py:824 companies/report_views.py:913
 #, python-brace-format
 msgid "Overall: {0.compared_percent_abs:.0f}&#37; less energy than last {1}"
 msgstr "總計: 比上{1}少用 {0.compared_percent_abs:.0f}&#37;"
@@ -713,34 +713,34 @@ msgid "Automated Reports"
 msgstr "自動發送報告"
 
 #: companies/templates/companies/report_schedule/report_schedule.html:129
-#: companies/templates/companies/report_schedule/report_schedule.html:354
+#: companies/templates/companies/report_schedule/report_schedule.html:373
 #: entrak/templates/manage_accounts.html:182
 msgctxt "dropdown"
 msgid "Add"
 msgstr "新增"
 
 #: companies/templates/companies/report_schedule/report_schedule.html:130
-#: companies/templates/companies/report_schedule/report_schedule.html:355
+#: companies/templates/companies/report_schedule/report_schedule.html:374
 #: entrak/templates/manage_accounts.html:180
 msgctxt "dropdown"
 msgid "Emails"
 msgstr "個電郵"
 
 #: companies/templates/companies/report_schedule/report_schedule.html:131
-#: companies/templates/companies/report_schedule/report_schedule.html:356
+#: companies/templates/companies/report_schedule/report_schedule.html:375
 #: entrak/templates/manage_accounts.html:181
 msgctxt "dropdown"
 msgid "Add Email"
 msgstr "新增電郵"
 
 #: companies/templates/companies/report_schedule/report_schedule.html:133
-#: companies/templates/companies/report_schedule/report_schedule.html:358
+#: companies/templates/companies/report_schedule/report_schedule.html:377
 msgctxt "dropdown"
 msgid "Duplicated Email"
 msgstr "不能輸入相同電郵"
 
 #: companies/templates/companies/report_schedule/report_schedule.html:134
-#: companies/templates/companies/report_schedule/report_schedule.html:359
+#: companies/templates/companies/report_schedule/report_schedule.html:378
 msgctxt "dropdown"
 msgid "Invalid Email"
 msgstr "電郵不正確"
@@ -752,7 +752,7 @@ msgstr ""
 "新用電情況。"
 
 #: companies/templates/companies/report_schedule/report_schedule.html:148
-#: companies/templates/companies/report_schedule/report_schedule.html:305
+#: companies/templates/companies/report_schedule/report_schedule.html:324
 #: entrak/templates/alert_settings.html:52
 #: entrak/templates/alert_settings.html:67
 #: entrak/templates/alert_settings.html:1102
@@ -782,7 +782,7 @@ msgid "Manage Automated Reports"
 msgstr "管理自動發送報告"
 
 #: companies/templates/companies/report_schedule/report_schedule.html:157
-#: companies/templates/companies/report_schedule/report_schedule.html:310
+#: companies/templates/companies/report_schedule/report_schedule.html:329
 #: entrak/templates/general_settings.html:35
 #: entrak/templates/manage_accounts.html:362
 #: entrak/templates/manage_accounts.html:373
@@ -794,7 +794,7 @@ msgid "Are you sure you want to delete the item?"
 msgstr "您確認要刪除項目?"
 
 #: companies/templates/companies/report_schedule/report_schedule.html:159
-#: companies/templates/companies/report_schedule/report_schedule.html:306
+#: companies/templates/companies/report_schedule/report_schedule.html:325
 #: entrak/templates/alert_settings.html:51
 #: entrak/templates/alert_settings.html:66
 #: entrak/templates/alert_settings.html:1101
@@ -807,25 +807,25 @@ msgstr "您確認要刪除項目?"
 msgid "Cancel"
 msgstr "取消"
 
-#: companies/templates/companies/report_schedule/report_schedule.html:279
+#: companies/templates/companies/report_schedule/report_schedule.html:298
 msgid "Scope"
 msgstr "所需報告"
 
-#: companies/templates/companies/report_schedule/report_schedule.html:286
+#: companies/templates/companies/report_schedule/report_schedule.html:305
 msgid "Frequency"
 msgstr "報告類型"
 
-#: companies/templates/companies/report_schedule/report_schedule.html:294
+#: companies/templates/companies/report_schedule/report_schedule.html:313
 #: entrak/templates/manage_accounts.html:359 entrak/templates/profile.html:99
 #: user/templates/activate_account.html:140
 msgid "Email"
 msgstr "電郵"
 
-#: companies/templates/companies/report_schedule/report_schedule.html:304
+#: companies/templates/companies/report_schedule/report_schedule.html:323
 msgid "Edit"
 msgstr "編輯"
 
-#: companies/templates/companies/report_schedule/report_schedule.html:324
+#: companies/templates/companies/report_schedule/report_schedule.html:343
 #: entrak/templates/general_settings.html:332
 #: entrak/templates/general_settings.html:351
 msgid "Actions"
@@ -1858,11 +1858,11 @@ msgstr "新加坡機場"
 msgid "Marina Bay Sands"
 msgstr "濱海灣金沙"
 
-#: entrak/settings_common.py:128
+#: entrak/settings_common.py:129
 msgid "English"
 msgstr "英文"
 
-#: entrak/settings_common.py:129
+#: entrak/settings_common.py:130
 msgid "Traditional Chinese"
 msgstr "繁體中文"
 
@@ -2197,28 +2197,28 @@ msgstr ""
 "就算把電器關掉，但還連接在插座上，這樣仍然會消耗5-10%%的能源。正因如此，請緊"
 "記得也把插座或拖板上的開關掣關掉！"
 
-#: entrak/templates/display.html:210 entrak/templates/graph.html:411
+#: entrak/templates/display.html:210 entrak/templates/graph.html:423
 #: entrak/templates/ranking.html:565
 #: printers/templates/system/printers/graph.html:417
 msgid "Total"
 msgstr "總數"
 
-#: entrak/templates/display.html:211 entrak/templates/graph.html:412
+#: entrak/templates/display.html:211 entrak/templates/graph.html:424
 #: printers/templates/system/printers/graph.html:418
 msgid "Previous"
 msgstr "以前"
 
-#: entrak/templates/display.html:212 entrak/templates/graph.html:413
+#: entrak/templates/display.html:212 entrak/templates/graph.html:425
 #: printers/templates/system/printers/graph.html:419
 msgid "Highest"
 msgstr "最高"
 
-#: entrak/templates/display.html:213 entrak/templates/graph.html:414
+#: entrak/templates/display.html:213 entrak/templates/graph.html:426
 #: printers/templates/system/printers/graph.html:420
 msgid "Lowest"
 msgstr "最低"
 
-#: entrak/templates/display.html:214 entrak/templates/graph.html:415
+#: entrak/templates/display.html:214 entrak/templates/graph.html:427
 #: printers/templates/system/printers/graph.html:421
 msgid "Custom"
 msgstr "自訂"
@@ -2640,91 +2640,91 @@ msgstr "一小時"
 msgid "compare_between_hour"
 msgstr "一小時"
 
-#: entrak/templates/graph.html:661
+#: entrak/templates/graph.html:673
 msgid "THE GRAPH SECTION"
 msgstr "圖表"
 
-#: entrak/templates/graph.html:662
+#: entrak/templates/graph.html:674
 msgid "Explore your energy use with the"
 msgstr "想發掘更多實時用電資料，請看看"
 
-#: entrak/templates/graph.html:672 entrak/templates/ranking.html:555
+#: entrak/templates/graph.html:684 entrak/templates/ranking.html:555
 #: printers/templates/system/printers/graph.html:662
 msgid "Unit"
 msgstr "單位"
 
-#: entrak/templates/graph.html:673 entrak/templates/ranking.html:556
+#: entrak/templates/graph.html:685 entrak/templates/ranking.html:556
 #: printers/templates/system/printers/graph.html:663
 msgid "Time"
 msgstr "時間"
 
-#: entrak/templates/graph.html:674
+#: entrak/templates/graph.html:686
 #: printers/templates/system/printers/graph.html:664
 msgid "End-use"
 msgstr "最終用途"
 
-#: entrak/templates/graph.html:674
+#: entrak/templates/graph.html:686
 #: printers/templates/system/printers/graph.html:664
 msgid "Compare"
 msgstr "比較"
 
-#: entrak/templates/graph.html:692
+#: entrak/templates/graph.html:704
 #: printers/templates/system/printers/graph.html:682
 msgid "Compare between end-use types"
 msgstr "跟個別用電組成比較"
 
-#: entrak/templates/graph.html:693
+#: entrak/templates/graph.html:705
 #: printers/templates/system/printers/graph.html:683
 msgid "(Max 5)"
 msgstr "(最多選擇5項)"
 
-#: entrak/templates/graph.html:694 entrak/templates/graph.html.py:704
+#: entrak/templates/graph.html:706 entrak/templates/graph.html.py:716
 #: printers/templates/system/printers/graph.html:684
 #: printers/templates/system/printers/graph.html:694
 msgid "Clear all"
 msgstr "全部清除"
 
-#: entrak/templates/graph.html:703
+#: entrak/templates/graph.html:715
 #: printers/templates/system/printers/graph.html:693
 msgid "Compare between <span id='compare-between'>days</span>"
 msgstr "跟過往數據相比"
 
-#: entrak/templates/graph.html:713
+#: entrak/templates/graph.html:725
 #: printers/templates/system/printers/graph.html:703
 msgid "Previous "
 msgstr "上"
 
-#: entrak/templates/graph.html:725
+#: entrak/templates/graph.html:737
 #: printers/templates/system/printers/graph.html:715
 msgid "Highest "
 msgstr "最高用量的"
 
-#: entrak/templates/graph.html:737
+#: entrak/templates/graph.html:749
 #: printers/templates/system/printers/graph.html:727
 msgid "Lowest "
 msgstr "最低用量的"
 
-#: entrak/templates/graph.html:749
+#: entrak/templates/graph.html:761
 #: printers/templates/system/printers/graph.html:739
 msgid "Custom date selection"
 msgstr "自訂比較日期"
 
-#: entrak/templates/graph.html:765
+#: entrak/templates/graph.html:777
 #: printers/templates/system/printers/graph.html:755
 msgid "Clear Graph"
 msgstr "清空圖表"
 
-#: entrak/templates/graph.html:785
+#: entrak/templates/graph.html:797
 #: printers/templates/system/printers/graph.html:774
 msgid "Amount of energy consumed on: "
 msgstr "能源消耗量："
 
-#: entrak/templates/graph.html:786
+#: entrak/templates/graph.html:798
 #: printers/templates/system/printers/graph.html:775
 msgid "from:"
 msgstr "由："
 
-#: entrak/templates/graph.html:787
+#: entrak/templates/graph.html:799
 #: printers/templates/system/printers/graph.html:776
 msgid "to:"
 msgstr "至："
@@ -2960,7 +2960,7 @@ msgstr "設置"
 msgid "Logout"
 msgstr "登出"
 
-#: entrak/templates/page_base.html:294
+#: entrak/templates/page_base.html:296
 msgid "You are viewing:"
 msgstr "你正在檢視:"
 

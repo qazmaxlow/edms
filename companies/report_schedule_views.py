@@ -33,6 +33,8 @@ class ReportScheduleView(TemplateView):
         context = systems_info
 
         context['current_system'] = systems_info['systems'][0]
+        context['current_user'] = self.request.user
+
         return context
 
 
@@ -52,10 +54,11 @@ class ReportScheduleSerializer(serializers.ModelSerializer):
     receivers = ReceiverSerializer(many=True)
     system_id = serializers.IntegerField(source='system.id')
     frequency_id = serializers.IntegerField(source='frequency')
+    created_by_id = serializers.IntegerField()
 
     class Meta:
         model = AutoSendReportSchedular
-        fields = ('id', 'frequency_id', 'receivers', 'system_id')
+        fields = ('id', 'frequency_id', 'receivers', 'system_id', 'created_by_id')
 
 
 class CreateReportScheduleSerializer(serializers.ModelSerializer):

@@ -339,13 +339,13 @@ class SendPasswordResetEmailView(generics.CreateAPIView):
     def post(self, request, format=None):
 
         data = request.data
-        required_keys = set(['email', 'system_id'])
+        required_keys = set(['email'])
 
         if not required_keys.issubset(set(data.keys())):
             raise ParseError('Invalid request')
 
         try:
-            u = EntrakUser.objects.get(email=data['email'], system_id=data['system_id'])
+            u = EntrakUser.objects.get(email=data['email'], is_personal_account=True)
             u.send_password_reset_email()
         except ObjectDoesNotExist as e:
             raise serializers.ValidationError(_("This email is not linked to any existing account."))
