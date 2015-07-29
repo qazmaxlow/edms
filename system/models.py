@@ -1196,6 +1196,13 @@ class SystemHomeImage(models.Model):
 
 class SystemEnergyGoal(models.Model):
     system = models.ForeignKey('system.System')
+    goal_type = models.IntegerField(
+        choices=(
+            (1, 'Next 12 months'),
+            (2, 'Month'),
+            (3, 'Year'),
+        )
+    )
     validated_date = models.DateTimeField()
     comparison_type = models.IntegerField(
         choices=(
