@@ -25,3 +25,7 @@ class GoalSettingsView(generics.ListAPIView):
     def get_queryset(self):
         goals = SystemEnergyGoal.objects.all()
         return goals
+
+
+class CreateGoalSettingView(generics.CreateAPIView):
+    serializer_class = GoalSerializer

@@ -39,6 +39,7 @@ urlpatterns = patterns(
     url(r'^progresses/compare-to-baseline/$', progress_views.progressCompareToBaseline.as_view(), name='companies.progesses.compare-to-baseline'),
     url(r'^goal/tracking/$', goal_views.goalTracking.as_view(), name='companies.goal.tracking'),
     url(r'^goal/settings/$', goal_views.GoalSettingsView.as_view(), name='companies.goal.settings'),
+    url(r'^goal/settings/create/$', goal_views.CreateGoalSettingView.as_view(), name='companies.goal.settings.create'),
     url(r'^savings/so-far-this-year/$', saving_views.savingSoFarThisYear.as_view(), name='companies.savings.so-far-this-year'),
     url(r'^savings/compare-to-baseline/$', saving_views.compareToBaseline.as_view(), name='companies.savings.compare-to-baseline'),
     url(r'^export/$', export_views.ExportView.as_view(), name='companies.export'),
