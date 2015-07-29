@@ -8,6 +8,8 @@ from rest_framework import routers
 from entrak import settings
 
 from django.contrib import admin
+
+from system.views import SystemGoalSettingsView
 from trails import trails, apis
 
 import user
@@ -68,6 +70,7 @@ urlpatterns = patterns('',
         url(r'^remove_alert/$', 'entrak.settings_views.remove_alert_view', name='remove_alert'),
         url(r'^general_settings/$', 'entrak.settings_views.general_settings_view', name='general_settings'),
         url(r'^manage_accounts/$', 'entrak.settings_views.manage_accounts_view', name='manage_accounts'),
+        url(r'^goal_settings/$', SystemGoalSettingsView.as_view(), name='systems.goals.settings'),
         url(r'^profile/$', 'entrak.settings_views.profile_view', name='profile'),
         url(r'^set_user_info/$', 'entrak.settings_views.set_user_info_view', name='set_user_info'),
         url(r'^delete_user/$', 'entrak.settings_views.delete_user_view', name='delete_user'),
