@@ -42,7 +42,7 @@
 
 {% block page_content %}
 
-
+{% verbatim %}
 <div ng-app="entrak">
     <div class="profile profile-container" ng-controller="GoalSettingsController">
         <div class="k-header">
@@ -61,7 +61,12 @@
                                 k-data-value-field="'id'"
                                 k-data-source="systemsDataSource"></select>
             </div>
-            <div>Time type: <input type="radio"><label>Next 12 months</label>  <input type="radio"><label>Month</label> <input type="radio"><label>Year</label> </div>
+            <div>Time type:
+              <input type="radio" ng-model="goal_type" value="12 months"><label>Next 12 months</label>
+              <input type="radio" ng-model="goal_type" value="Month"><label>Month</label>
+              <input type="radio" ng-model="goal_type" value="Year"><label>Year</label>
+              {{ goal_type }}
+            </div>
             <div>Time: <input kendo-et-date-picker k-options="validatedDateOptions"></input> </div>
             <div>Goal: Use <input type="text"> % less than
               <select kendo-drop-down-list>
@@ -78,7 +83,7 @@
 
     </div>
 </div>
-
+{% endverbatim %}
 
  <script>
         angular.module("entrak", [ "kendo.directives" ])
@@ -87,9 +92,16 @@
                     transport: {
                         read: {
                             url: "{% url 'companies.goal.settings' current_system.code %}"
+                        },
+                        create: {
+                            url: "{% url 'companies.goal.settings.create' current_system.code %}",
+                            type: "POST",
+                            // contentType: "application/json"
                         }
                     }
                 });
+
+                $scope.goal_type = "testing";
 
                 $scope.validatedDateOptions = {
                     format: 'MMM yyyy',
