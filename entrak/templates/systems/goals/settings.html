@@ -51,7 +51,7 @@
         </div>
 
         <div class="form-horizontal form-widgets">
-          <kendo-grid>
+          <kendo-grid k-options="goalSettingGridOptions(dataItem)">
           </kendo-grid>
         </div>
 
@@ -61,7 +61,20 @@
 
  <script>
         angular.module("entrak", [ "kendo.directives" ])
-            .controller("GoalSettingsController", function($scope, $http) {
+            .controller("GoalSettingsController", function($scope) {
+                var goalSettingsDataSource = new kendo.data.DataSource({
+                    transport: {
+                        read: {
+                            url: "{% url 'companies.goal.settings' current_system.code %}"
+                        }
+                    }
+                });
+
+                $scope.goalSettingGridOptions = function(dataItem) {
+                    return {
+                        dataSource: goalSettingsDataSource
+                    }
+                };
 
 
             });
