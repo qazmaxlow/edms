@@ -1,0 +1,69 @@
+{% extends "page_base.html" %}
+
+{% load i18n %}
+{% load entrak_extras %}
+{% load static %}
+{% load humanize %}
+
+{% block ga_page_title %}report{% endblock %}
+
+{% block extra_head %}
+{{block.super}}
+{% get_current_language as LANGUAGE_CODE %}
+
+
+<script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
+<script src="{% static 'assets/django/js/ajax.js' %}"></script>
+<script src="{% static 'js/moment-with-locales.js' %}"></script>
+<script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
+<script src="{% static 'js/entrak-system.js' %}"></script>
+<script src="{% static 'js/entrak-utils.js' %}"></script>
+<script src="{% static 'js/report-generator.js' %}"></script>
+
+<link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static 'css/kendo.entrak.theme.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/my_profile.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/custom_control.css' %}">
+
+<script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
+<script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
+<script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
+
+{% endblock %}
+
+{% block selected-menu-link-id %}menu-link-setting{% endblock %}
+{% block page_title %}{% trans "SETTINGS" %}{% endblock %}
+{% block page_subtitle %}{% trans "Manage your system access with" %}{% endblock %}
+
+{% block extra_script %}
+{{block.super}}
+{% endblock %}
+
+{% block page_content %}
+
+
+<div ng-app="entrak">
+    <div class="profile profile-container" ng-controller="GoalSettingsController">
+        <div class="k-header">
+            <div class="header-tab selected-tab">{% trans "My Profile" %}</div><!--
+            -->{% if user.is_manager == True %}<div class="header-tab"><a href="{% url 'manage_accounts' system_code=systems.0.code %}">{% trans "Manage Accounts" %}</a></div>{% endif %}
+        </div>
+
+        <div class="form-horizontal form-widgets">
+          <kendo-grid>
+          </kendo-grid>
+        </div>
+
+    </div>
+</div>
+
+
+ <script>
+        angular.module("entrak", [ "kendo.directives" ])
+            .controller("GoalSettingsController", function($scope, $http) {
+
+
+            });
+    </script>
+{% endblock %}
