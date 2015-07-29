@@ -51,8 +51,12 @@
         </div>
 
         <div class="form-horizontal form-widgets">
+          <button ng-click="createGoalWin.open()">Set New Goal</button>
           <kendo-grid k-options="goalSettingGridOptions(dataItem)">
           </kendo-grid>
+          <div kendo-window="createGoalWin" k-visible="false">
+            test
+          </div>
         </div>
 
     </div>
