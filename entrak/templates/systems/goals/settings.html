@@ -54,8 +54,14 @@
           <button ng-click="createGoalWin.open()">Set New Goal</button>
           <kendo-grid k-options="goalSettingGridOptions(dataItem)">
           </kendo-grid>
-          <div kendo-window="createGoalWin" k-visible="false">
-            test
+          <div kendo-window="createGoalWin" xk-visible="false">
+            <div>Set an energy saving goal and track your progress on the Dashboard.</div>
+            <div>Area:   <select kendo-drop-down-list="systemDropdown"
+                                k-data-text-field="'fullname'"
+                                k-data-value-field="'id'"
+                                k-data-source="systemsDataSource"></select>
+            </div>
+            <div>Time: </div>
           </div>
         </div>
 
@@ -70,6 +76,17 @@
                     transport: {
                         read: {
                             url: "{% url 'companies.goal.settings' current_system.code %}"
+                        }
+                    }
+                });
+
+                $scope.systemsDataSource = new kendo.data.DataSource({
+                    transport: {
+                        read: {
+                            async: false,
+                            url: "{% url 'companies.systems.company-systems' current_system.code %}",
+                            type: 'GET',
+                            dataType: "json"
                         }
                     }
                 });
