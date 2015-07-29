@@ -72,7 +72,18 @@
 
                 $scope.goalSettingGridOptions = function(dataItem) {
                     return {
-                        dataSource: goalSettingsDataSource
+                        dataSource: goalSettingsDataSource,
+                        editable: "inline",
+                        columns: [
+                            { field: "system" },
+                            { field: "validated_date" },
+                            { field: "comparison_type"},
+                            {
+                                command: [{
+                                    name: "edit"
+                                }]
+                            }
+                        ]
                     }
                 };
 
