@@ -61,7 +61,7 @@
                                 k-data-value-field="'id'"
                                 k-data-source="systemsDataSource"></select>
             </div>
-            <div>Time: </div>
+            <div>Time: <input kendo-et-date-picker k-options="validatedDateOptions"></input> </div>
           </div>
         </div>
 
@@ -79,6 +79,12 @@
                         }
                     }
                 });
+
+                $scope.validatedDateOptions = {
+                    format: 'MMM yyyy',
+                    select: "month",
+                    clickPopup: true
+                };
 
                 $scope.systemsDataSource = new kendo.data.DataSource({
                     transport: {
