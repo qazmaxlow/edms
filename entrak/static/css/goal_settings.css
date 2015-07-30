@@ -1,0 +1,115 @@
+.leftLabel {
+	text-align: right;
+	padding-right: 10px;
+	width: 100px;
+	font-weight: 600;
+	display: inline-block;
+}
+
+.popupRow {
+	box-sizing: border-box;
+	height: 65px;
+	padding-top: 30px;
+	width: 100%;
+	color: #354960;
+	font-size: 1em;
+}
+
+.popupRow>* {
+	vertical-align: middle;
+	height: 35px;
+	line-height: 35px;
+	margin: 0 10px 0 0;
+}
+
+.popupRow>label {
+	font-weight: 400;
+	padding-left: 5px;
+	padding-right: 10px;
+}
+
+.datepicker.k-datepicker.k-widget {
+	margin: 0;
+	padding: 0;
+}
+
+.datepicker.k-datepicker.k-widget .k-picker-wrap {
+	height: 35px;
+    line-height: 35px;
+    box-sizing: border-box;
+}
+
+.datepicker.k-datepicker.k-widget .k-picker-wrap .k-select,
+.datepicker.k-datepicker.k-widget .k-picker-wrap input {
+	height: 100%;
+    box-sizing: border-box;
+}
+
+.vLine {
+	display: inline-block;
+	width: 1px;
+	background-color: #e5e5e5;
+	margin: 0 15px 0 -5px;
+}
+
+.k-textbox.normal-tb.w80 {
+	width: 80px;
+}
+
+.right {
+	float: right;
+}
+
+.btnContainer {
+	padding-top: 10px;
+	width: 80%;
+	margin: 0 10%;
+	text-align: left;
+}
+
+.popupRow>label.checkboxLabel {
+	margin: 0;
+}
+
+[type="checkbox"]:not(:checked),
+[type="checkbox"]:checked {
+	display: none;
+}
+
+[type="checkbox"]:not(:checked) + label,
+[type="checkbox"]:checked + label {
+  height: 22px;
+  line-height: 22px;
+  cursor: pointer;
+  font-weight: 300;
+}
+
+[type="checkbox"]:not(:checked) + label>div.colorBox,
+[type="checkbox"]:checked + label>div.colorBox {
+  width: 17px;
+  height: 17px;
+  border: 1px solid #e5e5e5;
+  border-radius: 3px;
+  margin-right: 5px;
+}
+[type="checkbox"]:not(:checked) + label>*,
+[type="checkbox"]:checked + label>* {
+	vertical-align: middle;
+	display: inline-block;
+}
+
+[type="checkbox"]:not(:checked) + label>div.colorBox {
+	background: #efefef;
+}
+[type="checkbox"]:checked + label>div.colorBox {
+	background: #74C62B;
+}
+
+#errText {
+	border: 1px solid #D65C2C;
+	background-color: #ffe0d9;
+	color: #354960;
+	border-radius: 4px;
+	padding: 10px;
+	float: left;
+}
