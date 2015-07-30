@@ -52,7 +52,9 @@
         </div>
 
         <div class="form-horizontal form-widgets">
-            <button ng-click="showPopup()">Set New Goal</button>
+            <div class="createGoalPanel">
+                <button class="k-button normal-btn" ng-click="showPopup()">Set New Goal</button>
+            </div>
             <kendo-grid class="settingGrid" k-options="goalSettingGridOptions(dataItem)"></kendo-grid>
             <div kendo-window="deleteGridRowWin" k-title="'Delete'"
                  k-visible="false" k-modal="true" k-draggable="false">
