@@ -190,6 +190,23 @@
                         });
                 }
 
+                function dateEditor(container, options){
+                    $('<input kendo-et-date-picker class="datepicker" k-options="validatedDateOptions" data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '"></input>').appendTo(container);
+                }
+
+                function comparisonEditor(container, options) {
+                    $('<input required data-value-field="' + options.field + '" data-bind="value:' + options.field + '"></input>')
+                        .appendTo(container).kendoDropDownList({
+                            autoBind: false,
+                            dataTextField: "text",
+                            dataValueField: "value",
+                            dataSource: [
+                                {"value": 1, "text": "Previous Month"},
+                                {"value": 2, "text": "Last Year Same Month"}
+                            ]  
+                        });
+                }
+
                 $scope.goalSettingGridOptions = function(dataItem) {
                     return {
                         dataSource: goalSettingsDataSource,
@@ -197,17 +214,30 @@
                         columns: [
                             {
                                 field: "system", title: "Area",
+                                width: "300px",
                                 editor: systemDropDownEditor,
                                 template: function(dataItem) {
                                     return $.grep(company_systems, function(e) {
                                         return e.id == dataItem.system
                                     })[0].fullname;
                                 }
-                            },
-                            { field: "validated_date", title: "Time" },
-                            { field: "comparison_type", title: "Comparison" },
-                            { field: "", title: "Goal" },
-                            {
+                            }, {
+                                field: "validated_date", title: "Time",
+                                editor: dateEditor,
+                                // format: "{0:yyyy-MM-dd HH:mm}", data-format="' + options.format + '"
+                                template: function(dataItem) {
+                                    return kendo.toString(new Date(dataItem.validated_date), "MMM yyyy");
+                                }
+                            }, {
+                                field: "comparison_type", title: "Comparison",
+                                editor: comparisonEditor,
+                                template: function(dateItem){
+                                    return dateItem.comparison_type == 1 ? "Previous Month" : "Last Year Same Month";
+                                }
+                            }, {
+                                field: "", title: "Goal",
+                                width: "100px"
+                            }, {
                                 command: [{
                                     name: "edit",
                                     text: {
@@ -216,7 +246,7 @@
                                         cancel: "Cancel"
                                     }
                                 }, {
-                                    name: "delete",
+                                    name: "mydestroy",
                                     text: "Delete",
                                     click: function(e) {
                                         var tr = $(e.target).closest("tr"); 
