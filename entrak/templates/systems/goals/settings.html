@@ -129,7 +129,7 @@
 
                         var json = {
                             "goal_type": dateType,
-                            "validated_date": date,
+                            "validated_date": date.toISOString(),
                             "comparison_type": compareTo,
                             "system": area,
                             "created_by": 1 //TODO user id
@@ -154,6 +154,9 @@
                             url: "{% url 'companies.goal.settings.create' current_system.code %}",
                             type: "POST"
                         }
+                    },
+                    schema: {
+                        model: {id: "id"}
                     }
                 });
 
