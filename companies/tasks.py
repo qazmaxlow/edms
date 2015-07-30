@@ -35,11 +35,15 @@ def send_report_by_schedulers():
         last_execute_time = None
 
         owner = scheduler.created_by
+        system = scheduler.system
         translation.activate(owner.language)
-        url = reverse('companies.reports.share-report.custom-dates', kwargs={ 'system_code': scheduler.system.code })
+        if system.code == 'esf' or 'esf' in system.path:
+            url = reverse('companies.report_revamp.share-report.custom-dates', kwargs={ 'system_code': system.code })
+        else:
+            url = reverse('companies.reports.share-report.custom-dates', kwargs={ 'system_code': system.code })
         # build regex to match both report page and dowload page view
         url_regex = r'^%s(download/)?$' % url
-        user_tz = scheduler.system.time_zone
+        user_tz = system.time_zone
         execute_time = scheduler.execute_time.astimezone(user_tz)
 
         # skip sending report before 8:00am in user's time zone
