@@ -23,6 +23,7 @@
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="{% static 'css/kendo.entrak.theme.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/goal_settings.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/my_profile.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/custom_control.css' %}">
 
@@ -51,27 +52,44 @@
         </div>
 
         <div class="form-horizontal form-widgets">
-          <button ng-click="createGoalWin.open()">Set New Goal</button>
+          <button ng-click="showPopup()">Set New Goal</button>
           <kendo-grid k-options="goalSettingGridOptions(dataItem)">
           </kendo-grid>
-          <div kendo-window="createGoalWin" xk-visible="false">
-            <div>Set an energy saving goal and track your progress on the Dashboard.</div>
-            <div>Area:   <select kendo-drop-down-list="systemDropdown"
-                                k-data-text-field="'fullname'"
-                                k-data-value-field="'id'"
-                                k-data-source="systemsDataSource"></select>
+
+          <div kendo-window="createGoalWin" k-title="'{% trans "Set New Goal" %}'" k-width="650" k-height="350" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
+            <div class="popupRow">
+                <div class="leftLabel">Area:</div>
+                <select kendo-drop-down-list="systemDropdown"
+                    k-data-text-field="'fullname'"
+                    k-data-value-field="'id'"
+                    k-data-source="systemsDataSource"></select>
             </div>
-            <div>Time type: <input type="radio"><label>Next 12 months</label>  <input type="radio"><label>Month</label> <input type="radio"><label>Year</label> </div>
-            <div>Time: <input kendo-et-date-picker k-options="validatedDateOptions"></input> </div>
-            <div>Goal: Use <input type="text"> % less than
-              <select kendo-drop-down-list>
-                <option>Previous month</option>
-                <option>Last year same year</option>
-              </select>
+            <div class="popupRow">
+                <div class="leftLabel">Time:</div>
+                <input value="next12month" type="radio" name="timeGroup" id="next12Radio" checked><label for="next12Radio">Next 12 months</label>
+                <input value="month" type="radio" name="timeGroup" id="monthRadio"><label for="monthRadio">Month</label>
+                <input value="year" type="radio" name="timeGroup" id="yearRadio"><label for="yearRadio">Year</label>
+                <span class="vLine"></span>
+                <input kendo-et-date-picker="datePicker" class="datepicker" k-options="validatedDateOptions"></input>
             </div>
-            <div>
-              <button>Confirm</button>
-              <button>Cancel</button>
+            <div class="popupRow">
+                <div class="leftLabel">Goal:</div>
+                <span>Use</span>
+                <input id="percentTextbox" class="k-textbox normal-tb w80"></input>
+                <span></span><span>% less than</span>
+                <select kendo-drop-down-list="dateDropdown">
+                    <option value="month">Previous month</option>
+                    <option value="year">Last year same month</option>
+                </select>
+            </div>
+            <div class="popupRow">
+                <div class="leftLabel"></div>
+                <input id="repeatCheckbox" type="checkbox" ng-model="isRepeat"/><label class="checkboxLabel" for="repeatCheckbox"><div class="colorBox"></div><span class="leftPad10" ng-bind="currentNode"></span></label><span>Repeat Every Month</span>
+            </div>
+            <div class="btnContainer">
+                <span id="errText"></span>
+                <button class="right k-button normal-btn cancel" ng-click="hidePopup()">Cancel</button>
+                <button class="right k-button normal-btn" ng-click="confirmAction()">Confirm</button>
             </div>
           </div>
         </div>
@@ -83,6 +101,37 @@
  <script>
         angular.module("entrak", [ "kendo.directives" ])
             .controller("GoalSettingsController", function($scope) {
+                $scope.showPopup = function(){
+                    $("#errText").hide();
+                    $scope.isRepeat = false;
+                    $scope.systemDropdown.select(0);
+                    $scope.dateDropdown.select(0);
+                    $("#percentTextbox").val("");
+                    $scope.datePicker.value(null);
+
+                    $scope.createGoalWin.open();
+                }
+
+                $scope.hidePopup = function(){
+                    $scope.createGoalWin.close();
+                }
+
+                $scope.confirmAction = function(){
+                    var area = $scope.systemDropdown.value();
+                    var date = $scope.datePicker.value();
+                    var dateType = $('input[name="timeGroup"]:checked').val();
+                    var percent = $("#percentTextbox").val().trim();
+                    var compareTo = $scope.dateDropdown.value();
+
+                    if (percent.length > 0 && date && area && dateType && compareTo){
+                        $("#errText").hide();
+                        $scope.createGoalWin.close();
+                    } else {
+                        $("#errText").html("Please fill in all the fields.");
+                        $("#errText").show();
+                    }
+                }
+
                 var goalSettingsDataSource = new kendo.data.DataSource({
                     transport: {
                         read: {
