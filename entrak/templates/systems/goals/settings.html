@@ -53,7 +53,7 @@
 
         <div class="form-horizontal form-widgets">
             <button ng-click="showPopup()">Set New Goal</button>
-            <kendo-grid k-options="goalSettingGridOptions(dataItem)"></kendo-grid>
+            <kendo-grid class="settingGrid" k-options="goalSettingGridOptions(dataItem)"></kendo-grid>
             <div kendo-window="deleteGridRowWin" k-title="'Delete'"
                  k-visible="false" k-modal="true" k-draggable="false">
               <div class="titleText">{% trans "Are you sure you want to delete the item?" %}</div>
@@ -127,6 +127,16 @@
                     if (percent.length > 0 && date && area && dateType && compareTo){
                         $("#errText").hide();
 
+                        var json = {
+                            "goal_type": dateType,
+                            "validated_date": date,
+                            "comparison_type": compareTo,
+                            "system": area,
+                            "created_by": 1 //TODO user id
+                            //TODO add percent
+                        }
+                        goalSettingsDataSource.add(json);
+                        goalSettingsDataSource.sync();
                         
                         $scope.createGoalWin.close();
                     } else {
@@ -142,13 +152,10 @@
                         },
                         create: {
                             url: "{% url 'companies.goal.settings.create' current_system.code %}",
-                            type: "POST",
-                            // contentType: "application/json"
+                            type: "POST"
                         }
                     }
                 });
-
-                $scope.goal_type = "testing";
 
                 $scope.validatedDateOptions = {
                     format: 'MMM yyyy',
@@ -166,13 +173,32 @@
                         }
                     }
                 });
+                $scope.systemsDataSource.read();
+                var company_systems = $scope.systemsDataSource.data();
+
+                function systemDropDownEditor(container, options) {
+                    $('<input required data-text-field="fullname" data-value-field="id" data-bind="value:' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({
+                            autoBind: false,
+                            dataSource: $scope.systemsDataSource
+                        });
+                }
 
                 $scope.goalSettingGridOptions = function(dataItem) {
                     return {
                         dataSource: goalSettingsDataSource,
                         editable: "inline",
                         columns: [
-                            { field: "system", title: "Area" },
+                            {
+                                field: "system", title: "Area",
+                                editor: systemDropDownEditor,
+                                template: function(dataItem) {
+                                    return $.grep(company_systems, function(e) {
+                                        return e.id == dataItem.system
+                                    })[0].fullname;
+                                }
+                            },
                             { field: "validated_date", title: "Time" },
                             { field: "comparison_type", title: "Comparison" },
                             { field: "", title: "Goal" },
