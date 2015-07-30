@@ -52,11 +52,17 @@
         </div>
 
         <div class="form-horizontal form-widgets">
-          <button ng-click="showPopup()">Set New Goal</button>
-          <kendo-grid k-options="goalSettingGridOptions(dataItem)">
-          </kendo-grid>
-
-          <div kendo-window="createGoalWin" k-title="'{% trans "Set New Goal" %}'" k-width="650" k-height="350" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
+            <button ng-click="showPopup()">Set New Goal</button>
+            <kendo-grid k-options="goalSettingGridOptions(dataItem)"></kendo-grid>
+            <div kendo-window="deleteGridRowWin" k-title="'Delete'"
+                 k-visible="false" k-modal="true" k-draggable="false">
+              <div class="titleText">{% trans "Are you sure you want to delete the item?" %}</div>
+              <div class="buttons-wrap">
+                <button class="k-button normal-btn cancel" ng-click="deleteGridRowWin.close()">{% trans "Cancel" %}</button>
+                <button class="k-button normal-btn" ng-click="confirmDelete()">{% trans "Confirm" %}</button>
+              </div>
+            </div>
+            <div kendo-window="createGoalWin" k-title="'{% trans "Set New Goal" %}'" k-width="650" k-height="300" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
             <div class="popupRow">
                 <div class="leftLabel">Area:</div>
                 <select kendo-drop-down-list="systemDropdown"
@@ -66,9 +72,9 @@
             </div>
             <div class="popupRow">
                 <div class="leftLabel">Time:</div>
-                <input value="next12month" type="radio" name="timeGroup" id="next12Radio" checked><label for="next12Radio">Next 12 months</label>
-                <input value="month" type="radio" name="timeGroup" id="monthRadio"><label for="monthRadio">Month</label>
-                <input value="year" type="radio" name="timeGroup" id="yearRadio"><label for="yearRadio">Year</label>
+                <input value="1" type="radio" name="timeGroup" id="next12Radio" checked><label for="next12Radio">Next 12 months</label>
+                <input value="2" type="radio" name="timeGroup" id="monthRadio"><label for="monthRadio">Month</label>
+                <input value="3" type="radio" name="timeGroup" id="yearRadio"><label for="yearRadio">Year</label>
                 <span class="vLine"></span>
                 <input kendo-et-date-picker="datePicker" class="datepicker" k-options="validatedDateOptions"></input>
             </div>
@@ -78,13 +84,9 @@
                 <input id="percentTextbox" class="k-textbox normal-tb w80"></input>
                 <span></span><span>% less than</span>
                 <select kendo-drop-down-list="dateDropdown">
-                    <option value="month">Previous month</option>
-                    <option value="year">Last year same month</option>
+                    <option value="1">Previous Month</option>
+                    <option value="2">Last Year Same Month</option>
                 </select>
-            </div>
-            <div class="popupRow">
-                <div class="leftLabel"></div>
-                <input id="repeatCheckbox" type="checkbox" ng-model="isRepeat"/><label class="checkboxLabel" for="repeatCheckbox"><div class="colorBox"></div><span class="leftPad10" ng-bind="currentNode"></span></label><span>Repeat Every Month</span>
             </div>
             <div class="btnContainer">
                 <span id="errText"></span>
@@ -103,7 +105,6 @@
             .controller("GoalSettingsController", function($scope) {
                 $scope.showPopup = function(){
                     $("#errText").hide();
-                    $scope.isRepeat = false;
                     $scope.systemDropdown.select(0);
                     $scope.dateDropdown.select(0);
                     $("#percentTextbox").val("");
@@ -125,6 +126,8 @@
 
                     if (percent.length > 0 && date && area && dateType && compareTo){
                         $("#errText").hide();
+
+                        
                         $scope.createGoalWin.close();
                     } else {
                         $("#errText").html("Please fill in all the fields.");
@@ -169,13 +172,36 @@
                         dataSource: goalSettingsDataSource,
                         editable: "inline",
                         columns: [
-                            { field: "system" },
-                            { field: "validated_date" },
-                            { field: "comparison_type"},
+                            { field: "system", title: "Area" },
+                            { field: "validated_date", title: "Time" },
+                            { field: "comparison_type", title: "Comparison" },
+                            { field: "", title: "Goal" },
                             {
                                 command: [{
-                                    name: "edit"
-                                }]
+                                    name: "edit",
+                                    text: {
+                                        edit: "Edit",
+                                        update: "Confirm",
+                                        cancel: "Cancel"
+                                    }
+                                }, {
+                                    name: "delete",
+                                    text: "Delete",
+                                    click: function(e) {
+                                        var tr = $(e.target).closest("tr"); 
+                                        var data = this.dataItem(tr);
+
+                                        var that = this;
+                                        $scope.confirmDelete = function() {
+                                            that._removeRow(tr);
+                                            $scope.deleteGridRowWin.close();
+                                        };
+
+                                        $scope.deleteGridRowWin.center().open();
+                                    }
+                                }],
+                                title: "Actions",
+                                width: "160px"
                             }
                         ]
                     }
