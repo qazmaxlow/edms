@@ -116,6 +116,14 @@
 
 .settingGrid.k-grid.k-widget .k-grid-content td{
 	border: none;
+	height: 50px;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+.settingGrid.k-grid.k-widget .k-grid-content .datepicker.k-datepicker {
+	height: 35px;
+	background-color: transparent;
 }
 
 .createGoalPanel {
@@ -123,4 +131,35 @@
 	padding-left: 30px;
 	height: 65px;
 	padding-top: 15px;
+}
+
+.settingGrid.k-grid.k-widget a.k-button.k-button-icontext {
+    margin: 0;
+    height: 20px;
+    box-shadow: 0px 2px 0px #6b9aa5;
+    font-size: 0.857em;
+    padding: 0px;
+    text-decoration: none;
+    background-image: none;
+    background-color: #9bceda;
+    border-color: #9bceda;
+}
+
+.settingGrid.k-grid.k-widget a.k-button.k-button-icontext.k-grid-edit:hover,
+.settingGrid.k-grid.k-widget a.k-button.k-button-icontext.k-grid-update:hover,
+.settingGrid.k-grid.k-widget a.k-button.k-button-icontext.k-grid-mydestroy:hover,
+.settingGrid.k-grid.k-widget a.k-button.k-button-icontext.k-grid-cancel:hover {
+    background-color: #74c62b;
+    border-color: #74c62b;
+}
+
+.settingGrid.k-grid.k-widget a.k-button.k-button-icontext.k-grid-edit,
+.settingGrid.k-grid.k-widget a.k-button.k-button-icontext.k-grid-update {
+	margin-right: 5px;
+}
+
+.settingGrid.k-grid.k-widget span.k-icon.k-edit,
+.settingGrid.k-grid.k-widget span.k-icon.k-update,
+.settingGrid.k-grid.k-widget span.k-icon.k-cancel {
+    display: none;
 }
