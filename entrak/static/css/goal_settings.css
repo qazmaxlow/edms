@@ -145,6 +145,10 @@
     border-color: #9bceda;
 }
 
+.settingGrid.k-grid.k-widget .k-grid-content {
+	max-height: 350px;
+}
+
 .settingGrid.k-grid.k-widget a.k-button.k-button-icontext.k-grid-edit:hover,
 .settingGrid.k-grid.k-widget a.k-button.k-button-icontext.k-grid-update:hover,
 .settingGrid.k-grid.k-widget a.k-button.k-button-icontext.k-grid-mydestroy:hover,
@@ -162,4 +166,19 @@
 .settingGrid.k-grid.k-widget span.k-icon.k-update,
 .settingGrid.k-grid.k-widget span.k-icon.k-cancel {
     display: none;
+}
+
+.popupQuestion {
+	padding: 20px;
+}
+
+.popupBtnGrp {
+	box-sizing: border-box;
+	padding: 10px 20px 0 20px;
+	width: 100%;
+	text-align: right;
+}
+
+body #page-container #menu {
+	height: calc(100% + 50px);
 }
