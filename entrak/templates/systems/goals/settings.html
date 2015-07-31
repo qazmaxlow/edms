@@ -57,7 +57,7 @@
             </div>
             <kendo-grid class="settingGrid" k-options="goalSettingGridOptions(dataItem)"></kendo-grid>
             <div kendo-window="deleteGridRowWin" k-title="'Delete'"
-                 k-visible="false" k-modal="true" k-draggable="false" k-width="340" k-height="130">
+                 k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-width="340" k-height="130">
               <div class="popupQuestion">{% trans "Are you sure you want to delete the item?" %}</div>
               <div class="popupBtnGrp">
                 <button class="k-button normal-btn cancel" ng-click="deleteGridRowWin.close()">{% trans "Cancel" %}</button>
