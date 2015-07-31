@@ -187,3 +187,47 @@
 body #page-container #menu {
 	height: calc(100% + 50px);
 }
+
+
+
+[type="checkbox"]:not(:checked),
+[type="checkbox"]:checked {
+	display: none;
+}
+
+[type="checkbox"]:not(:checked) + label,
+[type="checkbox"]:checked + label {
+  height: 22px;
+  line-height: 22px;
+  cursor: pointer;
+  font-weight: 300;
+}
+
+[type="checkbox"]:not(:checked) + label>div.colorBox,
+[type="checkbox"]:checked + label>div.colorBox {
+  width: 17px;
+  height: 17px;
+  border: 1px solid #e5e5e5;
+  border-radius: 3px;
+  margin-right: 5px;
+}
+[type="checkbox"]:not(:checked) + label>*,
+[type="checkbox"]:checked + label>* {
+	vertical-align: middle;
+	display: inline-block;
+}
+
+[type="checkbox"]:not(:checked) + label>div.colorBox {
+	background: #efefef;
+}
+[type="checkbox"]:checked + label>div.colorBox {
+	background: #74c62b;
+}
+
+.popupRow label .colorBox {
+	margin-left: 30px;
+}
+
+.popupRow input[type="radio"] {
+	margin-top: 0;
+}

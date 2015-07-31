@@ -71,6 +71,7 @@
                     k-data-text-field="'fullname'"
                     k-data-value-field="'id'"
                     k-data-source="systemsDataSource"></select>
+                <input id="allAreaCheckbox" type="checkbox" ng-model="allAreaModel"/><label for="allAreaCheckbox"><div class="colorBox"></div><span class="leftPad10">All Area</span></label>
             </div>
             <div class="popupRow">
                 <div class="leftLabel">Time:</div>
@@ -107,17 +108,29 @@
             .controller("GoalSettingsController", function($scope) {
                 $scope.showPopup = function(){
                     $("#errText").hide();
+                    $scope.allAreaModel = false;
                     $scope.systemDropdown.select(0);
                     $scope.dateDropdown.select(0);
-                    $("#percentTextbox").val("");
+                    $("#percentTextbox").val("5");
                     $scope.datePicker.value(null);
+                    $('#next12Radio').prop("checked", true);
+                    $scope.datePicker.enable(false);
 
-                    $scope.createGoalWin.open();
+                    $scope.createGoalWin.center().open();
                 }
 
                 $scope.hidePopup = function(){
                     $scope.createGoalWin.close();
                 }
+
+                $scope.$watch("allAreaModel", function(nVal, oVal){
+                    if ($scope.systemDropdown)
+                        $scope.systemDropdown.enable(!nVal);
+                });
+
+                $('input[name="timeGroup"]').change(function(){
+                    $scope.datePicker.enable($('input[name="timeGroup"]:checked').val() != "1");
+                });
 
                 $scope.confirmAction = function(){
                     var area = $scope.systemDropdown.value();
@@ -126,7 +139,7 @@
                     var percent = $("#percentTextbox").val().trim();
                     var compareTo = $scope.dateDropdown.value();
 
-                    if (percent.length > 0 && date && area && dateType && compareTo){
+                    if (percent.length > 0 && ((date && dateType!="1") || date) && compareTo){
                         $("#errText").hide();
 
                         var json = {
@@ -135,6 +148,7 @@
                             "comparison_type": compareTo,
                             "system": area,
                             "goal_save_percent": percent,
+                            // "allArea": $scope.allAreaModel,  //TODO update all area
                             "created_by": 1 //TODO user id
                         }
                         goalSettingsDataSource.add(json);
