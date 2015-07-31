@@ -134,8 +134,8 @@
                             "validated_date": date.toISOString(),
                             "comparison_type": compareTo,
                             "system": area,
+                            "goal_save_percent": percent,
                             "created_by": 1 //TODO user id
-                            //TODO add percent
                         }
                         goalSettingsDataSource.add(json);
                         goalSettingsDataSource.sync();
@@ -207,6 +207,10 @@
                         });
                 }
 
+                function textEditor(container, options){
+                    $('<input type="text" class="k-textbox normal-tb" data-bind="value:' + options.field + '"></input>').appendTo(container);
+                }
+
                 $scope.goalSettingGridOptions = function(dataItem) {
                     return {
                         dataSource: goalSettingsDataSource,
@@ -235,8 +239,12 @@
                                     return dateItem.comparison_type == 1 ? "Previous Month" : "Last Year Same Month";
                                 }
                             }, {
-                                field: "", title: "Goal",
-                                width: "100px"
+                                field: "goal_save_percent", title: "Goal",
+                                width: "100px",
+                                editor: textEditor,
+                                template: function(dataItem) {
+                                    return dataItem.goal_save_percent + "%";
+                                }
                             }, {
                                 command: [{
                                     name: "edit",
