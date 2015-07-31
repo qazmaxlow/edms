@@ -1210,5 +1210,6 @@ class SystemEnergyGoal(models.Model):
             (2, 'Last Year Same Month'),
         )
     )
+    goal_save_percent = models.FloatField()
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL)
     created_time = models.DateTimeField(auto_now_add=True)
