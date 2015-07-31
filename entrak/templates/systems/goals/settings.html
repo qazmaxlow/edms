@@ -47,7 +47,7 @@
 <div ng-app="entrak">
     <div class="profile profile-container" ng-controller="GoalSettingsController">
         <div class="k-header">
-            <div class="header-tab">{% trans "My Profile" %}</div><!--
+            <div class="header-tab"><a href="{% url 'profile' system_code=systems.0.code %}">{% trans "My Profile" %}</a></div><!--
             -->{% if user.is_manager == True %}<div class="header-tab"><a href="{% url 'manage_accounts' system_code=systems.0.code %}">{% trans "Manage Accounts" %}</a></div><div class="header-tab selected-tab">{% trans "Goal Tracking" %}</div>{% endif %}
         </div>
 
