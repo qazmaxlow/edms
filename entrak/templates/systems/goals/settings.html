@@ -229,10 +229,12 @@
                     return {
                         dataSource: goalSettingsDataSource,
                         editable: "inline",
+                        sortable: true,
                         columns: [
                             {
                                 field: "system", title: "Area",
                                 width: "300px",
+                                sortable: true,
                                 editor: systemDropDownEditor,
                                 template: function(dataItem) {
                                     return $.grep(company_systems, function(e) {
@@ -241,6 +243,7 @@
                                 }
                             }, {
                                 field: "validated_date", title: "Time",
+                                sortable: true,
                                 editor: dateEditor,
                                 // format: "{0:yyyy-MM-dd HH:mm}", data-format="' + options.format + '"
                                 template: function(dataItem) {
@@ -248,18 +251,21 @@
                                 }
                             }, {
                                 field: "comparison_type", title: "Comparison",
+                                sortable: true,
                                 editor: comparisonEditor,
                                 template: function(dateItem){
                                     return dateItem.comparison_type == 1 ? "Previous Month" : "Last Year Same Month";
                                 }
                             }, {
                                 field: "goal_save_percent", title: "Goal",
+                                sortable: true,
                                 width: "100px",
                                 editor: textEditor,
                                 template: function(dataItem) {
                                     return dataItem.goal_save_percent + "%";
                                 }
                             }, {
+                                sortable: false,
                                 command: [{
                                     name: "edit",
                                     text: {

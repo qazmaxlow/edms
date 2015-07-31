@@ -105,9 +105,14 @@
 }
 
 .settingGrid.k-grid.k-widget th,
+.settingGrid.k-grid.k-widget th a,
 .settingGrid.k-grid.k-widget .k-grid-header {
 	background-color: #354960;
 	color: #ffffff;
+}
+
+.settingGrid.k-grid.k-widget .k-grid-header th.k-header>.k-link {
+	line-height: inherit;
 }
 
 .settingGrid.k-grid.k-widget th {
