@@ -99,11 +99,11 @@ class Alert(models.Model):
     def gen_start_end_dt(self, now):
         if self.type == ALERT_TYPE_STILL_ON or self.type == ALERT_TYPE_PEAK:
             end_min = (now.minute/CONTINUOUS_INTERVAL_MIN)*CONTINUOUS_INTERVAL_MIN
-            end_dt = now.replace(minute=end_min)
+            end_dt = now.replace(minute=end_min, second=0, microsecond=0)
             start_dt = end_dt - datetime.timedelta(minutes=CONTINUOUS_INTERVAL_MIN)
         elif self.type == ALERT_TYPE_SUMMARY:
-            start_dt = now.replace(hour=self.start_time.hour, minute=self.start_time.minute)
-            end_dt = now.replace(hour=self.end_time.hour, minute=self.end_time.minute)
+            start_dt = now.replace(hour=self.start_time.hour, minute=self.start_time.minute, second=0, microsecond=0)
+            end_dt = now.replace(hour=self.end_time.hour, minute=self.end_time.minute, second=0, microsecond=0)
             if now.time() < self.end_time:
                 start_dt -= datetime.timedelta(days=1)
                 end_dt -= datetime.timedelta(days=1)
