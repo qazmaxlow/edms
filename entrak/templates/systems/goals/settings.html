@@ -169,10 +169,26 @@
                         create: {
                             url: "{% url 'companies.goal.settings.create' current_system.code %}",
                             type: "POST"
+                        },
+                        update: {
+                            url: function(item){
+                                item.validated_date = item.validated_date.toISOString();
+                                var url = "{% url 'companies.goal.settings.update' current_system.code 999 %}";
+                                url = url.replace(999, item.id);
+                                return url;
+                            },
+                            type: "PUT"
                         }
                     },
                     schema: {
-                        model: {id: "id"}
+                        model: {id: "id"},
+                        parse: function(response){
+                            // if ($.isArray(response))
+                            for (i=0; i<response.length; i++){
+                                response[i].validated_date = new Date(response[i].validated_date);
+                            }
+                            return response;
+                        }
                     }
                 });
 
@@ -204,16 +220,14 @@
                         });
                 }
 
-                function dateEditor(container, options){
+                function dateEditor(container, options) {
                     $('<input kendo-et-date-picker class="datepicker" k-options="validatedDateOptions" data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '"></input>').appendTo(container);
                 }
 
                 function comparisonEditor(container, options) {
-                    $('<input required data-value-field="' + options.field + '" data-bind="value:' + options.field + '"></input>')
+                    $('<input required data-value-field="value" data-text-field="text" data-bind="value:' + options.field + '"></input>')
                         .appendTo(container).kendoDropDownList({
                             autoBind: false,
-                            dataTextField: "text",
-                            dataValueField: "value",
                             dataSource: [
                                 {"value": 1, "text": "Previous Month"},
                                 {"value": 2, "text": "Last Year Same Month"}
@@ -221,7 +235,7 @@
                         });
                 }
 
-                function textEditor(container, options){
+                function textEditor(container, options) {
                     $('<input type="text" class="k-textbox normal-tb" data-bind="value:' + options.field + '"></input>').appendTo(container);
                 }
 

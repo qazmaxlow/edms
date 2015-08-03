@@ -19,6 +19,17 @@ class GoalSerializer(serializers.ModelSerializer):
         model = SystemEnergyGoal
 
 
+class UpdateGoalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SystemEnergyGoal
+
+    def update(self, instance, validated_attrs):
+        for attr, value in validated_attrs.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
+
+
 class GoalSettingsView(generics.ListAPIView):
     serializer_class = GoalSerializer
 
@@ -29,3 +40,8 @@ class GoalSettingsView(generics.ListAPIView):
 
 class CreateGoalSettingView(generics.CreateAPIView):
     serializer_class = GoalSerializer
+
+
+class UpdateGoalSettingView(generics.UpdateAPIView):
+    serializer_class = UpdateGoalSerializer
+    queryset = SystemEnergyGoal.objects.all()
