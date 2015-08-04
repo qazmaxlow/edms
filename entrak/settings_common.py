@@ -35,6 +35,7 @@ STATIC_ROOT = path('site-static')
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'django.contrib.staticfiles.finders.FileSystemFinder',
+    'compressor.finders.CompressorFinder',
 )
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'entrak', 'media')
@@ -74,6 +75,7 @@ INSTALLED_APPS = (
     'apis',
     'schedulers',
     'meters',
+    'compressor',
 )
 
 REST_FRAMEWORK = {
