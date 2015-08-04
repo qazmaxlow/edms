@@ -49,7 +49,7 @@
             <div class="header-tab">
                 <a href="{% url 'profile' system_code=systems.0.code %}">{% trans "My Profile" %}</a>
             </div><!--
-            --><div class="header-tab selected-tab">{% trans "Manage Accounts" %}</div><div class="header-tab"><a href="{% url 'systems.goals.settings' system_code=systems.0.code %}">{% trans "Goal Tracking" %}</a></div>
+            --><div class="header-tab selected-tab">{% trans "Manage Accounts" %}</div><!--<div class="header-tab"><a href="{% url 'systems.goals.settings' system_code=systems.0.code %}">{% trans "Goal Tracking" %}</a></div>-->
         </div>
 
         <button class='k-button normal-btn userAcc' ng-click="showCreateUserAccountWindow()">{% trans "Create User Account" %}</button>
