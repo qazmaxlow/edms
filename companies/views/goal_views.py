@@ -45,3 +45,7 @@ class CreateGoalSettingView(generics.CreateAPIView):
 class UpdateGoalSettingView(generics.UpdateAPIView):
     serializer_class = UpdateGoalSerializer
     queryset = SystemEnergyGoal.objects.all()
+
+
+class DestroyGoalSettingView(generics.DestroyAPIView):
+    queryset = SystemEnergyGoal.objects.all()
