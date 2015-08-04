@@ -41,6 +41,8 @@ class EntrakUser(AbstractUser):
     is_email_verified = models.BooleanField(default=False)
     is_personal_account = models.BooleanField(default=False)
     salt = models.CharField(max_length=32, blank=True)
+    device_id = models.CharField(max_length=40, null=True, blank=True)
+    device_type = models.CharField(max_length=20, choices=(('apple_ios', 'Apple IOS'), ('google_android', 'Google Android'),), null=True, blank=True)
 
 
     @property

@@ -22,6 +22,7 @@
 
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static 'css/kendo.entrak.theme.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/custom_control.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/manage_account.css' %}">
 
@@ -48,7 +49,7 @@
             <div class="header-tab">
                 <a href="{% url 'profile' system_code=systems.0.code %}">{% trans "My Profile" %}</a>
             </div><!--
-            --><div class="header-tab selected-tab">{% trans "Manage Accounts" %}</div>
+            --><div class="header-tab selected-tab">{% trans "Manage Accounts" %}</div><div class="header-tab"><a href="{% url 'systems.goals.settings' system_code=systems.0.code %}">{% trans "Goal Tracking" %}</a></div>
         </div>
 
         <button class='k-button normal-btn userAcc' ng-click="showCreateUserAccountWindow()">{% trans "Create User Account" %}</button>
