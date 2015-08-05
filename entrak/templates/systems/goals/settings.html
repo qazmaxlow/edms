@@ -139,20 +139,31 @@
                     var percent = $("#percentTextbox").val().trim();
                     var compareTo = $scope.dateDropdown.value();
 
-                    if (percent.length > 0 && ((date && dateType!="1") || date) && compareTo){
+                    var validated_date = null;
+
+                    if (dateType != 1) {
+                        validated_date = date.toISOString()
+                    }
+
+                    // if (percent.length > 0 && ((date && dateType!="1") || date) && compareTo){
+                    if (true) {
                         $("#errText").hide();
 
                         var json = {
                             "goal_type": dateType,
-                            "validated_date": date.toISOString(),
+                            "validated_date": validated_date,
                             "comparison_type": compareTo,
                             "system": area,
                             "goal_save_percent": percent,
-                            // "allArea": $scope.allAreaModel,  //TODO update all area
+                            "is_all_systems": $scope.allAreaModel,
                             "created_by": 1 //TODO user id
                         }
                         goalSettingsDataSource.add(json);
                         goalSettingsDataSource.sync();
+                        // refresh data source if create for 12 months
+                        if (dateType == 1) {
+                            goalSettingsDataSource.read();
+                        }
                         
                         $scope.createGoalWin.close();
                     } else {
