@@ -178,6 +178,14 @@
                                 return url;
                             },
                             type: "PUT"
+                        },
+                        destroy: {
+                            url: function(item){
+                                var url = "{% url 'companies.goal.settings.destroy' current_system.code 999 %}";
+                                url = url.replace(999, item.id);
+                                return url;
+                            },
+                            type: "DELETE"
                         }
                     },
                     schema: {
