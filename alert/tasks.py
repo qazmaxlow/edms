@@ -1,9 +1,8 @@
-from __future__ import absolute_import
-
 import json
 import pytz
 import datetime
 import smtplib
+import requests
 from celery import shared_task
 from django.db.models import Q
 from django.core.mail import send_mail
@@ -12,7 +11,10 @@ from .models import Alert, AlertHistory, AlertEmail
 from .models import ALERT_TYPE_STILL_ON, ALERT_TYPE_SUMMARY, ALERT_TYPE_PEAK, CONTINUOUS_INTERVAL_MIN
 from contact.models import Contact
 from entrak.settings import EMAIL_HOST_USER
+from entrak.settings import ONESIGNAL
 from utils.utils import Utils
+from django.contrib.auth import get_user_model
+
 
 def __valid_alert_filter_f(utc_now):
     def filter_f(alert):
@@ -85,6 +87,8 @@ def check_all_alerts(check_dt):
                 alert_id=alert.id,
                 created=check_dt,
                 resolved=False,
+                threshold_kwh=verify_result['threshold_kwh'],
+                current_kwh=verify_result['current_kwh'],
                 diff_percent=verify_result['diff_percent'])
 
             need_send_email = True
@@ -128,9 +132,28 @@ def check_all_alerts(check_dt):
 @shared_task(ignore_result=True)
 def send_alert_email():
     send_success_email_ids = []
+    header = {
+        "Content-Type": "application/json",
+        "Authorization": "Basic %s"%ONESIGNAL['api_key'],
+    }
     with transaction.atomic():
         alert_emails = AlertEmail.objects.select_for_update().all()
         for alert_email in alert_emails:
+            EntrakUser = get_user_model()
+            user = EntrakUser.objects.filter(email=alert_email.recipient).first()
+            if user and user.device_id:
+                payload = {
+                    "app_id": ONESIGNAL["app_id"],
+                    "isIos": user.device_type == "apple_ios",
+                    "isAndroid": user.device_type == "google_android",
+                    "headings": {"en": alert_email.title},
+                    "contents": {"en": alert_email.content},
+                    "include_player_ids": [user.device_id],
+                }
+                req = requests.post("https://onesignal.com/api/v1/notifications", headers=header, data=json.dumps(payload))
+                print('Mobile notification sent')
+                print(payload)
+                print(req.__dict__)
             try:
                 send_mail(
                     alert_email.title,

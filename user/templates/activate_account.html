@@ -224,6 +224,12 @@
                 $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
             }])
             .controller("MyCtrl", function($scope, $http){
+
+                $scope.$on("kendoRendered", function(e) {
+                    $("#registration").data("kendoWindow").center().open();
+                    $("#department").data("kendoDropDownList").value(null);
+                });
+
                 var langCode = '{{LANGUAGE_CODE}}';
                 console.log(langCode);
                 if (langCode.indexOf("en") == 0){
@@ -300,10 +306,6 @@
                     }
                 }
 
-                setTimeout(function(){
-                    $("#registration").data("kendoWindow").center().open();
-                    $("#department").data("kendoDropDownList").value(null);
-                }, 500);
             })
     </script>
 </div>

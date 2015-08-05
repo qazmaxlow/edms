@@ -1,0 +1,324 @@
+{% extends "page_base.html" %}
+
+{% load i18n %}
+{% load entrak_extras %}
+{% load static %}
+{% load humanize %}
+
+{% block ga_page_title %}report{% endblock %}
+
+{% block extra_head %}
+{{block.super}}
+{% get_current_language as LANGUAGE_CODE %}
+
+
+<script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
+<script src="{% static 'assets/django/js/ajax.js' %}"></script>
+<script src="{% static 'js/moment-with-locales.js' %}"></script>
+<script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
+<script src="{% static 'js/entrak-system.js' %}"></script>
+<script src="{% static 'js/entrak-utils.js' %}"></script>
+<script src="{% static 'js/report-generator.js' %}"></script>
+
+<link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static 'css/kendo.entrak.theme.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/goal_settings.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/my_profile.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/custom_control.css' %}">
+
+<script src="{% static 'assets/etkendoui/js/et.datepicker.js' %}"></script>
+<script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
+<script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
+
+{% endblock %}
+
+{% block selected-menu-link-id %}menu-link-setting{% endblock %}
+{% block page_title %}{% trans "SETTINGS" %}{% endblock %}
+{% block page_subtitle %}{% trans "Manage your system access with" %}{% endblock %}
+
+{% block extra_script %}
+{{block.super}}
+{% endblock %}
+
+{% block page_content %}
+
+
+<div ng-app="entrak">
+    <div class="profile profile-container" ng-controller="GoalSettingsController">
+        <div class="k-header">
+            <div class="header-tab"><a href="{% url 'profile' system_code=systems.0.code %}">{% trans "My Profile" %}</a></div><!--
+            -->{% if user.is_manager == True %}<div class="header-tab"><a href="{% url 'manage_accounts' system_code=systems.0.code %}">{% trans "Manage Accounts" %}</a></div><div class="header-tab selected-tab">{% trans "Goal Tracking" %}</div>{% endif %}
+        </div>
+
+        <div class="form-horizontal form-widgets">
+            <div class="createGoalPanel">
+                <button class="k-button normal-btn" ng-click="showPopup()">Set New Goal</button>
+            </div>
+            <kendo-grid class="settingGrid" k-options="goalSettingGridOptions(dataItem)"></kendo-grid>
+            <div kendo-window="deleteGridRowWin" k-title="'Delete'"
+                 k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-width="340" k-height="130">
+              <div class="popupQuestion">{% trans "Are you sure you want to delete the item?" %}</div>
+              <div class="popupBtnGrp">
+                <button class="k-button normal-btn cancel" ng-click="deleteGridRowWin.close()">{% trans "Cancel" %}</button>
+                <button class="k-button normal-btn" ng-click="confirmDelete()">{% trans "Confirm" %}</button>
+              </div>
+            </div>
+            <div kendo-window="createGoalWin" k-title="'{% trans "Set New Goal" %}'" k-width="650" k-height="300" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
+            <div class="popupRow">
+                <div class="leftLabel">Area:</div>
+                <select kendo-drop-down-list="systemDropdown"
+                    k-data-text-field="'fullname'"
+                    k-data-value-field="'id'"
+                    k-data-source="systemsDataSource"></select>
+                <input id="allAreaCheckbox" type="checkbox" ng-model="allAreaModel"/><label for="allAreaCheckbox"><div class="colorBox"></div><span class="leftPad10">All Area</span></label>
+            </div>
+            <div class="popupRow">
+                <div class="leftLabel">Time:</div>
+                <input value="1" type="radio" name="timeGroup" id="next12Radio" checked><label for="next12Radio">Next 12 months</label>
+                <input value="2" type="radio" name="timeGroup" id="monthRadio"><label for="monthRadio">Month</label>
+                <input value="3" type="radio" name="timeGroup" id="yearRadio"><label for="yearRadio">Year</label>
+                <span class="vLine"></span>
+                <input kendo-et-date-picker="datePicker" class="datepicker" k-options="validatedDateOptions"></input>
+            </div>
+            <div class="popupRow">
+                <div class="leftLabel">Goal:</div>
+                <span>Use</span>
+                <input id="percentTextbox" class="k-textbox normal-tb w80"></input>
+                <span></span><span>% less than</span>
+                <select kendo-drop-down-list="dateDropdown">
+                    <option value="1">Previous Month</option>
+                    <option value="2">Last Year Same Month</option>
+                </select>
+            </div>
+            <div class="btnContainer">
+                <span id="errText"></span>
+                <button class="right k-button normal-btn cancel" ng-click="hidePopup()">Cancel</button>
+                <button class="right k-button normal-btn" ng-click="confirmAction()">Confirm</button>
+            </div>
+          </div>
+        </div>
+
+    </div>
+</div>
+
+
+ <script>
+        angular.module("entrak", [ "kendo.directives" ])
+            .controller("GoalSettingsController", function($scope) {
+                $scope.showPopup = function(){
+                    $("#errText").hide();
+                    $scope.allAreaModel = false;
+                    $scope.systemDropdown.select(0);
+                    $scope.dateDropdown.select(0);
+                    $("#percentTextbox").val("5");
+                    $scope.datePicker.value(null);
+                    $('#next12Radio').prop("checked", true);
+                    $scope.datePicker.enable(false);
+
+                    $scope.createGoalWin.center().open();
+                }
+
+                $scope.hidePopup = function(){
+                    $scope.createGoalWin.close();
+                }
+
+                $scope.$watch("allAreaModel", function(nVal, oVal){
+                    if ($scope.systemDropdown)
+                        $scope.systemDropdown.enable(!nVal);
+                });
+
+                $('input[name="timeGroup"]').change(function(){
+                    $scope.datePicker.enable($('input[name="timeGroup"]:checked').val() != "1");
+                });
+
+                $scope.confirmAction = function(){
+                    var area = $scope.systemDropdown.value();
+                    var date = $scope.datePicker.value();
+                    var dateType = $('input[name="timeGroup"]:checked').val();
+                    var percent = $("#percentTextbox").val().trim();
+                    var compareTo = $scope.dateDropdown.value();
+
+                    if (percent.length > 0 && ((date && dateType!="1") || date) && compareTo){
+                        $("#errText").hide();
+
+                        var json = {
+                            "goal_type": dateType,
+                            "validated_date": date.toISOString(),
+                            "comparison_type": compareTo,
+                            "system": area,
+                            "goal_save_percent": percent,
+                            // "allArea": $scope.allAreaModel,  //TODO update all area
+                            "created_by": 1 //TODO user id
+                        }
+                        goalSettingsDataSource.add(json);
+                        goalSettingsDataSource.sync();
+                        
+                        $scope.createGoalWin.close();
+                    } else {
+                        $("#errText").html("Please fill in all the fields.");
+                        $("#errText").show();
+                    }
+                }
+
+                var goalSettingsDataSource = new kendo.data.DataSource({
+                    transport: {
+                        read: {
+                            url: "{% url 'companies.goal.settings' current_system.code %}"
+                        },
+                        create: {
+                            url: "{% url 'companies.goal.settings.create' current_system.code %}",
+                            type: "POST"
+                        },
+                        update: {
+                            url: function(item){
+                                item.validated_date = item.validated_date.toISOString();
+                                var url = "{% url 'companies.goal.settings.update' current_system.code 999 %}";
+                                url = url.replace(999, item.id);
+                                return url;
+                            },
+                            type: "PUT"
+                        },
+                        destroy: {
+                            url: function(item){
+                                var url = "{% url 'companies.goal.settings.destroy' current_system.code 999 %}";
+                                url = url.replace(999, item.id);
+                                return url;
+                            },
+                            type: "DELETE"
+                        }
+                    },
+                    schema: {
+                        model: {id: "id"},
+                        parse: function(response){
+                            // if ($.isArray(response))
+                            for (i=0; i<response.length; i++){
+                                response[i].validated_date = new Date(response[i].validated_date);
+                            }
+                            return response;
+                        }
+                    }
+                });
+
+                $scope.validatedDateOptions = {
+                    format: 'MMM yyyy',
+                    select: "month",
+                    clickPopup: true
+                };
+
+                $scope.systemsDataSource = new kendo.data.DataSource({
+                    transport: {
+                        read: {
+                            async: false,
+                            url: "{% url 'companies.systems.company-systems' current_system.code %}",
+                            type: 'GET',
+                            dataType: "json"
+                        }
+                    }
+                });
+                $scope.systemsDataSource.read();
+                var company_systems = $scope.systemsDataSource.data();
+
+                function systemDropDownEditor(container, options) {
+                    $('<input required data-text-field="fullname" data-value-field="id" data-bind="value:' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({
+                            autoBind: false,
+                            dataSource: $scope.systemsDataSource
+                        });
+                }
+
+                function dateEditor(container, options) {
+                    $('<input kendo-et-date-picker class="datepicker" k-options="validatedDateOptions" data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '"></input>').appendTo(container);
+                }
+
+                function comparisonEditor(container, options) {
+                    $('<input required data-value-field="value" data-text-field="text" data-bind="value:' + options.field + '"></input>')
+                        .appendTo(container).kendoDropDownList({
+                            autoBind: false,
+                            dataSource: [
+                                {"value": 1, "text": "Previous Month"},
+                                {"value": 2, "text": "Last Year Same Month"}
+                            ]  
+                        });
+                }
+
+                function textEditor(container, options) {
+                    $('<input type="text" class="k-textbox normal-tb" data-bind="value:' + options.field + '"></input>').appendTo(container);
+                }
+
+                $scope.goalSettingGridOptions = function(dataItem) {
+                    return {
+                        dataSource: goalSettingsDataSource,
+                        editable: "inline",
+                        sortable: true,
+                        columns: [
+                            {
+                                field: "system", title: "Area",
+                                width: "300px",
+                                sortable: true,
+                                editor: systemDropDownEditor,
+                                template: function(dataItem) {
+                                    return $.grep(company_systems, function(e) {
+                                        return e.id == dataItem.system
+                                    })[0].fullname;
+                                }
+                            }, {
+                                field: "validated_date", title: "Time",
+                                sortable: true,
+                                editor: dateEditor,
+                                // format: "{0:yyyy-MM-dd HH:mm}", data-format="' + options.format + '"
+                                template: function(dataItem) {
+                                    return kendo.toString(new Date(dataItem.validated_date), "MMM yyyy");
+                                }
+                            }, {
+                                field: "comparison_type", title: "Comparison",
+                                sortable: true,
+                                editor: comparisonEditor,
+                                template: function(dateItem){
+                                    return dateItem.comparison_type == 1 ? "Previous Month" : "Last Year Same Month";
+                                }
+                            }, {
+                                field: "goal_save_percent", title: "Goal",
+                                sortable: true,
+                                width: "100px",
+                                editor: textEditor,
+                                template: function(dataItem) {
+                                    return dataItem.goal_save_percent + "%";
+                                }
+                            }, {
+                                sortable: false,
+                                command: [{
+                                    name: "edit",
+                                    text: {
+                                        edit: "Edit",
+                                        update: "Confirm",
+                                        cancel: "Cancel"
+                                    }
+                                }, {
+                                    name: "mydestroy",
+                                    text: "Delete",
+                                    click: function(e) {
+                                        var tr = $(e.target).closest("tr"); 
+                                        var data = this.dataItem(tr);
+
+                                        var that = this;
+                                        $scope.confirmDelete = function() {
+                                            that._removeRow(tr);
+                                            $scope.deleteGridRowWin.close();
+                                        };
+
+                                        $scope.deleteGridRowWin.center().open();
+                                    }
+                                }],
+                                title: "Actions",
+                                width: "160px"
+                            }
+                        ]
+                    }
+                };
+
+
+            });
+    </script>
+{% endblock %}

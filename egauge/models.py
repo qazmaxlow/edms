@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from django.db import models
+
 from mongoengine.document import Document
 from mongoengine.document import EmbeddedDocument
 from mongoengine.fields import *
@@ -118,3 +120,11 @@ class SourceReadingMonth(BaseSourceReading):
 
 class SourceReadingYear(BaseSourceReading):
     pass
+
+
+class StatusMonitor(models.Model):
+    source_id = models.CharField(max_length=100)
+    threshold = models.FloatField(null=True)
+
+    threshold_starttime = models.TimeField(null=True)
+    threshold_endtime = models.TimeField(null=True)

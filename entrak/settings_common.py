@@ -75,6 +75,7 @@ INSTALLED_APPS = (
     'apis',
     'schedulers',
     'meters',
+    'keyserver',
     'compressor',
 )
 
@@ -88,14 +89,15 @@ REST_FRAMEWORK = {
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'oauth2_provider.middleware.OAuth2TokenMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'entrak.middleware.timezone_middleware.TimezoneMiddleware',
     'entrak.middleware.locale.LocaleMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 )
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -203,3 +205,10 @@ ENTRAK_BROKER_URL = 'amqp://guest:entrak8888@localhost' # should be removed
 
 # Site
 SITE_ID = 1
+
+# One Signal App Alert
+ONESIGNAL = {
+    'user_auth_key': '<YOUR ONESIGNAL KEYS>',
+    'app_id': '<YOUR ONESIGNAL KEYS>',
+    'api_key': '<YOUR ONESIGNAL KEYS>',
+}

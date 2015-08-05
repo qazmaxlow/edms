@@ -7,6 +7,7 @@ import copy
 
 from bson.objectid import ObjectId
 from collections import OrderedDict
+from django.conf import settings
 from django.db import models
 from django.db.models import Q
 from django.utils import translation
@@ -1191,3 +1192,24 @@ class System(models.Model):
 class SystemHomeImage(models.Model):
     image = models.ImageField(upload_to="system_home/%Y/%m")
     system = models.ForeignKey(System)
+
+
+class SystemEnergyGoal(models.Model):
+    system = models.ForeignKey('system.System')
+    goal_type = models.IntegerField(
+        choices=(
+            (1, 'Next 12 months'),
+            (2, 'Month'),
+            (3, 'Year'),
+        )
+    )
+    validated_date = models.DateTimeField()
+    comparison_type = models.IntegerField(
+        choices=(
+            (1, 'Previous Month'),
+            (2, 'Last Year Same Month'),
+        )
+    )
+    goal_save_percent = models.FloatField()
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL)
+    created_time = models.DateTimeField(auto_now_add=True)

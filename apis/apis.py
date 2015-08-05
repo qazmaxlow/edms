@@ -4,6 +4,7 @@ import pytz
 from bson.objectid import ObjectId
 from datetime import datetime
 from datetime import timedelta
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import Http404
 from django.utils import timezone, dateparse
@@ -11,13 +12,19 @@ from egauge.manager import SourceManager
 from egauge.models import SourceReadingHour
 from mongoengine import connection
 from rest_framework import viewsets, filters
+from rest_framework import generics
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 from system.models import System
+from user.models import EntrakUser
+from alert.models import Alert, AlertHistory
 from utils.auth import has_permission
 from common import return_error_response
+from serializers import SystemSerializer, AlertHistorySerializer, RegisterDeviceSerializer
+
 
 @api_view(['GET'])
 @authentication_classes((TokenAuthentication,SessionAuthentication,))
@@ -82,3 +89,65 @@ def DailyElectricityUsageDetail(request, api_version, format=None):
             'kWh' : round(comparing_to_readings,4)
         },
     })
+
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 25
+    page_size_query_param = 'per_page'
+    max_page_size = 100
+
+
+class SystemListView(generics.ListAPIView):
+
+    serializer_class = SystemSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+
+        current_user = self.request.user
+        system = current_user.system
+
+        return [system]
+
+
+class AlertHistoryListView(generics.ListAPIView):
+
+    serializer_class = AlertHistorySerializer
+    permission_classes = (IsAuthenticated,)
+    pagination_class = StandardResultsSetPagination
+
+    def get_queryset(self):
+
+        syscode = self.kwargs['system_code']
+        sys = System.objects.get(code=syscode)
+        alert_ids = Alert.objects.filter(system_id=sys.id).only('id')
+        return AlertHistory.objects.filter(alert_id__in=alert_ids)
+
+
+class RegisterDeviceView(generics.UpdateAPIView):
+
+    serializer_class = RegisterDeviceSerializer
+    permission_classes = (IsAuthenticated,)
+    lookup_field = 'user_id'
+    lookup_url_kwarg = 'user_id'
+
+    def put(self, request, *args, **kwargs):
+
+        user = EntrakUser.objects.get(username=self.kwargs['username'])
+        current_user = request.user
+
+        if user and current_user and user.id == current_user.id:
+
+            user.device_id = request.data.get('device_id', None)
+            user.device_type = request.data.get('device_type', None)
+            user.save()
+
+            serializer = RegisterDeviceSerializer(user, data=request.data)
+            serializer.is_valid(raise_exception=True)
+
+            # TODO: handle multiple users logging into the same device
+            return Response(serializer.data)
+
+        else:
+
+            return return_error_response()
