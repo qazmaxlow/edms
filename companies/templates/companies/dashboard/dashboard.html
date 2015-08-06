@@ -4,6 +4,7 @@
 {% load entrak_extras %}
 {% load static %}
 {% load humanize %}
+{% load compress %}
 
 {% block ga_page_title %}report{% endblock %}
 
@@ -11,22 +12,29 @@
 {{block.super}}
 {% get_current_language as LANGUAGE_CODE %}
 
+{% compress css %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
-
-<script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
-<script src="{% static 'js/csrf_ajax.js' %}"></script>
-<script src="{% static 'js/moment-with-locales.js' %}"></script>
-<script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
-<script src="{% static 'js/entrak-system.js' %}"></script>
-<script src="{% static 'js/entrak-utils.js' %}"></script>
-<script src="{% static 'js/report-generator.js' %}"></script>
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
 <link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/kendo.entrak.theme.css' %}" rel="stylesheet">
 
 <link href="{% static 'assets/kendoui/styles/kendo.dataviz.min.css' %}" rel="stylesheet">
-<link href="{% static 'assets/kendoui/styles/kendo.dataviz.default.min.css' %}" rel="stylesheet"
+<link href="{% static 'assets/kendoui/styles/kendo.dataviz.default.min.css' %}" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static 'css/dashboard/widgets.css' %}">
+{% endcompress %}
+
+<script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
+<script src="{% static 'js/moment-with-locales.js' %}"></script>
+<script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
+
+{% compress js %}
+<script src="{% static 'js/csrf_ajax.js' %}"></script>
+<script src="{% static 'js/entrak-system.js' %}"></script>
+<script src="{% static 'js/entrak-utils.js' %}"></script>
+<script src="{% static 'js/report-generator.js' %}"></script>
+{% endcompress %}
+
 <!-- Because now using jquery v1.11 -->
 <!-- <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script> -->
 <!-- <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script> -->
@@ -34,9 +42,9 @@
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
 
-<script type="text/javascript" charset="utf-8" src="/static/edges/dashboard/widgets/money/edge_includes/edge.5.0.1.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="{% static 'edges/dashboard/widgets/money/edge_includes/edge.5.0.1.min.js' %}"></script>
 
-<link rel="stylesheet" type="text/css" href="{% static 'css/dashboard/widgets.css' %}">
+
 <style>
     .edgeLoad-EDGE-18660633 { visibility:hidden; }
     .edgeLoad-EDGE-9220080 { visibility:hidden; }
@@ -275,7 +283,7 @@
 
         $scope.dashboardSortableOpt = {
             // cursor: "url('/static/images/dashboard/grabbing.cur'), default",
-            connectWith: "#widgetContainer",    
+            connectWith: "#widgetContainer",
             handler: ".widget-header *:not(.k-dropdown *, button)",
             disabled: ".disableSort",
             end: function(e){
@@ -567,7 +575,7 @@
                     $scope.total_cost = data[0].cost;
                 });
             });
-        }   
+        }
 
         $scope.updateRates = function () {
             var date_end = new Date();
