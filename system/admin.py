@@ -63,3 +63,10 @@ class SystemHomeImageAdmin(admin.ModelAdmin):
 
 admin.site.register(System, SystemAdmin)
 admin.site.register(SystemHomeImage, SystemHomeImageAdmin)
+
+
+from .models import SystemEnergyGoal
+class SystemEnergyGoalAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(SystemEnergyGoal, SystemEnergyGoalAdmin)
