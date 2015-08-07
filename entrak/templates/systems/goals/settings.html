@@ -200,7 +200,10 @@
                         },
                         create: {
                             url: "{% url 'companies.goal.settings.create' current_system.code %}",
-                            type: "POST"
+                            type: "POST",
+                            complete: function(e) {
+                                goalSettingsDataSource.read();
+                            }
                         },
                         update: {
                             url: function(item){
