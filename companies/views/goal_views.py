@@ -35,7 +35,9 @@ class GoalSettingsView(generics.ListAPIView):
     serializer_class = GoalSerializer
 
     def get_queryset(self):
-        goals = SystemEnergyGoal.objects.all()
+        syscode = self.kwargs['system_code']
+        goals = SystemEnergyGoal.objects.filter(system__code=syscode)
+
         return goals
 
 
