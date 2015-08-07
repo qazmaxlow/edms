@@ -18,6 +18,17 @@ class GoalSerializer(serializers.ModelSerializer):
     # is_all_systems = serializers.BooleanField()
     class Meta:
         model = SystemEnergyGoal
+        exclude = ('created_by',)
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+
+        goal_setting = SystemEnergyGoal(**validated_data)
+        goal_setting.created_by = request.user
+
+        goal_setting.save()
+
+        return goal_setting
 
 
 class UpdateGoalSerializer(serializers.ModelSerializer):
