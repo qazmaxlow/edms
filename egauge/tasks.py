@@ -1,13 +1,22 @@
 from __future__ import absolute_import
 
-import pytz
-import datetime
 import celery
+import csv
+import datetime
+import pytz
+import urllib
+
 from celery import shared_task
 from dateutil.relativedelta import relativedelta
-from .models import Source, SourceReadingMinInvalid
+from egauge.manager import SourceManager
+from egauge.models import Source
+from egauge.models import SourceReadingMin
+from egauge.models import SourceReadingMinInvalid
+from ftplib import FTP
 from meters.models import Electricity
-from .manager import SourceManager
+from StringIO import StringIO
+from system.models import System
+
 
 @shared_task(ignore_result=True)
 def retrieve_all_reading():
@@ -96,14 +105,6 @@ def auto_recap(hours=6):
             force_retrieve_hour_reading.delay(grouped_sources, start_dt, 0)
 
     return None
-
-import csv
-from ftplib import FTP
-import urllib
-from StringIO import StringIO
-
-from egauge.models import SourceReadingMin
-from system.models import System
 
 
 @shared_task(ignore_result=True)
