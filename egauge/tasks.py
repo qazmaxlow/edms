@@ -90,7 +90,7 @@ def auto_recap(hours=6):
         sources_without_members = []
         sources_with_members = []
 
-        sources = Source.objects(id__in=source_ids)
+        sources = Source.objects(id__in=source_ids, active=True)
         for source in sources:
             if source.source_members:
                 sources_with_members.append(source)
