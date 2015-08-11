@@ -304,12 +304,6 @@ class SourceManager:
             sources = grouped_sources['sources']
             logger.info('force retrieve: [start_time: %s], [xml_url: %s]'%(start_time.strftime('%Y-%m-%d %H:%M'), xml_url))
 
-            SourceReadingMin.objects(
-                source_id__in=[source['_id'] for source in sources],
-                datetime__gte=start_time,
-                datetime__lte=end_time
-            ).delete()
-
             source_reading_mins = []
             source_reading_mins_invalid = []
             need_update_source_ids = []
@@ -317,6 +311,11 @@ class SourceManager:
                 readings = SourceManager.__get_egauge_data(xml_url, end_timestamp, 60)
                 for source in sources:
                     if source['name'] in readings:
+                        SourceReadingMin.objects(
+                            source_id=source['_id'],
+                            datetime__gte=start_time,
+                            datetime__lte=end_time
+                        ).delete()
                         source_reading_mins += [SourceReadingMin(
                             datetime=reading_datetime,
                             source_id=source['_id'],
@@ -361,7 +360,7 @@ class SourceManager:
             if source_reading_mins:
                 SourceReadingMin.objects.insert(source_reading_mins, write_concern={'continue_on_error': True})
             if source_reading_mins_invalid:
-                SourceReadingMinInvalid.objects.insert(source_reading_mins_invalid)
+                # SourceReadingMinInvalid.objects.insert(source_reading_mins_invalid)
 
             if need_update_source_ids:
                 source_tz = sources[0]['tz']
