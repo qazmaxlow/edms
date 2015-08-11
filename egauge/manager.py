@@ -359,9 +359,8 @@ class SourceManager:
 
             if source_reading_mins:
                 SourceReadingMin.objects.insert(source_reading_mins, write_concern={'continue_on_error': True})
-            if source_reading_mins_invalid:
+            # if source_reading_mins_invalid:
                 # SourceReadingMinInvalid.objects.insert(source_reading_mins_invalid)
-
             if need_update_source_ids:
                 source_tz = sources[0]['tz']
                 SourceManager.update_sum(start_time, source_tz, need_update_source_ids)
