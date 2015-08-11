@@ -355,6 +355,8 @@ class SourceManager:
                         need_update_source_ids.append(source['_id'])
                     else:
                         Utils.log_error("no matching cname for source! source: %s, cname: %s"%(xml_url, source['name']))
+            except Exception, e:
+                logger.error(e)
 
             if source_reading_mins:
                 SourceReadingMin.objects.insert(source_reading_mins, write_concern={'continue_on_error': True})
