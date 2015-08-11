@@ -98,9 +98,13 @@ def auto_recap(hours=6):
                 sources_without_members.append(source)
 
         if sources_with_members:
+            for s in sources_with_members:
+                print("Force download job /w members added to source %s for system %s for time %s"%(s.name, s.system_code, start_dt.strftime('%Y-%m-%d %H:%M:%S')))
             force_retrieve_source_with_members_hour_reading.delay(sources_with_members, start_dt, 0)
 
         if sources_without_members:
+            for s in sources_without_members:
+                print("Force download job /wo members added to source %s for system %s for time %s"%(s.name, s.system_code, start_dt.strftime('%Y-%m-%d %H:%M:%S')))
             grouped_sources = SourceManager.get_grouped_sources(None, [s.id for s in sources_without_members])
             force_retrieve_hour_reading.delay(grouped_sources, start_dt, 0)
 
