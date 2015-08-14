@@ -160,7 +160,7 @@
 
                 $scope.confirmAction = function(){
                     var area = $scope.systemDropdown.value();
-                    var date = $scope.datePicker.getSelectedStartDate()
+                    var date = $scope.datePicker.getSelectedStartDate();
                     var dateType = $('input[name="timeGroup"]:checked').val();
                     var percent = $("#percentTextbox").val().trim();
                     var compareTo = $scope.dateDropdown.value();
