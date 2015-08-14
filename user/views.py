@@ -216,6 +216,7 @@ def reset_password(request, user_id):
         request.session['login_warning_msg'] = _("Invalid request")
         return redirect('/login')
 
+
 class CreateIndividualUserView(generics.CreateAPIView):
 
     serializer_class = UserSerializer
@@ -335,6 +336,8 @@ class UpdateUserView(generics.UpdateAPIView):
 class SendPasswordResetEmailView(generics.CreateAPIView):
 
     serializer_class = UserSerializer
+    authentication_classes = ()
+
 
     def post(self, request, format=None):
 
