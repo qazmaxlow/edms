@@ -121,7 +121,7 @@ class AlertHistoryListView(generics.ListAPIView):
         syscode = self.kwargs['system_code']
         sys = System.objects.get(code=syscode)
         alert_ids = Alert.objects.filter(system_id=sys.id).only('id')
-        return AlertHistory.objects.filter(alert_id__in=alert_ids).order_by('-created')
+        return AlertHistory.objects.filter(alert_id__in=alert_ids).order_by('-created').select_related('alert')
 
 
 class RegisterDeviceView(generics.UpdateAPIView):
