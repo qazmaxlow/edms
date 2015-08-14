@@ -1336,7 +1336,7 @@
         $scope.saving = saving;
     });
 
-    ngapp.controller("WidgetGoalTracking", function($scope){
+    ngapp.controller("WidgetGoalTracking", function($scope, $http){
         $scope.selectedGoal = "0";
         $scope.changeGoal = function(){
             console.log($scope.selectedGoal);
@@ -1365,6 +1365,11 @@
         $scope.thirdRowPart3Text = '{% trans "from " %}';
         $scope.thirdRowPart4Text = '{% trans " to " %}';
 
+        $http.get("{% url 'companies.goal.tracking' current_system.code %}").success(
+            function(data) {
+                $scope.goalPercent = data.goal_percent;
+            }
+        );
     });
 
 </script>
