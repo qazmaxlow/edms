@@ -1,3 +1,7 @@
+from datetime import datetime
+from dateutil import relativedelta
+import pytz
+
 from rest_framework import status
 from rest_framework import generics, serializers
 from rest_framework.response import Response
@@ -9,7 +13,43 @@ from system.models import System, SystemEnergyGoal
 
 class goalTracking(APIView):
     def get(self, request, *args, **kwargs):
-        info = {}
+
+        syscode = self.kwargs['system_code']
+        system = System.objects.get(code=syscode)
+
+        goal_type = 'this-month'
+
+        now = datetime.utcnow().replace(tzinfo=pytz.utc)
+        now = now.astimezone(request.user.system.time_zone)
+
+        # get this month usage
+        start_from = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        end_to = start_from + relativedelta.relativedelta(months=1)
+
+        this_month_kwh = system.total_usage(start_from, end_to)['totalKwh']
+
+        # get last month usage
+        last_start_from = start_from - relativedelta.relativedelta(months=1)
+        last_end_to = start_from
+
+        last_month_kwh = system.total_usage(last_start_from, last_end_to)['totalKwh']
+
+        # month = 2
+        goal_setting = SystemEnergyGoal.objects.get(
+            system=system,
+            goal_type=2,
+            validated_date=start_from
+        )
+
+        compare_percent = None
+        if last_month_kwh > 0:
+            compare_percent = float(this_month_kwh - last_month_kwh)/ last_month_kwh * 100
+
+        info = {
+            'goal_percent': goal_setting.goal_save_percent,
+            'compare_percent': compare_percent,
+        }
+
         response = Response(info, status=status.HTTP_200_OK)
         return response
 
