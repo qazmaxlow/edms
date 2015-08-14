@@ -265,7 +265,7 @@ class AlertHistory(models.Model):
         if self.alert.end_time > self.alert.start_time:
             return self.created.astimezone(system_tz).date()
         else:
-            return (self.created - relative_delta(days=1)).astimezone(system_tz).date()
+            return (self.created - relativedelta(days=1)).astimezone(system_tz).date()
 
 
 class AlertEmail(models.Model):
