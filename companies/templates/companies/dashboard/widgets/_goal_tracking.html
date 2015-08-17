@@ -25,28 +25,20 @@
     <div class="widget-content row">
         <div class="top-row">
             <span>{{descPart1Text}}</span><br>
-            <span class="bold">{{fromDate | dateFmt:'y'}}</span><br>
-            <span>{{descPart2Text}}</span><span class="bold">{{goalPercent}}%</span><span>{{descPart3Text}}</span><br>
-            <span class="bold">{{compareDate | dateFmt:'y'}}</span>
+            <span>{{descPart2Text}}</span>
+            <span>{{fromDate | dateFmt:'y'}}</span>
+            <span>{{descPart3Text}}</span><br>
+            <span class="bold description-5">{{goalPercent}}</span>
+            <span class="description-4">%</span><br>
+            <span>{{descPart4Text}}</span><span>{{compareDate | dateFmt:'y'}}</span>
+            <div class="separator"></div>
         </div>
-        <div class="second-row">
+        <div class="bottom-row">
+            <span>{{secondRowPart1Text}}</span><span>{{reducedText}}</span><br>
+            <span>{{secondRowPart2Text}}</span><br>
             <div class="arrow-icon" ng-class="{up : isIncrease}"></div>
-            <div class="right-text">
-                <span>{{secondRowPart1Text}}</span><span ng-class="{'red-text' : isIncrease, 'green-text' : !isIncrease}">{{reducedText}}</span><br>
-                <span>{{secondRowPart2Text}}</span>
-                <div class="percent" ng-class="{'red-text' : isIncrease, 'green-text' : !isIncrease}">
-                    <span class="percentNum">{{soFarPercent}}</span><span class="percentSign">%</span>
-                </div>
-            </div>
-        </div>
-        <div class="third-row">
-            <div class="goal-icon"></div>
-            <div class="right-text">
-                <span>{{thirdRowPart1Text}}</span>
-                <div class="percent">
-                    <span class="percentNum">{{todoPercent}}</span><span class="percentSign">{{thirdRowPart2Text}}</span>
-                </div>
-                <span>{{thirdRowPart3Text}}</span><span class="bold">{{fromDate | dateFmt:'D'}}</span><span>{{thirdRowPart4Text}}</span><span class="bold">{{toDate | dateFmt:'D'}}</span>
+            <div class="percent" ng-class="{'red-text' : isIncrease, 'green-text' : !isIncrease}">
+                <span class="percentNum">{{soFarPercent}}</span><span class="percentSign">%</span>
             </div>
         </div>
 

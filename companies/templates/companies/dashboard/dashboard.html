@@ -252,7 +252,7 @@
 
         //TODO load user saved layout from server
         //set timeout so that the widget can be initialized first
-        var userLayout = [1, 2, 3, 4, 5];
+        var userLayout = [1, 2, 3, 4, 5,6,7,8];
         setTimeout(function(){
             for (var i=0; i<userLayout.length; i++){
                 $("#dashboardContainer").append($("#widgetContainer div[data-widgetId='" + userLayout[i] + "']").detach());
@@ -1329,16 +1329,28 @@
     });
 
     ngapp.controller("WidgetGoalTracking", function($scope){
+        var ds = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    dataType: "json"
+                }
+            },
+            change: function(d){
+                if (d.items.length > 0){
+
+                }
+            }
+        });
+
+
         $scope.selectedGoal = "0";
         $scope.changeGoal = function(){
             console.log($scope.selectedGoal);
 
             $scope.compareDate = new Date();
             $scope.fromDate = new Date();
-            $scope.toDate = new Date();
             $scope.goalPercent = 10;
             $scope.soFarPercent = 14;
-            $scope.todoPercent = 6;
             $scope.isIncrease = true;
             $scope.reducedText = $scope.isIncrease ? '{% trans "increased" %}' : '{% trans "reduced" %}';
         }
@@ -1347,15 +1359,13 @@
         $scope.title = '{% trans "Goal Tracking" %}';
         $scope.p12BtnText = '{% trans "Past 12 months" %}';
         $scope.btnText = '{% trans "Goal-1" %}';
-        $scope.descPart1Text = '{% trans "Reduce energy use in " %}';
-        $scope.descPart2Text = '{% trans "by " %}';
-        $scope.descPart3Text = '{% trans " compared to " %}';
+        $scope.descPart1Text = '{% trans "I want to reduce my" %}';
+        $scope.descPart2Text = '{% trans "energy use in " %}';
+        $scope.descPart3Text = '{% trans " by" %}';
+        $scope.descPart4Text = '{% trans " compared to " %}';
+
         $scope.secondRowPart1Text = '{% trans "So far you have " %}';
         $scope.secondRowPart2Text = '{% trans "your energy use by" %}';
-        $scope.thirdRowPart1Text = '{% trans "To meet your goal, you need to use" %}';
-        $scope.thirdRowPart2Text = '{% trans "% less" %}';
-        $scope.thirdRowPart3Text = '{% trans "from " %}';
-        $scope.thirdRowPart4Text = '{% trans " to " %}';
 
     });
 
