@@ -1339,7 +1339,6 @@
     ngapp.controller("WidgetGoalTracking", function($scope, $http){
         $scope.selectedGoal = "0";
         $scope.changeGoal = function(){
-            console.log($scope.selectedGoal);
 
             $scope.compareDate = new Date();
             $scope.fromDate = new Date();
@@ -1349,6 +1348,18 @@
             $scope.todoPercent = 6;
             $scope.isIncrease = true;
             $scope.reducedText = $scope.isIncrease ? '{% trans "increased" %}' : '{% trans "reduced" %}';
+
+            var goal_type = 'this-month';
+
+            if ($scope.goalDropdown !== undefined)
+                goal_type = $scope.goalDropdown.value();
+
+            $http.get("{% url 'companies.goal.tracking' current_system.code %}", {params: {goal_type: goal_type}}).success(
+                function(data) {
+                    $scope.goalPercent = data.goal_percent;
+                }
+            );
+
         }
         $scope.changeGoal();
 
@@ -1365,11 +1376,7 @@
         $scope.thirdRowPart3Text = '{% trans "from " %}';
         $scope.thirdRowPart4Text = '{% trans " to " %}';
 
-        $http.get("{% url 'companies.goal.tracking' current_system.code %}").success(
-            function(data) {
-                $scope.goalPercent = data.goal_percent;
-            }
-        );
+
     });
 
 </script>

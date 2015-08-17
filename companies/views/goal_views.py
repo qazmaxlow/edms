@@ -18,13 +18,19 @@ class goalTracking(APIView):
         system = System.objects.get(code=syscode)
 
         goal_type = 'this-month'
+        goal_type = request.QUERY_PARAMS.get('goal_type')
 
         now = datetime.utcnow().replace(tzinfo=pytz.utc)
         now = now.astimezone(request.user.system.time_zone)
 
         # get this month usage
-        start_from = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-        end_to = start_from + relativedelta.relativedelta(months=1)
+        if goal_type == 'this-month':
+            start_from = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+            end_to = start_from + relativedelta.relativedelta(months=1)
+
+        elif goal_type == 'previous-month':
+            end_to = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+            start_from = end_to - relativedelta.relativedelta(months=1)
 
         this_month_kwh = system.total_usage(start_from, end_to)['totalKwh']
 
