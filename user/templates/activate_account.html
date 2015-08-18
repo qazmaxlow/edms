@@ -3,11 +3,13 @@
 {% load i18n %}
 {% load static %}
 {% load entrak_extras %}
+{% load compress %}
 
 {% block ga_page_title %}login{% endblock %}
 
 {% block extra_head %}
 {{block.super}}
+{% compress css %}
 <link rel="stylesheet" type="text/css" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/tmp/bootstrap_hack.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}">
@@ -22,14 +24,17 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/custom_control.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/kendo.entrak.theme.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/activate_account.css' %}">
+{% endcompress %}
 {% endblock %}
 
 {% block extra_script %}
+{% compress js %}
 <script src="{% static 'assets/jquery/jquery-1.11.0.min.js' %}"></script>
 <script src="{% static 'assets/django/js/ajax.js' %}"></script>
 <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
 <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
 <script src="{% static 'js/ua-parser.min.js' %}"></script>
+{% endcompress %}
 {% endblock %}
 
 {% block content %}

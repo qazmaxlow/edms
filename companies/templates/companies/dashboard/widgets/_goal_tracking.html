@@ -10,10 +10,10 @@
         <div class="widget-toggle col-xs-6">
             <div class="pull-right">
                 <select kendo-drop-down-list="goalDropdown" ng-model="selectedGoal" k-on-change="changeGoal()">
-                    <option value="0">This Month</option>
-                    <option value="1">Last Month</option>
-                    <option value="2">This Year</option>
-                    <option value="3">Last Year</option>
+                    <option value="this-month">This Month</option>
+                    <option value="last-month">Last Month</option>
+                    <option value="this-year">This Year</option>
+                    <option value="last-year">Last Year</option>
                 </select>
                 <!-- <div class="long-text-toggle" ng-click="toggle()">
                     <span class="button-left">{{ btnText }}</span><span class="button-right"></span>
@@ -28,7 +28,7 @@
             <span>{{descPart2Text}}</span>
             <span>{{fromDate | dateFmt:'y'}}</span>
             <span>{{descPart3Text}}</span><br>
-            <span class="bold description-5">{{goalPercent}}</span>
+            <span class="bold description-5">{{goalPercent | entrakNumber}}</span>
             <span class="description-4">%</span><br>
             <span>{{descPart4Text}}</span><span>{{compareDate | dateFmt:'y'}}</span>
             <div class="separator"></div>
@@ -38,10 +38,9 @@
             <span>{{secondRowPart2Text}}</span><br>
             <div class="arrow-icon" ng-class="{up : isIncrease}"></div>
             <div class="percent" ng-class="{'red-text' : isIncrease, 'green-text' : !isIncrease}">
-                <span class="percentNum">{{soFarPercent}}</span><span class="percentSign">%</span>
+                <span class="percentNum">{{soFarPercent | entrakNumber}}</span><span class="percentSign">%</span>
             </div>
         </div>
-
     </div>
 </div>
 {% endverbatim %}

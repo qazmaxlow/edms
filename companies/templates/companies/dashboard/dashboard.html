@@ -4,6 +4,7 @@
 {% load entrak_extras %}
 {% load static %}
 {% load humanize %}
+{% load compress %}
 
 {% block ga_page_title %}report{% endblock %}
 
@@ -11,22 +12,29 @@
 {{block.super}}
 {% get_current_language as LANGUAGE_CODE %}
 
+{% compress css %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
-
-<script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
-<script src="{% static 'js/csrf_ajax.js' %}"></script>
-<script src="{% static 'js/moment-with-locales.js' %}"></script>
-<script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
-<script src="{% static 'js/entrak-system.js' %}"></script>
-<script src="{% static 'js/entrak-utils.js' %}"></script>
-<script src="{% static 'js/report-generator.js' %}"></script>
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
 <link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/kendo.entrak.theme.css' %}" rel="stylesheet">
 
 <link href="{% static 'assets/kendoui/styles/kendo.dataviz.min.css' %}" rel="stylesheet">
-<link href="{% static 'assets/kendoui/styles/kendo.dataviz.default.min.css' %}" rel="stylesheet"
+<link href="{% static 'assets/kendoui/styles/kendo.dataviz.default.min.css' %}" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static 'css/dashboard/widgets.css' %}">
+{% endcompress %}
+
+<script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
+<script src="{% static 'js/moment-with-locales.js' %}"></script>
+<script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
+
+{% compress js %}
+<script src="{% static 'js/csrf_ajax.js' %}"></script>
+<script src="{% static 'js/entrak-system.js' %}"></script>
+<script src="{% static 'js/entrak-utils.js' %}"></script>
+<script src="{% static 'js/report-generator.js' %}"></script>
+{% endcompress %}
+
 <!-- Because now using jquery v1.11 -->
 <!-- <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script> -->
 <!-- <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script> -->
@@ -34,9 +42,9 @@
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
 
-<script type="text/javascript" charset="utf-8" src="/static/edges/dashboard/widgets/money/edge_includes/edge.5.0.1.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="{% static 'edges/dashboard/widgets/money/edge_includes/edge.5.0.1.min.js' %}"></script>
 
-<link rel="stylesheet" type="text/css" href="{% static 'css/dashboard/widgets.css' %}">
+
 <style>
     .edgeLoad-EDGE-18660633 { visibility:hidden; }
     .edgeLoad-EDGE-9220080 { visibility:hidden; }
@@ -139,8 +147,8 @@
 
     ngapp.filter('entrakNumber', function () {
         return function(val) {
-            if (isNaN(val)){
-                return "";
+            if (val == null || isNaN(val)){
+                return "N/A";
             } else if (val < 1) {
                 return kendo.toString(val, "#.##");
             } else if (val < 10 ) {
@@ -252,7 +260,8 @@
 
         //TODO load user saved layout from server
         //set timeout so that the widget can be initialized first
-        var userLayout = [1, 2, 3, 4, 5,6,7,8];
+        var userLayout = [1, 2, 3, 4, 5, 6, 7, 8];
+
         setTimeout(function(){
             for (var i=0; i<userLayout.length; i++){
                 $("#dashboardContainer").append($("#widgetContainer div[data-widgetId='" + userLayout[i] + "']").detach());
@@ -275,7 +284,7 @@
 
         $scope.dashboardSortableOpt = {
             // cursor: "url('/static/images/dashboard/grabbing.cur'), default",
-            connectWith: "#widgetContainer",    
+            connectWith: "#widgetContainer",
             handler: ".widget-header *:not(.k-dropdown *, button)",
             disabled: ".disableSort",
             end: function(e){
@@ -567,7 +576,7 @@
                     $scope.total_cost = data[0].cost;
                 });
             });
-        }   
+        }
 
         $scope.updateRates = function () {
             var date_end = new Date();
@@ -1328,31 +1337,28 @@
         $scope.saving = saving;
     });
 
-    ngapp.controller("WidgetGoalTracking", function($scope){
-        var ds = new kendo.data.DataSource({
-            transport: {
-                read: {
-                    dataType: "json"
-                }
-            },
-            change: function(d){
-                if (d.items.length > 0){
-
-                }
-            }
-        });
-
+    ngapp.controller("WidgetGoalTracking", function($scope, $http){
 
         $scope.selectedGoal = "0";
         $scope.changeGoal = function(){
-            console.log($scope.selectedGoal);
 
-            $scope.compareDate = new Date();
-            $scope.fromDate = new Date();
-            $scope.goalPercent = 10;
-            $scope.soFarPercent = 14;
-            $scope.isIncrease = true;
             $scope.reducedText = $scope.isIncrease ? '{% trans "increased" %}' : '{% trans "reduced" %}';
+
+            var goal_type = 'this-month';
+
+            if ($scope.goalDropdown !== undefined)
+                goal_type = $scope.goalDropdown.value();
+
+            $http.get("{% url 'companies.goal.tracking' current_system.code %}", {params: {goal_type: goal_type}}).success(
+                function(data) {
+                    $scope.goalPercent = data.goal_percent;
+                    $scope.soFarPercent = 14;//TODO
+                    $scope.isIncrease = $scope.soFarPercent > 0;
+                    $scope.compareDate = new Date();//TODO
+                    $scope.fromDate = new Date();//TODO
+                }
+            );
+
         }
         $scope.changeGoal();
 
@@ -1366,6 +1372,7 @@
 
         $scope.secondRowPart1Text = '{% trans "So far you have " %}';
         $scope.secondRowPart2Text = '{% trans "your energy use by" %}';
+
 
     });
 
