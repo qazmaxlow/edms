@@ -23,37 +23,59 @@ class goalTracking(APIView):
         now = datetime.utcnow().replace(tzinfo=pytz.utc)
         now = now.astimezone(request.user.system.time_zone)
 
-        # get this month usage
+        # get this usage
         if goal_type == 'this-month':
             start_from = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
             end_to = start_from + relativedelta.relativedelta(months=1)
-
-        elif goal_type == 'previous-month':
+        elif goal_type == 'last-month':
             end_to = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
             start_from = end_to - relativedelta.relativedelta(months=1)
+        elif goal_type == 'this-year':
+            start_from = now.replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
+            end_to = start_from + relativedelta.relativedelta(years=1)
+        else:
+            end_to = now.replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
+            start_from = end_to - relativedelta.relativedelta(years=1)
 
-        this_month_kwh = system.total_usage(start_from, end_to)['totalKwh']
+        this_kwh = system.total_usage(start_from, end_to)['totalKwh']
 
-        # get last month usage
-        last_start_from = start_from - relativedelta.relativedelta(months=1)
-        last_end_to = start_from
+        # get last usage
+        if goal_type == 'this-month' or goal_type == 'last-month':
+            
+            goal_setting = SystemEnergyGoal.objects.get(
+                system=system,
+                goal_type=2,
+                validated_date=start_from
+            )      
 
-        last_month_kwh = system.total_usage(last_start_from, last_end_to)['totalKwh']
+            if goal_setting.comparison_type == 1:   #previous month
+                last_start_from = start_from - relativedelta.relativedelta(months=1)
+                last_end_to = start_from
+            else:
+                last_start_from = start_from - relativedelta.relativedelta(years=1)
+                last_end_to = end_to - relativedelta.relativedelta(years=1)
+        else:
+            goal_setting = SystemEnergyGoal.objects.get(
+                system=system,
+                goal_type=3,
+                validated_date=start_from
+            )
 
-        # month = 2
-        goal_setting = SystemEnergyGoal.objects.get(
-            system=system,
-            goal_type=2,
-            validated_date=start_from
-        )
+            last_start_from = start_from - relativedelta.relativedelta(years=1)
+            last_end_to = start_from
+
+        last_kwh = system.total_usage(last_start_from, last_end_to)['totalKwh']
+
 
         compare_percent = None
-        if last_month_kwh > 0:
-            compare_percent = float(this_month_kwh - last_month_kwh)/ last_month_kwh * 100
+        if last_kwh > 0:
+            compare_percent = float(this_kwh - last_kwh) / last_kwh * 100
 
         info = {
             'goal_percent': goal_setting.goal_save_percent,
             'compare_percent': compare_percent,
+            'target_date': goal_setting.validated_date,
+            'compare_date': last_start_from
         }
 
         response = Response(info, status=status.HTTP_200_OK)

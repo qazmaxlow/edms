@@ -26,14 +26,17 @@
         <div class="top-row">
             <span>{{descPart1Text}}</span><br>
             <span>{{descPart2Text}}</span>
-            <span>{{fromDate | dateFmt:'y'}}</span>
+            <span ng-show="selectedGoal == 'this-month' || selectedGoal == 'last-month'">{{targetDate | dateFmt:'y'}}</span>
+            <span ng-show="selectedGoal == 'this-year' || selectedGoal == 'last-year'">{{targetDate | dateFmt:'yyyy'}}</span>
             <span>{{descPart3Text}}</span><br>
             <span class="bold description-5">{{goalPercent | entrakNumber}}</span>
             <span class="description-4">%</span><br>
-            <span>{{descPart4Text}}</span><span>{{compareDate | dateFmt:'y'}}</span>
+            <span>{{descPart4Text}}</span>
+            <span ng-show="selectedGoal == 'this-month' || selectedGoal == 'last-month'">{{compareDate | dateFmt:'y'}}</span>
+            <span ng-show="selectedGoal == 'this-year' || selectedGoal == 'last-year'">{{compareDate | dateFmt:'yyyy'}}</span>
             <div class="separator"></div>
         </div>
-        <div class="bottom-row">
+        <div class="bottom-row" ng-class="{up : isIncrease}">
             <span>{{secondRowPart1Text}}</span><span>{{reducedText}}</span><br>
             <span>{{secondRowPart2Text}}</span><br>
             <div class="arrow-icon" ng-class="{up : isIncrease}"></div>
