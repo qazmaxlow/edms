@@ -127,32 +127,41 @@
                         $scope.systemDropdown.enable(!nVal);
                 });
 
-                $scope.goal_type = 1;
-                $scope.$watch('goal_type', function(n, o) {
-                    if (n==1 || n==2) {
-                        $scope.dateDropdown.dataSource =
-                            new kendo.data.DataSource({
-                                data: [
-                                    {"value": 1, "text": "Previous Month"},
-                                    {"value": 2, "text": "Last Year Same Month"}
-                                ]});
-                        $scope.dateDropdown.dataSource.read();
-                        $scope.dateDropdown.refresh();
+                $scope.firstLoaded = false;
+                $scope.$on("kendoRendered", function(e) {
+                    if (!$scope.firstLoaded)
+                        return;
+                    $scope.firstLoaded = true;
+                    
+                    $scope.goal_type = 1;
+                    $scope.$watch('goal_type', function(n, o) {
+                        if (n==1 || n==2) {
+                            $scope.dateDropdown.dataSource =
+                                new kendo.data.DataSource({
+                                    data: [
+                                        {"value": 1, "text": "Previous Month"},
+                                        {"value": 2, "text": "Last Year Same Month"}
+                                    ]});
+                            $scope.dateDropdown.dataSource.read();
+                            $scope.dateDropdown.refresh();
 
-                        $scope.validatedDateOptions.select = 'month';
-                    }
-                    else {
-                        $scope.dateDropdown.dataSource =
-                            new kendo.data.DataSource({
-                                data: [
-                                    {"value": 3, "text": "Previous Year"}
-                                ]});
-                        $scope.dateDropdown.dataSource.read();
-                        $scope.dateDropdown.refresh();
+                            $scope.validatedDateOptions.select = 'month';
+                        }
+                        else {
+                            $scope.dateDropdown.dataSource =
+                                new kendo.data.DataSource({
+                                    data: [
+                                        {"value": 3, "text": "Previous Year"}
+                                    ]});
+                            $scope.dateDropdown.dataSource.read();
+                            $scope.dateDropdown.refresh();
 
-                        $scope.validatedDateOptions.select = 'year';
-                    }
-                })
+                            $scope.validatedDateOptions.select = 'year';
+                        }
+                    })
+                });
+
+
 
                 $('input[name="timeGroup"]').change(function(){
                     $scope.datePicker.enable($('input[name="timeGroup"]:checked').val() != "1");

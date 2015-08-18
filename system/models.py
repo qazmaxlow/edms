@@ -1208,6 +1208,7 @@ class SystemEnergyGoal(models.Model):
         choices=(
             (1, 'Previous Month'),
             (2, 'Last Year Same Month'),
+            (3, 'Previous Year')
         )
     )
     goal_save_percent = models.FloatField()
