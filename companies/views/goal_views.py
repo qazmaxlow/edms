@@ -7,6 +7,8 @@ from rest_framework import generics, serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from django.core.exceptions import ObjectDoesNotExist
+
 from baseline.models import BaselineUsage
 from system.models import System, SystemEnergyGoal
 
@@ -42,11 +44,14 @@ class goalTracking(APIView):
         # get last usage
         if goal_type == 'this-month' or goal_type == 'last-month':
             
-            goal_setting = SystemEnergyGoal.objects.get(
-                system=system,
-                goal_type=2,
-                validated_date=start_from
-            )      
+            try:
+                goal_setting = SystemEnergyGoal.objects.get(
+                    system=system,
+                    goal_type=2,
+                    validated_date=start_from
+                )
+            except ObjectDoesNotExist as e:
+                return Response({}, status=status.HTTP_200_OK)
 
             if goal_setting.comparison_type == 1:   #previous month
                 last_start_from = start_from - relativedelta.relativedelta(months=1)
@@ -55,11 +60,14 @@ class goalTracking(APIView):
                 last_start_from = start_from - relativedelta.relativedelta(years=1)
                 last_end_to = end_to - relativedelta.relativedelta(years=1)
         else:
-            goal_setting = SystemEnergyGoal.objects.get(
-                system=system,
-                goal_type=3,
-                validated_date=start_from
-            )
+            try:
+                goal_setting = SystemEnergyGoal.objects.get(
+                    system=system,
+                    goal_type=3,
+                    validated_date=start_from
+                )
+            except ObjectDoesNotExist as e:
+                return Response({}, status=status.HTTP_200_OK)
 
             last_start_from = start_from - relativedelta.relativedelta(years=1)
             last_end_to = start_from
