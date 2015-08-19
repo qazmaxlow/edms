@@ -1245,96 +1245,75 @@
     });
 
     ngapp.controller("WidgetCumulative", function($scope){
-        $scope.isPast12Month = "1";
-        $scope.sinceDate = new Date();
-        $scope.baselineYear = "2014 - 15";
-        $scope.currencyUnit = "HKD";
-        $scope.savedAmt = 2345;
-        $scope.co2Amt = 3;
-        $scope.isSaved = false;
 
+        // function getComparedWithBaselineData() {
+        //     var saving_ds = new kendo.data.DataSource({
+        //         transport: {
+        //             read: {
+        //                 async: false,
+        //                 url: "{% url 'companies.savings.compare-to-baseline' current_system.code %}",
+        //                 type: 'GET',
+        //                 dataType: "json"
+        //             }
+        //         },
+        //         schema: {
+        //             // Fix for single result
+        //             data: function(response) {
+        //                 return [response];
+        //             }
+        //         }
+        //     });
+        //     saving_ds.read();
+        //     var saving = saving_ds.data()[0];
+        //     saving.costChangedDescText = saving.totalCostChanged > 0 ? '{% trans "Lost" %}' : '{% trans "Saved" %}';
+        //     saving.co2ChangedDescText = saving.co2Changed > 0 ? '{% trans "Increased" %}' : '{% trans "Reduced" %}';
+
+        //     return saving;
+        // }
+        
         $scope.title = '{% trans "Cumulative Savings" %}';
-        $scope.p12BtnText = '{% trans "Past 12 months" %}';
-        $scope.thisYrBtnText = '{% trans "So far this year" %}';
-        $scope.p12HeaderText = '{% trans "Since " %}' + kendo.toString($scope.sinceDate, "D") + '{% trans " you have" %}';
-        $scope.thisYrHeaderText = '{% trans "So far this year you have" %}';
-        $scope.footerText = '{% trans "Compared with your baseline year of " %}' + $scope.baselineYear;
-        $scope.savedText1 = $scope.isSaved ? '{% trans "Saved" %}' : '{% trans "Increased" %}';
-        $scope.savedText2 = '{% trans "on energy costs" %}';
-        $scope.reducedText1 = $scope.isSaved ? '{% trans "Reduced" %}' : '{% trans "Increased" %}';
+        $scope.headerText = '{% trans "Since you started En-trak, you have" %}';
+        $scope.costChangedDescText2 = '{% trans "in energy costs" %}';
         $scope.tons = '{% trans "Tons" %}';
 
-        // $scope.toggle = function(){
-        //     $scope.isPast12Month = !$scope.isPast12Month;
-        // }
-
-        function getComparedWithBaselineData() {
-            var saving_ds = new kendo.data.DataSource({
-                transport: {
-                    read: {
-                        async: false,
-                        url: "{% url 'companies.savings.compare-to-baseline' current_system.code %}",
-                        type: 'GET',
-                        dataType: "json"
-                    }
-                },
-                schema: {
-                    // Fix for single result
-                    data: function(response) {
-                        return [response];
-                    }
+        $scope.saving = {};
+        var saving_ds = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "{% url 'companies.savings.compare-to-baseline' current_system.code %}",
+                    type: 'GET',
+                    dataType: "json"
                 }
-            });
-            saving_ds.read();
-            var saving = saving_ds.data()[0];
-            saving.costChangedDescText = saving.totalCostChanged > 0 ? '{% trans "Lost" %}' : '{% trans "Saved" %}';
-            saving.co2ChangedDescText = saving.co2Changed > 0 ? '{% trans "Increased" %}' : '{% trans "Reduced" %}';
-
-            return saving;
-        }
-
-        function getPast12MonthData() {
-            var saving_ds = new kendo.data.DataSource({
-                transport: {
-                    read: {
-                        async: false,
-                        url: "{% url 'companies.savings.so-far-this-year' current_system.code %}",
-                        type: 'GET',
-                        dataType: "json"
-                    }
-                },
-                schema: {
-                    // Fix for single result
-                    data: function(response) {
-                        return [response];
-                    }
+            },
+            schema: {
+                // Fix for single result
+                data: function(response) {
+                    return [response];
                 }
-            });
-
-            saving_ds.read();
-            var saving = saving_ds.data()[0];
-            saving.costChangedDescText = saving.totalCostChanged > 0 ? '{% trans "Lost" %}' : '{% trans "Saved" %}';
-            saving.co2ChangedDescText = saving.co2Changed > 0 ? '{% trans "Increased" %}' : '{% trans "Reduced" %}';
-
-            return saving;
-        }
-
-        $scope.changeCumulativeOption = function(e) {
-            var saving;
-            if ($scope.cumulativeDropdown.value() == 'sinceUsingEntrak' ) {
-                saving = getComparedWithBaselineData();
+            },
+            change: function(data) {
+                if (data.items && data.items[0]){
+                    var d = data.items[0];
+                    if (d.noBaseline){
+                        $scope.saving.costChanged = 0;
+                        $scope.saving.co2Changed = 0;
+                        $scope.saving.currencyUnit = d.currencyUnit || "HKD";//TODO
+                        $scope.footerText = '{% trans "Compared with your baseline year" %}';
+                    } else {
+                        $scope.saving.costChanged = d.costChanged;
+                        $scope.saving.co2Changed = d.co2Changed;
+                        $scope.saving.currencyUnit = d.currencyUnit || "HKD";//TODO
+                        var baselineYear = d.baselineYear + " - " + (d.baselineYear+1);
+                        $scope.footerText = '{% trans "Compared with your baseline year of " %}' + baselineYear;
+                    }
+                    $scope.isSaved = d.costChanged < 0;
+                    $scope.saving.costChangedDescText = $scope.isSaved ? '{% trans "Increased" %}' : '{% trans "Saved" %}';
+                    $scope.saving.co2ChangedDescText = $scope.isSaved ? '{% trans "Increased" %}' : '{% trans "Reduced" %}';
+                }
             }
-            else if ($scope.cumulativeDropdown.value() == 'soFarThisYear' ) {
-                saving = getPast12MonthData();
-            }
+        });
+        saving_ds.read();
 
-            // saving.costChanged = 0;
-            $scope.saving = saving;
-        }
-
-
-        var saving = getPast12MonthData();
-        $scope.saving = saving;
     });
 
     ngapp.controller("WidgetGoalTracking", function($scope, $http){

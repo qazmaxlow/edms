@@ -158,12 +158,15 @@ class compareToBaseline(APIView):
         # baseline, assume this is one year data
         baselines = BaselineUsage.objects.filter(system=system).order_by('start_dt')
         year_ranges = range(start_date_year, timezone.now().year+1)
+        
+        # no baseline data
+        if len(baselines) < 12:
+            return Response({'noBaseline': True}, status=status.HTTP_200_OK)
 
-        total_changed = 0
         total_co2_changed = 0
 
+        baseline_year = baselines[0].start_dt.year
         for data_year in year_ranges:
-            baseline_year = baselines[0].start_dt.year
             for baseline in baselines:
                 compare_year = data_year + (baseline.start_dt.year - baseline_year)
                 compare_start_date = baseline.start_dt.replace(year = compare_year)
@@ -191,6 +194,6 @@ class compareToBaseline(APIView):
                 total_co2_changed += co2_changed
 
 
-        info = {'costChanged': total_changed, 'co2Changed': total_co2_changed}
+        info = {'costChanged': total_changed, 'co2Changed': total_co2_changed, 'baselineYear': baseline_year}
         response = Response(info, status=status.HTTP_200_OK)
         return response
