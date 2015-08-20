@@ -10,10 +10,10 @@
         <div class="widget-toggle col-xs-6">
             <div class="pull-right">
                 <select kendo-drop-down-list="goalDropdown" ng-model="selectedGoal" k-on-change="changeGoal()">
-                    <option value="this-month">This Month</option>
-                    <option value="last-month">Last Month</option>
-                    <option value="this-year">This Year</option>
-                    <option value="last-year">Last Year</option>
+                    <option value="this-month">{{thisMonth}}</option>
+                    <option value="last-month">{{lastMonth}}</option>
+                    <option value="this-year">{{thisYear}}</option>
+                    <option value="last-year">{{lastYear}}</option>
                 </select>
                 <!-- <div class="long-text-toggle" ng-click="toggle()">
                     <span class="button-left">{{ btnText }}</span><span class="button-right"></span>

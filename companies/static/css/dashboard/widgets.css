@@ -796,12 +796,19 @@
     border-bottom: 1px solid #f2f2f2;
 }
 
-.cumulative-widget .top-box, .cumulative-widget .bottom-box {
-    height: calc(50% - 44px);
+.cumulative-widget .middle-box {
+    width: 100%;
+    height: calc(100% - 88px);
+}
+
+.cumulative-widget .top-box,
+.cumulative-widget .bottom-box {
+    height: 50%;
     padding-left: 15px;
     padding-top: 10px;
     border-bottom: 1px solid #f2f2f2;
     background-repeat: no-repeat;
+    background-size: auto 80%;
     background-position: right bottom;
 }
 
@@ -1229,6 +1236,25 @@
     padding-top: 140px;
 }
 
+.fullscreen .cumulative-widget .footer-text {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+}
+
+.fullscreen .cumulative-widget .middle-box {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    padding-top: 100px;
+    padding-bottom: 28px;
+}
+
+.fullscreen .widget-container.cumulative-widget .description-1 {
+    width: 100%;
+    position: absolute;
+}
+
 /* fullscreen with large screen (1280x800)*/
 @media screen and (min-width: 1250px) and (min-height: 780px) {
     .fullscreen .widget-container {
@@ -1260,6 +1286,7 @@
     .fullscreen .widget-message .single-box,
     .fullscreen .widget-message2 .message-text,
     .fullscreen .widget-content .bc-left-box.first-row h3,
+    .fullscreen .cumulative-widget .description-1,
     .fullscreen .widget-message2 .eu-box .description-1,
     .fullscreen .widget-message2 .eu-box .description-2 {
         height: 65px;
@@ -1298,6 +1325,18 @@
 
     .fullscreen .lw-graph {
         padding-top: 150px;
+    }
+
+    .fullscreen .cumulative-widget .middle-box {
+        padding-top: 110px;
+    }
+
+    .fullscreen .cumulative-widget .normal-text {
+        line-height: 90%;
+    }
+
+    .fullscreen .cumulative-widget .amount-text {
+        line-height: 95%;
     }
 }
 
@@ -1340,6 +1379,7 @@
     .fullscreen .widget-message .single-box,
     .fullscreen .widget-message2 .message-text,
     .fullscreen .widget-content .bc-left-box.first-row h3,
+    .fullscreen .cumulative-widget .description-1,
     .fullscreen .widget-message2 .eu-box .description-1,
     .fullscreen .widget-message2 .eu-box .description-2 {
         height: 70px;
@@ -1383,6 +1423,18 @@
     .fullscreen .lw-graph {
         padding-top: 160px;
     }
+
+    .fullscreen .cumulative-widget .middle-box {
+        padding-top: 120px;
+    }
+
+    .fullscreen .cumulative-widget .top-box,
+    .fullscreen .cumulative-widget .bottom-box,
+    .fullscreen .goal-widget .widget-content .top-row,
+    .fullscreen .goal-widget .widget-content .bottom-row {
+        padding-top: 25px;
+    }
+
 }
 
 /*real time*/
