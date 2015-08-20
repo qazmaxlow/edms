@@ -1166,82 +1166,83 @@
     });
 
     ngapp.controller("WidgetProgress", function($scope){
-        $scope.isPast12Month = "1";
-        $scope.percent = 14;
-        $scope.lastYear = 2014;
-
-        $scope.isIncrease = $scope.percent > 0;
-        $scope.percent = Math.abs($scope.percent);
 
         $scope.title = '{% trans "Progress" %}';
-        $scope.p12BtnText = '{% trans "Past 12 months" %}';
-        $scope.thisYrBtnText = '{% trans "So far this year" %}';
+
         $scope.p12DescLine1Text = '{% trans "Over the past 12 months" %}';
-        $scope.thisYrDescLine1Text = '{% trans "So far this year" %}';
         $scope.increaseLine2Text = '{% trans "you have increased your energy use" %}';
         $scope.decreaseLine2Text = '{% trans "you have decreased your energy use" %}';
-        $scope.fromBaselineText = '{% trans "from your baseline of" %}';
-        $scope.comparedToText = '{% trans "compared to " %}' + $scope.lastYear;
-        $scope.yearRangeText = $scope.lastYear + ' - ' + ($scope.lastYear + 1);
 
-        function getSoFarThisYearData() {
-            var progress_ds = new kendo.data.DataSource({
-                transport: {
-                    read: {
-                        async: false,
-                        url: "{% url 'companies.progesses.so-far-this-year' current_system.code %}",
-                        type: 'GET',
-                        dataType: "json"
-                    }
-                },
-                schema: {
-                    // Fix for single result
-                    data: function(response) {
-                        return [response];
-                    }
+        // function getSoFarThisYearData() {
+        //     var progress_ds = new kendo.data.DataSource({
+        //         transport: {
+        //             read: {
+        //                 async: false,
+        //                 url: "{% url 'companies.progesses.so-far-this-year' current_system.code %}",
+        //                 type: 'GET',
+        //                 dataType: "json"
+        //             }
+        //         },
+        //         schema: {
+        //             // Fix for single result
+        //             data: function(response) {
+        //                 return [response];
+        //             }
+        //         }
+        //     });
+
+        //     progress_ds.read();
+        //     var progress = progress_ds.data()[0];
+        //     return progress;
+        // }
+
+        var progress_ds = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "{% url 'companies.progesses.compare-to-baseline' current_system.code %}",
+                    type: 'GET',
+                    dataType: "json"
                 }
-            });
-
-            progress_ds.read();
-            var progress = progress_ds.data()[0];
-            return progress;
-        }
-
-        function getComparedToBaselineData() {
-            var progress_ds = new kendo.data.DataSource({
-                transport: {
-                    read: {
-                        async: false,
-                        url: "{% url 'companies.progesses.compare-to-baseline' current_system.code %}",
-                        type: 'GET',
-                        dataType: "json"
-                    }
-                },
-                schema: {
-                    // Fix for single result
-                    data: function(response) {
-                        return [response];
-                    }
+            },
+            schema: {
+                // Fix for single result
+                data: function(response) {
+                    return [response];
                 }
-            });
+            },
+            change: function(data){
+                if (data.items && data.items[0]){
+                    var d = data.items[0];
+                    if (d.noBaseline){
+                        $scope.comparedPercent = 0;
+                        $scope.fromBaselineText = '{% trans "from your baseline" %}';
+                        $scope.yearRangeText = "";
+                    } else {
+                        $scope.comparedPercent = d.comparedPercent;
+                        $scope.yearRangeText = d.baselineYear + " - " + (d.baselineYear+1);
+                        $scope.fromBaselineText = '{% trans "from your baseline of" %}';
+                    }
+                    $scope.isIncrease = d.comparedPercent < 0;
 
-            progress_ds.read();
-            var progress = progress_ds.data()[0];
-            return progress;
-        }
-
-        $scope.changeProgressOption = function(e) {
-            if ($scope.progressDropdown.value() == 'pass12Months' ) {
-                progress = getComparedToBaselineData();
+                }
             }
-            else if ($scope.progressDropdown.value() == 'soFarThisYear' ) {
-                progress = getSoFarThisYearData();
-            }
+        });
 
-            $scope.progress = progress;
-        };
+        progress_ds.read();
 
-        $scope.progress = getSoFarThisYearData();
+
+        // $scope.changeProgressOption = function(e) {
+        //     if ($scope.progressDropdown.value() == 'pass12Months' ) {
+        //         progress = getComparedToBaselineData();
+        //     }
+        //     else if ($scope.progressDropdown.value() == 'soFarThisYear' ) {
+        //         progress = getSoFarThisYearData();
+        //     }
+
+        //     $scope.progress = progress;
+        // };
+
+        // $scope.progress = getSoFarThisYearData();
     });
 
     ngapp.controller("WidgetCumulative", function($scope){

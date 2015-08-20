@@ -18,16 +18,16 @@
     </div>
     
     <div class="widget-content row bg-image" ng-class="{'increase' : isIncrease}">
-        <div class="description-6 top-space">{{isPast12Month == "1" ? p12DescLine1Text : thisYrDescLine1Text}}</div>
+        <div class="description-6 top-space">{{p12DescLine1Text}}</div>
         <div class="description-6">{{isIncrease ? increaseLine2Text : decreaseLine2Text}}</div>
         <div class="percentRow">
             <div class="arrow-icon"></div>
             <div class="percent">
-                <span class="percentNum">{{ progress.compared_percent | abs | number:0 }}</span><span class="percentSign">%</span>
+                <span class="percentNum">{{ comparedPercent | abs | entrakNumber }}</span><span class="percentSign">%</span>
             </div>
         </div>
-        <div class="description-6">{{isPast12Month == "1" ? fromBaselineText : comparedToText}}</div>
-        <div class="description-6">{{isPast12Month == "1" ? yearRangeText : ""}}</div>
+        <div class="description-6">{{fromBaselineText}}</div>
+        <div class="description-6">{{yearRangeText}}</div>
     </div>
 </div>
 {% endverbatim %}
