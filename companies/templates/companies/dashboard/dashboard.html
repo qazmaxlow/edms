@@ -1333,7 +1333,6 @@
                     $scope.soFarPercent = data.compare_percent;
                     $scope.isIncrease = $scope.soFarPercent > 0;
                     $scope.soFarPercent = Math.abs($scope.soFarPercent);
-                    $scope.reducedText = $scope.isIncrease ? '{% trans "increased" %}' : '{% trans "reduced" %}';
                     $scope.compareDate = new Date(data.compare_date);
                     $scope.targetDate = new Date(data.target_date);
                 }
@@ -1349,8 +1348,8 @@
         $scope.descPart3Text = '{% trans " by" %}';
         $scope.descPart4Text = '{% trans " compared to " %}';
 
-        $scope.secondRowPart1Text = '{% trans "So far you have " %}';
-        $scope.secondRowPart2Text = '{% trans "your energy use by" %}';
+        $scope.secondRowText = '{% trans "So far, you are saving at the rate of" %}';
+        $scope.secondRowPastText = '{% trans "You achieved savings of" %}';
 
 
     });

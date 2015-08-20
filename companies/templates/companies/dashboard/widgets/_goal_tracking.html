@@ -37,8 +37,9 @@
             <div class="separator"></div>
         </div>
         <div class="bottom-row" ng-class="{up : isIncrease}">
-            <span>{{secondRowPart1Text}}</span><span>{{reducedText}}</span><br>
-            <span>{{secondRowPart2Text}}</span><br>
+            <span ng-show="selectedGoal == 'this-month' || selectedGoal == 'this-year'" class="bottom-space">{{secondRowText}}</span>
+            <span ng-show="selectedGoal == 'last-month' || selectedGoal == 'last-year'" class="bottom-space">{{secondRowPastText}}</span>
+            <br>
             <div class="arrow-icon" ng-class="{up : isIncrease}"></div>
             <div class="percent" ng-class="{'red-text' : isIncrease, 'green-text' : !isIncrease}">
                 <span class="percentNum">{{soFarPercent | entrakNumber}}</span><span class="percentSign">%</span>
