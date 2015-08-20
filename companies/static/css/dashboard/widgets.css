@@ -735,32 +735,47 @@
 
 /* progess widget -----*/
 .progress-widget .bg-image {
-    background-image: url(../../images/dashboard/decrease-illu.png);
+    background-image: url(../../images/dashboard/progress_decrease.png);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center bottom;
 }
 
 .progress-widget .bg-image.increase {
-    background-image: url(../../images/dashboard/increase-illu.png);
+    background-image: url(../../images/dashboard/progress_increase.png);
 }
 
 .progress-widget .percent {
     text-align: center;
-    padding-top: 30px;
+    padding: 15px 0;
+}
+
+.progress-widget .percentRow {
+    text-align: center;
+}
+
+.progress-widget .percentRow>* {
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.progress-widget .percent .percentNum,
+.progress-widget .percent .percentSign {
+    color: #74C26B;
+}
+
+.progress-widget .increase .percent .percentNum,
+.progress-widget .increase .percent .percentSign {
+    color: #D65C2C;
 }
 
 .progress-widget .percent .percentNum {
     font-size: 2.857em;
-    color: #354960;
-    display: inline-block;
     line-height: 100%;
 }
 
 .progress-widget .percent .percentSign {
     font-size: 1.786em;
-    color: #354960;
-    display: inline-block;
     line-height: 100%;
 }
 
@@ -888,7 +903,8 @@
     font-weight: 500;
 }
 
-.goal-widget .widget-content .bottom-row .arrow-icon {
+.goal-widget .widget-content .bottom-row .arrow-icon,
+.progress-widget .percentRow .arrow-icon {
     display: inline-block;
     height: 18px;
     width: 28px;
@@ -898,7 +914,8 @@
     background-image: url(../../images/dashboard/down.png);
 }
 
-.goal-widget .widget-content .bottom-row .arrow-icon.up {
+.goal-widget .widget-content .bottom-row .arrow-icon.up,
+.progress-widget .increase .percentRow .arrow-icon {
     background-image: url(../../images/dashboard/up.png);
 }
 
