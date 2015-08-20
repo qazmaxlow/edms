@@ -1298,7 +1298,7 @@
                     if (d.noBaseline){
                         $scope.saving.costChanged = 0;
                         $scope.saving.co2Changed = 0;
-                        $scope.saving.currencyUnit = d.currencyUnit || "HKD";//TODO
+                        $scope.saving.currencyUnit = '{{current_system.money_unit.name}}';
                         $scope.footerText = '{% trans "Compared with your baseline year" %}';
                     } else {
                         $scope.saving.costChanged = d.costChanged;
