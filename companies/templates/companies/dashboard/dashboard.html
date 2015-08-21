@@ -332,7 +332,7 @@
 
     ngapp.controller("WidgetRealtime", function($scope) {
         $scope.title = '{% trans "Real-Time" %}';
-        $scope.btnLeft = '{% trans "Graph" %}';
+        $scope.btnLeft = '{% trans "Graph" context "dashboard" %}';
         $scope.btnRight = '{% trans "Rates" %}';
         $scope.usedSoFar = '{% trans "So far today you have used: " %}';
         $scope.yourRate = '{% trans "Your current rate of energy use." %}';
