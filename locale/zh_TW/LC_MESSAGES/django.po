@@ -248,7 +248,7 @@ msgstr "實時"
 #: companies/templates/companies/dashboard/dashboard.html:325
 #: entrak/templates/page_base.html:199
 msgid "Graph"
-msgstr "圖表"
+msgstr "圖表功能"
 
 #: companies/templates/companies/dashboard/dashboard.html:326
 msgid "Rates"
@@ -442,30 +442,40 @@ msgstr ""
 #: companies/templates/companies/dashboard/dashboard.html:1269
 #: companies/templates/companies/dashboard/dashboard.html:1311
 msgid "Saved"
-msgstr "儲存"
+msgstr "在能源方面節省了"
 
 #: companies/templates/companies/dashboard/dashboard.html:1270
-#: companies/templates/companies/dashboard/dashboard.html:1311
-#: companies/templates/companies/dashboard/dashboard.html:1312
-#, fuzzy
 msgid "Increased"
 msgstr "增加"
+
+#: companies/templates/companies/dashboard/dashboard.html:1311
+msgctxt "progressCost"
+msgid "Increased"
+msgstr "在能源方面多用了"
+
+#: companies/templates/companies/dashboard/dashboard.html:1312
+msgctxt "progressCO2"
+msgid "Increased"
+msgstr "相等於增加了"
 
 #: companies/templates/companies/dashboard/dashboard.html:1270
 #: companies/templates/companies/dashboard/dashboard.html:1312
 msgid "Reduced"
-msgstr "減少"
+msgstr "相等於減少了"
 
 #: companies/templates/companies/dashboard/dashboard.html:1275
+msgctxt "dashboard"
+msgid "Cumulative Savings"
+msgstr "節約進度"
+
 #: entrak/templates/progress.html:90
 msgid "Cumulative Savings"
 msgstr "累積能源節省 (相等於)"
 
 #: companies/templates/companies/dashboard/dashboard.html:1276
 msgid "Since you started En-trak, you have"
-msgstr ""
+msgstr "從開始使用 En-trak, 您已"
 
-#: companies/templates/companies/dashboard/dashboard.html:1277
 #: companies/templates/companies/reports/_report_content.html:50
 #: companies/templates/companies/reports/_report_revamp_content.html:50
 #: companies/templates/companies/reports/popup_report_pdf.html:104
@@ -473,18 +483,22 @@ msgstr ""
 msgid "in energy costs"
 msgstr "電費"
 
+#: companies/templates/companies/dashboard/dashboard.html:1277
+msgctxt "dashboard"
+msgid "in energy costs"
+msgstr " "
+
 #: companies/templates/companies/dashboard/dashboard.html:1278
 msgid "Tons"
 msgstr "噸"
 
 #: companies/templates/companies/dashboard/dashboard.html:1302
-#, fuzzy
 msgid "Compared with your baseline year"
-msgstr "比上年"
+msgstr "相對於基準用量"
 
 #: companies/templates/companies/dashboard/dashboard.html:1308
 msgid "Compared with your baseline year of "
-msgstr "比上年"
+msgstr "相對於"
 
 #: companies/templates/companies/dashboard/dashboard.html:1343
 #: entrak/templates/manage_accounts.html:52 entrak/templates/profile.html:50
@@ -542,7 +556,7 @@ msgstr "上年"
 
 #: companies/templates/companies/dashboard/widgets/_cumulative_savings.html:33
 msgid "of CO<sub>2</sub> emissions"
-msgstr "二氧化碳排放 (kg)"
+msgstr "的二氧化碳排放"
 
 #: companies/templates/companies/dashboard/widgets/_real_time.html:65
 #: companies/templates/companies/reports/_report_content.html:39

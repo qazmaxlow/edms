@@ -33,6 +33,8 @@
                 <div class="normal-text">{% trans "of CO<sub>2</sub> emissions" %}</div>
             </div>
         </div>
-        <div class="footer-text" ng-bind="footerText"></div>
+        <div class="footer-text" ng-bind="footerText">
+            <span ng-bind="footerText"></span>{% ifequal LANGUAGE_CODE 'zh-tw' %}<span>年的基準用量</span>{% endifequal %}
+        </div>
     </div>
 </div>

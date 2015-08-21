@@ -1283,9 +1283,9 @@
         //     return saving;
         // }
         
-        $scope.title = '{% trans "Cumulative Savings" %}';
+        $scope.title = '{% trans "Cumulative Savings" context "dashboard" %}';
         $scope.headerText = '{% trans "Since you started En-trak, you have" %}';
-        $scope.costChangedDescText2 = '{% trans "in energy costs" %}';
+        $scope.costChangedDescText2 = '{% trans "in energy costs" context "dashboard" %}';
         $scope.tons = '{% trans "Tons" %}';
 
         $scope.saving = {};
@@ -1319,8 +1319,8 @@
                         $scope.footerText = '{% trans "Compared with your baseline year of " %}' + baselineYear;
                     }
                     $scope.isSaved = d.costChanged < 0;
-                    $scope.saving.costChangedDescText = $scope.isSaved ? '{% trans "Increased" %}' : '{% trans "Saved" %}';
-                    $scope.saving.co2ChangedDescText = $scope.isSaved ? '{% trans "Increased" %}' : '{% trans "Reduced" %}';
+                    $scope.saving.costChangedDescText = $scope.isSaved ? '{% trans "Increased" context "progressCost" %}' : '{% trans "Saved" %}';
+                    $scope.saving.co2ChangedDescText = $scope.isSaved ? '{% trans "Increased" context "progressCO2" %}' : '{% trans "Reduced" %}';
                 }
             }
         });
