@@ -159,6 +159,16 @@
         }
     });
 
+    ngapp.filter('yearInChinese', function () {
+        return function(val) {
+            if (val == null){
+                return "";
+            } else {
+                return val.substring(0,5);
+            }
+        }
+    });
+
     ngapp.controller("Dashboard", function($scope){
         //fullscren btn action
         $("#exit-fullscreen-btn").click(function(){
@@ -1318,6 +1328,8 @@
     });
 
     ngapp.controller("WidgetGoalTracking", function($scope, $http){
+        var langCode = '{{LANGUAGE_CODE}}';
+        kendo.culture(langCode.substring(0,3)+langCode.substring(3,5).toUpperCase());
 
         $scope.selectedGoal = "this-month";
         $scope.changeGoal = function(){
@@ -1333,16 +1345,15 @@
                     $scope.soFarPercent = data.compare_percent;
                     $scope.isIncrease = $scope.soFarPercent > 0;
                     $scope.soFarPercent = Math.abs($scope.soFarPercent);
-                    $scope.compareDate = new Date(data.compare_date);
-                    $scope.targetDate = new Date(data.target_date);
+                    $scope.compareDate = kendo.toString(new Date(data.compare_date), "y");
+                    $scope.targetDate = kendo.toString(new Date(data.target_date), "y");
                 }
             );
         }
         $scope.changeGoal();
 
         $scope.title = '{% trans "Goal Tracking" %}';
-        $scope.p12BtnText = '{% trans "Past 12 months" %}';
-        $scope.btnText = '{% trans "Goal-1" %}';
+
         $scope.descPart1Text = '{% trans "I want to reduce my" %}';
         $scope.descPart2Text = '{% trans "energy use in " %}';
         $scope.descPart3Text = '{% trans " by" %}';

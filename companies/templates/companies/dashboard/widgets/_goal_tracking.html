@@ -3,8 +3,10 @@
 {% load static %}
 {% load humanize %}
 
-{% verbatim %}
+{% get_current_language as LANGUAGE_CODE %}
+
 <div class="widget-container goal-widget" ng-controller="WidgetGoalTracking">
+    {% verbatim %}
     <div class="widget-header row">
         <div class="widget-title col-xs-6">{{title}}</div>
         <div class="widget-toggle col-xs-6">
@@ -21,21 +23,34 @@
             </div>
         </div>
     </div>
-    
+    {% endverbatim %}
     <div class="widget-content row">
         <div class="top-row">
-            <span>{{descPart1Text}}</span><br>
-            <span>{{descPart2Text}}</span>
-            <span ng-show="selectedGoal == 'this-month' || selectedGoal == 'last-month'">{{targetDate | dateFmt:'y'}}</span>
-            <span ng-show="selectedGoal == 'this-year' || selectedGoal == 'last-year'">{{targetDate | dateFmt:'yyyy'}}</span>
-            <span>{{descPart3Text}}</span><br>
-            <span class="bold description-5">{{goalPercent | entrakNumber}}</span>
+            {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                <span ng-bind="descPart1Text"></span>
+                <span ng-show="selectedGoal == 'this-month' || selectedGoal == 'last-month'" ng-bind="targetDate"></span>
+                 <span ng-show="selectedGoal == 'this-year' || selectedGoal == 'last-year'" ng-bind="targetDate | yearInChinese"></span><br>
+                <span ng-bind="descPart2Text"></span>
+            {% else %}
+                <span ng-bind="descPart1Text"></span><br>
+                <span ng-bind="descPart2Text"></span>
+                <span ng-show="selectedGoal == 'this-month' || selectedGoal == 'last-month'" ng-bind="targetDate"></span>
+                <span ng-show="selectedGoal == 'this-year' || selectedGoal == 'last-year'" ng-bind="targetDate"></span>
+            {% endifequal %}
+
+            <span ng-bind="descPart3Text"></span><br>
+            <span class="bold description-5" ng-bind="goalPercent | entrakNumber"></span>
             <span class="description-4">%</span><br>
-            <span>{{descPart4Text}}</span>
-            <span ng-show="selectedGoal == 'this-month' || selectedGoal == 'last-month'">{{compareDate | dateFmt:'y'}}</span>
-            <span ng-show="selectedGoal == 'this-year' || selectedGoal == 'last-year'">{{compareDate | dateFmt:'yyyy'}}</span>
+            <span ng-bind="descPart4Text"></span>
+            <span ng-show="selectedGoal == 'this-month' || selectedGoal == 'last-month'" ng-bind="compareDate"></span>
+            {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                <span ng-show="selectedGoal == 'this-year' || selectedGoal == 'last-year'" ng-bind="compareDate | yearInChinese"></span>
+            {% else %}
+                <span ng-show="selectedGoal == 'this-year' || selectedGoal == 'last-year'" ng-bind="compareDate"></span>
+            {% endifequal %}
             <div class="separator"></div>
         </div>
+        {% verbatim %}
         <div class="bottom-row" ng-class="{up : isIncrease}">
             <span ng-show="selectedGoal == 'this-month' || selectedGoal == 'this-year'" class="bottom-space">{{secondRowText}}</span>
             <span ng-show="selectedGoal == 'last-month' || selectedGoal == 'last-year'" class="bottom-space">{{secondRowPastText}}</span>
@@ -45,6 +60,6 @@
                 <span class="percentNum">{{soFarPercent | entrakNumber}}</span><span class="percentSign">%</span>
             </div>
         </div>
+        {% endverbatim %}
     </div>
 </div>
-{% endverbatim %}

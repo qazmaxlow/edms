@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-28 08:32+0000\n"
+"POT-Creation-Date: 2015-08-20 10:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,8 +22,8 @@ msgid "{0:.0f}% {1}"
 msgstr ""
 
 #: companies/report_revamp_views.py:381 companies/report_views.py:480
-#: companies/templates/companies/dashboard/dashboard.html:1012
-#: companies/templates/companies/dashboard/dashboard.html:1151
+#: companies/templates/companies/dashboard/dashboard.html:1021
+#: companies/templates/companies/dashboard/dashboard.html:1160
 #: companies/templates/companies/reports/_report_content.html:70
 #: companies/templates/companies/reports/_report_content.html:79
 #: companies/templates/companies/reports/_report_content.html:97
@@ -43,8 +43,8 @@ msgid "more"
 msgstr ""
 
 #: companies/report_revamp_views.py:381 companies/report_views.py:480
-#: companies/templates/companies/dashboard/dashboard.html:1012
-#: companies/templates/companies/dashboard/dashboard.html:1151
+#: companies/templates/companies/dashboard/dashboard.html:1021
+#: companies/templates/companies/dashboard/dashboard.html:1160
 #: companies/templates/companies/reports/_report_content.html:68
 #: companies/templates/companies/reports/_report_content.html:77
 #: companies/templates/companies/reports/_report_content.html:95
@@ -183,7 +183,7 @@ msgid "This week"
 msgstr ""
 
 #: companies/report_revamp_views.py:776 companies/report_views.py:839
-#: companies/templates/companies/dashboard/dashboard.html:321
+#: companies/templates/companies/dashboard/dashboard.html:330
 msgid "Last week"
 msgstr ""
 
@@ -213,344 +213,325 @@ msgstr ""
 msgid "Overall: {0.compared_percent_abs:.0f}&#37; less energy than last {1}"
 msgstr ""
 
-#: companies/tasks.py:83
+#: companies/tasks.py:87
 msgid "automated report description 1"
 msgstr "Your energy report for "
 
-#: companies/tasks.py:84
+#: companies/tasks.py:88
 msgid "automated report description 2"
 msgstr "is ready for your review!"
 
-#: companies/tasks.py:87
+#: companies/tasks.py:91
 msgid "automated report remark"
 msgstr ""
 "This link will expire in 72 hours after sending.\n"
 "If you wish to view this report after that period,\n"
 " simply log into your En-trak system and go to the Reports page."
 
-#: companies/tasks.py:88
+#: companies/tasks.py:92
 msgid "automated report button"
 msgstr "View Report"
 
-#: companies/templates/companies/dashboard/dashboard.html:51
+#: companies/templates/companies/dashboard/dashboard.html:59
 msgid "ENERGY DASHBOARD"
 msgstr "DASHBOARD"
 
-#: companies/templates/companies/dashboard/dashboard.html:52
+#: companies/templates/companies/dashboard/dashboard.html:60
 msgid "Grab a snapshot of your performance at the"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:315
+#: companies/templates/companies/dashboard/dashboard.html:324
 msgid "Real-Time"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:316
-#: entrak/templates/page_base.html:193
+#: companies/templates/companies/dashboard/dashboard.html:325
+#: entrak/templates/page_base.html:199
 msgid "Graph"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:317
+#: companies/templates/companies/dashboard/dashboard.html:326
 msgid "Rates"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:318
+#: companies/templates/companies/dashboard/dashboard.html:327
 msgid "So far today you have used: "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:319
+#: companies/templates/companies/dashboard/dashboard.html:328
 msgid "Your current rate of energy use."
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:320
+#: companies/templates/companies/dashboard/dashboard.html:329
 #: entrak/templates/display.html:274
 msgid "Today"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:322
+#: companies/templates/companies/dashboard/dashboard.html:331
 msgid "per day"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:627
+#: companies/templates/companies/dashboard/dashboard.html:636
 msgid "Biggest Consumers"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:628
-#: companies/templates/companies/dashboard/dashboard.html:761
+#: companies/templates/companies/dashboard/dashboard.html:637
+#: companies/templates/companies/dashboard/dashboard.html:770
 msgctxt "dashboard"
 msgid "Week"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:629
-#: companies/templates/companies/dashboard/dashboard.html:762
+#: companies/templates/companies/dashboard/dashboard.html:638
+#: companies/templates/companies/dashboard/dashboard.html:771
 msgctxt "dashboard"
 msgid "Month"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:630
-#: companies/templates/companies/dashboard/dashboard.html:665
+#: companies/templates/companies/dashboard/dashboard.html:639
+#: companies/templates/companies/dashboard/dashboard.html:674
 msgid "change from last week"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:630
-#: companies/templates/companies/dashboard/dashboard.html:665
+#: companies/templates/companies/dashboard/dashboard.html:639
+#: companies/templates/companies/dashboard/dashboard.html:674
 msgid "change from last month"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:631
+#: companies/templates/companies/dashboard/dashboard.html:640
 msgid "Energy cost so far"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:705
+#: companies/templates/companies/dashboard/dashboard.html:714
 msgid "Energy Saving Tips"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:707
+#: companies/templates/companies/dashboard/dashboard.html:716
 msgid "Put a ribbon on it"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:708
+#: companies/templates/companies/dashboard/dashboard.html:717
 msgid ""
 "Tie a ribbon to the vent of each aircon unit so you can easily tell if "
 "aircon has actually been turned off."
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:712
+#: companies/templates/companies/dashboard/dashboard.html:721
 msgid "Label your plugs"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:713
+#: companies/templates/companies/dashboard/dashboard.html:722
 #: entrak/templates/display.html:174
 msgid ""
 "Label your plugs so you can unplug appliances without accidentally turning "
 "off important things!"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:717
+#: companies/templates/companies/dashboard/dashboard.html:726
 msgid "Remove a tube"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:718
+#: companies/templates/companies/dashboard/dashboard.html:727
 #: entrak/templates/display.html:171
 msgid ""
 "If you have more light than you need in an area, you can remove one light "
 "tube to save energy!"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:722
+#: companies/templates/companies/dashboard/dashboard.html:731
 msgid "Turn off the socket"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:723
+#: companies/templates/companies/dashboard/dashboard.html:732
 #, python-format
 msgid ""
 "Even if an appliance is off, it can still consume 10%(percent)s of normal "
 "energy. Remember to turn off the socket switch too!"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:727
+#: companies/templates/companies/dashboard/dashboard.html:736
 msgid "Adjust aircon temperature"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:728
+#: companies/templates/companies/dashboard/dashboard.html:737
 #: entrak/templates/display.html:172
 msgid ""
 "30 minutes after turning on aircon, adjust the temperature to minimize "
 "energy wastage."
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:760
+#: companies/templates/companies/dashboard/dashboard.html:769
 msgid "Comparison"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:911
+#: companies/templates/companies/dashboard/dashboard.html:920
 msgid "So far this week"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:911
+#: companies/templates/companies/dashboard/dashboard.html:920
 msgid "So far this month"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:912
+#: companies/templates/companies/dashboard/dashboard.html:921
 msgid "By this time last week"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:912
+#: companies/templates/companies/dashboard/dashboard.html:921
 msgid "By this time last month"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:960
+#: companies/templates/companies/dashboard/dashboard.html:969
 msgid "Last Week Stats"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:961
+#: companies/templates/companies/dashboard/dashboard.html:970
 msgid "Day"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:962
+#: companies/templates/companies/dashboard/dashboard.html:971
 msgid "Night"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:963
+#: companies/templates/companies/dashboard/dashboard.html:972
 msgid "than two weeks ago"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1155
+#: companies/templates/companies/dashboard/dashboard.html:1164
 msgid "average weekday"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1155
+#: companies/templates/companies/dashboard/dashboard.html:1164
 msgid "average overnight"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1167
-#: entrak/templates/page_base.html:200
+#: companies/templates/companies/dashboard/dashboard.html:1170
+#: entrak/templates/page_base.html:206
 msgid "Progress"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1168
-#: companies/templates/companies/dashboard/dashboard.html:1248
-#: companies/templates/companies/dashboard/dashboard.html:1348
-msgid "Past 12 months"
-msgstr ""
-
-#: companies/templates/companies/dashboard/dashboard.html:1169
-#: companies/templates/companies/dashboard/dashboard.html:1171
-#: companies/templates/companies/dashboard/dashboard.html:1249
-msgid "So far this year"
-msgstr ""
-
-#: companies/templates/companies/dashboard/dashboard.html:1170
+#: companies/templates/companies/dashboard/dashboard.html:1172
 #: entrak/templates/display.html:100 entrak/templates/display.html.py:102
 msgid "Over the past 12 months"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1172
+#: companies/templates/companies/dashboard/dashboard.html:1173
 msgid "you have increased your energy use"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1173
+#: companies/templates/companies/dashboard/dashboard.html:1174
 msgid "you have decreased your energy use"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1174
+#: companies/templates/companies/dashboard/dashboard.html:1218
+msgid "from your baseline"
+msgstr ""
+
+#: companies/templates/companies/dashboard/dashboard.html:1223
 msgid "from your baseline of"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1175
-msgid "compared to "
+#: companies/templates/companies/dashboard/dashboard.html:1269
+msgid "Lost"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1247
+#: companies/templates/companies/dashboard/dashboard.html:1269
+#: companies/templates/companies/dashboard/dashboard.html:1311
+msgid "Saved"
+msgstr ""
+
+#: companies/templates/companies/dashboard/dashboard.html:1270
+#: companies/templates/companies/dashboard/dashboard.html:1311
+#: companies/templates/companies/dashboard/dashboard.html:1312
+msgid "Increased"
+msgstr ""
+
+#: companies/templates/companies/dashboard/dashboard.html:1270
+#: companies/templates/companies/dashboard/dashboard.html:1312
+msgid "Reduced"
+msgstr ""
+
+#: companies/templates/companies/dashboard/dashboard.html:1275
 #: entrak/templates/progress.html:90
 msgid "Cumulative Savings"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1250
-msgid "Since "
+#: companies/templates/companies/dashboard/dashboard.html:1276
+msgid "Since you started En-trak, you have"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1250
-msgid " you have"
+#: companies/templates/companies/dashboard/dashboard.html:1277
+#: companies/templates/companies/reports/_report_content.html:50
+#: companies/templates/companies/reports/_report_revamp_content.html:50
+#: companies/templates/companies/reports/popup_report_pdf.html:104
+#: entrak/templates/report_main_content.html:37
+msgid "in energy costs"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1251
-msgid "So far this year you have"
-msgstr ""
-
-#: companies/templates/companies/dashboard/dashboard.html:1252
-msgid "Compared with your baseline year of "
-msgstr ""
-
-#: companies/templates/companies/dashboard/dashboard.html:1253
-#: companies/templates/companies/dashboard/dashboard.html:1281
-#: companies/templates/companies/dashboard/dashboard.html:1307
-msgid "Saved"
-msgstr ""
-
-#: companies/templates/companies/dashboard/dashboard.html:1253
-#: companies/templates/companies/dashboard/dashboard.html:1255
-#: companies/templates/companies/dashboard/dashboard.html:1282
-#: companies/templates/companies/dashboard/dashboard.html:1308
-msgid "Increased"
-msgstr ""
-
-#: companies/templates/companies/dashboard/dashboard.html:1254
-msgid "on energy costs"
-msgstr ""
-
-#: companies/templates/companies/dashboard/dashboard.html:1255
-#: companies/templates/companies/dashboard/dashboard.html:1282
-#: companies/templates/companies/dashboard/dashboard.html:1308
-msgid "Reduced"
-msgstr ""
-
-#: companies/templates/companies/dashboard/dashboard.html:1256
+#: companies/templates/companies/dashboard/dashboard.html:1278
 msgid "Tons"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1281
-#: companies/templates/companies/dashboard/dashboard.html:1307
-msgid "Lost"
+#: companies/templates/companies/dashboard/dashboard.html:1302
+msgid "Compared with your baseline year"
+msgstr ""
+
+#: companies/templates/companies/dashboard/dashboard.html:1308
+msgid "Compared with your baseline year of "
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:1343
-msgid "increased"
-msgstr ""
-
-#: companies/templates/companies/dashboard/dashboard.html:1343
-msgid "reduced"
-msgstr ""
-
-#: companies/templates/companies/dashboard/dashboard.html:1347
+#: entrak/templates/manage_accounts.html:52 entrak/templates/profile.html:50
+#: entrak/templates/systems/goals/settings.html:51
 msgid "Goal Tracking"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1349
+#: companies/templates/companies/dashboard/dashboard.html:1344
+msgid "Past 12 months"
+msgstr ""
+
+#: companies/templates/companies/dashboard/dashboard.html:1345
 msgid "Goal-1"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1350
-msgid "Reduce energy use in "
+#: companies/templates/companies/dashboard/dashboard.html:1346
+msgid "I want to reduce my"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1351
-msgid "by "
+#: companies/templates/companies/dashboard/dashboard.html:1347
+msgid "energy use in "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1352
+#: companies/templates/companies/dashboard/dashboard.html:1348
+msgid " by"
+msgstr ""
+
+#: companies/templates/companies/dashboard/dashboard.html:1349
 msgid " compared to "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1353
-msgid "So far you have "
+#: companies/templates/companies/dashboard/dashboard.html:1351
+msgid "So far, you are saving at the rate of"
+msgstr ""
+
+#: companies/templates/companies/dashboard/dashboard.html:1352
+msgid "You achieved savings of"
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:1354
-msgid "your energy use by"
+msgid "This Month"
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:1355
-msgid "To meet your goal, you need to use"
+msgid "This Year"
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:1356
-#, python-format
-msgid "%% less"
+msgid "Last Month"
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:1357
-#: entrak/templates/progress.html:121
-msgid "from "
+msgid "Last Year"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1358
-#: companies/templates/companies/reports/summary.html:80
-#: companies/templates/companies/reports/summary_revamp.html:80
-#: entrak/templates/progress.html:121 entrak/templates/report.html:40
-msgid " to "
-msgstr ""
-
-#: companies/templates/companies/dashboard/widgets/_cumulative_savings.html:35
+#: companies/templates/companies/dashboard/widgets/_cumulative_savings.html:33
 msgid "of CO<sub>2</sub> emissions"
 msgstr ""
 
@@ -668,7 +649,7 @@ msgstr ""
 
 #: companies/templates/companies/export/index.html:192
 #: companies/templates/companies/reports/popup_report_pdf.html:633
-#: entrak/templates/page_base.html:213 entrak/templates/report.html:713
+#: entrak/templates/page_base.html:225 entrak/templates/report.html:713
 #: entrak/templates/report.html.py:893
 msgid "Download"
 msgstr ""
@@ -701,21 +682,21 @@ msgstr ""
 
 #: companies/templates/companies/report_schedule/report_schedule.html:129
 #: companies/templates/companies/report_schedule/report_schedule.html:373
-#: entrak/templates/manage_accounts.html:182
+#: entrak/templates/manage_accounts.html:183
 msgctxt "dropdown"
 msgid "Add"
 msgstr ""
 
 #: companies/templates/companies/report_schedule/report_schedule.html:130
 #: companies/templates/companies/report_schedule/report_schedule.html:374
-#: entrak/templates/manage_accounts.html:180
+#: entrak/templates/manage_accounts.html:181
 msgctxt "dropdown"
 msgid "Emails"
 msgstr ""
 
 #: companies/templates/companies/report_schedule/report_schedule.html:131
 #: companies/templates/companies/report_schedule/report_schedule.html:375
-#: entrak/templates/manage_accounts.html:181
+#: entrak/templates/manage_accounts.html:182
 msgctxt "dropdown"
 msgid "Add Email"
 msgstr ""
@@ -742,7 +723,8 @@ msgstr ""
 #: entrak/templates/alert_settings.html:67
 #: entrak/templates/alert_settings.html:1102
 #: entrak/templates/general_settings.html:394
-#: entrak/templates/manage_accounts.html:88
+#: entrak/templates/manage_accounts.html:89
+#: entrak/templates/systems/goals/settings.html:64
 msgid "Confirm"
 msgstr ""
 
@@ -769,12 +751,13 @@ msgstr ""
 #: companies/templates/companies/report_schedule/report_schedule.html:157
 #: companies/templates/companies/report_schedule/report_schedule.html:329
 #: entrak/templates/general_settings.html:35
-#: entrak/templates/manage_accounts.html:362
-#: entrak/templates/manage_accounts.html:373
+#: entrak/templates/manage_accounts.html:363
+#: entrak/templates/manage_accounts.html:374
 msgid "Delete"
 msgstr ""
 
 #: companies/templates/companies/report_schedule/report_schedule.html:158
+#: entrak/templates/systems/goals/settings.html:61
 msgid "Are you sure you want to delete the item?"
 msgstr ""
 
@@ -787,8 +770,9 @@ msgstr ""
 #: entrak/templates/general_settings.html:369
 #: entrak/templates/general_settings.html:382
 #: entrak/templates/general_settings.html:393
-#: entrak/templates/manage_accounts.html:87
-#: entrak/templates/manage_accounts.html:137 entrak/templates/profile.html:104
+#: entrak/templates/manage_accounts.html:88
+#: entrak/templates/manage_accounts.html:138 entrak/templates/profile.html:104
+#: entrak/templates/systems/goals/settings.html:63
 msgid "Cancel"
 msgstr ""
 
@@ -801,8 +785,8 @@ msgid "Frequency"
 msgstr ""
 
 #: companies/templates/companies/report_schedule/report_schedule.html:313
-#: entrak/templates/manage_accounts.html:359 entrak/templates/profile.html:99
-#: user/templates/activate_account.html:140
+#: entrak/templates/manage_accounts.html:360 entrak/templates/profile.html:99
+#: user/templates/activate_account.html:145
 msgid "Email"
 msgstr ""
 
@@ -846,13 +830,6 @@ msgstr ""
 #: companies/templates/companies/reports/_report_content.html:41
 #: companies/templates/companies/reports/_report_revamp_content.html:41
 msgid "emitted"
-msgstr ""
-
-#: companies/templates/companies/reports/_report_content.html:50
-#: companies/templates/companies/reports/_report_revamp_content.html:50
-#: companies/templates/companies/reports/popup_report_pdf.html:104
-#: entrak/templates/report_main_content.html:37
-msgid "in energy costs"
 msgstr ""
 
 #: companies/templates/companies/reports/_report_content.html:56
@@ -1479,6 +1456,12 @@ msgstr ""
 msgid "D MMM YYYY, ddd"
 msgstr ""
 
+#: companies/templates/companies/reports/summary.html:80
+#: companies/templates/companies/reports/summary_revamp.html:80
+#: entrak/templates/progress.html:121 entrak/templates/report.html:40
+msgid " to "
+msgstr ""
+
 #: companies/templates/companies/reports/summary.html:81
 #: companies/templates/companies/reports/summary_revamp.html:81
 #: entrak/templates/display.html:113 entrak/templates/report.html:41
@@ -1828,11 +1811,11 @@ msgstr ""
 msgid "Marina Bay Sands"
 msgstr ""
 
-#: entrak/settings_common.py:129
+#: entrak/settings_common.py:131
 msgid "English"
 msgstr ""
 
-#: entrak/settings_common.py:130
+#: entrak/settings_common.py:132
 msgid "Traditional Chinese"
 msgstr ""
 
@@ -2138,28 +2121,28 @@ msgid ""
 "Remember to turn off the socket switch too!"
 msgstr ""
 
-#: entrak/templates/display.html:210 entrak/templates/graph.html:423
+#: entrak/templates/display.html:210 entrak/templates/graph.html:411
 #: entrak/templates/ranking.html:565
 #: printers/templates/system/printers/graph.html:417
 msgid "Total"
 msgstr ""
 
-#: entrak/templates/display.html:211 entrak/templates/graph.html:424
+#: entrak/templates/display.html:211 entrak/templates/graph.html:412
 #: printers/templates/system/printers/graph.html:418
 msgid "Previous"
 msgstr ""
 
-#: entrak/templates/display.html:212 entrak/templates/graph.html:425
+#: entrak/templates/display.html:212 entrak/templates/graph.html:413
 #: printers/templates/system/printers/graph.html:419
 msgid "Highest"
 msgstr ""
 
-#: entrak/templates/display.html:213 entrak/templates/graph.html:426
+#: entrak/templates/display.html:213 entrak/templates/graph.html:414
 #: printers/templates/system/printers/graph.html:420
 msgid "Lowest"
 msgstr ""
 
-#: entrak/templates/display.html:214 entrak/templates/graph.html:427
+#: entrak/templates/display.html:214 entrak/templates/graph.html:415
 #: printers/templates/system/printers/graph.html:421
 msgid "Custom"
 msgstr ""
@@ -2371,7 +2354,7 @@ msgid "Recovering Email"
 msgstr ""
 
 #: entrak/templates/general_settings.html:32
-#: entrak/templates/manage_accounts.html:94 entrak/templates/profile.html:110
+#: entrak/templates/manage_accounts.html:95 entrak/templates/profile.html:110
 #: entrak/templates/profile.html.py:114
 msgid "Change Password"
 msgstr ""
@@ -2398,7 +2381,7 @@ msgstr ""
 
 #: entrak/templates/general_settings.html:110
 #: entrak/templates/general_settings.html:341
-#: user/templates/activate_account.html:99
+#: user/templates/activate_account.html:104
 msgid "All fields are required"
 msgstr ""
 
@@ -2407,12 +2390,14 @@ msgid "Please set password first"
 msgstr ""
 
 #: entrak/templates/general_settings.html:321
-#: entrak/templates/manage_accounts.html:49 entrak/templates/profile.html:49
+#: entrak/templates/manage_accounts.html:50 entrak/templates/profile.html:49
+#: entrak/templates/systems/goals/settings.html:50
 msgid "My Profile"
 msgstr ""
 
 #: entrak/templates/general_settings.html:322
-#: entrak/templates/manage_accounts.html:51 entrak/templates/profile.html:50
+#: entrak/templates/manage_accounts.html:52 entrak/templates/profile.html:50
+#: entrak/templates/systems/goals/settings.html:51
 msgid "Manage Accounts"
 msgstr ""
 
@@ -2426,14 +2411,14 @@ msgstr ""
 
 #: entrak/templates/general_settings.html:329
 #: entrak/templates/general_settings.html:348
-#: entrak/templates/manage_accounts.html:124
+#: entrak/templates/manage_accounts.html:125
 msgid "Username"
 msgstr ""
 
 #: entrak/templates/general_settings.html:331
 #: entrak/templates/general_settings.html:350 entrak/templates/login.html:133
-#: entrak/templates/manage_accounts.html:128
-#: entrak/templates/manage_accounts.html:372
+#: entrak/templates/manage_accounts.html:129
+#: entrak/templates/manage_accounts.html:373
 msgid "Password"
 msgstr ""
 
@@ -2451,25 +2436,25 @@ msgstr ""
 
 #: entrak/templates/general_settings.html:361
 #: entrak/templates/general_settings.html:374
-#: entrak/templates/manage_accounts.html:102 entrak/templates/profile.html:124
+#: entrak/templates/manage_accounts.html:103 entrak/templates/profile.html:124
 msgid "New Password"
 msgstr ""
 
 #: entrak/templates/general_settings.html:365
 #: entrak/templates/general_settings.html:378
-#: entrak/templates/manage_accounts.html:106
-#: entrak/templates/manage_accounts.html:132 entrak/templates/profile.html:130
+#: entrak/templates/manage_accounts.html:107
+#: entrak/templates/manage_accounts.html:133 entrak/templates/profile.html:130
 msgid "Confirm Password"
 msgstr ""
 
 #: entrak/templates/general_settings.html:387
-#: entrak/templates/manage_accounts.html:527
-#: entrak/templates/manage_accounts.html:579
+#: entrak/templates/manage_accounts.html:528
+#: entrak/templates/manage_accounts.html:580
 msgid "OK"
 msgstr ""
 
 #: entrak/templates/general_settings.html:391
-#: entrak/templates/manage_accounts.html:84
+#: entrak/templates/manage_accounts.html:85
 msgid "Are you sure you want to delete"
 msgstr ""
 
@@ -2548,91 +2533,91 @@ msgstr "hours"
 msgid "compare_between_hour"
 msgstr "hour"
 
-#: entrak/templates/graph.html:673
+#: entrak/templates/graph.html:661
 msgid "THE GRAPH SECTION"
 msgstr "GRAPH"
 
-#: entrak/templates/graph.html:674
+#: entrak/templates/graph.html:662
 msgid "Explore your energy use with the"
 msgstr ""
 
-#: entrak/templates/graph.html:684 entrak/templates/ranking.html:555
+#: entrak/templates/graph.html:672 entrak/templates/ranking.html:555
 #: printers/templates/system/printers/graph.html:662
 msgid "Unit"
 msgstr ""
 
-#: entrak/templates/graph.html:685 entrak/templates/ranking.html:556
+#: entrak/templates/graph.html:673 entrak/templates/ranking.html:556
 #: printers/templates/system/printers/graph.html:663
 msgid "Time"
 msgstr ""
 
-#: entrak/templates/graph.html:686
+#: entrak/templates/graph.html:674
 #: printers/templates/system/printers/graph.html:664
 msgid "End-use"
 msgstr ""
 
-#: entrak/templates/graph.html:686
+#: entrak/templates/graph.html:674
 #: printers/templates/system/printers/graph.html:664
 msgid "Compare"
 msgstr ""
 
-#: entrak/templates/graph.html:704
+#: entrak/templates/graph.html:692
 #: printers/templates/system/printers/graph.html:682
 msgid "Compare between end-use types"
 msgstr ""
 
-#: entrak/templates/graph.html:705
+#: entrak/templates/graph.html:693
 #: printers/templates/system/printers/graph.html:683
 msgid "(Max 5)"
 msgstr ""
 
-#: entrak/templates/graph.html:706 entrak/templates/graph.html.py:716
+#: entrak/templates/graph.html:694 entrak/templates/graph.html.py:704
 #: printers/templates/system/printers/graph.html:684
 #: printers/templates/system/printers/graph.html:694
 msgid "Clear all"
 msgstr ""
 
-#: entrak/templates/graph.html:715
+#: entrak/templates/graph.html:703
 #: printers/templates/system/printers/graph.html:693
 msgid "Compare between <span id='compare-between'>days</span>"
 msgstr ""
 
-#: entrak/templates/graph.html:725
+#: entrak/templates/graph.html:713
 #: printers/templates/system/printers/graph.html:703
 msgid "Previous "
 msgstr ""
 
-#: entrak/templates/graph.html:737
+#: entrak/templates/graph.html:725
 #: printers/templates/system/printers/graph.html:715
 msgid "Highest "
 msgstr ""
 
-#: entrak/templates/graph.html:749
+#: entrak/templates/graph.html:737
 #: printers/templates/system/printers/graph.html:727
 msgid "Lowest "
 msgstr ""
 
-#: entrak/templates/graph.html:761
+#: entrak/templates/graph.html:749
 #: printers/templates/system/printers/graph.html:739
 msgid "Custom date selection"
 msgstr ""
 
-#: entrak/templates/graph.html:777
+#: entrak/templates/graph.html:765
 #: printers/templates/system/printers/graph.html:755
 msgid "Clear Graph"
 msgstr ""
 
-#: entrak/templates/graph.html:797
+#: entrak/templates/graph.html:785
 #: printers/templates/system/printers/graph.html:774
 msgid "Amount of energy consumed on: "
 msgstr ""
 
-#: entrak/templates/graph.html:798
+#: entrak/templates/graph.html:786
 #: printers/templates/system/printers/graph.html:775
 msgid "from:"
 msgstr ""
 
-#: entrak/templates/graph.html:799
+#: entrak/templates/graph.html:787
 #: printers/templates/system/printers/graph.html:776
 msgid "to:"
 msgstr ""
@@ -2649,17 +2634,17 @@ msgstr ""
 msgid "Forget Password"
 msgstr ""
 
-#: entrak/templates/login.html:121 user/templates/activate_account.html:64
+#: entrak/templates/login.html:121 user/templates/activate_account.html:69
 #: user/templates/reset_password.html:63
 msgid "Welcome to En-trak<sup>TM</sup>"
 msgstr ""
 
-#: entrak/templates/login.html:122 user/templates/activate_account.html:65
+#: entrak/templates/login.html:122 user/templates/activate_account.html:70
 #: user/templates/reset_password.html:64
 msgid "Turning Data into Actionable Intelligence"
 msgstr ""
 
-#: entrak/templates/login.html:124 user/templates/activate_account.html:67
+#: entrak/templates/login.html:124 user/templates/activate_account.html:72
 #: user/templates/reset_password.html:66
 msgid "To use the En-trak monitor platform, please sign in"
 msgstr ""
@@ -2672,12 +2657,12 @@ msgstr ""
 msgid "Remember Me"
 msgstr ""
 
-#: entrak/templates/login.html:141 user/templates/activate_account.html:83
+#: entrak/templates/login.html:141 user/templates/activate_account.html:88
 #: user/templates/reset_password.html:82
 msgid "Sign In"
 msgstr ""
 
-#: entrak/templates/login.html:143 user/templates/activate_account.html:85
+#: entrak/templates/login.html:143 user/templates/activate_account.html:90
 msgid "Forgot your password?"
 msgstr ""
 
@@ -2685,264 +2670,266 @@ msgstr ""
 msgid "Please enter your email"
 msgstr ""
 
-#: entrak/templates/login.html:164 entrak/templates/manage_accounts.html:377
-#: entrak/templates/manage_accounts.html:391
-#: entrak/templates/manage_accounts.html:444
-#: entrak/templates/manage_accounts.html:557
+#: entrak/templates/login.html:164 entrak/templates/manage_accounts.html:378
+#: entrak/templates/manage_accounts.html:392
+#: entrak/templates/manage_accounts.html:445
+#: entrak/templates/manage_accounts.html:558
 msgid "Send"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:35 entrak/templates/profile.html:36
+#: entrak/templates/manage_accounts.html:36 entrak/templates/profile.html:36
+#: entrak/templates/systems/goals/settings.html:37
 msgid "SETTINGS"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:36 entrak/templates/profile.html:37
+#: entrak/templates/manage_accounts.html:37 entrak/templates/profile.html:37
+#: entrak/templates/systems/goals/settings.html:38
 msgid "Manage your system access with"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:54
+#: entrak/templates/manage_accounts.html:55
 msgid "Create User Account"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:58
+#: entrak/templates/manage_accounts.html:59
 msgid "Create Individual Account"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:61
+#: entrak/templates/manage_accounts.html:62
 msgid "Send an invitation link to:"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:70
+#: entrak/templates/manage_accounts.html:71
 msgid "Resend Account Invitation"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:73
+#: entrak/templates/manage_accounts.html:74
 msgid "Send the account invitation to"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:82
+#: entrak/templates/manage_accounts.html:83
 msgid "Delete Account"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:99
-#: entrak/templates/manage_accounts.html:103
-#: entrak/templates/manage_accounts.html:107
-#: entrak/templates/manage_accounts.html:125
-#: entrak/templates/manage_accounts.html:129
-#: entrak/templates/manage_accounts.html:133 entrak/templates/profile.html:58
+#: entrak/templates/manage_accounts.html:100
+#: entrak/templates/manage_accounts.html:104
+#: entrak/templates/manage_accounts.html:108
+#: entrak/templates/manage_accounts.html:126
+#: entrak/templates/manage_accounts.html:130
+#: entrak/templates/manage_accounts.html:134 entrak/templates/profile.html:58
 #: entrak/templates/profile.html.py:62 entrak/templates/profile.html:86
 #: entrak/templates/profile.html.py:90 entrak/templates/profile.html:120
 #: entrak/templates/profile.html.py:126 entrak/templates/profile.html:132
-#: user/templates/activate_account.html:103
-#: user/templates/activate_account.html:107
-#: user/templates/activate_account.html:111
-#: user/templates/activate_account.html:133
-#: user/templates/activate_account.html:153
-#: user/templates/activate_account.html:157
+#: user/templates/activate_account.html:108
+#: user/templates/activate_account.html:112
+#: user/templates/activate_account.html:116
+#: user/templates/activate_account.html:138
+#: user/templates/activate_account.html:158
+#: user/templates/activate_account.html:162
 #: user/templates/reset_password.html:95 user/templates/reset_password.html:99
 msgid "*Required field"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:117
+#: entrak/templates/manage_accounts.html:118
 msgid "Create Shared Account"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:120
-#: user/templates/activate_account.html:164
+#: entrak/templates/manage_accounts.html:121
+#: user/templates/activate_account.html:169
 msgid "Create Account"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:158
+#: entrak/templates/manage_accounts.html:159
 msgid "Account Not Activated"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:161
+#: entrak/templates/manage_accounts.html:162
 msgid "Resend Invitation"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:195
+#: entrak/templates/manage_accounts.html:196
 msgid ""
 "User Accounts enjoy a higher level of security, more control, and better "
 "functionality than Shared Accounts. We encourage you to create User Accounts."
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:211 entrak/templates/profile.html:227
-#: user/templates/activate_account.html:283
+#: entrak/templates/manage_accounts.html:212 entrak/templates/profile.html:227
+#: user/templates/activate_account.html:294
 #: user/templates/reset_password.html:169
 msgid "*Passwords do not match"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:358
+#: entrak/templates/manage_accounts.html:359
 msgid "Full Name"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:360
+#: entrak/templates/manage_accounts.html:361
 msgctxt "grid"
 msgid "Language"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:361 entrak/templates/profile.html:61
-#: user/templates/activate_account.html:110
+#: entrak/templates/manage_accounts.html:362 entrak/templates/profile.html:61
+#: user/templates/activate_account.html:115
 msgid "Department"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:371
+#: entrak/templates/manage_accounts.html:372
 msgid "User Name"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:372
+#: entrak/templates/manage_accounts.html:373
 msgid "Change password"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:404
-#: entrak/templates/manage_accounts.html:453
-#: entrak/templates/manage_accounts.html:546
+#: entrak/templates/manage_accounts.html:405
+#: entrak/templates/manage_accounts.html:454
+#: entrak/templates/manage_accounts.html:547
 msgid "Create"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:430 entrak/templates/profile.html:136
+#: entrak/templates/manage_accounts.html:431 entrak/templates/profile.html:136
 msgid "Save"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:483
+#: entrak/templates/manage_accounts.html:484
 msgid "Great, the invitation has been sent out."
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:484
+#: entrak/templates/manage_accounts.html:485
 msgid "Go to Graph"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:526
+#: entrak/templates/manage_accounts.html:527
 msgid "Great, you just created a shared account."
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:578
+#: entrak/templates/manage_accounts.html:579
 msgid "The invitation has been sent out."
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:584
+#: entrak/templates/manage_accounts.html:585
 msgid "Unable to send inviation"
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:625
+#: entrak/templates/manage_accounts.html:626
 msgid "Account deleted."
 msgstr ""
 
-#: entrak/templates/manage_accounts.html:685
-#: entrak/templates/manage_accounts.html:688 entrak/templates/profile.html:198
+#: entrak/templates/manage_accounts.html:686
+#: entrak/templates/manage_accounts.html:689 entrak/templates/profile.html:198
 #: user/templates/reset_password.html:145
 msgid "Password changed."
 msgstr ""
 
-#: entrak/templates/page_base.html:189
+#: entrak/templates/page_base.html:195
 msgid "Home"
 msgstr ""
 
-#: entrak/templates/page_base.html:196
+#: entrak/templates/page_base.html:202
 msgid "Ranking"
 msgstr ""
 
-#: entrak/templates/page_base.html:204
+#: entrak/templates/page_base.html:211 entrak/templates/page_base.html:215
 msgid "Reports"
 msgstr ""
 
-#: entrak/templates/page_base.html:208
+#: entrak/templates/page_base.html:220
 msgid "Display"
 msgstr ""
 
-#: entrak/templates/page_base.html:223
+#: entrak/templates/page_base.html:235
 msgid "Alert"
 msgstr ""
 
-#: entrak/templates/page_base.html:227
+#: entrak/templates/page_base.html:239
 msgid "Paper"
 msgstr ""
 
-#: entrak/templates/page_base.html:231
+#: entrak/templates/page_base.html:243
 msgid "Settings"
 msgstr ""
 
-#: entrak/templates/page_base.html:234
+#: entrak/templates/page_base.html:246
 msgid "Logout"
 msgstr ""
 
-#: entrak/templates/page_base.html:296
+#: entrak/templates/page_base.html:308
 msgid "You are viewing:"
 msgstr ""
 
-#: entrak/templates/profile.html:57 user/templates/activate_account.html:102
+#: entrak/templates/profile.html:57 user/templates/activate_account.html:107
 msgid "First Name"
 msgstr ""
 
-#: entrak/templates/profile.html:63 user/templates/activate_account.html:112
+#: entrak/templates/profile.html:63 user/templates/activate_account.html:117
 msgid "Administration"
 msgstr ""
 
-#: entrak/templates/profile.html:64 user/templates/activate_account.html:113
+#: entrak/templates/profile.html:64 user/templates/activate_account.html:118
 msgid "Business Development"
 msgstr ""
 
-#: entrak/templates/profile.html:65 user/templates/activate_account.html:114
+#: entrak/templates/profile.html:65 user/templates/activate_account.html:119
 msgid "CEO Office / Management"
 msgstr ""
 
-#: entrak/templates/profile.html:66 user/templates/activate_account.html:115
+#: entrak/templates/profile.html:66 user/templates/activate_account.html:120
 msgid "Corporate Communications"
 msgstr ""
 
-#: entrak/templates/profile.html:67 user/templates/activate_account.html:116
+#: entrak/templates/profile.html:67 user/templates/activate_account.html:121
 msgid "CSR"
 msgstr ""
 
-#: entrak/templates/profile.html:68 user/templates/activate_account.html:117
+#: entrak/templates/profile.html:68 user/templates/activate_account.html:122
 msgid "Customer Services"
 msgstr ""
 
-#: entrak/templates/profile.html:69 user/templates/activate_account.html:118
+#: entrak/templates/profile.html:69 user/templates/activate_account.html:123
 msgid "Facilities Management"
 msgstr ""
 
-#: entrak/templates/profile.html:70 user/templates/activate_account.html:119
+#: entrak/templates/profile.html:70 user/templates/activate_account.html:124
 msgid "Finance / Accounting"
 msgstr ""
 
-#: entrak/templates/profile.html:71 user/templates/activate_account.html:120
+#: entrak/templates/profile.html:71 user/templates/activate_account.html:125
 msgid "Human Resources"
 msgstr ""
 
-#: entrak/templates/profile.html:72 user/templates/activate_account.html:121
+#: entrak/templates/profile.html:72 user/templates/activate_account.html:126
 msgid "Information Technology"
 msgstr ""
 
-#: entrak/templates/profile.html:73 user/templates/activate_account.html:122
+#: entrak/templates/profile.html:73 user/templates/activate_account.html:127
 msgid "Legal / Compliance"
 msgstr ""
 
-#: entrak/templates/profile.html:74 user/templates/activate_account.html:123
+#: entrak/templates/profile.html:74 user/templates/activate_account.html:128
 msgid "Marketing"
 msgstr ""
 
-#: entrak/templates/profile.html:75 user/templates/activate_account.html:124
+#: entrak/templates/profile.html:75 user/templates/activate_account.html:129
 msgid "Others"
 msgstr ""
 
-#: entrak/templates/profile.html:76 user/templates/activate_account.html:125
+#: entrak/templates/profile.html:76 user/templates/activate_account.html:130
 msgid "Products"
 msgstr ""
 
-#: entrak/templates/profile.html:77 user/templates/activate_account.html:126
+#: entrak/templates/profile.html:77 user/templates/activate_account.html:131
 msgid "Purchasing"
 msgstr ""
 
-#: entrak/templates/profile.html:78 user/templates/activate_account.html:127
+#: entrak/templates/profile.html:78 user/templates/activate_account.html:132
 msgid "Sales"
 msgstr ""
 
-#: entrak/templates/profile.html:85 user/templates/activate_account.html:106
+#: entrak/templates/profile.html:85 user/templates/activate_account.html:111
 msgid "Last Name"
 msgstr ""
 
-#: entrak/templates/profile.html:89 user/templates/activate_account.html:132
+#: entrak/templates/profile.html:89 user/templates/activate_account.html:137
 msgid "Language"
 msgstr ""
 
@@ -2954,11 +2941,11 @@ msgstr ""
 msgid "Current Password"
 msgstr ""
 
-#: entrak/templates/profile.html:161 user/templates/activate_account.html:233
+#: entrak/templates/profile.html:161 user/templates/activate_account.html:244
 msgid "'Department'"
 msgstr ""
 
-#: entrak/templates/profile.html:162 user/templates/activate_account.html:234
+#: entrak/templates/profile.html:162 user/templates/activate_account.html:245
 msgid "'Language'"
 msgstr ""
 
@@ -2994,6 +2981,10 @@ msgstr ""
 
 #: entrak/templates/progress.html:120
 msgid " taxi trips"
+msgstr ""
+
+#: entrak/templates/progress.html:121
+msgid "from "
 msgstr ""
 
 #: entrak/templates/ranking.html:34
@@ -3301,6 +3292,10 @@ msgstr ""
 msgid "Overnight: "
 msgstr ""
 
+#: entrak/templates/systems/goals/settings.html:67
+msgid "Set New Goal"
+msgstr ""
+
 #: printers/templates/system/printers/graph.html:651
 msgid "THE PAPER SECTION"
 msgstr ""
@@ -3382,70 +3377,70 @@ msgstr ""
 msgid "Invalid request"
 msgstr ""
 
-#: user/templates/activate_account.html:98
+#: user/templates/activate_account.html:103
 msgid "Basic Information"
 msgstr ""
 
-#: user/templates/activate_account.html:144
+#: user/templates/activate_account.html:149
 msgid "Please note"
 msgstr ""
 
-#: user/templates/activate_account.html:145
+#: user/templates/activate_account.html:150
 msgid "You will be using this email to login the En-trak Platform."
 msgstr ""
 
-#: user/templates/activate_account.html:149
+#: user/templates/activate_account.html:154
 msgctxt "activate_title"
 msgid "Password"
 msgstr ""
 
-#: user/templates/activate_account.html:152
+#: user/templates/activate_account.html:157
 #: user/templates/reset_password.html:94
 msgctxt "activate_input"
 msgid "Password"
 msgstr ""
 
-#: user/templates/activate_account.html:156
+#: user/templates/activate_account.html:161
 #: user/templates/reset_password.html:98
 msgctxt "activate"
 msgid "Confirm Password"
 msgstr ""
 
-#: user/templates/activate_account.html:174
-#: user/templates/activate_account.html:182
+#: user/templates/activate_account.html:179
+#: user/templates/activate_account.html:187
 msgid "Congrats, your account is ready to use!"
 msgstr ""
 
-#: user/templates/activate_account.html:176
+#: user/templates/activate_account.html:181
 msgid "Get Started"
 msgstr ""
 
-#: user/templates/activate_account.html:184
+#: user/templates/activate_account.html:189
 msgid "As the Admin you are able to create additional User Accounts."
 msgstr ""
 
-#: user/templates/activate_account.html:185
+#: user/templates/activate_account.html:190
 msgid "Do you want to create User Accounts now?"
 msgstr ""
 
-#: user/templates/activate_account.html:187
+#: user/templates/activate_account.html:192
 msgid "Yes"
 msgstr ""
 
-#: user/templates/activate_account.html:188
+#: user/templates/activate_account.html:193
 msgid "No"
 msgstr ""
 
-#: user/templates/activate_account.html:190
+#: user/templates/activate_account.html:195
 msgid "You can also later create or manage accounts in the settings page."
 msgstr ""
 
-#: user/templates/activate_account.html:230
-#: user/templates/activate_account.html:231
+#: user/templates/activate_account.html:241
+#: user/templates/activate_account.html:242
 msgid "'Create En-trak Account'"
 msgstr ""
 
-#: user/templates/activate_account.html:232
+#: user/templates/activate_account.html:243
 msgid "'Create En-trak Accounts'"
 msgstr ""
 
