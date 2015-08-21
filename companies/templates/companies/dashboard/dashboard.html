@@ -1313,7 +1313,7 @@
                     } else {
                         $scope.saving.costChanged = d.costChanged;
                         $scope.saving.co2Changed = d.co2Changed;
-                        $scope.saving.currencyUnit = d.currencyUnit || "HKD";//TODO
+                        $scope.saving.currencyUnit = '{{current_system.money_unit.name}}';
                         var baselineYear = d.baselineYear + " - " + (d.baselineYear+1);
                         $scope.footerText = '{% trans "Compared with your baseline year of " %}' + baselineYear;
                     }
