@@ -1176,7 +1176,6 @@
     });
 
     ngapp.controller("WidgetProgress", function($scope){
-
         $scope.title = '{% trans "Progress" %}';
 
         $scope.p12DescLine1Text = '{% trans "Over the past 12 months" %}';
@@ -1227,10 +1226,12 @@
                         $scope.comparedPercent = 0;
                         $scope.fromBaselineText = '{% trans "from your baseline" %}';
                         $scope.yearRangeText = "";
+                        $scope.chineseFromBaselineText = "";
                     } else {
                         $scope.comparedPercent = d.comparedPercent;
                         $scope.yearRangeText = d.baselineYear + " - " + (d.baselineYear+1);
                         $scope.fromBaselineText = '{% trans "from your baseline of" %}';
+                        $scope.chineseFromBaselineText = "年的基準用量";
                     }
                     $scope.isIncrease = d.comparedPercent < 0;
 
