@@ -264,8 +264,12 @@ class System(models.Model):
     def get_unit_rate(self, datetime, target_unit=MONEY_CATEGORY_CODE):
         unit_infos = json.loads(self.unit_info)
         unit_code = unit_infos[target_unit]
-        unit_rate = UnitRate.objects.filter(category_code=target_unit, code=unit_code, effective_date__lte=datetime).order_by('-effective_date').first()
-        return unit_rate
+        unit_rates = UnitRate.objects.filter(category_code=target_unit, code=unit_code)
+        unit_rate = unit_rates.filter(effective_date__lte=datetime).order_by('-effective_date').first()
+        if unit_rate:
+            return unit_rate
+        else:
+            return unit_rates.order_by('effective_date').first()
 
 
     def get_unitrates(self, start_from=None, end_to=None, target_unit=MONEY_CATEGORY_CODE):
