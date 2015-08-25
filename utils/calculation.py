@@ -65,7 +65,7 @@ def calculate_total_baseline_energy_usage(start_dt, end_dt, daily_baselines):
     total_day_diff = (end_dt-start_dt).days
     for day_diff in xrange(0,total_day_diff):
         inspect_dt = start_dt+datetime.timedelta(days=day_diff)
-        if daily_baselines:
+        if daily_baselines and inspect_dt.month in daily_baselines:
             target_day = 28 if (inspect_dt.month == 2 and inspect_dt.day == 29) else inspect_dt.day
             energy_usage = daily_baselines[inspect_dt.month]['usages'][target_day]
         else:

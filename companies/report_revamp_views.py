@@ -539,10 +539,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         system_and_childs = System.get_systems_within_root(system.code)
         system_timezone = pytz.timezone(system.timezone)
 
-        print(last_year_usage)
-
         grouped_baselines = BaselineUsage.get_baselines_for_systems([s.id for s in system_and_childs])
-
 
         for s in system_and_childs:
             missing_daily_usages = s.first_record - (start_date - relativedelta(years=1))
@@ -563,12 +560,11 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
                             missing_end_dt.astimezone(system_timezone),
                             baseline_daily_usages
                         )
+
                 if kwh > 0:
                     money_rate = system.get_unit_rate(missing_end_dt, MONEY_CATEGORY_CODE)
                     last_year_usage['totalKwh'] += kwh
                     last_year_usage['totalMoney'] += kwh*money_rate.rate
-
-        print(last_year_usage)
 
         m['s1_total_money'] = current_usage['totalMoney']
         m['s1_total_kwh'] = current_usage['totalKwh']
