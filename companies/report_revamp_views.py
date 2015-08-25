@@ -563,8 +563,10 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
                 if kwh > 0:
                     money_rate = system.get_unit_rate(missing_end_dt, MONEY_CATEGORY_CODE)
+                    co2_rate = system.get_unit_rate(missing_end_dt, CO2_CATEGORY_CODE)
                     last_year_usage['totalKwh'] += kwh
                     last_year_usage['totalMoney'] += kwh*money_rate.rate
+                    last_year_usage['totalCo2'] += kwh*co2_rate.rate
 
         m['s1_total_money'] = current_usage['totalMoney']
         m['s1_total_kwh'] = current_usage['totalKwh']
