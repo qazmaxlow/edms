@@ -627,7 +627,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
                 'total_money': current_money,
                 'diff_kwh': change_in_kwh,
                 'diff_money': change_in_money,
-                'percent_base_on_max': None,
+                'percent_base_on_max': 0,
                 'color': TYPE_COLORS[ix % len(TYPE_COLORS)],
             }
 

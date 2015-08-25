@@ -18,7 +18,7 @@ urlpatterns = patterns(
     '',
     url('^audit/trails/$', audit_views.CompanyAuditTrailsListView.as_view()),
     url(r'^apis/', include(router.urls)),
-    url(r'^report/$', report_views.report_view, name='companies.report'),
+    url(r'^report/old$', report_views.report_view, name='companies.report'),
     url(r'^report/revamp$', report_revamp_views.report_view, name='companies.report_revamp'),
     url(r'^dashboard/$', dashboard_views.dashboard_view, name='companies.dashboard'),
     url(r'^report/summary/ajax/$', report_views.summary_ajax, name='companies.reports.summary.ajax'),
