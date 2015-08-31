@@ -129,7 +129,7 @@
 
                 $scope.firstLoaded = false;
                 $scope.$on("kendoRendered", function(e) {
-                    if (!$scope.firstLoaded)
+                    if ($scope.firstLoaded)
                         return;
                     $scope.firstLoaded = true;
                     
