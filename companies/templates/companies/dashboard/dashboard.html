@@ -134,6 +134,12 @@
         }
     });
 
+    ngapp.filter('mapCurrency', function () {
+        return function(val) {
+            return val == "HK$" ? "HKD" : val;
+        }
+    });
+
     ngapp.filter('dateFmt', function () {
         return function(val, fmtStr) {
             if (!val){

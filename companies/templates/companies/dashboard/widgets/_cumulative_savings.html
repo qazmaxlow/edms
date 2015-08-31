@@ -24,7 +24,7 @@
         <div class="middle-box">
             <div class="top-box" ng-class="{saved : isSaved}">
                 <div class="light-text" ng-bind="saving.costChangedDescText"></div>
-                <div class="amount-text" ng-bind="saving.costChanged | abs | entrakNumber"></div><div class="unit-text" ng-bind="saving.currencyUnit"></div>
+                <div class="amount-text" ng-bind="saving.costChanged | abs | entrakNumber"></div><div class="unit-text" ng-bind="saving.currencyUnit | mapCurrency"></div>
                 <div class="normal-text" ng-bind="costChangedDescText2"></div>
             </div>
             <div class="bottom-box" ng-class="{saved : isSaved}">
