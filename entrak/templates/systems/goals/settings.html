@@ -64,7 +64,7 @@
                 <button class="k-button normal-btn" ng-click="confirmDelete()">{% trans "Confirm" %}</button>
               </div>
             </div>
-            <div kendo-window="createGoalWin" k-title="'{% trans "Set New Goal" %}'" k-append-to="'#goalSettingsController'" k-width="650" k-height="300" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
+            <div kendo-window="createGoalWin" k-title="'{% trans "Set New Goal" %}'" k-append-to="'#goalSettingsController'" k-width="650" k-height="300" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false" k-position="{top:'25%', left:'25%'}">
             <div class="popupRow">
                 <div class="leftLabel">Area:</div>
                 <select kendo-drop-down-list="systemDropdown"
@@ -115,7 +115,7 @@
                     $('#next12Radio').prop("checked", true);
                     $scope.datePicker.enable(false);
 
-                    $scope.createGoalWin.center().open();
+                    $scope.createGoalWin.open();
                 }
 
                 $scope.hidePopup = function(){
