@@ -2,12 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-20 10:08+0000\n"
+"POT-Creation-Date: 2015-08-31 10:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,8 +22,8 @@ msgid "{0:.0f}% {1}"
 msgstr "{1} {0:.0f}%"
 
 #: companies/report_revamp_views.py:381 companies/report_views.py:480
-#: companies/templates/companies/dashboard/dashboard.html:1021
-#: companies/templates/companies/dashboard/dashboard.html:1160
+#: companies/templates/companies/dashboard/dashboard.html:1051
+#: companies/templates/companies/dashboard/dashboard.html:1190
 #: companies/templates/companies/reports/_report_content.html:70
 #: companies/templates/companies/reports/_report_content.html:79
 #: companies/templates/companies/reports/_report_content.html:97
@@ -43,8 +43,8 @@ msgid "more"
 msgstr "增加了"
 
 #: companies/report_revamp_views.py:381 companies/report_views.py:480
-#: companies/templates/companies/dashboard/dashboard.html:1021
-#: companies/templates/companies/dashboard/dashboard.html:1160
+#: companies/templates/companies/dashboard/dashboard.html:1051
+#: companies/templates/companies/dashboard/dashboard.html:1190
 #: companies/templates/companies/reports/_report_content.html:68
 #: companies/templates/companies/reports/_report_content.html:77
 #: companies/templates/companies/reports/_report_content.html:95
@@ -183,7 +183,7 @@ msgid "This week"
 msgstr "本週"
 
 #: companies/report_revamp_views.py:776 companies/report_views.py:839
-#: companies/templates/companies/dashboard/dashboard.html:330
+#: companies/templates/companies/dashboard/dashboard.html:360
 msgid "Last week"
 msgstr "上週"
 
@@ -241,90 +241,86 @@ msgstr "儀錶板"
 msgid "Grab a snapshot of your performance at the"
 msgstr "想一目了然地知道你的用電概況，請看看"
 
-#: companies/templates/companies/dashboard/dashboard.html:324
+#: companies/templates/companies/dashboard/dashboard.html:354
 msgid "Real-Time"
 msgstr "實時"
 
-#: companies/templates/companies/dashboard/dashboard.html:325
+#: companies/templates/companies/dashboard/dashboard.html:355
 msgctxt "dashboard"
 msgid "Graph"
 msgstr "圖表"
 
-#: entrak/templates/page_base.html:199
-msgid "Graph"
-msgstr "圖表功能"
-
-#: companies/templates/companies/dashboard/dashboard.html:326
+#: companies/templates/companies/dashboard/dashboard.html:356
 msgid "Rates"
 msgstr "率"
 
-#: companies/templates/companies/dashboard/dashboard.html:327
+#: companies/templates/companies/dashboard/dashboard.html:357
 msgid "So far today you have used: "
 msgstr "今天直到目前，你消耗電力共 "
 
-#: companies/templates/companies/dashboard/dashboard.html:328
+#: companies/templates/companies/dashboard/dashboard.html:358
 msgid "Your current rate of energy use."
 msgstr "你的電力使用況情"
 
-#: companies/templates/companies/dashboard/dashboard.html:329
+#: companies/templates/companies/dashboard/dashboard.html:359
 #: entrak/templates/display.html:274
 msgid "Today"
 msgstr "今天"
 
-#: companies/templates/companies/dashboard/dashboard.html:331
+#: companies/templates/companies/dashboard/dashboard.html:361
 msgid "per day"
 msgstr "每天"
 
-#: companies/templates/companies/dashboard/dashboard.html:636
+#: companies/templates/companies/dashboard/dashboard.html:666
 msgid "Biggest Consumers"
 msgstr "最大用量"
 
-#: companies/templates/companies/dashboard/dashboard.html:637
-#: companies/templates/companies/dashboard/dashboard.html:770
+#: companies/templates/companies/dashboard/dashboard.html:667
+#: companies/templates/companies/dashboard/dashboard.html:800
 msgctxt "dashboard"
 msgid "Week"
 msgstr "週"
 
-#: companies/templates/companies/dashboard/dashboard.html:638
-#: companies/templates/companies/dashboard/dashboard.html:771
+#: companies/templates/companies/dashboard/dashboard.html:668
+#: companies/templates/companies/dashboard/dashboard.html:801
 msgctxt "dashboard"
 msgid "Month"
 msgstr "月"
 
-#: companies/templates/companies/dashboard/dashboard.html:639
-#: companies/templates/companies/dashboard/dashboard.html:674
+#: companies/templates/companies/dashboard/dashboard.html:669
+#: companies/templates/companies/dashboard/dashboard.html:704
 msgid "change from last week"
 msgstr "與上週比較"
 
-#: companies/templates/companies/dashboard/dashboard.html:639
-#: companies/templates/companies/dashboard/dashboard.html:674
+#: companies/templates/companies/dashboard/dashboard.html:669
+#: companies/templates/companies/dashboard/dashboard.html:704
 msgid "change from last month"
 msgstr "與上月比較"
 
-#: companies/templates/companies/dashboard/dashboard.html:640
+#: companies/templates/companies/dashboard/dashboard.html:670
 msgid "Energy cost so far"
 msgstr "直到目前的用電"
 
-#: companies/templates/companies/dashboard/dashboard.html:714
+#: companies/templates/companies/dashboard/dashboard.html:744
 msgid "Energy Saving Tips"
 msgstr "節能方案"
 
-#: companies/templates/companies/dashboard/dashboard.html:716
+#: companies/templates/companies/dashboard/dashboard.html:746
 msgid "Put a ribbon on it"
 msgstr "綁上小絲帶"
 
-#: companies/templates/companies/dashboard/dashboard.html:717
+#: companies/templates/companies/dashboard/dashboard.html:747
 msgid ""
 "Tie a ribbon to the vent of each aircon unit so you can easily tell if "
 "aircon has actually been turned off."
 msgstr ""
 "在空調的通風口綁上一條小絲帶，這樣你可以從絲帶的動態看到空調是否已經關上。"
 
-#: companies/templates/companies/dashboard/dashboard.html:721
+#: companies/templates/companies/dashboard/dashboard.html:751
 msgid "Label your plugs"
 msgstr "為電制、插頭貼上標記"
 
-#: companies/templates/companies/dashboard/dashboard.html:722
+#: companies/templates/companies/dashboard/dashboard.html:752
 #: entrak/templates/display.html:174
 msgid ""
 "Label your plugs so you can unplug appliances without accidentally turning "
@@ -332,11 +328,11 @@ msgid ""
 msgstr ""
 "在插頭上貼上註明用途的標記，讓你關閉電器或插座時不再擔憂錯誤關上重要的設施。"
 
-#: companies/templates/companies/dashboard/dashboard.html:726
+#: companies/templates/companies/dashboard/dashboard.html:756
 msgid "Remove a tube"
 msgstr "取下過盛的燈管"
 
-#: companies/templates/companies/dashboard/dashboard.html:727
+#: companies/templates/companies/dashboard/dashboard.html:757
 #: entrak/templates/display.html:171
 msgid ""
 "If you have more light than you need in an area, you can remove one light "
@@ -344,11 +340,11 @@ msgid ""
 msgstr ""
 "如果你工作範圍安裝遠超於你所需要的燈管，你可以取下過盛的燈管以減低用電。"
 
-#: companies/templates/companies/dashboard/dashboard.html:731
+#: companies/templates/companies/dashboard/dashboard.html:761
 msgid "Turn off the socket"
 msgstr "關上插座總開關"
 
-#: companies/templates/companies/dashboard/dashboard.html:732
+#: companies/templates/companies/dashboard/dashboard.html:762
 #, python-format
 msgid ""
 "Even if an appliance is off, it can still consume 10%(percent)s of normal "
@@ -357,11 +353,11 @@ msgstr ""
 "縱使電器已經關掉，如果插頭沒有拔除，仍然會消耗若10%(percent)s的正常用電。 以"
 "後要緊記關掉掉或拔出插頭啊。"
 
-#: companies/templates/companies/dashboard/dashboard.html:736
+#: companies/templates/companies/dashboard/dashboard.html:766
 msgid "Adjust aircon temperature"
 msgstr "調整空調溫度"
 
-#: companies/templates/companies/dashboard/dashboard.html:737
+#: companies/templates/companies/dashboard/dashboard.html:767
 #: entrak/templates/display.html:172
 msgid ""
 "30 minutes after turning on aircon, adjust the temperature to minimize "
@@ -369,192 +365,171 @@ msgid ""
 msgstr ""
 "在冷氣開啟30分鐘後，請把溫度調整至適中的溫度，以免溫度過低，浪費電力能源。"
 
-#: companies/templates/companies/dashboard/dashboard.html:769
+#: companies/templates/companies/dashboard/dashboard.html:799
 msgid "Comparison"
 msgstr "和以往相比"
 
-#: companies/templates/companies/dashboard/dashboard.html:920
+#: companies/templates/companies/dashboard/dashboard.html:950
 msgid "So far this week"
 msgstr "本週直到目前"
 
-#: companies/templates/companies/dashboard/dashboard.html:920
+#: companies/templates/companies/dashboard/dashboard.html:950
 msgid "So far this month"
 msgstr "本月直到目前"
 
-#: companies/templates/companies/dashboard/dashboard.html:921
+#: companies/templates/companies/dashboard/dashboard.html:951
 msgid "By this time last week"
 msgstr "上週同一時段"
 
-#: companies/templates/companies/dashboard/dashboard.html:921
+#: companies/templates/companies/dashboard/dashboard.html:951
 msgid "By this time last month"
 msgstr "上月同一時段"
 
-#: companies/templates/companies/dashboard/dashboard.html:969
+#: companies/templates/companies/dashboard/dashboard.html:999
 msgid "Last Week Stats"
 msgstr "上週數據"
 
-#: companies/templates/companies/dashboard/dashboard.html:970
+#: companies/templates/companies/dashboard/dashboard.html:1000
 msgid "Day"
 msgstr "平日"
 
-#: companies/templates/companies/dashboard/dashboard.html:971
+#: companies/templates/companies/dashboard/dashboard.html:1001
 msgid "Night"
 msgstr "晚間"
 
-#: companies/templates/companies/dashboard/dashboard.html:972
+#: companies/templates/companies/dashboard/dashboard.html:1002
 msgid "than two weeks ago"
 msgstr "比兩週前"
 
-#: companies/templates/companies/dashboard/dashboard.html:1164
+#: companies/templates/companies/dashboard/dashboard.html:1194
 msgid "average weekday"
 msgstr "平日平均用電"
 
-#: companies/templates/companies/dashboard/dashboard.html:1164
+#: companies/templates/companies/dashboard/dashboard.html:1194
 msgid "average overnight"
 msgstr "晚間平均用電"
 
-#: companies/templates/companies/dashboard/dashboard.html:1170
+#: companies/templates/companies/dashboard/dashboard.html:1199
 #: entrak/templates/page_base.html:206
 msgid "Progress"
 msgstr "我的進度"
 
-#: companies/templates/companies/dashboard/dashboard.html:1172
+#: companies/templates/companies/dashboard/dashboard.html:1201
 #: entrak/templates/display.html:100 entrak/templates/display.html.py:102
 msgid "Over the past 12 months"
 msgstr "過去12個月"
 
-#: companies/templates/companies/dashboard/dashboard.html:1173
+#: companies/templates/companies/dashboard/dashboard.html:1202
 msgid "you have increased your energy use"
 msgstr "您的電力消耗減少了"
 
-#: companies/templates/companies/dashboard/dashboard.html:1174
+#: companies/templates/companies/dashboard/dashboard.html:1203
 msgid "you have decreased your energy use"
 msgstr "您的電力消耗增加了"
 
-#: companies/templates/companies/dashboard/dashboard.html:1218
+#: companies/templates/companies/dashboard/dashboard.html:1226
 msgid "from your baseline"
 msgstr "相對於基準用量"
 
-#: companies/templates/companies/dashboard/dashboard.html:1223
+#: companies/templates/companies/dashboard/dashboard.html:1232
 msgid "from your baseline of"
 msgstr "相對於"
 
-#: companies/templates/companies/dashboard/dashboard.html:1269
-msgid "Lost"
-msgstr ""
-
-#: companies/templates/companies/dashboard/dashboard.html:1269
-#: companies/templates/companies/dashboard/dashboard.html:1311
-msgid "Saved"
-msgstr "在能源方面節省了"
-
-#: companies/templates/companies/dashboard/dashboard.html:1270
-msgid "Increased"
-msgstr "增加"
-
-#: companies/templates/companies/dashboard/dashboard.html:1311
-msgctxt "progressCost"
-msgid "Increased"
-msgstr "在能源方面多用了"
-
-#: companies/templates/companies/dashboard/dashboard.html:1312
-msgctxt "progressCO2"
-msgid "Increased"
-msgstr "相等於增加了"
-
-#: companies/templates/companies/dashboard/dashboard.html:1270
-#: companies/templates/companies/dashboard/dashboard.html:1312
-msgid "Reduced"
-msgstr "相等於減少了"
-
-#: companies/templates/companies/dashboard/dashboard.html:1275
+#: companies/templates/companies/dashboard/dashboard.html:1247
 msgctxt "dashboard"
 msgid "Cumulative Savings"
 msgstr "節約進度"
 
-#: entrak/templates/progress.html:90
-msgid "Cumulative Savings"
-msgstr "累積能源節省 (相等於)"
-
-#: companies/templates/companies/dashboard/dashboard.html:1276
+#: companies/templates/companies/dashboard/dashboard.html:1248
 msgid "Since you started En-trak, you have"
 msgstr "從開始使用 En-trak, 您已"
 
-#: companies/templates/companies/reports/_report_content.html:50
-#: companies/templates/companies/reports/_report_revamp_content.html:50
-#: companies/templates/companies/reports/popup_report_pdf.html:104
-#: entrak/templates/report_main_content.html:37
-msgid "in energy costs"
-msgstr "電費"
-
-#: companies/templates/companies/dashboard/dashboard.html:1277
+#: companies/templates/companies/dashboard/dashboard.html:1249
 msgctxt "dashboard"
 msgid "in energy costs"
 msgstr " "
 
-#: companies/templates/companies/dashboard/dashboard.html:1278
+#: companies/templates/companies/dashboard/dashboard.html:1250
 msgid "Tons"
 msgstr "噸"
 
-#: companies/templates/companies/dashboard/dashboard.html:1302
+#: companies/templates/companies/dashboard/dashboard.html:1275
 msgid "Compared with your baseline year"
 msgstr "相對於基準用量"
 
-#: companies/templates/companies/dashboard/dashboard.html:1308
+#: companies/templates/companies/dashboard/dashboard.html:1281
 msgid "Compared with your baseline year of "
 msgstr "相對於"
 
-#: companies/templates/companies/dashboard/dashboard.html:1343
+#: companies/templates/companies/dashboard/dashboard.html:1284
+msgctxt "progressCost"
+msgid "Increased"
+msgstr "在能源方面多用了"
+
+#: companies/templates/companies/dashboard/dashboard.html:1284
+msgid "Saved"
+msgstr "在能源方面節省了"
+
+#: companies/templates/companies/dashboard/dashboard.html:1285
+msgctxt "progressCO2"
+msgid "Increased"
+msgstr "相等於增加了"
+
+#: companies/templates/companies/dashboard/dashboard.html:1285
+msgid "Reduced"
+msgstr "相等於減少了"
+
+#: companies/templates/companies/dashboard/dashboard.html:1350
 #: entrak/templates/manage_accounts.html:52 entrak/templates/profile.html:50
 #: entrak/templates/systems/goals/settings.html:51
 msgid "Goal Tracking"
 msgstr "節能目標"
 
-#: companies/templates/companies/dashboard/dashboard.html:1344
-msgid "Past 12 months"
-msgstr "上月"
-
-#: companies/templates/companies/dashboard/dashboard.html:1345
-msgid "Goal-1"
-msgstr ""
-
-#: companies/templates/companies/dashboard/dashboard.html:1346
+#: companies/templates/companies/dashboard/dashboard.html:1352
 msgid "I want to reduce my"
 msgstr "我希望把"
 
-#: companies/templates/companies/dashboard/dashboard.html:1347
+#: companies/templates/companies/dashboard/dashboard.html:1353
 msgid "energy use in "
 msgstr "的能源使用量降低"
 
-#: companies/templates/companies/dashboard/dashboard.html:1348
+#: companies/templates/companies/dashboard/dashboard.html:1354
 msgid " by"
 msgstr " "
 
-#: companies/templates/companies/dashboard/dashboard.html:1349
+#: companies/templates/companies/dashboard/dashboard.html:1355
 msgid " compared to "
 msgstr "相對"
 
-#: companies/templates/companies/dashboard/dashboard.html:1351
+#: companies/templates/companies/dashboard/dashboard.html:1357
 msgid "So far, you are saving at the rate of"
 msgstr "至今，您節省的速率為"
 
-#: companies/templates/companies/dashboard/dashboard.html:1352
+#: companies/templates/companies/dashboard/dashboard.html:1358
 msgid "You achieved savings of"
 msgstr "期內，您的節省達到"
 
-#: companies/templates/companies/dashboard/dashboard.html:1354
+#: companies/templates/companies/dashboard/dashboard.html:1360
+msgid "You have not set any energy goals"
+msgstr "您沒有設立節能目標"
+
+#: companies/templates/companies/dashboard/dashboard.html:1361
+msgid "Click here to set"
+msgstr "設立節能目標"
+
+#: companies/templates/companies/dashboard/dashboard.html:1364
 msgid "This Month"
 msgstr "本月"
 
-#: companies/templates/companies/dashboard/dashboard.html:1355
+#: companies/templates/companies/dashboard/dashboard.html:1365
 msgid "This Year"
 msgstr "本年"
 
-#: companies/templates/companies/dashboard/dashboard.html:1356
+#: companies/templates/companies/dashboard/dashboard.html:1366
 msgid "Last Month"
 msgstr "上月"
 
-#: companies/templates/companies/dashboard/dashboard.html:1357
+#: companies/templates/companies/dashboard/dashboard.html:1367
 msgid "Last Year"
 msgstr "上年"
 
@@ -860,6 +835,13 @@ msgstr "噸"
 #: companies/templates/companies/reports/_report_revamp_content.html:41
 msgid "emitted"
 msgstr "排放"
+
+#: companies/templates/companies/reports/_report_content.html:50
+#: companies/templates/companies/reports/_report_revamp_content.html:50
+#: companies/templates/companies/reports/popup_report_pdf.html:104
+#: entrak/templates/report_main_content.html:37
+msgid "in energy costs"
+msgstr "電費"
 
 #: companies/templates/companies/reports/_report_content.html:56
 #: companies/templates/companies/reports/_report_revamp_content.html:56
@@ -2933,6 +2915,10 @@ msgstr "密碼已變更"
 msgid "Home"
 msgstr ""
 
+#: entrak/templates/page_base.html:199
+msgid "Graph"
+msgstr "圖表功能"
+
 #: entrak/templates/page_base.html:202
 msgid "Ranking"
 msgstr "用電量排行榜"
@@ -3074,6 +3060,10 @@ msgstr "下個目標"
 msgid ""
 "%(target_level)s<span class=\"saving-percent-symbol\">%%</span> Reduction"
 msgstr "節省 %(target_level)s<span class=\"saving-percent-symbol\">%%</span>"
+
+#: entrak/templates/progress.html:90
+msgid "Cumulative Savings"
+msgstr "累積能源節省 (相等於)"
 
 #: entrak/templates/progress.html:90
 msgid "Extra Spending"
@@ -3408,7 +3398,7 @@ msgstr "晚間："
 
 #: entrak/templates/systems/goals/settings.html:67
 msgid "Set New Goal"
-msgstr ""
+msgstr "設立新節能目標"
 
 #: printers/templates/system/printers/graph.html:651
 msgid "THE PAPER SECTION"
@@ -3557,6 +3547,12 @@ msgstr "用戶沒有訪問這部份的權限。"
 #: utils/auth.py:40 utils/auth.py:61
 msgid "Please enter username and password."
 msgstr "請輸入用戶名稱和密碼"
+
+#~ msgid "Increased"
+#~ msgstr "增加"
+
+#~ msgid "Past 12 months"
+#~ msgstr "上月"
 
 #~ msgid "So far this year"
 #~ msgstr "本週直到目前"
