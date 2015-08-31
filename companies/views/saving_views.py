@@ -164,6 +164,7 @@ class compareToBaseline(APIView):
             return Response({'noBaseline': True}, status=status.HTTP_200_OK)
 
         total_co2_changed = 0
+        total_changed = 0
 
         baseline_year = baselines[0].start_dt.year
         for data_year in year_ranges:
