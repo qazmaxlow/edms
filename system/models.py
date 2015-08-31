@@ -1207,7 +1207,7 @@ class SystemEnergyGoal(models.Model):
     comparison_type = models.IntegerField(
         choices=(
             (1, 'Previous Month'),
-            (2, 'Last Year Same Month'),
+            (2, 'Same Month Last Year'),
             (3, 'Previous Year')
         )
     )

@@ -140,7 +140,7 @@
                                 new kendo.data.DataSource({
                                     data: [
                                         {"value": 1, "text": "Previous Month"},
-                                        {"value": 2, "text": "Last Year Same Month"}
+                                        {"value": 2, "text": "Same Month Last Year"}
                                     ]});
                             $scope.dateDropdown.dataSource.read();
                             $scope.dateDropdown.refresh();
@@ -286,7 +286,7 @@
                             autoBind: false,
                             dataSource: [
                                 {"value": 1, "text": "Previous Month"},
-                                {"value": 2, "text": "Last Year Same Month"}
+                                {"value": 2, "text": "Same Month Last Year"}
                             ]  
                         });
                 }
@@ -300,7 +300,7 @@
                     dataTextField:"text",
                     dataSource: [
                         {"value": 1, "text": "Previous Month"},
-                        {"value": 2, "text": "Last Year Same Month"}
+                        {"value": 2, "text": "Same Month Last Year"}
                     ]
                 };
 
@@ -333,7 +333,7 @@
                                 sortable: true,
                                 editor: comparisonEditor,
                                 template: function(dateItem){
-                                    return dateItem.comparison_type == 1 ? "Previous Month" : "Last Year Same Month";
+                                    return dateItem.comparison_type == 1 ? "Previous Month" : "Same Month Last Year";
                                 }
                             }, {
                                 field: "goal_save_percent", title: "Goal",
