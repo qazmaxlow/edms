@@ -1294,26 +1294,54 @@
         var langCode = '{{LANGUAGE_CODE}}';
         kendo.culture(langCode.substring(0,3)+langCode.substring(3,5).toUpperCase());
 
-        $scope.selectedGoal = "this-month";
-        $scope.changeGoal = function(){
+        $scope.goals = {};
+        $scope.selectedGoal = null;
 
-            var goal_type = 'this-month';
-
-            if ($scope.goalDropdown !== undefined)
-                goal_type = $scope.goalDropdown.value();
-
-            $http.get("{% url 'companies.goal.tracking' current_system.code %}", {params: {goal_type: goal_type}}).success(
-                function(data) {
-                    $scope.goalPercent = data.goal_percent;
-                    $scope.soFarPercent = data.compare_percent;
-                    $scope.isIncrease = $scope.soFarPercent > 0;
-                    $scope.soFarPercent = Math.abs($scope.soFarPercent);
-                    $scope.compareDate = kendo.toString(new Date(data.compare_date), "y");
-                    $scope.targetDate = kendo.toString(new Date(data.target_date), "y");
-                }
-            );
+        function changeGoal(){
+            var data = $scope.goals[$scope.selectedGoal];
+            if (data){
+                $scope.goalPercent = data.goal_percent;
+                $scope.soFarPercent = data.compare_percent;
+                $scope.isIncrease = $scope.soFarPercent > 0;
+                $scope.soFarPercent = Math.abs($scope.soFarPercent);
+                $scope.compareDate = kendo.toString(new Date(data.compare_date), "y");
+                $scope.targetDate = kendo.toString(new Date(data.target_date), "y");
+            }
         }
-        $scope.changeGoal();
+
+        $scope.$watch("selectedGoal", function(nVal, oVal){
+            changeGoal();
+        });
+
+        $scope.dropdownItem = [];
+        var goalListDS = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    //url: "{% url 'companies.savings.compare-to-baseline' current_system.code %}",
+                    url: "{% url 'companies.goal.tracking' current_system.code %}",
+                    type: 'GET',
+                    dataType: "json"
+                }
+            },
+            change: function(data) {
+                if (data.items.length){
+                    for (var i=0; i<data.items.length; i++){
+                        $scope.goals[data.items[i].type] = data.items[i].info;
+                        $scope.dropdownItem.push({'text': $scope.dropdownText[data.items[i].type], 'value': data.items[i].type});
+                    }
+                    $scope.$apply(function(){
+                        $scope.selectedGoal = data.items[0].type;
+                    });
+                }
+            }
+        });
+        goalListDS.read();
+
+        $scope.dropdownOpt = {
+          dataTextField: "text",
+          dataValueField: "value",
+          dataSource: $scope.dropdownItem
+        }
 
         $scope.title = '{% trans "Goal Tracking" %}';
 
@@ -1325,10 +1353,12 @@
         $scope.secondRowText = '{% trans "So far, you are saving at the rate of" %}';
         $scope.secondRowPastText = '{% trans "You achieved savings of" %}';
 
-        $scope.thisMonth = '{% trans "This Month" %}';
-        $scope.thisYear = '{% trans "This Year" %}';
-        $scope.lastMonth = '{% trans "Last Month" %}';
-        $scope.lastYear = '{% trans "Last Year" %}';
+
+        $scope.dropdownText = {};
+        $scope.dropdownText['this-month'] = '{% trans "This Month" %}';
+        $scope.dropdownText['this-year'] = '{% trans "This Year" %}';
+        $scope.dropdownText['last-month'] = '{% trans "Last Month" %}';
+        $scope.dropdownText['last-year'] = '{% trans "Last Year" %}';
     });
 
 </script>

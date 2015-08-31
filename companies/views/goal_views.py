@@ -15,6 +15,163 @@ from system.models import System, SystemEnergyGoal
 
 class goalTracking(APIView):
     def get(self, request, *args, **kwargs):
+        result_list = [];
+
+        syscode = self.kwargs['system_code']
+        system = System.objects.get(code=syscode)
+
+        now = datetime.utcnow().replace(tzinfo=pytz.utc)
+        now = now.astimezone(request.user.system.time_zone)
+
+        #this-month
+        goal_type = 'this-month'
+        start_from = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        end_to = now.replace(hour=0, minute=0, second=0, microsecond=0)
+
+        this_kwh = system.total_usage(start_from, end_to)['totalKwh']
+
+        try:
+            goal_setting = SystemEnergyGoal.objects.get(
+                system=system,
+                goal_type=2,
+                validated_date=start_from
+            )
+        except ObjectDoesNotExist as e:
+            goal_setting = None
+
+        if goal_setting != None:
+            if goal_setting.comparison_type == 1:   #previous month
+                last_start_from = start_from - relativedelta.relativedelta(months=1)
+                last_end_to = end_to - relativedelta.relativedelta(months=1)
+            else:
+                last_start_from = start_from - relativedelta.relativedelta(years=1)
+                last_end_to = end_to - relativedelta.relativedelta(years=1)
+
+            last_kwh = system.total_usage(last_start_from, last_end_to)['totalKwh']
+
+            compare_percent = None
+            if last_kwh > 0:
+                compare_percent = float(this_kwh - last_kwh) / last_kwh * 100
+
+            info = {
+                'goal_percent': goal_setting.goal_save_percent,
+                'compare_percent': compare_percent,
+                'target_date': goal_setting.validated_date,
+                'compare_date': last_start_from
+            }
+            result_list.append({'type': goal_type, 'info': info})
+
+        #last-month
+        goal_type = 'last-month'
+        end_to = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        start_from = end_to - relativedelta.relativedelta(months=1)
+
+        this_kwh = system.total_usage(start_from, end_to)['totalKwh']
+
+        try:
+            goal_setting = SystemEnergyGoal.objects.get(
+                system=system,
+                goal_type=2,
+                validated_date=start_from
+            )
+        except ObjectDoesNotExist as e:
+            goal_setting = None
+
+        if goal_setting != None:
+            if goal_setting.comparison_type == 1:   #previous month
+                last_start_from = start_from - relativedelta.relativedelta(months=1)
+                last_end_to = end_to - relativedelta.relativedelta(months=1)
+            else:
+                last_start_from = start_from - relativedelta.relativedelta(years=1)
+                last_end_to = end_to - relativedelta.relativedelta(years=1)
+
+            last_kwh = system.total_usage(last_start_from, last_end_to)['totalKwh']
+
+            compare_percent = None
+            if last_kwh > 0:
+                compare_percent = float(this_kwh - last_kwh) / last_kwh * 100
+
+            info = {
+                'goal_percent': goal_setting.goal_save_percent,
+                'compare_percent': compare_percent,
+                'target_date': goal_setting.validated_date,
+                'compare_date': last_start_from
+            }
+            result_list.append({'type': goal_type, 'info': info})
+
+        #this-year
+        goal_type = 'this-year'
+        start_from = now.replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
+        end_to = now.replace(hour=0, minute=0, second=0, microsecond=0)
+
+        this_kwh = system.total_usage(start_from, end_to)['totalKwh']
+
+        try:
+            goal_setting = SystemEnergyGoal.objects.get(
+                system=system,
+                goal_type=3,
+                validated_date=start_from
+            )
+        except ObjectDoesNotExist as e:
+            goal_setting = None
+
+        if goal_setting != None:
+            last_start_from = start_from - relativedelta.relativedelta(years=1)
+            last_end_to = end_to - relativedelta.relativedelta(years=1)
+
+            last_kwh = system.total_usage(last_start_from, last_end_to)['totalKwh']
+
+            compare_percent = None
+            if last_kwh > 0:
+                compare_percent = float(this_kwh - last_kwh) / last_kwh * 100
+
+            info = {
+                'goal_percent': goal_setting.goal_save_percent,
+                'compare_percent': compare_percent,
+                'target_date': goal_setting.validated_date,
+                'compare_date': last_start_from
+            }
+            result_list.append({'type': goal_type, 'info': info})
+
+        #last-year
+        goal_type = 'last-year'
+        end_to = now.replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
+        start_from = end_to - relativedelta.relativedelta(years=1)
+
+        this_kwh = system.total_usage(start_from, end_to)['totalKwh']
+
+        try:
+            goal_setting = SystemEnergyGoal.objects.get(
+                system=system,
+                goal_type=3,
+                validated_date=start_from
+            )
+        except ObjectDoesNotExist as e:
+            goal_setting = None
+
+        if goal_setting != None:
+            last_start_from = start_from - relativedelta.relativedelta(years=1)
+            last_end_to = end_to - relativedelta.relativedelta(years=1)
+
+            last_kwh = system.total_usage(last_start_from, last_end_to)['totalKwh']
+
+            compare_percent = None
+            if last_kwh > 0:
+                compare_percent = float(this_kwh - last_kwh) / last_kwh * 100
+
+            info = {
+                'goal_percent': goal_setting.goal_save_percent,
+                'compare_percent': compare_percent,
+                'target_date': goal_setting.validated_date,
+                'compare_date': last_start_from
+            }
+            result_list.append({'type': goal_type, 'info': info})
+
+        response = Response(result_list, status=status.HTTP_200_OK)
+        return response
+
+class goalTracking_old(APIView):
+    def get(self, request, *args, **kwargs):
 
         syscode = self.kwargs['system_code']
         system = System.objects.get(code=syscode)
@@ -88,7 +245,6 @@ class goalTracking(APIView):
 
         response = Response(info, status=status.HTTP_200_OK)
         return response
-
 
 class GoalSerializer(serializers.ModelSerializer):
     # is_all_systems = serializers.BooleanField()
