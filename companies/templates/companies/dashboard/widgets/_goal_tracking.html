@@ -18,7 +18,16 @@
         </div>
     </div>
     {% endverbatim %}
-    <div class="widget-content row">
+    <div ng-show="isEmpty" class="widget-content row">
+        <div class="empty-top-row h-center">
+            <div><img src="/static/images/dashboard/goal-tracking.png"/></div>
+        </div>
+        <div class="h-center" ng-bind="createGoalText"></div>
+        <div class="h-center">
+            <a class="k-button" ng-bind="createGoalBtnText" href="{% url 'systems.goals.settings' system_code=systems.0.code %}"></a>
+        </div>
+    </div>
+    <div ng-show="!isEmpty" class="widget-content row">
         <div class="top-row">
             {% ifequal LANGUAGE_CODE 'zh-tw' %}
                 <span ng-bind="descPart1Text"></span>

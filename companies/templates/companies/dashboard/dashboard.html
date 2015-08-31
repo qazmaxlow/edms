@@ -1314,6 +1314,7 @@
         });
 
         $scope.dropdownItem = [];
+        $scope.isEmpty = true;
         var goalListDS = new kendo.data.DataSource({
             transport: {
                 read: {
@@ -1325,6 +1326,7 @@
             },
             change: function(data) {
                 if (data.items.length){
+                    $scope.isEmpty = false;
                     for (var i=0; i<data.items.length; i++){
                         $scope.goals[data.items[i].type] = data.items[i].info;
                         $scope.dropdownItem.push({'text': $scope.dropdownText[data.items[i].type], 'value': data.items[i].type});
@@ -1332,6 +1334,8 @@
                     $scope.$apply(function(){
                         $scope.selectedGoal = data.items[0].type;
                     });
+                } else {
+                    $scope.isEmpty = true;
                 }
             }
         });
@@ -1353,6 +1357,8 @@
         $scope.secondRowText = '{% trans "So far, you are saving at the rate of" %}';
         $scope.secondRowPastText = '{% trans "You achieved savings of" %}';
 
+        $scope.createGoalText = '{% trans "You have not set any energy goals" %}';
+        $scope.createGoalBtnText = '{% trans "Click here to set" %}';
 
         $scope.dropdownText = {};
         $scope.dropdownText['this-month'] = '{% trans "This Month" %}';

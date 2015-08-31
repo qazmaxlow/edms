@@ -865,6 +865,29 @@
 /* -----cumulative saving widget */
 
 /* goal tracking widget----- */
+.goal-widget .k-button {
+    box-shadow: 0px 2px 0px #6b9aa5;
+    border-radius: 4px;
+    background-color: #9bceda;
+    border: none;
+    color: #FFFFFF;
+}
+
+.goal-widget .k-button:hover {
+    background-color: #74C62B;
+}
+
+.goal-widget .widget-content .empty-top-row {
+    height: 45%;
+    position: relative;
+}
+
+.goal-widget .widget-content .empty-top-row>div {
+    position: absolute;
+    width: 100%;
+    bottom: 10px;
+}
+
 .goal-widget .widget-content .top-row {
     position: relative;
     height: 45%;
