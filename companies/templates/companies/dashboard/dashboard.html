@@ -1221,12 +1221,12 @@
                         $scope.yearRangeText = "";
                         $scope.chineseFromBaselineText = "";
                     } else {
-                        $scope.comparedPercent = d.comparedPercent;
+                        $scope.comparedPercent = d.comparedPercent || 0;
                         $scope.yearRangeText = d.baselineYear + " - " + (d.baselineYear+1);
                         $scope.fromBaselineText = '{% trans "from your baseline of" %}';
                         $scope.chineseFromBaselineText = "年的基準用量";
                     }
-                    $scope.isIncrease = d.comparedPercent < 0;
+                    $scope.isIncrease = $scope.comparedPercent > 0;
 
                 }
             }
