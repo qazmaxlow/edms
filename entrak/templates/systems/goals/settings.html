@@ -227,7 +227,10 @@
                                 url = url.replace(999, item.id);
                                 return url;
                             },
-                            type: "PUT"
+                            type: "PUT",
+                            complete: function(e) {
+                                goalSettingsDataSource.read();
+                            }
                         },
                         destroy: {
                             url: function(item){
