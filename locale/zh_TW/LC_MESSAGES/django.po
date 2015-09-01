@@ -2,12 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-31 10:35+0000\n"
+"POT-Creation-Date: 2015-09-01 04:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -366,6 +366,7 @@ msgstr ""
 "在冷氣開啟30分鐘後，請把溫度調整至適中的溫度，以免溫度過低，浪費電力能源。"
 
 #: companies/templates/companies/dashboard/dashboard.html:799
+#: entrak/templates/systems/goals/settings.html:350
 msgid "Comparison"
 msgstr "和以往相比"
 
@@ -453,83 +454,83 @@ msgstr " "
 msgid "Tons"
 msgstr "噸"
 
-#: companies/templates/companies/dashboard/dashboard.html:1275
+#: companies/templates/companies/dashboard/dashboard.html:1276
 msgid "Compared with your baseline year"
 msgstr "相對於基準用量"
 
-#: companies/templates/companies/dashboard/dashboard.html:1281
+#: companies/templates/companies/dashboard/dashboard.html:1282
 msgid "Compared with your baseline year of "
 msgstr "相對於"
 
-#: companies/templates/companies/dashboard/dashboard.html:1284
+#: companies/templates/companies/dashboard/dashboard.html:1285
 msgctxt "progressCost"
 msgid "Increased"
 msgstr "在能源方面多用了"
 
-#: companies/templates/companies/dashboard/dashboard.html:1284
+#: companies/templates/companies/dashboard/dashboard.html:1285
 msgid "Saved"
 msgstr "在能源方面節省了"
 
-#: companies/templates/companies/dashboard/dashboard.html:1285
+#: companies/templates/companies/dashboard/dashboard.html:1286
 msgctxt "progressCO2"
 msgid "Increased"
 msgstr "相等於增加了"
 
-#: companies/templates/companies/dashboard/dashboard.html:1285
+#: companies/templates/companies/dashboard/dashboard.html:1286
 msgid "Reduced"
 msgstr "相等於減少了"
 
-#: companies/templates/companies/dashboard/dashboard.html:1350
+#: companies/templates/companies/dashboard/dashboard.html:1352
 #: entrak/templates/manage_accounts.html:52 entrak/templates/profile.html:50
 #: entrak/templates/systems/goals/settings.html:51
 msgid "Goal Tracking"
 msgstr "節能目標"
 
-#: companies/templates/companies/dashboard/dashboard.html:1352
+#: companies/templates/companies/dashboard/dashboard.html:1354
 msgid "I want to reduce my"
 msgstr "我希望把"
 
-#: companies/templates/companies/dashboard/dashboard.html:1353
+#: companies/templates/companies/dashboard/dashboard.html:1355
 msgid "energy use in "
 msgstr "的能源使用量降低"
 
-#: companies/templates/companies/dashboard/dashboard.html:1354
+#: companies/templates/companies/dashboard/dashboard.html:1356
 msgid " by"
 msgstr " "
 
-#: companies/templates/companies/dashboard/dashboard.html:1355
+#: companies/templates/companies/dashboard/dashboard.html:1357
 msgid " compared to "
 msgstr "相對"
 
-#: companies/templates/companies/dashboard/dashboard.html:1357
+#: companies/templates/companies/dashboard/dashboard.html:1359
 msgid "So far, you are saving at the rate of"
 msgstr "至今，您節省的速率為"
 
-#: companies/templates/companies/dashboard/dashboard.html:1358
+#: companies/templates/companies/dashboard/dashboard.html:1360
 msgid "You achieved savings of"
 msgstr "期內，您的節省達到"
 
-#: companies/templates/companies/dashboard/dashboard.html:1360
+#: companies/templates/companies/dashboard/dashboard.html:1362
 msgid "You have not set any energy goals"
 msgstr "您沒有設立節能目標"
 
-#: companies/templates/companies/dashboard/dashboard.html:1361
+#: companies/templates/companies/dashboard/dashboard.html:1363
 msgid "Click here to set"
 msgstr "設立節能目標"
 
-#: companies/templates/companies/dashboard/dashboard.html:1364
+#: companies/templates/companies/dashboard/dashboard.html:1366
 msgid "This Month"
 msgstr "本月"
 
-#: companies/templates/companies/dashboard/dashboard.html:1365
+#: companies/templates/companies/dashboard/dashboard.html:1367
 msgid "This Year"
 msgstr "本年"
 
-#: companies/templates/companies/dashboard/dashboard.html:1366
+#: companies/templates/companies/dashboard/dashboard.html:1368
 msgid "Last Month"
 msgstr "上月"
 
-#: companies/templates/companies/dashboard/dashboard.html:1367
+#: companies/templates/companies/dashboard/dashboard.html:1369
 msgid "Last Year"
 msgstr "上年"
 
@@ -729,6 +730,7 @@ msgstr ""
 #: entrak/templates/general_settings.html:394
 #: entrak/templates/manage_accounts.html:89
 #: entrak/templates/systems/goals/settings.html:64
+#: entrak/templates/systems/goals/settings.html:95
 msgid "Confirm"
 msgstr "確認"
 
@@ -777,6 +779,7 @@ msgstr "您確認要刪除項目?"
 #: entrak/templates/manage_accounts.html:88
 #: entrak/templates/manage_accounts.html:138 entrak/templates/profile.html:104
 #: entrak/templates/systems/goals/settings.html:63
+#: entrak/templates/systems/goals/settings.html:96
 msgid "Cancel"
 msgstr "取消"
 
@@ -801,6 +804,7 @@ msgstr "編輯"
 #: companies/templates/companies/report_schedule/report_schedule.html:343
 #: entrak/templates/general_settings.html:332
 #: entrak/templates/general_settings.html:351
+#: entrak/templates/systems/goals/settings.html:394
 msgid "Actions"
 msgstr "行動"
 
@@ -1789,6 +1793,11 @@ msgstr "週報"
 msgid "Month"
 msgstr "月報"
 
+#: entrak/templates/systems/goals/settings.html:79
+msgctxt "setting"
+msgid "Month"
+msgstr "月"
+
 #: companies/templates/companies/reports/summary.html:996
 #: companies/templates/companies/reports/summary_revamp.html:1001
 msgid "Quarter"
@@ -1798,6 +1807,11 @@ msgstr "季報"
 #: companies/templates/companies/reports/summary_revamp.html:1002
 msgid "Year"
 msgstr "年報"
+
+#: entrak/templates/systems/goals/settings.html:80
+msgctxt "setting"
+msgid "Year"
+msgstr "年"
 
 #: companies/templates/companies/reports/summary.html:998
 #: companies/templates/companies/reports/summary_revamp.html:1003
@@ -2635,9 +2649,11 @@ msgid "Unit"
 msgstr "單位"
 
 #: entrak/templates/graph.html:673 entrak/templates/ranking.html:556
+#: entrak/templates/systems/goals/settings.html:77
+#: entrak/templates/systems/goals/settings.html:340
 #: printers/templates/system/printers/graph.html:663
 msgid "Time"
-msgstr "時間"
+msgstr "所選時間"
 
 #: entrak/templates/graph.html:674
 #: printers/templates/system/printers/graph.html:664
@@ -3396,9 +3412,46 @@ msgstr "白天："
 msgid "Overnight: "
 msgstr "晚間："
 
+#: entrak/templates/systems/goals/settings.html:56
 #: entrak/templates/systems/goals/settings.html:67
 msgid "Set New Goal"
 msgstr "設立新節能目標"
+
+#: entrak/templates/systems/goals/settings.html:69
+#: entrak/templates/systems/goals/settings.html:330
+msgid "Area"
+msgstr "區域"
+
+#: entrak/templates/systems/goals/settings.html:74
+msgid "All Area"
+msgstr "全部區域"
+
+#: entrak/templates/systems/goals/settings.html:78
+
+msgid "Next 12 months"
+msgstr "下12個月"
+
+#: entrak/templates/systems/goals/settings.html:85
+#: entrak/templates/systems/goals/settings.html:362
+msgid "Goal"
+msgstr "節能目標"
+
+#: entrak/templates/systems/goals/settings.html:142
+#: entrak/templates/systems/goals/settings.html:299
+#: entrak/templates/systems/goals/settings.html:318
+msgid "Previous Month"
+msgstr "上個月"
+
+#: entrak/templates/systems/goals/settings.html:143
+#: entrak/templates/systems/goals/settings.html:300
+#: entrak/templates/systems/goals/settings.html:319
+msgid "Same Month Last Year"
+msgstr "去年同期"
+
+#: entrak/templates/systems/goals/settings.html:155
+#: entrak/templates/systems/goals/settings.html:296
+msgid "Previous Year"
+msgstr "去年"
 
 #: printers/templates/system/printers/graph.html:651
 msgid "THE PAPER SECTION"
@@ -3550,9 +3603,6 @@ msgstr "請輸入用戶名稱和密碼"
 
 #~ msgid "Increased"
 #~ msgstr "增加"
-
-#~ msgid "Past 12 months"
-#~ msgstr "上月"
 
 #~ msgid "So far this year"
 #~ msgstr "本週直到目前"
