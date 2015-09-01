@@ -146,6 +146,7 @@
                             $scope.dateDropdown.refresh();
 
                             $scope.validatedDateOptions.select = 'month';
+                            $scope.validatedDateOptions.format = 'MMM yyyy';
                         }
                         else {
                             $scope.dateDropdown.dataSource =
@@ -157,6 +158,7 @@
                             $scope.dateDropdown.refresh();
 
                             $scope.validatedDateOptions.select = 'year';
+                            $scope.validatedDateOptions.format = 'yyyy';
                         }
                     })
                 });
@@ -164,7 +166,7 @@
 
 
                 $('input[name="timeGroup"]').change(function(){
-                    $scope.datePicker.enable($('input[name="timeGroup"]:checked').val() != "1");
+                    $scope.datePicker.enable($('input[name="timeGroup"]:checked').val() != "0");
                 });
 
                 $scope.confirmAction = function(){
@@ -276,20 +278,21 @@
                         });
                 }
 
-                function dateEditor(container, options) {
-                    if (options.model.goal_type == 3){
+                function dateEditor(container, options) {console.log(options);
+                    if (options.model.goal_type == 2){
                         $scope.validatedDateOptions.select = 'year';
                         $scope.validatedDateOptions.format = 'yyyy';
                     } else {
                         $scope.validatedDateOptions.select = 'month';
-                        $scope.validatedDateOptions.format = 'MMM yyyy';
+                        $scope.validatedDateOptions.format = 'MMM yyyy';//k-rebind="validatedDateOptions" 
                     }
-                    $('<input kendo-et-date-picker class="datepicker" k-options="validatedDateOptions" k-rebind="validatedDateOptions" data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '"></input>').appendTo(container);
+
+                    $('<input kendo-et-date-picker class="datepicker" k-options="validatedDateOptions" data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '"></input>').appendTo(container);
                 }
 
                 function comparisonEditor(container, options) {
                     var ds;
-                    if (options.model.goal_type == 3){
+                    if (options.model.goal_type == 2){
                         ds = [{"value": 3, "text": "Previous Year"}];
                     } else {
                         ds = [
@@ -338,8 +341,8 @@
                                 sortable: true,
                                 editor: dateEditor,
                                 // format: "{0:yyyy-MM-dd HH:mm}", data-format="' + options.format + '"
-                                template: function(dataItem) {
-                                    if (dataItem.gaol_type == 3)
+                                template: function(dataItem) {console.log(dataItem);
+                                    if (dataItem.goal_type == 2)
                                         return kendo.toString(new Date(dataItem.validated_date), "yyyy");
                                     return kendo.toString(new Date(dataItem.validated_date), "MMM yyyy");
                                 }
