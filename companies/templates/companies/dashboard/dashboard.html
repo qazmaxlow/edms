@@ -1266,24 +1266,26 @@
                 }
             },
             change: function(data) {
-                if (data.items && data.items[0]){
-                    var d = data.items[0];
-                    if (d.noBaseline){
-                        $scope.saving.costChanged = 0;
-                        $scope.saving.co2Changed = 0;
-                        $scope.saving.currencyUnit = '{{current_system.money_unit.name}}';
-                        $scope.footerText = '{% trans "Compared with your baseline year" %}';
-                    } else {
-                        $scope.saving.costChanged = d.costChanged || 0;
-                        $scope.saving.co2Changed = d.co2Changed || 0;
-                        $scope.saving.currencyUnit = '{{current_system.money_unit.name}}';
-                        var baselineYear = d.baselineYear + " - " + (d.baselineYear+1);
-                        $scope.footerText = '{% trans "Compared with your baseline year of " %}' + baselineYear;
+                $scope.$apply(function(){
+                    if (data.items && data.items[0]){
+                        var d = data.items[0];
+                        if (d.noBaseline){
+                            $scope.saving.costChanged = 0;
+                            $scope.saving.co2Changed = 0;
+                            $scope.saving.currencyUnit = '{{current_system.money_unit.name}}';
+                            $scope.footerText = '{% trans "Compared with your baseline year" %}';
+                        } else {
+                            $scope.saving.costChanged = d.costChanged || 0;
+                            $scope.saving.co2Changed = d.co2Changed || 0;
+                            $scope.saving.currencyUnit = '{{current_system.money_unit.name}}';
+                            var baselineYear = d.baselineYear + " - " + (d.baselineYear+1);
+                            $scope.footerText = '{% trans "Compared with your baseline year of " %}' + baselineYear;
+                        }
+                        $scope.isSaved = $scope.saving.costChanged <= 0;
+                        $scope.saving.costChangedDescText = $scope.isSaved ? '{% trans "Increased" context "progressCost" %}' : '{% trans "Saved" %}';
+                        $scope.saving.co2ChangedDescText = $scope.isSaved ? '{% trans "Increased" context "progressCO2" %}' : '{% trans "Reduced" %}';
                     }
-                    $scope.isSaved = $scope.saving.costChanged <= 0;
-                    $scope.saving.costChangedDescText = $scope.isSaved ? '{% trans "Increased" context "progressCost" %}' : '{% trans "Saved" %}';
-                    $scope.saving.co2ChangedDescText = $scope.isSaved ? '{% trans "Increased" context "progressCO2" %}' : '{% trans "Reduced" %}';
-                }
+                });
             }
         });
         saving_ds.read();
