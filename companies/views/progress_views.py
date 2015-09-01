@@ -112,6 +112,9 @@ class progressCompareToBaseline(APIView):
         baselines = BaselineUsage.objects.filter(system=system).order_by('start_dt')
         year_ranges = range(start_date_year, timezone.now().year+1)
 
+        if len(baselines) < 12:
+            return Response({'noBaseline': True}, status=status.HTTP_200_OK)
+
         # this_year_kwh =
         total_changed = 0
         total_co2_changed = 0
@@ -128,6 +131,6 @@ class progressCompareToBaseline(APIView):
         total_baseline_kwh = sum([b.usage for b in baselines])
         compare = float(pass_12months_kwh - total_baseline_kwh)/total_baseline_kwh
 
-        info = {'compared_percent': compare * 100}
+        info = {'comparedPercent': compare * 100, 'baselineYear': baselines[0].start_dt.year}
         response = Response(info, status=status.HTTP_200_OK)
         return response

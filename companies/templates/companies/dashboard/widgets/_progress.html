@@ -3,31 +3,38 @@
 {% load static %}
 {% load humanize %}
 
-{% verbatim %}
 <div class="widget-container progress-widget" ng-controller="WidgetProgress">
     <div class="widget-header row">
-        <div class="widget-title col-xs-6">{{title}}</div>
+        <div class="widget-title col-xs-6" ng-bind="title"></div>
         <div class="widget-toggle col-xs-6">
             <div class="pull-right">
-                <!-- <div class="long-text-toggle" ng-click="toggle()">
-                    <span class="button-left">{{ isPast12Month ? p12BtnText : thisYrBtnText }}</span><span class="button-right"></span>
-                </div> -->
-                <select kendo-dropdownlist="progressDropdown" ng-model="isPast12Month" k-on-change="changeProgressOption(kendoEvent)">
+                <!-- <select kendo-dropdownlist="progressDropdown" ng-model="isPast12Month" k-on-change="changeProgressOption(kendoEvent)">
                     <option value="pass12Months">{{p12BtnText}}</option>
                     <option value="soFarThisYear">{{thisYrBtnText}}</option>
-                </select>
+                </select> -->
             </div>
         </div>
     </div>
     
     <div class="widget-content row bg-image" ng-class="{'increase' : isIncrease}">
-        <div class="description-6 top-space">{{isPast12Month == "1" ? p12DescLine1Text : thisYrDescLine1Text}}</div>
-        <div class="description-6">{{isIncrease ? increaseLine2Text : decreaseLine2Text}}</div>
-        <div class="percent">
-            <span class="percentNum">{{ progress.compared_percent | abs | number:0 }}</span><span class="percentSign">%</span>
+        <div class="description-6 top-space" ng-bind="p12DescLine1Text"></div>
+        <div class="description-6" ng-bind="isIncrease ? increaseLine2Text : decreaseLine2Text"></div>
+        <div class="percentRow">
+            <div class="arrow-icon"></div>
+            <div class="percent">
+                <span class="percentNum" ng-bind="comparedPercent | abs | entrakNumber"></span><span class="percentSign">%</span>
+            </div>
         </div>
-        <div class="description-6">{{isPast12Month == "1" ? fromBaselineText : comparedToText}}</div>
-        <div class="description-6">{{isPast12Month == "1" ? yearRangeText : ""}}</div>
+        {% ifequal LANGUAGE_CODE 'zh-tw' %}
+        <div class="h-center">
+            <span class="description-6" ng-bind="fromBaselineText">
+            </span><span class="description-6" ng-bind="yearRangeText">
+            </span><span class="description-6" ng-bind="chineseFromBaselineText">
+            </span>
+        </div>
+        {% else %}
+            <div class="description-6" ng-bind="fromBaselineText"></div>
+            <div class="description-6" ng-bind="yearRangeText"></div>
+        {% endifequal %}
     </div>
 </div>
-{% endverbatim %}

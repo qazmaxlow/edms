@@ -32,6 +32,8 @@
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
 
 {% endblock %}
+{% block system_menu_target_view %}dashboard{% endblock %}
+{% block breadcrumb_target_view %}dashboard{% endblock %}
 
 {% block selected-menu-link-id %}menu-link-setting{% endblock %}
 {% block page_title %}{% trans "SETTINGS" %}{% endblock %}
@@ -45,7 +47,7 @@
 
 
 <div ng-app="entrak">
-    <div class="profile profile-container" ng-controller="GoalSettingsController">
+    <div class="profile profile-container" ng-controller="GoalSettingsController" id="goalSettingsController">
         <div class="k-header">
             <div class="header-tab"><a href="{% url 'profile' system_code=systems.0.code %}">{% trans "My Profile" %}</a></div><!--
             -->{% if user.is_manager == True %}<div class="header-tab"><a href="{% url 'manage_accounts' system_code=systems.0.code %}">{% trans "Manage Accounts" %}</a></div><div class="header-tab selected-tab">{% trans "Goal Tracking" %}</div>{% endif %}
@@ -53,48 +55,52 @@
 
         <div class="form-horizontal form-widgets">
             <div class="createGoalPanel">
-                <button class="k-button normal-btn" ng-click="showPopup()">Set New Goal</button>
+                <button class="k-button normal-btn" ng-click="showPopup()">{% trans "Set New Goal" %}</button>
             </div>
             <kendo-grid class="settingGrid" k-options="goalSettingGridOptions(dataItem)"></kendo-grid>
-            <div kendo-window="deleteGridRowWin" k-title="'Delete'"
+            <div kendo-window="deleteGridRowWin" k-title="'{% trans "Confirm Delete" %}'"
                  k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-width="340" k-height="130">
-              <div class="popupQuestion">{% trans "Are you sure you want to delete the item?" %}</div>
+              <div class="popupQuestion">{% trans "Are you sure you want to delete this goal?" %}</div>
               <div class="popupBtnGrp">
                 <button class="k-button normal-btn cancel" ng-click="deleteGridRowWin.close()">{% trans "Cancel" %}</button>
                 <button class="k-button normal-btn" ng-click="confirmDelete()">{% trans "Confirm" %}</button>
               </div>
             </div>
-            <div kendo-window="createGoalWin" k-title="'{% trans "Set New Goal" %}'" k-width="650" k-height="300" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false">
+            <div kendo-window="createGoalWin" k-title="'{% trans "Set New Goal" %}'" k-append-to="'#goalSettingsController'" k-width="650" k-height="300" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false" k-position="{top:'25%', left:'25%'}">
             <div class="popupRow">
-                <div class="leftLabel">Area:</div>
+                <div class="leftLabel">{% trans "Area" %}:</div>
                 <select kendo-drop-down-list="systemDropdown"
                     k-data-text-field="'fullname'"
                     k-data-value-field="'id'"
                     k-data-source="systemsDataSource"></select>
-                <input id="allAreaCheckbox" type="checkbox" ng-model="allAreaModel"/><label for="allAreaCheckbox"><div class="colorBox"></div><span class="leftPad10">All Area</span></label>
+                <input id="allAreaCheckbox" type="checkbox" ng-model="allAreaModel"/><label for="allAreaCheckbox"><div class="colorBox"></div><span class="leftPad10">{% trans "All Area" %}</span></label>
             </div>
             <div class="popupRow">
-                <div class="leftLabel">Time:</div>
-                <input value="1" type="radio" name="timeGroup" id="next12Radio" checked><label for="next12Radio">Next 12 months</label>
-                <input value="2" type="radio" name="timeGroup" id="monthRadio"><label for="monthRadio">Month</label>
-                <input value="3" type="radio" name="timeGroup" id="yearRadio"><label for="yearRadio">Year</label>
+                <div class="leftLabel">{% trans "Time" %}:</div>
+                <input ng-model="goal_type" value="0" type="radio" name="timeGroup" id="next12Radio" checked><label for="next12Radio">{% trans "Next 12 months" %}</label>
+                <input ng-model="goal_type" value="1" type="radio" name="timeGroup" id="monthRadio"><label for="monthRadio">{% trans "Month" context "setting" %}</label>
+                <input ng-model="goal_type" value="2" type="radio" name="timeGroup" id="yearRadio"><label for="yearRadio">{% trans "Year" context "setting" %}</label>
                 <span class="vLine"></span>
-                <input kendo-et-date-picker="datePicker" class="datepicker" k-options="validatedDateOptions"></input>
+                <input kendo-et-date-picker="datePicker" class="datepicker" k-options="validatedDateOptions" k-rebind="validatedDateOptions"></input>
             </div>
             <div class="popupRow">
-                <div class="leftLabel">Goal:</div>
-                <span>Use</span>
-                <input id="percentTextbox" class="k-textbox normal-tb w80"></input>
-                <span></span><span>% less than</span>
-                <select kendo-drop-down-list="dateDropdown">
-                    <option value="1">Previous Month</option>
-                    <option value="2">Last Year Same Month</option>
-                </select>
+                <div class="leftLabel">{% trans "Goal" %}:</div>
+                {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                    <span>比</span>
+                    <select kendo-drop-down-list="dateDropdown" k-options="goalCompareTypeDropdownOptions"></select>
+                    <span></span><span>少用</span>
+                    <input id="percentTextbox" class="k-textbox normal-tb w80"></input><span> %</span>
+                {% else %}
+                    <span>Use</span>
+                    <input id="percentTextbox" class="k-textbox normal-tb w80"></input>
+                    <span></span><span>% less than</span>
+                    <select kendo-drop-down-list="dateDropdown" k-options="goalCompareTypeDropdownOptions"></select>
+                {% endifequal %}
             </div>
             <div class="btnContainer">
                 <span id="errText"></span>
-                <button class="right k-button normal-btn cancel" ng-click="hidePopup()">Cancel</button>
-                <button class="right k-button normal-btn" ng-click="confirmAction()">Confirm</button>
+                <button class="right k-button normal-btn" ng-click="confirmAction()">{% trans "Confirm" %}</button>
+                <button class="right k-button normal-btn cancel" ng-click="hidePopup()">{% trans "Cancel" %}</button>
             </div>
           </div>
         </div>
@@ -106,6 +112,9 @@
  <script>
         angular.module("entrak", [ "kendo.directives" ])
             .controller("GoalSettingsController", function($scope) {
+                var langCode = '{{LANGUAGE_CODE}}';
+                kendo.culture(langCode.substring(0,3)+langCode.substring(3,5).toUpperCase());
+
                 $scope.showPopup = function(){
                     $("#errText").hide();
                     $scope.allAreaModel = false;
@@ -116,7 +125,7 @@
                     $('#next12Radio').prop("checked", true);
                     $scope.datePicker.enable(false);
 
-                    $scope.createGoalWin.center().open();
+                    $scope.createGoalWin.open();
                 }
 
                 $scope.hidePopup = function(){
@@ -128,31 +137,84 @@
                         $scope.systemDropdown.enable(!nVal);
                 });
 
+                $scope.firstLoaded = false;
+                $scope.$on("kendoRendered", function(e) {
+                    if ($scope.firstLoaded)
+                        return;
+                    $scope.firstLoaded = true;
+                    
+                    $scope.goal_type = 0;
+                    $scope.$watch('goal_type', function(n, o) {
+                        if (n==0 || n==1) {
+                            $scope.dateDropdown.dataSource =
+                                new kendo.data.DataSource({
+                                    data: [
+                                        {"value": 1, "text": "{% trans 'Previous Month' %}"},
+                                        {"value": 2, "text": "{% trans 'Same Month Last Year' %}"}
+                                    ]});
+                            $scope.dateDropdown.dataSource.read();
+                            $scope.dateDropdown.refresh();
+
+                            $scope.validatedDateOptions.select = 'month';
+                            $scope.validatedDateOptions.format = 'y';
+                        }
+                        else {
+                            $scope.dateDropdown.dataSource =
+                                new kendo.data.DataSource({
+                                    data: [
+                                        {"value": 3, "text": "{% trans 'Previous Year' %}"}
+                                    ]});
+                            $scope.dateDropdown.dataSource.read();
+                            $scope.dateDropdown.refresh();
+
+                            $scope.validatedDateOptions.select = 'year';
+                            $scope.validatedDateOptions.format = 'yyyy';
+                        }
+                    })
+                });
+
+
+
                 $('input[name="timeGroup"]').change(function(){
-                    $scope.datePicker.enable($('input[name="timeGroup"]:checked').val() != "1");
+                    $scope.datePicker.enable($('input[name="timeGroup"]:checked').val() != "0");
                 });
 
                 $scope.confirmAction = function(){
                     var area = $scope.systemDropdown.value();
-                    var date = $scope.datePicker.value();
+                    var date = $scope.datePicker.getSelectedStartDate();
                     var dateType = $('input[name="timeGroup"]:checked').val();
                     var percent = $("#percentTextbox").val().trim();
                     var compareTo = $scope.dateDropdown.value();
 
-                    if (percent.length > 0 && ((date && dateType!="1") || date) && compareTo){
+                    var validated_date = null;
+
+                    var validPercent = /^-?\d+\.?\d*$/.test(percent);
+                    if (!validPercent)
+                        return;
+
+                    if (dateType != 0) {
+                        validated_date = date.toISOString();
+                    }
+                    
+
+                    // if (percent.length > 0 && ((date && dateType!="1") || date) && compareTo){
+                    if (true) {
                         $("#errText").hide();
 
                         var json = {
                             "goal_type": dateType,
-                            "validated_date": date.toISOString(),
+                            "validated_date": validated_date,
                             "comparison_type": compareTo,
                             "system": area,
                             "goal_save_percent": percent,
-                            // "allArea": $scope.allAreaModel,  //TODO update all area
-                            "created_by": 1 //TODO user id
+                            "is_all_systems": $scope.allAreaModel
                         }
                         goalSettingsDataSource.add(json);
                         goalSettingsDataSource.sync();
+                        // refresh data source if create for 12 months
+                        if (dateType == 1) {
+                            goalSettingsDataSource.read();
+                        }
                         
                         $scope.createGoalWin.close();
                     } else {
@@ -168,7 +230,10 @@
                         },
                         create: {
                             url: "{% url 'companies.goal.settings.create' current_system.code %}",
-                            type: "POST"
+                            type: "POST",
+                            complete: function(e) {
+                                goalSettingsDataSource.read();
+                            }
                         },
                         update: {
                             url: function(item){
@@ -177,7 +242,10 @@
                                 url = url.replace(999, item.id);
                                 return url;
                             },
-                            type: "PUT"
+                            type: "PUT",
+                            complete: function(e) {
+                                goalSettingsDataSource.read();
+                            }
                         },
                         destroy: {
                             url: function(item){
@@ -229,23 +297,46 @@
                 }
 
                 function dateEditor(container, options) {
+                    if (options.model.goal_type == 2){
+                        $scope.validatedDateOptions.select = 'year';
+                        $scope.validatedDateOptions.format = 'yyyy';
+                    } else {
+                        $scope.validatedDateOptions.select = 'month';
+                        $scope.validatedDateOptions.format = 'y';//k-rebind="validatedDateOptions" 
+                    }
+
                     $('<input kendo-et-date-picker class="datepicker" k-options="validatedDateOptions" data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '"></input>').appendTo(container);
                 }
 
                 function comparisonEditor(container, options) {
+                    var ds;
+                    if (options.model.goal_type == 2){
+                        ds = [{"value": 3, "text": "{% trans 'Previous Year' %}"}];
+                    } else {
+                        ds = [
+                            {"value": 1, "text": "{% trans 'Previous Month' %}"},
+                            {"value": 2, "text": "{% trans 'Same Month Last Year' %}"}
+                        ];
+                    }
                     $('<input required data-value-field="value" data-text-field="text" data-bind="value:' + options.field + '"></input>')
                         .appendTo(container).kendoDropDownList({
                             autoBind: false,
-                            dataSource: [
-                                {"value": 1, "text": "Previous Month"},
-                                {"value": 2, "text": "Last Year Same Month"}
-                            ]  
+                            dataSource: ds
                         });
                 }
 
                 function textEditor(container, options) {
                     $('<input type="text" class="k-textbox normal-tb" data-bind="value:' + options.field + '"></input>').appendTo(container);
                 }
+
+                $scope.goalCompareTypeDropdownOptions = {
+                    dataValueField:"value",
+                    dataTextField:"text",
+                    dataSource: [
+                        {"value": 1, "text": "{% trans 'Previous Month' %}"},
+                        {"value": 2, "text": "{% trans 'Same Month Last Year' %}"}
+                    ]
+                };
 
                 $scope.goalSettingGridOptions = function(dataItem) {
                     return {
@@ -254,7 +345,7 @@
                         sortable: true,
                         columns: [
                             {
-                                field: "system", title: "Area",
+                                field: "system", title: "{% trans 'Area' %}",
                                 width: "300px",
                                 sortable: true,
                                 editor: systemDropDownEditor,
@@ -264,22 +355,29 @@
                                     })[0].fullname;
                                 }
                             }, {
-                                field: "validated_date", title: "Time",
+                                field: "validated_date", title: "{% trans 'Time' %}",
                                 sortable: true,
                                 editor: dateEditor,
                                 // format: "{0:yyyy-MM-dd HH:mm}", data-format="' + options.format + '"
                                 template: function(dataItem) {
-                                    return kendo.toString(new Date(dataItem.validated_date), "MMM yyyy");
+                                    if (dataItem.goal_type == 2)
+                                        return kendo.toString(new Date(dataItem.validated_date), "yyyy");
+                                    return kendo.toString(new Date(dataItem.validated_date), "y");
                                 }
                             }, {
-                                field: "comparison_type", title: "Comparison",
+                                field: "comparison_type", title: "{% trans 'Comparison' %}",
                                 sortable: true,
                                 editor: comparisonEditor,
                                 template: function(dateItem){
-                                    return dateItem.comparison_type == 1 ? "Previous Month" : "Last Year Same Month";
+                                    if (dateItem.comparison_type == 1){
+                                        return "{% trans 'Previous Month' %}";
+                                    } else if (dateItem.comparison_type == 2){
+                                        return "{% trans 'Same Month Last Year' %}";
+                                    }
+                                    return "{% trans 'Previous Year' %}";
                                 }
                             }, {
-                                field: "goal_save_percent", title: "Goal",
+                                field: "goal_save_percent", title: "{% trans 'Goal' %}",
                                 sortable: true,
                                 width: "100px",
                                 editor: textEditor,
@@ -291,13 +389,13 @@
                                 command: [{
                                     name: "edit",
                                     text: {
-                                        edit: "Edit",
-                                        update: "Confirm",
-                                        cancel: "Cancel"
+                                        edit: " ",
+                                        cancel: " ",
+                                        update: " "
                                     }
                                 }, {
                                     name: "mydestroy",
-                                    text: "Delete",
+                                    text: " ",
                                     click: function(e) {
                                         var tr = $(e.target).closest("tr"); 
                                         var data = this.dataItem(tr);
@@ -311,8 +409,8 @@
                                         $scope.deleteGridRowWin.center().open();
                                     }
                                 }],
-                                title: "Actions",
-                                width: "160px"
+                                title: "{% trans 'Actions' %}",
+                                width: "100px"
                             }
                         ]
                     }

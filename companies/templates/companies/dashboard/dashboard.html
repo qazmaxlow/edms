@@ -4,6 +4,7 @@
 {% load entrak_extras %}
 {% load static %}
 {% load humanize %}
+{% load compress %}
 
 {% block ga_page_title %}report{% endblock %}
 
@@ -11,22 +12,29 @@
 {{block.super}}
 {% get_current_language as LANGUAGE_CODE %}
 
+{% compress css %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
-
-<script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
-<script src="{% static 'js/csrf_ajax.js' %}"></script>
-<script src="{% static 'js/moment-with-locales.js' %}"></script>
-<script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
-<script src="{% static 'js/entrak-system.js' %}"></script>
-<script src="{% static 'js/entrak-utils.js' %}"></script>
-<script src="{% static 'js/report-generator.js' %}"></script>
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
 <link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/kendo.entrak.theme.css' %}" rel="stylesheet">
 
 <link href="{% static 'assets/kendoui/styles/kendo.dataviz.min.css' %}" rel="stylesheet">
-<link href="{% static 'assets/kendoui/styles/kendo.dataviz.default.min.css' %}" rel="stylesheet"
+<link href="{% static 'assets/kendoui/styles/kendo.dataviz.default.min.css' %}" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static 'css/dashboard/widgets.css' %}">
+{% endcompress %}
+
+<script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
+<script src="{% static 'js/moment-with-locales.js' %}"></script>
+<script src="{% static 'js/moment-timezone-with-data.min.js' %}"></script>
+
+{% compress js %}
+<script src="{% static 'js/csrf_ajax.js' %}"></script>
+<script src="{% static 'js/entrak-system.js' %}"></script>
+<script src="{% static 'js/entrak-utils.js' %}"></script>
+<script src="{% static 'js/report-generator.js' %}"></script>
+{% endcompress %}
+
 <!-- Because now using jquery v1.11 -->
 <!-- <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script> -->
 <!-- <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script> -->
@@ -34,9 +42,9 @@
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.en-US.js' %}"></script>
 
-<script type="text/javascript" charset="utf-8" src="/static/edges/dashboard/widgets/money/edge_includes/edge.5.0.1.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="{% static 'edges/dashboard/widgets/money/edge_includes/edge.5.0.1.min.js' %}"></script>
 
-<link rel="stylesheet" type="text/css" href="{% static 'css/dashboard/widgets.css' %}">
+
 <style>
     .edgeLoad-EDGE-18660633 { visibility:hidden; }
     .edgeLoad-EDGE-9220080 { visibility:hidden; }
@@ -64,28 +72,28 @@
         </div>
         <!--for drag and drop-->
         <div id="widgetContainer" style="display: none;" class="widget-icon" kendo-sortable="widgetContainer" k-options="iconSortableOpt">
-            <div class="col-md-8 col-xs-12 realTimeIcon" data-widgetId="4">
+            <div ng-class="{'col-md-8 col-xs-12' : !isFullscreen, 'col-xs-6' : isFullscreen}" class="realTimeIcon" data-widgetId="4">
                  {% include "companies/dashboard/widgets/_real_time.html" with widget_id=4  %}
             </div>
-            <div class="col-md-4 col-xs-6 tipsIcon" data-widgetId="3">
+            <div ng-class="{'col-md-4 col-xs-6' : !isFullscreen, 'col-xs-3' : isFullscreen}" class="tipsIcon" data-widgetId="3">
                 {% include "companies/dashboard/widgets/_tips.html" with widget_id=3 %}
             </div>
-            <div class="col-md-4 col-xs-6 biggestConsumerIcon" data-widgetId="1">
+            <div ng-class="{'col-md-4 col-xs-6' : !isFullscreen, 'col-xs-3' : isFullscreen}" class="biggestConsumerIcon" data-widgetId="1">
               {% include "companies/dashboard/widgets/_biggest_consumers.html" with widget_id=1 %}
             </div>
-            <div class="col-md-4 col-xs-6 soFarIcon" data-widgetId="2">
+            <div ng-class="{'col-md-4 col-xs-6' : !isFullscreen, 'col-xs-3' : isFullscreen}" class="soFarIcon" data-widgetId="2">
               {% include "companies/dashboard/widgets/_so_far.html" with widget_id=2 %}
             </div>
-            <div class="col-md-4 col-xs-6 lastWeekStatsIcon" data-widgetId="5">
+            <div ng-class="{'col-md-4 col-xs-6' : !isFullscreen, 'col-xs-3' : isFullscreen}" class="lastWeekStatsIcon" data-widgetId="5">
               {% include "companies/dashboard/widgets/_last_week_stats.html" with widget_id=5 %}
             </div>
-            <div class="col-md-4 col-xs-6 progressIcon" data-widgetId="6">
+            <div ng-class="{'col-md-4 col-xs-6' : !isFullscreen, 'col-xs-3' : isFullscreen}" class="progressIcon" data-widgetId="6">
               {% include "companies/dashboard/widgets/_progress.html" with widget_id=6 %}
             </div>
-            <div class="col-md-4 col-xs-6 cumulativeIcon" data-widgetId="7">
+            <div ng-class="{'col-md-4 col-xs-6' : !isFullscreen, 'col-xs-3' : isFullscreen}" class="cumulativeIcon" data-widgetId="7">
               {% include "companies/dashboard/widgets/_cumulative_savings.html" with widget_id=7 %}
             </div>
-            <div class="col-md-4 col-xs-6 goalTrackingIcon" data-widgetId="8">
+            <div ng-class="{'col-md-4 col-xs-6' : !isFullscreen, 'col-xs-3' : isFullscreen}" class="goalTrackingIcon" data-widgetId="8">
               {% include "companies/dashboard/widgets/_goal_tracking.html" with widget_id=8 %}
             </div>
         </div>
@@ -126,6 +134,12 @@
         }
     });
 
+    ngapp.filter('mapCurrency', function () {
+        return function(val) {
+            return val == "HK$" ? "HKD" : val;
+        }
+    });
+
     ngapp.filter('dateFmt', function () {
         return function(val, fmtStr) {
             if (!val){
@@ -139,8 +153,8 @@
 
     ngapp.filter('entrakNumber', function () {
         return function(val) {
-            if (isNaN(val)){
-                return "";
+            if (val == null || isNaN(val)){
+                return "N/A";
             } else if (val < 1) {
                 return kendo.toString(val, "#.##");
             } else if (val < 10 ) {
@@ -151,9 +165,36 @@
         }
     });
 
+    ngapp.filter('yearInChinese', function () {
+        return function(val) {
+            if (val == null){
+                return "";
+            } else {
+                val = kendo.toString(val, "y");
+                return val.substring(0,5);
+            }
+        }
+    });
+
+    ngapp.filter('yearInEnglish', function () {
+        return function(val) {
+            if (val == null){
+                return "";
+            } else {
+                return "year " + val.getFullYear();
+            }
+        }
+    });
+
     ngapp.controller("Dashboard", function($scope){
+        $scope.isFullscreen = false;
+
         //fullscren btn action
         $("#exit-fullscreen-btn").click(function(){
+            $scope.isFullscreen = false;
+            $(".cumulativeIcon").show();
+            $(".progressIcon").show();
+
             $("body").removeClass("fullscreen");
             //TODO uncomment it when drag and drop ready
             // $("#dashboardController .disableSort").removeClass("disableSort");
@@ -167,6 +208,9 @@
         });
         $("#fullscreen-btn").show();
         $scope.setFullscreenMode = function(){
+            $scope.isFullscreen = true;
+            $(".cumulativeIcon").hide();
+
             $("body").addClass("fullscreen");
             $("#dashboardContainer>div").addClass("disableSort");
             $scope.updateWidget();
@@ -248,11 +292,17 @@
                     }
                 }
             }
+
+            if ($scope.isFullscreen){
+                $(".cumulativeIcon").toggle();
+                $(".progressIcon").toggle();
+            }
         }
 
         //TODO load user saved layout from server
         //set timeout so that the widget can be initialized first
-        var userLayout = [1, 2, 3, 4, 5];
+        var userLayout = [4,2,5,1,8,7,6,3];
+
         setTimeout(function(){
             for (var i=0; i<userLayout.length; i++){
                 $("#dashboardContainer").append($("#widgetContainer div[data-widgetId='" + userLayout[i] + "']").detach());
@@ -275,7 +325,7 @@
 
         $scope.dashboardSortableOpt = {
             // cursor: "url('/static/images/dashboard/grabbing.cur'), default",
-            connectWith: "#widgetContainer",    
+            connectWith: "#widgetContainer",
             handler: ".widget-header *:not(.k-dropdown *, button)",
             disabled: ".disableSort",
             end: function(e){
@@ -313,7 +363,7 @@
 
     ngapp.controller("WidgetRealtime", function($scope) {
         $scope.title = '{% trans "Real-Time" %}';
-        $scope.btnLeft = '{% trans "Graph" %}';
+        $scope.btnLeft = '{% trans "Graph" context "dashboard" %}';
         $scope.btnRight = '{% trans "Rates" %}';
         $scope.usedSoFar = '{% trans "So far today you have used: " %}';
         $scope.yourRate = '{% trans "Your current rate of energy use." %}';
@@ -567,7 +617,7 @@
                     $scope.total_cost = data[0].cost;
                 });
             });
-        }   
+        }
 
         $scope.updateRates = function () {
             var date_end = new Date();
@@ -1157,206 +1207,187 @@
     });
 
     ngapp.controller("WidgetProgress", function($scope){
-        $scope.isPast12Month = "1";
-        $scope.percent = 14;
-        $scope.lastYear = 2014;
-
-        $scope.isIncrease = $scope.percent > 0;
-        $scope.percent = Math.abs($scope.percent);
-
         $scope.title = '{% trans "Progress" %}';
-        $scope.p12BtnText = '{% trans "Past 12 months" %}';
-        $scope.thisYrBtnText = '{% trans "So far this year" %}';
+
         $scope.p12DescLine1Text = '{% trans "Over the past 12 months" %}';
-        $scope.thisYrDescLine1Text = '{% trans "So far this year" %}';
         $scope.increaseLine2Text = '{% trans "you have increased your energy use" %}';
         $scope.decreaseLine2Text = '{% trans "you have decreased your energy use" %}';
-        $scope.fromBaselineText = '{% trans "from your baseline of" %}';
-        $scope.comparedToText = '{% trans "compared to " %}' + $scope.lastYear;
-        $scope.yearRangeText = $scope.lastYear + ' - ' + ($scope.lastYear + 1);
 
-        function getSoFarThisYearData() {
-            var progress_ds = new kendo.data.DataSource({
-                transport: {
-                    read: {
-                        async: false,
-                        url: "{% url 'companies.progesses.so-far-this-year' current_system.code %}",
-                        type: 'GET',
-                        dataType: "json"
-                    }
-                },
-                schema: {
-                    // Fix for single result
-                    data: function(response) {
-                        return [response];
-                    }
+
+        var progress_ds = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    //url: "{% url 'companies.progesses.so-far-this-year' current_system.code %}",
+                    url: "{% url 'companies.progesses.compare-to-baseline' current_system.code %}",
+                    type: 'GET',
+                    dataType: "json"
                 }
-            });
-
-            progress_ds.read();
-            var progress = progress_ds.data()[0];
-            return progress;
-        }
-
-        function getComparedToBaselineData() {
-            var progress_ds = new kendo.data.DataSource({
-                transport: {
-                    read: {
-                        async: false,
-                        url: "{% url 'companies.progesses.compare-to-baseline' current_system.code %}",
-                        type: 'GET',
-                        dataType: "json"
-                    }
-                },
-                schema: {
-                    // Fix for single result
-                    data: function(response) {
-                        return [response];
-                    }
+            },
+            schema: {
+                // Fix for single result
+                data: function(response) {
+                    return [response];
                 }
-            });
+            },
+            change: function(data){
+                if (data.items && data.items[0]){
+                    var d = data.items[0];
+                    if (d.noBaseline){
+                        $scope.comparedPercent = 0;
+                        $scope.fromBaselineText = '{% trans "from your baseline" %}';
+                        $scope.yearRangeText = "";
+                        $scope.chineseFromBaselineText = "";
+                    } else {
+                        $scope.comparedPercent = d.comparedPercent || 0;
+                        $scope.yearRangeText = d.baselineYear + " - " + (d.baselineYear+1);
+                        $scope.fromBaselineText = '{% trans "from your baseline of" %}';
+                        $scope.chineseFromBaselineText = "年的基準用量";
+                    }
+                    $scope.isIncrease = $scope.comparedPercent > 0;
 
-            progress_ds.read();
-            var progress = progress_ds.data()[0];
-            return progress;
-        }
-
-        $scope.changeProgressOption = function(e) {
-            if ($scope.progressDropdown.value() == 'pass12Months' ) {
-                progress = getComparedToBaselineData();
+                }
             }
-            else if ($scope.progressDropdown.value() == 'soFarThisYear' ) {
-                progress = getSoFarThisYearData();
-            }
+        });
 
-            $scope.progress = progress;
-        };
+        progress_ds.read();
 
-        $scope.progress = getSoFarThisYearData();
     });
 
     ngapp.controller("WidgetCumulative", function($scope){
-        $scope.isPast12Month = "1";
-        $scope.sinceDate = new Date();
-        $scope.baselineYear = "2014 - 15";
-        $scope.currencyUnit = "HKD";
-        $scope.savedAmt = 2345;
-        $scope.co2Amt = 3;
-        $scope.isSaved = false;
-
-        $scope.title = '{% trans "Cumulative Savings" %}';
-        $scope.p12BtnText = '{% trans "Past 12 months" %}';
-        $scope.thisYrBtnText = '{% trans "So far this year" %}';
-        $scope.p12HeaderText = '{% trans "Since " %}' + kendo.toString($scope.sinceDate, "D") + '{% trans " you have" %}';
-        $scope.thisYrHeaderText = '{% trans "So far this year you have" %}';
-        $scope.footerText = '{% trans "Compared with your baseline year of " %}' + $scope.baselineYear;
-        $scope.savedText1 = $scope.isSaved ? '{% trans "Saved" %}' : '{% trans "Increased" %}';
-        $scope.savedText2 = '{% trans "on energy costs" %}';
-        $scope.reducedText1 = $scope.isSaved ? '{% trans "Reduced" %}' : '{% trans "Increased" %}';
+        
+        $scope.title = '{% trans "Cumulative Savings" context "dashboard" %}';
+        $scope.headerText = '{% trans "Since you started En-trak, you have" %}';
+        $scope.costChangedDescText2 = '{% trans "in energy costs" context "dashboard" %}';
         $scope.tons = '{% trans "Tons" %}';
 
-        // $scope.toggle = function(){
-        //     $scope.isPast12Month = !$scope.isPast12Month;
-        // }
-
-        function getComparedWithBaselineData() {
-            var saving_ds = new kendo.data.DataSource({
-                transport: {
-                    read: {
-                        async: false,
-                        url: "{% url 'companies.savings.compare-to-baseline' current_system.code %}",
-                        type: 'GET',
-                        dataType: "json"
-                    }
-                },
-                schema: {
-                    // Fix for single result
-                    data: function(response) {
-                        return [response];
-                    }
+        $scope.saving = {};
+        var saving_ds = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    //url: "{% url 'companies.savings.compare-to-baseline' current_system.code %}",
+                    url: "{% url 'companies.savings.compare-to-baseline' current_system.code %}",
+                    type: 'GET',
+                    dataType: "json"
                 }
-            });
-            saving_ds.read();
-            var saving = saving_ds.data()[0];
-            saving.costChangedDescText = saving.totalCostChanged > 0 ? '{% trans "Lost" %}' : '{% trans "Saved" %}';
-            saving.co2ChangedDescText = saving.co2Changed > 0 ? '{% trans "Increased" %}' : '{% trans "Reduced" %}';
-
-            return saving;
-        }
-
-        function getPast12MonthData() {
-            var saving_ds = new kendo.data.DataSource({
-                transport: {
-                    read: {
-                        async: false,
-                        url: "{% url 'companies.savings.so-far-this-year' current_system.code %}",
-                        type: 'GET',
-                        dataType: "json"
-                    }
-                },
-                schema: {
-                    // Fix for single result
-                    data: function(response) {
-                        return [response];
-                    }
+            },
+            schema: {
+                // Fix for single result
+                data: function(response) {
+                    return [response];
                 }
-            });
-
-            saving_ds.read();
-            var saving = saving_ds.data()[0];
-            saving.costChangedDescText = saving.totalCostChanged > 0 ? '{% trans "Lost" %}' : '{% trans "Saved" %}';
-            saving.co2ChangedDescText = saving.co2Changed > 0 ? '{% trans "Increased" %}' : '{% trans "Reduced" %}';
-
-            return saving;
-        }
-
-        $scope.changeCumulativeOption = function(e) {
-            var saving;
-            if ($scope.cumulativeDropdown.value() == 'sinceUsingEntrak' ) {
-                saving = getComparedWithBaselineData();
+            },
+            change: function(data) {
+                $scope.$apply(function(){
+                    if (data.items && data.items[0]){
+                        var d = data.items[0];
+                        if (d.noBaseline){
+                            $scope.saving.costChanged = 0;
+                            $scope.saving.co2Changed = 0;
+                            $scope.saving.currencyUnit = '{{current_system.money_unit.name}}';
+                            $scope.footerText = '{% trans "Compared with your baseline year" %}';
+                        } else {
+                            $scope.saving.costChanged = d.costChanged || 0;
+                            $scope.saving.co2Changed = d.co2Changed || 0;
+                            $scope.saving.currencyUnit = '{{current_system.money_unit.name}}';
+                            var baselineYear = d.baselineYear + " - " + (d.baselineYear+1);
+                            $scope.footerText = '{% trans "Compared with your baseline year of " %}' + baselineYear;
+                        }
+                        $scope.isSaved = $scope.saving.costChanged >= 0;
+                        $scope.saving.costChangedDescText = $scope.isSaved ? '{% trans "Increased" context "progressCost" %}' : '{% trans "Saved" %}';
+                        $scope.saving.co2ChangedDescText = $scope.isSaved ? '{% trans "Increased" context "progressCO2" %}' : '{% trans "Reduced" %}';
+                    }
+                });
             }
-            else if ($scope.cumulativeDropdown.value() == 'soFarThisYear' ) {
-                saving = getPast12MonthData();
-            }
+        });
+        saving_ds.read();
 
-            // saving.costChanged = 0;
-            $scope.saving = saving;
-        }
-
-
-        var saving = getPast12MonthData();
-        $scope.saving = saving;
     });
 
-    ngapp.controller("WidgetGoalTracking", function($scope){
-        $scope.selectedGoal = "0";
-        $scope.changeGoal = function(){
-            console.log($scope.selectedGoal);
+    ngapp.controller("WidgetGoalTracking", function($scope, $http){
+        var langCode = '{{LANGUAGE_CODE}}';
+        kendo.culture(langCode.substring(0,3)+langCode.substring(3,5).toUpperCase());
 
-            $scope.compareDate = new Date();
-            $scope.fromDate = new Date();
-            $scope.toDate = new Date();
-            $scope.goalPercent = 10;
-            $scope.soFarPercent = 14;
-            $scope.todoPercent = 6;
-            $scope.isIncrease = true;
-            $scope.reducedText = $scope.isIncrease ? '{% trans "increased" %}' : '{% trans "reduced" %}';
+        $scope.goals = {};
+        $scope.selectedGoal = null;
+
+        function changeGoal(){
+            var data = $scope.goals[$scope.selectedGoal];
+            if (data){
+                $scope.goalPercent = data.goal_percent;
+                $scope.soFarPercent = data.compare_percent;
+                $scope.isIncrease = $scope.soFarPercent > 0;
+                $scope.soFarPercent = Math.abs($scope.soFarPercent);
+                $scope.compareDate = new Date(data.compare_date);
+                $scope.targetDate = new Date(data.target_date);
+
+                // if ($scope.selectedGoal == 'last-year' || $scope.selectedGoal == 'this-year'){
+                //     $scope.targetDate = new Date(data.target_date);
+                //     $scope.targetDate = "year " + $scope.targetDate.getFullYear();
+                //     $scope.compareDate = new Date(data.compareDate);
+                //     $scope.compareDate = "year " + $scope.compareDate.getFullYear();
+                // } else {
+                //     $scope.targetDate = kendo.toString(new Date(data.target_date), "y");
+                //     $scope.compareDate = kendo.toString(new Date(data.compare_date), "y");
+                // }
+            }
         }
-        $scope.changeGoal();
+
+        $scope.$watch("selectedGoal", function(nVal, oVal){
+            changeGoal();
+        });
+
+        $scope.dropdownItem = [];
+        $scope.isEmpty = true;
+        var goalListDS = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    //url: "{% url 'companies.savings.compare-to-baseline' current_system.code %}",
+                    url: "{% url 'companies.goal.tracking' current_system.code %}",
+                    type: 'GET',
+                    dataType: "json"
+                }
+            },
+            change: function(data) {
+                if (data.items.length){
+                    $scope.isEmpty = false;
+                    for (var i=0; i<data.items.length; i++){
+                        $scope.goals[data.items[i].type] = data.items[i].info;
+                        $scope.dropdownItem.push({'text': $scope.dropdownText[data.items[i].type], 'value': data.items[i].type});
+                    }
+                    $scope.$apply(function(){
+                        $scope.selectedGoal = data.items[0].type;
+                    });
+                } else {
+                    $scope.isEmpty = true;
+                }
+            }
+        });
+        goalListDS.read();
+
+        $scope.dropdownOpt = {
+          dataTextField: "text",
+          dataValueField: "value",
+          dataSource: $scope.dropdownItem
+        }
 
         $scope.title = '{% trans "Goal Tracking" %}';
-        $scope.p12BtnText = '{% trans "Past 12 months" %}';
-        $scope.btnText = '{% trans "Goal-1" %}';
-        $scope.descPart1Text = '{% trans "Reduce energy use in " %}';
-        $scope.descPart2Text = '{% trans "by " %}';
-        $scope.descPart3Text = '{% trans " compared to " %}';
-        $scope.secondRowPart1Text = '{% trans "So far you have " %}';
-        $scope.secondRowPart2Text = '{% trans "your energy use by" %}';
-        $scope.thirdRowPart1Text = '{% trans "To meet your goal, you need to use" %}';
-        $scope.thirdRowPart2Text = '{% trans "% less" %}';
-        $scope.thirdRowPart3Text = '{% trans "from " %}';
-        $scope.thirdRowPart4Text = '{% trans " to " %}';
 
+        $scope.descPart1Text = '{% trans "I want to reduce my" %}';
+        $scope.descPart2Text = '{% trans "energy use in " %}';
+        $scope.descPart3Text = '{% trans " by" %}';
+        $scope.descPart4Text = '{% trans " compared to " %}';
+
+        $scope.secondRowText = '{% trans "So far, you are saving at the rate of" %}';
+        $scope.secondRowPastText = '{% trans "You achieved savings of" %}';
+
+        $scope.createGoalText = '{% trans "You have not set any energy goals" %}';
+        $scope.createGoalBtnText = '{% trans "Click here to set" %}';
+
+        $scope.dropdownText = {};
+        $scope.dropdownText['this-month'] = '{% trans "This Month" %}';
+        $scope.dropdownText['this-year'] = '{% trans "This Year" %}';
+        $scope.dropdownText['last-month'] = '{% trans "Last Month" %}';
+        $scope.dropdownText['last-year'] = '{% trans "Last Year" %}';
     });
 
 </script>

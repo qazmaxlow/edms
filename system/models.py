@@ -21,13 +21,13 @@ from holiday.models import CityHoliday, Holiday
 from unit.models import UnitRate, UnitCategory, CO2_CATEGORY_CODE, MONEY_CATEGORY_CODE
 from meters.models import Electricity, HourDetail
 
-from system.constants import CITY_ALL
-from system.constants import CORPORATE
-from system.constants import EDUCATION
-from system.constants import COMPANY_TYPES
-from system.constants import DEFAULT_NIGHT_TIME_END
-from system.constants import DEFAULT_NIGHT_TIME_START
-from system.constants import SOURCE_TZ_HK
+from system.system_constants import CITY_ALL
+from system.system_constants import CORPORATE
+from system.system_constants import EDUCATION
+from system.system_constants import COMPANY_TYPES
+from system.system_constants import DEFAULT_NIGHT_TIME_END
+from system.system_constants import DEFAULT_NIGHT_TIME_START
+from system.system_constants import SOURCE_TZ_HK
 
 
 UNIT_IMG_DIR = os.path.join(BASE_DIR, 'entrak', 'static', 'images', 'unit')
@@ -1202,16 +1202,16 @@ class SystemEnergyGoal(models.Model):
     system = models.ForeignKey('system.System')
     goal_type = models.IntegerField(
         choices=(
-            (1, 'Next 12 months'),
-            (2, 'Month'),
-            (3, 'Year'),
+            (1, 'Month'),
+            (2, 'Year'),
         )
     )
     validated_date = models.DateTimeField()
     comparison_type = models.IntegerField(
         choices=(
             (1, 'Previous Month'),
-            (2, 'Last Year Same Month'),
+            (2, 'Same Month Last Year'),
+            (3, 'Previous Year')
         )
     )
     goal_save_percent = models.FloatField()

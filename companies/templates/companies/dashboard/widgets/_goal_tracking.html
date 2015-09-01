@@ -3,17 +3,13 @@
 {% load static %}
 {% load humanize %}
 
-{% verbatim %}
 <div class="widget-container goal-widget" ng-controller="WidgetGoalTracking">
+    {% verbatim %}
     <div class="widget-header row">
         <div class="widget-title col-xs-6">{{title}}</div>
         <div class="widget-toggle col-xs-6">
             <div class="pull-right">
-                <select kendo-drop-down-list="goalDropdown" ng-model="selectedGoal" k-on-change="changeGoal()">
-                    <option value="0">This Month</option>
-                    <option value="1">Last Month</option>
-                    <option value="2">This Year</option>
-                    <option value="3">Last Year</option>
+                <select kendo-drop-down-list="goalDropdown" ng-model="selectedGoal" k-options="dropdownOpt">
                 </select>
                 <!-- <div class="long-text-toggle" ng-click="toggle()">
                     <span class="button-left">{{ btnText }}</span><span class="button-right"></span>
@@ -21,35 +17,52 @@
             </div>
         </div>
     </div>
-    
-    <div class="widget-content row">
+    {% endverbatim %}
+    <div ng-show="isEmpty" class="widget-content row">
+        <div class="empty-top-row h-center">
+            <div><img src="/static/images/dashboard/goal-tracking.png"/></div>
+        </div>
+        <div class="h-center description-1" ng-bind="createGoalText"></div>
+        <div class="h-center">
+            <a class="k-button" ng-bind="createGoalBtnText" href="{% url 'systems.goals.settings' system_code=systems.0.code %}"></a>
+        </div>
+    </div>
+    <div ng-show="!isEmpty" class="widget-content row">
         <div class="top-row">
-            <span>{{descPart1Text}}</span><br>
-            <span class="bold">{{fromDate | dateFmt:'y'}}</span><br>
-            <span>{{descPart2Text}}</span><span class="bold">{{goalPercent}}%</span><span>{{descPart3Text}}</span><br>
-            <span class="bold">{{compareDate | dateFmt:'y'}}</span>
-        </div>
-        <div class="second-row">
-            <div class="arrow-icon" ng-class="{up : isIncrease}"></div>
-            <div class="right-text">
-                <span>{{secondRowPart1Text}}</span><span ng-class="{'red-text' : isIncrease, 'green-text' : !isIncrease}">{{reducedText}}</span><br>
-                <span>{{secondRowPart2Text}}</span>
-                <div class="percent" ng-class="{'red-text' : isIncrease, 'green-text' : !isIncrease}">
-                    <span class="percentNum">{{soFarPercent}}</span><span class="percentSign">%</span>
-                </div>
-            </div>
-        </div>
-        <div class="third-row">
-            <div class="goal-icon"></div>
-            <div class="right-text">
-                <span>{{thirdRowPart1Text}}</span>
-                <div class="percent">
-                    <span class="percentNum">{{todoPercent}}</span><span class="percentSign">{{thirdRowPart2Text}}</span>
-                </div>
-                <span>{{thirdRowPart3Text}}</span><span class="bold">{{fromDate | dateFmt:'D'}}</span><span>{{thirdRowPart4Text}}</span><span class="bold">{{toDate | dateFmt:'D'}}</span>
-            </div>
-        </div>
+            {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                <span ng-bind="descPart1Text"></span>
+                <span ng-show="selectedGoal == 'this-month' || selectedGoal == 'last-month'" ng-bind="targetDate | dateFmt:'y'"></span>
+                 <span ng-show="selectedGoal == 'this-year' || selectedGoal == 'last-year'" ng-bind="targetDate | yearInChinese"></span><br>
+                <span ng-bind="descPart2Text"></span>
+            {% else %}
+                <span ng-bind="descPart1Text"></span><br>
+                <span ng-bind="descPart2Text"></span>
+                <span ng-show="selectedGoal == 'this-month' || selectedGoal == 'last-month'" ng-bind="targetDate | dateFmt:'y'"></span>
+                <span ng-show="selectedGoal == 'this-year' || selectedGoal == 'last-year'" ng-bind="targetDate | yearInEnglish"></span>
+            {% endifequal %}
 
+            <span ng-bind="descPart3Text"></span><br>
+            <span class="bold description-5" ng-bind="goalPercent | entrakNumber"></span>
+            <span class="description-4">%</span><br>
+            <span ng-bind="descPart4Text"></span>
+            <span ng-show="selectedGoal == 'this-month' || selectedGoal == 'last-month'" ng-bind="compareDate | dateFmt:'y'"></span>
+            {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                <span ng-show="selectedGoal == 'this-year' || selectedGoal == 'last-year'" ng-bind="compareDate | yearInChinese"></span>
+            {% else %}
+                <span ng-show="selectedGoal == 'this-year' || selectedGoal == 'last-year'" ng-bind="compareDate | yearInEnglish"></span>
+            {% endifequal %}
+            <div class="separator"></div>
+        </div>
+        {% verbatim %}
+        <div class="bottom-row" ng-class="{up : isIncrease}">
+            <span ng-show="selectedGoal == 'this-month' || selectedGoal == 'this-year'" class="bottom-space">{{secondRowText}}</span>
+            <span ng-show="selectedGoal == 'last-month' || selectedGoal == 'last-year'" class="bottom-space">{{secondRowPastText}}</span>
+            <br>
+            <div class="arrow-icon" ng-class="{up : isIncrease}"></div>
+            <div class="percent" ng-class="{'red-text' : isIncrease, 'green-text' : !isIncrease}">
+                <span class="percentNum">{{soFarPercent | entrakNumber}}</span><span class="percentSign">%</span>
+            </div>
+        </div>
+        {% endverbatim %}
     </div>
 </div>
-{% endverbatim %}

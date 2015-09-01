@@ -3,16 +3,23 @@
 {% load i18n %}
 {% load static %}
 {% load entrak_extras %}
+{% load compress %}
 
 {% block extra_head %}
 {{block.super}}
 
+
+{% compress css %}
 <link rel="shortcut icon" href="{% static 'images/entrak-favicon.png' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
-<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="{% static 'css/smoothness.jquery-ui.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'js/superfish-master/dist/css/superfish.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'js/superfish-master/dist/css/superfish-vertical.css' %}">
+<link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/kendo.entrak.theme.css' %}" rel="stylesheet">
+{% endcompress %}
 
+{% compress js %}
 <script src="{% static 'assets/jquery/jquery-1.11.0.min.js' %}"></script>
 <script src="{% static 'assets/jquery/jquery-ui.js' %}"></script>
 <script src="{% static 'js/arboreal-customized.js' %}"></script>
@@ -22,10 +29,9 @@
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
 <script src="{% static 'js/csrf_ajax.js' %}"></script>
 
-<link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
-<link href="{% static 'css/kendo.entrak.theme.css' %}" rel="stylesheet">
 <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
 <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
+{% endcompress %}
 
 <!-- copied from bootstrap -->
 <style>
@@ -186,7 +192,7 @@ function readMeesage(id) {
             <ul id="menu-links">
                 {% if user_systems.0.code == 'nea-nwro-3f' or user_systems.0.code == 'fujixerox' or user_systems.0.code == 'dbs-posb' or user_systems.0.code == 'twghscgms' or user_systems.0.code == 'ylcss' or user_systems.0.code == 'sbcps' or user_systems.0.code == 'kcmc' or user_systems.0.code == 'belle' or user_systems.0.code == 'bossini' or user_systems.0.code == 'searshk' or user_systems.0.code == 'esf' or user_systems.0.code == 'amorepacific' or user_systems.0.code == 'fxsg' or user_systems.0.code == 'soka' %}
                 <li id="menu-link-dashboard">
-                    <a href="{% url 'companies.dashboard' system_code=systems.0.code %}"><img width="26" height="22" src="{% static 'images/home-icon.png' %}"><span>{% trans "Home" %}</span></a>
+                    <a href="{% url 'companies.dashboard' system_code=systems.0.code %}"><img width="26" height="22" src="{% static 'images/home-icon.png' %}"><span>{% trans "Dashboard" %}</span></a>
                 </li>
                 {% endif %}
                 <li id="menu-link-graph">
@@ -195,10 +201,10 @@ function readMeesage(id) {
                 <li id="menu-link-ranking">
                     <a href="{% url 'ranking' system_code=systems.0.code %}"><img width="26" height="23" src="{% static 'images/ranking-icon.png' %}"><span>{% trans "Ranking" %}</span></a>
                 </li>
-                {% if user_systems.0.code != 'nea-nwro-3f' and user_systems.0.code != 'dbs-posb' and user_systems.0.code != 'belle' and user_systems.0.code != 'bossini' and user_systems.0.code != 'amorepacific' and user_systems.0.code != 'fxsg' %}
-                <li id="menu-link-progress">
+                {% if 'nea-nwro-3f' != systems.0.code and 'dbs-posb' != systems.0.code and 'belle' not in systems.0.code and 'bossini' != systems.0.code  %}
+<!--                 <li id="menu-link-progress">
                     <a href="{% url 'progress' system_code=systems.0.code %}"><img width="26" height="23" src="{% static 'images/progress-icon.png' %}"><span>{% trans "Progress" %}</span></a>
-                </li>
+                </li> -->
                 {% endif %}
                 {% if 'esf' == user_systems.0.code %}
                 <li id="menu-link-report">
@@ -209,10 +215,10 @@ function readMeesage(id) {
                     <a href="{% url 'companies.report' system_code=systems.0.code %}"><img width="26" height="24" src="{% static 'images/reports-icon.png' %}"><span>{% trans "Reports" %}</span></a>
                 </li>
                 {% endif %}
-                {% if user_systems.0.code != 'nea-nwro-3f' and user_systems.0.code != 'dbs-posb' and user_systems.0.code != 'belle' and user_systems.0.code != 'bossini' and user_systems.0.code != 'searshk' and user_systems.0.code != 'esf' and user_systems.0.code != 'amorepacific' and user_systems.0.code != 'fxsg' and user_systems.0.code != 'soka' %}
-                <li id="menu-link-display">
+                {% if 'nea-nwro-3f' != systems.0.code and 'dbs-posb' != systems.0.code and 'belle' not in systems.0.code and 'bossini' != systems.0.code and 'searshk' not in systems.0.code %}
+<!--                 <li id="menu-link-display">
                     <a href="{% url 'display' system_code=systems.0.code %}" target="_blank"><img width="26" height="22" src="{% static 'images/display-icon.png' %}"><span>{% trans "Display" %}</span></a>
-                </li>
+                </li> -->
                 {% endif %}
 
                 <li id="menu-link-export">
