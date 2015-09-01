@@ -1198,9 +1198,8 @@ class SystemEnergyGoal(models.Model):
     system = models.ForeignKey('system.System')
     goal_type = models.IntegerField(
         choices=(
-            (1, 'Next 12 months'),
-            (2, 'Month'),
-            (3, 'Year'),
+            (1, 'Month'),
+            (2, 'Year'),
         )
     )
     validated_date = models.DateTimeField()
