@@ -19,6 +19,7 @@ from django.utils.dateformat import DateFormat
 
 from wkhtmltopdf.views import PDFTemplateResponse
 
+from baseline.models import BaselineUsage
 from egauge.manager import SourceManager
 from egauge.models import SourceReadingYear, SourceReadingMonth, SourceReadingDay, SourceReadingHour, SourceReadingMin, Source
 from system.models import System
@@ -535,6 +536,37 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         # beginning of section 1a summary stats
         current_usage = system.total_usage(start_date, end_date)
         last_year_usage = system.total_usage(start_date - relativedelta(years=1), end_date - relativedelta(years=1))
+        system_and_childs = System.get_systems_within_root(system.code)
+        system_timezone = pytz.timezone(system.timezone)
+
+        grouped_baselines = BaselineUsage.get_baselines_for_systems([s.id for s in system_and_childs])
+
+        for s in system_and_childs:
+            missing_daily_usages = s.first_record - (start_date - relativedelta(years=1))
+
+            if missing_daily_usages.days > 0:
+                if missing_daily_usages.days > (end_date - start_date).days:
+                    missing_start_dt = start_date - relativedelta(years=1)
+                    missing_end_dt = end_date - relativedelta(years=1)
+                else:
+                    missing_start_dt = start_date - relativedelta(years=1)
+                    missing_end_dt = s.first_record
+
+                baselines = grouped_baselines[s.id]
+                baseline_daily_usages = BaselineUsage.transform_to_daily_usages(baselines, system_timezone)
+
+                kwh = calculation.calculate_total_baseline_energy_usage(
+                            missing_start_dt.astimezone(system_timezone),
+                            missing_end_dt.astimezone(system_timezone),
+                            baseline_daily_usages
+                        )
+
+                if kwh > 0:
+                    money_rate = system.get_unit_rate(missing_end_dt, MONEY_CATEGORY_CODE)
+                    co2_rate = system.get_unit_rate(missing_end_dt, CO2_CATEGORY_CODE)
+                    last_year_usage['totalKwh'] += kwh
+                    last_year_usage['totalMoney'] += kwh*money_rate.rate
+                    last_year_usage['totalCo2'] += kwh*co2_rate.rate
 
         m['s1_total_money'] = current_usage['totalMoney']
         m['s1_total_kwh'] = current_usage['totalKwh']
@@ -627,7 +659,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
                 'total_money': current_money,
                 'diff_kwh': change_in_kwh,
                 'diff_money': change_in_money,
-                'percent_base_on_max': None,
+                'percent_base_on_max': 0,
                 'color': TYPE_COLORS[ix % len(TYPE_COLORS)],
             }
 

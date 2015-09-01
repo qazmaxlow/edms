@@ -189,6 +189,7 @@ FORMAT_MODULE_PATH = 'entrak.formats'
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'user.EntrakUser'
+LOGIN_URL = '/login'
 
 # Grappelli
 GRAPPELLI_ADMIN_TITLE = 'En-trak CMS'

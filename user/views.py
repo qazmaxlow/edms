@@ -216,6 +216,7 @@ def reset_password(request, user_id):
         request.session['login_warning_msg'] = _("Invalid request")
         return redirect('/login')
 
+
 class CreateIndividualUserView(generics.CreateAPIView):
 
     serializer_class = UserSerializer
@@ -335,6 +336,8 @@ class UpdateUserView(generics.UpdateAPIView):
 class SendPasswordResetEmailView(generics.CreateAPIView):
 
     serializer_class = UserSerializer
+    authentication_classes = ()
+
 
     def post(self, request, format=None):
 
@@ -345,7 +348,7 @@ class SendPasswordResetEmailView(generics.CreateAPIView):
             raise ParseError('Invalid request')
 
         try:
-            u = EntrakUser.objects.get(email=data['email'], is_personal_account=True)
+            u = EntrakUser.objects.get(email=data['email'].strip(), is_personal_account=True)
             u.send_password_reset_email()
         except ObjectDoesNotExist as e:
             raise serializers.ValidationError(_("This email is not linked to any existing account."))

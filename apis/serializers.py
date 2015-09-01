@@ -33,7 +33,7 @@ class AlertHistorySerializer(serializers.ModelSerializer):
     source_name = serializers.DictField(source='alert.source_name')
     start_time = serializers.TimeField(source='alert.start_time')
     end_time = serializers.TimeField(source='alert.end_time')
-    check_date = serializers.DateField(source='alert.create_date')
+    check_date = serializers.DateField(source='create_date')
 
     class Meta:
         model = AlertHistory

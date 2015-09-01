@@ -1,13 +1,22 @@
 from __future__ import absolute_import
 
-import pytz
-import datetime
 import celery
+import csv
+import datetime
+import pytz
+import urllib
+
 from celery import shared_task
 from dateutil.relativedelta import relativedelta
-from .models import Source, SourceReadingMinInvalid
+from egauge.manager import SourceManager
+from egauge.models import Source
+from egauge.models import SourceReadingMin
+from egauge.models import SourceReadingMinInvalid
+from ftplib import FTP
 from meters.models import Electricity
-from .manager import SourceManager
+from StringIO import StringIO
+from system.models import System
+
 
 @shared_task(ignore_result=True)
 def retrieve_all_reading():
@@ -81,7 +90,7 @@ def auto_recap(hours=6):
         sources_without_members = []
         sources_with_members = []
 
-        sources = Source.objects(id__in=source_ids)
+        sources = Source.objects(id__in=source_ids, active=True, xml_url__ne='')
         for source in sources:
             if source.source_members:
                 sources_with_members.append(source)
@@ -89,21 +98,17 @@ def auto_recap(hours=6):
                 sources_without_members.append(source)
 
         if sources_with_members:
-            force_retrieve_source_with_members_hour_reading.delay(sources_with_members, start_dt, 0)
+            for s in sources_with_members:
+                print("Force download job /w members added to source %s for system %s for time %s"%(s.name, s.system_code, start_dt.strftime('%Y-%m-%d %H:%M:%S')))
+            force_retrieve_source_with_members_hour_reading.apply_async(args=[sources_with_members, start_dt, 0])
 
         if sources_without_members:
+            for s in sources_without_members:
+                print("Force download job /wo members added to source %s for system %s for time %s"%(s.name, s.system_code, start_dt.strftime('%Y-%m-%d %H:%M:%S')))
             grouped_sources = SourceManager.get_grouped_sources(None, [s.id for s in sources_without_members])
-            force_retrieve_hour_reading.delay(grouped_sources, start_dt, 0)
+            force_retrieve_hour_reading.apply_async(args=[grouped_sources, start_dt, 0])
 
     return None
-
-import csv
-from ftplib import FTP
-import urllib
-from StringIO import StringIO
-
-from egauge.models import SourceReadingMin
-from system.models import System
 
 
 @shared_task(ignore_result=True)
