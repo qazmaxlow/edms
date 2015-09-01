@@ -186,9 +186,14 @@
 
                     var validated_date = null;
 
+                    var validPercent = /^-?\d+\.?\d*$/.test(percent);
+                    if (!validPercent)
+                        return;
+
                     if (dateType != 0) {
-                        validated_date = date.toISOString()
+                        validated_date = date.toISOString();
                     }
+                    
 
                     // if (percent.length > 0 && ((date && dateType!="1") || date) && compareTo){
                     if (true) {
