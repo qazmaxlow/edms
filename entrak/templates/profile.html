@@ -31,6 +31,8 @@
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
 
 {% endblock %}
+{% block system_menu_target_view %}dashboard{% endblock %}
+{% block breadcrumb_target_view %}dashboard{% endblock %}
 
 {% block selected-menu-link-id %}menu-link-setting{% endblock %}
 {% block page_title %}{% trans "SETTINGS" %}{% endblock %}
