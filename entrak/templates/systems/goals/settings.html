@@ -289,7 +289,7 @@
                         });
                 }
 
-                function dateEditor(container, options) {console.log(options);
+                function dateEditor(container, options) {
                     if (options.model.goal_type == 2){
                         $scope.validatedDateOptions.select = 'year';
                         $scope.validatedDateOptions.format = 'yyyy';
@@ -352,7 +352,7 @@
                                 sortable: true,
                                 editor: dateEditor,
                                 // format: "{0:yyyy-MM-dd HH:mm}", data-format="' + options.format + '"
-                                template: function(dataItem) {console.log(dataItem);
+                                template: function(dataItem) {
                                     if (dataItem.goal_type == 2)
                                         return kendo.toString(new Date(dataItem.validated_date), "yyyy");
                                     return kendo.toString(new Date(dataItem.validated_date), "MMM yyyy");
