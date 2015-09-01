@@ -291,7 +291,7 @@ class CreateGoalSettingView(generics.CreateAPIView):
         goal_type = request.data['goal_type']
         is_for_all_systems = request.data['is_all_systems']
 
-        if goal_type == '1':
+        if goal_type == '0':
             syscode = self.kwargs['system_code']
             systems = System.get_systems_within_root(syscode)
 
@@ -310,7 +310,7 @@ class CreateGoalSettingView(generics.CreateAPIView):
                 next_month += relativedelta(months=1)
 
                 request_data = dict(request.data.items())
-                request_data['goal_type'] = '2'
+                request_data['goal_type'] = '1'
                 request_data['validated_date'] = next_month
 
                 if is_for_all_systems == 'true':
