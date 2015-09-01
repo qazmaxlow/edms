@@ -154,7 +154,7 @@
                             $scope.dateDropdown.refresh();
 
                             $scope.validatedDateOptions.select = 'month';
-                            $scope.validatedDateOptions.format = 'MMM yyyy';
+                            $scope.validatedDateOptions.format = 'y';
                         }
                         else {
                             $scope.dateDropdown.dataSource =
@@ -300,7 +300,7 @@
                         $scope.validatedDateOptions.format = 'yyyy';
                     } else {
                         $scope.validatedDateOptions.select = 'month';
-                        $scope.validatedDateOptions.format = 'MMM yyyy';//k-rebind="validatedDateOptions" 
+                        $scope.validatedDateOptions.format = 'y';//k-rebind="validatedDateOptions" 
                     }
 
                     $('<input kendo-et-date-picker class="datepicker" k-options="validatedDateOptions" data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '"></input>').appendTo(container);
@@ -360,7 +360,7 @@
                                 template: function(dataItem) {
                                     if (dataItem.goal_type == 2)
                                         return kendo.toString(new Date(dataItem.validated_date), "yyyy");
-                                    return kendo.toString(new Date(dataItem.validated_date), "MMM yyyy");
+                                    return kendo.toString(new Date(dataItem.validated_date), "y");
                                 }
                             }, {
                                 field: "comparison_type", title: "{% trans 'Comparison' %}",
