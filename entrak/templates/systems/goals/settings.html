@@ -56,7 +56,7 @@
                 <button class="k-button normal-btn" ng-click="showPopup()">{% trans "Set New Goal" %}</button>
             </div>
             <kendo-grid class="settingGrid" k-options="goalSettingGridOptions(dataItem)"></kendo-grid>
-            <div kendo-window="deleteGridRowWin" k-title="'Delete'"
+            <div kendo-window="deleteGridRowWin" k-title="'{% trans "Delete" %}'"
                  k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-width="340" k-height="130">
               <div class="popupQuestion">{% trans "Are you sure you want to delete the item?" %}</div>
               <div class="popupBtnGrp">
@@ -382,13 +382,13 @@
                                 command: [{
                                     name: "edit",
                                     text: {
-                                        edit: "Edit",
-                                        update: "Confirm",
-                                        cancel: "Cancel"
+                                        edit: " ",
+                                        cancel: " ",
+                                        update: " "
                                     }
                                 }, {
                                     name: "mydestroy",
-                                    text: "Delete",
+                                    text: " ",
                                     click: function(e) {
                                         var tr = $(e.target).closest("tr"); 
                                         var data = this.dataItem(tr);
