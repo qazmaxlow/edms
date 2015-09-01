@@ -181,7 +181,8 @@ class compareToBaseline(APIView):
                     baseline_cost += (daterange_rate['to'] - daterange_rate['from']).days * kwh_per_day * daterange_rate['unitrate'].rate
 
                 # get the engry used in the peroid
-                meter_cost = system.get_total_cost(compare_start_date, compare_end_date)
+                total_usages = system.total_usage(compare_start_date, compare_end_date)
+                meter_cost = total_usages['totalMoney']
                 changed = meter_cost - baseline_cost
                 total_changed += changed
 
@@ -190,7 +191,7 @@ class compareToBaseline(APIView):
                 daterange_co2rates = get_unitrate_daterange_map(system, start_date, end_date, 'co2')
                 for daterange_co2rate in daterange_co2rates:
                     baseline_co2 += (daterange_co2rate['to'] - daterange_co2rate['from']).days * kwh_per_day * daterange_co2rate['unitrate'].rate
-                meter_co2 = system.get_total_co2(compare_start_date, compare_end_date)
+                meter_co2 = total_usages['totalCo2']
                 co2_changed = meter_co2 - baseline_co2
                 total_co2_changed += co2_changed
 
