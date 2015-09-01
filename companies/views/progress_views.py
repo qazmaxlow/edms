@@ -91,7 +91,7 @@ class progressSoFarThisYear(APIView):
         return response
 
 
-
+from utils import calculation
 from django.utils import timezone
 
 from baseline.models import BaselineUsage
@@ -124,11 +124,27 @@ class progressCompareToBaseline(APIView):
         pass_12months_end = system_now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
         pass_12months_start = pass_12months_end - relativedelta.relativedelta(years=1)
 
+        if pass_12months_start < start_date:
+            pass_12months_start = start_date
+
         pass_12months_kwh = system.get_total_kwh(pass_12months_start, pass_12months_end)
 
 
-        # assume baseline is one year data
-        total_baseline_kwh = sum([b.usage for b in baselines])
+        baselines = BaselineUsage.objects.filter(system=system).order_by('start_dt')
+
+        total_baseline_kwh = 0
+        if baselines.exists():
+            baseline_daily_usages = BaselineUsage.transform_to_daily_usages(
+                baselines,
+                system.time_zone)
+
+            total_baseline_kwh = calculation.calculate_total_baseline_energy_usage(
+                pass_12months_start,
+                pass_12months_end,
+                baseline_daily_usages
+            )
+
+
         compare = float(pass_12months_kwh - total_baseline_kwh)/total_baseline_kwh
 
         info = {'comparedPercent': compare * 100, 'baselineYear': baselines[0].start_dt.year}
