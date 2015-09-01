@@ -98,6 +98,7 @@
     height: 40px;
     border-radius: 8px 8px 0 0;
     background-color: #9BCEDA;
+    position: relative;
     /*-webkit-box-shadow: -2px 2px 3px rgba(0,0,0,0.1);
     box-shadow: -2px 2px 3px rgba(0,0,0,0.1);*/
 }
@@ -160,6 +161,7 @@
     color: #FFF;
     font-size: 1.0em;
     font-weight: 500;
+    display: inline-block;
 }
 
 .widget-toggle {
@@ -167,6 +169,9 @@
     padding-left: 0px;
     height: 100%;
     line-height: 40px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
 }
 
 /*.long-text-toggle {
@@ -1162,10 +1167,10 @@
 }
 
 .fullscreen #page-container .container {
-    width: 86%;
+    width: 94%;
     min-width: 800px;
-    margin-left: 7%;
-    margin-right: 7%;
+    margin-left: 3%;
+    margin-right: 3%;
     padding: 10px 0 0 0;
 }
 
