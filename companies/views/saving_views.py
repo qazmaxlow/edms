@@ -160,7 +160,7 @@ class compareToBaseline(APIView):
         year_ranges = range(start_date_year, timezone.now().year+1)
         
         # no baseline data
-        if len(baselines) < 12:
+        if baselines is None:
             return Response({'noBaseline': True}, status=status.HTTP_200_OK)
 
         total_co2_changed = 0
@@ -171,10 +171,14 @@ class compareToBaseline(APIView):
             for baseline in baselines:
                 compare_year = data_year + (baseline.start_dt.year - baseline_year)
                 compare_start_date = baseline.start_dt.replace(year = compare_year)
+
+                if compare_start_date.year == start_date_year:
+                    compare_start_date = start_date
+
                 compare_end_date = baseline.end_dt.replace(year = compare_year)
 
                 kwh_per_day = baseline.usage / (baseline.end_dt - baseline.start_dt).days
-                daterange_rates = get_unitrate_daterange_map(system, start_date, end_date, 'money')
+                daterange_rates = get_unitrate_daterange_map(system, compare_start_date, compare_end_date, 'money')
 
                 baseline_cost = 0
                 for daterange_rate in daterange_rates:
