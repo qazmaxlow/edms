@@ -32,6 +32,8 @@
 <script src="{% static 'assets/etkendoui/js/cultures/kendo.culture.zh-TW.js' %}"></script>
 
 {% endblock %}
+{% block system_menu_target_view %}dashboard{% endblock %}
+{% block breadcrumb_target_view %}dashboard{% endblock %}
 
 {% block selected-menu-link-id %}menu-link-setting{% endblock %}
 {% block page_title %}{% trans "SETTINGS" %}{% endblock %}
@@ -154,7 +156,7 @@
                             $scope.dateDropdown.refresh();
 
                             $scope.validatedDateOptions.select = 'month';
-                            $scope.validatedDateOptions.format = 'MMM yyyy';
+                            $scope.validatedDateOptions.format = 'y';
                         }
                         else {
                             $scope.dateDropdown.dataSource =
@@ -186,9 +188,14 @@
 
                     var validated_date = null;
 
+                    var validPercent = /^-?\d+\.?\d*$/.test(percent);
+                    if (!validPercent)
+                        return;
+
                     if (dateType != 0) {
-                        validated_date = date.toISOString()
+                        validated_date = date.toISOString();
                     }
+                    
 
                     // if (percent.length > 0 && ((date && dateType!="1") || date) && compareTo){
                     if (true) {
@@ -295,7 +302,7 @@
                         $scope.validatedDateOptions.format = 'yyyy';
                     } else {
                         $scope.validatedDateOptions.select = 'month';
-                        $scope.validatedDateOptions.format = 'MMM yyyy';//k-rebind="validatedDateOptions" 
+                        $scope.validatedDateOptions.format = 'y';//k-rebind="validatedDateOptions" 
                     }
 
                     $('<input kendo-et-date-picker class="datepicker" k-options="validatedDateOptions" data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '"></input>').appendTo(container);
@@ -355,7 +362,7 @@
                                 template: function(dataItem) {
                                     if (dataItem.goal_type == 2)
                                         return kendo.toString(new Date(dataItem.validated_date), "yyyy");
-                                    return kendo.toString(new Date(dataItem.validated_date), "MMM yyyy");
+                                    return kendo.toString(new Date(dataItem.validated_date), "y");
                                 }
                             }, {
                                 field: "comparison_type", title: "{% trans 'Comparison' %}",
