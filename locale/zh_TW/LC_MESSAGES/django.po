@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-01 04:48+0000\n"
+"POT-Creation-Date: 2015-09-01 05:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -366,7 +366,7 @@ msgstr ""
 "在冷氣開啟30分鐘後，請把溫度調整至適中的溫度，以免溫度過低，浪費電力能源。"
 
 #: companies/templates/companies/dashboard/dashboard.html:799
-#: entrak/templates/systems/goals/settings.html:350
+#: entrak/templates/systems/goals/settings.html:353
 msgid "Comparison"
 msgstr "和以往相比"
 
@@ -804,7 +804,7 @@ msgstr "編輯"
 #: companies/templates/companies/report_schedule/report_schedule.html:343
 #: entrak/templates/general_settings.html:332
 #: entrak/templates/general_settings.html:351
-#: entrak/templates/systems/goals/settings.html:394
+#: entrak/templates/systems/goals/settings.html:397
 msgid "Actions"
 msgstr "行動"
 
@@ -1793,11 +1793,6 @@ msgstr "週報"
 msgid "Month"
 msgstr "月報"
 
-#: entrak/templates/systems/goals/settings.html:79
-msgctxt "setting"
-msgid "Month"
-msgstr "月"
-
 #: companies/templates/companies/reports/summary.html:996
 #: companies/templates/companies/reports/summary_revamp.html:1001
 msgid "Quarter"
@@ -1807,11 +1802,6 @@ msgstr "季報"
 #: companies/templates/companies/reports/summary_revamp.html:1002
 msgid "Year"
 msgstr "年報"
-
-#: entrak/templates/systems/goals/settings.html:80
-msgctxt "setting"
-msgid "Year"
-msgstr "年"
 
 #: companies/templates/companies/reports/summary.html:998
 #: companies/templates/companies/reports/summary_revamp.html:1003
@@ -2650,7 +2640,7 @@ msgstr "單位"
 
 #: entrak/templates/graph.html:673 entrak/templates/ranking.html:556
 #: entrak/templates/systems/goals/settings.html:77
-#: entrak/templates/systems/goals/settings.html:340
+#: entrak/templates/systems/goals/settings.html:343
 #: printers/templates/system/printers/graph.html:663
 msgid "Time"
 msgstr "所選時間"
@@ -3418,7 +3408,7 @@ msgid "Set New Goal"
 msgstr "設立新節能目標"
 
 #: entrak/templates/systems/goals/settings.html:69
-#: entrak/templates/systems/goals/settings.html:330
+#: entrak/templates/systems/goals/settings.html:333
 msgid "Area"
 msgstr "區域"
 
@@ -3427,29 +3417,41 @@ msgid "All Area"
 msgstr "全部區域"
 
 #: entrak/templates/systems/goals/settings.html:78
-
 msgid "Next 12 months"
 msgstr "下12個月"
 
+#: entrak/templates/systems/goals/settings.html:79
+msgctxt "setting"
+msgid "Month"
+msgstr "月"
+
+#: entrak/templates/systems/goals/settings.html:80
+msgctxt "setting"
+msgid "Year"
+msgstr "年"
+
 #: entrak/templates/systems/goals/settings.html:85
-#: entrak/templates/systems/goals/settings.html:362
+#: entrak/templates/systems/goals/settings.html:365
 msgid "Goal"
 msgstr "節能目標"
 
 #: entrak/templates/systems/goals/settings.html:142
-#: entrak/templates/systems/goals/settings.html:299
-#: entrak/templates/systems/goals/settings.html:318
+#: entrak/templates/systems/goals/settings.html:302
+#: entrak/templates/systems/goals/settings.html:321
+#: entrak/templates/systems/goals/settings.html:358
 msgid "Previous Month"
 msgstr "上個月"
 
 #: entrak/templates/systems/goals/settings.html:143
-#: entrak/templates/systems/goals/settings.html:300
-#: entrak/templates/systems/goals/settings.html:319
+#: entrak/templates/systems/goals/settings.html:303
+#: entrak/templates/systems/goals/settings.html:322
+#: entrak/templates/systems/goals/settings.html:360
 msgid "Same Month Last Year"
 msgstr "去年同期"
 
 #: entrak/templates/systems/goals/settings.html:155
-#: entrak/templates/systems/goals/settings.html:296
+#: entrak/templates/systems/goals/settings.html:299
+#: entrak/templates/systems/goals/settings.html:362
 msgid "Previous Year"
 msgstr "去年"
 

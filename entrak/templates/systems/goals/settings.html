@@ -83,12 +83,17 @@
             </div>
             <div class="popupRow">
                 <div class="leftLabel">{% trans "Goal" %}:</div>
-                <span>Use</span>
-                <input id="percentTextbox" class="k-textbox normal-tb w80"></input>
-                <span></span><span>% less than</span>
-                <select kendo-drop-down-list="dateDropdown" k-options="goalCompareTypeDropdownOptions">
-
-                </select>
+                {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                    <span>比</span>
+                    <select kendo-drop-down-list="dateDropdown" k-options="goalCompareTypeDropdownOptions"></select>
+                    <span></span><span>少用</span>
+                    <input id="percentTextbox" class="k-textbox normal-tb w80"></input><span> %</span>
+                {% else %}
+                    <span>Use</span>
+                    <input id="percentTextbox" class="k-textbox normal-tb w80"></input>
+                    <span></span><span>% less than</span>
+                    <select kendo-drop-down-list="dateDropdown" k-options="goalCompareTypeDropdownOptions"></select>
+                {% endifequal %}
             </div>
             <div class="btnContainer">
                 <span id="errText"></span>
@@ -105,6 +110,9 @@
  <script>
         angular.module("entrak", [ "kendo.directives" ])
             .controller("GoalSettingsController", function($scope) {
+                var langCode = '{{LANGUAGE_CODE}}';
+                kendo.culture(langCode.substring(0,3)+langCode.substring(3,5).toUpperCase());
+
                 $scope.showPopup = function(){
                     $("#errText").hide();
                     $scope.allAreaModel = false;
@@ -355,11 +363,11 @@
                                 editor: comparisonEditor,
                                 template: function(dateItem){
                                     if (dateItem.comparison_type == 1){
-                                        return "Previous Month";
+                                        return "{% trans 'Previous Month' %}";
                                     } else if (dateItem.comparison_type == 2){
-                                        return "Same Month Last Year";
+                                        return "{% trans 'Same Month Last Year' %}";
                                     }
-                                    return "Previous Year";
+                                    return "{% trans 'Previous Year' %}";
                                 }
                             }, {
                                 field: "goal_save_percent", title: "{% trans 'Goal' %}",
