@@ -101,7 +101,7 @@ class progressCompareToBaseline(APIView):
         syscode = self.kwargs['system_code']
         _system = System.objects.get(code=syscode)
         system_and_childs = System.get_systems_within_root(_system.code)
-        baselines = BaselineUsage.objects.filter(system=_system).order_by('start_dt')
+        baselines = None
 
 
         pass_12months_kwh = 0
@@ -135,12 +135,11 @@ class progressCompareToBaseline(APIView):
             if pass_12months_start < start_date:
                 pass_12months_start = start_date
 
-            pass_12months_kwh += system.get_total_kwh(pass_12months_start, pass_12months_end)
-
 
             baselines = BaselineUsage.objects.filter(system=system).order_by('start_dt')
 
             if baselines.exists():
+                pass_12months_kwh += system.get_total_kwh(pass_12months_start, pass_12months_end)
                 baseline_daily_usages = BaselineUsage.transform_to_daily_usages(
                     baselines,
                     system.time_zone)
