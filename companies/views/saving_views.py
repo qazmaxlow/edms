@@ -151,6 +151,7 @@ class compareToBaseline(APIView):
         system_and_childs = System.get_systems_within_root(_system.code)
         changed_cost = 0
         changed_co2 = 0
+        baseline_year = 1900
 
         for system in system_and_childs:
             # first date using entrak
@@ -163,25 +164,26 @@ class compareToBaseline(APIView):
             # baseline, assume this is one year data
 
             baselines = BaselineUsage.objects.filter(system=system).order_by('start_dt')
-            year_ranges = range(start_date_year, timezone.now().year+1)
+            # year_ranges = range(start_date_year, timezone.now().year+1)
 
             # no baseline data
-            if baselines is None:
-                return Response({'noBaseline': True}, status=status.HTTP_200_OK)
+            # if baselines is None:
+                # return Response({'noBaseline': True}, status=status.HTTP_200_OK)
 
             # total_co2_changed = 0
             # total_changed = 0
 
-            baseline_year = baselines[0].start_dt.year
+            if baselines.exists():
+                baseline_year = baselines[0].start_dt.year
 
-            from utils import calculation
+                from utils import calculation
 
 
-            # baseline_daily_usages = BaselineUsage.transform_to_daily_usages(grouped_baselines[system.id], system.time_zone)
-            baseline_daily_usages = BaselineUsage.transform_to_daily_usages(
-                # grouped_baselines[system.id],
-                baselines,
-                system.time_zone)
+                # baseline_daily_usages = BaselineUsage.transform_to_daily_usages(grouped_baselines[system.id], system.time_zone)
+                baseline_daily_usages = BaselineUsage.transform_to_daily_usages(
+                    # grouped_baselines[system.id],
+                    baselines,
+                    system.time_zone)
 
 
 
@@ -190,11 +192,13 @@ class compareToBaseline(APIView):
                 unit_start_date = ur['from']
                 unit_end_date = ur['to']
 
-                kwh = calculation.calculate_total_baseline_energy_usage(
-                    unit_start_date,
-                    unit_end_date,
-                    baseline_daily_usages
-                )
+                kwh = 0
+                if baselines.exists():
+                    kwh = calculation.calculate_total_baseline_energy_usage(
+                        unit_start_date,
+                        unit_end_date,
+                        baseline_daily_usages
+                    )
 
                 sids = [s.id for s in system.direct_sources]
                 if len(sids) > 0:
@@ -208,11 +212,13 @@ class compareToBaseline(APIView):
                 unit_start_date = ur['from']
                 unit_end_date = ur['to']
 
-                kwh = calculation.calculate_total_baseline_energy_usage(
-                    unit_start_date,
-                    unit_end_date,
-                    baseline_daily_usages
-                )
+                kwh = 0
+                if baselines.exists():
+                    kwh = calculation.calculate_total_baseline_energy_usage(
+                        unit_start_date,
+                        unit_end_date,
+                        baseline_daily_usages
+                    )
 
                 sids = [s.id for s in system.direct_sources]
                 if len(sids) > 0:
