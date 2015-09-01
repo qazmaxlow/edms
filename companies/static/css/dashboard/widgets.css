@@ -818,19 +818,19 @@
 }
 
 .cumulative-widget .top-box {
-    background-image: url(../../images/dashboard/break.png);
-}
-
-.cumulative-widget .bottom-box {
-    background-image: url(../../images/dashboard/carbon.png);
-}
-
-.cumulative-widget .top-box.saved {
     background-image: url(../../images/dashboard/save.png);
 }
 
+.cumulative-widget .bottom-box {
+    background-image: url(../../images/dashboard/tree.png);    
+}
+
+.cumulative-widget .top-box.saved {
+    background-image: url(../../images/dashboard/break.png);
+}
+
 .cumulative-widget .bottom-box.saved {
-    background-image: url(../../images/dashboard/tree.png);
+    background-image: url(../../images/dashboard/carbon.png);
 }
 
 .cumulative-widget .light-text {
