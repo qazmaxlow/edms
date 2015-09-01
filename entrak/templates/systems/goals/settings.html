@@ -146,6 +146,7 @@
                             $scope.dateDropdown.refresh();
 
                             $scope.validatedDateOptions.select = 'month';
+                            $scope.validatedDateOptions.format = 'MMM yyyy';
                         }
                         else {
                             $scope.dateDropdown.dataSource =
@@ -157,6 +158,7 @@
                             $scope.dateDropdown.refresh();
 
                             $scope.validatedDateOptions.select = 'year';
+                            $scope.validatedDateOptions.format = 'yyyy';
                         }
                     })
                 });
@@ -164,7 +166,7 @@
 
 
                 $('input[name="timeGroup"]').change(function(){
-                    $scope.datePicker.enable($('input[name="timeGroup"]:checked').val() != "1");
+                    $scope.datePicker.enable($('input[name="timeGroup"]:checked').val() != "0");
                 });
 
                 $scope.confirmAction = function(){
@@ -276,18 +278,32 @@
                         });
                 }
 
-                function dateEditor(container, options) {
+                function dateEditor(container, options) {console.log(options);
+                    if (options.model.goal_type == 2){
+                        $scope.validatedDateOptions.select = 'year';
+                        $scope.validatedDateOptions.format = 'yyyy';
+                    } else {
+                        $scope.validatedDateOptions.select = 'month';
+                        $scope.validatedDateOptions.format = 'MMM yyyy';//k-rebind="validatedDateOptions" 
+                    }
+
                     $('<input kendo-et-date-picker class="datepicker" k-options="validatedDateOptions" data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '"></input>').appendTo(container);
                 }
 
                 function comparisonEditor(container, options) {
+                    var ds;
+                    if (options.model.goal_type == 2){
+                        ds = [{"value": 3, "text": "Previous Year"}];
+                    } else {
+                        ds = [
+                            {"value": 1, "text": "Previous Month"},
+                            {"value": 2, "text": "Same Month Last Year"}
+                        ];
+                    }
                     $('<input required data-value-field="value" data-text-field="text" data-bind="value:' + options.field + '"></input>')
                         .appendTo(container).kendoDropDownList({
                             autoBind: false,
-                            dataSource: [
-                                {"value": 1, "text": "Previous Month"},
-                                {"value": 2, "text": "Same Month Last Year"}
-                            ]  
+                            dataSource: ds
                         });
                 }
 
@@ -325,7 +341,9 @@
                                 sortable: true,
                                 editor: dateEditor,
                                 // format: "{0:yyyy-MM-dd HH:mm}", data-format="' + options.format + '"
-                                template: function(dataItem) {
+                                template: function(dataItem) {console.log(dataItem);
+                                    if (dataItem.goal_type == 2)
+                                        return kendo.toString(new Date(dataItem.validated_date), "yyyy");
                                     return kendo.toString(new Date(dataItem.validated_date), "MMM yyyy");
                                 }
                             }, {
@@ -333,7 +351,12 @@
                                 sortable: true,
                                 editor: comparisonEditor,
                                 template: function(dateItem){
-                                    return dateItem.comparison_type == 1 ? "Previous Month" : "Same Month Last Year";
+                                    if (dateItem.comparison_type == 1){
+                                        return "Previous Month";
+                                    } else if (dateItem.comparison_type == 2){
+                                        return "Same Month Last Year";
+                                    }
+                                    return "Previous Year";
                                 }
                             }, {
                                 field: "goal_save_percent", title: "Goal",
