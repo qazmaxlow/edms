@@ -86,7 +86,7 @@ def activate_account(request, user_id):
                     login(request, user)
                     translation.activate(user.language)
 
-                dashboard_url = reverse('graph', kwargs={'system_code': system.code})
+                dashboard_url = reverse('companies.dashboard', kwargs={'system_code': system.code})
                 settings_url = reverse('manage_accounts', kwargs={'system_code': system.code})
 
                 if user.is_manager:
@@ -204,7 +204,7 @@ def reset_password(request, user_id):
             m.update(csrf(request))
             m["system"] = system
             m["user"] = user
-            m["dashboard_url"] = reverse('graph', kwargs={'system_code': system.code})
+            m["dashboard_url"] = reverse('companies.dashboard', kwargs={'system_code': system.code})
 
             return render(request, 'reset_password.html', m)
 

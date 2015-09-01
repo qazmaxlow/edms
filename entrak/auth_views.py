@@ -25,7 +25,7 @@ def login_view(request, system_code=None):
             if request.POST.get('remember_me', None):
                 request.session.set_expiry(365 * 24 * 3600)
 
-            return redirect('graph', system_code=system_code)
+            return redirect('companies.dashboard', system_code=system_code)
 
         else:
             warning_msg = _("Username or password incorrect")
@@ -64,7 +64,7 @@ def centeral_login_view(request):
             if is_safe_url(url=redirect_url, host=request.get_host()):
                 return redirect(redirect_url)
             else:
-                return redirect('graph', system_code=user.system.code)
+                return redirect('companies.dashboard', system_code=user.system.code)
         else:
             warning_msg = _("Username or password incorrect")
 
