@@ -266,6 +266,7 @@ class GoalSerializer(serializers.ModelSerializer):
 class UpdateGoalSerializer(serializers.ModelSerializer):
     class Meta:
         model = SystemEnergyGoal
+        exclude = ('created_by',)
 
     def update(self, instance, validated_attrs):
         for attr, value in validated_attrs.items():
