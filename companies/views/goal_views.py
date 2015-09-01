@@ -200,7 +200,7 @@ class goalTracking_old(APIView):
 
         # get last usage
         if goal_type == 'this-month' or goal_type == 'last-month':
-            
+
             try:
                 goal_setting = SystemEnergyGoal.objects.get(
                     system=system,
@@ -280,7 +280,8 @@ class GoalSettingsView(generics.ListAPIView):
 
     def get_queryset(self):
         syscode = self.kwargs['system_code']
-        goals = SystemEnergyGoal.objects.filter(system__code=syscode)
+        systems = System.get_systems_within_root(syscode)
+        goals = SystemEnergyGoal.objects.filter(system_id__in=[s.id for s in systems])
 
         return goals
 

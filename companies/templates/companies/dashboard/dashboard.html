@@ -170,7 +170,18 @@
             if (val == null){
                 return "";
             } else {
+                val = kendo.toString(val, "y");
                 return val.substring(0,5);
+            }
+        }
+    });
+
+    ngapp.filter('yearInEnglish', function () {
+        return function(val) {
+            if (val == null){
+                return "";
+            } else {
+                return "year " + val.getFullYear();
             }
         }
     });
@@ -1306,8 +1317,18 @@
                 $scope.soFarPercent = data.compare_percent;
                 $scope.isIncrease = $scope.soFarPercent > 0;
                 $scope.soFarPercent = Math.abs($scope.soFarPercent);
-                $scope.compareDate = kendo.toString(new Date(data.compare_date), "y");
-                $scope.targetDate = kendo.toString(new Date(data.target_date), "y");
+                $scope.compareDate = new Date(data.compare_date);
+                $scope.targetDate = new Date(data.target_date);
+
+                // if ($scope.selectedGoal == 'last-year' || $scope.selectedGoal == 'this-year'){
+                //     $scope.targetDate = new Date(data.target_date);
+                //     $scope.targetDate = "year " + $scope.targetDate.getFullYear();
+                //     $scope.compareDate = new Date(data.compareDate);
+                //     $scope.compareDate = "year " + $scope.compareDate.getFullYear();
+                // } else {
+                //     $scope.targetDate = kendo.toString(new Date(data.target_date), "y");
+                //     $scope.compareDate = kendo.toString(new Date(data.compare_date), "y");
+                // }
             }
         }
 

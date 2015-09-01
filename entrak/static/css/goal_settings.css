@@ -146,20 +146,46 @@
 
 .settingGrid.k-grid.k-widget a.k-button.k-button-icontext {
     margin: 0;
-    height: 20px;
+/*    height: 20px;
     box-shadow: 0px 2px 0px #6b9aa5;
-    font-size: 0.857em;
+    font-size: 0.857em;*/
     padding: 0px;
-    text-decoration: none;
+/*    text-decoration: none;
     background-image: none;
     background-color: #9bceda;
-    border-color: #9bceda;
+    border-color: #9bceda;*/
 }
 
 .settingGrid.k-grid.k-widget .k-grid-content {
 	max-height: 350px;
 }
 
+.settingGrid.k-grid.k-widget a.k-button.k-button-icontext.k-grid-edit {
+	background-image: url(/static/images/edit-icon.png);
+}
+.settingGrid.k-grid.k-widget a.k-button.k-button-icontext.k-grid-update {
+	background-image: url(/static/images/confirm-icon.png);	
+}
+.settingGrid.k-grid.k-widget a.k-button.k-button-icontext.k-grid-mydestroy {
+	background-image: url(/static/images/delete-icon.png);	
+}
+.settingGrid.k-grid.k-widget a.k-button.k-button-icontext.k-grid-cancel {
+	background-image: url(/static/images/cancel-icon.png);
+}
+.settingGrid.k-grid.k-widget a.k-button.k-button-icontext.k-grid-edit,
+.settingGrid.k-grid.k-widget a.k-button.k-button-icontext.k-grid-update,
+.settingGrid.k-grid.k-widget a.k-button.k-button-icontext.k-grid-mydestroy,
+.settingGrid.k-grid.k-widget a.k-button.k-button-icontext.k-grid-cancel {
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-position: center;
+	border: none;
+	box-shadow: none;
+	height: 100%;
+	width: 50%;
+	min-width: 30px;
+}
+/*
 .settingGrid.k-grid.k-widget a.k-button.k-button-icontext.k-grid-edit:hover,
 .settingGrid.k-grid.k-widget a.k-button.k-button-icontext.k-grid-update:hover,
 .settingGrid.k-grid.k-widget a.k-button.k-button-icontext.k-grid-mydestroy:hover,
@@ -171,7 +197,7 @@
 .settingGrid.k-grid.k-widget a.k-button.k-button-icontext.k-grid-edit,
 .settingGrid.k-grid.k-widget a.k-button.k-button-icontext.k-grid-update {
 	margin-right: 5px;
-}
+}*/
 
 .settingGrid.k-grid.k-widget span.k-icon.k-edit,
 .settingGrid.k-grid.k-widget span.k-icon.k-update,
@@ -179,11 +205,16 @@
     display: none;
 }
 
+.settingGrid.k-grid.k-widget .k-grid-header th:last-child {
+	text-align: center;
+}
+
 .settingGrid.k-grid.k-widget .k-textbox.normal-tb {
 	background-color: #FFFFFF;
 }
 
 .popupQuestion {
+	color: #354960;
 	padding: 20px;
 }
 

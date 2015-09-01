@@ -190,11 +190,9 @@ function readMeesage(id) {
         <!-- Main Sidebar Links -->
         <nav>
             <ul id="menu-links">
-                {% if 'nea-nwro-3f' == systems.0.code or 'fujixerox' in systems.0.code or 'dbs-posb' == systems.0.code or 'twghscgms' == systems.0.code or 'ylcss' == systems.0.code or 'sbcps' == systems.0.code or 'kcmc' == systems.0.code or 'belle' in systems.0.code or 'bossini' == systems.0.code or 'searshk' in systems.0.code %}
                 <li id="menu-link-dashboard">
-                    <a href="{% url 'companies.dashboard' system_code=systems.0.code %}"><img width="26" height="22" src="{% static 'images/home-icon.png' %}"><span>{% trans "Home" %}</span></a>
+                    <a href="{% url 'companies.dashboard' system_code=systems.0.code %}"><img width="26" height="22" src="{% static 'images/home-icon.png' %}"><span>{% trans "Dashboard" %}</span></a>
                 </li>
-                {% endif %}
                 <li id="menu-link-graph">
                     <a href="{% url 'graph' system_code=systems.0.code %}"><img width="26" height="22" src="{% static 'images/graph-icon.png' %}"><span>{% trans "Graph" %}</span></a>
                 </li>

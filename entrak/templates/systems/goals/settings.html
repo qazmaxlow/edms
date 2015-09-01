@@ -56,9 +56,9 @@
                 <button class="k-button normal-btn" ng-click="showPopup()">{% trans "Set New Goal" %}</button>
             </div>
             <kendo-grid class="settingGrid" k-options="goalSettingGridOptions(dataItem)"></kendo-grid>
-            <div kendo-window="deleteGridRowWin" k-title="'Delete'"
+            <div kendo-window="deleteGridRowWin" k-title="'{% trans "Confirm Delete" %}'"
                  k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-width="340" k-height="130">
-              <div class="popupQuestion">{% trans "Are you sure you want to delete the item?" %}</div>
+              <div class="popupQuestion">{% trans "Are you sure you want to delete this goal?" %}</div>
               <div class="popupBtnGrp">
                 <button class="k-button normal-btn cancel" ng-click="deleteGridRowWin.close()">{% trans "Cancel" %}</button>
                 <button class="k-button normal-btn" ng-click="confirmDelete()">{% trans "Confirm" %}</button>
@@ -83,12 +83,17 @@
             </div>
             <div class="popupRow">
                 <div class="leftLabel">{% trans "Goal" %}:</div>
-                <span>Use</span>
-                <input id="percentTextbox" class="k-textbox normal-tb w80"></input>
-                <span></span><span>% less than</span>
-                <select kendo-drop-down-list="dateDropdown" k-options="goalCompareTypeDropdownOptions">
-
-                </select>
+                {% ifequal LANGUAGE_CODE 'zh-tw' %}
+                    <span>比</span>
+                    <select kendo-drop-down-list="dateDropdown" k-options="goalCompareTypeDropdownOptions"></select>
+                    <span></span><span>少用</span>
+                    <input id="percentTextbox" class="k-textbox normal-tb w80"></input><span> %</span>
+                {% else %}
+                    <span>Use</span>
+                    <input id="percentTextbox" class="k-textbox normal-tb w80"></input>
+                    <span></span><span>% less than</span>
+                    <select kendo-drop-down-list="dateDropdown" k-options="goalCompareTypeDropdownOptions"></select>
+                {% endifequal %}
             </div>
             <div class="btnContainer">
                 <span id="errText"></span>
@@ -105,6 +110,9 @@
  <script>
         angular.module("entrak", [ "kendo.directives" ])
             .controller("GoalSettingsController", function($scope) {
+                var langCode = '{{LANGUAGE_CODE}}';
+                kendo.culture(langCode.substring(0,3)+langCode.substring(3,5).toUpperCase());
+
                 $scope.showPopup = function(){
                     $("#errText").hide();
                     $scope.allAreaModel = false;
@@ -281,7 +289,7 @@
                         });
                 }
 
-                function dateEditor(container, options) {console.log(options);
+                function dateEditor(container, options) {
                     if (options.model.goal_type == 2){
                         $scope.validatedDateOptions.select = 'year';
                         $scope.validatedDateOptions.format = 'yyyy';
@@ -344,7 +352,7 @@
                                 sortable: true,
                                 editor: dateEditor,
                                 // format: "{0:yyyy-MM-dd HH:mm}", data-format="' + options.format + '"
-                                template: function(dataItem) {console.log(dataItem);
+                                template: function(dataItem) {
                                     if (dataItem.goal_type == 2)
                                         return kendo.toString(new Date(dataItem.validated_date), "yyyy");
                                     return kendo.toString(new Date(dataItem.validated_date), "MMM yyyy");
@@ -355,11 +363,11 @@
                                 editor: comparisonEditor,
                                 template: function(dateItem){
                                     if (dateItem.comparison_type == 1){
-                                        return "Previous Month";
+                                        return "{% trans 'Previous Month' %}";
                                     } else if (dateItem.comparison_type == 2){
-                                        return "Same Month Last Year";
+                                        return "{% trans 'Same Month Last Year' %}";
                                     }
-                                    return "Previous Year";
+                                    return "{% trans 'Previous Year' %}";
                                 }
                             }, {
                                 field: "goal_save_percent", title: "{% trans 'Goal' %}",
@@ -374,13 +382,13 @@
                                 command: [{
                                     name: "edit",
                                     text: {
-                                        edit: "Edit",
-                                        update: "Confirm",
-                                        cancel: "Cancel"
+                                        edit: " ",
+                                        cancel: " ",
+                                        update: " "
                                     }
                                 }, {
                                     name: "mydestroy",
-                                    text: "Delete",
+                                    text: " ",
                                     click: function(e) {
                                         var tr = $(e.target).closest("tr"); 
                                         var data = this.dataItem(tr);
@@ -395,7 +403,7 @@
                                     }
                                 }],
                                 title: "{% trans 'Actions' %}",
-                                width: "160px"
+                                width: "100px"
                             }
                         ]
                     }
