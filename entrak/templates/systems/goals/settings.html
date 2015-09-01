@@ -75,9 +75,9 @@
             </div>
             <div class="popupRow">
                 <div class="leftLabel">Time:</div>
-                <input ng-model="goal_type" value="1" type="radio" name="timeGroup" id="next12Radio" checked><label for="next12Radio">Next 12 months</label>
-                <input ng-model="goal_type" value="2" type="radio" name="timeGroup" id="monthRadio"><label for="monthRadio">Month</label>
-                <input ng-model="goal_type" value="3" type="radio" name="timeGroup" id="yearRadio"><label for="yearRadio">Year</label>
+                <input ng-model="goal_type" value="0" type="radio" name="timeGroup" id="next12Radio" checked><label for="next12Radio">Next 12 months</label>
+                <input ng-model="goal_type" value="1" type="radio" name="timeGroup" id="monthRadio"><label for="monthRadio">Month</label>
+                <input ng-model="goal_type" value="2" type="radio" name="timeGroup" id="yearRadio"><label for="yearRadio">Year</label>
                 <span class="vLine"></span>
                 <input kendo-et-date-picker="datePicker" class="datepicker" k-options="validatedDateOptions" k-rebind="validatedDateOptions"></input>
             </div>
@@ -133,9 +133,9 @@
                         return;
                     $scope.firstLoaded = true;
                     
-                    $scope.goal_type = 1;
+                    $scope.goal_type = 0;
                     $scope.$watch('goal_type', function(n, o) {
-                        if (n==1 || n==2) {
+                        if (n==0 || n==1) {
                             $scope.dateDropdown.dataSource =
                                 new kendo.data.DataSource({
                                     data: [
@@ -176,7 +176,7 @@
 
                     var validated_date = null;
 
-                    if (dateType != 1) {
+                    if (dateType != 0) {
                         validated_date = date.toISOString()
                     }
 
