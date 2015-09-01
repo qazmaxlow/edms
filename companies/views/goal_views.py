@@ -33,7 +33,7 @@ class goalTracking(APIView):
         try:
             goal_setting = SystemEnergyGoal.objects.get(
                 system=system,
-                goal_type=2,
+                goal_type=1,
                 validated_date=start_from
             )
         except ObjectDoesNotExist as e:
@@ -71,7 +71,7 @@ class goalTracking(APIView):
         try:
             goal_setting = SystemEnergyGoal.objects.get(
                 system=system,
-                goal_type=2,
+                goal_type=1,
                 validated_date=start_from
             )
         except ObjectDoesNotExist as e:
@@ -109,7 +109,7 @@ class goalTracking(APIView):
         try:
             goal_setting = SystemEnergyGoal.objects.get(
                 system=system,
-                goal_type=3,
+                goal_type=2,
                 validated_date=start_from
             )
         except ObjectDoesNotExist as e:
@@ -143,7 +143,7 @@ class goalTracking(APIView):
         try:
             goal_setting = SystemEnergyGoal.objects.get(
                 system=system,
-                goal_type=3,
+                goal_type=2,
                 validated_date=start_from
             )
         except ObjectDoesNotExist as e:
