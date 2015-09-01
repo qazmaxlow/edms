@@ -13,7 +13,7 @@
 {% get_current_language as LANGUAGE_CODE %}
 
 {% compress css %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/drop-down-panel.css' %}">
+<link href="{% static 'css/drop-down-panel.css' %}" rel="stylesheet" >
 <link href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/tmp/bootstrap_hack.css' %}" rel="stylesheet">
 <link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
@@ -21,7 +21,7 @@
 
 <link href="{% static 'assets/kendoui/styles/kendo.dataviz.min.css' %}" rel="stylesheet">
 <link href="{% static 'assets/kendoui/styles/kendo.dataviz.default.min.css' %}" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="{% static 'css/dashboard/widgets.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/dashboard/widgets.css' %}?v=3.2">
 {% endcompress %}
 
 <script src="{% static 'js/jquery-cookie-master/jquery.cookie.js' %}"></script>
@@ -1254,7 +1254,7 @@
     });
 
     ngapp.controller("WidgetCumulative", function($scope){
-        
+
         $scope.title = '{% trans "Cumulative Savings" context "dashboard" %}';
         $scope.headerText = '{% trans "Since you started En-trak, you have" %}';
         $scope.costChangedDescText2 = '{% trans "in energy costs" context "dashboard" %}';
