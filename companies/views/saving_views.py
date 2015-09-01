@@ -222,13 +222,6 @@ class compareToBaseline(APIView):
             unit_start_date = ur['from']
             unit_end_date = ur['to']
 
-            # get baseline cost
-            # year_diff = unit_start_date.year - baseline_year
-
-            # find baseline
-            # baseline_start_date = compare_start_date.replace(year=baseline_year)
-            # baseline_end_date = compare_end_date.replace()
-
             kwh = calculation.calculate_total_baseline_energy_usage(
                 unit_start_date,
                 unit_end_date,
@@ -239,6 +232,22 @@ class compareToBaseline(APIView):
             changed_cost += (total_usages['totalKwh'] - kwh) * ur['unitrate'].rate
 
 
-        info = {'costChanged': changed_cost, 'co2Changed': total_co2_changed, 'baselineYear': baseline_year}
+        changed_co2 = 0
+        urs = get_unitrate_daterange_map(system, start_date, end_date, 'co2')
+        for ur in urs:
+            unit_start_date = ur['from']
+            unit_end_date = ur['to']
+
+            kwh = calculation.calculate_total_baseline_energy_usage(
+                unit_start_date,
+                unit_end_date,
+                baseline_daily_usages
+            )
+
+            total_usages = system.total_usage(unit_start_date, unit_end_date)
+            changed_co2 += (total_usages['totalKwh'] - kwh) * ur['unitrate'].rate
+
+
+        info = {'costChanged': changed_cost, 'co2Changed': changed_co2, 'baselineYear': baseline_year}
         response = Response(info, status=status.HTTP_200_OK)
         return response
