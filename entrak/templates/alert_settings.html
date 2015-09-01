@@ -74,12 +74,10 @@
     <div class="date-col">
         <div class="created-date">{% templatetag openvariable %}createdDate{% templatetag closevariable %}</div>
         <div class="created-time">{% templatetag openvariable %}createdTime{% templatetag closevariable %}</div>
-    </div>
-    <div class="source-col">
+    </div><div class="source-col">
         <div class="source-line-1">{% templatetag openvariable %}systemName{% templatetag closevariable %}</div>
         <div class="source-line-2">{% templatetag openvariable %}sourceName{% templatetag closevariable %}</div>
-    </div>
-    <div class="issue-col">
+    </div><div class="issue-col">
         <div class="issue-line-1">{% templatetag openvariable %}issueLine1{% templatetag closevariable %}</div>
         <div class="issue-line-2">{% templatetag openvariable %}issueLine2{% templatetag closevariable %}</div>
         <div class="issue-line-3">{% templatetag openvariable %}issueLine3{% templatetag closevariable %}</div>
@@ -968,7 +966,7 @@ $(function() {
     <div class="alert-history-container">
         <div class="history-table-header">
             <div class="history-th-date">{% trans "Date" %}
-            </div><div class="history-th-source">{% trans "End-Source" %}
+            </div><div class="history-th-source">{% trans "End-Use" %}
             </div><div class="history-th-issue">{% trans "Alert Issue" %}
             </div><div class="history-th-status">
                 <div>{% trans "Alert Status" %}</div>
@@ -1053,7 +1051,7 @@ $(function() {
                         </div><div class="table-header-percentage">%
                         </div><div class="table-header-time-from">{% trans "Time from" %}
                         </div><div class="table-header-time-to">{% trans "Time to" %}
-                        </div><div class="table-header-weekdays">{% trans "alert_weekdays" %}
+                        </div><div class="table-header-weekdays">{% trans "Days" context "alert" %}
                         </div><div class="table-header-send-to">{% trans "Send to" %}
                         </div><div class="table-header-created">{% trans "Date Created" %}
                         </div><div class="table-header-action">{% trans "Action" %}</div>
@@ -1078,7 +1076,7 @@ $(function() {
                         </div><div class="table-header-percentage">%
                         </div><div class="table-header-time-from">{% trans "Time from" %}
                         </div><div class="table-header-time-to">{% trans "Time to" %}
-                        </div><div class="table-header-weekdays">{% trans "alert_weekdays" %}
+                        </div><div class="table-header-weekdays">{% trans "Days" context "alert" %}
                         </div><div class="table-header-send-to">{% trans "Send to" %}
                         </div><div class="table-header-created">{% trans "Date Created" %}
                         </div><div class="table-header-action">{% trans "Action" %}</div>

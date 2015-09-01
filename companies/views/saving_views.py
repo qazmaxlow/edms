@@ -160,21 +160,26 @@ class compareToBaseline(APIView):
         year_ranges = range(start_date_year, timezone.now().year+1)
         
         # no baseline data
-        if len(baselines) < 12:
+        if baselines is None:
             return Response({'noBaseline': True}, status=status.HTTP_200_OK)
 
         total_co2_changed = 0
         total_changed = 0
 
         baseline_year = baselines[0].start_dt.year
+        year_ranges =[] # oops!
         for data_year in year_ranges:
             for baseline in baselines:
                 compare_year = data_year + (baseline.start_dt.year - baseline_year)
                 compare_start_date = baseline.start_dt.replace(year = compare_year)
+
+                if compare_start_date.year == start_date_year:
+                    compare_start_date = start_date
+
                 compare_end_date = baseline.end_dt.replace(year = compare_year)
 
                 kwh_per_day = baseline.usage / (baseline.end_dt - baseline.start_dt).days
-                daterange_rates = get_unitrate_daterange_map(system, start_date, end_date, 'money')
+                daterange_rates = get_unitrate_daterange_map(system, compare_start_date, compare_end_date, 'money')
 
                 baseline_cost = 0
                 for daterange_rate in daterange_rates:
@@ -196,6 +201,45 @@ class compareToBaseline(APIView):
                 total_co2_changed += co2_changed
 
 
-        info = {'costChanged': total_changed, 'co2Changed': total_co2_changed, 'baselineYear': baseline_year}
+        from utils import calculation
+        system_and_childs = System.get_systems_within_root(system.code)
+
+
+        grouped_baselines = BaselineUsage.get_baselines_for_systems([s.id for s in system_and_childs])
+
+        # grouped_baselines = BaselineUsage.get_baselines_for_systems([s.id for s in system_and_childs])
+
+
+        # baseline_daily_usages = BaselineUsage.transform_to_daily_usages(grouped_baselines[system.id], system.time_zone)
+        baseline_daily_usages = BaselineUsage.transform_to_daily_usages(
+            # grouped_baselines[system.id],
+            baselines,
+            system.time_zone)
+
+
+        changed_cost = 0
+        urs = get_unitrate_daterange_map(system, start_date, end_date, 'money')
+        for ur in urs:
+            unit_start_date = ur['from']
+            unit_end_date = ur['to']
+
+            # get baseline cost
+            # year_diff = unit_start_date.year - baseline_year
+
+            # find baseline
+            # baseline_start_date = compare_start_date.replace(year=baseline_year)
+            # baseline_end_date = compare_end_date.replace()
+
+            kwh = calculation.calculate_total_baseline_energy_usage(
+                unit_start_date,
+                unit_end_date,
+                baseline_daily_usages
+            )
+
+            total_usages = system.total_usage(unit_start_date, unit_end_date)
+            changed_cost += (total_usages['totalKwh'] - kwh) * ur['unitrate'].rate
+
+
+        info = {'costChanged': changed_cost, 'co2Changed': total_co2_changed, 'baselineYear': baseline_year}
         response = Response(info, status=status.HTTP_200_OK)
         return response
