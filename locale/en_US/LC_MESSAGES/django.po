@@ -2,12 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-31 10:35+0000\n"
+"POT-Creation-Date: 2015-09-01 04:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -359,6 +359,7 @@ msgid ""
 msgstr ""
 
 #: companies/templates/companies/dashboard/dashboard.html:799
+#: entrak/templates/systems/goals/settings.html:350
 msgid "Comparison"
 msgstr ""
 
@@ -446,83 +447,83 @@ msgstr ""
 msgid "Tons"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1275
+#: companies/templates/companies/dashboard/dashboard.html:1276
 msgid "Compared with your baseline year"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1281
+#: companies/templates/companies/dashboard/dashboard.html:1282
 msgid "Compared with your baseline year of "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1284
+#: companies/templates/companies/dashboard/dashboard.html:1285
 msgctxt "progressCost"
 msgid "Increased"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1284
+#: companies/templates/companies/dashboard/dashboard.html:1285
 msgid "Saved"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1285
+#: companies/templates/companies/dashboard/dashboard.html:1286
 msgctxt "progressCO2"
 msgid "Increased"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1285
+#: companies/templates/companies/dashboard/dashboard.html:1286
 msgid "Reduced"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1350
+#: companies/templates/companies/dashboard/dashboard.html:1352
 #: entrak/templates/manage_accounts.html:52 entrak/templates/profile.html:50
 #: entrak/templates/systems/goals/settings.html:51
 msgid "Goal Tracking"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1352
+#: companies/templates/companies/dashboard/dashboard.html:1354
 msgid "I want to reduce my"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1353
+#: companies/templates/companies/dashboard/dashboard.html:1355
 msgid "energy use in "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1354
+#: companies/templates/companies/dashboard/dashboard.html:1356
 msgid " by"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1355
+#: companies/templates/companies/dashboard/dashboard.html:1357
 msgid " compared to "
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1357
+#: companies/templates/companies/dashboard/dashboard.html:1359
 msgid "So far, you are saving at the rate of"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1358
+#: companies/templates/companies/dashboard/dashboard.html:1360
 msgid "You achieved savings of"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1360
+#: companies/templates/companies/dashboard/dashboard.html:1362
 msgid "You have not set any energy goals"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1361
+#: companies/templates/companies/dashboard/dashboard.html:1363
 msgid "Click here to set"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1364
+#: companies/templates/companies/dashboard/dashboard.html:1366
 msgid "This Month"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1365
+#: companies/templates/companies/dashboard/dashboard.html:1367
 msgid "This Year"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1366
+#: companies/templates/companies/dashboard/dashboard.html:1368
 msgid "Last Month"
 msgstr ""
 
-#: companies/templates/companies/dashboard/dashboard.html:1367
+#: companies/templates/companies/dashboard/dashboard.html:1369
 msgid "Last Year"
 msgstr ""
 
@@ -720,6 +721,7 @@ msgstr ""
 #: entrak/templates/general_settings.html:394
 #: entrak/templates/manage_accounts.html:89
 #: entrak/templates/systems/goals/settings.html:64
+#: entrak/templates/systems/goals/settings.html:95
 msgid "Confirm"
 msgstr ""
 
@@ -768,6 +770,7 @@ msgstr ""
 #: entrak/templates/manage_accounts.html:88
 #: entrak/templates/manage_accounts.html:138 entrak/templates/profile.html:104
 #: entrak/templates/systems/goals/settings.html:63
+#: entrak/templates/systems/goals/settings.html:96
 msgid "Cancel"
 msgstr ""
 
@@ -792,6 +795,7 @@ msgstr ""
 #: companies/templates/companies/report_schedule/report_schedule.html:343
 #: entrak/templates/general_settings.html:332
 #: entrak/templates/general_settings.html:351
+#: entrak/templates/systems/goals/settings.html:394
 msgid "Actions"
 msgstr ""
 
@@ -1762,6 +1766,7 @@ msgstr ""
 
 #: companies/templates/companies/reports/summary.html:995
 #: companies/templates/companies/reports/summary_revamp.html:1000
+#: entrak/templates/systems/goals/settings.html:79
 msgid "Month"
 msgstr ""
 
@@ -1772,6 +1777,7 @@ msgstr ""
 
 #: companies/templates/companies/reports/summary.html:997
 #: companies/templates/companies/reports/summary_revamp.html:1002
+#: entrak/templates/systems/goals/settings.html:80
 msgid "Year"
 msgstr ""
 
@@ -2549,6 +2555,8 @@ msgid "Unit"
 msgstr ""
 
 #: entrak/templates/graph.html:673 entrak/templates/ranking.html:556
+#: entrak/templates/systems/goals/settings.html:77
+#: entrak/templates/systems/goals/settings.html:340
 #: printers/templates/system/printers/graph.html:663
 msgid "Time"
 msgstr ""
@@ -3302,8 +3310,44 @@ msgstr ""
 msgid "Overnight: "
 msgstr ""
 
+#: entrak/templates/systems/goals/settings.html:56
 #: entrak/templates/systems/goals/settings.html:67
 msgid "Set New Goal"
+msgstr ""
+
+#: entrak/templates/systems/goals/settings.html:69
+#: entrak/templates/systems/goals/settings.html:330
+msgid "Area"
+msgstr ""
+
+#: entrak/templates/systems/goals/settings.html:74
+msgid "All Area"
+msgstr ""
+
+#: entrak/templates/systems/goals/settings.html:78
+msgid "Next 12 months"
+msgstr ""
+
+#: entrak/templates/systems/goals/settings.html:85
+#: entrak/templates/systems/goals/settings.html:362
+msgid "Goal"
+msgstr ""
+
+#: entrak/templates/systems/goals/settings.html:142
+#: entrak/templates/systems/goals/settings.html:299
+#: entrak/templates/systems/goals/settings.html:318
+msgid "Previous Month"
+msgstr ""
+
+#: entrak/templates/systems/goals/settings.html:143
+#: entrak/templates/systems/goals/settings.html:300
+#: entrak/templates/systems/goals/settings.html:319
+msgid "Same Month Last Year"
+msgstr ""
+
+#: entrak/templates/systems/goals/settings.html:155
+#: entrak/templates/systems/goals/settings.html:296
+msgid "Previous Year"
 msgstr ""
 
 #: printers/templates/system/printers/graph.html:651

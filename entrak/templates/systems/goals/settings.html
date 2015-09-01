@@ -66,23 +66,23 @@
             </div>
             <div kendo-window="createGoalWin" k-title="'{% trans "Set New Goal" %}'" k-append-to="'#goalSettingsController'" k-width="650" k-height="300" k-visible="false" k-modal="true" k-actions="[]" k-draggable="false" k-resizable="false" k-position="{top:'25%', left:'25%'}">
             <div class="popupRow">
-                <div class="leftLabel">Area:</div>
+                <div class="leftLabel">{% trans "Area" %}:</div>
                 <select kendo-drop-down-list="systemDropdown"
                     k-data-text-field="'fullname'"
                     k-data-value-field="'id'"
                     k-data-source="systemsDataSource"></select>
-                <input id="allAreaCheckbox" type="checkbox" ng-model="allAreaModel"/><label for="allAreaCheckbox"><div class="colorBox"></div><span class="leftPad10">All Area</span></label>
+                <input id="allAreaCheckbox" type="checkbox" ng-model="allAreaModel"/><label for="allAreaCheckbox"><div class="colorBox"></div><span class="leftPad10">{% trans "All Area" %}</span></label>
             </div>
             <div class="popupRow">
-                <div class="leftLabel">Time:</div>
-                <input ng-model="goal_type" value="0" type="radio" name="timeGroup" id="next12Radio" checked><label for="next12Radio">Next 12 months</label>
-                <input ng-model="goal_type" value="1" type="radio" name="timeGroup" id="monthRadio"><label for="monthRadio">Month</label>
-                <input ng-model="goal_type" value="2" type="radio" name="timeGroup" id="yearRadio"><label for="yearRadio">Year</label>
+                <div class="leftLabel">{% trans "Time" %}:</div>
+                <input ng-model="goal_type" value="0" type="radio" name="timeGroup" id="next12Radio" checked><label for="next12Radio">{% trans "Next 12 months" %}</label>
+                <input ng-model="goal_type" value="1" type="radio" name="timeGroup" id="monthRadio"><label for="monthRadio">{% trans "Month" context "setting" %}</label>
+                <input ng-model="goal_type" value="2" type="radio" name="timeGroup" id="yearRadio"><label for="yearRadio">{% trans "Year" context "setting" %}</label>
                 <span class="vLine"></span>
                 <input kendo-et-date-picker="datePicker" class="datepicker" k-options="validatedDateOptions" k-rebind="validatedDateOptions"></input>
             </div>
             <div class="popupRow">
-                <div class="leftLabel">Goal:</div>
+                <div class="leftLabel">{% trans "Goal" %}:</div>
                 <span>Use</span>
                 <input id="percentTextbox" class="k-textbox normal-tb w80"></input>
                 <span></span><span>% less than</span>
@@ -92,8 +92,8 @@
             </div>
             <div class="btnContainer">
                 <span id="errText"></span>
-                <button class="right k-button normal-btn cancel" ng-click="hidePopup()">Cancel</button>
-                <button class="right k-button normal-btn" ng-click="confirmAction()">Confirm</button>
+                <button class="right k-button normal-btn" ng-click="confirmAction()">{% trans "Confirm" %}</button>
+                <button class="right k-button normal-btn cancel" ng-click="hidePopup()">{% trans "Cancel" %}</button>
             </div>
           </div>
         </div>
@@ -139,8 +139,8 @@
                             $scope.dateDropdown.dataSource =
                                 new kendo.data.DataSource({
                                     data: [
-                                        {"value": 1, "text": "Previous Month"},
-                                        {"value": 2, "text": "Same Month Last Year"}
+                                        {"value": 1, "text": "{% trans 'Previous Month' %}"},
+                                        {"value": 2, "text": "{% trans 'Same Month Last Year' %}"}
                                     ]});
                             $scope.dateDropdown.dataSource.read();
                             $scope.dateDropdown.refresh();
@@ -152,7 +152,7 @@
                             $scope.dateDropdown.dataSource =
                                 new kendo.data.DataSource({
                                     data: [
-                                        {"value": 3, "text": "Previous Year"}
+                                        {"value": 3, "text": "{% trans 'Previous Year' %}"}
                                     ]});
                             $scope.dateDropdown.dataSource.read();
                             $scope.dateDropdown.refresh();
@@ -293,11 +293,11 @@
                 function comparisonEditor(container, options) {
                     var ds;
                     if (options.model.goal_type == 2){
-                        ds = [{"value": 3, "text": "Previous Year"}];
+                        ds = [{"value": 3, "text": "{% trans 'Previous Year' %}"}];
                     } else {
                         ds = [
-                            {"value": 1, "text": "Previous Month"},
-                            {"value": 2, "text": "Same Month Last Year"}
+                            {"value": 1, "text": "{% trans 'Previous Month' %}"},
+                            {"value": 2, "text": "{% trans 'Same Month Last Year' %}"}
                         ];
                     }
                     $('<input required data-value-field="value" data-text-field="text" data-bind="value:' + options.field + '"></input>')
@@ -315,8 +315,8 @@
                     dataValueField:"value",
                     dataTextField:"text",
                     dataSource: [
-                        {"value": 1, "text": "Previous Month"},
-                        {"value": 2, "text": "Same Month Last Year"}
+                        {"value": 1, "text": "{% trans 'Previous Month' %}"},
+                        {"value": 2, "text": "{% trans 'Same Month Last Year' %}"}
                     ]
                 };
 
@@ -327,7 +327,7 @@
                         sortable: true,
                         columns: [
                             {
-                                field: "system", title: "Area",
+                                field: "system", title: "{% trans 'Area' %}",
                                 width: "300px",
                                 sortable: true,
                                 editor: systemDropDownEditor,
@@ -337,7 +337,7 @@
                                     })[0].fullname;
                                 }
                             }, {
-                                field: "validated_date", title: "Time",
+                                field: "validated_date", title: "{% trans 'Time' %}",
                                 sortable: true,
                                 editor: dateEditor,
                                 // format: "{0:yyyy-MM-dd HH:mm}", data-format="' + options.format + '"
@@ -347,7 +347,7 @@
                                     return kendo.toString(new Date(dataItem.validated_date), "MMM yyyy");
                                 }
                             }, {
-                                field: "comparison_type", title: "Comparison",
+                                field: "comparison_type", title: "{% trans 'Comparison' %}",
                                 sortable: true,
                                 editor: comparisonEditor,
                                 template: function(dateItem){
@@ -359,7 +359,7 @@
                                     return "Previous Year";
                                 }
                             }, {
-                                field: "goal_save_percent", title: "Goal",
+                                field: "goal_save_percent", title: "{% trans 'Goal' %}",
                                 sortable: true,
                                 width: "100px",
                                 editor: textEditor,
@@ -391,7 +391,7 @@
                                         $scope.deleteGridRowWin.center().open();
                                     }
                                 }],
-                                title: "Actions",
+                                title: "{% trans 'Actions' %}",
                                 width: "160px"
                             }
                         ]
