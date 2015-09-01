@@ -156,7 +156,8 @@ class compareToBaseline(APIView):
         unitrates = system.get_unitrates(start_from=start_date, target_unit='money')
 
         # baseline, assume this is one year data
-        baselines = BaselineUsage.objects.filter(system=system).order_by('start_dt')
+        system_and_childs = System.get_systems_within_root(system.code)
+        baselines = BaselineUsage.objects.filter(system__in=[s.id for s in system_and_childs]).order_by('start_dt')
         year_ranges = range(start_date_year, timezone.now().year+1)
         
         # no baseline data
@@ -202,8 +203,6 @@ class compareToBaseline(APIView):
 
 
         from utils import calculation
-        system_and_childs = System.get_systems_within_root(system.code)
-
 
         grouped_baselines = BaselineUsage.get_baselines_for_systems([s.id for s in system_and_childs])
 
