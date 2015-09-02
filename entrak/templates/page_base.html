@@ -3,13 +3,11 @@
 {% load i18n %}
 {% load static %}
 {% load entrak_extras %}
-{% load compress %}
 
 {% block extra_head %}
 {{block.super}}
 
 
-{% compress css %}
 <link rel="shortcut icon" href="{% static 'images/entrak-favicon.png' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/smoothness.jquery-ui.css' %}">
@@ -17,9 +15,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'js/superfish-master/dist/css/superfish-vertical.css' %}">
 <link href="{% static 'assets/kendoui/styles/kendo.common.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/kendo.entrak.theme.css' %}" rel="stylesheet">
-{% endcompress %}
 
-{% compress js %}
 <script src="{% static 'assets/jquery/jquery-1.11.0.min.js' %}"></script>
 <script src="{% static 'assets/jquery/jquery-ui.js' %}"></script>
 <script src="{% static 'js/arboreal-customized.js' %}"></script>
@@ -31,7 +27,6 @@
 
 <script src="{% static 'assets/kendoui/js/angular.min.js' %}"></script>
 <script src="{% static 'assets/kendoui/js/kendo.all.min.js' %}"></script>
-{% endcompress %}
 
 <!-- copied from bootstrap -->
 <style>

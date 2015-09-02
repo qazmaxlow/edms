@@ -32,11 +32,13 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 STATIC_ROOT = path('site-static')
+
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'django.contrib.staticfiles.finders.FileSystemFinder',
-    'compressor.finders.CompressorFinder',
 )
+
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.CachedStaticFilesStorage'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'entrak', 'media')
 
@@ -76,7 +78,6 @@ INSTALLED_APPS = (
     'schedulers',
     'meters',
     'keyserver',
-    'compressor',
 )
 
 REST_FRAMEWORK = {
