@@ -86,7 +86,7 @@ def activate_account(request, user_id):
                     login(request, user)
                     translation.activate(user.language)
 
-                dashboard_url = reverse('graph', kwargs={'system_code': system.code})
+                dashboard_url = reverse('companies.dashboard', kwargs={'system_code': system.code})
                 settings_url = reverse('manage_accounts', kwargs={'system_code': system.code})
 
                 if user.is_manager:
@@ -204,7 +204,7 @@ def reset_password(request, user_id):
             m.update(csrf(request))
             m["system"] = system
             m["user"] = user
-            m["dashboard_url"] = reverse('graph', kwargs={'system_code': system.code})
+            m["dashboard_url"] = reverse('companies.dashboard', kwargs={'system_code': system.code})
 
             return render(request, 'reset_password.html', m)
 
@@ -215,6 +215,7 @@ def reset_password(request, user_id):
     else:
         request.session['login_warning_msg'] = _("Invalid request")
         return redirect('/login')
+
 
 class CreateIndividualUserView(generics.CreateAPIView):
 
@@ -335,6 +336,8 @@ class UpdateUserView(generics.UpdateAPIView):
 class SendPasswordResetEmailView(generics.CreateAPIView):
 
     serializer_class = UserSerializer
+    authentication_classes = ()
+
 
     def post(self, request, format=None):
 
@@ -345,7 +348,7 @@ class SendPasswordResetEmailView(generics.CreateAPIView):
             raise ParseError('Invalid request')
 
         try:
-            u = EntrakUser.objects.get(email=data['email'], is_personal_account=True)
+            u = EntrakUser.objects.get(email=data['email'].strip(), is_personal_account=True)
             u.send_password_reset_email()
         except ObjectDoesNotExist as e:
             raise serializers.ValidationError(_("This email is not linked to any existing account."))

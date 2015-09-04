@@ -2,7 +2,7 @@
 
 {% load i18n %}
 {% load entrak_extras %}
-{% load static %}
+{% load static from staticfiles %}
 {% load humanize %}
 
 {% block ga_page_title %}report{% endblock %}
@@ -284,12 +284,7 @@ $(function() {
         <div class="panel-header-left-menu">
             <h3 panel="monthly-report">
                 <a>{% trans "View Report" %}</a></h3>
-
-            {% if 'hkex' in systems.0.code %}
                 <h3><a href="{% url 'companies.report-schedule' system_code=systems.0.code %}">{% trans "Automated Reports" %}</a></h3>
-            {% else %}
-                <h3 panel="download-data"><a>{% trans "Download Data" %}</a></h3>
-            {% endif %}
         </div>
     </div>
     <div id="panel-content">

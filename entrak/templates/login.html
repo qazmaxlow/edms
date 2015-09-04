@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% load i18n %}
-{% load static %}
+{% load static from staticfiles %}
 {% load entrak_extras %}
 
 {% block ga_page_title %}login{% endblock %}
@@ -138,7 +138,8 @@ $(function() {
                 {% trans "Remember Me" %}
             </label>
         </div>
-        <input type="submit" value='{% trans "Sign In" %}'>
+        <input type="hidden" name="next_url" value='{{ next_url }}' />
+        <input type="submit" value='{% trans "Sign In" %}' />
         <div class="forget-pwd-container">
             <a class="forget-pwd-link" href="#" onclick="openForgetPwd()">{% trans "Forgot your password?" %}</a>
         </div>

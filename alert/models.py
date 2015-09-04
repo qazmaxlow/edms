@@ -7,6 +7,8 @@ from egauge.manager import SourceManager
 from egauge.models import Source
 from system.models import System
 from entrak.settings import SITE_LINK_FORMAT, LANG_CODE_EN
+from dateutil.relativedelta import relativedelta
+
 
 ALERT_TYPE_STILL_ON     = 'still_on'
 ALERT_TYPE_SUMMARY      = 'summary'
@@ -79,11 +81,6 @@ class Alert(models.Model):
     def source_name(self):
         source = self.source
         return {'en': source.d_name, 'zh-tw': source.d_name_tc}
-
-    @property
-    def create_date(self):
-        system_tz = self.system.time_zone
-        return self.created.astimezone(system_tz).date()
 
     def __unicode__(self):
         return '%d'%self.id
@@ -261,6 +258,15 @@ class AlertHistory(models.Model):
     diff_percent = models.SmallIntegerField()
     threshold_kwh = models.FloatField(null=True)
     current_kwh = models.FloatField(null=True)
+
+    @property
+    def create_date(self):
+        system_tz = self.alert.system.time_zone
+        if self.alert.end_time > self.alert.start_time:
+            return self.created.astimezone(system_tz).date()
+        else:
+            return (self.created - relativedelta(days=1)).astimezone(system_tz).date()
+
 
 class AlertEmail(models.Model):
     created = models.DateTimeField(auto_now_add=True)

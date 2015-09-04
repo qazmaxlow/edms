@@ -91,7 +91,7 @@ class progressSoFarThisYear(APIView):
         return response
 
 
-
+from utils import calculation
 from django.utils import timezone
 
 from baseline.models import BaselineUsage
@@ -99,38 +99,56 @@ class progressCompareToBaseline(APIView):
 
     def get(self, request, *args, **kwargs):
         syscode = self.kwargs['system_code']
-        system = System.objects.get(code=syscode)
+        _system = System.objects.get(code=syscode)
+        system_and_childs = System.get_systems_within_root(_system.code)
+        baselines = None
+        baseline_year = None
 
-        # first date using entrak
-        start_date = system.first_record
-        start_date_year = start_date.year
+        pass_12months_kwh = 0
+        total_baseline_kwh = 0
 
-        end_date = timezone.now()
-        # unitrates = system.get_unitrates(start_from=start_date, target_unit='money')
+        for system in system_and_childs:
 
-        # baseline, assume this is one year data
-        baselines = BaselineUsage.objects.filter(system=system).order_by('start_dt')
-        year_ranges = range(start_date_year, timezone.now().year+1)
+            # first date using entrak
+            start_date = system.first_record
+            start_date_year = start_date.year
 
-        if len(baselines) < 12:
-            return Response({'noBaseline': True}, status=status.HTTP_200_OK)
+            end_date = timezone.now()
+            # unitrates = system.get_unitrates(start_from=start_date, target_unit='money')
 
-        # this_year_kwh =
-        total_changed = 0
-        total_co2_changed = 0
+            # baseline, assume this is one year data
+            baselines = BaselineUsage.objects.filter(system=system).order_by('start_dt')
 
-        system_now = timezone.now().astimezone(system.time_zone)
-        # pass 12 months, last year this month 31th > kwh < this month 1st
-        pass_12months_end = system_now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-        pass_12months_start = pass_12months_end - relativedelta.relativedelta(years=1)
+            # this_year_kwh =
+            total_changed = 0
+            total_co2_changed = 0
 
-        pass_12months_kwh = system.get_total_kwh(pass_12months_start, pass_12months_end)
+            system_now = timezone.now().astimezone(system.time_zone)
+            # pass 12 months, last year this month 31th > kwh < this month 1st
+            pass_12months_end = system_now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+            pass_12months_start = pass_12months_end - relativedelta.relativedelta(years=1)
 
+            if pass_12months_start < start_date:
+                pass_12months_start = start_date
 
-        # assume baseline is one year data
-        total_baseline_kwh = sum([b.usage for b in baselines])
-        compare = float(pass_12months_kwh - total_baseline_kwh)/total_baseline_kwh
+            if baselines.exists():
+                baseline_year = min(baseline_year or pass_12months_start.year, pass_12months_start.year)
+                pass_12months_kwh += system.get_total_kwh(pass_12months_start, pass_12months_end)
+                baseline_daily_usages = BaselineUsage.transform_to_daily_usages(
+                    baselines,
+                    system.time_zone)
 
-        info = {'comparedPercent': compare * 100, 'baselineYear': baselines[0].start_dt.year}
+                total_baseline_kwh += calculation.calculate_total_baseline_energy_usage(
+                    pass_12months_start,
+                    pass_12months_end,
+                    baseline_daily_usages
+                )
+
+        if total_baseline_kwh > 0:
+            compare = float(pass_12months_kwh - total_baseline_kwh)/total_baseline_kwh
+            info = {'comparedPercent': compare * 100, 'baselineYear': baseline_year}
+        else:
+            info = {'comparedPercent': None, 'baselineYear': None}
+
         response = Response(info, status=status.HTTP_200_OK)
         return response

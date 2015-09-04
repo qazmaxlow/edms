@@ -67,7 +67,7 @@ def send_report_by_schedulers():
             'report_type': report_type
         }
         url_params_json = json.dumps(url_params)
-        url_token = UrlToken.objects.create_url_token(scheduler.created_by, expiration_days=10, url=url_regex, url_params=url_params_json)
+        url_token = UrlToken.objects.create_url_token(scheduler.created_by, expiration_days=7, url=url_regex, url_params=url_params_json)
 
         # report_token = url_token.token_key
         qd = QueryDict('', mutable=True)
