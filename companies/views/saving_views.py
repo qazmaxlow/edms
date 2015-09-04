@@ -187,9 +187,10 @@ class compareToBaseline(APIView):
 
                 urs = get_unitrate_daterange_map(system, start_date, end_date, 'money')
                 for ur in urs:
-                    baseline_year = min(baseline_year or unit_start_date.year, unit_start_date.year)
+
                     unit_start_date = ur['from']
                     unit_end_date = ur['to']
+                    baseline_year = min(baseline_year or unit_start_date.year, unit_start_date.year)
 
                     kwh = 0
                     if baselines.exists():
@@ -206,9 +207,10 @@ class compareToBaseline(APIView):
 
                 urs = get_unitrate_daterange_map(system, start_date, end_date, 'co2')
                 for ur in urs:
-                    baseline_year = min(baseline_year or unit_start_date.year, unit_start_date.year)
+
                     unit_start_date = ur['from']
                     unit_end_date = ur['to']
+                    baseline_year = min(baseline_year or unit_start_date.year, unit_start_date.year)
 
                     kwh = 0
                     if baselines.exists():
