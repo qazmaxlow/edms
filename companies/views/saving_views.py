@@ -175,9 +175,7 @@ class compareToBaseline(APIView):
 
             if baselines.exists():
 
-
                 from utils import calculation
-
 
                 # baseline_daily_usages = BaselineUsage.transform_to_daily_usages(grouped_baselines[system.id], system.time_zone)
                 baseline_daily_usages = BaselineUsage.transform_to_daily_usages(
@@ -190,18 +188,16 @@ class compareToBaseline(APIView):
 
                     unit_start_date = ur['from']
                     unit_end_date = ur['to']
-                    baseline_year = min(baseline_year or unit_start_date.year, unit_start_date.year)
-
-                    kwh = 0
-                    if baselines.exists():
-                        kwh = calculation.calculate_total_baseline_energy_usage(
-                            unit_start_date,
-                            unit_end_date,
-                            baseline_daily_usages
-                        )
+                    kwh = calculation.calculate_total_baseline_energy_usage(
+                        unit_start_date,
+                        unit_end_date,
+                        baseline_daily_usages
+                    )
 
                     sids = [s.id for s in system.direct_sources]
+
                     if len(sids) > 0:
+                        baseline_year = min(baseline_year or unit_start_date.year, unit_start_date.year)
                         total_usages = system.total_usage(unit_start_date, unit_end_date, source_ids=sids)
                         changed_cost += (total_usages['totalKwh'] - kwh) * ur['unitrate'].rate
 
@@ -210,18 +206,16 @@ class compareToBaseline(APIView):
 
                     unit_start_date = ur['from']
                     unit_end_date = ur['to']
-                    baseline_year = min(baseline_year or unit_start_date.year, unit_start_date.year)
-
-                    kwh = 0
-                    if baselines.exists():
-                        kwh = calculation.calculate_total_baseline_energy_usage(
-                            unit_start_date,
-                            unit_end_date,
-                            baseline_daily_usages
-                        )
+                    kwh = calculation.calculate_total_baseline_energy_usage(
+                        unit_start_date,
+                        unit_end_date,
+                        baseline_daily_usages
+                    )
 
                     sids = [s.id for s in system.direct_sources]
+
                     if len(sids) > 0:
+                        baseline_year = min(baseline_year or unit_start_date.year, unit_start_date.year)
                         total_usages = system.total_usage(unit_start_date, unit_end_date, source_ids=sids)
                         changed_co2 += (total_usages['totalKwh'] - kwh) * ur['unitrate'].rate
 
