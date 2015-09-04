@@ -151,7 +151,7 @@ class compareToBaseline(APIView):
         system_and_childs = System.get_systems_within_root(_system.code)
         changed_cost = 0
         changed_co2 = 0
-        baseline_year = 1900
+        baseline_year = None
 
         for system in system_and_childs:
             # first date using entrak
@@ -174,7 +174,7 @@ class compareToBaseline(APIView):
             # total_changed = 0
 
             if baselines.exists():
-                baseline_year = baselines[0].start_dt.year
+
 
                 from utils import calculation
 
@@ -194,6 +194,7 @@ class compareToBaseline(APIView):
 
                 kwh = 0
                 if baselines.exists():
+                    baseline_year = min(baseline_year or unit_start_date.year, unit_start_date.year)
                     kwh = calculation.calculate_total_baseline_energy_usage(
                         unit_start_date,
                         unit_end_date,
@@ -225,7 +226,9 @@ class compareToBaseline(APIView):
                     total_usages = system.total_usage(unit_start_date, unit_end_date, source_ids=sids)
                     changed_co2 += (total_usages['totalKwh'] - kwh) * ur['unitrate'].rate
 
-
-        info = {'costChanged': changed_cost, 'co2Changed': changed_co2, 'baselineYear': baseline_year}
+        if baseline_year:
+            info = {'costChanged': changed_cost, 'co2Changed': changed_co2, 'baselineYear': baseline_year}
+        else:
+            info = {'costChanged': None, 'co2Changed': None, 'baselineYear': None}
         response = Response(info, status=status.HTTP_200_OK)
         return response

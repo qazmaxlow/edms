@@ -102,7 +102,7 @@ class progressCompareToBaseline(APIView):
         _system = System.objects.get(code=syscode)
         system_and_childs = System.get_systems_within_root(_system.code)
         baselines = None
-
+        baseline_year = None
 
         pass_12months_kwh = 0
         total_baseline_kwh = 0
@@ -118,10 +118,6 @@ class progressCompareToBaseline(APIView):
 
             # baseline, assume this is one year data
             baselines = BaselineUsage.objects.filter(system=system).order_by('start_dt')
-            year_ranges = range(start_date_year, timezone.now().year+1)
-
-            # if len(baselines) < 12:
-                # return Response({'noBaseline': True}, status=status.HTTP_200_OK)
 
             # this_year_kwh =
             total_changed = 0
@@ -135,10 +131,8 @@ class progressCompareToBaseline(APIView):
             if pass_12months_start < start_date:
                 pass_12months_start = start_date
 
-
-            baselines = BaselineUsage.objects.filter(system=system).order_by('start_dt')
-
             if baselines.exists():
+                baseline_year = min(baseline_year or pass_12months_start.year, pass_12months_start.year)
                 pass_12months_kwh += system.get_total_kwh(pass_12months_start, pass_12months_end)
                 baseline_daily_usages = BaselineUsage.transform_to_daily_usages(
                     baselines,
@@ -150,9 +144,11 @@ class progressCompareToBaseline(APIView):
                     baseline_daily_usages
                 )
 
+        if total_baseline_kwh > 0:
+            compare = float(pass_12months_kwh - total_baseline_kwh)/total_baseline_kwh
+            info = {'comparedPercent': compare * 100, 'baselineYear': baseline_year}
+        else:
+            info = {'comparedPercent': None, 'baselineYear': None}
 
-        compare = float(pass_12months_kwh - total_baseline_kwh)/total_baseline_kwh
-
-        info = {'comparedPercent': compare * 100, 'baselineYear': baselines[0].start_dt.year}
         response = Response(info, status=status.HTTP_200_OK)
         return response

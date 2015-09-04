@@ -1227,8 +1227,8 @@
             change: function(data){
                 if (data.items && data.items[0]){
                     var d = data.items[0];
-                    if (d.noBaseline){
-                        $scope.comparedPercent = 0;
+                    if (d.comparedPercent === null || d.baselineYear === null){
+                        $scope.comparedPercent = null;
                         $scope.fromBaselineText = '{% trans "from your baseline" %}';
                         $scope.yearRangeText = "";
                         $scope.chineseFromBaselineText = "";
@@ -1275,11 +1275,12 @@
                 $scope.$apply(function(){
                     if (data.items && data.items[0]){
                         var d = data.items[0];
-                        if (d.noBaseline){
+
+                        if (typeof d.baselineYear !== 'number' || (d.baselineYear%1) !== 0){
                             $scope.saving.costChanged = 0;
                             $scope.saving.co2Changed = 0;
                             $scope.saving.currencyUnit = '{{current_system.money_unit.name}}';
-                            $scope.footerText = '{% trans "Compared with your baseline year" %}';
+                            $scope.footerText = '{% trans "Compared with your baseline year of " %}';
                         } else {
                             $scope.saving.costChanged = d.costChanged || 0;
                             $scope.saving.co2Changed = d.co2Changed || 0;
