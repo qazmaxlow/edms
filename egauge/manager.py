@@ -103,15 +103,15 @@ class SourceManager:
         if source_reading_mins:
             SourceReadingMin.objects.insert(source_reading_mins)
 
-        if error_sources:
-            SourceReadingMinInvalid.objects.insert([
-                                SourceReadingMinInvalid(
-                                    datetime=retrieve_time,
-                                    source_id=source['_id'],
-                                    name=source['name'],
-                                    xml_url=xml_url,
-                                    tz=source['tz']
-                                ) for source in error_sources])
+        # if error_sources:
+        #     SourceReadingMinInvalid.objects.insert([
+        #                         SourceReadingMinInvalid(
+        #                             datetime=retrieve_time,
+        #                             source_id=source['_id'],
+        #                             name=source['name'],
+        #                             xml_url=xml_url,
+        #                             tz=source['tz']
+        #                         ) for source in error_sources])
 
         if need_update_source_ids:
             # source with same XML should be same timezone
@@ -166,15 +166,15 @@ class SourceManager:
                 # log parent data only
                 # no point to log individual member as all members must be redownloaded
                 Utils.log_exception(e)
-                SourceReadingMinInvalid.objects.insert(
-                    SourceReadingMinInvalid(
-                        datetime=retrieve_time,
-                        source_id=source['id'],
-                        name=source['name'],
-                        xml_url=source['xml_url'],
-                        tz=source['tz']
-                    )
-                )
+                # SourceReadingMinInvalid.objects.insert(
+                #     SourceReadingMinInvalid(
+                #         datetime=retrieve_time,
+                #         source_id=source['id'],
+                #         name=source['name'],
+                #         xml_url=source['xml_url'],
+                #         tz=source['tz']
+                #     )
+                # )
 
 
     @staticmethod
@@ -280,7 +280,7 @@ class SourceManager:
 
         if source_reading_mins:
             try:
-                SourceReadingMin.objects.insert(source_reading_mins, write_concern={'continue_on_error': True})
+                SourceReadingMin.objects.insert(source_reading_mins, write_options={'continue_on_error': True})
             except NotUniqueError, e:
                 # do nothing
                 pass
@@ -358,7 +358,7 @@ class SourceManager:
                 logger.error(e)
 
             if source_reading_mins:
-                SourceReadingMin.objects.insert(source_reading_mins, write_concern={'continue_on_error': True})
+                SourceReadingMin.objects.insert(source_reading_mins, write_options={'continue_on_error': True})
             # if source_reading_mins_invalid:
                 # SourceReadingMinInvalid.objects.insert(source_reading_mins_invalid)
             if need_update_source_ids:
@@ -445,11 +445,11 @@ class SourceManager:
                             name=source_with_members['name'],
                             tz=source_with_members['tz']
                         ) for (idx, reading_datetime) in enumerate(reading_datetimes)]
-                SourceReadingMinInvalid.objects.insert(source_reading_mins_invalid)
+                # SourceReadingMinInvalid.objects.insert(source_reading_mins_invalid)
                 return
 
             if source_reading_mins:
-                SourceReadingMin.objects.insert(source_reading_mins, write_concern={'continue_on_error': True})
+                SourceReadingMin.objects.insert(source_reading_mins, write_options={'continue_on_error': True})
 
             if need_update_source_ids:
                 source_tz = source_with_members['tz']
