@@ -293,6 +293,9 @@ class CreateGoalSettingView(generics.CreateAPIView):
         goal_type = request.data['goal_type']
         is_for_all_systems = request.data['is_all_systems']
 
+        request_data_list = []
+        response_data = []
+
         if goal_type == '0':
             syscode = self.kwargs['system_code']
             systems = System.get_systems_within_root(syscode)
@@ -307,7 +310,8 @@ class CreateGoalSettingView(generics.CreateAPIView):
             this_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
             next_month = this_month
 
-            response_data = []
+
+
             for i in range(12):
                 next_month += relativedelta(months=1)
 
@@ -319,27 +323,35 @@ class CreateGoalSettingView(generics.CreateAPIView):
                     for s in systems:
                         # assert False
                         request_data['system'] = s.id
-                        serializer = self.get_serializer(data=request_data)
-                        serializer.is_valid(raise_exception=True)
-                        self.perform_create(serializer)
-                        headers = self.get_success_headers(serializer.data)
-                        response_data.append(serializer.data)
-
+                        request_data_list.append(request_data)
                 else:
-                    serializer = self.get_serializer(data=request_data)
-                    serializer.is_valid(raise_exception=True)
-                    self.perform_create(serializer)
-                    headers = self.get_success_headers(serializer.data)
-                    response_data.append(serializer.data)
+                    request_data_list.append(request_data)
 
-            return Response(response_data, status=status.HTTP_201_CREATED, headers=headers)
+        else:
 
+            if is_for_all_systems == 'true':
 
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+                response_data = []
+                syscode = self.kwargs['system_code']
+                systems = System.get_systems_within_root(syscode)
+                request_data = dict(request.data.items())
+
+                for s in systems:
+                    # assert False
+                    request_data['system'] = s.id
+                    request_data_list.append(request_data)
+
+            else:
+                request_data_list.append(request_data)
+
+        for r in request_data_list:
+            serializer = self.get_serializer(data=r)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            response_data.append(serializer.data)
+
+        return Response(response_data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class UpdateGoalSettingView(generics.UpdateAPIView):

@@ -148,7 +148,6 @@ class Alert(models.Model):
 
                 if recent_value != 0:
 
-                    threshold_kwh = recent_value
                     current_kwh = value
 
                     if self.compare_method == ALERT_COMPARE_METHOD_ABOVE:
@@ -163,8 +162,10 @@ class Alert(models.Model):
 
                     if self.compare_method == 'above-threshold':
                         diff_percent = int(float(value - self.peak_threshold)/self.peak_threshold*100)
+                        threshold_kwh = self.peak_threshold
                     else:
                         diff_percent = int(((float(value)/recent_value)-1)*100)
+                        threshold_kwh = recent_value
 
         verify_result = {
             'start_dt': start_dt,
