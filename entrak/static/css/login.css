@@ -120,7 +120,7 @@ form img{
     vertical-align: middle;
     margin-right: 5px;
 }
-input[type="submit"]{
+input[type="submit"]:not(.greenBtn){
     margin-top: 10px;
     width: 70px;
     height: 28px;
@@ -224,4 +224,164 @@ a.forget-pwd-link {
 
 .forget-pwd-wrapper #msgBox.error-text{
     color: #e05d5d;
+}
+
+
+/* copy from paper*/
+a,
+a:link,
+a:visited,
+a:active,
+a:hover {
+    text-decoration: none;
+    color: #929292;
+}
+
+input:-moz-placeholder {
+    color: #b4b4b4;
+    font-weight: 300;
+}
+::-webkit-input-placeholder {
+    color: #b4b4b4;
+    font-weight: 300;
+}
+::-moz-placeholder {
+    color: #b4b4b4;
+    font-weight: 300;
+}
+:-ms-input-placeholder {
+    color: #b4b4b4;
+    font-weight: 300;
+}
+
+.textBox,
+.textBox:-webkit-autofill {
+    width: 100%;
+    height: 40px;
+    background-color: #ffffff !important;
+    border: none;
+    outline: none;
+    color: #555555 !important;
+    font-size: 1.143em;
+    padding-left: 35px;
+    background-repeat: no-repeat;
+    background-position: 5px center;
+    box-sizing: border-box;
+}
+
+
+.textBox.username {
+    background-image: url(/static/images/login/username.png) !important;
+}
+
+.textBox.password {
+    background-image: url(/static/images/login/password.png) !important;
+}
+
+input.greenBtn {
+    outline: none;
+    text-align: center;
+    font-weight: 300;
+    border: none;
+    height: 30px;
+    width: 80px;
+    border-radius: 30px;
+    color: #ffffff;
+    background-color: #8cc63e;
+    cursor: pointer;
+}
+
+.light {
+    font-weight: 300;
+}
+
+.greenText {
+    color: #8cc63e;
+}
+
+.redText {
+    color: #eb2726;
+}
+
+.greyText {
+    color: #929292;
+}
+
+.lightGreyText {
+    color: #b4b4b4;
+}
+
+.bigText1 {
+    font-size: 1.143em;
+}
+
+.topIcon {
+    margin-top: 40px;
+    margin-bottom: 30px;
+}
+
+.errText {
+    width: calc(100% - 85px);
+    text-align: left;
+    color: #eb2726;
+    font-weight: 300;
+}
+
+.toLeft {
+    float: left;
+}
+
+.toRight {
+    float: right;
+}
+
+
+.formRow {
+    overflow: hidden;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px;
+    text-align: center;
+}
+
+.formRow.top25 {
+    margin-top: 25px;
+}
+
+.top15 {
+    margin-top: 15px;
+}
+
+[type="checkbox"]:not(:checked),
+[type="checkbox"]:checked {
+    display: none;
+}
+
+[type="checkbox"]:not(:checked) + label,
+[type="checkbox"]:checked + label {
+  position: relative;
+  padding-left: 25px;
+  height: 22px;
+  cursor: pointer;
+  font-weight: 300;
+}
+
+[type="checkbox"]:not(:checked) + label:before,
+[type="checkbox"]:checked + label:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 14px;
+  height: 14px;
+  border: 1px solid #e5e5e5;
+  border-radius: 3px;
+}
+
+[type="checkbox"]:not(:checked) + label:before {
+    background: #ffffff;
+}
+[type="checkbox"]:checked + label:before {
+    background: #8cc63e;
 }
