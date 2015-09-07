@@ -280,7 +280,7 @@ class SourceManager:
 
         if source_reading_mins:
             try:
-                SourceReadingMin.objects.insert(source_reading_mins, write_options={'continue_on_error': True})
+                SourceReadingMin.objects.insert(source_reading_mins, write_concern={'continue_on_error': True})
             except NotUniqueError, e:
                 # do nothing
                 pass
@@ -358,7 +358,7 @@ class SourceManager:
                 logger.error(e)
 
             if source_reading_mins:
-                SourceReadingMin.objects.insert(source_reading_mins, write_options={'continue_on_error': True})
+                SourceReadingMin.objects.insert(source_reading_mins, write_concern={'continue_on_error': True})
             # if source_reading_mins_invalid:
                 # SourceReadingMinInvalid.objects.insert(source_reading_mins_invalid)
             if need_update_source_ids:
@@ -449,7 +449,7 @@ class SourceManager:
                 return
 
             if source_reading_mins:
-                SourceReadingMin.objects.insert(source_reading_mins, write_options={'continue_on_error': True})
+                SourceReadingMin.objects.insert(source_reading_mins, write_concern={'continue_on_error': True})
 
             if need_update_source_ids:
                 source_tz = source_with_members['tz']
