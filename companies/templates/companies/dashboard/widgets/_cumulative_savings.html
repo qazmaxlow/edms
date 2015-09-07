@@ -19,7 +19,7 @@
     </div>
     {% endverbatim %}
     
-    <div class="widget-content row">
+    <div ng-show="!noBaseline" class="widget-content row">
         <div class="description-1" ng-bind="headerText"></div>
         <div class="middle-box">
             <div class="top-box" ng-class="{saved : isSaved}">
@@ -36,5 +36,9 @@
         <div class="footer-text" ng-bind="footerText">
             <span ng-bind="footerText"></span>{% ifequal LANGUAGE_CODE 'zh-tw' %}<span>年的基準用量</span>{% endifequal %}
         </div>
+    </div>
+    <div ng-show="noBaseline" class="widget-content row hPad20 noBaseline bg-image h-center">
+        <div class="height25"></div>
+        <div class="description-6" ng-bind="noBaselineText"></div>
     </div>
 </div>

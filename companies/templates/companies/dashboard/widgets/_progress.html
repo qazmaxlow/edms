@@ -16,7 +16,12 @@
         </div>
     </div>
     
-    <div class="widget-content row bg-image" ng-class="{'increase' : isIncrease}">
+
+    <div ng-show="noBaseline" class="hPad20 widget-content row bg-image noBaseline">
+        <div class="height25"></div>
+        <div class="description-6" ng-bind="noBaselineText"></div>
+    </div>
+    <div ng-show="!noBaseline" class="widget-content row bg-image" ng-class="{'increase' : isIncrease}">
         <div class="description-6 top-space" ng-bind="p12DescLine1Text"></div>
         <div class="description-6" ng-bind="isIncrease ? increaseLine2Text : decreaseLine2Text"></div>
         <div class="percentRow">
