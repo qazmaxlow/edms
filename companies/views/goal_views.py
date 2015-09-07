@@ -310,8 +310,6 @@ class CreateGoalSettingView(generics.CreateAPIView):
             this_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
             next_month = this_month
 
-
-
             for i in range(12):
                 next_month += relativedelta(months=1)
 
@@ -322,8 +320,9 @@ class CreateGoalSettingView(generics.CreateAPIView):
                 if is_for_all_systems == 'true':
                     for s in systems:
                         # assert False
-                        request_data['system'] = s.id
-                        request_data_list.append(request_data)
+                        request_data_copy = request_data.copy()
+                        request_data_copy['system'] = s.id
+                        request_data_list.append(request_data_copy)
                 else:
                     request_data_list.append(request_data)
 
@@ -331,15 +330,15 @@ class CreateGoalSettingView(generics.CreateAPIView):
 
             if is_for_all_systems == 'true':
 
-                response_data = []
                 syscode = self.kwargs['system_code']
                 systems = System.get_systems_within_root(syscode)
                 request_data = dict(request.data.items())
 
                 for s in systems:
                     # assert False
-                    request_data['system'] = s.id
-                    request_data_list.append(request_data)
+                    request_data_copy = request_data.copy()
+                    request_data_copy['system'] = s.id
+                    request_data_list.append(request_data_copy)
 
             else:
                 request_data_list.append(request_data)
