@@ -1207,7 +1207,7 @@
         $scope.p12DescLine1Text = '{% trans "Over the past 12 months" %}';
         $scope.increaseLine2Text = '{% trans "you have increased your energy use" %}';
         $scope.decreaseLine2Text = '{% trans "you have decreased your energy use" %}';
-
+        $scope.noBaselineText = '{% trans "You have not submitted a baseline for the past year - we cannot calculate your progress" %}';
 
         var progress_ds = new kendo.data.DataSource({
             transport: {
@@ -1228,11 +1228,9 @@
                 if (data.items && data.items[0]){
                     var d = data.items[0];
                     if (d.comparedPercent === null || d.baselineYear === null){
-                        $scope.comparedPercent = null;
-                        $scope.fromBaselineText = '{% trans "from your baseline" %}';
-                        $scope.yearRangeText = "";
-                        $scope.chineseFromBaselineText = "";
+                        $scope.noBaseline = true;
                     } else {
+                        $scope.noBaseline = false;
                         $scope.comparedPercent = d.comparedPercent || 0;
                         $scope.yearRangeText = d.baselineYear + " - " + (d.baselineYear+1);
                         $scope.fromBaselineText = '{% trans "from your baseline of" %}';
@@ -1254,6 +1252,7 @@
         $scope.headerText = '{% trans "Since you started En-trak, you have" %}';
         $scope.costChangedDescText2 = '{% trans "in energy costs" context "dashboard" %}';
         $scope.tons = '{% trans "Tons" %}';
+        $scope.noBaselineText = '{% trans "You have not submitted a baseline for the past year - we cannot calculate your savings" %}';
 
         $scope.saving = {};
         var saving_ds = new kendo.data.DataSource({
@@ -1277,11 +1276,13 @@
                         var d = data.items[0];
 
                         if (typeof d.baselineYear !== 'number' || (d.baselineYear%1) !== 0){
+                            $scope.noBaseline = true;
                             $scope.saving.costChanged = 0;
                             $scope.saving.co2Changed = 0;
                             $scope.saving.currencyUnit = '{{current_system.money_unit.name}}';
                             $scope.footerText = '{% trans "Compared with your baseline year of " %}';
                         } else {
+                            $scope.noBaseline = false;
                             $scope.saving.costChanged = d.costChanged || 0;
                             $scope.saving.co2Changed = d.co2Changed || 0;
                             $scope.saving.currencyUnit = '{{current_system.money_unit.name}}';

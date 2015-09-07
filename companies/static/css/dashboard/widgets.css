@@ -88,6 +88,14 @@
     background-color: #d9d9d9;
 }
 
+.height25 {
+    height: 25%;
+}
+
+.hPad20 {
+    padding: 0 20px;
+}
+
 .left-padding-15 {
     padding-left: 15px;
 }
@@ -739,7 +747,8 @@
 /* last week stats -----*/
 
 /* progess widget -----*/
-.progress-widget .bg-image {
+.progress-widget .bg-image,
+.widget-content.bg-image.noBaseline {
     background-image: url(../../images/dashboard/progress_decrease.png);
     background-size: contain;
     background-repeat: no-repeat;
