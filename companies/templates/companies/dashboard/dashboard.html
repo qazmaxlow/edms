@@ -668,6 +668,7 @@
     });
 
     ngapp.controller("WidgetBiggestConsumers", function($scope){
+        $scope.langCode = '{{LANGUAGE_CODE}}';
         $scope.isWeek = true;
         $scope.title = '{% trans "Biggest Consumers" %}';
         $scope.btnLeft = '{% trans "Week" context "dashboard" %}';
