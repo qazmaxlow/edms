@@ -69,8 +69,8 @@ b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
     margin: 0;
@@ -92,7 +92,7 @@ sub {
 }
 
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
+article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
     display: block;
 }
@@ -383,7 +383,7 @@ html, body {
     margin-bottom: 0px !important;
 }
 
-#heading{   
+#heading{
     position: absolute;
     font-size: 30px;
     color: white;
@@ -490,4 +490,26 @@ footer img{
     background-image: url(/static/images/fullscreen-icon.png);
     background-repeat: no-repeat;
     background-position: 3px center;
+}
+
+.top-right-menu {
+    display: none;
+    position: absolute;
+    width: 100px;
+    z-index: 100;
+    top: 24px;
+    left: 10px;
+    background-color: #354960;
+    color: white;
+    font-size: 11pt;
+}
+.top-right-menu li{
+    padding: 8px 2px 8px 11px;
+    border-bottom: 1px solid #ffffff;
+}
+.top-right-menu li:hover{
+    background: -webkit-linear-gradient(right, #aee428, #67cd18);
+    background: -o-linear-gradient(left, #aee428, #67cd18);
+    background: -moz-linear-gradient(left, #aee428, #67cd18);
+    background: linear-gradient(to left, #aee428, #67cd18);
 }

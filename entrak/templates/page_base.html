@@ -140,7 +140,19 @@ $(function() {
     });
 
     noti_datasource.read();
+
+    // top right menu hide show
+    $("#topRight-btn, #topRight-menu li").hover(
+        function() {
+            $("#topRight-menu").stop().slideDown(150);
+        },
+        function() {
+            $("#topRight-menu").stop().slideUp(150);
+        }
+    );
+
 });
+
 
 function readMeesage(id) {
     $.ajax({
@@ -257,7 +269,7 @@ function readMeesage(id) {
           {% elif 'belle' in systems.0.code %}
             <img class="image-carousel" style="right: 0;" src="{% static 'images/banners/belle.jpg' %}">
           {% else %}
-            <img class="image-carousel" src="{% static 'images/banner-animation.gif' %}">
+            <!-- <img class="image-carousel" src="{% static 'images/banner-animation.gif' %}"> -->
           {% endif %}
 
 
@@ -268,8 +280,18 @@ function readMeesage(id) {
 
             <div class="change-lang-block">
                 <a lang_code="zh-tw" class="{% ifequal LANGUAGE_CODE 'zh-tw' %}current-lang{% endifequal %}" href="#">繁體中文</a>
-                <span> / </span>
+                <span> | </span>
                 <a lang_code="en" class="{% ifequal LANGUAGE_CODE 'en' %}current-lang{% endifequal %}" href="#">ENGLISH</a>
+                <span> | </span>
+
+                <a id="topRight-btn">&#9662;</a>
+                <ul class="top-right-menu" id="topRight-menu">
+                    <a href="{% url 'profile' system_code=systems.0.code %}"><li>{% trans "Settings" %}</li></a>
+                    <a href="{% url 'faq' system_code=systems.0.code %}"><li>{% trans "FAQ" %}</li></a>
+                    <a href="{% url 'disclaimer' system_code=systems.0.code %}"><li>{% trans "Legal" %}</li></a>
+                    <a href="{% url 'logout' system_code=systems.0.code %}"><li>{% trans "Logout" %}</li></a>
+                </ul>
+
             </div>
 
             <div id="fullscreen-title" style="display: none;">Real Time Energy Monitoring System</div>
