@@ -1275,7 +1275,7 @@
                     if (data.items && data.items[0]){
                         var d = data.items[0];
 
-                        if (typeof d.baselineYear !== 'number' || (d.baselineYear%1) !== 0){
+                        if ( !d.baselineYear){
                             $scope.noBaseline = true;
                             $scope.saving.costChanged = 0;
                             $scope.saving.co2Changed = 0;
@@ -1286,7 +1286,7 @@
                             $scope.saving.costChanged = d.costChanged || 0;
                             $scope.saving.co2Changed = d.co2Changed || 0;
                             $scope.saving.currencyUnit = '{{current_system.money_unit.name}}';
-                            var baselineYear = d.baselineYear + " - " + (d.baselineYear+1);
+                            var baselineYear = d.baselineYear;
                             $scope.footerText = '{% trans "Compared with your baseline year of " %}' + baselineYear;
                         }
                         $scope.isSaved = $scope.saving.costChanged >= 0;
