@@ -102,6 +102,7 @@ class progressCompareToBaseline(APIView):
         _system = System.objects.get(code=syscode)
         system_and_childs = System.get_systems_within_root(_system.code)
         baselines = None
+        baseline_starts, baseline_ends = [], []
         baseline_year = None
 
         pass_12months_kwh = 0
@@ -132,7 +133,9 @@ class progressCompareToBaseline(APIView):
                 pass_12months_start = start_date
 
             if baselines.exists():
-                baseline_year = min(baseline_year or pass_12months_start.year, pass_12months_start.year)
+                baseline_starts.append(baselines.first().start_dt)
+                baseline_ends.append(baselines.last().end_dt)
+
                 pass_12months_kwh += system.get_total_kwh(pass_12months_start, pass_12months_end)
                 baseline_daily_usages = BaselineUsage.transform_to_daily_usages(
                     baselines,
@@ -145,6 +148,7 @@ class progressCompareToBaseline(APIView):
                 )
 
         if total_baseline_kwh > 0:
+            baseline_year = '{0}-{1}'.format(baseline_starts[0].year, baseline_ends[-1].year)
             compare = float(pass_12months_kwh - total_baseline_kwh)/total_baseline_kwh
             info = {'comparedPercent': compare * 100, 'baselineYear': baseline_year}
         else:
