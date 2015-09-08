@@ -399,13 +399,12 @@ html, body {
     bottom: 10px;
     font-size: 8pt;
     color: #FFF;
+    height: 15px;
 }
+.change-lang-block a:hover,
 .change-lang-block a {
     color: #FFF;
     text-decoration: none;
-}
-.change-lang-block a:hover {
-    text-decoration: underline;
 }
 .current-lang{
     text-decoration: underline;
@@ -504,7 +503,10 @@ footer img{
     font-size: 11pt;
 }
 .top-right-menu li{
-    padding: 8px 2px 8px 11px;
+    height: 30px;
+    line-height: 30px;
+    padding-left: 10px;
+    /*padding: 8px 2px 8px 11px;*/
     border-bottom: 1px solid #ffffff;
 }
 .top-right-menu li:hover{
@@ -512,4 +514,18 @@ footer img{
     background: -o-linear-gradient(left, #aee428, #67cd18);
     background: -moz-linear-gradient(left, #aee428, #67cd18);
     background: linear-gradient(to left, #aee428, #67cd18);
+}
+
+.change-lang-block>a,
+.change-lang-block>span  {
+    vertical-align: middle;
+}
+
+.change-lang-block .dropdownArrow {
+    font-size: 20px;
+    display: inline-block;
+    height: 12px;
+    line-height: 12px;
+    vertical-align: top;
+    cursor: pointer;
 }
