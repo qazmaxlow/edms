@@ -371,7 +371,7 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
     });
 
     $("#current-energy-usage").text(Utils.formatWithCommas(totalEnergyUsage.toFixed(0)));
-    $("#current-co2-usage").html(Utils.formatWithCommas((totalCo2Usage/1000).toFixed(0)) + this.multiLangTexts.tons);
+    $("#current-co2-usage").html(Utils.formatWithCommas((totalCo2Usage/1000).toFixed(0)));
     $("#current-money-usage").text(Utils.formatWithCommas("$ " + totalMoneyUsage.toFixed(0)));
 
     var positiveOrNegativePrefix, carImpactSuffix, carImpactSubText, forestImpactSubText, pandaImpactSubText;
@@ -419,7 +419,7 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
     }
 
     var savedCo2Text = Utils.formatWithCommas((Math.abs(reportGenThis.savingInfo.co2)/1000).toFixed(0));
-    savedCo2Text = positiveOrNegativePrefix + savedCo2Text + this.multiLangTexts.tonsCo2;
+    savedCo2Text = positiveOrNegativePrefix + savedCo2Text;
     $("#save-co2-usage").html(savedCo2Text);
     var savedMoneyText = "$ " + Utils.formatWithCommas(Math.abs(reportGenThis.savingInfo.money).toFixed(0));
     savedMoneyText = positiveOrNegativePrefix + savedMoneyText;
@@ -427,17 +427,21 @@ ReportGenerator.prototype.generateKeyStatistics = function() {
 
     var co2InCar = Utils.formatWithCommas(Math.abs((reportGenThis.savingInfo.co2*0.003).toFixed(0)));
     if (this.langCode === 'zh-tw') {
-        $("#car-impact").text(carImpactSuffix + co2InCar + "輛車");
+        $("#car-impact").text(carImpactSuffix + co2InCar);
+        $("#car-impact-unit").text("輛車");
     } else {
-        $("#car-impact").text(co2InCar + " cars");
+        $("#car-impact").text(co2InCar);
+        $("#car-impact-unit").text(" cars");
     }
     carImpactSubText += this.getReportTypeName();
     $("#car-impact-subtext").text(carImpactSubText);
     var co2InForest = Utils.formatWithCommas(Math.abs((reportGenThis.savingInfo.co2*0.016).toFixed(0)));
-    $("#forest-impact").text(co2InForest + this.multiLangTexts.mSquare);
+    $("#forest-impact").text(co2InForest);
+    $("#forest-impact-unit").text(this.multiLangTexts.mSquare);
     $("#forest-impact-subtext").text(forestImpactSubText);
     var co2InElephant = Utils.formatWithCommas(Math.abs((reportGenThis.savingInfo.co2*0.00667).toFixed(0)));
-    $("#panda-impact").text(co2InElephant + this.multiLangTexts.pandas);
+    $("#panda-impact").text(co2InElephant);
+    $("#panda-impact-unit").text(this.multiLangTexts.pandas);
     $("#panda-impact-subtext").html(pandaImpactSubText);
 
     var transformedDatas = [];
