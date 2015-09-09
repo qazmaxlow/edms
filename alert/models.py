@@ -65,22 +65,17 @@ class Alert(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     @property
-    def source(self):
-        return Source.objects.get(id=self.all_source_ids[0])
+    def sources(self):
+        return Source.objects.filter(id__in=self.all_source_ids)
 
     @property
     def parent_system(self):
-        return System.objects.get(code=self.source.system_code)
+        return System.objects.get(code=self.sources[0].system_code)
 
     @property
     def parent_system_name(self):
         system = self.parent_system
         return {'en': system.full_name, 'zh-tw': system.full_name_tc}
-
-    @property
-    def source_name(self):
-        source = self.source
-        return {'en': source.d_name, 'zh-tw': source.d_name_tc}
 
     def __unicode__(self):
         return '%d'%self.id
@@ -206,15 +201,15 @@ class Alert(models.Model):
 
         if (not info['pass_verify']) and info['diff_percent'] is not None:
             diff_percent_text = "%d"%abs(info['diff_percent']) if abs(info['diff_percent']) <= MAX_DIFF_PERCENT_DISPLAY else ">%d"%MAX_DIFF_PERCENT_DISPLAY
-            sub_msg += '   %s%%'%diff_percent_text
+            sub_msg += ' %s%%'%diff_percent_text
 
         if self.type == ALERT_TYPE_PEAK:
-            sub_msg += '  of previous peak of %d kVA'%self.peak_threshold
+            sub_msg += ' of previous peak of %d kVA'%self.peak_threshold
         else:
             if self.compare_method == 'above-threshold':
                 sub_msg += ' higher than your set threshold'
             else:
-                sub_msg += '  higher than recent average'
+                sub_msg += ' higher than recent average'
 
         return sub_msg
 
