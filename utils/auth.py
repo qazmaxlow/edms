@@ -36,8 +36,8 @@ def permission_required(required_level=USER_ROLE_VIEWER_LEVEL):
                     return view_func(request, *args, **kwargs)
                 else:
                     request.session['login_warning_msg'] = _("User is not permitted to access the system.")
-            else:
-                request.session['login_warning_msg'] = _('Please enter username and password.')
+            # else:
+            #     request.session['login_warning_msg'] = _('Please enter username and password.')
 
             return redirect('login', system_code=system_code)
         return wrapper
@@ -57,8 +57,8 @@ def permission_required_trails(required_level=USER_ROLE_VIEWER_LEVEL):
                     return view_func(request, *args, **kwargs)
                 else:
                     request.session['login_warning_msg'] = _("User is not permitted to access the system.")
-            else:
-                request.session['login_warning_msg'] = _('Please enter username and password.')
+            # else:
+            #     request.session['login_warning_msg'] = _('Please enter username and password.')
 
             return redirect('/login/')
         return wrapper
