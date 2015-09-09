@@ -504,7 +504,7 @@ footer img{
     width: 85px;
     z-index: 100;
     top: 28px;
-    left: 40px;
+    right: 0;
     background-color: #354960;
     color: white;
     font-size: 11pt;
@@ -529,10 +529,9 @@ footer img{
 }
 
 .change-lang-block .dropdownArrow {
-    font-size: 20px;
-    display: inline-block;
-    height: 12px;
-    line-height: 12px;
+    height: 25px;
+    width: 25px;
     vertical-align: top;
     cursor: pointer;
+    padding-right: 2px;
 }

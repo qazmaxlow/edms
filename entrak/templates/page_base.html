@@ -102,7 +102,7 @@ $(function() {
 
     $("#{% block selected-menu-link-id %}menu-link-home{% endblock %}").addClass('menu-links-selected');
 
-    $(".change-lang-block > a").click(function(event) {
+    $("#toChinese, #toEnglish").click(function(event) {
         event.preventDefault();
         $('.change-lang-form input[name=language]').val($(this).attr('lang_code'));
         $('.change-lang-form').submit();
@@ -279,13 +279,15 @@ function readMeesage(id) {
             <!-- <div id="sub-heading"><h2>{% block page_subtitle %}{% endblock %}</h2></div> -->
 
             <div class="change-lang-block">
-                <a lang_code="zh-tw" class="{% ifequal LANGUAGE_CODE 'zh-tw' %}current-lang{% endifequal %}" href="#">繁體中文</a>
+<!--                 <a lang_code="zh-tw" class="{% ifequal LANGUAGE_CODE 'zh-tw' %}current-lang{% endifequal %}" href="#">繁體中文</a>
                 <span> | </span>
                 <a lang_code="en" class="{% ifequal LANGUAGE_CODE 'en' %}current-lang{% endifequal %}" href="#">ENGLISH</a>
-                <span> | </span>
+                <span> | </span> -->
 
-                <div id="topRight-btn" class="dropdownArrow">&#9662;</div>
+                <img id="topRight-btn" class="dropdownArrow" src="/static/images/settings-hover.png"/>
                 <ul class="top-right-menu" id="topRight-menu">
+                    {% ifequal LANGUAGE_CODE 'zh-tw' %}<a lang_code="en" id="toEnglish" href="#"><li>English</li></a>{% endifequal %}
+                    {% ifequal LANGUAGE_CODE 'en' %}<a lang_code="zh-tw" id="toChinese" href="#"><li>繁體中文</li></a>{% endifequal %}
                     <a href="{% url 'profile' system_code=systems.0.code %}"><li>{% trans "Settings" %}</li></a>
                     <a href="{% url 'faq' system_code=systems.0.code %}"><li>{% trans "FAQ" %}</li></a>
                     <a href="{% url 'disclaimer' system_code=systems.0.code %}"><li>{% trans "Legal" %}</li></a>
