@@ -255,8 +255,22 @@ class GoalSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         request = self.context.get('request')
 
-        goal_setting = SystemEnergyGoal(**validated_data)
-        goal_setting.created_by = request.user
+        goal_setting, created = SystemEnergyGoal.objects.get_or_create(
+            system = validated_data['system'],
+            goal_type = validated_data['goal_type'],
+            validated_date = validated_data['validated_date'],
+            defaults = {
+                'comparison_type': validated_data['comparison_type'],
+                'goal_save_percent': validated_data['goal_save_percent'],
+                'created_by': request.user,
+            }
+        )
+
+        if not created:
+            goal_setting.comparison_type = validated_data['comparison_type']
+            goal_setting.goal_save_percent = validated_data['goal_save_percent']
+            goal_setting.save()
+
 
         goal_setting.save()
 

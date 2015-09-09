@@ -102,7 +102,7 @@ $(function() {
 
     $("#{% block selected-menu-link-id %}menu-link-home{% endblock %}").addClass('menu-links-selected');
 
-    $(".change-lang-block > a").click(function(event) {
+    $("#toChinese, #toEnglish").click(function(event) {
         event.preventDefault();
         $('.change-lang-form input[name=language]').val($(this).attr('lang_code'));
         $('.change-lang-form').submit();
@@ -140,7 +140,19 @@ $(function() {
     });
 
     noti_datasource.read();
+
+    // top right menu hide show
+    $("#topRight-btn, #topRight-menu li").hover(
+        function() {
+            $("#topRight-menu").stop().slideDown(150);
+        },
+        function() {
+            $("#topRight-menu").stop().slideUp(150);
+        }
+    );
+
 });
+
 
 function readMeesage(id) {
     $.ajax({
@@ -231,12 +243,12 @@ function readMeesage(id) {
                     <a href="{% url 'printers.graph' system_code=systems.0.code %}"><img width="19" height="25" src="{% static 'images/paper-icon.png' %}"><span>{% trans "Paper" %}</span></a>
                 </li>
                 {% endif %}
-                <li id="menu-link-setting">
+<!--                 <li id="menu-link-setting">
                     <a href="{% url 'profile' system_code=systems.0.code %}"><img width="24" height="24" src="{% static 'images/settings-icon.png' %}" style="margin-right:2px"><span>{% trans "Settings" %}</span></a>
                 </li>
                 <li id="menu-link-logout">
                     <a href="{% url 'logout' system_code=systems.0.code %}"><img width="23" height="24" src="{% static 'images/logout-icon.png' %}" style="margin-right:3px"><span>{% trans "Logout" %}</span></a>
-                </li>
+                </li> -->
             </ul>
         </nav>
 
@@ -257,19 +269,31 @@ function readMeesage(id) {
           {% elif 'belle' in systems.0.code %}
             <img class="image-carousel" style="right: 0;" src="{% static 'images/banners/belle.jpg' %}">
           {% else %}
-            <img class="image-carousel" src="{% static 'images/banner-animation.gif' %}">
+            <!-- <img class="image-carousel" src="{% static 'images/banner-animation.gif' %}"> -->
           {% endif %}
 
 
 
             <!-- Header Wording -->
             <div id="heading"><h1>{% block page_title %}{% endblock %}</h1></div>
-            <div id="sub-heading"><h2>{% block page_subtitle %}{% endblock %}</h2></div>
+            <!-- <div id="sub-heading"><h2>{% block page_subtitle %}{% endblock %}</h2></div> -->
 
             <div class="change-lang-block">
-                <a lang_code="zh-tw" class="{% ifequal LANGUAGE_CODE 'zh-tw' %}current-lang{% endifequal %}" href="#">繁體中文</a>
-                <span> / </span>
+<!--                 <a lang_code="zh-tw" class="{% ifequal LANGUAGE_CODE 'zh-tw' %}current-lang{% endifequal %}" href="#">繁體中文</a>
+                <span> | </span>
                 <a lang_code="en" class="{% ifequal LANGUAGE_CODE 'en' %}current-lang{% endifequal %}" href="#">ENGLISH</a>
+                <span> | </span> -->
+
+                <img id="topRight-btn" class="dropdownArrow" src="/static/images/settings-hover.png"/>
+                <ul class="top-right-menu" id="topRight-menu">
+                    {% ifequal LANGUAGE_CODE 'zh-tw' %}<a lang_code="en" id="toEnglish" href="#"><li>English</li></a>{% endifequal %}
+                    {% ifequal LANGUAGE_CODE 'en' %}<a lang_code="zh-tw" id="toChinese" href="#"><li>繁體中文</li></a>{% endifequal %}
+                    <a href="{% url 'profile' system_code=systems.0.code %}"><li>{% trans "Settings" %}</li></a>
+                    <a href="{% url 'faq' system_code=systems.0.code %}"><li>{% trans "FAQ" %}</li></a>
+                    <a href="{% url 'disclaimer' system_code=systems.0.code %}"><li>{% trans "Legal" %}</li></a>
+                    <a href="{% url 'logout' system_code=systems.0.code %}"><li>{% trans "Logout" %}</li></a>
+                </ul>
+
             </div>
 
             <div id="fullscreen-title" style="display: none;">Real Time Energy Monitoring System</div>
@@ -286,7 +310,7 @@ function readMeesage(id) {
         <!-- Header End -->
 
         <!-- Blue Bar bottom -->
-        <div class="blue-bar"></div>
+        <div class="blue-bar-thin"></div>
 
         <div id="sub-heading-facilities">
             <button id="fullscreen-btn" class="k-button" style="display:none;"></button>
@@ -320,9 +344,9 @@ function readMeesage(id) {
     <p style="clear: both;"></p>
     <p id="copyright">Copyright © En-trak Hong Kong Ltd 2015. All rights reserved.</p>
     <a><img id="entrak-logo" src="{% static 'images/powered-by-logo.png' %}"></a>
-    <p class="footer-main"><a class="footer-link" href="{% url 'faq' system_code=systems.0.code %}">FAQ </a>
-    <!-- <a class="footer-link" href="{% url 'profile' system_code=systems.0.code %}"> |  Settings</a> -->
-    <a class="footer-link" href="{% url 'disclaimer' system_code=systems.0.code %}"> |  Legal </a></p>
+    <!-- <p class="footer-main"><a class="footer-link" href="{% url 'faq' system_code=systems.0.code %}">FAQ </a>
+    <a class="footer-link" href="{% url 'profile' system_code=systems.0.code %}"> |  Settings</a>
+    <a class="footer-link" href="{% url 'disclaimer' system_code=systems.0.code %}"> |  Legal </a></p> -->
     <p style="clear: both;"></p>
 </footer>
 {% endblock %}

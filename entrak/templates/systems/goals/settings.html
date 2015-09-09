@@ -98,6 +98,7 @@
                 {% endifequal %}
             </div>
             <div class="btnContainer">
+                <span class="create-goalsetting-msg">{% trans "These goals will replace any existing goals for the same area and time period" %}</span>
                 <span id="errText"></span>
                 <button class="right k-button normal-btn" ng-click="confirmAction()">{% trans "Confirm" %}</button>
                 <button class="right k-button normal-btn cancel" ng-click="hidePopup()">{% trans "Cancel" %}</button>

@@ -1,4 +1,4 @@
-{% load static from staticfiles %
+{% load static from staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -91,7 +91,8 @@
                 visible: true,
                 format: "{0}%",
                 template: "#= category #: #= kendo.format('{0:n0}',value) #"
-            }
+            },
+            transitions: false
         };
         $scope.barOptions = {
             dataSource: {

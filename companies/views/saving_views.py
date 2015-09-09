@@ -151,6 +151,7 @@ class compareToBaseline(APIView):
         system_and_childs = System.get_systems_within_root(_system.code)
         changed_cost = 0
         changed_co2 = 0
+        baseline_starts, baseline_ends = [], []
         baseline_year = None
 
         for system in system_and_childs:
@@ -177,6 +178,9 @@ class compareToBaseline(APIView):
 
                 from utils import calculation
 
+                baseline_starts.append(baselines.first().start_dt)
+                baseline_ends.append(baselines.last().end_dt)
+
                 # baseline_daily_usages = BaselineUsage.transform_to_daily_usages(grouped_baselines[system.id], system.time_zone)
                 baseline_daily_usages = BaselineUsage.transform_to_daily_usages(
                     # grouped_baselines[system.id],
@@ -197,7 +201,6 @@ class compareToBaseline(APIView):
                     sids = [s.id for s in system.direct_sources]
 
                     if len(sids) > 0:
-                        baseline_year = min(baseline_year or unit_start_date.year, unit_start_date.year)
                         total_usages = system.total_usage(unit_start_date, unit_end_date, source_ids=sids)
                         changed_cost += (total_usages['totalKwh'] - kwh) * ur['unitrate'].rate
 
@@ -215,9 +218,13 @@ class compareToBaseline(APIView):
                     sids = [s.id for s in system.direct_sources]
 
                     if len(sids) > 0:
-                        baseline_year = min(baseline_year or unit_start_date.year, unit_start_date.year)
                         total_usages = system.total_usage(unit_start_date, unit_end_date, source_ids=sids)
                         changed_co2 += (total_usages['totalKwh'] - kwh) * ur['unitrate'].rate
+
+        if baseline_starts and baseline_ends:
+            baseline_starts.sort()
+            baseline_ends.sort()
+            baseline_year = '{0}-{1}'.format(baseline_starts[0].year, baseline_ends[-1].year)
 
         if baseline_year:
             info = {'costChanged': changed_cost, 'co2Changed': changed_co2, 'baselineYear': baseline_year}
