@@ -328,11 +328,12 @@ class CreateGoalSettingView(generics.CreateAPIView):
 
         else:
 
+            request_data = dict(request.data.items())
+
             if is_for_all_systems == 'true':
 
                 syscode = self.kwargs['system_code']
                 systems = System.get_systems_within_root(syscode)
-                request_data = dict(request.data.items())
 
                 for s in systems:
                     # assert False
