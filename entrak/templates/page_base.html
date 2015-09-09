@@ -211,15 +211,9 @@ function readMeesage(id) {
                     <a href="{% url 'progress' system_code=systems.0.code %}"><img width="26" height="23" src="{% static 'images/progress-icon.png' %}"><span>{% trans "Progress" %}</span></a>
                 </li> -->
                 {% endif %}
-                {% if 'esf' == user_systems.0.code %}
-                <li id="menu-link-report">
-                    <a href="{% url 'companies.report_revamp' system_code=systems.0.code %}"><img width="26" height="24" src="{% static 'images/reports-icon.png' %}"><span>{% trans "Reports" %}</span></a>
-                </li>
-                {% else %}
                 <li id="menu-link-report">
                     <a href="{% url 'companies.report' system_code=systems.0.code %}"><img width="26" height="24" src="{% static 'images/reports-icon.png' %}"><span>{% trans "Reports" %}</span></a>
                 </li>
-                {% endif %}
                 {% if 'nea-nwro-3f' != systems.0.code and 'dbs-posb' != systems.0.code and 'belle' not in systems.0.code and 'bossini' != systems.0.code and 'searshk' not in systems.0.code %}
 <!--                 <li id="menu-link-display">
                     <a href="{% url 'display' system_code=systems.0.code %}" target="_blank"><img width="26" height="22" src="{% static 'images/display-icon.png' %}"><span>{% trans "Display" %}</span></a>
