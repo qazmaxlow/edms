@@ -35,6 +35,20 @@
 {% block content %}
 {% get_current_language as LANGUAGE_CODE %}
 <div class="system-info-container">
+    {% block system_info_container %}
+    <div class="system-title">{{system|get_system_full_name:LANGUAGE_CODE}}</div>
+    <div class="system-logo">
+        <div class="logo-circle-bound" style="background-image: url('{{system.logo.url}}');"></div>
+        <img src="{% static 'images/user-logo-bg.png' %}">
+    </div>
+    {% endblock %}
+
+    <div class="change-lang-block">
+        <a lang_code="zh-tw" class="{% ifequal LANGUAGE_CODE 'zh-tw' %}current-lang{% endifequal %}" href="#">繁體中文</a>
+        <span> / </span>
+        <a lang_code="en" class="{% ifequal LANGUAGE_CODE 'en' %}current-lang{% endifequal %}" href="#">ENGLISH</a>
+    </div>
+
     <div style="display:none;">
         <form class="change-lang-form" action="{% url 'set_language' %}" method="post">
             {% csrf_token %}
@@ -43,34 +57,37 @@
     </div>
 </div>
 
-<div>
+<div class="bg-container">
+    <img src="{% static 'images/login/bg.png' %}">
+</div>
+
+<div class="desc-header">{% trans "Welcome to En-trak<sup>TM</sup>" %}</div>
+<div class="desc-content">{% trans "Turning Data into Actionable Intelligence" %}</div>
+<div class="login-panel">
+    <div>{% trans "To use the En-trak monitor platform, please sign in" %}</div>
     <form method="POST">{% csrf_token %}
-        <img class="topIcon" src="/static/images/login/en-trak-logo.png"/>
-        <div class="greenText">Turning data into actionable intelligence</div>
-        <div class="formRow">
-            <input class="textBox username" placeholder="Email or Username" maxlength="254" name="username" type="text">
+        <div>
+            <img src="{% static 'images/login/username-icon.png' %}">
+            <input type="text" name="username">
         </div>
-        <div class="formRow">
-            <input class="textBox password" placeholder="Password" name="password" type="password"/>
+        <div>
+            <img src="{% static 'images/login/password-icon.png' %}">
+            <input type="password" name="password" >
         </div>
-        <div class="formRow greyText">
-            <div class="toRight">
-                <a href="#" onclick="openForgetPwd()">{% trans "Forgot Password?" %}</a>
-            </div>
-            <div class="toLeft">
-                <input id="rmbMe" type="checkbox" value="remember_me"/><label for="rmbMe">{% trans 'Remember Me' %}</label>
-            </div>
+        <div class="remember-me">
+            <label for="remember_me" class="remember-me">
+                <input type="checkbox" value="remember_me" name="remember_me" class="remember-me">
+                Remember Me
+            </label>
         </div>
-        <div class="formRow">
-            <div class="toRight">
-                <input class="greenBtn" type="submit" value="{% trans 'Sign In' %}" />
-            </div>
-            {% if warning_msg %}
-            <div class="errText toLeft">{{warning_msg}}</div>
-            {% endif %}
+        <input type="submit" value='{% trans "Sign In" %}'>
+        <div class="forget-pwd-container">
+            <a class="forget-pwd-link" href="#" onclick="openForgetPwd()">{% trans "Forgot your password?" %}</a>
         </div>
-        <img class="topIcon" src="/static/images/login/en-trak-product.png"/>
     </form>
+    {% if warning_msg %}
+    <div class="warning-msg">{{warning_msg}}</div>
+    {% endif %}
 </div>
 <div ng-app="entrak">
     <div class="demo-section k-header" ng-controller="MyCtrl">
@@ -288,5 +305,12 @@
     </script>
 </div>
 
+<footer class="site-footer">
+    <p style="clear: both;"></p>
+    <p id="copyright">Copyright © En-trak Hong Kong Ltd 2015. All rights reserved.</p>
+    <a href="#"><img id="entrak-logo" src="{% static 'images/powered-by-logo.png' %}"></a>
+    <p class="footer-main"></p>
+    <p style="clear: both;"></p>
+</footer>
 
 {% endblock %}
