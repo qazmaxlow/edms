@@ -346,6 +346,11 @@ class SourceManager:
                 readings = SourceManager.__get_egauge_compressed_data(xml_url, end_timestamp)
                 for source in sources:
                     if source['name'] in readings:
+                        SourceReadingMin.objects(
+                            source_id=source['_id'],
+                            datetime__gte=start_time,
+                            datetime__lte=end_time
+                        ).delete()
                         source_reading_mins += [SourceReadingMin(
                             datetime=reading_datetime,
                             source_id=source['_id'],
@@ -358,7 +363,10 @@ class SourceManager:
                 logger.error(e)
 
             if source_reading_mins:
-                SourceReadingMin.objects.insert(source_reading_mins, write_concern={'continue_on_error': True})
+                try:
+                    SourceReadingMin.objects.insert(source_reading_mins, write_concern={'continue_on_error': True})
+                except NotUniqueError, e:
+                    logger.error(e)
             # if source_reading_mins_invalid:
                 # SourceReadingMinInvalid.objects.insert(source_reading_mins_invalid)
             if need_update_source_ids:
@@ -449,7 +457,10 @@ class SourceManager:
                 return
 
             if source_reading_mins:
-                SourceReadingMin.objects.insert(source_reading_mins, write_concern={'continue_on_error': True})
+                try:
+                    SourceReadingMin.objects.insert(source_reading_mins, write_concern={'continue_on_error': True})
+                except NotUniqueError, e:
+                    logger.error(e)
 
             if need_update_source_ids:
                 source_tz = source_with_members['tz']
@@ -535,7 +546,7 @@ class SourceManager:
         for idx, cname in enumerate(cnames):
             values = root.xpath("//r[position()>1]/c[%d]/text()"%(idx+1))
             if len(values) != row:
-                raise SourceManager.GetEgaugeDataError("cname or row number not much! source: %s, cname: %s, row_num: %d"%(full_url, cname, row))
+                raise SourceManager.GetEgaugeDataError("cname or row number not match! source: %s, cname: %s, row_num: %d"%(full_url, cname, row))
             result[cname] = [abs(float(value))/3600000 for value in values]
         return result
 
