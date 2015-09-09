@@ -26,10 +26,10 @@ app.conf.update(
             'task': 'egauge.tasks.retrieve_all_reading',
             'schedule': crontab(),
         },
-        'recover-reading-every-10-min': {
-            'task': 'egauge.tasks.recover_all_invalid_reading',
-            'schedule': crontab(minute='*/10'),
-        },
+        # 'recover-reading-every-10-min': {
+        #     'task': 'egauge.tasks.recover_all_invalid_reading',
+        #     'schedule': crontab(minute='*/10'),
+        # },
         'check-alert-every-10-min': {
             'task': 'alert.tasks.invoke_check_all_alerts',
             'schedule': crontab(minute='*/10'),
@@ -54,16 +54,16 @@ app.conf.update(
             'task': 'companies.tasks.send_report_by_schedulers',
             'schedule': crontab(minute='*/10'),
         },
-        # 'recap-missing-readings-hourly': {
-        #     'task': 'egauge.tasks.auto_recap',
-        #     'schedule': crontab(minute='25'),
-        #     'kwargs': {"hours": 6},
-        # },
-        # 'recap-missing-readings-daily': {
-        #     'task': 'egauge.tasks.auto_recap',
-        #     'schedule': crontab(minute='35', hour='0'),
-        #     'kwargs': {"hours": 24},
-        # },
+        'recap-missing-readings-hourly': {
+            'task': 'egauge.tasks.auto_recap',
+            'schedule': crontab(minute='25'),
+            'kwargs': {"hours": 6},
+        },
+        'recap-missing-readings-daily': {
+            'task': 'egauge.tasks.auto_recap',
+            'schedule': crontab(minute='35', hour='0'),
+            'kwargs': {"hours": 24},
+        },
     },
 
     CELERY_ROUTES = {

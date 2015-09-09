@@ -787,14 +787,14 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
         if compare_value > 0:
             compare_to_last_interval = (last_value - compare_value)*100/compare_value
+            compare_last_interval_helper = CompareTplHepler(compare_to_last_interval)
+            m['s2_barchart_compare_text'] = _("Your energy consumption this {1} was {0} than it was last {1}").format(
+                compare_last_interval_helper.formated_percent_change,
+                report_type_name
+            )
         else:
             compare_to_last_interval = None
-
-        compare_last_interval_helper = CompareTplHepler(compare_to_last_interval)
-        m['s2_barchart_compare_text'] = _("Your energy consumption this {1} was {0} than it was last {1}").format(
-            compare_last_interval_helper.formated_percent_change,
-            report_type_name
-        )
+            m['s2_barchart_compare_text'] = ''
 
         if report_type == 'month':
             if current_lang()=="zh-tw":
@@ -848,7 +848,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
             if last_total:
                 total_compare = float(current_total- last_total)/last_total*100
 
-            chart_title = 'N/A'
+            chart_title = ''
             if total_compare:
                 if(CompareTplHepler(total_compare).compared_percent >=0):
                     chart_title = _('Overall: {0.compared_percent_abs:.0f}&#37; more energy than last {1}').format(CompareTplHepler(total_compare), report_type_name)
@@ -904,11 +904,14 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
         for k, v in system.overnight_usage_by_day(start_date, end_date).items():
             overnight_daily_usage[str(int_date_to_timestamp(k, system_tz))] = v['totalMoney']
 
+            dt = int_date_to_datetime(k, system_tz)
+            wd = dt.weekday()
+
             if v['totalMoney'] > highest_overnight_cost:
                 highest_overnight_cost = v['totalMoney']
                 highest_overnight_date = int_date_to_datetime(k, system_tz)
 
-            if (wd >= 5 and wd <=6) or dt.date() in all_holidays:
+            if (wd >= 5 and wd <= 6) or dt.date() in all_holidays:
                 if v['totalMoney'] > highest_weekend_cost:
                     highest_weekend_cost = v['totalMoney']
                     highest_weekend_date = dt

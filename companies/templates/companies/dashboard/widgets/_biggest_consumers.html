@@ -34,8 +34,11 @@
                     </div>
                 </div>
                 <div class="bc-left-box auto-width">
-                    <div class="name-row">
+                    <div class="name-row" ng-show="langCode == 'en'">
                         <div class="name" ng-bind="c.d_name"></div>
+                    </div>
+                    <div class="name-row" ng-show="langCode == 'zh-tw'">
+                        <div class="name" ng-bind="c.d_name_tc"></div>
                     </div>
                     <div class="bar-row">
                         <img class="ranking-icon" ng-src="/static/images/dashboard/consumer-{{$index+1}}.png"></img>
