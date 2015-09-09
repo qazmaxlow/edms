@@ -278,13 +278,13 @@ function readMeesage(id) {
             <div id="heading"><h1>{% block page_title %}{% endblock %}</h1></div>
             <!-- <div id="sub-heading"><h2>{% block page_subtitle %}{% endblock %}</h2></div> -->
 
+            <img id="topRight-btn" class="dropdownArrow" src="/static/images/settings-hover.png"/>
             <div class="change-lang-block">
 <!--                 <a lang_code="zh-tw" class="{% ifequal LANGUAGE_CODE 'zh-tw' %}current-lang{% endifequal %}" href="#">繁體中文</a>
                 <span> | </span>
                 <a lang_code="en" class="{% ifequal LANGUAGE_CODE 'en' %}current-lang{% endifequal %}" href="#">ENGLISH</a>
                 <span> | </span> -->
-
-                <img id="topRight-btn" class="dropdownArrow" src="/static/images/settings-hover.png"/>
+                
                 <ul class="top-right-menu" id="topRight-menu">
                     {% ifequal LANGUAGE_CODE 'zh-tw' %}<a lang_code="en" id="toEnglish" href="#"><li>English</li></a>{% endifequal %}
                     {% ifequal LANGUAGE_CODE 'en' %}<a lang_code="zh-tw" id="toChinese" href="#"><li>繁體中文</li></a>{% endifequal %}
