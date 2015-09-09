@@ -45,7 +45,7 @@ def alert_settings_view(request, system_code=None):
     alert_history_infos = []
     for alert_history in alert_historys:
 
-        system = System.objects.get(code=alert_history.alert.source.system_code)
+        system = System.objects.get(code=alert_history.alert.sources[0].system_code)
 
         info = {
             'created': calendar.timegm(alert_history.created.utctimetuple()),
