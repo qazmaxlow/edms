@@ -16,7 +16,7 @@ class SystemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = System
-        fields = ('id', 'code', 'name', 'name_tc', 'full_name', 'full_name_tc', 'child_systems')
+        fields = ('id', 'code', 'name', 'name_tc', 'full_name', 'full_name_tc', 'child_systems', 'city')
 
 
 class SystemOnlySerializer(serializers.ModelSerializer):
