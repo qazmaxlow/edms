@@ -290,15 +290,13 @@ class DeleteUserView(generics.DestroyAPIView):
         request_user = self.request.user
         user_to_be_deleted = EntrakUser.objects.get(id=self.kwargs['user_id'])
 
-        system_info = System.get_systems_info(user_to_be_deleted.system.code, request_user.system.code)
-
-        if not system_info or not request_user.is_manager:
-            raise PermissionDenied()
-
-        user_to_be_deleted.is_active = False
-        user_to_be_deleted.save()
+        if not request_user.is_superuser:
+            system_info = System.get_systems_info(user_to_be_deleted.system.code, request_user.system.code)
+            if not system_info or not request_user.is_manager:
+                raise PermissionDenied()
 
         user = UserSerializer(user_to_be_deleted)
+        user_to_be_deleted.delete()
         return Response(user.data)
 
 
