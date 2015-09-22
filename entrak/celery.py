@@ -32,11 +32,11 @@ app.conf.update(
         # },
         'check-alert-every-10-min': {
             'task': 'alert.tasks.invoke_check_all_alerts',
-            'schedule': crontab(minute='*/10'),
+            'schedule': crontab(minute='10,20,30,40,50'),
         },
         'send-alert-email-every-5-min': {
             'task': 'alert.tasks.send_alert_email',
-            'schedule': crontab(minute='*/5'),
+            'schedule': crontab(minute='15,25,35,45,55'),
         },
         'retrieve-hkis-hs-measures': {
             'task': 'egauge.tasks.retrieve_hkis_hs_measures',

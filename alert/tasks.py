@@ -35,7 +35,7 @@ def __valid_alert_filter_f(utc_now):
                         if now.time() >= alert.start_time and now.time() <= alert.end_time:
                             isValid = True
                 elif alert.type == ALERT_TYPE_SUMMARY:
-                    if (now.time() >= alert.end_time or now.time() <= alert.start_time):
+                    if (now.time() >= alert.end_time):
                         if alert.summary_last_check is None:
                             isValid = True
                         else:
