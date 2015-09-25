@@ -166,7 +166,7 @@ def generate_weekday_weekend_overnight_details(system, start_date, end_date, int
         else:
             current_average_cost = None
 
-        if len(current_dates) > 0 or len(last_interval_dates) > 0:
+        if len(current_dates) > 0:
             sub_system_stat = {
                 'name': sub_system['name'],
                 'average_cost': current_average_cost,
@@ -646,7 +646,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
                 change_in_kwh = (current_kwh - last_year_kwh)*100/last_year_kwh
                 change_in_money = current_money - last_year_money
 
-            if current_kwh > 0 or last_year_kwh > 0:
+            if current_kwh > 0:
 
                 max_kwh = max(current_kwh, max_kwh)
 
@@ -859,7 +859,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
                 else:
                     chart_title = _('Overall: {0.compared_percent_abs:.0f}&#37; less energy than last {1}').format(CompareTplHepler(total_compare), report_type_name)
 
-            if current_total > 0 or last_total > 0 :
+            if current_total > 0:
                 graph = {
                     'color': TYPE_COLORS[len(sub_system_compare_graphs) % len(TYPE_COLORS)],
                     'title': sub_system['name'],
