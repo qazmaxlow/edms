@@ -166,15 +166,16 @@ def generate_weekday_weekend_overnight_details(system, start_date, end_date, int
         else:
             current_average_cost = None
 
-        sub_system_stat = {
-            'name': sub_system['name'],
-            'average_cost': current_average_cost,
-            'diff_last_interval': CompareTplHepler(diff_last_interval),
-            'diff_last_year': CompareTplHepler(diff_last_year),
-            'color': type_colors[ix % len(type_colors)],
-        }
+        if len(current_dates) > 0:
+            sub_system_stat = {
+                'name': sub_system['name'],
+                'average_cost': current_average_cost,
+                'diff_last_interval': CompareTplHepler(diff_last_interval),
+                'diff_last_year': CompareTplHepler(diff_last_year),
+                'color': type_colors[len(sub_system_stats) % len(type_colors)],
+            }
 
-        sub_system_stats.append(sub_system_stat)
+            sub_system_stats.append(sub_system_stat)
 
     parent_diff_last_interval = None
     parent_diff_last_year = None
@@ -645,32 +646,34 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
                 change_in_kwh = (current_kwh - last_year_kwh)*100/last_year_kwh
                 change_in_money = current_money - last_year_money
 
-            max_kwh = max(current_kwh, max_kwh)
+            if current_kwh > 0:
 
-            if current_kwh == 0:
-                current_kwh = None
-                current_co2 = None
-                current_money = None
+                max_kwh = max(current_kwh, max_kwh)
 
-            sub_system_stat = {
-                'name': sub_system['name'],
-                'total_kwh': current_kwh,
-                'total_co2': current_co2,
-                'total_money': current_money,
-                'diff_kwh': change_in_kwh,
-                'diff_money': change_in_money,
-                'percent_base_on_max': 0,
-                'color': TYPE_COLORS[ix % len(TYPE_COLORS)],
-            }
+                if current_kwh == 0:
+                    current_kwh = None
+                    current_co2 = None
+                    current_money = None
 
-            sub_system_json = {
-                'category': sub_system['name'],
-                'color': TYPE_COLORS[ix % len(TYPE_COLORS)],
-                'value': current_kwh,
-            }
+                sub_system_stat = {
+                    'name': sub_system['name'],
+                    'total_kwh': current_kwh,
+                    'total_co2': current_co2,
+                    'total_money': current_money,
+                    'diff_kwh': change_in_kwh,
+                    'diff_money': change_in_money,
+                    'percent_base_on_max': 0,
+                    'color': TYPE_COLORS[len(sub_system_stats) % len(TYPE_COLORS)],
+                }
 
-            sub_system_stats.append(sub_system_stat)
-            sub_system_jsons.append(sub_system_json)
+                sub_system_json = {
+                    'category': sub_system['name'],
+                    'color': TYPE_COLORS[len(sub_system_jsons) % len(TYPE_COLORS)],
+                    'value': current_kwh,
+                }
+
+                sub_system_stats.append(sub_system_stat)
+                sub_system_jsons.append(sub_system_json)
 
         for s in sub_system_stats:
             if s['total_kwh'] and max_kwh > 0:
@@ -841,28 +844,30 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
                 subsys_current_daily_usage = system.total_usage_by_interval(start_date, end_date, "DAY", [sub_system['id']])
                 subsys_last_daily_usage = system.total_usage_by_interval(start_date - interval_delta, end_date - interval_delta, "DAY", [sub_system['id']])
 
-            current_total = sum([v['totalKwh'] for k, v in subsys_current_daily_usage.items()])
-            last_total = sum([v['totalKwh'] for k, v in subsys_last_daily_usage.items()])
+            current_total = sum([v['totalKwh'] for k, v in subsys_current_daily_usage.items()]) or 0
+            last_total = sum([v['totalKwh'] for k, v in subsys_last_daily_usage.items()]) or 0
 
             total_compare = None
-            if last_total:
-                total_compare = float(current_total- last_total)/last_total*100
+            if last_total > 0:
+                total_compare = float(current_total - last_total)/last_total*100
 
             chart_title = ''
+
             if total_compare:
                 if(CompareTplHepler(total_compare).compared_percent >=0):
                     chart_title = _('Overall: {0.compared_percent_abs:.0f}&#37; more energy than last {1}').format(CompareTplHepler(total_compare), report_type_name)
                 else:
                     chart_title = _('Overall: {0.compared_percent_abs:.0f}&#37; less energy than last {1}').format(CompareTplHepler(total_compare), report_type_name)
 
-            graph = {
-                'color': TYPE_COLORS[ix % len(TYPE_COLORS)],
-                'title': sub_system['name'],
-                'current_series': json.dumps([{'name': compare_current_name, 'value': v['totalKwh'], 'datetime': int_date_to_datetime(k, system_tz)} for k, v in subsys_current_daily_usage.items()], cls=DjangoJSONEncoder),
-                'last_series': json.dumps([{'name': compare_last_name, 'value': v['totalKwh'], 'datetime': int_date_to_datetime(k, system_tz)} for k, v in subsys_last_daily_usage.items()], cls=DjangoJSONEncoder),
-                'chart_title': chart_title
-            }
-            sub_system_compare_graphs.append(graph)
+            if current_total > 0:
+                graph = {
+                    'color': TYPE_COLORS[len(sub_system_compare_graphs) % len(TYPE_COLORS)],
+                    'title': sub_system['name'],
+                    'current_series': json.dumps([{'name': compare_current_name, 'value': v['totalKwh'], 'datetime': int_date_to_datetime(k, system_tz)} for k, v in subsys_current_daily_usage.items()], cls=DjangoJSONEncoder),
+                    'last_series': json.dumps([{'name': compare_last_name, 'value': v['totalKwh'], 'datetime': int_date_to_datetime(k, system_tz)} for k, v in subsys_last_daily_usage.items()], cls=DjangoJSONEncoder),
+                    'chart_title': chart_title
+                }
+                sub_system_compare_graphs.append(graph)
 
         m['s2_sub_system_compare_graphs'] = sub_system_compare_graphs
         return m
