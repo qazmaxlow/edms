@@ -172,7 +172,7 @@ def generate_weekday_weekend_overnight_details(system, start_date, end_date, int
                 'average_cost': current_average_cost,
                 'diff_last_interval': CompareTplHepler(diff_last_interval),
                 'diff_last_year': CompareTplHepler(diff_last_year),
-                'color': type_colors[len(sub_system_stat) % len(type_colors)],
+                'color': type_colors[len(sub_system_stats) % len(type_colors)],
             }
 
             sub_system_stats.append(sub_system_stat)
