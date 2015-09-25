@@ -172,7 +172,7 @@ def generate_weekday_weekend_overnight_details(system, start_date, end_date, int
                 'average_cost': current_average_cost,
                 'diff_last_interval': CompareTplHepler(diff_last_interval),
                 'diff_last_year': CompareTplHepler(diff_last_year),
-                'color': type_colors[ix % len(type_colors)],
+                'color': type_colors[len(sub_system_stat) % len(type_colors)],
             }
 
             sub_system_stats.append(sub_system_stat)
@@ -663,12 +663,12 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
                     'diff_kwh': change_in_kwh,
                     'diff_money': change_in_money,
                     'percent_base_on_max': 0,
-                    'color': TYPE_COLORS[ix % len(TYPE_COLORS)],
+                    'color': TYPE_COLORS[len(sub_system_stat) % len(TYPE_COLORS)],
                 }
 
                 sub_system_json = {
                     'category': sub_system['name'],
-                    'color': TYPE_COLORS[ix % len(TYPE_COLORS)],
+                    'color': TYPE_COLORS[len(sub_system_json) % len(TYPE_COLORS)],
                     'value': current_kwh,
                 }
 
@@ -861,7 +861,7 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
 
             if current_total > 0 or last_total > 0 :
                 graph = {
-                    'color': TYPE_COLORS[ix % len(TYPE_COLORS)],
+                    'color': TYPE_COLORS[len(sub_system_compare_graphs) % len(TYPE_COLORS)],
                     'title': sub_system['name'],
                     'current_series': json.dumps([{'name': compare_current_name, 'value': v['totalKwh'], 'datetime': int_date_to_datetime(k, system_tz)} for k, v in subsys_current_daily_usage.items()], cls=DjangoJSONEncoder),
                     'last_series': json.dumps([{'name': compare_last_name, 'value': v['totalKwh'], 'datetime': int_date_to_datetime(k, system_tz)} for k, v in subsys_last_daily_usage.items()], cls=DjangoJSONEncoder),
