@@ -663,12 +663,12 @@ def _popup_report_view(request, system_code, year=None, month=None, report_type=
                     'diff_kwh': change_in_kwh,
                     'diff_money': change_in_money,
                     'percent_base_on_max': 0,
-                    'color': TYPE_COLORS[len(sub_system_stat) % len(TYPE_COLORS)],
+                    'color': TYPE_COLORS[len(sub_system_stats) % len(TYPE_COLORS)],
                 }
 
                 sub_system_json = {
                     'category': sub_system['name'],
-                    'color': TYPE_COLORS[len(sub_system_json) % len(TYPE_COLORS)],
+                    'color': TYPE_COLORS[len(sub_system_jsons) % len(TYPE_COLORS)],
                     'value': current_kwh,
                 }
 
