@@ -591,7 +591,7 @@ class SourceManager:
                 SourceManager.force_retrieve_hour_reading(all_grouped_sources, start_dt, hour_idx)
                 SourceManager.force_retrieve_source_with_members_hour_reading(all_sources_with_members, start_dt, hour_idx)
                 for s in all_mssql_sources:
-                    SourceManager.force_retrieve_myssql_source_hour_reading(s, start_dt, 60)
+                    SourceManager.force_retrieve_myssql_source_hour_reading(s, start_dt + datetime.timedelta(hours=hour_idx), 60)
 
 
     @staticmethod
@@ -707,6 +707,8 @@ class SourceManager:
                 cursor.execute(sql)
                 for row in cursor:
                     row['TIMESTAMP'] = row['TIMESTAMP'].replace(second=0)
+                    # convert kW to kWh
+                    row['VALUE'] = row['VALUE']/3600
                     rows.append(row)
 
         return rows
