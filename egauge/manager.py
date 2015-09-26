@@ -545,7 +545,6 @@ class SourceManager:
 
             # each row should be in 10 minutes interval
             reading_datetimes = [(dt - datetime.timedelta(minutes=minute)) for minute in xrange(10)]
-            print(reading_datetimes)
 
             source_reading_mins += [SourceReadingMin(
                 datetime=reading_datetime.astimezone(pytz.utc),
