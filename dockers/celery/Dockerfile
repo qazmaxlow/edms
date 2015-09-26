@@ -7,6 +7,7 @@ RUN apt-get install -y libmysqlclient-dev libpq-dev
 RUN apt-get install -y python-dev libxslt1-dev libxml2-dev
 
 RUN apt-get install -y python-dateutil
+RUN apt-get install -y freetds-dev
 
 ADD pip_requirements.txt pip_requirements.txt
 RUN pip install -r pip_requirements.txt
