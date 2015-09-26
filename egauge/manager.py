@@ -586,7 +586,7 @@ class SourceManager:
                 celery_task_1.delay(all_grouped_sources, start_dt, hour_idx)
                 celery_task_2.delay(all_sources_with_members, start_dt, hour_idx)
                 for s in all_mssql_sources:
-                    celery_task_3.delay(s, start_dt, 60)
+                    celery_task_3.delay(s, start_dt + datetime.timedelta(hours=hour_idx), 60)
             else:
                 SourceManager.force_retrieve_hour_reading(all_grouped_sources, start_dt, hour_idx)
                 SourceManager.force_retrieve_source_with_members_hour_reading(all_sources_with_members, start_dt, hour_idx)
