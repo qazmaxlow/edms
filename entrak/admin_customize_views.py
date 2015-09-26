@@ -14,7 +14,7 @@ from holiday.models import CityHoliday
 from utils.utils import Utils
 from bson.objectid import ObjectId
 
-CAN_UPDATE_SOURCE_FIELDS = ['name', 'xml_url', 'system_code', 'system_path', 'd_name', 'd_name_tc', 'order', 'source_members', 'active']
+CAN_UPDATE_SOURCE_FIELDS = ['name', 'xml_url', 'system_code', 'system_path', 'd_name', 'd_name_tc', 'order', 'source_members', 'datasource_type', 'active']
 
 def __is_source_need_update(source, info):
     need_update = False
@@ -115,6 +115,7 @@ def edit_sources_view(request, system_code=None):
                     d_name=info['d_name'],
                     d_name_tc=info['d_name_tc'],
                     order=info['order'],
+                    datasource_type=info['datasource_type'],
                     active=info['active'])
                 if source_members:
                     source.source_members = source_members
@@ -123,9 +124,8 @@ def edit_sources_view(request, system_code=None):
                 original_source = source_id_map[info['source_id']]
                 if __is_source_need_update(original_source, info):
                     __assign_source_info(original_source, info)
+                    print('Good!!!!!')
                     print(original_source.__dict__)
-                    print(type(original_source.source_members))
-                    print(type(info['source_members']))
                     original_source.save()
 
         if will_insert_sources:

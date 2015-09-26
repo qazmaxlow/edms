@@ -29,7 +29,17 @@ class Source(Document):
     order = IntField(default=1)
     tz = StringField(max_length=50, default=SOURCE_TZ_HK)
     source_members = ListField(EmbeddedDocumentField(SourceMember))
+    datasource_type = StringField(default='egauge', max_length=100)
     active = BooleanField(default=True)
+
+
+    @property
+    def is_egauge(self):
+        return (not self.datasource_type) or self.datasource_type == 'egauge'
+
+    @property
+    def is_mssql(self):
+        return self.datasource_type and self.datasource_type == 'mssql'
 
 
 class BaseSourceReading(Document):

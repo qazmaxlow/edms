@@ -29,6 +29,11 @@ def retrieve_all_reading():
     for source_with_members in SourceManager.get_sources_with_members():
         retrieve_source_with_members_min_reading.delay([source_with_members], retrieve_time)
 
+    if retrieve_time.minute == 5:
+        for mssql_source in SourceManager.get_mssql_sources():
+            retrieve_mssql_source_10min_reading.delay(mssql_source, retrieve_time)
+
+
 @shared_task(ignore_result=True)
 def retrieve_min_reading(xml_url, sources, retrieve_time):
     SourceManager.retrieve_min_reading(xml_url, sources, retrieve_time)
@@ -36,6 +41,10 @@ def retrieve_min_reading(xml_url, sources, retrieve_time):
 @shared_task(ignore_result=True)
 def retrieve_source_with_members_min_reading(sources, retrieve_time):
     SourceManager.retrieve_source_with_members_min_reading(sources, retrieve_time)
+
+@shared_task(ignore_result=True)
+def retrieve_mssql_source_10min_reading(sources, retrieve_time):
+    SourceManager.retrieve_mssql_10mins_reading(sources, retrieve_time)
 
 @shared_task(ignore_result=True)
 def recover_all_invalid_reading():
@@ -49,7 +58,7 @@ def recover_min_reading_for_xml_url(xml_url):
 @shared_task(ignore_result=True)
 def force_retrieve_reading(start_dt, end_dt, system_codes):
     SourceManager.force_retrieve_reading(start_dt, end_dt, system_codes,
-        True, force_retrieve_hour_reading, force_retrieve_source_with_members_hour_reading)
+        True, force_retrieve_hour_reading, force_retrieve_source_with_members_hour_reading, force_retrieve_myssql_source_hour_reading)
 
 @shared_task(ignore_result=True)
 def force_retrieve_hour_reading(all_grouped_sources, start_dt, hour_idx):
@@ -58,6 +67,10 @@ def force_retrieve_hour_reading(all_grouped_sources, start_dt, hour_idx):
 @shared_task(ignore_result=True)
 def force_retrieve_source_with_members_hour_reading(all_sources_with_members, start_dt, hour_idx):
     SourceManager.force_retrieve_source_with_members_hour_reading(all_sources_with_members, start_dt, hour_idx)
+
+@shared_task(ignore_result=True)
+def force_retrieve_myssql_source_hour_reading(source, start_dt, no_of_minutes):
+    SourceManager.force_retrieve_myssql_source_hour_reading(source, start_dt, no_of_minutes)
 
 
 @shared_task(ignore_result=True)
@@ -87,15 +100,23 @@ def auto_recap(hours=6):
                 if s.id not in usages.keys() or usages[s.id]['totalKwh'] == 0:
                     source_ids.add(s.id)
 
+        mssql_sources = []
         sources_without_members = []
         sources_with_members = []
 
         sources = Source.objects(id__in=source_ids, active=True, xml_url__ne='')
         for source in sources:
-            if source.source_members:
+            if source.is_mssql:
+                mssql_sources.append(source)
+            elif source.source_members:
                 sources_with_members.append(source)
             else:
                 sources_without_members.append(source)
+
+        if mssql_sources:
+            for s in sources_with_members:
+                print("Force download mssql job added to source %s for system %s for time %s"%(s.name, s.system_code, start_dt.strftime('%Y-%m-%d %H:%M:%S')))
+                force_retrieve_myssql_source_hour_reading.apply_async(args=[s, start_dt, 60])
 
         if sources_with_members:
             for s in sources_with_members:

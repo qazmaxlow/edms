@@ -95,6 +95,15 @@ input[type="radio"], input[type="checkbox"] {
     </div>
   </div>
   <div class="form-group">
+    <label class="control-label col-sm-4" for="datasource_type">Data Source</label>
+    <div class="col-sm-8">
+    <select name="datasource_type" class="col-sm-8">
+      <option value="egauge">egauge</option>
+      <option value="mssql">mssql</option>
+    </select>
+    </div>
+  </div>
+  <div class="form-group">
     <label class="control-label col-sm-4" for="active">Active?</label>
     <div class="col-sm-8">
       <input id="active" type="checkbox" name="active" value="true" checked />
@@ -155,19 +164,20 @@ $(function() {
 
     $(".add-source-btn").each(function(systemIdx) {
         $(this).click({systemIdx: systemIdx}, function(event) {
+            console.log('sshiiit00');
             var systemCode = $(this).attr('system_code');
             var systemPath = $(this).attr('system_path');
             var sourceHtml = Mustache.render(sourceTemplate, {systemCode: systemCode, systemPath: systemPath});
             var sourceEle = $(sourceHtml);
             sourceEle.find(".remove-btn").click(function() {
-                $(this).parent().parent().remove();
+                //$(this).parent().parent().remove();
             });
             sourceEle.find(".add-member-btn").each(function(systemIdx) {
               $(this).click({systemIdx: systemIdx}, function(event) {
                 var memberHtml = Mustache.render(memberTemplate);
                 var memberEle = $(memberHtml);
                 memberEle.find(".remove-btn").click(function() {
-                  $(this).parent().parent().remove();
+                  //$(this).parent().parent().remove();
                 })
                 sourceEle.find(".member-container:eq("+event.data.systemIdx+")").append(memberEle);
               });
@@ -200,6 +210,8 @@ $(function() {
             info.d_name_tc = $(this).find("input[name='d_name_tc']").val();
             info.order = $(this).find("input[name='order']").val();
             info.active = $(this).find("input[name='active']").prop("checked");
+            info.datasource_type = $(this).find("select[name='datasource_type'] option:selected").text();
+            console.log(info.datasource_type);
             var sourceIdInput = $(this).find("input[name='source_id']");
             if (sourceIdInput.length === 0) {
                 info.source_id = null;
@@ -234,7 +246,6 @@ $(function() {
 {% endblock %}
 
 {% block content %}
-
 {% for system in systems %}
 <div class="panel panel-success">
   <div class="panel-heading">
@@ -273,6 +284,15 @@ $(function() {
             <label class="control-label col-sm-4" for="order">Order</label>
             <div class="col-sm-8">
                 <input id="order" type="text" class="col-sm-8" name="order" value="{{source.order}}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-4" for="datasource_type">Data Source</label>
+            <div class="col-sm-8">
+                <select name="datasource_type" class="col-sm-8">
+                    <option value="egauge" {% if source.is_egauge %} selected {% endif %} >egauge</option>
+                    <option value="mssql" {% if source.is_mssql %} selected {% endif %} >mssql</option>
+                </select>
             </div>
         </div>
         <div class="form-group">

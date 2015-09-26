@@ -4,6 +4,8 @@ import calendar
 import time
 import datetime
 import logging
+import math
+import pymssql
 from bson.code import Code
 from bson.objectid import ObjectId
 from mongoengine import connection, Q, NotUniqueError
@@ -21,6 +23,15 @@ class SourceManager:
     DEFAULT_PASSWORD = 'jianshu1906'
     INVALID_RECOVER_LIMIT = 2000
     OPERATOR_MAP = {"+": 1, "-": -1}
+    MSSQL_SOURCES = {
+        'hkex': {
+            'host': '218.255.236.2:1433',
+            'database': 'HKEX',
+            'username': 'sa',
+            'password': 'Atalces1',
+            'timezone': 'Asia/Hong_Kong'
+        }
+    }
 
     class GetEgaugeDataError(Exception):
         pass
@@ -32,7 +43,7 @@ class SourceManager:
     def get_grouped_sources(system_codes=None, source_object_ids=None):
         current_db_conn = connection.get_db()
         aggregate_pipeline = [
-            { "$match": {"active": True, "$or": [{"source_members": {"$exists" : False}}, {"source_members": {"$size" : 0}}]}},
+            { "$match": {"active": True, "datasource_type": "egauge", "$or": [{"source_members": {"$exists" : False}}, {"source_members": {"$size" : 0}}]}},
             { "$project": {"_id": 1, "name": 1, "tz": 1, "xml_url": 1}},
             {
                 "$group": {
@@ -51,12 +62,20 @@ class SourceManager:
 
     @staticmethod
     def get_sources_with_members(system_codes=None):
-        current_db_conn = connection.get_db()
+        if system_codes:
+            sources =  Source.objects(system_code__in=system_codes, datasource_type='egauge', source_members__exists=True, source_members__not__size=0)
+        else:
+            sources = Source.objects(datasource_type='egauge', source_members__exists=True, source_members__not__size=0)
+
+        return [s for s in sources]
+
+    @staticmethod
+    def get_mssql_sources(system_codes=None):
 
         if system_codes:
-            sources =  Source.objects(system_code__in=system_codes, source_members__exists=True, source_members__not__size=0)
+            sources =  Source.objects(system_code__in=system_codes, datasource_type='mssql')
         else:
-            sources = Source.objects(source_members__exists=True, source_members__not__size=0)
+            sources = Source.objects(datasource_type='mssql')
 
         return [s for s in sources]
 
@@ -76,6 +95,10 @@ class SourceManager:
             SourceManager.retrieve_min_reading(grouped_sources['_id'], grouped_sources['sources'], retrieve_time)
 
         SourceManager.retrieve_source_with_members_min_reading(SourceManager.get_sources_with_members(), retrieve_time)
+
+        if retrieve_time.minute == 5:
+            for mssql_source in SourceManager.get_mssql_sources():
+                SourceManager.retrieve_mssql_10mins_reading(mssql_source, retrieve_time)
 
     @staticmethod
     def retrieve_min_reading(xml_url, sources, retrieve_time):
@@ -176,6 +199,39 @@ class SourceManager:
                 #     )
                 # )
 
+    @staticmethod
+    def retrieve_mssql_10mins_reading(source, start_dt):
+
+        db_tz = pytz.timezone(SourceManager.MSSQL_SOURCES['hkex']['timezone'])
+
+        start_dt = start_dt.replace(minute=int(math.floor(start_dt.minute/10))*10-1, second=0)
+
+        source_reading_mins = []
+        need_update = False
+
+        rows = SourceManager.__get_mssql_data(source, start_dt, 1)
+
+        for row in rows:
+            dt = db_tz.localize(row['TIMESTAMP'])
+
+            # each row should be in 10 minutes interval
+            reading_datetimes = [(dt - datetime.timedelta(minutes=minute)) for minute in xrange(10)]
+
+            source_reading_mins += [SourceReadingMin(
+                datetime=reading_datetime.astimezone(pytz.utc),
+                source_id=source.id,
+                value=row['VALUE']
+            ) for (idx, reading_datetime) in enumerate(reading_datetimes)]
+            need_update = True
+
+        if source_reading_mins:
+            try:
+                SourceReadingMin.objects.insert(source_reading_mins, write_concern={'continue_on_error': True})
+            except NotUniqueError, e:
+                pass
+
+        if need_update:
+            SourceManager.update_sum(start_dt, db_tz.zone, [source.id])
 
     @staticmethod
     def update_sum(retrieve_time, source_tz, source_ids, update_v4_ds=True):
@@ -468,7 +524,52 @@ class SourceManager:
 
 
     @staticmethod
-    def force_retrieve_reading(start_dt, end_dt, system_codes, is_delayed=False, celery_task_1=None, celery_task_2=None):
+    def force_retrieve_myssql_source_hour_reading(source, start_dt, no_of_minutes):
+
+        logger = logging.getLogger('django.recap_data_log')
+
+        db_tz = pytz.timezone(SourceManager.MSSQL_SOURCES['hkex']['timezone'])
+
+        start_dt = start_dt.replace(second=0)
+        end_dt = start_dt - datetime.timedelta(minutes=no_of_minutes)
+
+        source_reading_mins = []
+        need_update = False
+
+        rows = SourceManager.__get_mssql_data(source, start_dt, no_of_minutes)
+
+        for row in rows:
+            dt = db_tz.localize(row['TIMESTAMP'])
+
+            print(dt)
+
+            # each row should be in 10 minutes interval
+            reading_datetimes = [(dt - datetime.timedelta(minutes=minute)) for minute in xrange(10)]
+
+            source_reading_mins += [SourceReadingMin(
+                datetime=reading_datetime.astimezone(pytz.utc),
+                source_id=source.id,
+                value=row['VALUE']
+            ) for (idx, reading_datetime) in enumerate(reading_datetimes)]
+            need_update = True
+
+        if source_reading_mins:
+            SourceReadingMin.objects(
+                source_id=source.id,
+                datetime__gte=start_dt,
+                datetime__lte=end_dt
+            ).delete()
+            try:
+                SourceReadingMin.objects.insert(source_reading_mins, write_concern={'continue_on_error': True})
+            except NotUniqueError, e:
+                logger.error(e)
+
+        if need_update:
+            SourceManager.update_sum(start_dt, db_tz.zone, [source.id])
+
+
+    @staticmethod
+    def force_retrieve_reading(start_dt, end_dt, system_codes, is_delayed=False, celery_task_1=None, celery_task_2=None, celery_task_3=None):
         '''
         The start_dt and end_dt should be timezone aware
         '''
@@ -478,14 +579,19 @@ class SourceManager:
 
         all_grouped_sources = SourceManager.get_grouped_sources(system_codes)
         all_sources_with_members = SourceManager.get_sources_with_members(system_codes)
+        all_mssql_sources = SourceManager.get_mssql_sources(system_codes)
 
         for hour_idx in xrange(total_hour):
             if is_delayed:
                 celery_task_1.delay(all_grouped_sources, start_dt, hour_idx)
                 celery_task_2.delay(all_sources_with_members, start_dt, hour_idx)
+                for s in all_mssql_sources:
+                    celery_task_3.delay(s, start_dt, 60)
             else:
                 SourceManager.force_retrieve_hour_reading(all_grouped_sources, start_dt, hour_idx)
                 SourceManager.force_retrieve_source_with_members_hour_reading(all_sources_with_members, start_dt, hour_idx)
+                for s in all_mssql_sources:
+                    SourceManager.force_retrieve_myssql_source_hour_reading(s, start_dt, 60)
 
 
     @staticmethod
@@ -572,6 +678,38 @@ class SourceManager:
                 raise SourceManager.GetEgaugeDataError("cname or row number not much! source: %s, cname: %s, row_num: %d"%(full_url, cname, 2))
             result[cname] = [abs(float(value))/3600000 for value in values]
         return result
+
+    @staticmethod
+    def __get_mssql_data(source, start_dt, no_of_minutes):
+
+        host = SourceManager.MSSQL_SOURCES['hkex']['host']
+        db = SourceManager.MSSQL_SOURCES['hkex']['database']
+        username = SourceManager.MSSQL_SOURCES['hkex']['username']
+        password = SourceManager.MSSQL_SOURCES['hkex']['password']
+
+        db_tz = pytz.timezone(SourceManager.MSSQL_SOURCES['hkex']['timezone'])
+
+        start_dt = start_dt.astimezone(db_tz).replace(second=59)
+        end_dt = start_dt + datetime.timedelta(minutes=no_of_minutes)
+
+        sql = "SELECT TIMESTAMP, VALUE FROM {table_name} WHERE TIMESTAMP > '{start_dt_string}' AND TIMESTAMP <= '{end_dt_string}' ORDER BY TIMESTAMP desc"
+        sql = sql.format(
+                table_name = source.xml_url,
+                start_dt_string = start_dt.strftime('%Y-%m-%d %H:%M:%S'),
+                end_dt_string = end_dt.strftime('%Y-%m-%d %H:%M:%S')
+        )
+
+        print(sql)
+        rows = []
+
+        with pymssql.connect(host, username, password, db) as conn:
+            with conn.cursor(as_dict=True) as cursor:
+                cursor.execute(sql)
+                for row in cursor:
+                    row['TIMESTAMP'] = row['TIMESTAMP'].replace(second=0)
+                    rows.append(row)
+
+        return rows
 
     @staticmethod
     def get_sources(system):
