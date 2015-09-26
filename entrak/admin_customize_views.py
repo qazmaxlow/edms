@@ -124,8 +124,6 @@ def edit_sources_view(request, system_code=None):
                 original_source = source_id_map[info['source_id']]
                 if __is_source_need_update(original_source, info):
                     __assign_source_info(original_source, info)
-                    print('Good!!!!!')
-                    print(original_source.__dict__)
                     original_source.save()
 
         if will_insert_sources:
