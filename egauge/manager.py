@@ -531,7 +531,7 @@ class SourceManager:
         db_tz = pytz.timezone(SourceManager.MSSQL_SOURCES['hkex']['timezone'])
 
         start_dt = start_dt.replace(second=0)
-        end_dt = start_dt - datetime.timedelta(minutes=no_of_minutes)
+        end_dt = start_dt + datetime.timedelta(minutes=no_of_minutes)
 
         source_reading_mins = []
         need_update = False
@@ -545,6 +545,7 @@ class SourceManager:
 
             # each row should be in 10 minutes interval
             reading_datetimes = [(dt - datetime.timedelta(minutes=minute)) for minute in xrange(10)]
+            print(reading_datetimes)
 
             source_reading_mins += [SourceReadingMin(
                 datetime=reading_datetime.astimezone(pytz.utc),
@@ -556,7 +557,7 @@ class SourceManager:
         if source_reading_mins:
             SourceReadingMin.objects(
                 source_id=source.id,
-                datetime__gte=start_dt,
+                datetime__gt=start_dt,
                 datetime__lte=end_dt
             ).delete()
             try:
