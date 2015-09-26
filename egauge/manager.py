@@ -708,7 +708,7 @@ class SourceManager:
                 for row in cursor:
                     row['TIMESTAMP'] = row['TIMESTAMP'].replace(second=0)
                     # convert kW to kWh
-                    row['VALUE'] = row['VALUE']/3600
+                    row['VALUE'] = float(row['VALUE'])/3600.0
                     rows.append(row)
 
         return rows
