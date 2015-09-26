@@ -204,7 +204,7 @@ class SourceManager:
 
         db_tz = pytz.timezone(SourceManager.MSSQL_SOURCES['hkex']['timezone'])
 
-        start_dt = start_dt.replace(minute=int(math.floor(start_dt.minute/10))*10-1, second=0)
+        start_dt = start_dt.replace(minute=int(math.floor(start_dt.minute/10))*10, second=0) - datetime.timedelta(minutes=1)
 
         source_reading_mins = []
         need_update = False
