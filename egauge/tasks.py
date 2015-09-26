@@ -29,7 +29,7 @@ def retrieve_all_reading():
     for source_with_members in SourceManager.get_sources_with_members():
         retrieve_source_with_members_min_reading.delay([source_with_members], retrieve_time)
 
-    if retrieve_time.minute == 5:
+    if retrieve_time.minute%10 in [3,5,7]:
         for mssql_source in SourceManager.get_mssql_sources():
             retrieve_mssql_source_10min_reading.delay(mssql_source, retrieve_time)
 
